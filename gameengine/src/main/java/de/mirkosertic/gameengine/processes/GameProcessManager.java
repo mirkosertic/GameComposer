@@ -28,7 +28,7 @@ public class GameProcessManager implements GameSystem {
     public void proceedGame(long aGameTime, long aElapsedTimeSinceLastLoop) {
         processesAmountOfTime += aElapsedTimeSinceLastLoop;
         // We limit the physics system to 60 frames / second, or we are getting strange results
-        if (processesAmountOfTime > 16) {
+        if (processesAmountOfTime > 8) {
 
             for (GameProcess theProcess : runningProcesses) {
                 theProcess.proceedGame(aGameTime, processesAmountOfTime);

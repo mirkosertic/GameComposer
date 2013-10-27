@@ -2,7 +2,6 @@ package de.mirkosertic.gameengine.javafx;
 
 import de.mirkosertic.gameengine.camera.CameraComponent;
 import de.mirkosertic.gameengine.core.*;
-import de.mirkosertic.gameengine.resource.GameResource;
 import de.mirkosertic.gameengine.resource.GameResourceCache;
 import de.mirkosertic.gameengine.sprites.SpriteComponent;
 import javafx.animation.AnimationTimer;

@@ -37,11 +37,11 @@ public class CameraComponent implements GameComponent {
         return theResult;
     }
 
-    public Position transformToScreenPosition(Position aPosition) {
+    public Position transformToScreenPosition(Position aWorldPosition) {
 
         Position theCameraPosition = objectInstance.getPosition();
 
-        return new Position(aPosition.getX() - theCameraPosition.getX(), aPosition.getY() - theCameraPosition.getY());
+        return new Position(aWorldPosition.getX() - theCameraPosition.getX(), aWorldPosition.getY() - theCameraPosition.getY());
     }
 
     public Size getScreenSize() {
