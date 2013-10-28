@@ -12,6 +12,20 @@
     <modules>
         <module>gameengine</module>
         <module>gameengine-fxrenderer</module>
+        <module>gamecomposer</module>
         <module>sampleplatformer</module>
     </modules>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
