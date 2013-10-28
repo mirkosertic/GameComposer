@@ -12,6 +12,7 @@
     <modules>
         <module>gameengine</module>
         <module>gameengine-fxrenderer</module>
+        <module>gameengine-gwtrenderer</module>
         <module>gamecomposer</module>
         <module>sampleplatformer</module>
     </modules>

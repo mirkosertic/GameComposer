@@ -1,12 +1,12 @@
-FXGameCreator
+FXGameComposer
 =============
 
-FXGameCreator is a game authoring tool and also a game runtime environment, targeting at JavaFX2 or HTML5 capable devices.
+FXGameComposer is a game authoring tool and also a game runtime environment, targeting at JavaFX2 or HTML5 capable devices.
 
-GameCreator
+GameComposer
 -----------
 
-GameCreator is the authoring tool.
+GameComposer is the authoring tool, the IDE.
 
 GameEngine
 ----------
@@ -18,7 +18,7 @@ GameEngine-FXRenderer
 
 This is the game presentation logic using JavaFX2.
 
-GameEngine-GWT
+GameEngine-GWTRenderer
 --------------
 
-This is the game presentation logic using GWT and HTML5.
+This is the game presentation logic using GWT and HTML5(JavaScript).

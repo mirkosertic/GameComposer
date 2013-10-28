@@ -1,0 +1,6 @@
+<module>
+    <inherits name="com.google.gwt.user.User"/>
+    <inherits name="de.mirkosertic.Engine"/>
+    <entry-point class="de.mirkosertic.gameengine.gwt.GWTRenderer"/>
+    <source path="gwt"/>
+</module>
