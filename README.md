@@ -1,7 +1,7 @@
 FXGameCreator
 =============
 
-FXGameCreator is a game authoring tool and also a game runtime environment, targeting to JavaFX2 or HTML5 capable devices.
+FXGameCreator is a game authoring tool and also a game runtime environment, targeting at JavaFX2 or HTML5 capable devices.
 
 GameCreator
 -----------
