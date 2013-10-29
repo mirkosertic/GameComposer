@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.*?>
+<?import java.net.*?>
 <?import java.util.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -8,46 +9,7 @@
 
 <BorderPane id="BorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="636.0" prefWidth="1081.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="de.mirkosertic.gamecomposer.GameComposerController">
   <center>
-    <HBox prefHeight="100.0" prefWidth="200.0">
-      <children>
-        <TitledPane animated="false" collapsible="false" expanded="true" maxHeight="1.7976931348623157E308" minWidth="133.0" prefWidth="155.0" text="%objectinspector.title" textAlignment="LEFT" wrapText="false">
-          <content>
-            <BorderPane maxHeight="1.7976931348623157E308" prefHeight="-1.0" prefWidth="-1.0">
-              <center>
-                <Accordion id="objectInpectorAccordion" fx:id="propertiesAccordion" expandedPane="$null" />
-              </center>
-            </BorderPane>
-          </content>
-        </TitledPane>
-        <StackPane prefHeight="150.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
-          <children>
-            <TabPane id="editorAreaTabbedPane" fx:id="editorTabPane" disable="false" prefHeight="-1.0" prefWidth="-1.0" tabClosingPolicy="UNAVAILABLE" visible="true">
-              <tabs>
-                <Tab text="Game scene #1">
-                  <content>
-                    <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                  </content>
-                </Tab>
-              </tabs>
-            </TabPane>
-            <BorderPane fx:id="welcomeBorderPane" prefHeight="-1.0" prefWidth="-1.0">
-              <center>
-                <Label alignment="CENTER" contentDisplay="CENTER" text="Welcome to GameComposer" textAlignment="CENTER" BorderPane.alignment="CENTER" />
-              </center>
-            </BorderPane>
-          </children>
-        </StackPane>
-        <TitledPane animated="false" collapsible="false" expanded="true" maxHeight="1.7976931348623157E308" minWidth="-1.0" prefWidth="-1.0" text="%projectstructure.title" textAlignment="LEFT" wrapText="false">
-          <content>
-            <BorderPane prefHeight="200.0" prefWidth="200.0">
-              <center>
-                <TreeView fx:id="projectStructureTreeView" prefHeight="200.0" prefWidth="200.0" />
-              </center>
-            </BorderPane>
-          </content>
-        </TitledPane>
-      </children>
-    </HBox>
+    <HBox fx:id="childViews" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="-1.0" prefWidth="-1.0" />
   </center>
   <top>
     <MenuBar>

@@ -16,6 +16,7 @@
                 <includes>
                     <include>**/*.fxml</include>
                     <include>**/*.properties</include>
+                    <include>**/*.css</include>
                 </includes>
             </resource>
             <resource>

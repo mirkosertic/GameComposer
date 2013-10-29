@@ -17,10 +17,12 @@ public class GameComposerFactory {
     FXMLLoader fxmlLoader;
 
     public void createAndStart(Stage aStage, Application.Parameters aParameters) throws IOException {
+
         try (InputStream fxml = GameComposerController.class.getResourceAsStream("GameComposer.fxml")) {
             ResourceBundle theBundle = ResourceBundle.getBundle("de.mirkosertic.gamecomposer.GameComposer");
             fxmlLoader.setResources(theBundle);
             Parent root = (Parent) fxmlLoader.load(fxml);
+            root.getStylesheets().add("/de/mirkosertic/gamecomposer/JMetroLightTheme.css");
             ((GameComposerController)fxmlLoader.getController()).initialize(aStage);
             aStage.setScene(new Scene(root));
             aStage.show();
