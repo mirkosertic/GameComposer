@@ -22,7 +22,6 @@ public class GameComposerFactory {
             ResourceBundle theBundle = ResourceBundle.getBundle("de.mirkosertic.gamecomposer.GameComposer");
             fxmlLoader.setResources(theBundle);
             Parent root = (Parent) fxmlLoader.load(fxml);
-            root.getStylesheets().add("/de/mirkosertic/gamecomposer/JMetroLightTheme.css");
             ((GameComposerController)fxmlLoader.getController()).initialize(aStage);
             aStage.setScene(new Scene(root));
             aStage.show();
