@@ -1,18 +1,11 @@
 package de.mirkosertic.gameengine.camera;
 
+import de.mirkosertic.gameengine.core.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import de.mirkosertic.gameengine.core.GameComponent;
-import de.mirkosertic.gameengine.core.GameEventListener;
-import de.mirkosertic.gameengine.core.GameObjectInstance;
-import de.mirkosertic.gameengine.core.GameRuntime;
-import de.mirkosertic.gameengine.core.GameScene;
-import de.mirkosertic.gameengine.core.Position;
-import de.mirkosertic.gameengine.core.SetScreenResolutionEvent;
-import de.mirkosertic.gameengine.core.Size;
 
 public class CameraComponent implements GameComponent {
 
@@ -63,6 +56,11 @@ public class CameraComponent implements GameComponent {
 
     public Size getScreenSize() {
         return screenSize;
+    }
+
+    @Override
+    public String getTypeKey() {
+        return TYPE;
     }
 
     @Override

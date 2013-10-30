@@ -1,15 +1,21 @@
 
 package de.mirkosertic.sampleplatformer;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
-import de.mirkosertic.gameengine.camera.CameraComponentTemplate;
-import de.mirkosertic.gameengine.physics.PhysicsComponentTemplate;
-import de.mirkosertic.gameengine.physics.PlatformComponentTemplate;
-import de.mirkosertic.gameengine.physics.StaticComponentTemplate;
+import de.mirkosertic.gameengine.camera.*;
+import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.javafx.JavaFXClasspathGameResourceLoader;
+import de.mirkosertic.gameengine.javafx.JavaFXGameView;
+import de.mirkosertic.gameengine.physics.*;
+import de.mirkosertic.gameengine.physics.jbox2d.JBox2DGamePhysicsManager;
+import de.mirkosertic.gameengine.physics.jbox2d.JBox2DGamePhysicsManagerFactory;
+import de.mirkosertic.gameengine.processes.GameProcessManager;
+import de.mirkosertic.gameengine.processes.GameProcessManagerFactory;
+import de.mirkosertic.gameengine.processes.StartProcessEvent;
+import de.mirkosertic.gameengine.resource.GameResourceCache;
+import de.mirkosertic.gameengine.resource.GameResourceLoader;
 import de.mirkosertic.gameengine.sprites.SpriteComponentTemplate;
+import de.mirkosertic.gameengine.sprites.SpriteComponentTemplateUnmarshaller;
+import de.mirkosertic.gameengine.sprites.SpriteComponentUnmarshaller;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -20,33 +26,14 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.ObjectWriter;
 
-import de.mirkosertic.gameengine.camera.CameraComponent;
-import de.mirkosertic.gameengine.camera.FollowCameraProcess;
-import de.mirkosertic.gameengine.core.GameEventManager;
-import de.mirkosertic.gameengine.core.GameKeyCode;
-import de.mirkosertic.gameengine.core.GameLoop;
-import de.mirkosertic.gameengine.core.GameLoopFactory;
-import de.mirkosertic.gameengine.core.GameObject;
-import de.mirkosertic.gameengine.core.GameObjectInstance;
-import de.mirkosertic.gameengine.core.GameObjectInstanceFactory;
-import de.mirkosertic.gameengine.core.GameRuntime;
-import de.mirkosertic.gameengine.core.GameScene;
-import de.mirkosertic.gameengine.core.KeyPressedGameEvent;
-import de.mirkosertic.gameengine.core.KeyReleasedGameEvent;
-import de.mirkosertic.gameengine.core.ResourceName;
-import de.mirkosertic.gameengine.core.SetScreenResolutionEvent;
-import de.mirkosertic.gameengine.core.ShutdownGameEvent;
-import de.mirkosertic.gameengine.core.Size;
-import de.mirkosertic.gameengine.javafx.JavaFXClasspathGameResourceLoader;
-import de.mirkosertic.gameengine.javafx.JavaFXGameView;
-import de.mirkosertic.gameengine.physics.jbox2d.JBox2DGamePhysicsManager;
-import de.mirkosertic.gameengine.physics.jbox2d.JBox2DGamePhysicsManagerFactory;
-import de.mirkosertic.gameengine.processes.GameProcessManager;
-import de.mirkosertic.gameengine.processes.GameProcessManagerFactory;
-import de.mirkosertic.gameengine.processes.StartProcessEvent;
-import de.mirkosertic.gameengine.resource.GameResourceCache;
-import de.mirkosertic.gameengine.resource.GameResourceLoader;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Map;
 
 public class PlatformerGame extends Application {
 
@@ -78,18 +65,39 @@ public class PlatformerGame extends Application {
         GameRuntime theGameRuntime = new GameRuntime(theEventManager);
         theGameRuntime.addSystem(theProcessManager);
         theGameRuntime.addSystem(thePhysicsManager);
+        theGameRuntime.registeredTemplateUnmarshaller(new PhysicsComponentTemplateUnmarshaller());
+        theGameRuntime.registeredTemplateUnmarshaller(new CameraComponentTemplateUnmarshaller());
+        theGameRuntime.registeredTemplateUnmarshaller(new SpriteComponentTemplateUnmarshaller());
+        theGameRuntime.registeredTemplateUnmarshaller(new StaticComponentTemplateUnmarshaller());
+        theGameRuntime.registeredTemplateUnmarshaller(new PlatformComponentTemplateUnmarshaller());
+
+        theGameRuntime.registeredComponentUnmarshaller(new PhysicsComponentUnmarshaller());
+        theGameRuntime.registeredComponentUnmarshaller(new CameraComponentUnmarshaller());
+        theGameRuntime.registeredComponentUnmarshaller(new SpriteComponentUnmarshaller());
+        theGameRuntime.registeredComponentUnmarshaller(new StaticComponentUnmarshaller());
+        theGameRuntime.registeredComponentUnmarshaller(new PlatformComponentUnmarshaller());
 
         GameObjectInstanceFactory theInstanceFactory = new GameObjectInstanceFactory(theGameRuntime);
+
+        Game theGame = new Game();
+        theGame.setName("Examplegame");
+        theGame.addScene("scene1");
+
+        GameScene theCurrentScene = new GameScene(theGameRuntime);
+        theCurrentScene.setName("Testscene");
 
         GameObject thePlayerObject = new GameObject("Player");
         thePlayerObject.add(new PlatformComponentTemplate());
         thePlayerObject.add(new PhysicsComponentTemplate());
+        theCurrentScene.addGameObject(thePlayerObject);
 
         GameObject theBrickObject = new GameObject("Brick");
         theBrickObject.add(new StaticComponentTemplate());
+        theCurrentScene.addGameObject(theBrickObject);
 
         GameObject theCameraObject = new GameObject("Camera");
         theCameraObject.add(new CameraComponentTemplate());
+        theCurrentScene.addGameObject(theCameraObject);
 
         GameObjectInstance theCameraInstance = theInstanceFactory.createFrom(theCameraObject);
 
@@ -112,8 +120,6 @@ public class PlatformerGame extends Application {
             }
         });
 
-        GameScene theCurrentScene = new GameScene(theGameRuntime);
-
         // Bricks
         LevelLoader theLevelLoader = new LevelLoader();
         theLevelLoader.loadFrom(new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/world.txt"))), theBrickObject, theInstanceFactory, theCurrentScene);
@@ -121,7 +127,16 @@ public class PlatformerGame extends Application {
         // Player
         GameObjectInstance thePlayerInstance = theInstanceFactory.createFrom(thePlayerObject);
         thePlayerInstance.setSize(new Size(50, 50));
+        thePlayerInstance.setName("Player#1");
         theCurrentScene.addGameObjectInstance(thePlayerInstance);
+
+        Map<String, Object> theSerializedResult = theCurrentScene.serialize();
+
+        ObjectMapper theObjectMapper = new ObjectMapper();
+
+        ObjectWriter theObjWriter = theObjectMapper.writerWithDefaultPrettyPrinter();
+        theObjWriter.writeValue(new File("C:\\source\\idea_projects\\GameEngine\\sampleplatformer\\data\\scene1\\scene.json"), theSerializedResult);
+        theObjWriter.writeValue(new File("C:\\source\\idea_projects\\GameEngine\\sampleplatformer\\data\\game.json"), theGame.serialize());
 
         GameLoopFactory theGameLoopFactory = new GameLoopFactory();
         GameLoop theMainLoop = theGameLoopFactory.create(theCurrentScene, theGameView, theGameRuntime);

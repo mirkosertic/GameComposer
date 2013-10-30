@@ -14,6 +14,11 @@ public class StaticComponentTemplate implements GameComponentTemplate<StaticComp
     }
 
     @Override
+    public String getTypeKey() {
+        return StaticComponent.TYPE;
+    }
+
+    @Override
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<>();
         theResult.put(StaticComponent.TYPE_ATTRIBUTE, StaticComponent.TYPE);

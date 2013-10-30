@@ -7,4 +7,6 @@ public interface GameComponent {
     String TYPE_ATTRIBUTE = "type";
 
     Map<String, Object> serialize();
+
+    String getTypeKey();
 }

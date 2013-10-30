@@ -19,6 +19,11 @@ public class CameraComponentTemplate implements GameComponentTemplate<CameraComp
     }
 
     @Override
+    public String getTypeKey() {
+        return CameraComponent.TYPE;
+    }
+
+    @Override
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<>();
         theResult.put(CameraComponent.TYPE_ATTRIBUTE, CameraComponent.TYPE);

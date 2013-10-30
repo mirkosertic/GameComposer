@@ -23,4 +23,9 @@ public class PhysicsComponentTemplate implements GameComponentTemplate<PhysicsCo
     public static PhysicsComponentTemplate deserialize(Map<String, Object> aSerializedData) {
         return new PhysicsComponentTemplate();
     }
+
+    @Override
+    public String getTypeKey() {
+        return PhysicsComponent.TYPE;
+    }
 }

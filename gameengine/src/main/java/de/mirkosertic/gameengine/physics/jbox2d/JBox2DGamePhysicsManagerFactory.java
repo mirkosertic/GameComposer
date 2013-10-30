@@ -5,9 +5,9 @@ import de.mirkosertic.gameengine.core.GameEventManager;
 import de.mirkosertic.gameengine.core.GameObjectInstanceAddedToSceneEvent;
 import de.mirkosertic.gameengine.physics.ApplyForceToGameObjectInstance;
 import de.mirkosertic.gameengine.physics.ApplyImpulseToGameObjectInstance;
-import de.mirkosertic.gameengine.physics.PhysicsManagerFactory;
+import de.mirkosertic.gameengine.physics.GamePhysicsManagerFactory;
 
-public class JBox2DGamePhysicsManagerFactory implements PhysicsManagerFactory {
+public class JBox2DGamePhysicsManagerFactory implements GamePhysicsManagerFactory {
 
     public JBox2DGamePhysicsManager create(GameEventManager aEventManager) {
         final JBox2DGamePhysicsManager thePhysicsManager = new JBox2DGamePhysicsManager(aEventManager);

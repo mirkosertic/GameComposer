@@ -1,15 +1,13 @@
 package de.mirkosertic.gameengine.core;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class GameObjectInstance {
 
     private Map<Class<GameComponent>, GameComponent> components;
     private Position position;
     private Size size;
+    private String name;
 
     GameObjectInstance() {
         components = new HashMap<>();
@@ -32,6 +30,14 @@ public class GameObjectInstance {
         this.size = size;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     void addComponent(GameComponent aComponent) {
         components.put((Class<GameComponent>) aComponent.getClass(), aComponent);
     }
@@ -40,10 +46,16 @@ public class GameObjectInstance {
         return (T) components.get(aComponentClass);
     }
 
+    public Set<GameComponent> getComponents() {
+        HashSet<GameComponent> theResult = new HashSet<>(components.values());
+        return Collections.unmodifiableSet(theResult);
+    }
+
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<>();
         theResult.put("size", size.serializeToMap());
         theResult.put("position", position.serializeToMap());
+        theResult.put("name", name);
 
         List<Map<String, Object>> theComponents = new ArrayList<>();
         for (GameComponent theComponent : components.values()) {
@@ -58,6 +70,7 @@ public class GameObjectInstance {
         GameObjectInstance theResult = new GameObjectInstance();
         theResult.size = Size.deserialize((Map<String, Object>) theInstance.get("size"));
         theResult.position = Position.deserialize((Map<String, Object>) theInstance.get("position"));
+        theResult.name = (String) theInstance.get("name");
 
         List<Map<String, Object>> theComponents = (List<Map<String, Object>>) theInstance.get("components");
         for (Map<String, Object> theStructure : theComponents) {
