@@ -7,7 +7,7 @@ import de.mirkosertic.gameengine.core.GameComponentTemplate;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
 
-public class StaticComponentTemplate implements GameComponentTemplate<StaticComponent> {
+public class StaticComponentTemplate extends StaticData implements GameComponentTemplate<StaticComponent> {
 
     public StaticComponent create(GameObjectInstance aInstance, GameRuntime aGameRuntime) {
         return new StaticComponent(aInstance);

@@ -7,7 +7,7 @@ import de.mirkosertic.gameengine.core.GameComponentTemplate;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
 
-public class PhysicsComponentTemplate implements GameComponentTemplate<PhysicsComponent> {
+public class PhysicsComponentTemplate extends PhysicsData implements GameComponentTemplate<PhysicsComponent> {
 
     public PhysicsComponent create(GameObjectInstance aInstance, GameRuntime aGameRuntime) {
         return new PhysicsComponent(aInstance);

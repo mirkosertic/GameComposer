@@ -7,12 +7,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CameraComponent implements GameComponent {
+public class CameraComponent extends CameraData implements GameComponent {
 
     public static final String TYPE = "CameraComponent";
 
     private GameObjectInstance objectInstance;
-    private Size screenSize;
 
     CameraComponent(GameObjectInstance aObjectInstance) {
         objectInstance = aObjectInstance;
@@ -21,26 +20,23 @@ public class CameraComponent implements GameComponent {
     void registerEvents(GameRuntime aGameRuntime) {
         aGameRuntime.getEventManager().register(objectInstance, SetScreenResolutionEvent.class, new GameEventListener<SetScreenResolutionEvent>() {
             public void handleGameEvent(SetScreenResolutionEvent aEvent) {
-                setScreenResolution(aEvent.getScreenWidth(), aEvent.getScreenHeight());
+                setScreenSize(new Size(aEvent.getScreenWidth(), aEvent.getScreenHeight()));
             }
         });
-    }
-
-    void setScreenResolution(int aScreenWidth, int aScremHeight) {
-        screenSize = new Size(aScreenWidth, aScremHeight);
     }
 
     public List<GameObjectInstance> getObjectsToDrawInRightOrder(GameScene aScene) {
         //TODO: Implement Z-Ordering here
 
+        Size theScreenSize = getScreenSize();
         Position theCameraPosition = objectInstance.getPosition();
 
         List<GameObjectInstance> theResult = new ArrayList<GameObjectInstance>();
         for (GameObjectInstance theInstance : aScene.getInstances()) {
             Position theInstancePosition = theInstance.getPosition();
             Size theInstanceSize = theInstance.getSize();
-            if (theInstancePosition.getX() + theInstanceSize.getWidth() >= theCameraPosition.getX() && theInstancePosition.getX() <= theCameraPosition.getX() + screenSize.getWidth() &&
-                    theInstancePosition.getY() + theInstanceSize.getHeight() >= theCameraPosition.getY() && theInstancePosition.getY() <= theCameraPosition.getY() + screenSize.getHeight()) {
+            if (theInstancePosition.getX() + theInstanceSize.getWidth() >= theCameraPosition.getX() && theInstancePosition.getX() <= theCameraPosition.getX() + theScreenSize.getWidth() &&
+                    theInstancePosition.getY() + theInstanceSize.getHeight() >= theCameraPosition.getY() && theInstancePosition.getY() <= theCameraPosition.getY() + theScreenSize.getHeight()) {
                 theResult.add(theInstance);
             }
         }
@@ -52,10 +48,6 @@ public class CameraComponent implements GameComponent {
         Position theCameraPosition = objectInstance.getPosition();
 
         return new Position(aWorldPosition.getX() - theCameraPosition.getX(), aWorldPosition.getY() - theCameraPosition.getY());
-    }
-
-    public Size getScreenSize() {
-        return screenSize;
     }
 
     @Override

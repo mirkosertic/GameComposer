@@ -6,7 +6,7 @@ import java.util.Map;
 import de.mirkosertic.gameengine.core.GameComponent;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 
-public class PhysicsComponent implements GameComponent {
+public class PhysicsComponent extends PhysicsData implements GameComponent {
 
     public static final String TYPE = "PhysicsComponent";
 
