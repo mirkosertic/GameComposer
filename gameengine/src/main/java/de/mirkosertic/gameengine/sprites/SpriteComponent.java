@@ -7,25 +7,15 @@ import de.mirkosertic.gameengine.core.GameComponent;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.ResourceName;
 
-public class SpriteComponent implements GameComponent {
+public class SpriteComponent extends SpriteData implements GameComponent {
 
     public static final String TYPE = "SpriteComponent";
 
     private GameObjectInstance objectInstance;
 
-    private ResourceName resourceName;
-
     SpriteComponent(GameObjectInstance aObjectInstance, ResourceName aResourceName) {
         objectInstance = aObjectInstance;
-        resourceName = aResourceName;
-    }
-
-    public void setResourceName(ResourceName resourceName) {
-        this.resourceName = resourceName;
-    }
-
-    public ResourceName getResourceName() {
-        return resourceName;
+        setResourceName(aResourceName);
     }
 
     @Override
@@ -37,7 +27,7 @@ public class SpriteComponent implements GameComponent {
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<>();
         theResult.put(TYPE_ATTRIBUTE, TYPE);
-        theResult.put("resourcename", resourceName.serialize());
+        theResult.put("resourcename", getResourceName().serialize());
         return theResult;
     }
 

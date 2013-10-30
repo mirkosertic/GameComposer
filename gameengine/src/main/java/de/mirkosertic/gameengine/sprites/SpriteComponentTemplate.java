@@ -1,30 +1,20 @@
 package de.mirkosertic.gameengine.sprites;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import de.mirkosertic.gameengine.core.GameComponentTemplate;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.core.ResourceName;
 
-public class SpriteComponentTemplate implements GameComponentTemplate<SpriteComponent> {
+import java.util.HashMap;
+import java.util.Map;
 
-    private ResourceName resourceName;
+public class SpriteComponentTemplate extends SpriteData implements GameComponentTemplate<SpriteComponent> {
 
     public SpriteComponentTemplate() {
     }
 
-    public ResourceName getResourceName() {
-        return resourceName;
-    }
-
-    public void setResourceName(ResourceName resourceName) {
-        this.resourceName = resourceName;
-    }
-
     public SpriteComponent create(GameObjectInstance aInstance, GameRuntime aGameRuntime) {
-        return new SpriteComponent(aInstance, resourceName);
+        return new SpriteComponent(aInstance, getResourceName());
     }
 
     @Override
@@ -36,7 +26,7 @@ public class SpriteComponentTemplate implements GameComponentTemplate<SpriteComp
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<>();
         theResult.put(SpriteComponent.TYPE_ATTRIBUTE, SpriteComponent.TYPE);        
-        theResult.put("resourcename", resourceName.serialize());
+        theResult.put("resourcename", getResourceName().serialize());
         return theResult;
     }
 

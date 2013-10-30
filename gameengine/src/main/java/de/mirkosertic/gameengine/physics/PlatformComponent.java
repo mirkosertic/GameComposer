@@ -5,13 +5,12 @@ import java.util.Map;
 
 import de.mirkosertic.gameengine.core.*;
 
-public class PlatformComponent implements GameComponent {
+public class PlatformComponent extends PlatformData implements GameComponent {
 
     public static String TYPE = "PlatformComponent";
 
     private GameRuntime gameRuntime;
     private GameObjectInstance objectInstance;
-    private boolean jumping;
 
     PlatformComponent(GameObjectInstance aObjectInstance, GameRuntime aGameRuntime) {
         gameRuntime = aGameRuntime;
@@ -48,9 +47,9 @@ public class PlatformComponent implements GameComponent {
         if (aEvent.getKeyCode() == GameKeyCode.RIGHT) {
             gameRuntime.getEventManager().fire(new ApplyForceToGameObjectInstance(objectInstance, 9f, 0f));
         }
-        if (aEvent.getKeyCode() == GameKeyCode.UP && !jumping) {
+        if (aEvent.getKeyCode() == GameKeyCode.UP && !isJumping()) {
             gameRuntime.getEventManager().fire(new ApplyImpulseToGameObjectInstance(objectInstance, 0, 1.4f));
-            jumping = true;
+            setJumping(true);
         }
     }
 
@@ -64,16 +63,16 @@ public class PlatformComponent implements GameComponent {
             double my = theOtherInstance.getPosition().getY() - objectInstance.getPosition().getY();
             if (my > 0) {
                 // Object is under the game object
-                jumping = false;
+                setJumping(false);
             } else {
                 double mx = theOtherInstance.getPosition().getX() - objectInstance.getPosition().getX();
                 // Object is on the right side
                 if (mx > 0) {
-                    jumping = false;
+                    setJumping(false);
                 }
                 // Object is on the left side
                 if (mx < 0) {
-                    jumping = false;
+                    setJumping(false);
                 }
             }
         }

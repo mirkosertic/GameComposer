@@ -7,7 +7,7 @@ import de.mirkosertic.gameengine.core.GameComponentTemplate;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
 
-public class CameraComponentTemplate implements GameComponentTemplate<CameraComponent> {
+public class CameraComponentTemplate extends CameraData implements GameComponentTemplate<CameraComponent> {
 
     public CameraComponentTemplate() {
     }
