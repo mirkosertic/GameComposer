@@ -3,12 +3,7 @@ package de.mirkosertic.gameengine.physics;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.mirkosertic.gameengine.core.GameComponent;
-import de.mirkosertic.gameengine.core.GameKeyCode;
-import de.mirkosertic.gameengine.core.GameObjectInstance;
-import de.mirkosertic.gameengine.core.GameRuntime;
-import de.mirkosertic.gameengine.core.KeyPressedGameEvent;
-import de.mirkosertic.gameengine.core.KeyReleasedGameEvent;
+import de.mirkosertic.gameengine.core.*;
 
 public class PlatformComponent implements GameComponent {
 
@@ -21,6 +16,29 @@ public class PlatformComponent implements GameComponent {
     PlatformComponent(GameObjectInstance aObjectInstance, GameRuntime aGameRuntime) {
         gameRuntime = aGameRuntime;
         objectInstance = aObjectInstance;
+    }
+
+    @Override
+    public String getTypeKey() {
+        return TYPE;
+    }
+
+    public void registerEvents(GameRuntime aGameRuntime) {
+        aGameRuntime.getEventManager().register(objectInstance, KeyPressedGameEvent.class, new GameEventListener<KeyPressedGameEvent>() {
+            public void handleGameEvent(KeyPressedGameEvent aEvent) {
+                handleKeyPressed(aEvent);
+            }
+        });
+        aGameRuntime.getEventManager().register(objectInstance, KeyReleasedGameEvent.class, new GameEventListener<KeyReleasedGameEvent>() {
+            public void handleGameEvent(KeyReleasedGameEvent aEvent) {
+                handleKeyReleased(aEvent);
+            }
+        });
+        aGameRuntime.getEventManager().register(objectInstance, GameObjectCollisionEvent.class, new GameEventListener<GameObjectCollisionEvent>() {
+            public void handleGameEvent(GameObjectCollisionEvent aEvent) {
+                handleCollision(aEvent);
+            }
+        });
     }
 
     public void handleKeyPressed(KeyPressedGameEvent aEvent) {
@@ -66,5 +84,11 @@ public class PlatformComponent implements GameComponent {
         Map<String, Object> theResult = new HashMap<>();
         theResult.put(TYPE_ATTRIBUTE, TYPE);
         return theResult;
+    }
+
+    public static PlatformComponent deserialize(GameObjectInstance aObjectInstance, Map<String, Object> aSerializedData, GameRuntime aGameRuntime) {
+        PlatformComponent theComponent = new PlatformComponent(aObjectInstance, aGameRuntime);
+        theComponent.registerEvents(aGameRuntime);
+        return theComponent;
     }
 }

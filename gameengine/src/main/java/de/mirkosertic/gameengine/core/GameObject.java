@@ -54,7 +54,7 @@ public class GameObject {
         List<Map<String, Object>> theTemplates = (List<Map<String, Object>>) theSerializedData.get("templates");
         for (Map<String, Object> theTemplate : theTemplates) {
             String theTypeKey = (String) theTemplate.get(GameComponent.TYPE_ATTRIBUTE);
-            theObject.add(aGameRuntime.getTemplateUnmarshallerFor(theTypeKey).deserialize(aGameRuntime, theTemplate));
+            theObject.add(aGameRuntime.getTemplateUnmarshallerFor(theTypeKey).deserialize( theTemplate));
         }
 
         return theObject;

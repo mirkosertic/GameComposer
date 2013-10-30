@@ -38,5 +38,20 @@
         	<artifactId>weld-se</artifactId>
         	<version>2.0.4.Final</version>
         </dependency>
+        <dependency>
+        	<groupId>org.codehaus.jackson</groupId>
+        	<artifactId>jackson-mapper-lgpl</artifactId>
+        	<version>1.9.13</version>
+        </dependency>
+        <dependency>
+            <groupId>com.dooapp.fxform2</groupId>
+            <artifactId>core</artifactId>
+            <version>0.2.2</version>
+        </dependency>
+        <dependency>
+        	<groupId>org.hibernate</groupId>
+        	<artifactId>hibernate-validator</artifactId>
+        	<version>4.3.1.Final</version>
+        </dependency>
     </dependencies>
 </project>

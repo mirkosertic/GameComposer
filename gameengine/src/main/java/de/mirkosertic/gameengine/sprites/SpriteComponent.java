@@ -29,6 +29,11 @@ public class SpriteComponent implements GameComponent {
     }
 
     @Override
+    public String getTypeKey() {
+        return TYPE;
+    }
+
+    @Override
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<>();
         theResult.put(TYPE_ATTRIBUTE, TYPE);
@@ -37,7 +42,6 @@ public class SpriteComponent implements GameComponent {
     }
 
     public static SpriteComponent deserialize(GameObjectInstance aObjectInstance, Map<String, Object> aSerializedData) {
- 
         ResourceName theResourceName = ResourceName.deserialize((Map<String, Object>) aSerializedData.get("resourcename"));
         return new SpriteComponent(aObjectInstance, theResourceName);
     }

@@ -42,6 +42,10 @@ public class GameScene {
         return Collections.unmodifiableSet(instances);
     }
 
+    public Set<GameObject> getObjects() {
+        return Collections.unmodifiableSet(objects);
+    }
+
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<>();
         theResult.put("name", name);

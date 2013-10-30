@@ -28,6 +28,11 @@ public class SpriteComponentTemplate implements GameComponentTemplate<SpriteComp
     }
 
     @Override
+    public String getTypeKey() {
+        return SpriteComponent.TYPE;
+    }
+
+    @Override
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<>();
         theResult.put(SpriteComponent.TYPE_ATTRIBUTE, SpriteComponent.TYPE);        

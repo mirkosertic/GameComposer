@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import javax.inject.Inject;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ResourceBundle;
@@ -15,6 +16,9 @@ public class GameComposerFactory {
 
     @Inject
     FXMLLoader fxmlLoader;
+
+    @Inject
+    PersistenceManager persistenceManager;
 
     public void createAndStart(Stage aStage, Application.Parameters aParameters) throws IOException {
 
@@ -25,6 +29,8 @@ public class GameComposerFactory {
             ((GameComposerController)fxmlLoader.getController()).initialize(aStage);
             aStage.setScene(new Scene(root));
             aStage.show();
+
+            persistenceManager.loadGame(new File("C:\\source\\idea_projects\\GameEngine\\sampleplatformer\\data"));
         }
     }
 }

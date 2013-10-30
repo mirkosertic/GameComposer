@@ -35,4 +35,8 @@ public class GameEventManager {
             }
         }
     }
+
+    public void clearListener() {
+        registeredListeners.clear();
+    }
 }
