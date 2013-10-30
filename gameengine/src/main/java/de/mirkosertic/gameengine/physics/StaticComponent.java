@@ -1,16 +1,30 @@
 package de.mirkosertic.gameengine.physics;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import de.mirkosertic.gameengine.core.GameComponent;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
 
 public class StaticComponent implements GameComponent {
+    
+    public static final String TYPE = "StaticComponent";
 
-    private GameRuntime gameRuntime;
     private GameObjectInstance objectInstance;
 
-    StaticComponent(GameObjectInstance aObjectInstance, GameRuntime aGameRuntime) {
-        gameRuntime = aGameRuntime;
+    StaticComponent(GameObjectInstance aObjectInstance) {
         objectInstance = aObjectInstance;
+    }
+
+    @Override
+    public Map<String, Object> serialize() {
+        Map<String, Object> theResult = new HashMap<>();
+        theResult.put(TYPE_ATTRIBUTE, TYPE);
+        return theResult;
+    }
+
+    public static StaticComponent deserialize(GameObjectInstance aObjectInstance, Map<String, Object> aSerializedData) {
+        return new StaticComponent(aObjectInstance);
     }
 }

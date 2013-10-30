@@ -1,11 +1,10 @@
 package de.mirkosertic.gameengine.resource;
 
+import java.io.IOException;
+
 import de.mirkosertic.gameengine.core.ResourceName;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 public interface GameResourceLoader {
-
-    InputStream getResourceAsStream(ResourceName aResourceName) throws IOException;
+    
+    GameResource load(ResourceName aResourceName) throws IOException;
 }

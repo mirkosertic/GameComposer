@@ -1,10 +1,18 @@
 package de.mirkosertic.gameengine.physics;
 
-import de.mirkosertic.gameengine.core.*;
+import java.util.HashMap;
+import java.util.Map;
 
-import java.awt.event.KeyEvent;
+import de.mirkosertic.gameengine.core.GameComponent;
+import de.mirkosertic.gameengine.core.GameKeyCode;
+import de.mirkosertic.gameengine.core.GameObjectInstance;
+import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.KeyPressedGameEvent;
+import de.mirkosertic.gameengine.core.KeyReleasedGameEvent;
 
 public class PlatformComponent implements GameComponent {
+
+    public static String TYPE = "PlatformComponent";
 
     private GameRuntime gameRuntime;
     private GameObjectInstance objectInstance;
@@ -51,5 +59,12 @@ public class PlatformComponent implements GameComponent {
                 }
             }
         }
+    }
+
+    @Override
+    public Map<String, Object> serialize() {
+        Map<String, Object> theResult = new HashMap<>();
+        theResult.put(TYPE_ATTRIBUTE, TYPE);
+        return theResult;
     }
 }

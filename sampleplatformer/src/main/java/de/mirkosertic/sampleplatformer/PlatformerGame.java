@@ -1,23 +1,15 @@
+
 package de.mirkosertic.sampleplatformer;
 
-import de.mirkosertic.gameengine.camera.CameraComponent;
-import de.mirkosertic.gameengine.camera.CameraComponentFactory;
-import de.mirkosertic.gameengine.camera.FollowCameraProcess;
-import de.mirkosertic.gameengine.core.*;
-import de.mirkosertic.gameengine.javafx.JavaFXBitmapDecoder;
-import de.mirkosertic.gameengine.javafx.JavaFXGameView;
-import de.mirkosertic.gameengine.physics.PhysicsComponentFactory;
-import de.mirkosertic.gameengine.physics.PlatformComponentFactory;
-import de.mirkosertic.gameengine.physics.StaticComponentFactory;
-import de.mirkosertic.gameengine.physics.jbox2d.JBox2DGamePhysicsManager;
-import de.mirkosertic.gameengine.physics.jbox2d.JBox2DGamePhysicsManagerFactory;
-import de.mirkosertic.gameengine.processes.GameProcessManager;
-import de.mirkosertic.gameengine.processes.GameProcessManagerFactory;
-import de.mirkosertic.gameengine.processes.StartProcessEvent;
-import de.mirkosertic.gameengine.resource.ClasspathGameResourceLoader;
-import de.mirkosertic.gameengine.resource.GameResourceCache;
-import de.mirkosertic.gameengine.resource.GameResourceLoader;
-import de.mirkosertic.gameengine.sprites.SpriteComponentFactory;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+import de.mirkosertic.gameengine.camera.CameraComponentTemplate;
+import de.mirkosertic.gameengine.physics.PhysicsComponentTemplate;
+import de.mirkosertic.gameengine.physics.PlatformComponentTemplate;
+import de.mirkosertic.gameengine.physics.StaticComponentTemplate;
+import de.mirkosertic.gameengine.sprites.SpriteComponentTemplate;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -29,9 +21,32 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import de.mirkosertic.gameengine.camera.CameraComponent;
+import de.mirkosertic.gameengine.camera.FollowCameraProcess;
+import de.mirkosertic.gameengine.core.GameEventManager;
+import de.mirkosertic.gameengine.core.GameKeyCode;
+import de.mirkosertic.gameengine.core.GameLoop;
+import de.mirkosertic.gameengine.core.GameLoopFactory;
+import de.mirkosertic.gameengine.core.GameObject;
+import de.mirkosertic.gameengine.core.GameObjectInstance;
+import de.mirkosertic.gameengine.core.GameObjectInstanceFactory;
+import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.KeyPressedGameEvent;
+import de.mirkosertic.gameengine.core.KeyReleasedGameEvent;
+import de.mirkosertic.gameengine.core.ResourceName;
+import de.mirkosertic.gameengine.core.SetScreenResolutionEvent;
+import de.mirkosertic.gameengine.core.ShutdownGameEvent;
+import de.mirkosertic.gameengine.core.Size;
+import de.mirkosertic.gameengine.javafx.JavaFXClasspathGameResourceLoader;
+import de.mirkosertic.gameengine.javafx.JavaFXGameView;
+import de.mirkosertic.gameengine.physics.jbox2d.JBox2DGamePhysicsManager;
+import de.mirkosertic.gameengine.physics.jbox2d.JBox2DGamePhysicsManagerFactory;
+import de.mirkosertic.gameengine.processes.GameProcessManager;
+import de.mirkosertic.gameengine.processes.GameProcessManagerFactory;
+import de.mirkosertic.gameengine.processes.StartProcessEvent;
+import de.mirkosertic.gameengine.resource.GameResourceCache;
+import de.mirkosertic.gameengine.resource.GameResourceLoader;
 
 public class PlatformerGame extends Application {
 
@@ -49,9 +64,8 @@ public class PlatformerGame extends Application {
         final GameEventManager theEventManager = new GameEventManager();
 
         // Resourcemanagement subsystem
-        GameResourceLoader theResourceLoader = new ClasspathGameResourceLoader();
+        GameResourceLoader theResourceLoader = new JavaFXClasspathGameResourceLoader();
         GameResourceCache theResourceCache = new GameResourceCache(theResourceLoader);
-        theResourceCache.addResourceDecoder(new JavaFXBitmapDecoder());
 
         // Processmanagement subsystem
         GameProcessManagerFactory theProcessManagerFactory = new GameProcessManagerFactory();
@@ -68,18 +82,18 @@ public class PlatformerGame extends Application {
         GameObjectInstanceFactory theInstanceFactory = new GameObjectInstanceFactory(theGameRuntime);
 
         GameObject thePlayerObject = new GameObject("Player");
-        thePlayerObject.add(new PlatformComponentFactory());
-        thePlayerObject.add(new PhysicsComponentFactory());
+        thePlayerObject.add(new PlatformComponentTemplate());
+        thePlayerObject.add(new PhysicsComponentTemplate());
 
         GameObject theBrickObject = new GameObject("Brick");
-        theBrickObject.add(new StaticComponentFactory());
+        theBrickObject.add(new StaticComponentTemplate());
 
         GameObject theCameraObject = new GameObject("Camera");
-        theCameraObject.add(new CameraComponentFactory());
+        theCameraObject.add(new CameraComponentTemplate());
 
         GameObjectInstance theCameraInstance = theInstanceFactory.createFrom(theCameraObject);
 
-        SpriteComponentFactory theSpriteComponentFactory = new SpriteComponentFactory();
+        SpriteComponentTemplate theSpriteComponentFactory = new SpriteComponentTemplate();
         theSpriteComponentFactory.setResourceName(new ResourceName("/assets/tiles/wall2_1.png"));
         theBrickObject.add(theSpriteComponentFactory);
 
