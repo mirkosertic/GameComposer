@@ -1,19 +1,36 @@
 package de.mirkosertic.gameengine.camera;
 
-import de.mirkosertic.gameengine.core.*;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import de.mirkosertic.gameengine.core.GameComponent;
+import de.mirkosertic.gameengine.core.GameEventListener;
+import de.mirkosertic.gameengine.core.GameObjectInstance;
+import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.Position;
+import de.mirkosertic.gameengine.core.SetScreenResolutionEvent;
+import de.mirkosertic.gameengine.core.Size;
 
 public class CameraComponent implements GameComponent {
 
-    private GameRuntime gameRuntime;
+    public static final String TYPE = "CameraComponent";
+
     private GameObjectInstance objectInstance;
     private Size screenSize;
 
-    CameraComponent(GameObjectInstance aObjectInstance, GameRuntime aGameRuntime) {
-        gameRuntime = aGameRuntime;
+    CameraComponent(GameObjectInstance aObjectInstance) {
         objectInstance = aObjectInstance;
+    }
+
+    void registerEvents(GameRuntime aGameRuntime) {
+        aGameRuntime.getEventManager().register(objectInstance, SetScreenResolutionEvent.class, new GameEventListener<SetScreenResolutionEvent>() {
+            public void handleGameEvent(SetScreenResolutionEvent aEvent) {
+                setScreenResolution(aEvent.getScreenWidth(), aEvent.getScreenHeight());
+            }
+        });
     }
 
     void setScreenResolution(int aScreenWidth, int aScremHeight) {
@@ -46,5 +63,16 @@ public class CameraComponent implements GameComponent {
 
     public Size getScreenSize() {
         return screenSize;
+    }
+
+    @Override
+    public Map<String, Object> serialize() {
+        Map<String, Object> theResult = new HashMap<>();
+        theResult.put(TYPE_ATTRIBUTE, TYPE);
+        return theResult;
+    }
+
+    public static CameraComponent deserialize(GameObjectInstance aObjectInstance, Map<String, Object> aSerializedData) {
+        return new CameraComponent(aObjectInstance);
     }
 }
