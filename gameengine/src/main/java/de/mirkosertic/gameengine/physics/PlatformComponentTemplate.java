@@ -7,7 +7,7 @@ import de.mirkosertic.gameengine.core.GameRuntime;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PlatformComponentTemplate extends PlatformData implements GameComponentTemplate<PlatformComponent> {
+public class PlatformComponentTemplate implements GameComponentTemplate<PlatformComponent> {
 
     public PlatformComponent create(GameObjectInstance aInstance, GameRuntime aGameRuntime) {
         PlatformComponent theSpriteComponent = new PlatformComponent(aInstance, aGameRuntime);

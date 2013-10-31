@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+
+<BorderPane id="BorderPane" maxHeight="-1.0" maxWidth="-1.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="-1.0" prefWidth="-1.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="de.mirkosertic.gamecomposer.objectinspector.gameobjectinstance.GameObjectInstanceEditorController">
+  <center>
+    <VBox prefHeight="-1.0" prefWidth="-1.0" spacing="0.0">
+      <children>
+        <Label prefWidth="50.0" text="Name" />
+        <TextField fx:id="nameTextField" prefWidth="200.0" />
+      </children>
+    </VBox>
+  </center>
+</BorderPane>

@@ -7,11 +7,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CameraComponent extends CameraData implements GameComponent {
+public class CameraComponent implements GameComponent {
 
     public static final String TYPE = "CameraComponent";
 
     private GameObjectInstance objectInstance;
+
+    private Size screenSize;
 
     CameraComponent(GameObjectInstance aObjectInstance) {
         objectInstance = aObjectInstance;
@@ -24,6 +26,15 @@ public class CameraComponent extends CameraData implements GameComponent {
             }
         });
     }
+
+    public Size getScreenSize() {
+        return screenSize;
+    }
+
+    public void setScreenSize(Size screenSize) {
+        this.screenSize = screenSize;
+    }
+
 
     public List<GameObjectInstance> getObjectsToDrawInRightOrder(GameScene aScene) {
         //TODO: Implement Z-Ordering here

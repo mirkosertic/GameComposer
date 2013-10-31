@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane id="BorderPane" maxHeight="-1.0" maxWidth="-1.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="-1.0" prefWidth="-1.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="de.mirkosertic.gamecomposer.objectinspector.spritetemplate.SpriteTemplateEditorController">
+  <center>
+    <VBox prefHeight="-1.0" prefWidth="-1.0" spacing="0.0" />
+  </center>
+</BorderPane>

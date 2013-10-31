@@ -5,12 +5,14 @@ import java.util.Map;
 
 import de.mirkosertic.gameengine.core.*;
 
-public class PlatformComponent extends PlatformData implements GameComponent {
+public class PlatformComponent implements GameComponent {
 
     public static String TYPE = "PlatformComponent";
 
     private GameRuntime gameRuntime;
     private GameObjectInstance objectInstance;
+
+    private boolean jumping;
 
     PlatformComponent(GameObjectInstance aObjectInstance, GameRuntime aGameRuntime) {
         gameRuntime = aGameRuntime;
@@ -38,6 +40,14 @@ public class PlatformComponent extends PlatformData implements GameComponent {
                 handleCollision(aEvent);
             }
         });
+    }
+
+    public boolean isJumping() {
+        return jumping;
+    }
+
+    public void setJumping(boolean jumping) {
+        this.jumping = jumping;
     }
 
     public void handleKeyPressed(KeyPressedGameEvent aEvent) {

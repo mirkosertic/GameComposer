@@ -4,6 +4,7 @@ import de.mirkosertic.gameengine.camera.CameraComponent;
 import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.resource.GameResourceCache;
 import de.mirkosertic.gameengine.sprites.SpriteComponent;
+import de.mirkosertic.gameengine.sprites.SpriteComponentTemplate;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -39,10 +40,10 @@ public class JavaFXGameView extends Canvas implements GameView {
         for (GameObjectInstance theInstance : cameraComponent.getObjectsToDrawInRightOrder(gameScene)) {
             Position thePosition = cameraComponent.transformToScreenPosition(theInstance.getPosition());
             Size theSize = theInstance.getSize();
-            SpriteComponent theSpriteComponent = theInstance.getComponent(SpriteComponent.class);
-            if (theSpriteComponent != null) {
+            SpriteComponentTemplate theTemplateComponent = theInstance.getOwnerGameObject().getComponentTemplate(SpriteComponentTemplate.class);
+            if (theTemplateComponent != null) {
                 try {
-                    JavaFXBitmapResource theBitmap = (JavaFXBitmapResource) resourceCache.getResourceFor(theSpriteComponent.getResourceName());
+                    JavaFXBitmapResource theBitmap = (JavaFXBitmapResource) resourceCache.getResourceFor(theTemplateComponent.getResourceName());
                     theContext.drawImage(theBitmap, thePosition.getX(), thePosition.getY());
                 } catch (IOException e) {
                     throw new RuntimeException(e);
