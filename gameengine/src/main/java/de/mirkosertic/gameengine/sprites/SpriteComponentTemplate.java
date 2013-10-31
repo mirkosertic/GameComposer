@@ -8,18 +8,28 @@ import de.mirkosertic.gameengine.core.ResourceName;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SpriteComponentTemplate extends SpriteData implements GameComponentTemplate<SpriteComponent> {
+public class SpriteComponentTemplate implements GameComponentTemplate<SpriteComponent> {
+
+    private ResourceName resourceName;
 
     public SpriteComponentTemplate() {
     }
 
     public SpriteComponent create(GameObjectInstance aInstance, GameRuntime aGameRuntime) {
-        return new SpriteComponent(aInstance, getResourceName());
+        return new SpriteComponent(aInstance);
     }
 
     @Override
     public String getTypeKey() {
         return SpriteComponent.TYPE;
+    }
+
+    public ResourceName getResourceName() {
+        return resourceName;
+    }
+
+    public void setResourceName(ResourceName resourceName) {
+        this.resourceName = resourceName;
     }
 
     @Override

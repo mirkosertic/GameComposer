@@ -9,7 +9,7 @@ public class GameObjectInstanceFactory {
     }
 
     public GameObjectInstance createFrom(GameObject aGameObject) {
-        GameObjectInstance theInstance = new GameObjectInstance();
+        GameObjectInstance theInstance = new GameObjectInstance(aGameObject);
         for (GameComponentTemplate theFactory : aGameObject.getComponentTemplates()) {
             theInstance.addComponent(theFactory.create(theInstance, gameRuntime));
         }

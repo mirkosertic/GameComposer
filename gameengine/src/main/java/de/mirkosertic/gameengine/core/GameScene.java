@@ -64,6 +64,15 @@ public class GameScene {
         return theResult;
     }
 
+    public GameObject findGameObjectByID(String aObjectID) {
+        for (GameObject theObject : objects) {
+            if (theObject.getUuid().equals(aObjectID)) {
+                return theObject;
+            }
+        }
+        return null;
+    }
+
     public static GameScene deserialize(GameRuntime aGameRuntime, Map<String, Object> aSerializedData) {
         GameScene theScene = new GameScene(aGameRuntime);
         theScene.name = (String) aSerializedData.get("name");
@@ -75,7 +84,7 @@ public class GameScene {
 
         List<Map<String, Object>> theInstances = (List<Map<String, Object>>) aSerializedData.get("instances");
         for (Map<String, Object> theInstance : theInstances) {
-            theScene.addGameObjectInstance(GameObjectInstance.deserialize(aGameRuntime, theInstance));
+            theScene.addGameObjectInstance(GameObjectInstance.deserialize(aGameRuntime, theScene, theInstance));
         }
         return theScene;
     }

@@ -8,8 +8,10 @@ public class GameObjectInstance {
     private Position position;
     private Size size;
     private String name;
+    private GameObject ownerGameObject;
 
-    GameObjectInstance() {
+    GameObjectInstance(GameObject aOwnerGameObject) {
+        ownerGameObject = aOwnerGameObject;
         components = new HashMap<>();
         position = new Position();
     }
@@ -38,6 +40,10 @@ public class GameObjectInstance {
         this.name = name;
     }
 
+    public GameObject getOwnerGameObject() {
+        return ownerGameObject;
+    }
+
     void addComponent(GameComponent aComponent) {
         components.put((Class<GameComponent>) aComponent.getClass(), aComponent);
     }
@@ -53,6 +59,7 @@ public class GameObjectInstance {
 
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<>();
+        theResult.put("gameobjectuuid", ownerGameObject.getUuid());
         theResult.put("size", size.serializeToMap());
         theResult.put("position", position.serializeToMap());
         theResult.put("name", name);
@@ -66,8 +73,12 @@ public class GameObjectInstance {
         return theResult;
     }
 
-    public static GameObjectInstance deserialize(GameRuntime aGameRuntime, Map<String, Object> theInstance) {
-        GameObjectInstance theResult = new GameObjectInstance();
+    public static GameObjectInstance deserialize(GameRuntime aGameRuntime, GameScene aScene, Map<String, Object> theInstance) {
+
+        String theUUID = (String) theInstance.get("uuid");
+        GameObject theGameObject = aScene.findGameObjectByID(theUUID);
+
+        GameObjectInstance theResult = new GameObjectInstance(theGameObject);
         theResult.size = Size.deserialize((Map<String, Object>) theInstance.get("size"));
         theResult.position = Position.deserialize((Map<String, Object>) theInstance.get("position"));
         theResult.name = (String) theInstance.get("name");

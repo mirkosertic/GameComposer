@@ -1,20 +1,25 @@
 package de.mirkosertic.gameengine.core;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class GameObject {
 
+    private String uuid;
     private String name;
     private Map<Class<GameComponentTemplate>, GameComponentTemplate> componentTemplates;
 
     public GameObject(String aName) {
+        this(aName, UUID.randomUUID().toString());
+    }
+
+    GameObject(String aName, String aUUID) {
+        uuid = aUUID;
         name = aName;
         componentTemplates = new HashMap<>();
+    }
+
+    public String getUuid() {
+        return uuid;
     }
 
     public void setName(String name) {
@@ -29,6 +34,10 @@ public class GameObject {
         componentTemplates.put((Class<GameComponentTemplate>) aComponentFactory.getClass(), aComponentFactory);
     }
 
+    public <T extends GameComponentTemplate> T getComponentTemplate(Class<T> aComponentClass) {
+        return (T) componentTemplates.get(aComponentClass);
+    }
+
     public Set<GameComponentTemplate> getComponentTemplates() {
         HashSet<GameComponentTemplate> theResult = new HashSet<GameComponentTemplate>();
         theResult.addAll(componentTemplates.values());
@@ -38,6 +47,7 @@ public class GameObject {
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<>();
         theResult.put("name", name);
+        theResult.put("uuid", uuid);
 
         List<Map<String, Object>> theTemplates = new ArrayList<>();
         for (GameComponentTemplate theTemplate : componentTemplates.values()) {
@@ -49,7 +59,8 @@ public class GameObject {
 
     public static GameObject deserialize(GameRuntime aGameRuntime, Map<String, Object> theSerializedData) {
         String theName = (String) theSerializedData.get("name");
-        GameObject theObject = new GameObject(theName);
+        String theUUID = (String) theSerializedData.get("uuid");
+        GameObject theObject = new GameObject(theName, theUUID);
 
         List<Map<String, Object>> theTemplates = (List<Map<String, Object>>) theSerializedData.get("templates");
         for (Map<String, Object> theTemplate : theTemplates) {
