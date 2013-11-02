@@ -75,8 +75,11 @@ public class GameObjectInstance {
 
     public static GameObjectInstance deserialize(GameRuntime aGameRuntime, GameScene aScene, Map<String, Object> theInstance) {
 
-        String theUUID = (String) theInstance.get("uuid");
+        String theUUID = (String) theInstance.get("gameobjectuuid");
         GameObject theGameObject = aScene.findGameObjectByID(theUUID);
+        if (theGameObject == null) {
+            throw new RuntimeException("Cannot find gameobject with uuid" + theUUID);
+        }
 
         GameObjectInstance theResult = new GameObjectInstance(theGameObject);
         theResult.size = Size.deserialize((Map<String, Object>) theInstance.get("size"));

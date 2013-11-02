@@ -2,6 +2,7 @@ package de.mirkosertic.gamecomposer;
 
 import de.mirkosertic.gameengine.core.Game;
 import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.resource.GameResourceLoader;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.ObjectReader;
 
@@ -50,7 +51,7 @@ public class PersistenceManager {
 
         Map<String, GameScene> theLoadedScenes = new HashMap<>();
         for (String theSceneName : theLoadedGame.getScenes()) {
-            File theSceneDescriptor = new File(new File(aGameDirectory,theSceneName),"scene.json");
+            File theSceneDescriptor = new File(new File(aGameDirectory, theSceneName), "scene.json");
             GameScene theLoadedScene = GameScene.deserialize(gameRuntimeFactory.createNewRuntime(), theReader.<Map<String, Object>>readValue(theSceneDescriptor));
             theLoadedScenes.put(theSceneName, theLoadedScene);
         }
@@ -59,5 +60,14 @@ public class PersistenceManager {
         gameScenes = theLoadedScenes;
         gameLoadedEventEvent.fire(new GameLoadedEvent());
         currentGameDirectory = aGameDirectory;
+    }
+
+    public GameResourceLoader createResourceLoaderFor(GameScene aScene) {
+        for (Map.Entry<String, GameScene> theEntry : gameScenes.entrySet()) {
+            if (theEntry.getValue() == aScene) {
+                return new JavaFXFileGameResourceLoader(new File(currentGameDirectory, theEntry.getKey()));
+            }
+        }
+        throw new RuntimeException("Cannot find scene directory for " + aScene.getName());
     }
 }
