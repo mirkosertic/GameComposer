@@ -35,7 +35,9 @@ public class JavaFXGameView extends Canvas implements GameView {
     private void renderScene() {
         GraphicsContext theContext = getGraphicsContext2D();
 
-        theContext.clearRect(0, 0, getWidth(), getHeight());
+        theContext.setFill(Color.BLACK);
+        theContext.setStroke(Color.BLACK);
+        theContext.fillRect(0,0, getWidth(), getHeight());
 
         for (GameObjectInstance theInstance : cameraComponent.getObjectsToDrawInRightOrder(gameScene)) {
             Position thePosition = cameraComponent.transformToScreenPosition(theInstance.getPosition());

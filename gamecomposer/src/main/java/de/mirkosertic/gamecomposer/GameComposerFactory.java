@@ -30,7 +30,7 @@ public class GameComposerFactory {
             aStage.setScene(new Scene(root));
             aStage.show();
 
-            persistenceManager.loadGame(new File("C:\\source\\idea_projects\\GameEngine\\sampleplatformer\\data"));
+            persistenceManager.loadGame(new File("C:\\Users\\Andrea\\IdeaProjects\\GameComposer\\sampleplatformer\\data"));
         }
     }
 }

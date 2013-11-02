@@ -24,7 +24,7 @@ public class GameLoop implements Runnable {
         long theLastInvocation = theStartTime;
         long theCurrentTime;
 
-        while (!shutdownSignal.get()) {
+        while (!shutdownSignal.get() && !Thread.currentThread().isInterrupted()) {
             theCurrentTime = System.currentTimeMillis();
             long theGameTime = theCurrentTime - theStartTime;
             long theElapsedTime = theCurrentTime - theLastInvocation;

@@ -7,10 +7,12 @@ import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameScene;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.input.MouseEvent;
 
 import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
@@ -30,6 +32,9 @@ public class ProjectStructureController implements ChildController {
     @Inject
     Event<ObjectSelectedEvent> objectSelectedEvent;
 
+    @Inject
+    Event<GameSceneSelectedEvent> sceneSelectedEventEvent;
+
     private Node view;
 
     ProjectStructureController initialize(Node aView) {
@@ -45,12 +50,27 @@ public class ProjectStructureController implements ChildController {
             }
         });
         view = aView;
+        projectStructureTreeView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent aEvent) {
+                onMouseEvent(aEvent);
+            }
+        });
         return this;
     }
 
     @Override
     public Node getView() {
         return view;
+    }
+
+    private void onMouseEvent(MouseEvent aEvent) {
+        if (aEvent.getClickCount() == 2) {
+            TreeItem theSelectedItem = (TreeItem) projectStructureTreeView.getSelectionModel().getSelectedItem();
+            if (theSelectedItem.getValue() instanceof GameScene) {
+                sceneSelectedEventEvent.fire(new GameSceneSelectedEvent((GameScene) theSelectedItem.getValue()));
+            }
+        }
     }
 
     public void onApplicationStarted(@Observes ApplicationStartedEvent aEvent) {

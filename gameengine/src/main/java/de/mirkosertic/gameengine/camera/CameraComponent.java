@@ -38,17 +38,19 @@ public class CameraComponent implements GameComponent {
 
     public List<GameObjectInstance> getObjectsToDrawInRightOrder(GameScene aScene) {
         //TODO: Implement Z-Ordering here
+        List<GameObjectInstance> theResult = new ArrayList<GameObjectInstance>();
 
         Size theScreenSize = getScreenSize();
-        Position theCameraPosition = objectInstance.getPosition();
+        if (theScreenSize != null) {
+            Position theCameraPosition = objectInstance.getPosition();
 
-        List<GameObjectInstance> theResult = new ArrayList<GameObjectInstance>();
-        for (GameObjectInstance theInstance : aScene.getInstances()) {
-            Position theInstancePosition = theInstance.getPosition();
-            Size theInstanceSize = theInstance.getSize();
-            if (theInstancePosition.getX() + theInstanceSize.getWidth() >= theCameraPosition.getX() && theInstancePosition.getX() <= theCameraPosition.getX() + theScreenSize.getWidth() &&
-                    theInstancePosition.getY() + theInstanceSize.getHeight() >= theCameraPosition.getY() && theInstancePosition.getY() <= theCameraPosition.getY() + theScreenSize.getHeight()) {
-                theResult.add(theInstance);
+            for (GameObjectInstance theInstance : aScene.getInstances()) {
+                Position theInstancePosition = theInstance.getPosition();
+                Size theInstanceSize = theInstance.getSize();
+                if (theInstancePosition.getX() + theInstanceSize.getWidth() >= theCameraPosition.getX() && theInstancePosition.getX() <= theCameraPosition.getX() + theScreenSize.getWidth() &&
+                        theInstancePosition.getY() + theInstanceSize.getHeight() >= theCameraPosition.getY() && theInstancePosition.getY() <= theCameraPosition.getY() + theScreenSize.getHeight()) {
+                    theResult.add(theInstance);
+                }
             }
         }
         return theResult;

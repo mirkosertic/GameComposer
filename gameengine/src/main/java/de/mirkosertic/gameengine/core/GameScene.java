@@ -21,6 +21,10 @@ public class GameScene {
         gameRuntime = aGameRuntime;
     }
 
+    public GameRuntime getRuntime() {
+        return gameRuntime;
+    }
+
     public String getName() {
         return name;
     }
