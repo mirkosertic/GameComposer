@@ -16,6 +16,11 @@ public class Position {
         y = aY;
     }
 
+    public Position(double aX, double aY) {
+        x = (float) aX;
+        y = (float) aY;
+    }
+
     public float getX() {
         return x;
     }

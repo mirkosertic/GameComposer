@@ -24,6 +24,7 @@ public class GameComposerApplication extends Application {
 
     @Override
     public void stop() throws Exception {
+        weldContainer.event().select(ShutdownEvent.class).fire(new ShutdownEvent());
         super.stop();
         weld.shutdown();
     }

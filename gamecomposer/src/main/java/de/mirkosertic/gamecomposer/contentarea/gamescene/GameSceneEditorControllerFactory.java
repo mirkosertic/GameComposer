@@ -1,5 +1,6 @@
 package de.mirkosertic.gamecomposer.contentarea.gamescene;
 
+import de.mirkosertic.gamecomposer.ObjectSelectedEvent;
 import de.mirkosertic.gamecomposer.PersistenceManager;
 import de.mirkosertic.gameengine.camera.CameraComponent;
 import de.mirkosertic.gameengine.camera.CameraComponentTemplate;
@@ -9,14 +10,20 @@ import de.mirkosertic.gameengine.resource.GameResourceCache;
 import de.mirkosertic.gameengine.resource.GameResourceLoader;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
 public class GameSceneEditorControllerFactory {
 
     @Inject
     PersistenceManager persistenceManager;
+
+    @Inject
+    Event<ObjectSelectedEvent> objectSelectedEventEvent;
 
     public GameSceneEditorController createFor(GameScene aScene) {
 
@@ -36,7 +43,7 @@ public class GameSceneEditorControllerFactory {
         }
         GameResourceLoader theResourceLoader = persistenceManager.createResourceLoaderFor(aScene);
         GameResourceCache theResourceCache = new GameResourceCache(theResourceLoader);
-        JavaFXGameView theGameView = new JavaFXGameView(theResourceCache, theCameraComponent);
+        EditorJXGameView theGameView = new EditorJXGameView(theResourceCache, theCameraComponent);
 
         GameLoopFactory theGameLoopFactory = new GameLoopFactory();
         GameLoop theMainLoop = theGameLoopFactory.create(aScene, theGameView, theRuntime);
@@ -48,13 +55,13 @@ public class GameSceneEditorControllerFactory {
         theBorderpane.widthProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
-                theEventManager.fire(new SetScreenResolutionEvent((int) ((double) number2), (int) theFinalCameraComponent.getScreenSize().getHeight()));
+                theEventManager.fire(new SetScreenResolutionEvent((int) ((double) number2), theFinalCameraComponent.getScreenSize().getHeight()));
             }
         });
         theBorderpane.heightProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
-                theEventManager.fire(new SetScreenResolutionEvent((int) theFinalCameraComponent.getScreenSize().getWidth(), (int) ((double) number2)));
+                theEventManager.fire(new SetScreenResolutionEvent(theFinalCameraComponent.getScreenSize().getWidth(), (int) ((double) number2)));
             }
         });
         theGameView.widthProperty().bind(theBorderpane.widthProperty());
@@ -63,8 +70,16 @@ public class GameSceneEditorControllerFactory {
         theBorderpane.setCenter(theGameView);
 
         // Set defaults, this will be overridden
-        theEventManager.fire(new SetScreenResolutionEvent((int) 200, (int) 200));
+        theEventManager.fire(new SetScreenResolutionEvent(200, 200));
 
-        return new GameSceneEditorController(aScene, theBorderpane, theGameView, theMainLoopThread);
+        final GameSceneEditorController theController = new GameSceneEditorController(aScene, theBorderpane, theGameView, theMainLoopThread, theCameraComponent, objectSelectedEventEvent);
+        theGameView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent aEvent) {
+                theController.onMouseClicked(aEvent);
+            }
+        });
+
+        return theController;
     }
 }

@@ -38,7 +38,7 @@ public class CameraComponent implements GameComponent {
 
     public List<GameObjectInstance> getObjectsToDrawInRightOrder(GameScene aScene) {
         //TODO: Implement Z-Ordering here
-        List<GameObjectInstance> theResult = new ArrayList<GameObjectInstance>();
+        List<GameObjectInstance> theResult = new ArrayList<>();
 
         Size theScreenSize = getScreenSize();
         if (theScreenSize != null) {

@@ -47,7 +47,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
             public void postSolve(Contact aContact, ContactImpulse aImpulse) {
             }
         });
-        simulatedObjects = new HashMap<GameObjectInstance, Body>();
+        simulatedObjects = new HashMap<>();
         physicsAmountOfTime = 0;
     }
 
@@ -158,9 +158,6 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
 
     public boolean isAwake(GameObjectInstance aInstance) {
         Body theBody = simulatedObjects.get(aInstance);
-        if (theBody != null) {
-            return theBody.isAwake();
-        }
-        return false;
+        return theBody != null && theBody.isAwake();
     }
 }
