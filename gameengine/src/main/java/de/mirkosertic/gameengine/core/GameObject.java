@@ -39,7 +39,7 @@ public class GameObject {
     }
 
     public Set<GameComponentTemplate> getComponentTemplates() {
-        HashSet<GameComponentTemplate> theResult = new HashSet<GameComponentTemplate>();
+        HashSet<GameComponentTemplate> theResult = new HashSet<>();
         theResult.addAll(componentTemplates.values());
         return theResult;
     }

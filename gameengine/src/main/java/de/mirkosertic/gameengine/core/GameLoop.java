@@ -12,7 +12,7 @@ public class GameLoop implements Runnable {
     private GameRuntime runtime;
 
     GameLoop(GameScene aScene, GameView aHumanGameView, GameRuntime aRuntime) {
-        views = new HashSet<GameView>();
+        views = new HashSet<>();
         views.add(aHumanGameView);
         shutdownSignal = new AtomicBoolean(false);
         runtime = aRuntime;

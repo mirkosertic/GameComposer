@@ -19,6 +19,8 @@ import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @Singleton
 public class ProjectStructureController implements ChildController {
@@ -36,6 +38,11 @@ public class ProjectStructureController implements ChildController {
     Event<GameSceneSelectedEvent> sceneSelectedEventEvent;
 
     private Node view;
+    private Map<Object, TreeItem> treeItemMap;
+
+    ProjectStructureController() {
+        treeItemMap = new HashMap<>();
+    }
 
     ProjectStructureController initialize(Node aView) {
         projectStructureTreeView.setCellFactory(new StructureTreeCellFactory());
@@ -77,12 +84,23 @@ public class ProjectStructureController implements ChildController {
         projectStructureTreeView.setRoot(null);
     }
 
-    public void onGameLoades(@Observes GameLoadedEvent aEvent) throws IOException {
+    public void onObjectSelected(@Observes ObjectSelectedEvent aEvent) {
+        TreeItem theItem = treeItemMap.get(aEvent.getSelectedObject());
+        TreeItem theCurrentSelectedItem = (TreeItem) projectStructureTreeView.getSelectionModel().getSelectedItem();
+        if (theItem != null && theItem != theCurrentSelectedItem) {
+            projectStructureTreeView.getSelectionModel().select(theItem);
+            projectStructureTreeView.scrollTo(projectStructureTreeView.getRow(theItem));
+        }
+    }
+
+    public void onGameLoaded(@Observes GameLoadedEvent aEvent) {
+        treeItemMap.clear();
         Game theCurrentGame = persistenceManager.getGame();
 
         TreeItem theRootTreeItem = new TreeItem(theCurrentGame.getName());
         theRootTreeItem.setValue(theCurrentGame);
         theRootTreeItem.setExpanded(true);
+        treeItemMap.put(theCurrentGame, theRootTreeItem);
 
         for (String theSceneName : theCurrentGame.getScenes()) {
             TreeItem theSceneTreeItem = new TreeItem(theSceneName);
@@ -99,6 +117,7 @@ public class ProjectStructureController implements ChildController {
                 TreeItem theObjectTreeItem = new TreeItem();
                 theObjectTreeItem.setValue(theGameObject);
                 theObjectsTreeItem.getChildren().add(theObjectTreeItem);
+                treeItemMap.put(theGameObject, theObjectsTreeItem);
             }
 
             theSceneTreeItem.getChildren().add(theObjectsTreeItem);
@@ -111,6 +130,7 @@ public class ProjectStructureController implements ChildController {
                 TreeItem theObjectInstanceTreeItem = new TreeItem();
                 theObjectInstanceTreeItem.setValue(theGameObjectInstance);
                 theInstancesTreeItem.getChildren().add(theObjectInstanceTreeItem);
+                treeItemMap.put(theGameObjectInstance, theObjectInstanceTreeItem);
             }
 
             theSceneTreeItem.getChildren().add(theInstancesTreeItem);

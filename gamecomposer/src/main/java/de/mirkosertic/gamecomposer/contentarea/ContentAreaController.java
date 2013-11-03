@@ -1,8 +1,6 @@
 package de.mirkosertic.gamecomposer.contentarea;
 
-import de.mirkosertic.gamecomposer.ApplicationStartedEvent;
-import de.mirkosertic.gamecomposer.ChildController;
-import de.mirkosertic.gamecomposer.GameSceneSelectedEvent;
+import de.mirkosertic.gamecomposer.*;
 import de.mirkosertic.gamecomposer.contentarea.gamescene.GameSceneEditorController;
 import de.mirkosertic.gamecomposer.contentarea.gamescene.GameSceneEditorControllerFactory;
 import de.mirkosertic.gameengine.core.GameScene;
@@ -85,6 +83,18 @@ public class ContentAreaController implements ChildController {
         editorTabPane.setVisible(true);
         welcomeBorderPane.setVisible(false);
         editorTabPane.getTabs().add(aTab);
+    }
+
+    public void onShutdown(@Observes ShutdownEvent aEvent) {
+        for (Map.Entry<ContentChildController, Tab> theTab : visibleScenes.entrySet()) {
+            theTab.getKey().onShutdown(aEvent);
+        }
+    }
+
+    public void onObjectSelected(@Observes ObjectSelectedEvent aEvent) {
+        for (Map.Entry<ContentChildController, Tab> theTab : visibleScenes.entrySet()) {
+            theTab.getKey().onObjectSelected(aEvent);
+        }
     }
 
     public void onGameSceneSelected(@Observes GameSceneSelectedEvent aEvent) {

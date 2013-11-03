@@ -16,6 +16,12 @@ public class GameObjectInstance {
         position = new Position();
     }
 
+    public boolean contains(Position aPosition) {
+        return (aPosition.getX() >= position.getX() && aPosition.getY() >= position.getY() &&
+                aPosition.getX() <= position.getX() + size.getWidth() &&
+                aPosition.getY() <= position.getY() + size.getHeight());
+    }
+
     public Position getPosition() {
         return position;
     }

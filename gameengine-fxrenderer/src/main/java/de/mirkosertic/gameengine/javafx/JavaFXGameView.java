@@ -45,8 +45,8 @@ public class JavaFXGameView extends Canvas implements GameView {
             SpriteComponentTemplate theTemplateComponent = theInstance.getOwnerGameObject().getComponentTemplate(SpriteComponentTemplate.class);
             if (theTemplateComponent != null) {
                 try {
-                    JavaFXBitmapResource theBitmap = (JavaFXBitmapResource) resourceCache.getResourceFor(theTemplateComponent.getResourceName());
-                    theContext.drawImage(theBitmap, thePosition.getX(), thePosition.getY());
+                    JavaFXBitmapResource theBitmap = resourceCache.getResourceFor(theTemplateComponent.getResourceName());
+                    drawGameObjectInstance(theContext, theInstance, thePosition, theSize, theBitmap);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -59,6 +59,10 @@ public class JavaFXGameView extends Canvas implements GameView {
         }
     }
 
+    protected void drawGameObjectInstance(GraphicsContext aContext, GameObjectInstance aInstance, Position aPosition, Size aSize, JavaFXBitmapResource aBitmapResource) {
+        aContext.drawImage(aBitmapResource, aPosition.getX(), aPosition.getY());
+    }
+
     public void startTimer() {
         animationTimer.start();
     }
@@ -69,5 +73,13 @@ public class JavaFXGameView extends Canvas implements GameView {
 
     public void renderGame(long aGameTime, long aElapsedTimeSinceLastLoop, GameScene aScene) {
         gameScene = aScene;
+    }
+
+    protected GameScene getGameScene() {
+        return gameScene;
+    }
+
+    protected CameraComponent getCameraComponent() {
+        return cameraComponent;
     }
 }
