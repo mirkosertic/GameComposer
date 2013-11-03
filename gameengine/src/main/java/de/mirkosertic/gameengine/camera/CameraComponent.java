@@ -38,7 +38,7 @@ public class CameraComponent implements GameComponent {
 
     public List<GameObjectInstance> getObjectsToDrawInRightOrder(GameScene aScene) {
         //TODO: Implement Z-Ordering here
-        List<GameObjectInstance> theResult = new ArrayList<>();
+        List<GameObjectInstance> theResult = new ArrayList<GameObjectInstance>();
 
         Size theScreenSize = getScreenSize();
         if (theScreenSize != null) {
@@ -70,7 +70,7 @@ public class CameraComponent implements GameComponent {
 
     @Override
     public Map<String, Object> serialize() {
-        Map<String, Object> theResult = new HashMap<>();
+        Map<String, Object> theResult = new HashMap<String, Object>();
         theResult.put(TYPE_ATTRIBUTE, TYPE);
         return theResult;
     }

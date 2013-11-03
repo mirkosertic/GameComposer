@@ -30,7 +30,7 @@ public class Position {
     }
 
     public Map<String, Object> serializeToMap() {
-        Map<String, Object> theResult = new HashMap<>();
+        Map<String, Object> theResult = new HashMap<String, Object>();
         theResult.put("x", "" + x);
         theResult.put("y", ""+ y);
         return theResult;

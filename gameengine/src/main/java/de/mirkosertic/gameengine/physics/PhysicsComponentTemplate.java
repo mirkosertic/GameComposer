@@ -15,7 +15,7 @@ public class PhysicsComponentTemplate implements GameComponentTemplate<PhysicsCo
 
     @Override
     public Map<String, Object> serialize() {
-        Map<String, Object> theResult = new HashMap<>();
+        Map<String, Object> theResult = new HashMap<String, Object>();
         theResult.put(PhysicsComponent.TYPE_ATTRIBUTE, PhysicsComponent.TYPE);        
         return theResult;
     }

@@ -1,3 +1,4 @@
 <module>
+    <inherits name="org.jbox2d.JBox2D"/>
     <source path="gameengine"/>
 </module>

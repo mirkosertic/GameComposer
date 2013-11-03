@@ -15,9 +15,9 @@ public class GameRuntime {
 
     public GameRuntime(GameEventManager aEventManager) {
         eventManager = aEventManager;
-        systems = new HashSet<>();
-        registeredTemplateUnmarshaller = new HashMap<>();
-        registeredComponentUnmarshaller = new HashMap<>();
+        systems = new HashSet<GameSystem>();
+        registeredTemplateUnmarshaller = new HashMap<String, GameComponentTemplateUnmarshaller>();
+        registeredComponentUnmarshaller = new HashMap<String, GameComponentUnmarshaller>();
     }
 
     public GameEventManager getEventManager() {

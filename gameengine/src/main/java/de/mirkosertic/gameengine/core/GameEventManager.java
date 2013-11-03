@@ -15,13 +15,13 @@ public class GameEventManager {
     private Map<Class<GameEvent>, List<GameEventListener>> registeredListeners;
 
     public GameEventManager() {
-        registeredListeners = new HashMap<>();
+        registeredListeners = new HashMap<Class<GameEvent>, List<GameEventListener>>();
     }
 
     public <T extends GameEvent> void register(GameObjectInstance aOwningInstance, Class<T> aEvent, GameEventListener<T> aEventListener) {
         List<GameEventListener> theListener = registeredListeners.get(aEvent);
         if (theListener == null) {
-            theListener = new ArrayList<>();
+            theListener = new ArrayList<GameEventListener>();
             registeredListeners.put((Class<GameEvent>) aEvent, theListener);
         }
         theListener.add(aEventListener);

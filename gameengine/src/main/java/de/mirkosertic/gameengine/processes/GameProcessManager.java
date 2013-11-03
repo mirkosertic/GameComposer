@@ -12,8 +12,8 @@ public class GameProcessManager implements GameSystem {
     private long processesAmountOfTime;
 
     GameProcessManager() {
-        runningProcesses = new HashSet<>();
-        killedProcesses = new HashSet<>();
+        runningProcesses = new HashSet<GameProcess>();
+        killedProcesses = new HashSet<GameProcess>();
         processesAmountOfTime = 0;
     }
 

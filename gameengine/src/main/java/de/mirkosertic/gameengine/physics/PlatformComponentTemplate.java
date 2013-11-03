@@ -17,7 +17,7 @@ public class PlatformComponentTemplate implements GameComponentTemplate<Platform
 
     @Override
     public Map<String, Object> serialize() {
-        Map<String, Object> theResult = new HashMap<>();
+        Map<String, Object> theResult = new HashMap<String, Object>();
         theResult.put(PlatformComponent.TYPE_ATTRIBUTE, PlatformComponent.TYPE);
         return theResult;
     }

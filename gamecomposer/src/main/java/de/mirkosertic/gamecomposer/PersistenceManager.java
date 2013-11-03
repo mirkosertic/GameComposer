@@ -52,7 +52,7 @@ public class PersistenceManager {
         Map<String, GameScene> theLoadedScenes = new HashMap<>();
         for (String theSceneName : theLoadedGame.getScenes()) {
             File theSceneDescriptor = new File(new File(aGameDirectory, theSceneName), "scene.json");
-            GameScene theLoadedScene = GameScene.deserialize(gameRuntimeFactory.createNewRuntime(), theReader.<Map<String, Object>>readValue(theSceneDescriptor));
+            GameScene theLoadedScene = GameScene.deserialize(gameRuntimeFactory.create(), theReader.<Map<String, Object>>readValue(theSceneDescriptor));
             theLoadedScenes.put(theSceneName, theLoadedScene);
         }
 
