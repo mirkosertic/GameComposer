@@ -23,7 +23,7 @@ public class PhysicsComponent implements GameComponent {
 
     @Override
     public Map<String, Object> serialize() {
-        Map<String, Object> theStructure = new HashMap<>();
+        Map<String, Object> theStructure = new HashMap<String, Object>();
         theStructure.put(TYPE_ATTRIBUTE, TYPE);
         return theStructure;
     }

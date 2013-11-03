@@ -34,7 +34,7 @@ public class SpriteComponentTemplate implements GameComponentTemplate<SpriteComp
 
     @Override
     public Map<String, Object> serialize() {
-        Map<String, Object> theResult = new HashMap<>();
+        Map<String, Object> theResult = new HashMap<String, Object>();
         theResult.put(SpriteComponent.TYPE_ATTRIBUTE, SpriteComponent.TYPE);        
         theResult.put("resourcename", getResourceName().serialize());
         return theResult;

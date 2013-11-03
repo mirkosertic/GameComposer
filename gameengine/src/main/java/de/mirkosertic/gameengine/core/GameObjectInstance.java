@@ -12,7 +12,7 @@ public class GameObjectInstance {
 
     GameObjectInstance(GameObject aOwnerGameObject) {
         ownerGameObject = aOwnerGameObject;
-        components = new HashMap<>();
+        components = new HashMap<Class<GameComponent>, GameComponent>();
         position = new Position();
     }
 
@@ -59,18 +59,18 @@ public class GameObjectInstance {
     }
 
     public Set<GameComponent> getComponents() {
-        HashSet<GameComponent> theResult = new HashSet<>(components.values());
+        HashSet<GameComponent> theResult = new HashSet<GameComponent>(components.values());
         return Collections.unmodifiableSet(theResult);
     }
 
     public Map<String, Object> serialize() {
-        Map<String, Object> theResult = new HashMap<>();
+        Map<String, Object> theResult = new HashMap<String, Object>();
         theResult.put("gameobjectuuid", ownerGameObject.getUuid());
         theResult.put("size", size.serializeToMap());
         theResult.put("position", position.serializeToMap());
         theResult.put("name", name);
 
-        List<Map<String, Object>> theComponents = new ArrayList<>();
+        List<Map<String, Object>> theComponents = new ArrayList<Map<String, Object>>();
         for (GameComponent theComponent : components.values()) {
             theComponents.add(theComponent.serialize());
         }

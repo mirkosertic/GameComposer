@@ -8,7 +8,7 @@ public class Game {
     private Set<String> scenes;
 
     public Game() {
-        scenes = new HashSet<>();
+        scenes = new HashSet<String>();
     }
 
     public String getName() {
@@ -28,9 +28,9 @@ public class Game {
     }
 
     public Map<String, Object> serialize() {
-        Map<String, Object> theResult = new HashMap<>();
+        Map<String, Object> theResult = new HashMap<String, Object>();
         theResult.put("name", name);
-        theResult.put("scenes", new ArrayList<>(scenes));
+        theResult.put("scenes", new ArrayList<String>(scenes));
         return theResult;
     }
 

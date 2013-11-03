@@ -47,7 +47,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
             public void postSolve(Contact aContact, ContactImpulse aImpulse) {
             }
         });
-        simulatedObjects = new HashMap<>();
+        simulatedObjects = new HashMap<GameObjectInstance, Body>();
         physicsAmountOfTime = 0;
     }
 

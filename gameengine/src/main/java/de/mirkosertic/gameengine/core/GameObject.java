@@ -9,13 +9,13 @@ public class GameObject {
     private Map<Class<GameComponentTemplate>, GameComponentTemplate> componentTemplates;
 
     public GameObject(String aName) {
-        this(aName, UUID.randomUUID().toString());
+        this(aName, UUID.randomUID());
     }
 
     GameObject(String aName, String aUUID) {
         uuid = aUUID;
         name = aName;
-        componentTemplates = new HashMap<>();
+        componentTemplates = new HashMap<Class<GameComponentTemplate>, GameComponentTemplate>();
     }
 
     public String getUuid() {
@@ -39,17 +39,17 @@ public class GameObject {
     }
 
     public Set<GameComponentTemplate> getComponentTemplates() {
-        HashSet<GameComponentTemplate> theResult = new HashSet<>();
+        HashSet<GameComponentTemplate> theResult = new HashSet<GameComponentTemplate>();
         theResult.addAll(componentTemplates.values());
         return theResult;
     }
 
     public Map<String, Object> serialize() {
-        Map<String, Object> theResult = new HashMap<>();
+        Map<String, Object> theResult = new HashMap<String, Object>();
         theResult.put("name", name);
         theResult.put("uuid", uuid);
 
-        List<Map<String, Object>> theTemplates = new ArrayList<>();
+        List<Map<String, Object>> theTemplates = new ArrayList<Map<String, Object>>();
         for (GameComponentTemplate theTemplate : componentTemplates.values()) {
            theTemplates.add(theTemplate.serialize());
         }

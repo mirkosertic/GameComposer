@@ -16,8 +16,8 @@ public class GameScene {
     private GameRuntime gameRuntime;
 
     public GameScene(GameRuntime aGameRuntime) {
-        instances = new HashSet<>();
-        objects = new HashSet<>();
+        instances = new HashSet<GameObjectInstance>();
+        objects = new HashSet<GameObject>();
         gameRuntime = aGameRuntime;
     }
 
@@ -51,16 +51,16 @@ public class GameScene {
     }
 
     public Map<String, Object> serialize() {
-        Map<String, Object> theResult = new HashMap<>();
+        Map<String, Object> theResult = new HashMap<String, Object>();
         theResult.put("name", name);
 
-        List<Map<String, Object>> theObjects = new ArrayList<>();
+        List<Map<String, Object>> theObjects = new ArrayList<Map<String, Object>>();
         for (GameObject theObject : objects) {
             theObjects.add(theObject.serialize());
         }
         theResult.put("objects", theObjects);
 
-        List<Map<String, Object>> theInstances = new ArrayList<>();
+        List<Map<String, Object>> theInstances = new ArrayList<Map<String, Object>>();
         for (GameObjectInstance theInstance : instances) {
             theInstances.add(theInstance.serialize());
         }

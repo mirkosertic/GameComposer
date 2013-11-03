@@ -16,7 +16,7 @@ public class ResourceName {
     }
 
     public Map<String, Object> serialize() {
-        Map<String, Object> theResult = new HashMap<>();
+        Map<String, Object> theResult = new HashMap<String, Object>();
         theResult.put("name", name);
         return theResult;
     }
