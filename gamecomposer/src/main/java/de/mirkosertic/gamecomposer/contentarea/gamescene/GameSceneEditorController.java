@@ -57,6 +57,7 @@ public class GameSceneEditorController implements ContentChildController<GameSce
 
     @Override
     public void removed() {
+        gameScene.getRuntime().getEventManager().fire(new ShutdownGameEvent());
         gameView.stopTimer();
         gameLoopThread.interrupt();
     }
