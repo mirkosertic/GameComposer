@@ -26,7 +26,7 @@ public class GWTGameLoader {
     }
 
     public void loadFromServer() {
-        RequestBuilder theBuilder = new RequestBuilder(RequestBuilder.GET, "/game.json");
+        RequestBuilder theBuilder = new RequestBuilder(RequestBuilder.GET, "game.json");
         try {
             theBuilder.sendRequest(null, new RequestCallback() {
                 @Override

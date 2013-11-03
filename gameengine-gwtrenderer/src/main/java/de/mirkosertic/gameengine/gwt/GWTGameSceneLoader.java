@@ -27,7 +27,7 @@ public class GWTGameSceneLoader {
     }
 
     public void loadFromServer(String aSceneName) {
-        RequestBuilder theBuilder = new RequestBuilder(RequestBuilder.GET, "/"+aSceneName+"/scene.json");
+        RequestBuilder theBuilder = new RequestBuilder(RequestBuilder.GET, aSceneName+"/scene.json");
         try {
             theBuilder.sendRequest(null, new RequestCallback() {
                 @Override
