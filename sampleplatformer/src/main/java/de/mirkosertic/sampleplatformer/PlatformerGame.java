@@ -165,7 +165,7 @@ public class PlatformerGame extends Application {
         aPrimaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             public void handle(WindowEvent windowEvent) {
                 theGameView.stopTimer();
-                theEventManager.fire(new ShutdownGameEvent());
+                theEventManager.fire(new GameShutdownEvent());
             }
         });
 

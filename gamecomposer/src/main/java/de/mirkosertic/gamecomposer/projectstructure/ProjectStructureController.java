@@ -18,7 +18,6 @@ import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,14 +52,16 @@ public class ProjectStructureController implements ChildController {
                 if (aNewValue instanceof TreeItem) {
                     theNewValue = ((TreeItem) aNewValue).getValue();
                 }
-                objectSelectedEvent.fire(new ObjectSelectedEvent(theNewValue));
+                if (!(theNewValue instanceof String)) {
+                    objectSelectedEvent.fire(new ObjectSelectedEvent(theNewValue));
+                }
             }
         });
         view = aView;
         projectStructureTreeView.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent aEvent) {
-                onMouseEvent(aEvent);
+                onMouseClicked(aEvent);
             }
         });
         return this;
@@ -71,9 +72,9 @@ public class ProjectStructureController implements ChildController {
         return view;
     }
 
-    private void onMouseEvent(MouseEvent aEvent) {
+    private void onMouseClicked(MouseEvent aEvent) {
+        TreeItem theSelectedItem = (TreeItem) projectStructureTreeView.getSelectionModel().getSelectedItem();
         if (aEvent.getClickCount() == 2) {
-            TreeItem theSelectedItem = (TreeItem) projectStructureTreeView.getSelectionModel().getSelectedItem();
             if (theSelectedItem.getValue() instanceof GameScene) {
                 sceneSelectedEventEvent.fire(new GameSceneSelectedEvent((GameScene) theSelectedItem.getValue()));
             }

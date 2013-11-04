@@ -70,12 +70,12 @@ public class PlatformComponent implements GameComponent {
     public void handleCollision(GameObjectCollisionEvent aEvent) {
         GameObjectInstance theOtherInstance = aEvent.getOtherInstanceOrNullIfNotAffected(objectInstance);
         if (theOtherInstance != null && theOtherInstance.getComponent(StaticComponent.class) != null) {
-            double my = theOtherInstance.getPosition().getY() - objectInstance.getPosition().getY();
+            double my = theOtherInstance.getPosition().y - objectInstance.getPosition().y;
             if (my > 0) {
                 // Object is under the game object
                 setJumping(false);
             } else {
-                double mx = theOtherInstance.getPosition().getX() - objectInstance.getPosition().getX();
+                double mx = theOtherInstance.getPosition().x - objectInstance.getPosition().x;
                 // Object is on the right side
                 if (mx > 0) {
                     setJumping(false);

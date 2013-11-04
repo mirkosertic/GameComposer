@@ -1,15 +1,17 @@
 package de.mirkosertic.gamecomposer.contentarea.gamescene;
 
+import de.mirkosertic.gamecomposer.GameObjectClipboardContent;
 import de.mirkosertic.gamecomposer.ObjectSelectedEvent;
 import de.mirkosertic.gamecomposer.ShutdownEvent;
 import de.mirkosertic.gamecomposer.contentarea.ContentChildController;
 import de.mirkosertic.gameengine.camera.CameraComponent;
 import de.mirkosertic.gameengine.core.*;
+import javafx.event.EventHandler;
 import javafx.scene.Node;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.*;
 
 import javax.enterprise.event.Event;
+import java.util.List;
 
 public class GameSceneEditorController implements ContentChildController<GameScene> {
 
@@ -20,6 +22,10 @@ public class GameSceneEditorController implements ContentChildController<GameSce
     private CameraComponent cameraComponent;
     private Event<ObjectSelectedEvent> objectSelectedEventEvent;
 
+    private GameObjectInstance dndCreateInstance;
+    private GameObjectInstance draggingInstance;
+    private Position draggingMouseWorldPosition;
+
     GameSceneEditorController(GameScene aScene, Node aView, EditorJXGameView aGameView, Thread aGameLoopThread, CameraComponent aCameraComponent, Event<ObjectSelectedEvent> aSelectedEvent) {
         gameScene = aScene;
         view = aView;
@@ -27,6 +33,128 @@ public class GameSceneEditorController implements ContentChildController<GameSce
         gameLoopThread = aGameLoopThread;
         cameraComponent = aCameraComponent;
         objectSelectedEventEvent = aSelectedEvent;
+
+        gameView.setOnDragOver(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent aEvent) {
+                onDragOver(aEvent);
+            }
+        });
+        gameView.setOnDragEntered(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent aEvent) {
+                onDragEntered(aEvent);
+            }
+        });
+        gameView.setOnDragExited(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent aEvent) {
+                onDragExited(aEvent);
+            }
+        });
+        gameView.setOnDragDropped(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent aEvent) {
+                setOnDragDropped(aEvent);
+            }
+        });
+        gameView.setOnMouseDragged(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent aEvent) {
+                onMouseDragged(aEvent);
+            }
+        });
+        gameView.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent aEvent) {
+                onMousePressed(aEvent);
+            }
+        });
+        gameView.setOnMouseReleased(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent aEvent) {
+                onMouseReleased(aEvent);
+            }
+        });
+    }
+
+    private void onDragOver(DragEvent aEvent) {
+        if (aEvent.getGestureSource() != this && aEvent.getDragboard().hasContent(GameObjectClipboardContent.FORMAT)) {
+            aEvent.acceptTransferModes(TransferMode.LINK);
+        }
+
+        if (dndCreateInstance != null) {
+            Position theNewPosition = cameraComponent.transformFromScreen(new Position(aEvent.getX(), aEvent.getY()));
+            gameScene.updateObjectInstancePosition(dndCreateInstance, theNewPosition);
+        }
+
+        aEvent.consume();
+    }
+
+    private void onDragEntered(DragEvent aEvent) {
+        Dragboard theDragBoard = aEvent.getDragboard();
+        if (theDragBoard.hasContent(GameObjectClipboardContent.FORMAT)) {
+            GameObjectClipboardContent theContent = (GameObjectClipboardContent) theDragBoard.getContent(GameObjectClipboardContent.FORMAT);
+            GameObject theGameObject = gameScene.findGameObjectByID(theContent.getGameObjectId());
+
+            GameObjectInstanceFactory theInstanceFactory = new GameObjectInstanceFactory(gameScene.getRuntime());
+            GameObjectInstance theInstance = theInstanceFactory.createFrom(theGameObject);
+            theInstance.setPosition(cameraComponent.transformFromScreen(new Position(aEvent.getX(), aEvent.getY())));
+            theInstance.setSize(new Size(76, 76));
+
+            gameScene.addGameObjectInstance(theInstance);
+
+            dndCreateInstance = theInstance;
+
+            aEvent.consume();
+        }
+    }
+
+    private void onDragExited(DragEvent aEvent) {
+        if (dndCreateInstance != null) {
+            gameScene.removeGameObjectInstance(dndCreateInstance);
+            dndCreateInstance = null;
+            aEvent.consume();
+        }
+    }
+
+    private void setOnDragDropped(DragEvent aEvent) {
+        if (dndCreateInstance != null) {
+            aEvent.setDropCompleted(true);
+            aEvent.consume();
+            dndCreateInstance = null;
+        }
+    }
+
+    private void onMousePressed(MouseEvent aEvent) {
+        Position theScreenPosition = new Position(aEvent.getX(), aEvent.getY());
+        Position theWorldPosition = cameraComponent.transformFromScreen(theScreenPosition);
+        List<GameObjectInstance> theFoundInstances = gameScene.findAllAt(theWorldPosition);
+        if (theFoundInstances.size() == 1) {
+            draggingInstance = theFoundInstances.get(0);
+            draggingMouseWorldPosition = theWorldPosition;
+
+            objectSelectedEventEvent.fire(new ObjectSelectedEvent(draggingInstance));
+        }
+    }
+
+    private void onMouseDragged(MouseEvent aEvent) {
+        if (draggingInstance != null) {
+            Position theScreenPosition = new Position(aEvent.getX(), aEvent.getY());
+            Position theWorldPosition = cameraComponent.transformFromScreen(theScreenPosition);
+            float theDX = theWorldPosition.x - draggingMouseWorldPosition.x;
+            float theDY = theWorldPosition.y - draggingMouseWorldPosition.y;
+
+            Position theObjectPosition = draggingInstance.getPosition();
+            gameScene.updateObjectInstancePosition(draggingInstance, new Position(theObjectPosition.x + theDX, theObjectPosition.y + theDY));
+
+            draggingMouseWorldPosition = theWorldPosition;
+        }
+    }
+
+    private void onMouseReleased(MouseEvent aEvent) {
+        draggingMouseWorldPosition = null;
+        draggingInstance = null;
     }
 
     @Override
@@ -57,7 +185,7 @@ public class GameSceneEditorController implements ContentChildController<GameSce
 
     @Override
     public void removed() {
-        gameScene.getRuntime().getEventManager().fire(new ShutdownGameEvent());
+        gameScene.getRuntime().getEventManager().fire(new GameShutdownEvent());
         gameView.stopTimer();
         gameLoopThread.interrupt();
     }
@@ -71,6 +199,7 @@ public class GameSceneEditorController implements ContentChildController<GameSce
     public void onShutdown(ShutdownEvent aEvent) {
         gameView.stopTimer();
         gameLoopThread.interrupt();
+        gameScene.getRuntime().getEventManager().fire(new GameShutdownEvent());
     }
 
     public void onMouseClicked(MouseEvent aEvent) {

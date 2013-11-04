@@ -5,10 +5,11 @@ import java.util.Map;
 
 public class Position {
 
-    private float x;
-    private float y;
+    public final float x;
+    public final float y;
 
     public Position() {
+        this(0f, 0f);
     }
 
     public Position(float aX, float aY) {
@@ -19,14 +20,6 @@ public class Position {
     public Position(double aX, double aY) {
         x = (float) aX;
         y = (float) aY;
-    }
-
-    public float getX() {
-        return x;
-    }
-
-    public float getY() {
-        return y;
     }
 
     public Map<String, Object> serializeToMap() {
