@@ -17,9 +17,9 @@ public class GameObjectInstance {
     }
 
     public boolean contains(Position aPosition) {
-        return (aPosition.getX() >= position.getX() && aPosition.getY() >= position.getY() &&
-                aPosition.getX() <= position.getX() + size.getWidth() &&
-                aPosition.getY() <= position.getY() + size.getHeight());
+        return (aPosition.x >= position.x && aPosition.y >= position.y &&
+                aPosition.x <= position.x + size.width &&
+                aPosition.y <= position.y + size.height);
     }
 
     public Position getPosition() {

@@ -47,8 +47,8 @@ public class CameraComponent implements GameComponent {
             for (GameObjectInstance theInstance : aScene.getInstances()) {
                 Position theInstancePosition = theInstance.getPosition();
                 Size theInstanceSize = theInstance.getSize();
-                if (theInstancePosition.getX() + theInstanceSize.getWidth() >= theCameraPosition.getX() && theInstancePosition.getX() <= theCameraPosition.getX() + theScreenSize.getWidth() &&
-                        theInstancePosition.getY() + theInstanceSize.getHeight() >= theCameraPosition.getY() && theInstancePosition.getY() <= theCameraPosition.getY() + theScreenSize.getHeight()) {
+                if (theInstancePosition.x + theInstanceSize.width >= theCameraPosition.x && theInstancePosition.x <= theCameraPosition.x + theScreenSize.width &&
+                        theInstancePosition.y + theInstanceSize.height >= theCameraPosition.y && theInstancePosition.y <= theCameraPosition.y + theScreenSize.height) {
                     theResult.add(theInstance);
                 }
             }
@@ -60,7 +60,14 @@ public class CameraComponent implements GameComponent {
 
         Position theCameraPosition = objectInstance.getPosition();
 
-        return new Position(aWorldPosition.getX() - theCameraPosition.getX(), aWorldPosition.getY() - theCameraPosition.getY());
+        return new Position(aWorldPosition.x - theCameraPosition.x, aWorldPosition.y - theCameraPosition.y);
+    }
+
+    public Position transformFromScreen(Position aScreenPosition) {
+
+        Position theCameraPosition = objectInstance.getPosition();
+
+        return new Position(theCameraPosition.x + aScreenPosition.x, theCameraPosition.y + aScreenPosition.y);
     }
 
     @Override

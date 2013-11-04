@@ -6,6 +6,7 @@ import de.mirkosertic.gameengine.camera.CameraComponent;
 import de.mirkosertic.gameengine.camera.CameraComponentTemplate;
 import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.javafx.JavaFXGameView;
+import de.mirkosertic.gameengine.physics.GamePhysicsManager;
 import de.mirkosertic.gameengine.resource.GameResourceCache;
 import de.mirkosertic.gameengine.resource.GameResourceLoader;
 import javafx.beans.value.ChangeListener;
@@ -43,7 +44,15 @@ public class GameSceneEditorControllerFactory {
         }
         GameResourceLoader theResourceLoader = persistenceManager.createResourceLoaderFor(aScene);
         GameResourceCache theResourceCache = new GameResourceCache(theResourceLoader);
-        EditorJXGameView theGameView = new EditorJXGameView(theResourceCache, theCameraComponent);
+
+        GamePhysicsManager thePhysicsManager = null;
+        for (GameSystem theSystem : theRuntime.getSystems()) {
+            if (theSystem instanceof GamePhysicsManager) {
+                thePhysicsManager = (GamePhysicsManager) theSystem;
+            }
+        }
+
+        EditorJXGameView theGameView = new EditorJXGameView(theResourceCache, theCameraComponent, thePhysicsManager);
 
         GameLoopFactory theGameLoopFactory = new GameLoopFactory();
         GameLoop theMainLoop = theGameLoopFactory.create(aScene, theGameView, theRuntime);
@@ -55,13 +64,13 @@ public class GameSceneEditorControllerFactory {
         theBorderpane.widthProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
-                theEventManager.fire(new SetScreenResolutionEvent((int) ((double) number2), theFinalCameraComponent.getScreenSize().getHeight()));
+                theEventManager.fire(new SetScreenResolutionEvent((int) ((double) number2), theFinalCameraComponent.getScreenSize().height));
             }
         });
         theBorderpane.heightProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
-                theEventManager.fire(new SetScreenResolutionEvent(theFinalCameraComponent.getScreenSize().getWidth(), (int) ((double) number2)));
+                theEventManager.fire(new SetScreenResolutionEvent(theFinalCameraComponent.getScreenSize().width, (int) ((double) number2)));
             }
         });
         theGameView.widthProperty().bind(theBorderpane.widthProperty());

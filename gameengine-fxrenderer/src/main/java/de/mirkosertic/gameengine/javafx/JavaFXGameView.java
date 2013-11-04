@@ -53,13 +53,17 @@ public class JavaFXGameView extends Canvas implements GameView {
                 theContext.setFill(Color.WHITE);
                 theContext.setStroke(Color.WHITE);
                 theContext.setLineWidth(1);
-                theContext.strokeRect(thePosition.getX(), thePosition.getY(), theSize.getWidth(), theSize.getHeight());
+                theContext.strokeRect(thePosition.x, thePosition.y, theSize.width, theSize.height);
             }
         }
+        afterRendering(theContext);
+    }
+
+    protected void afterRendering(GraphicsContext aContext) {
     }
 
     protected void drawGameObjectInstance(GraphicsContext aContext, GameObjectInstance aInstance, Position aPosition, Size aSize, JavaFXBitmapResource aBitmapResource) {
-        aContext.drawImage(aBitmapResource, aPosition.getX(), aPosition.getY());
+        aContext.drawImage(aBitmapResource, aPosition.x, aPosition.y);
     }
 
     public void startTimer() {

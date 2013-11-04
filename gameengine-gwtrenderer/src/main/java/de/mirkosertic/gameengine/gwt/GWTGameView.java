@@ -34,7 +34,7 @@ public class GWTGameView implements GameView {
 
         theContext.setFillStyle(CssColor.make(0, 0, 0));
         theContext.setStrokeStyle(CssColor.make(0, 0, 0));
-        theContext.fillRect(0, 0, currentSize.getWidth(), currentSize.getHeight());
+        theContext.fillRect(0, 0, currentSize.width, currentSize.height);
 
         for (GameObjectInstance theInstance : cameraComponent.getObjectsToDrawInRightOrder(aScene)) {
             Position thePosition = cameraComponent.transformToScreenPosition(theInstance.getPosition());
@@ -51,7 +51,7 @@ public class GWTGameView implements GameView {
                 theContext.setFillStyle(CssColor.make(255, 255, 255));
                 theContext.setStrokeStyle(CssColor.make(255, 255, 255));
                 theContext.setLineWidth(1);
-                theContext.strokeRect(thePosition.getX(), thePosition.getY(), theSize.getWidth(), theSize.getHeight());
+                theContext.strokeRect(thePosition.x, thePosition.y, theSize.width, theSize.height);
             }
         }
         counter++;
@@ -62,12 +62,12 @@ public class GWTGameView implements GameView {
 
     protected void drawGameObjectInstance(Context2d aContext, GameObjectInstance aInstance, Position aPosition, Size aSize, GWTBitmapResource aBitmapResource) {
         if (aBitmapResource.isLoaded()) {
-            aContext.drawImage(aBitmapResource.getImage(), aPosition.getX(), aPosition.getY());
+            aContext.drawImage(aBitmapResource.getImage(), aPosition.x, aPosition.y);
         } else {
             aContext.setFillStyle(CssColor.make(255, 255, 255));
             aContext.setStrokeStyle(CssColor.make(255, 255, 255));
             aContext.setLineWidth(1);
-            aContext.strokeRect(aPosition.getX(), aPosition.getY(), aSize.getWidth(), aSize.getHeight());
+            aContext.strokeRect(aPosition.x, aPosition.y, aSize.width, aSize.height);
         }
     }
 }

@@ -5,20 +5,12 @@ import java.util.Map;
 
 public class Size {
 
-    private int width;
-    private int height;
+    public final int width;
+    public final int height;
 
     public Size(int aWidth, int aHeight) {
         width = aWidth;
         height = aHeight;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
     }
 
     public Map<String, Object> serializeToMap() {

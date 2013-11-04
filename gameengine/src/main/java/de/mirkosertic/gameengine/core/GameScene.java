@@ -50,6 +50,16 @@ public class GameScene {
         return Collections.unmodifiableSet(objects);
     }
 
+    public List<GameObjectInstance> findAllAt(Position aPosition) {
+        List<GameObjectInstance> theResult = new ArrayList<GameObjectInstance>();
+        for (GameObjectInstance theInstance : instances) {
+            if (theInstance.contains(aPosition)) {
+                theResult.add(theInstance);
+            }
+        }
+        return theResult;
+    }
+
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<String, Object>();
         theResult.put("name", name);
@@ -91,5 +101,15 @@ public class GameScene {
             theScene.addGameObjectInstance(GameObjectInstance.deserialize(aGameRuntime, theScene, theInstance));
         }
         return theScene;
+    }
+
+    public void removeGameObjectInstance(GameObjectInstance aInstance) {
+        instances.remove(aInstance);
+        gameRuntime.getEventManager().fire(new GameObjectInstanceRemovedFromSceneEvent(aInstance));
+    }
+
+    public void updateObjectInstancePosition(GameObjectInstance aInstance, Position aNewPosition) {
+        aInstance.setPosition(aNewPosition);
+        gameRuntime.getEventManager().fire(new GameObjectInstancePositionChangedEvent(aInstance, aNewPosition));
     }
 }
