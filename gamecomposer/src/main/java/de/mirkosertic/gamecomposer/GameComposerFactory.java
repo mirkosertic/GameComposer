@@ -1,10 +1,14 @@
 package de.mirkosertic.gamecomposer;
 
+import insidefx.undecorator.Undecorator;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.Region;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import javax.inject.Inject;
 import java.io.File;
@@ -25,9 +29,16 @@ public class GameComposerFactory {
         try (InputStream fxml = GameComposerController.class.getResourceAsStream("GameComposer.fxml")) {
             ResourceBundle theBundle = ResourceBundle.getBundle("de.mirkosertic.gamecomposer.GameComposer");
             fxmlLoader.setResources(theBundle);
-            Parent root = (Parent) fxmlLoader.load(fxml);
+            Region root = (Region) fxmlLoader.load(fxml);
             ((GameComposerController)fxmlLoader.getController()).initialize(aStage);
-            aStage.setScene(new Scene(root));
+
+            Undecorator theUndecorator = new Undecorator(aStage, root);
+            theUndecorator.getStylesheets().add("/skin/undecorator.css");
+
+            Scene theScene = new Scene(theUndecorator);
+            theScene.setFill(Color.TRANSPARENT);
+            aStage.initStyle(StageStyle.TRANSPARENT);
+            aStage.setScene(theScene);
             aStage.show();
 
             persistenceManager.loadGame(new File("C:\\Users\\Andrea\\IdeaProjects\\GameComposer\\sampleplatformer\\data"));

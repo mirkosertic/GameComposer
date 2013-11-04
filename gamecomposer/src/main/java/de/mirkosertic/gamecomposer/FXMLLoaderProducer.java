@@ -1,12 +1,12 @@
 package de.mirkosertic.gamecomposer;
 
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.JavaFXBuilderFactory;
 import javafx.util.Callback;
 
 import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
-import java.nio.charset.StandardCharsets;
 
 public class FXMLLoaderProducer {
 
@@ -15,10 +15,13 @@ public class FXMLLoaderProducer {
 
     @Produces
     public FXMLLoader createLoader() {
-        return new FXMLLoader(null, null, null, new Callback<Class<?>, Object>() {
+        FXMLLoader theLoader = new FXMLLoader();
+        theLoader.setBuilderFactory(new JavaFXBuilderFactory());
+        theLoader.setControllerFactory(new Callback<Class<?>, Object>() {
             public Object call(Class<?> param) {
                 return instance.select(param).get();
             }
-        }, StandardCharsets.UTF_8);
+        });
+        return theLoader;
     }
 }
