@@ -93,7 +93,7 @@ public class GameScene {
 
         List<Map<String, Object>> theObjects = (List<Map<String, Object>>) aSerializedData.get("objects");
         for (Map<String, Object> theObject : theObjects) {
-            theScene.addGameObject(GameObject.deserialize(aGameRuntime, theObject));
+            theScene.addGameObject(GameObject.deserialize(aGameRuntime, theScene, theObject));
         }
 
         List<Map<String, Object>> theInstances = (List<Map<String, Object>>) aSerializedData.get("instances");
@@ -111,5 +111,10 @@ public class GameScene {
     public void updateObjectInstancePosition(GameObjectInstance aInstance, Position aNewPosition) {
         aInstance.setPosition(aNewPosition);
         gameRuntime.getEventManager().fire(new GameObjectInstancePositionChangedEvent(aInstance, aNewPosition));
+    }
+
+    public void updateObjectInstanceSize(GameObjectInstance aInstance, Size aNewSize) {
+        aInstance.setSize(aNewSize);
+        gameRuntime.getEventManager().fire(new GameObjectInstanceSizeChangedEvent(aInstance, aNewSize));
     }
 }

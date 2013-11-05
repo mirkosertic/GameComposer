@@ -4,18 +4,24 @@ import java.util.*;
 
 public class GameObject {
 
+    private GameScene gameScene;
     private String uuid;
     private String name;
     private Map<Class<GameComponentTemplate>, GameComponentTemplate> componentTemplates;
 
-    public GameObject(String aName) {
-        this(aName, UUID.randomUID());
+    public GameObject(GameScene aScene, String aName) {
+        this(aScene, aName, UUID.randomUID());
     }
 
-    GameObject(String aName, String aUUID) {
+    GameObject(GameScene aScene, String aName, String aUUID) {
+        gameScene = aScene;
         uuid = aUUID;
         name = aName;
         componentTemplates = new HashMap<Class<GameComponentTemplate>, GameComponentTemplate>();
+    }
+
+    public GameScene getGameScene() {
+        return gameScene;
     }
 
     public String getUuid() {
@@ -57,10 +63,10 @@ public class GameObject {
         return theResult;
     }
 
-    public static GameObject deserialize(GameRuntime aGameRuntime, Map<String, Object> theSerializedData) {
+    public static GameObject deserialize(GameRuntime aGameRuntime, GameScene aGameScene, Map<String, Object> theSerializedData) {
         String theName = (String) theSerializedData.get("name");
         String theUUID = (String) theSerializedData.get("uuid");
-        GameObject theObject = new GameObject(theName, theUUID);
+        GameObject theObject = new GameObject(aGameScene, theName, theUUID);
 
         List<Map<String, Object>> theTemplates = (List<Map<String, Object>>) theSerializedData.get("templates");
         for (Map<String, Object> theTemplate : theTemplates) {

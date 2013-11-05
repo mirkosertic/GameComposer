@@ -86,16 +86,16 @@ public class PlatformerGame extends Application {
         GameScene theCurrentScene = new GameScene(theGameRuntime);
         theCurrentScene.setName("Testscene");
 
-        GameObject thePlayerObject = new GameObject("Player");
+        GameObject thePlayerObject = new GameObject(theCurrentScene, "Player");
         thePlayerObject.add(new PlatformComponentTemplate());
         thePlayerObject.add(new PhysicsComponentTemplate());
         theCurrentScene.addGameObject(thePlayerObject);
 
-        GameObject theBrickObject = new GameObject("Brick");
+        GameObject theBrickObject = new GameObject(theCurrentScene, "Brick");
         theBrickObject.add(new StaticComponentTemplate());
         theCurrentScene.addGameObject(theBrickObject);
 
-        GameObject theCameraObject = new GameObject("Camera");
+        GameObject theCameraObject = new GameObject(theCurrentScene, "Camera");
         theCameraObject.add(new CameraComponentTemplate());
         theCurrentScene.addGameObject(theCameraObject);
 

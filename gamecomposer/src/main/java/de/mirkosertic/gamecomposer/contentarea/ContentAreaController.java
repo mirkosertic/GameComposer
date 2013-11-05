@@ -85,6 +85,12 @@ public class ContentAreaController implements ChildController {
         editorTabPane.getTabs().add(aTab);
     }
 
+    public void onObjectUpdated(@Observes ObjectUpdatedEvent aEvent) {
+        for (Map.Entry<ContentChildController, Tab> theTab : visibleScenes.entrySet()) {
+            theTab.getKey().onObjectUpdated(theTab.getValue(), aEvent);
+        }
+    }
+
     public void onShutdown(@Observes ShutdownEvent aEvent) {
         for (Map.Entry<ContentChildController, Tab> theTab : visibleScenes.entrySet()) {
             theTab.getKey().onShutdown(aEvent);

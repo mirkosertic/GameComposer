@@ -73,6 +73,12 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
         gameObjectInstanceAddedToScene(aInstance);
     }
 
+
+    void gameObjectInstanceSizeChanged(GameObjectInstance aInstance, Size aNewSize) {
+        gameObjectInstanceRemovedFromScene(aInstance);
+        gameObjectInstanceAddedToScene(aInstance);
+    }
+
     void gameObjectInstanceAddedToScene(GameObjectInstance aInstance) {
         synchronized (physicsWorld) {
             Position theInstancePosition = aInstance.getPosition();

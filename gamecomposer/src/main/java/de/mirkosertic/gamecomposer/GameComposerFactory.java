@@ -30,6 +30,7 @@ public class GameComposerFactory {
             ResourceBundle theBundle = ResourceBundle.getBundle("de.mirkosertic.gamecomposer.GameComposer");
             fxmlLoader.setResources(theBundle);
             Region root = (Region) fxmlLoader.load(fxml);
+            root.getStylesheets().add("/JMetroLightTheme.css");
             ((GameComposerController)fxmlLoader.getController()).initialize(aStage);
 
             Undecorator theUndecorator = new Undecorator(aStage, root);
