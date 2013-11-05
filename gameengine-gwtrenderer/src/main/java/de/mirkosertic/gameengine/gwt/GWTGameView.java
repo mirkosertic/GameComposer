@@ -32,8 +32,11 @@ public class GWTGameView implements GameView {
     public void renderGame(long aGameTime, long aElapsedTimeSinceLastLoop, GameScene aScene) {
         Context2d theContext = canvas.getContext2d();
 
-        theContext.setFillStyle(CssColor.make(0, 0, 0));
-        theContext.setStrokeStyle(CssColor.make(0, 0, 0));
+        de.mirkosertic.gameengine.core.Color theBGColor = aScene.getBackgroundColor();
+
+        CssColor theCssBackground = CssColor.make(theBGColor.getR(), theBGColor.getG(), theBGColor.getB());
+        theContext.setFillStyle(theCssBackground);
+        theContext.setStrokeStyle(theCssBackground);
         theContext.fillRect(0, 0, currentSize.width, currentSize.height);
 
         for (GameObjectInstance theInstance : cameraComponent.getObjectsToDrawInRightOrder(aScene)) {

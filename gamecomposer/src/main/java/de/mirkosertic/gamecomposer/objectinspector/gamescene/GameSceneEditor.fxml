@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.*?>
+<?import javafx.collections.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.control.Label?>
@@ -13,9 +14,35 @@
       <children>
         <HBox prefHeight="-1.0" prefWidth="-1.0" spacing="0.0">
           <children>
-            <Label prefWidth="50.0" text="Name" />
+            <Label prefWidth="70.0" text="Name" />
             <TextField fx:id="nameTextField" prefWidth="-1.0" HBox.hgrow="ALWAYS" />
           </children>
+        </HBox>
+        <VBox prefHeight="-1.0" prefWidth="-1.0">
+          <children>
+            <Label maxWidth="-1.0" prefWidth="-1.0" text="Default camera" VBox.vgrow="ALWAYS" />
+            <ComboBox id="defaultSceneComboBox" fx:id="defaultCamera" maxWidth="1.7976931348623157E308" VBox.vgrow="NEVER">
+              <items>
+                <FXCollections fx:factory="observableArrayList">
+                  <String fx:value="Item 1" />
+                  <String fx:value="Item 2" />
+                  <String fx:value="Item 3" />
+                </FXCollections>
+              </items>
+            </ComboBox>
+          </children>
+          <padding>
+            <Insets top="10.0" />
+          </padding>
+        </VBox>
+        <HBox alignment="CENTER_LEFT" prefHeight="-1.0" prefWidth="-1.0">
+          <children>
+            <Label maxWidth="-1.0" prefWidth="70.0" text="Background" />
+            <ColorPicker fx:id="backgroundColorPicker" />
+          </children>
+          <padding>
+            <Insets bottom="10.0" top="10.0" />
+          </padding>
         </HBox>
       </children>
     </VBox>

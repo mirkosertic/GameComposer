@@ -55,7 +55,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
         physicsAmountOfTime = 0;
     }
 
-    void gameObjectInstanceRemovedFromScene(GameObjectInstance aInstance) {
+    Body gameObjectInstanceRemovedFromScene(GameObjectInstance aInstance) {
         synchronized (physicsWorld) {
             Body theSimulatedBody = dynamicObjects.remove(aInstance);
             if (theSimulatedBody == null) {
@@ -64,22 +64,29 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
             if (theSimulatedBody != null) {
                 int count = physicsWorld.getBodyCount();
                 physicsWorld.destroyBody(theSimulatedBody);
+                return theSimulatedBody;
             }
         }
+        return null;
     }
 
     void gameObjectInstancePositionChanged(GameObjectInstance aInstance, Position aNewPosition) {
-        gameObjectInstanceRemovedFromScene(aInstance);
-        gameObjectInstanceAddedToScene(aInstance);
+        Body theOldBody = gameObjectInstanceRemovedFromScene(aInstance);
+        Body theNewBody = gameObjectInstanceAddedToScene(aInstance);
+        if (theOldBody != null && theNewBody != null) {
+            theNewBody.setActive(theOldBody.isActive());
+        }
     }
-
 
     void gameObjectInstanceSizeChanged(GameObjectInstance aInstance, Size aNewSize) {
-        gameObjectInstanceRemovedFromScene(aInstance);
-        gameObjectInstanceAddedToScene(aInstance);
+        Body theOldBody = gameObjectInstanceRemovedFromScene(aInstance);
+        Body theNewBody = gameObjectInstanceAddedToScene(aInstance);
+        if (theOldBody != null && theNewBody != null) {
+            theNewBody.setActive(theOldBody.isActive());
+        }
     }
 
-    void gameObjectInstanceAddedToScene(GameObjectInstance aInstance) {
+    Body gameObjectInstanceAddedToScene(GameObjectInstance aInstance) {
         synchronized (physicsWorld) {
             Position theInstancePosition = aInstance.getPosition();
             Size theInstanceSize = aInstance.getSize();
@@ -106,6 +113,8 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
                 theBody.createFixture(theStaticFixture);
 
                 staticObjects.put(aInstance, theBody);
+
+                return theBody;
             }
 
             // Now the player, hence the platform component
@@ -129,8 +138,11 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
                 Body thePlatformBody = physicsWorld.createBody(thePlatformBodyDef);
                 dynamicObjects.put(aInstance, thePlatformBody);
                 thePlatformBody.createFixture(thePlatformFixture);
+
+                return thePlatformBody;
             }
         }
+        return null;
     }
 
     void applyImpulse(GameObjectInstance aInstance, float aImpulseX, float aImpulseY) {
@@ -150,6 +162,21 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
             }
         }
     }
+
+    void disableDynamicPhysicsOn(GameObjectInstance aInstance) {
+        Body theSimulatedBody = dynamicObjects.get(aInstance);
+        if (theSimulatedBody != null) {
+            theSimulatedBody.setActive(false);
+        }
+    }
+
+    void enableDynamicPhysicsOn(GameObjectInstance aInstance) {
+        Body theSimulatedBody = dynamicObjects.get(aInstance);
+        if (theSimulatedBody != null) {
+            theSimulatedBody.setActive(true);
+        }
+    }
+
 
     public void proceedGame(long aGameTime, long aElapsedTimeSinceLastLoop) {
 
@@ -177,8 +204,10 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
 
                     Vec2 thePosition = theSimulatedBody.getPosition();
 
-                    // Now we have to use the XY coordinates again
-                    theGameObject.setPosition(new Position((thePosition.x / SIZE_FACTOR) - theInstanceSize.width / 2, -(thePosition.y / SIZE_FACTOR) - theInstanceSize.height / 2));
+                    if (theSimulatedBody.isActive()) {
+                        // Now we have to use the XY coordinates again
+                        theGameObject.setPosition(new Position((thePosition.x / SIZE_FACTOR) - theInstanceSize.width / 2, -(thePosition.y / SIZE_FACTOR) - theInstanceSize.height / 2));
+                    }
                 }
 
                 // Reset the time counter

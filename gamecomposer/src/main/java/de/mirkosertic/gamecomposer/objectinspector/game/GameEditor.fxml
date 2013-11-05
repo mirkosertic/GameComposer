@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.*?>
+<?import javafx.collections.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.control.Label?>
@@ -13,15 +14,35 @@
       <children>
         <HBox prefHeight="-1.0" prefWidth="-1.0" spacing="0.0">
           <children>
-            <Label prefWidth="50.0" text="Name" />
+            <Label prefWidth="70.0" text="Name" />
             <TextField fx:id="nameTextField" prefWidth="-1.0" HBox.hgrow="ALWAYS" />
           </children>
         </HBox>
-        <Hyperlink prefWidth="-1.0" text="Create new scene..." VBox.vgrow="ALWAYS">
-          <VBox.margin>
-            <Insets bottom="20.0" top="20.0" />
-          </VBox.margin>
-        </Hyperlink>
+        <VBox prefHeight="-1.0" prefWidth="-1.0">
+          <children>
+            <Label maxWidth="-1.0" prefWidth="-1.0" text="Default scene" VBox.vgrow="ALWAYS" />
+            <ComboBox fx:id="defaultSceneComboBox" maxWidth="1.7976931348623157E308" VBox.vgrow="NEVER">
+              <items>
+                <FXCollections fx:factory="observableArrayList">
+                  <String fx:value="Item 1" />
+                  <String fx:value="Item 2" />
+                  <String fx:value="Item 3" />
+                </FXCollections>
+              </items>
+            </ComboBox>
+          </children>
+          <padding>
+            <Insets top="10.0" />
+          </padding>
+        </VBox>
+        <HBox prefHeight="54.0" prefWidth="-1.0">
+          <children>
+            <Hyperlink prefWidth="-1.0" text="Create new scene..." />
+          </children>
+          <padding>
+            <Insets top="20.0" />
+          </padding>
+        </HBox>
       </children>
     </VBox>
   </center>
