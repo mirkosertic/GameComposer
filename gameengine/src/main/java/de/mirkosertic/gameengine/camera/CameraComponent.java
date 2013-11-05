@@ -27,6 +27,10 @@ public class CameraComponent implements GameComponent {
         });
     }
 
+    public GameObjectInstance getObjectInstance() {
+        return objectInstance;
+    }
+
     public Size getScreenSize() {
         return screenSize;
     }

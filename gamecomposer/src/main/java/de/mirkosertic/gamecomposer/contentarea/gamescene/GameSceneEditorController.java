@@ -2,18 +2,41 @@ package de.mirkosertic.gamecomposer.contentarea.gamescene;
 
 import de.mirkosertic.gamecomposer.GameObjectClipboardContent;
 import de.mirkosertic.gamecomposer.ObjectSelectedEvent;
+import de.mirkosertic.gamecomposer.ObjectUpdatedEvent;
 import de.mirkosertic.gamecomposer.ShutdownEvent;
 import de.mirkosertic.gamecomposer.contentarea.ContentChildController;
 import de.mirkosertic.gameengine.camera.CameraComponent;
 import de.mirkosertic.gameengine.core.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TextField;
 import javafx.scene.input.*;
+import javafx.scene.layout.BorderPane;
 
 import javax.enterprise.event.Event;
 import java.util.List;
 
 public class GameSceneEditorController implements ContentChildController<GameScene> {
+
+    @FXML
+    BorderPane centerBorderPane;
+
+    @FXML
+    CheckBox snapToGrid;
+
+    @FXML
+    CheckBox renderPhysics;
+
+    @FXML
+    TextField gridsizeWidth;
+
+    @FXML
+    TextField gridsizeHeight;
 
     private GameScene gameScene;
     private Node view;
@@ -26,7 +49,10 @@ public class GameSceneEditorController implements ContentChildController<GameSce
     private GameObjectInstance draggingInstance;
     private Position draggingMouseWorldPosition;
 
-    GameSceneEditorController(GameScene aScene, Node aView, EditorJXGameView aGameView, Thread aGameLoopThread, CameraComponent aCameraComponent, Event<ObjectSelectedEvent> aSelectedEvent) {
+    GameSceneEditorController initialize(GameScene aScene, Node aView, EditorJXGameView aGameView, Thread aGameLoopThread, CameraComponent aCameraComponent, Event<ObjectSelectedEvent> aSelectedEvent) {
+
+        centerBorderPane.setCenter(aGameView);
+
         gameScene = aScene;
         view = aView;
         gameView = aGameView;
@@ -76,6 +102,31 @@ public class GameSceneEditorController implements ContentChildController<GameSce
                 onMouseReleased(aEvent);
             }
         });
+        gameView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent aEvent) {
+                onMouseClicked(aEvent);
+            }
+        });
+
+        gridsizeWidth.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String aOldValue, String aNewValue) {
+                gameView.gridsizeWidthProperty().set(Integer.valueOf(aNewValue));
+            }
+        });
+        gridsizeHeight.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String aOldValue, String aNewValue) {
+                gameView.gridsizeHeightProperty().set(Integer.valueOf(aNewValue));
+            }
+        });
+        gridsizeWidth.setText(Integer.toString(gameView.gridsizeWidthProperty().get()));
+        gridsizeHeight.setText(Integer.toString(gameView.gridsizeHeightProperty().get()));
+
+        gameView.renderPhysicsDebugProperty().bind(renderPhysics.selectedProperty());
+        gameView.snapToGridProperty().bind(snapToGrid.selectedProperty());
+        return this;
     }
 
     private void onDragOver(DragEvent aEvent) {
@@ -122,6 +173,9 @@ public class GameSceneEditorController implements ContentChildController<GameSce
         if (dndCreateInstance != null) {
             aEvent.setDropCompleted(true);
             aEvent.consume();
+            if (snapToGrid.isSelected()) {
+                gameScene.updateObjectInstancePosition(dndCreateInstance, gameView.snapToGrid(dndCreateInstance.getPosition()));
+            }
             dndCreateInstance = null;
         }
     }
@@ -153,6 +207,9 @@ public class GameSceneEditorController implements ContentChildController<GameSce
     }
 
     private void onMouseReleased(MouseEvent aEvent) {
+        if (draggingInstance != null && snapToGrid.isSelected()) {
+            gameScene.updateObjectInstancePosition(draggingInstance, gameView.snapToGrid(draggingInstance.getPosition()));
+        }
         draggingMouseWorldPosition = null;
         draggingInstance = null;
     }
@@ -208,6 +265,12 @@ public class GameSceneEditorController implements ContentChildController<GameSce
             if (theInstance.contains(theClickPosition)) {
                 objectSelectedEventEvent.fire(new ObjectSelectedEvent(theInstance));
             }
+        }
+    }
+
+    public void onObjectUpdated(Tab aTab, ObjectUpdatedEvent aEvent) {
+        if (aEvent.getObject() == gameScene) {
+            aTab.setText(gameScene.getName());
         }
     }
 }

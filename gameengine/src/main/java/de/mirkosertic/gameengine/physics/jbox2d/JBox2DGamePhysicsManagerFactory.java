@@ -34,6 +34,11 @@ public class JBox2DGamePhysicsManagerFactory implements GamePhysicsManagerFactor
                 thePhysicsManager.gameObjectInstancePositionChanged(aEvent.getGameObjectInstance(), aEvent.getPosition());
             }
         });
+        aEventManager.register(null, GameObjectInstanceSizeChangedEvent.class, new GameEventListener<GameObjectInstanceSizeChangedEvent>() {
+            public void handleGameEvent(GameObjectInstanceSizeChangedEvent aEvent) {
+                thePhysicsManager.gameObjectInstanceSizeChanged(aEvent.getGameObjectInstance(), aEvent.getSize());
+            }
+        });
         return thePhysicsManager;
     }
 }

@@ -39,3 +39,5 @@ GameEngine-GWTRenderer
 --------------
 
 This is the game presentation logic using GWT and HTML5(JavaScript) by implementing a GameView.
+There will also be WebGL support in the future as the HTML5 Canvas can be pretty slow and we are
+dealing with a lot of visible objects.
