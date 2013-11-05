@@ -1,9 +1,7 @@
 package de.mirkosertic.gameengine.physics.jbox2d;
 
 import de.mirkosertic.gameengine.core.*;
-import de.mirkosertic.gameengine.physics.ApplyForceToGameObjectInstance;
-import de.mirkosertic.gameengine.physics.ApplyImpulseToGameObjectInstance;
-import de.mirkosertic.gameengine.physics.GamePhysicsManagerFactory;
+import de.mirkosertic.gameengine.physics.*;
 
 public class JBox2DGamePhysicsManagerFactory implements GamePhysicsManagerFactory {
 
@@ -37,6 +35,18 @@ public class JBox2DGamePhysicsManagerFactory implements GamePhysicsManagerFactor
         aEventManager.register(null, GameObjectInstanceSizeChangedEvent.class, new GameEventListener<GameObjectInstanceSizeChangedEvent>() {
             public void handleGameEvent(GameObjectInstanceSizeChangedEvent aEvent) {
                 thePhysicsManager.gameObjectInstanceSizeChanged(aEvent.getGameObjectInstance(), aEvent.getSize());
+            }
+        });
+        aEventManager.register(null, DisableDynamicPhysicsEvent.class, new GameEventListener<DisableDynamicPhysicsEvent>() {
+            @Override
+            public void handleGameEvent(DisableDynamicPhysicsEvent aEvent) {
+                thePhysicsManager.disableDynamicPhysicsOn(aEvent.getObject());
+            }
+        });
+        aEventManager.register(null, EnableDynamicPhysicsEvent.class, new GameEventListener<EnableDynamicPhysicsEvent>() {
+            @Override
+            public void handleGameEvent(EnableDynamicPhysicsEvent aEvent) {
+                thePhysicsManager.enableDynamicPhysicsOn(aEvent.getObject());
             }
         });
         return thePhysicsManager;

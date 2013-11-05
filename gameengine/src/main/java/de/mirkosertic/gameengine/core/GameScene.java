@@ -14,8 +14,11 @@ public class GameScene {
     private Set<GameObject> objects;
     private Set<GameObjectInstance> instances;
     private GameRuntime gameRuntime;
+    private GameObject cameraObject;
+    private Color backgroundColor;
 
     public GameScene(GameRuntime aGameRuntime) {
+        backgroundColor = new Color(0, 0, 0);
         instances = new HashSet<GameObjectInstance>();
         objects = new HashSet<GameObject>();
         gameRuntime = aGameRuntime;
@@ -31,6 +34,22 @@ public class GameScene {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public GameObject getCameraObject() {
+        return cameraObject;
+    }
+
+    public void setCameraObject(GameObject cameraObject) {
+        this.cameraObject = cameraObject;
+    }
+
+    public Color getBackgroundColor() {
+        return backgroundColor;
+    }
+
+    public void setBackgroundColor(Color backgroundColor) {
+        this.backgroundColor = backgroundColor;
     }
 
     public void addGameObject(GameObject aObject) {
@@ -69,6 +88,12 @@ public class GameScene {
             theObjects.add(theObject.serialize());
         }
         theResult.put("objects", theObjects);
+        if (cameraObject != null) {
+            theResult.put("cameraobjectid", cameraObject.getUuid());
+        }
+        if (backgroundColor != null) {
+            theResult.put("backgroundcolor", backgroundColor.serialize());
+        }
 
         List<Map<String, Object>> theInstances = new ArrayList<Map<String, Object>>();
         for (GameObjectInstance theInstance : instances) {
@@ -99,6 +124,15 @@ public class GameScene {
         List<Map<String, Object>> theInstances = (List<Map<String, Object>>) aSerializedData.get("instances");
         for (Map<String, Object> theInstance : theInstances) {
             theScene.addGameObjectInstance(GameObjectInstance.deserialize(aGameRuntime, theScene, theInstance));
+        }
+
+        String theCameraObject = (String) aSerializedData.get("cameraobjectid");
+        if (theCameraObject != null) {
+            theScene.cameraObject = theScene.findGameObjectByID(theCameraObject);
+        }
+        Map<String, Object> theBackgroundColor = (Map<String, Object>) aSerializedData.get("backgroundcolor");
+        if (theBackgroundColor != null) {
+            theScene.backgroundColor = Color.deserialize(theBackgroundColor);
         }
         return theScene;
     }

@@ -8,6 +8,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
 import javax.enterprise.event.Event;
@@ -17,6 +18,9 @@ public class GameEditorController implements ChildController {
 
     @FXML
     TextField nameTextField;
+
+    @FXML
+    ComboBox defaultSceneComboBox;
 
     @Inject
     Event<ObjectUpdatedEvent> objectUpdatedEvent;
@@ -30,11 +34,21 @@ public class GameEditorController implements ChildController {
 
         nameTextField.setText(game.getName());
 
+        defaultSceneComboBox.getItems().clear();
+        defaultSceneComboBox.getItems().addAll(aObject.getScenes());
+        defaultSceneComboBox.setValue(aObject.getDefaultScene());
+
         nameTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String aOldValue, String aNewValue) {
                 game.setName(aNewValue);
                 objectUpdatedEvent.fire(new ObjectUpdatedEvent(game));
+            }
+        });
+        defaultSceneComboBox.itemsProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observableValue, Object aOldValue, Object aNewValue) {
+                game.setDefaultScene((String) aNewValue);
             }
         });
 
