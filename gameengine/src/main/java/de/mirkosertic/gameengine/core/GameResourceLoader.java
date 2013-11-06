@@ -1,8 +1,6 @@
-package de.mirkosertic.gameengine.resource;
+package de.mirkosertic.gameengine.core;
 
 import java.io.IOException;
-
-import de.mirkosertic.gameengine.core.ResourceName;
 
 public interface GameResourceLoader {
     

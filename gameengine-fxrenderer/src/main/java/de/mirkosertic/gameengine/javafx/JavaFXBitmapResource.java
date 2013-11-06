@@ -1,7 +1,7 @@
 package de.mirkosertic.gameengine.javafx;
 
-import de.mirkosertic.gameengine.resource.GameResource;
-import de.mirkosertic.gameengine.resource.GameResourceType;
+import de.mirkosertic.gameengine.core.GameResource;
+import de.mirkosertic.gameengine.core.GameResourceType;
 import javafx.scene.image.Image;
 
 import java.io.InputStream;

@@ -3,8 +3,8 @@ package de.mirkosertic.gameengine.gwt;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.RootPanel;
 import de.mirkosertic.gameengine.core.ResourceName;
-import de.mirkosertic.gameengine.resource.GameResource;
-import de.mirkosertic.gameengine.resource.GameResourceLoader;
+import de.mirkosertic.gameengine.core.GameResource;
+import de.mirkosertic.gameengine.core.GameResourceLoader;
 
 import java.io.IOException;
 

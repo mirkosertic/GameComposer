@@ -18,8 +18,6 @@ import de.mirkosertic.gameengine.camera.FollowCameraProcess;
 import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.physics.PlatformComponent;
 import de.mirkosertic.gameengine.processes.StartProcessEvent;
-import de.mirkosertic.gameengine.resource.GameResourceCache;
-import de.mirkosertic.gameengine.resource.GameResourceLoader;
 
 public class GWTRenderer implements EntryPoint {
 
