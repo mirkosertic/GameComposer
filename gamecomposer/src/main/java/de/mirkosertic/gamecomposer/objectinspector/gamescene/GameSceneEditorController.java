@@ -22,11 +22,26 @@ import javax.inject.Inject;
 
 public class GameSceneEditorController implements ChildController {
 
+    static class GameObjectToStringConverter extends StringConverter<GameObject> {
+        @Override
+        public String toString(GameObject aObject) {
+            return aObject.getName();
+        }
+
+        @Override
+        public GameObject fromString(String s) {
+            return null;
+        }
+    }
+
     @FXML
     TextField nameTextField;
 
     @FXML
     ComboBox defaultCamera;
+
+    @FXML
+    ComboBox defaultPlayer;
 
     @FXML
     ColorPicker backgroundColorPicker;
@@ -46,17 +61,12 @@ public class GameSceneEditorController implements ChildController {
         defaultCamera.getItems().clear();
         defaultCamera.getItems().addAll(aObject.getObjects());
         defaultCamera.setValue(aObject.getCameraObject());
-        defaultCamera.setConverter(new StringConverter() {
-            @Override
-            public String toString(Object o) {
-                return ((GameObject)o).getName();
-            }
+        defaultCamera.setConverter(new GameObjectToStringConverter());
 
-            @Override
-            public Object fromString(String s) {
-                return null;
-            }
-        });
+        defaultPlayer.getItems().clear();
+        defaultPlayer.getItems().addAll(aObject.getObjects());
+        defaultPlayer.setValue(aObject.getDefaultPlayer());
+        defaultPlayer.setConverter(new GameObjectToStringConverter());
 
         backgroundColorPicker.setValue(Color.rgb(aObject.getBackgroundColor().getR(),
                 aObject.getBackgroundColor().getG(),
@@ -81,6 +91,13 @@ public class GameSceneEditorController implements ChildController {
             @Override
             public void changed(ObservableValue observableValue, Object aOldValue, Object aNewValue) {
                 gameScene.setCameraObject((GameObject) aNewValue);
+            }
+        });
+
+        defaultPlayer.valueProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observableValue, Object aOldValue, Object aNewValue) {
+                gameScene.setDefaultPlayer((GameObject) aNewValue);
             }
         });
 

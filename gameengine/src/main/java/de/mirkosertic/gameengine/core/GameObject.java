@@ -7,6 +7,7 @@ public class GameObject {
     private GameScene gameScene;
     private String uuid;
     private String name;
+    private Size size;
     private Map<Class<GameComponentTemplate>, GameComponentTemplate> componentTemplates;
 
     public GameObject(GameScene aScene, String aName) {
@@ -18,6 +19,7 @@ public class GameObject {
         uuid = aUUID;
         name = aName;
         componentTemplates = new HashMap<Class<GameComponentTemplate>, GameComponentTemplate>();
+        size = new Size(64, 64);
     }
 
     public GameScene getGameScene() {
@@ -34,6 +36,14 @@ public class GameObject {
 
     public String getName() {
         return name;
+    }
+
+    public Size getSize() {
+        return size;
+    }
+
+    public void setSize(Size size) {
+        this.size = size;
     }
 
     public void add(GameComponentTemplate aComponentFactory) {
@@ -54,7 +64,7 @@ public class GameObject {
         Map<String, Object> theResult = new HashMap<String, Object>();
         theResult.put("name", name);
         theResult.put("uuid", uuid);
-
+        theResult.put("size", size.serializeToMap());
         List<Map<String, Object>> theTemplates = new ArrayList<Map<String, Object>>();
         for (GameComponentTemplate theTemplate : componentTemplates.values()) {
            theTemplates.add(theTemplate.serialize());
@@ -68,10 +78,15 @@ public class GameObject {
         String theUUID = (String) theSerializedData.get("uuid");
         GameObject theObject = new GameObject(aGameScene, theName, theUUID);
 
+        Map<String, Object> theSize = (Map<String, Object>) theSerializedData.get("size");
+        if (theSize != null) {
+            theObject.size = Size.deserialize(theSize);
+        }
+
         List<Map<String, Object>> theTemplates = (List<Map<String, Object>>) theSerializedData.get("templates");
         for (Map<String, Object> theTemplate : theTemplates) {
             String theTypeKey = (String) theTemplate.get(GameComponent.TYPE_ATTRIBUTE);
-            theObject.add(aGameRuntime.getTemplateUnmarshallerFor(theTypeKey).deserialize( theTemplate));
+            theObject.add(aGameRuntime.getTemplateUnmarshallerFor(theTypeKey).deserialize(theObject, theTemplate));
         }
 
         return theObject;

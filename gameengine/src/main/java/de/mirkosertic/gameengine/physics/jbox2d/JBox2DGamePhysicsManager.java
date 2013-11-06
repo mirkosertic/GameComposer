@@ -50,6 +50,8 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
             public void postSolve(Contact aContact, ContactImpulse aImpulse) {
             }
         });
+        // Dynamic objects must be awake by default, or they will wait for a kind of impulse
+        physicsWorld.setAllowSleep(false);
         dynamicObjects = new HashMap<GameObjectInstance, Body>();
         staticObjects = new HashMap<GameObjectInstance, Body>();
         physicsAmountOfTime = 0;
@@ -89,7 +91,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
     Body gameObjectInstanceAddedToScene(GameObjectInstance aInstance) {
         synchronized (physicsWorld) {
             Position theInstancePosition = aInstance.getPosition();
-            Size theInstanceSize = aInstance.getSize();
+            Size theInstanceSize = aInstance.getOwnerGameObject().getSize();
 
             // Check if is a static component
             StaticComponent theStaticComponent = aInstance.getComponent(StaticComponent.class);
@@ -199,7 +201,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
                 // Finally, we have to update the position of our game objects to sync them to the simulation
                 for (Map.Entry<GameObjectInstance, Body> theEntry : dynamicObjects.entrySet()) {
                     GameObjectInstance theGameObject = theEntry.getKey();
-                    Size theInstanceSize = theGameObject.getSize();
+                    Size theInstanceSize = theGameObject.getOwnerGameObject().getSize();
                     Body theSimulatedBody = theEntry.getValue();
 
                     Vec2 thePosition = theSimulatedBody.getPosition();
@@ -240,9 +242,9 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
                     if (theShape.getType() == ShapeType.POLYGON) {
                         PolygonShape thePolyShape = (PolygonShape) theShape;
                         for (int i = 1; i < thePolyShape.getVertexCount(); i++) {
-                            aCanvas.drawLine(toPosition(thePolyShape.getVertex(i - 1), theBodyPosition), toPosition(thePolyShape.getVertex(i), theBodyPosition));
+                            aCanvas.drawLine(toPosition(thePolyShape.getVertex(i - 1), theBodyPosition), toPosition(thePolyShape.getVertex(i), theBodyPosition), theBody.isAwake());
                         }
-                        aCanvas.drawLine(toPosition(thePolyShape.getVertex(thePolyShape.getVertexCount() - 1), theBodyPosition), toPosition(thePolyShape.getVertex(0), theBodyPosition));
+                        aCanvas.drawLine(toPosition(thePolyShape.getVertex(thePolyShape.getVertexCount() - 1), theBodyPosition), toPosition(thePolyShape.getVertex(0), theBodyPosition), theBody.isAwake());
                     }
                     theFixture = theFixture.getNext();
                 }

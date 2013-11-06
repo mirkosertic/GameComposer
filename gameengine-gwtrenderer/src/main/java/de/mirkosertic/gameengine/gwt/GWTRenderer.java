@@ -47,7 +47,7 @@ public class GWTRenderer implements EntryPoint {
             public void onGameSceneLoadedError(Throwable aThrowable) {
                 System.out.println("Error loading scene"+aThrowable);
             }
-        }, theRuntimeFactory);
+        }, theRuntimeFactory, new GWTGameResourceLoader("scene1"));
 
         GWTGameLoader theLoader = new GWTGameLoader(new GWTGameLoader.GameLoadedListener() {
             @Override
@@ -98,9 +98,7 @@ public class GWTRenderer implements EntryPoint {
                 thePlayerInstance = theInstance;
             }
         }
-        GameResourceLoader theResourceLoader = new GWTGameResourceLoader("scene1");
-        GameResourceCache theResourceCache = new GameResourceCache(theResourceLoader);
-        GWTGameView theGameView = new GWTGameView(theResourceCache, canvas, theCameraComponent);
+        GWTGameView theGameView = new GWTGameView(theRuntime, canvas, theCameraComponent);
 
         theGameView.setSize(new Size(Window.getClientWidth(), Window.getClientHeight()));
         theEventManager.fire(new SetScreenResolutionEvent(Window.getClientWidth(), Window.getClientHeight()));

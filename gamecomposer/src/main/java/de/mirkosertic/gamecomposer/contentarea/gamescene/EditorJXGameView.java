@@ -2,10 +2,7 @@ package de.mirkosertic.gamecomposer.contentarea.gamescene;
 
 import de.mirkosertic.gamecomposer.ObjectSelectedEvent;
 import de.mirkosertic.gameengine.camera.CameraComponent;
-import de.mirkosertic.gameengine.core.GameObjectInstance;
-import de.mirkosertic.gameengine.core.GameScene;
-import de.mirkosertic.gameengine.core.Position;
-import de.mirkosertic.gameengine.core.Size;
+import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.javafx.JavaFXBitmapResource;
 import de.mirkosertic.gameengine.javafx.JavaFXGameView;
 import de.mirkosertic.gameengine.physics.GamePhysicsManager;
@@ -31,8 +28,8 @@ public class EditorJXGameView extends JavaFXGameView {
     private IntegerProperty gridsizeWidth;
     private IntegerProperty gridsizeHeight;
 
-    public EditorJXGameView(GameResourceCache aResourceCache, CameraComponent aCameraComponent, GamePhysicsManager aPhysicsManager) {
-        super(aResourceCache, aCameraComponent);
+    public EditorJXGameView(GameRuntime aGameRuntime, CameraComponent aCameraComponent, GamePhysicsManager aPhysicsManager) {
+        super(aGameRuntime, aCameraComponent);
 
         snapToGrid = new SimpleBooleanProperty(true);
         renderPhysicsDebug = new SimpleBooleanProperty(false);
@@ -114,8 +111,8 @@ public class EditorJXGameView extends JavaFXGameView {
             Position theCameraPosition = theCameraComponent.getObjectInstance().getPosition();
             Size theScreenSize = theCameraComponent.getScreenSize();
 
-            float theStartX = theCameraPosition.x - theCameraPosition.x % theGridsizeWidth;
-            float theStartY = theCameraPosition.y - theCameraPosition.y % theGridsizeHeight;
+            float theStartX = theCameraPosition.x - (theCameraPosition.x % theGridsizeWidth);
+            float theStartY = theCameraPosition.y - (theCameraPosition.y % theGridsizeHeight);
             int theCols = (int) (theScreenSize.width / theGridsizeWidth) + 1;
             int theRows = (int) (theScreenSize.height / theGridsizeHeight) + 1;
 
@@ -133,7 +130,7 @@ public class EditorJXGameView extends JavaFXGameView {
                         aContext.strokeLine(0, theScreenPosition.y, theScreenSize.width, theScreenPosition.y);
                     }
 
-                    aContext.strokeLine(theX, 0, theX, theScreenSize.height);
+                    aContext.strokeLine(theScreenPosition.x, 0, theScreenPosition.x, theScreenSize.height);
                 }
             }
         }
@@ -141,20 +138,36 @@ public class EditorJXGameView extends JavaFXGameView {
         if (renderPhysicsDebug.get()) {
             physicsManager.drawDebug(new PhysicsDebugCanvas() {
                 @Override
-                public void drawLine(Position p1, Position p2) {
+                public void drawLine(Position p1, Position p2, boolean awake) {
 
-                    aContext.setFill(Color.RED);
-                    aContext.setStroke(Color.RED);
-                    aContext.setLineWidth(3);
-                    aContext.strokeLine(p1.x, p1.y, p2.x, p2.y);
+                    CameraComponent theCameraComponent = getCameraComponent();
+
+                    Position theScreenP1 = theCameraComponent.transformToScreenPosition(p1);
+                    Position theScreenP2 = theCameraComponent.transformToScreenPosition(p2);
+
+                    if (awake) {
+                        aContext.setFill(Color.RED);
+                        aContext.setStroke(Color.RED);
+                        aContext.setLineWidth(3);
+                    } else {
+                        aContext.setFill(Color.BLUE);
+                        aContext.setStroke(Color.BLUE);
+                        aContext.setLineWidth(2);
+                    }
+                    aContext.strokeLine(theScreenP1.x, theScreenP1.y, theScreenP2.x, theScreenP2.y);
                 }
 
                 @Override
                 public void drawPosition(Position aPosition) {
+
+                    CameraComponent theCameraComponent = getCameraComponent();
+
+                    Position theScreenP1 = theCameraComponent.transformToScreenPosition(aPosition);
+
                     aContext.setFill(Color.BLUE);
                     aContext.setStroke(Color.BLUE);
                     aContext.setLineWidth(3);
-                    aContext.fillOval(aPosition.x, aPosition.y, 5, 5);
+                    aContext.fillOval(theScreenP1.x, theScreenP1.y, 5, 5);
                 }
             });
         }

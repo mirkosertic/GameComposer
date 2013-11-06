@@ -22,4 +22,8 @@ public abstract class JavaFXAbstractGameResourceLoader implements GameResourceLo
         }
         return null;
     }
+
+    @Override
+    public void flush() {
+    }
 }

@@ -15,7 +15,6 @@ public class PhysicsComponentUnmarshaller implements GameComponentUnmarshaller<P
 
     @Override
     public PhysicsComponent deserialize(GameRuntime aRuntime, GameObjectInstance aObjectInstance, Map<String, Object> aSerializedData) {
-        PhysicsComponent theResult = PhysicsComponent.deserialize(aObjectInstance, aSerializedData);
-        return theResult;
+        return PhysicsComponent.deserialize(aObjectInstance, aSerializedData);
     }
 }

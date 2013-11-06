@@ -1,6 +1,6 @@
 package de.mirkosertic.gamecomposer.objectinspector.statictemplate;
 
-import de.mirkosertic.gamecomposer.FXMLLoaderProducer;
+import de.mirkosertic.gamecomposer.FXMLLoaderFactory;
 import de.mirkosertic.gameengine.physics.StaticComponentTemplate;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,11 +13,11 @@ import java.util.ResourceBundle;
 public class StaticTemplateEditorControllerFactory {
 
     @Inject
-    FXMLLoaderProducer fxmlLoaderProducer;
+    FXMLLoaderFactory fxmlLoaderFactory;
 
     public StaticTemplateEditorController create(StaticComponentTemplate aObject) {
         try (InputStream fxml = StaticTemplateEditorController.class.getResourceAsStream("StaticTemplateEditor.fxml")) {
-            FXMLLoader theLoader = fxmlLoaderProducer.createLoader();
+            FXMLLoader theLoader = fxmlLoaderFactory.createLoader();
             ResourceBundle theBundle = ResourceBundle.getBundle("de.mirkosertic.gamecomposer.objectinspector.statictemplate.StaticTemplateEditor");
             theLoader.setResources(theBundle);
             Parent root = (Parent) theLoader.load(fxml);

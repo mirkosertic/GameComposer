@@ -1,6 +1,6 @@
 package de.mirkosertic.gamecomposer.objectinspector.spritetemplate;
 
-import de.mirkosertic.gamecomposer.FXMLLoaderProducer;
+import de.mirkosertic.gamecomposer.FXMLLoaderFactory;
 import de.mirkosertic.gameengine.sprites.SpriteComponentTemplate;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,11 +13,11 @@ import java.util.ResourceBundle;
 public class SpriteTemplateEditorControllerFactory {
 
     @Inject
-    FXMLLoaderProducer fxmlLoaderProducer;
+    FXMLLoaderFactory fxmlLoaderFactory;
 
     public SpriteTemplateEditorController create(SpriteComponentTemplate aObject) {
         try (InputStream fxml = SpriteTemplateEditorController.class.getResourceAsStream("SpriteTemplateEditor.fxml")) {
-            FXMLLoader theLoader = fxmlLoaderProducer.createLoader();
+            FXMLLoader theLoader = fxmlLoaderFactory.createLoader();
             ResourceBundle theBundle = ResourceBundle.getBundle("de.mirkosertic.gamecomposer.objectinspector.spritetemplate.SpriteTemplateEditor");
             theLoader.setResources(theBundle);
             Parent root = (Parent) theLoader.load(fxml);

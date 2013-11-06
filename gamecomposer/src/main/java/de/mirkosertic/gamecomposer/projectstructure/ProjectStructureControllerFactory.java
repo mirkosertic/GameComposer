@@ -1,5 +1,6 @@
 package de.mirkosertic.gamecomposer.projectstructure;
 
+import de.mirkosertic.gamecomposer.FXMLLoaderFactory;
 import de.mirkosertic.gamecomposer.ProjectStructure;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,16 +14,17 @@ import java.util.ResourceBundle;
 public class ProjectStructureControllerFactory {
 
     @Inject
-    FXMLLoader fxmlLoader;
+    FXMLLoaderFactory fxmlLoaderFactory;
 
     @Produces
     @ProjectStructure
     public ProjectStructureController create() throws IOException {
         try (InputStream fxml = ProjectStructureController.class.getResourceAsStream("ProjectStructure.fxml")) {
+            FXMLLoader theLoader = fxmlLoaderFactory.createLoader();
             ResourceBundle theBundle = ResourceBundle.getBundle("de.mirkosertic.gamecomposer.projectstructure.ProjectStructure");
-            fxmlLoader.setResources(theBundle);
-            Parent root = (Parent) fxmlLoader.load(fxml);
-            return ((ProjectStructureController)fxmlLoader.getController()).initialize(root);
+            theLoader.setResources(theBundle);
+            Parent root = (Parent) theLoader.load(fxml);
+            return ((ProjectStructureController)theLoader.getController()).initialize(root);
         }
     }
 

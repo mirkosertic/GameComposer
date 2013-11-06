@@ -24,7 +24,7 @@ public class FollowCameraProcess implements GameProcess {
         Position theCameraCenter = new Position(theCameraPosition.x + theCameraSize.width / 2, theCameraPosition.y + theCameraSize.height / 2);
 
         Position thePlayerPosition = playerObject.getPosition();
-        Size thePlayerSize = playerObject.getSize();
+        Size thePlayerSize = playerObject.getOwnerGameObject().getSize();
 
         Position thePlayerCenter = new Position(thePlayerPosition.x + thePlayerSize.width / 2, thePlayerPosition.y + thePlayerSize.height / 2);
 

@@ -1,23 +1,14 @@
 package de.mirkosertic.gamecomposer.contentarea.gamescene;
 
-import de.mirkosertic.gamecomposer.FXMLLoaderProducer;
-import de.mirkosertic.gamecomposer.GameComposerController;
+import de.mirkosertic.gamecomposer.FXMLLoaderFactory;
 import de.mirkosertic.gamecomposer.ObjectSelectedEvent;
-import de.mirkosertic.gamecomposer.PersistenceManager;
 import de.mirkosertic.gameengine.camera.CameraComponent;
-import de.mirkosertic.gameengine.camera.CameraComponentTemplate;
 import de.mirkosertic.gameengine.core.*;
-import de.mirkosertic.gameengine.javafx.JavaFXGameView;
 import de.mirkosertic.gameengine.physics.GamePhysicsManager;
-import de.mirkosertic.gameengine.resource.GameResourceCache;
-import de.mirkosertic.gameengine.resource.GameResourceLoader;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Region;
 
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
@@ -28,13 +19,10 @@ import java.util.ResourceBundle;
 public class GameSceneEditorControllerFactory {
 
     @Inject
-    PersistenceManager persistenceManager;
-
-    @Inject
     Event<ObjectSelectedEvent> objectSelectedEventEvent;
 
     @Inject
-    FXMLLoaderProducer fxmlLoaderProducer;
+    FXMLLoaderFactory fxmlLoaderFactory;
 
     public GameSceneEditorController createFor(GameScene aScene) {
 
@@ -42,18 +30,17 @@ public class GameSceneEditorControllerFactory {
         GameRuntime theRuntime = aScene.getRuntime();
         GameObjectInstanceFactory theInstanceFactory = new GameObjectInstanceFactory(theRuntime);
 
-        // Detect and create a camera
-        GameObjectInstance theCameraObject;
-        CameraComponent theCameraComponent = null;
-        for (GameObject theObject : aScene.getObjects()) {
-            CameraComponentTemplate theTemplate = theObject.getComponentTemplate(CameraComponentTemplate.class);
-            if (theTemplate != null) {
-                theCameraObject = theInstanceFactory.createFrom(theObject);
-                theCameraComponent = theCameraObject.getComponent(CameraComponent.class);
-            }
+        GameObject theDefaultCamera = aScene.getCameraObject();
+        if (theDefaultCamera == null) {
+            throw new IllegalArgumentException("No camera set");
         }
-        GameResourceLoader theResourceLoader = persistenceManager.createResourceLoaderFor(aScene);
-        GameResourceCache theResourceCache = new GameResourceCache(theResourceLoader);
+
+        // Detect and create a camera
+        GameObjectInstance theCameraObject = theInstanceFactory.createFrom(theDefaultCamera);
+        CameraComponent theCameraComponent = theCameraObject.getComponent(CameraComponent.class);
+        if (theCameraComponent == null) {
+            throw new IllegalArgumentException("No camera component in camera object");
+        }
 
         GamePhysicsManager thePhysicsManager = null;
         for (GameSystem theSystem : theRuntime.getSystems()) {
@@ -62,7 +49,7 @@ public class GameSceneEditorControllerFactory {
             }
         }
 
-        EditorJXGameView theGameView = new EditorJXGameView(theResourceCache, theCameraComponent, thePhysicsManager);
+        EditorJXGameView theGameView = new EditorJXGameView(theRuntime, theCameraComponent, thePhysicsManager);
 
         GameLoopFactory theGameLoopFactory = new GameLoopFactory();
         GameLoop theMainLoop = theGameLoopFactory.create(aScene, theGameView, theRuntime);
@@ -75,7 +62,7 @@ public class GameSceneEditorControllerFactory {
         theEventManager.fire(new SetScreenResolutionEvent(200, 200));
 
         try (InputStream fxml = GameSceneEditorController.class.getResourceAsStream("GameSceneEditor.fxml")) {
-            FXMLLoader theLoader = fxmlLoaderProducer.createLoader();
+            FXMLLoader theLoader = fxmlLoaderFactory.createLoader();
             ResourceBundle theBundle = ResourceBundle.getBundle("de.mirkosertic.gamecomposer.contentarea.gamescene.GameSceneEditor");
             theLoader.setResources(theBundle);
             BorderPane root = (BorderPane) theLoader.load(fxml);
@@ -96,7 +83,7 @@ public class GameSceneEditorControllerFactory {
             theGameView.widthProperty().bind(theController.centerBorderPane.widthProperty());
             theGameView.heightProperty().bind(theController.centerBorderPane.heightProperty());
 
-            return theController.initialize(aScene, root, theGameView, theMainLoopThread, theCameraComponent, objectSelectedEventEvent);
+            return theController.initialize(theRuntime, aScene, root, theGameView, theMainLoopThread, theCameraComponent, objectSelectedEventEvent);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -15,7 +15,6 @@ public class PlatformComponentUnmarshaller implements GameComponentUnmarshaller<
 
     @Override
     public PlatformComponent deserialize(GameRuntime aRuntime, GameObjectInstance aObjectInstance, Map<String, Object> aSerializedData) {
-        PlatformComponent theResult = PlatformComponent.deserialize(aObjectInstance, aSerializedData, aRuntime);
-        return theResult;
+        return PlatformComponent.deserialize(aObjectInstance, aSerializedData, aRuntime);
     }
 }

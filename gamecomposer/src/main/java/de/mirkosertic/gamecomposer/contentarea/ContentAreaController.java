@@ -4,6 +4,7 @@ import de.mirkosertic.gamecomposer.*;
 import de.mirkosertic.gamecomposer.contentarea.gamescene.GameSceneEditorController;
 import de.mirkosertic.gamecomposer.contentarea.gamescene.GameSceneEditorControllerFactory;
 import de.mirkosertic.gameengine.core.GameScene;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -79,42 +80,58 @@ public class ContentAreaController implements ChildController {
         welcomeBorderPane.setVisible(true);
     }
 
-    void addTab(Tab aTab) {
+    void addTab(final Tab aTab) {
         editorTabPane.setVisible(true);
         welcomeBorderPane.setVisible(false);
         editorTabPane.getTabs().add(aTab);
+        aTab.setClosable(true);
+        aTab.setOnClosed(new EventHandler<Event>() {
+            @Override
+            public void handle(Event aEvent) {
+                onTabClose(aTab);
+            }
+        });
+    }
+
+    void onTabClose(Tab aTab) {
+        for (Map.Entry<ContentChildController, Tab> theTabEntry : visibleScenes.entrySet()) {
+            if (theTabEntry.getValue() == aTab) {
+                theTabEntry.getKey().removed();
+                visibleScenes.remove(theTabEntry.getKey());
+                return;
+            }
+        }
     }
 
     public void onObjectUpdated(@Observes ObjectUpdatedEvent aEvent) {
-        for (Map.Entry<ContentChildController, Tab> theTab : visibleScenes.entrySet()) {
-            theTab.getKey().onObjectUpdated(theTab.getValue(), aEvent);
+        for (Map.Entry<ContentChildController, Tab> theTabEntry : visibleScenes.entrySet()) {
+            theTabEntry.getKey().onObjectUpdated(theTabEntry.getValue(), aEvent);
         }
     }
 
     public void onShutdown(@Observes ShutdownEvent aEvent) {
-        for (Map.Entry<ContentChildController, Tab> theTab : visibleScenes.entrySet()) {
-            theTab.getKey().onShutdown(aEvent);
+        for (Map.Entry<ContentChildController, Tab> theTabEntry : visibleScenes.entrySet()) {
+            theTabEntry.getKey().onShutdown(aEvent);
         }
     }
 
     public void onObjectSelected(@Observes ObjectSelectedEvent aEvent) {
-        for (Map.Entry<ContentChildController, Tab> theTab : visibleScenes.entrySet()) {
-            theTab.getKey().onObjectSelected(aEvent);
+        for (Map.Entry<ContentChildController, Tab> theTabEntry : visibleScenes.entrySet()) {
+            theTabEntry.getKey().onObjectSelected(aEvent);
         }
     }
 
     public void onGameSceneSelected(@Observes GameSceneSelectedEvent aEvent) {
         GameScene theScene = aEvent.getScene();
-        for (Map.Entry<ContentChildController, Tab> theTab : visibleScenes.entrySet()) {
-            if (theTab.getKey().getEditingObject() == theScene) {
-                editorTabPane.getSelectionModel().select(theTab.getValue());
+        for (Map.Entry<ContentChildController, Tab> theTabEntry : visibleScenes.entrySet()) {
+            if (theTabEntry.getKey().getEditingObject() == theScene) {
+                editorTabPane.getSelectionModel().select(theTabEntry.getValue());
                 return;
             }
         }
 
         GameSceneEditorController theSceneEditorController = sceneEditorControllerFactory.createFor(theScene);
         Tab theTab = new Tab(theScene.getName());
-        theTab.setClosable(true);
         theTab.setContent(theSceneEditorController.getView());
 
         addTab(theTab);
@@ -122,5 +139,11 @@ public class ContentAreaController implements ChildController {
         visibleScenes.put(theSceneEditorController, theTab);
 
         theSceneEditorController.addedAsTab();
+    }
+
+    public void onFlushResourceCache(@Observes FlushResourceCacheEvent aEvent) {
+        for (Map.Entry<ContentChildController, Tab> theTabEntry : visibleScenes.entrySet()) {
+            theTabEntry.getKey().onFlushResourceCache(aEvent);
+        }
     }
 }

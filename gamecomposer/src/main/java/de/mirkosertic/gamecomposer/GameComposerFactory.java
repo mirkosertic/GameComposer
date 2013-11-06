@@ -19,7 +19,7 @@ import java.util.ResourceBundle;
 public class GameComposerFactory {
 
     @Inject
-    FXMLLoader fxmlLoader;
+    FXMLLoaderFactory fxmlLoaderFactory;
 
     @Inject
     PersistenceManager persistenceManager;
@@ -27,11 +27,12 @@ public class GameComposerFactory {
     public void createAndStart(Stage aStage, Application.Parameters aParameters) throws IOException {
 
         try (InputStream fxml = GameComposerController.class.getResourceAsStream("GameComposer.fxml")) {
+            FXMLLoader theLoader = fxmlLoaderFactory.createLoader();
             ResourceBundle theBundle = ResourceBundle.getBundle("de.mirkosertic.gamecomposer.GameComposer");
-            fxmlLoader.setResources(theBundle);
-            Region root = (Region) fxmlLoader.load(fxml);
+            theLoader.setResources(theBundle);
+            Region root = (Region) theLoader.load(fxml);
             root.getStylesheets().add("/JMetroLightTheme.css");
-            ((GameComposerController)fxmlLoader.getController()).initialize(aStage);
+            ((GameComposerController)theLoader.getController()).initialize(aStage);
 
             Undecorator theUndecorator = new Undecorator(aStage, root);
             theUndecorator.getStylesheets().add("/skin/undecorator.css");

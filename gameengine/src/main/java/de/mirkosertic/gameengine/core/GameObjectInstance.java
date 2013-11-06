@@ -6,7 +6,6 @@ public class GameObjectInstance {
 
     private Map<Class<GameComponent>, GameComponent> components;
     private Position position;
-    private Size size;
     private String name;
     private GameObject ownerGameObject;
 
@@ -17,9 +16,10 @@ public class GameObjectInstance {
     }
 
     public boolean contains(Position aPosition) {
+        Size theSize = ownerGameObject.getSize();
         return (aPosition.x >= position.x && aPosition.y >= position.y &&
-                aPosition.x <= position.x + size.width &&
-                aPosition.y <= position.y + size.height);
+                aPosition.x <= position.x + theSize.width &&
+                aPosition.y <= position.y + theSize.height);
     }
 
     public Position getPosition() {
@@ -28,14 +28,6 @@ public class GameObjectInstance {
 
     public void setPosition(Position position) {
         this.position = position;
-    }
-
-    public Size getSize() {
-        return size;
-    }
-
-    public void setSize(Size size) {
-        this.size = size;
     }
 
     public String getName() {
@@ -66,7 +58,7 @@ public class GameObjectInstance {
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<String, Object>();
         theResult.put("gameobjectuuid", ownerGameObject.getUuid());
-        theResult.put("size", size.serializeToMap());
+
         theResult.put("position", position.serializeToMap());
         theResult.put("name", name);
 
@@ -88,7 +80,6 @@ public class GameObjectInstance {
         }
 
         GameObjectInstance theResult = new GameObjectInstance(theGameObject);
-        theResult.size = Size.deserialize((Map<String, Object>) theInstance.get("size"));
         theResult.position = Position.deserialize((Map<String, Object>) theInstance.get("position"));
         theResult.name = (String) theInstance.get("name");
 

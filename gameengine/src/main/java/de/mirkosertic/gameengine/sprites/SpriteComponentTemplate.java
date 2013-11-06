@@ -1,9 +1,6 @@
 package de.mirkosertic.gameengine.sprites;
 
-import de.mirkosertic.gameengine.core.GameComponentTemplate;
-import de.mirkosertic.gameengine.core.GameObjectInstance;
-import de.mirkosertic.gameengine.core.GameRuntime;
-import de.mirkosertic.gameengine.core.ResourceName;
+import de.mirkosertic.gameengine.core.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,8 +8,15 @@ import java.util.Map;
 public class SpriteComponentTemplate implements GameComponentTemplate<SpriteComponent> {
 
     private ResourceName resourceName;
+    private GameObject owner;
 
-    public SpriteComponentTemplate() {
+    public SpriteComponentTemplate(GameObject aOwner) {
+        owner = aOwner;
+    }
+
+    @Override
+    public GameObject getOwner() {
+        return owner;
     }
 
     public SpriteComponent create(GameObjectInstance aInstance, GameRuntime aGameRuntime) {
@@ -40,8 +44,8 @@ public class SpriteComponentTemplate implements GameComponentTemplate<SpriteComp
         return theResult;
     }
 
-    public static SpriteComponentTemplate deserialize(Map<String, Object> aSerializedData) {
-        SpriteComponentTemplate theResult = new SpriteComponentTemplate();
+    public static SpriteComponentTemplate deserialize(GameObject aOwner, Map<String, Object> aSerializedData) {
+        SpriteComponentTemplate theResult = new SpriteComponentTemplate(aOwner);
         theResult.setResourceName(ResourceName.deserialize((Map<String, Object>) aSerializedData.get("resourcename")));
         return theResult;
     }

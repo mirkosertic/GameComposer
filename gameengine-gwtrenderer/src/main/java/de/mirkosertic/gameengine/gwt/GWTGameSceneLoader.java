@@ -20,10 +20,12 @@ public class GWTGameSceneLoader {
 
     private GameSceneLoadedListener listener;
     private AbstractGameRuntimeFactory runtimeFactory;
+    private GWTGameResourceLoader gwtGameResourceLoader;
 
-    public GWTGameSceneLoader(GameSceneLoadedListener aListener, AbstractGameRuntimeFactory aRuntimeFactory) {
+    public GWTGameSceneLoader(GameSceneLoadedListener aListener, AbstractGameRuntimeFactory aRuntimeFactory, GWTGameResourceLoader aResourceLoader) {
         listener = aListener;
         runtimeFactory = aRuntimeFactory;
+        gwtGameResourceLoader = aResourceLoader;
     }
 
     public void loadFromServer(String aSceneName) {
@@ -50,6 +52,6 @@ public class GWTGameSceneLoader {
     private GameScene parse(Response aResponse) {
         JSONValue theJSONParsed = JSONParser.parseStrict(aResponse.getText());
         Map<String, Object> theResult = JSONUtils.toMap(theJSONParsed);
-        return GameScene.deserialize(runtimeFactory.create(), theResult);
+        return GameScene.deserialize(runtimeFactory.create(gwtGameResourceLoader), theResult);
     }
 }

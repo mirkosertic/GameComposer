@@ -26,15 +26,11 @@
             <TextField fx:id="yTextField" prefWidth="45.0" />
           </children>
         </HBox>
-        <HBox alignment="CENTER_LEFT" prefHeight="-1.0" prefWidth="-1.0">
-          <children>
-            <Label prefWidth="58.0" text="Size" />
-            <Label prefWidth="40.0" text="Width" />
-            <TextField fx:id="widthTextField" prefWidth="45.0" />
-            <Label prefWidth="40.0" text="Height" />
-            <TextField fx:id="heightTextField" prefWidth="45.0" />
-          </children>
-        </HBox>
+        <Hyperlink fx:id="jumpToObject" text="Jump to object...">
+          <VBox.margin>
+            <Insets top="20.0" />
+          </VBox.margin>
+        </Hyperlink>
       </children>
     </VBox>
   </center>

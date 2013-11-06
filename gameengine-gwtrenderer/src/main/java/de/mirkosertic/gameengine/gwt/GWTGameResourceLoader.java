@@ -26,4 +26,9 @@ public class GWTGameResourceLoader implements GameResourceLoader {
         RootPanel.get(holderId).add(theImage);
         return new GWTBitmapResource(theImage);
     }
+
+    @Override
+    public void flush() {
+        RootPanel.get(holderId).clear();
+    }
 }

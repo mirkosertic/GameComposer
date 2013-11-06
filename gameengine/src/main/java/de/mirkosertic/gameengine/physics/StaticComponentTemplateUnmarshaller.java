@@ -3,6 +3,7 @@ package de.mirkosertic.gameengine.physics;
 import java.util.Map;
 
 import de.mirkosertic.gameengine.core.GameComponentTemplateUnmarshaller;
+import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameRuntime;
 
 public class StaticComponentTemplateUnmarshaller implements GameComponentTemplateUnmarshaller<StaticComponentTemplate> {
@@ -13,7 +14,7 @@ public class StaticComponentTemplateUnmarshaller implements GameComponentTemplat
     }
 
     @Override
-    public StaticComponentTemplate deserialize(Map<String, Object> aSerializedData) {
-        return StaticComponentTemplate.deserialize(aSerializedData);
+    public StaticComponentTemplate deserialize(GameObject aOwner, Map<String, Object> aSerializedData) {
+        return StaticComponentTemplate.deserialize(aOwner, aSerializedData);
     }
 }

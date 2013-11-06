@@ -8,12 +8,13 @@ import de.mirkosertic.gameengine.physics.*;
 import de.mirkosertic.gameengine.physics.jbox2d.JBox2DGamePhysicsManagerFactory;
 import de.mirkosertic.gameengine.processes.GameProcessManager;
 import de.mirkosertic.gameengine.processes.GameProcessManagerFactory;
+import de.mirkosertic.gameengine.resource.GameResourceLoader;
 import de.mirkosertic.gameengine.sprites.SpriteComponentTemplateUnmarshaller;
 import de.mirkosertic.gameengine.sprites.SpriteComponentUnmarshaller;
 
 public abstract class AbstractGameRuntimeFactory {
 
-    public GameRuntime create() {
+    public GameRuntime create(GameResourceLoader aResourceLoader) {
         GameEventManager theEventManager = new GameEventManager();
         GameProcessManagerFactory theProcessManagerFactory = new GameProcessManagerFactory();
         GameProcessManager theProcessManager = theProcessManagerFactory.create(theEventManager);
@@ -23,7 +24,7 @@ public abstract class AbstractGameRuntimeFactory {
         GamePhysicsManager thePhysicsManager = thePhysicsManagerFactory.create(theEventManager);
 
         // Runtime
-        GameRuntime theGameRuntime = new GameRuntime(theEventManager);
+        GameRuntime theGameRuntime = new GameRuntime(theEventManager, aResourceLoader);
         theGameRuntime.addSystem(theProcessManager);
         theGameRuntime.addSystem(thePhysicsManager);
         theGameRuntime.registeredTemplateUnmarshaller(new PhysicsComponentTemplateUnmarshaller());
