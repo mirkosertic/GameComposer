@@ -80,12 +80,10 @@ public class SpriteTemplateEditorController implements ChildController {
 
         FileChooser theFileChooser = new FileChooser();
 
-        //Set extension filter
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("PNG files (*.png)","*.png");
         theFileChooser.getExtensionFilters().add(extFilter);
         theFileChooser.setInitialDirectory(persistenceManager.getAssetsDirectoryFor(theScene));
 
-        //Show open file dialog
         File theSelectedFile = theFileChooser.showOpenDialog(null);
         if (theSelectedFile != null) {
             ResourceName theName = persistenceManager.toResourceName(theScene, theSelectedFile);

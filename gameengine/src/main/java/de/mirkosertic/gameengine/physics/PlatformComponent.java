@@ -11,12 +11,14 @@ public class PlatformComponent implements GameComponent {
 
     private GameRuntime gameRuntime;
     private GameObjectInstance objectInstance;
+    private PlatformComponentTemplate platformTemplate;
 
     private boolean jumping;
 
     PlatformComponent(GameObjectInstance aObjectInstance, GameRuntime aGameRuntime) {
         gameRuntime = aGameRuntime;
         objectInstance = aObjectInstance;
+        platformTemplate = aObjectInstance.getOwnerGameObject().getComponentTemplate(PlatformComponentTemplate.class);
     }
 
     @Override
@@ -51,14 +53,14 @@ public class PlatformComponent implements GameComponent {
     }
 
     public void handleKeyPressed(KeyPressedGameEvent aEvent) {
-        if (aEvent.getKeyCode() == GameKeyCode.LEFT) {
-            gameRuntime.getEventManager().fire(new ApplyForceToGameObjectInstance(objectInstance, -9f, 0));
+        if (aEvent.getKeyCode() == platformTemplate.getMoveLeftKey()) {
+            gameRuntime.getEventManager().fire(new ApplyForceToGameObjectInstance(objectInstance, -platformTemplate.getLeftRightImpulse(), 0));
         }
-        if (aEvent.getKeyCode() == GameKeyCode.RIGHT) {
-            gameRuntime.getEventManager().fire(new ApplyForceToGameObjectInstance(objectInstance, 9f, 0f));
+        if (aEvent.getKeyCode() == platformTemplate.getMoveRightKey()) {
+            gameRuntime.getEventManager().fire(new ApplyForceToGameObjectInstance(objectInstance, platformTemplate.getLeftRightImpulse(), 0f));
         }
-        if (aEvent.getKeyCode() == GameKeyCode.UP && !isJumping()) {
-            gameRuntime.getEventManager().fire(new ApplyImpulseToGameObjectInstance(objectInstance, 0, 1.4f));
+        if (aEvent.getKeyCode() == platformTemplate.getJumpKey() && !isJumping()) {
+            gameRuntime.getEventManager().fire(new ApplyImpulseToGameObjectInstance(objectInstance, 0, platformTemplate.getJumpImpulse()));
             setJumping(true);
         }
     }

@@ -81,6 +81,21 @@ public class ProjectStructureController implements ChildController {
         }
     }
 
+    public void onNewGameEvent(@Observes NewGameEvent aEvent) {
+        treeItemMap.clear();
+        Game theCurrentGame = persistenceManager.getGame();
+
+        TreeItem theRootTreeItem = new TreeItem(theCurrentGame.getName());
+        theRootTreeItem.setValue(theCurrentGame);
+        theRootTreeItem.setExpanded(true);
+        treeItemMap.put(theCurrentGame, theRootTreeItem);
+
+        projectStructureTreeView.setRoot(theRootTreeItem);
+        projectStructureTreeView.getSelectionModel().select(theRootTreeItem);
+
+        objectSelectedEvent.fire(new ObjectSelectedEvent(theCurrentGame));
+    }
+
     public void onApplicationStarted(@Observes ApplicationStartedEvent aEvent) {
         projectStructureTreeView.setRoot(null);
     }

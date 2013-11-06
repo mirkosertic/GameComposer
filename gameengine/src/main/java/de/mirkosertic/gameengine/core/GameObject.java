@@ -46,8 +46,8 @@ public class GameObject {
         this.size = size;
     }
 
-    public void add(GameComponentTemplate aComponentFactory) {
-        componentTemplates.put((Class<GameComponentTemplate>) aComponentFactory.getClass(), aComponentFactory);
+    public void add(GameComponentTemplate aComponentTemplate) {
+        componentTemplates.put((Class<GameComponentTemplate>) aComponentTemplate.getClass(), aComponentTemplate);
     }
 
     public <T extends GameComponentTemplate> T getComponentTemplate(Class<T> aComponentClass) {
