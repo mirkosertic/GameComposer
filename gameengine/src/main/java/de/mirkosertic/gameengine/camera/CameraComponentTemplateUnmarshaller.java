@@ -3,6 +3,7 @@ package de.mirkosertic.gameengine.camera;
 import java.util.Map;
 
 import de.mirkosertic.gameengine.core.GameComponentTemplateUnmarshaller;
+import de.mirkosertic.gameengine.core.GameObject;
 
 public class CameraComponentTemplateUnmarshaller implements GameComponentTemplateUnmarshaller<CameraComponentTemplate> {
 
@@ -12,7 +13,7 @@ public class CameraComponentTemplateUnmarshaller implements GameComponentTemplat
     }
 
     @Override
-    public CameraComponentTemplate deserialize(Map<String, Object> aSerializedData) {
-        return CameraComponentTemplate.deserialize(aSerializedData);
+    public CameraComponentTemplate deserialize(GameObject aOwner, Map<String, Object> aSerializedData) {
+        return CameraComponentTemplate.deserialize(aOwner, aSerializedData);
     }
 }

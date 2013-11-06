@@ -28,4 +28,9 @@ public class GameResourceCache {
         }
         return theResource;
     }
+
+    public void flush() {
+        resourceLoader.flush();
+        cachedResources.clear();
+    }
 }

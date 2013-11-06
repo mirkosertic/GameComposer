@@ -1,6 +1,7 @@
 package de.mirkosertic.gamecomposer.contentarea;
 
 import de.mirkosertic.gamecomposer.ContentArea;
+import de.mirkosertic.gamecomposer.FXMLLoaderFactory;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
@@ -13,16 +14,17 @@ import java.util.ResourceBundle;
 public class ContentAreaControllerFactory {
 
     @Inject
-    FXMLLoader fxmlLoader;
+    FXMLLoaderFactory fxmlLoaderFactory;
 
     @Produces
     @ContentArea
     public ContentAreaController create() throws IOException {
         try (InputStream fxml = ContentAreaController.class.getResourceAsStream("ContentArea.fxml")) {
+            FXMLLoader theLoader = fxmlLoaderFactory.createLoader();
             ResourceBundle theBundle = ResourceBundle.getBundle("de.mirkosertic.gamecomposer.contentarea.ContentArea");
-            fxmlLoader.setResources(theBundle);
-            Parent root = (Parent) fxmlLoader.load(fxml);
-            return ((ContentAreaController)fxmlLoader.getController()).initialize(root);
+            theLoader.setResources(theBundle);
+            Parent root = (Parent) theLoader.load(fxml);
+            return ((ContentAreaController)theLoader.getController()).initialize(root);
         }
     }
 }

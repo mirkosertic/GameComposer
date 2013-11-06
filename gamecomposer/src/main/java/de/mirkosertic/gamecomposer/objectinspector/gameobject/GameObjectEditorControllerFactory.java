@@ -1,6 +1,6 @@
 package de.mirkosertic.gamecomposer.objectinspector.gameobject;
 
-import de.mirkosertic.gamecomposer.FXMLLoaderProducer;
+import de.mirkosertic.gamecomposer.FXMLLoaderFactory;
 import de.mirkosertic.gameengine.core.GameObject;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,11 +13,11 @@ import java.util.ResourceBundle;
 public class GameObjectEditorControllerFactory {
 
     @Inject
-    FXMLLoaderProducer fxmlLoaderProducer;
+    FXMLLoaderFactory fxmlLoaderFactory;
 
     public GameObjectEditorController create(GameObject aObject) {
         try (InputStream fxml = GameObjectEditorController.class.getResourceAsStream("GameObjectEditor.fxml")) {
-            FXMLLoader theLoader = fxmlLoaderProducer.createLoader();
+            FXMLLoader theLoader = fxmlLoaderFactory.createLoader();
             ResourceBundle theBundle = ResourceBundle.getBundle("de.mirkosertic.gamecomposer.objectinspector.gameobject.GameObjectEditor");
             theLoader.setResources(theBundle);
             Parent root = (Parent) theLoader.load(fxml);

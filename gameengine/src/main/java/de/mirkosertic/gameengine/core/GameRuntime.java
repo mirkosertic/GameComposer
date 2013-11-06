@@ -1,5 +1,8 @@
 package de.mirkosertic.gameengine.core;
 
+import de.mirkosertic.gameengine.resource.GameResourceCache;
+import de.mirkosertic.gameengine.resource.GameResourceLoader;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -12,12 +15,18 @@ public class GameRuntime {
     private Set<GameSystem> systems;
     private Map<String, GameComponentTemplateUnmarshaller> registeredTemplateUnmarshaller;
     private Map<String, GameComponentUnmarshaller> registeredComponentUnmarshaller;
+    private GameResourceCache gameResourceCache;
 
-    public GameRuntime(GameEventManager aEventManager) {
+    public GameRuntime(GameEventManager aEventManager, GameResourceLoader aResourceLoader) {
         eventManager = aEventManager;
         systems = new HashSet<GameSystem>();
         registeredTemplateUnmarshaller = new HashMap<String, GameComponentTemplateUnmarshaller>();
         registeredComponentUnmarshaller = new HashMap<String, GameComponentUnmarshaller>();
+        gameResourceCache = new GameResourceCache(aResourceLoader);
+    }
+
+    public GameResourceCache getResourceCache() {
+        return gameResourceCache;
     }
 
     public GameEventManager getEventManager() {

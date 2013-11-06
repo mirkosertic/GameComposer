@@ -7,8 +7,10 @@ import javafx.util.Callback;
 import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
-public class FXMLLoaderProducer {
+@Singleton
+public class FXMLLoaderFactory {
 
     @Inject
     Instance<Object> instance;

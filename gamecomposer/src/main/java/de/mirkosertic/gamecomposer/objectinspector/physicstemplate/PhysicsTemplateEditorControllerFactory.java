@@ -1,6 +1,6 @@
 package de.mirkosertic.gamecomposer.objectinspector.physicstemplate;
 
-import de.mirkosertic.gamecomposer.FXMLLoaderProducer;
+import de.mirkosertic.gamecomposer.FXMLLoaderFactory;
 import de.mirkosertic.gameengine.physics.PhysicsComponentTemplate;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,11 +13,11 @@ import java.util.ResourceBundle;
 public class PhysicsTemplateEditorControllerFactory {
 
     @Inject
-    FXMLLoaderProducer fxmlLoaderProducer;
+    FXMLLoaderFactory fxmlLoaderFactory;
 
     public PhysicsTemplateEditorController create(PhysicsComponentTemplate aObject) {
         try (InputStream fxml = PhysicsTemplateEditorController.class.getResourceAsStream("PhysicsTemplateEditor.fxml")) {
-            FXMLLoader theLoader = fxmlLoaderProducer.createLoader();
+            FXMLLoader theLoader = fxmlLoaderFactory.createLoader();
             ResourceBundle theBundle = ResourceBundle.getBundle("de.mirkosertic.gamecomposer.objectinspector.physicstemplate.PhysicsTemplateEditor");
             theLoader.setResources(theBundle);
             Parent root = (Parent) theLoader.load(fxml);

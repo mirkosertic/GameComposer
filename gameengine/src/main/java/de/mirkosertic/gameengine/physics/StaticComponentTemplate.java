@@ -4,10 +4,22 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.mirkosertic.gameengine.core.GameComponentTemplate;
+import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
 
 public class StaticComponentTemplate implements GameComponentTemplate<StaticComponent> {
+
+    private GameObject owner;
+
+    public StaticComponentTemplate(GameObject aOwner) {
+        owner = aOwner;
+    }
+
+    @Override
+    public GameObject getOwner() {
+        return owner;
+    }
 
     public StaticComponent create(GameObjectInstance aInstance, GameRuntime aGameRuntime) {
         return new StaticComponent(aInstance);
@@ -25,7 +37,7 @@ public class StaticComponentTemplate implements GameComponentTemplate<StaticComp
         return theResult;
     }
 
-    public static StaticComponentTemplate deserialize(Map<String, Object> aSerializedData) {
-        return new StaticComponentTemplate();
+    public static StaticComponentTemplate deserialize(GameObject aOwner, Map<String, Object> aSerializedData) {
+        return new StaticComponentTemplate(aOwner);
     }
 }

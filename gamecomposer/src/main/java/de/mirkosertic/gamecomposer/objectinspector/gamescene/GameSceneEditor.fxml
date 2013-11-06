@@ -35,6 +35,23 @@
             <Insets top="10.0" />
           </padding>
         </VBox>
+        <VBox prefHeight="-1.0" prefWidth="-1.0">
+          <children>
+            <Label maxWidth="-1.0" prefWidth="-1.0" text="Default player" VBox.vgrow="ALWAYS" />
+            <ComboBox id="defaultSceneComboBox" fx:id="defaultPlayer" maxWidth="1.7976931348623157E308" VBox.vgrow="NEVER">
+              <items>
+                <FXCollections fx:factory="observableArrayList">
+                  <String fx:value="Item 1" />
+                  <String fx:value="Item 2" />
+                  <String fx:value="Item 3" />
+                </FXCollections>
+              </items>
+            </ComboBox>
+          </children>
+          <padding>
+            <Insets top="10.0" />
+          </padding>
+        </VBox>
         <HBox alignment="CENTER_LEFT" prefHeight="-1.0" prefWidth="-1.0">
           <children>
             <Label maxWidth="-1.0" prefWidth="70.0" text="Background" />

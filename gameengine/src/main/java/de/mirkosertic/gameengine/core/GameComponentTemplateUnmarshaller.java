@@ -6,5 +6,5 @@ public interface GameComponentTemplateUnmarshaller<T extends GameComponentTempla
 
     String getTypeKey();
 
-    T deserialize(Map<String, Object> aSerializedData);
+    T deserialize(GameObject aOwner, Map<String, Object> aSerializedData);
 }

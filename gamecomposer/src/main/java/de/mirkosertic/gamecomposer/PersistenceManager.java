@@ -2,6 +2,7 @@ package de.mirkosertic.gamecomposer;
 
 import de.mirkosertic.gameengine.core.Game;
 import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.ResourceName;
 import de.mirkosertic.gameengine.resource.GameResourceLoader;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.ObjectReader;
@@ -51,8 +52,11 @@ public class PersistenceManager {
 
         Map<String, GameScene> theLoadedScenes = new HashMap<>();
         for (String theSceneName : theLoadedGame.getScenes()) {
+
+            GameResourceLoader theResourceLoader = new JavaFXFileGameResourceLoader(new File(aGameDirectory, theSceneName));
+
             File theSceneDescriptor = new File(new File(aGameDirectory, theSceneName), "scene.json");
-            GameScene theLoadedScene = GameScene.deserialize(gameRuntimeFactory.create(), theReader.<Map<String, Object>>readValue(theSceneDescriptor));
+            GameScene theLoadedScene = GameScene.deserialize(gameRuntimeFactory.create(theResourceLoader), theReader.<Map<String, Object>>readValue(theSceneDescriptor));
             theLoadedScenes.put(theSceneName, theLoadedScene);
         }
 
@@ -62,6 +66,7 @@ public class PersistenceManager {
         currentGameDirectory = aGameDirectory;
     }
 
+
     public GameResourceLoader createResourceLoaderFor(GameScene aScene) {
         for (Map.Entry<String, GameScene> theEntry : gameScenes.entrySet()) {
             if (theEntry.getValue() == aScene) {
@@ -69,5 +74,25 @@ public class PersistenceManager {
             }
         }
         throw new RuntimeException("Cannot find scene directory for " + aScene.getName());
+    }
+
+    public File getAssetsDirectoryFor(GameScene aGameScene) {
+        for (Map.Entry<String, GameScene> theEntry : gameScenes.entrySet()) {
+            if (theEntry.getValue() == aGameScene) {
+                return new File(currentGameDirectory, theEntry.getKey());
+            }
+        }
+        throw new RuntimeException("Cannot find scene directory for " + aGameScene.getName());
+    }
+
+    public ResourceName toResourceName(GameScene aGameScene, File theSelectedFile) {
+        for (Map.Entry<String, GameScene> theEntry : gameScenes.entrySet()) {
+            if (theEntry.getValue() == aGameScene) {
+                File theBaseDirectory = new File(currentGameDirectory, theEntry.getKey());
+                String theResourceName = theSelectedFile.toString().substring(theBaseDirectory.toString().length());
+                return new ResourceName(theResourceName.replace('\\','/'));
+            }
+        }
+        throw new RuntimeException("Cannot find scene directory for " + aGameScene.getName());
     }
 }

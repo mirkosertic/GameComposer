@@ -9,4 +9,6 @@ public interface GameComponentTemplate<T extends GameComponent> {
     Map<String,Object> serialize();
 
     String getTypeKey();
+
+    GameObject getOwner();
 }

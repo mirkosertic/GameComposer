@@ -5,21 +5,20 @@ import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.canvas.dom.client.CssColor;
 import de.mirkosertic.gameengine.camera.CameraComponent;
 import de.mirkosertic.gameengine.core.*;
-import de.mirkosertic.gameengine.resource.GameResourceCache;
 import de.mirkosertic.gameengine.sprites.SpriteComponentTemplate;
 
 import java.io.IOException;
 
 public class GWTGameView implements GameView {
 
-    private GameResourceCache resourceCache;
+    private GameRuntime gameRuntime;
     private Canvas canvas;
     private CameraComponent cameraComponent;
     private Size currentSize;
     private int counter;
 
-    public GWTGameView(GameResourceCache aResourceCache, Canvas aCanvas, CameraComponent aCameraComponent) {
-        resourceCache = aResourceCache;
+    public GWTGameView(GameRuntime aGameRuntime, Canvas aCanvas, CameraComponent aCameraComponent) {
+        gameRuntime = aGameRuntime;
         canvas = aCanvas;
         cameraComponent = aCameraComponent;
     }
@@ -41,11 +40,11 @@ public class GWTGameView implements GameView {
 
         for (GameObjectInstance theInstance : cameraComponent.getObjectsToDrawInRightOrder(aScene)) {
             Position thePosition = cameraComponent.transformToScreenPosition(theInstance.getPosition());
-            Size theSize = theInstance.getSize();
+            Size theSize = theInstance.getOwnerGameObject().getSize();
             SpriteComponentTemplate theTemplateComponent = theInstance.getOwnerGameObject().getComponentTemplate(SpriteComponentTemplate.class);
             if (theTemplateComponent != null) {
                 try {
-                    GWTBitmapResource theBitmap = resourceCache.getResourceFor(theTemplateComponent.getResourceName());
+                    GWTBitmapResource theBitmap = gameRuntime.getResourceCache().getResourceFor(theTemplateComponent.getResourceName());
                     drawGameObjectInstance(theContext, theInstance, thePosition, theSize, theBitmap);
                 } catch (IOException e) {
                     throw new RuntimeException(e);

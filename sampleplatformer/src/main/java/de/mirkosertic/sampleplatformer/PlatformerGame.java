@@ -50,10 +50,6 @@ public class PlatformerGame extends Application {
         // Eventing subsystem
         final GameEventManager theEventManager = new GameEventManager();
 
-        // Resourcemanagement subsystem
-        GameResourceLoader theResourceLoader = new JavaFXClasspathGameResourceLoader();
-        GameResourceCache theResourceCache = new GameResourceCache(theResourceLoader);
-
         // Processmanagement subsystem
         GameProcessManagerFactory theProcessManagerFactory = new GameProcessManagerFactory();
         GameProcessManager theProcessManager = theProcessManagerFactory.create(theEventManager);
@@ -62,7 +58,7 @@ public class PlatformerGame extends Application {
         JBox2DGamePhysicsManager thePhysicsManager = thePhysicsManagerFactory.create(theEventManager);
 
         // Runtime
-        GameRuntime theGameRuntime = new GameRuntime(theEventManager);
+        GameRuntime theGameRuntime = new GameRuntime(theEventManager, new JavaFXClasspathGameResourceLoader());
         theGameRuntime.addSystem(theProcessManager);
         theGameRuntime.addSystem(thePhysicsManager);
         theGameRuntime.registeredTemplateUnmarshaller(new PhysicsComponentTemplateUnmarshaller());
@@ -87,25 +83,25 @@ public class PlatformerGame extends Application {
         theCurrentScene.setName("Testscene");
 
         GameObject thePlayerObject = new GameObject(theCurrentScene, "Player");
-        thePlayerObject.add(new PlatformComponentTemplate());
-        thePlayerObject.add(new PhysicsComponentTemplate());
+        thePlayerObject.add(new PlatformComponentTemplate(thePlayerObject));
+        thePlayerObject.add(new PhysicsComponentTemplate(thePlayerObject));
         theCurrentScene.addGameObject(thePlayerObject);
 
         GameObject theBrickObject = new GameObject(theCurrentScene, "Brick");
-        theBrickObject.add(new StaticComponentTemplate());
+        theBrickObject.add(new StaticComponentTemplate(theBrickObject));
         theCurrentScene.addGameObject(theBrickObject);
 
         GameObject theCameraObject = new GameObject(theCurrentScene, "Camera");
-        theCameraObject.add(new CameraComponentTemplate());
+        theCameraObject.add(new CameraComponentTemplate(theCameraObject));
         theCurrentScene.addGameObject(theCameraObject);
 
         GameObjectInstance theCameraInstance = theInstanceFactory.createFrom(theCameraObject);
 
-        SpriteComponentTemplate theSpriteComponentFactory = new SpriteComponentTemplate();
+        SpriteComponentTemplate theSpriteComponentFactory = new SpriteComponentTemplate(theBrickObject);
         theSpriteComponentFactory.setResourceName(new ResourceName("/assets/tiles/wall2_1.png"));
         theBrickObject.add(theSpriteComponentFactory);
 
-        final JavaFXGameView theGameView = new JavaFXGameView(theResourceCache, theCameraInstance.getComponent(CameraComponent.class));
+        final JavaFXGameView theGameView = new JavaFXGameView(theGameRuntime, theCameraInstance.getComponent(CameraComponent.class));
         theGameView.widthProperty().bind(aPrimaryStage.widthProperty());
         theGameView.heightProperty().bind(aPrimaryStage.heightProperty());
 
@@ -126,7 +122,7 @@ public class PlatformerGame extends Application {
 
         // Player
         GameObjectInstance thePlayerInstance = theInstanceFactory.createFrom(thePlayerObject);
-        thePlayerInstance.setSize(new Size(50, 50));
+        thePlayerInstance.getOwnerGameObject().setSize(new Size(50, 50));
         thePlayerInstance.setName("Player#1");
         theCurrentScene.addGameObjectInstance(thePlayerInstance);
 

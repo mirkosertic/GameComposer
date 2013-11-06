@@ -23,6 +23,15 @@
             <TextField fx:id="nameTextField" prefWidth="-1.0" HBox.hgrow="ALWAYS" />
           </children>
         </HBox>
+        <HBox alignment="CENTER_LEFT" prefHeight="-1.0" prefWidth="-1.0">
+          <children>
+            <Label prefWidth="58.0" text="Size" />
+            <Label prefWidth="40.0" text="Width" />
+            <TextField fx:id="widthTextField" prefWidth="45.0" />
+            <Label prefWidth="40.0" text="Height" />
+            <TextField fx:id="heightTextField" prefWidth="45.0" />
+          </children>
+        </HBox>
       </children>
     </VBox>
   </center>

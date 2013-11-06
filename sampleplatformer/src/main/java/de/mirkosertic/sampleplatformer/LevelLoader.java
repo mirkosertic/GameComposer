@@ -18,7 +18,7 @@ public class LevelLoader {
                     if (theLine.charAt(x) == 'X') {
                         GameObjectInstance theBrick = aInstanceFactory.createFrom(aBrickGameObject);
                         theBrick.setPosition(new Position(x * size, y * size));
-                        theBrick.setSize(new Size(size, size));
+                        theBrick.getOwnerGameObject().setSize(new Size(size, size));
                         theBrick.setName(aBrickGameObject.getName() + "#" + count++);
                         aScene.addGameObjectInstance(theBrick);
                     }

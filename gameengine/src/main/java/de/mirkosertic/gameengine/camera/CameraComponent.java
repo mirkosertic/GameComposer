@@ -50,9 +50,9 @@ public class CameraComponent implements GameComponent {
 
             for (GameObjectInstance theInstance : aScene.getInstances()) {
                 Position theInstancePosition = theInstance.getPosition();
-                Size theInstanceSize = theInstance.getSize();
-                if (theInstancePosition.x + theInstanceSize.width >= theCameraPosition.x && theInstancePosition.x <= theCameraPosition.x + theScreenSize.width &&
-                        theInstancePosition.y + theInstanceSize.height >= theCameraPosition.y && theInstancePosition.y <= theCameraPosition.y + theScreenSize.height) {
+                Size theSize = theInstance.getOwnerGameObject().getSize();
+                if (theInstancePosition.x + theSize.width >= theCameraPosition.x && theInstancePosition.x <= theCameraPosition.x + theScreenSize.width &&
+                        theInstancePosition.y + theSize.height >= theCameraPosition.y && theInstancePosition.y <= theCameraPosition.y + theScreenSize.height) {
                     theResult.add(theInstance);
                 }
             }

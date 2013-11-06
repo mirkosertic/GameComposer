@@ -1,9 +1,6 @@
 package de.mirkosertic.gamecomposer.contentarea.gamescene;
 
-import de.mirkosertic.gamecomposer.GameObjectClipboardContent;
-import de.mirkosertic.gamecomposer.ObjectSelectedEvent;
-import de.mirkosertic.gamecomposer.ObjectUpdatedEvent;
-import de.mirkosertic.gamecomposer.ShutdownEvent;
+import de.mirkosertic.gamecomposer.*;
 import de.mirkosertic.gamecomposer.contentarea.ContentChildController;
 import de.mirkosertic.gameengine.camera.CameraComponent;
 import de.mirkosertic.gameengine.core.*;
@@ -50,8 +47,11 @@ public class GameSceneEditorController implements ContentChildController<GameSce
     private GameObjectInstance dndCreateInstance;
     private GameObjectInstance draggingInstance;
     private Position draggingMouseWorldPosition;
+    private GameRuntime gameRuntime;
 
-    GameSceneEditorController initialize(GameScene aScene, Node aView, EditorJXGameView aGameView, Thread aGameLoopThread, CameraComponent aCameraComponent, Event<ObjectSelectedEvent> aSelectedEvent) {
+    GameSceneEditorController initialize(GameRuntime aGameRuntime, GameScene aScene, Node aView, EditorJXGameView aGameView, Thread aGameLoopThread, CameraComponent aCameraComponent, Event<ObjectSelectedEvent> aSelectedEvent) {
+
+        gameRuntime = aGameRuntime;
 
         centerBorderPane.setCenter(aGameView);
 
@@ -153,7 +153,6 @@ public class GameSceneEditorController implements ContentChildController<GameSce
             GameObjectInstanceFactory theInstanceFactory = new GameObjectInstanceFactory(gameScene.getRuntime());
             GameObjectInstance theInstance = theInstanceFactory.createFrom(theGameObject);
             theInstance.setPosition(cameraComponent.transformFromScreen(new Position(aEvent.getX(), aEvent.getY())));
-            theInstance.setSize(new Size(76, 76));
 
             gameScene.addGameObjectInstance(theInstance);
 
@@ -198,21 +197,39 @@ public class GameSceneEditorController implements ContentChildController<GameSce
             gameScene.getRuntime().getEventManager().fire(new DisableDynamicPhysicsEvent(draggingInstance));
 
             objectSelectedEventEvent.fire(new ObjectSelectedEvent(draggingInstance));
+        } else {
+            draggingInstance = null;
+            draggingMouseWorldPosition = theScreenPosition;
         }
     }
 
     private void onMouseDragged(MouseEvent aEvent) {
-        if (draggingInstance != null) {
+        if (draggingMouseWorldPosition != null) {
+            if (draggingInstance != null) {
+                // Move object instance
 
-            Position theScreenPosition = new Position(aEvent.getX(), aEvent.getY());
-            Position theWorldPosition = cameraComponent.transformFromScreen(theScreenPosition);
-            float theDX = theWorldPosition.x - draggingMouseWorldPosition.x;
-            float theDY = theWorldPosition.y - draggingMouseWorldPosition.y;
+                Position theScreenPosition = new Position(aEvent.getX(), aEvent.getY());
+                Position theWorldPosition = cameraComponent.transformFromScreen(theScreenPosition);
+                float theDX = theWorldPosition.x - draggingMouseWorldPosition.x;
+                float theDY = theWorldPosition.y - draggingMouseWorldPosition.y;
 
-            Position theObjectPosition = draggingInstance.getPosition();
-            gameScene.updateObjectInstancePosition(draggingInstance, new Position(theObjectPosition.x + theDX, theObjectPosition.y + theDY));
+                Position theObjectPosition = draggingInstance.getPosition();
+                gameScene.updateObjectInstancePosition(draggingInstance, new Position(theObjectPosition.x + theDX, theObjectPosition.y + theDY));
 
-            draggingMouseWorldPosition = theWorldPosition;
+                draggingMouseWorldPosition = theWorldPosition;
+            } else {
+
+                Position theScreenPosition = new Position(aEvent.getX(), aEvent.getY());
+
+                float theDX = theScreenPosition.x - draggingMouseWorldPosition.x;
+                float theDY = theScreenPosition.y - draggingMouseWorldPosition.y;
+
+                // Move camera
+                Position theObjectPosition = cameraComponent.getObjectInstance().getPosition();
+                gameScene.updateObjectInstancePosition(cameraComponent.getObjectInstance(), new Position(theObjectPosition.x - theDX, theObjectPosition.y - theDY));
+
+                draggingMouseWorldPosition = theScreenPosition;
+            }
         }
     }
 
@@ -285,5 +302,10 @@ public class GameSceneEditorController implements ContentChildController<GameSce
         if (aEvent.getObject() == gameScene) {
             aTab.setText(gameScene.getName());
         }
+    }
+
+    @Override
+    public void onFlushResourceCache(FlushResourceCacheEvent aEvent) {
+        gameRuntime.getResourceCache().flush();
     }
 }

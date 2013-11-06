@@ -1,15 +1,19 @@
 package de.mirkosertic.gamecomposer.objectinspector.gameobjectinstance;
 
 import de.mirkosertic.gamecomposer.ChildController;
+import de.mirkosertic.gamecomposer.ObjectSelectedEvent;
 import de.mirkosertic.gamecomposer.ObjectUpdatedEvent;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.Position;
 import de.mirkosertic.gameengine.core.Size;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.TextField;
 import org.apache.commons.lang3.StringUtils;
 
@@ -28,13 +32,13 @@ public class GameObjectInstanceEditorController implements ChildController {
     TextField yTextField;
 
     @FXML
-    TextField widthTextField;
-
-    @FXML
-    TextField heightTextField;
+    Hyperlink jumpToObject;
 
     @Inject
     Event<ObjectUpdatedEvent> objectUpdatedEvent;
+
+    @Inject
+    Event<ObjectSelectedEvent> objectSelectedEvent;
 
     private Parent view;
     private GameObjectInstance object;
@@ -46,8 +50,6 @@ public class GameObjectInstanceEditorController implements ChildController {
         nameTextField.setText(object.getName());
         xTextField.setText(Integer.toString((int) aObject.getPosition().x));
         yTextField.setText(Integer.toString((int) aObject.getPosition().y));
-        widthTextField.setText(Integer.toString(aObject.getSize().width));
-        heightTextField.setText(Integer.toString(aObject.getSize().height));
 
         nameTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -76,24 +78,10 @@ public class GameObjectInstanceEditorController implements ChildController {
                 }
             }
         });
-        widthTextField.textProperty().addListener(new ChangeListener<String>() {
+        jumpToObject.setOnAction(new EventHandler<ActionEvent>() {
             @Override
-            public void changed(ObservableValue<? extends String> observableValue, String aOldValue, String aNewValue) {
-                if (!StringUtils.isEmpty(aNewValue)) {
-                    Size theSize = object.getSize();
-                    object.getOwnerGameObject().getGameScene().updateObjectInstanceSize(object, new Size(Integer.valueOf(aNewValue), theSize.height));
-                    objectUpdatedEvent.fire(new ObjectUpdatedEvent(object));
-                }
-            }
-        });
-        heightTextField.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String aOldValue, String aNewValue) {
-                if (!StringUtils.isEmpty(aNewValue)) {
-                    Size theSize = object.getSize();
-                    object.getOwnerGameObject().getGameScene().updateObjectInstanceSize(object, new Size(theSize.width, Integer.valueOf(aNewValue)));
-                    objectUpdatedEvent.fire(new ObjectUpdatedEvent(object));
-                }
+            public void handle(ActionEvent actionEvent) {
+                objectSelectedEvent.fire(new ObjectSelectedEvent(object.getOwnerGameObject()));
             }
         });
 

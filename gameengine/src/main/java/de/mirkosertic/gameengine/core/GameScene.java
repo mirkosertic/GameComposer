@@ -15,6 +15,7 @@ public class GameScene {
     private Set<GameObjectInstance> instances;
     private GameRuntime gameRuntime;
     private GameObject cameraObject;
+    private GameObject defaultPlayer;
     private Color backgroundColor;
 
     public GameScene(GameRuntime aGameRuntime) {
@@ -50,6 +51,14 @@ public class GameScene {
 
     public void setBackgroundColor(Color backgroundColor) {
         this.backgroundColor = backgroundColor;
+    }
+
+    public GameObject getDefaultPlayer() {
+        return defaultPlayer;
+    }
+
+    public void setDefaultPlayer(GameObject defaultPlayer) {
+        this.defaultPlayer = defaultPlayer;
     }
 
     public void addGameObject(GameObject aObject) {
@@ -94,6 +103,9 @@ public class GameScene {
         if (backgroundColor != null) {
             theResult.put("backgroundcolor", backgroundColor.serialize());
         }
+        if (defaultPlayer != null) {
+            theResult.put("defaultplayerobjectid", defaultPlayer.getUuid());
+        }
 
         List<Map<String, Object>> theInstances = new ArrayList<Map<String, Object>>();
         for (GameObjectInstance theInstance : instances) {
@@ -130,6 +142,10 @@ public class GameScene {
         if (theCameraObject != null) {
             theScene.cameraObject = theScene.findGameObjectByID(theCameraObject);
         }
+        String theDefaultPlayerObject = (String) aSerializedData.get("defaultplayerobjectid");
+        if (theDefaultPlayerObject != null) {
+            theScene.defaultPlayer = theScene.findGameObjectByID(theDefaultPlayerObject);
+        }
         Map<String, Object> theBackgroundColor = (Map<String, Object>) aSerializedData.get("backgroundcolor");
         if (theBackgroundColor != null) {
             theScene.backgroundColor = Color.deserialize(theBackgroundColor);
@@ -147,8 +163,12 @@ public class GameScene {
         gameRuntime.getEventManager().fire(new GameObjectInstancePositionChangedEvent(aInstance, aNewPosition));
     }
 
-    public void updateObjectInstanceSize(GameObjectInstance aInstance, Size aNewSize) {
-        aInstance.setSize(aNewSize);
-        gameRuntime.getEventManager().fire(new GameObjectInstanceSizeChangedEvent(aInstance, aNewSize));
+    public void updateObjectSize(GameObject aObject, Size aNewSize) {
+        aObject.setSize(aNewSize);
+        for (GameObjectInstance theInstance : instances) {
+            if (theInstance.getOwnerGameObject() == aObject) {
+                gameRuntime.getEventManager().fire(new GameObjectInstanceSizeChangedEvent(theInstance, aNewSize));
+            }
+        }
     }
 }
