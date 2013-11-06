@@ -1,8 +1,5 @@
 package de.mirkosertic.gameengine.core;
 
-import de.mirkosertic.gameengine.resource.GameResourceCache;
-import de.mirkosertic.gameengine.resource.GameResourceLoader;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;

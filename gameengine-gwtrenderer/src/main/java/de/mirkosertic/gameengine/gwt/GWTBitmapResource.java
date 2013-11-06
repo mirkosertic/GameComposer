@@ -4,8 +4,8 @@ import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;
 import com.google.gwt.user.client.ui.Image;
-import de.mirkosertic.gameengine.resource.GameResource;
-import de.mirkosertic.gameengine.resource.GameResourceType;
+import de.mirkosertic.gameengine.core.GameResource;
+import de.mirkosertic.gameengine.core.GameResourceType;
 
 public class GWTBitmapResource implements GameResource {
 

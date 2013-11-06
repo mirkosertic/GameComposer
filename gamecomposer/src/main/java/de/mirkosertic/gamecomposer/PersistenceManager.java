@@ -3,7 +3,7 @@ package de.mirkosertic.gamecomposer;
 import de.mirkosertic.gameengine.core.Game;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.core.ResourceName;
-import de.mirkosertic.gameengine.resource.GameResourceLoader;
+import de.mirkosertic.gameengine.core.GameResourceLoader;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.ObjectReader;
 

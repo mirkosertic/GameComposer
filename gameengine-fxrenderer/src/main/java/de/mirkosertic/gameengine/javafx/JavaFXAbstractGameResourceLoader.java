@@ -1,8 +1,8 @@
 package de.mirkosertic.gameengine.javafx;
 
 import de.mirkosertic.gameengine.core.ResourceName;
-import de.mirkosertic.gameengine.resource.GameResource;
-import de.mirkosertic.gameengine.resource.GameResourceLoader;
+import de.mirkosertic.gameengine.core.GameResource;
+import de.mirkosertic.gameengine.core.GameResourceLoader;
 
 import java.io.IOException;
 import java.io.InputStream;

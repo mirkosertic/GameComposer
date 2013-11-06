@@ -11,8 +11,6 @@ import de.mirkosertic.gameengine.physics.jbox2d.JBox2DGamePhysicsManagerFactory;
 import de.mirkosertic.gameengine.processes.GameProcessManager;
 import de.mirkosertic.gameengine.processes.GameProcessManagerFactory;
 import de.mirkosertic.gameengine.processes.StartProcessEvent;
-import de.mirkosertic.gameengine.resource.GameResourceCache;
-import de.mirkosertic.gameengine.resource.GameResourceLoader;
 import de.mirkosertic.gameengine.sprites.SpriteComponentTemplate;
 import de.mirkosertic.gameengine.sprites.SpriteComponentTemplateUnmarshaller;
 import de.mirkosertic.gameengine.sprites.SpriteComponentUnmarshaller;

@@ -1,10 +1,8 @@
-package de.mirkosertic.gameengine.resource;
+package de.mirkosertic.gameengine.core;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
-import de.mirkosertic.gameengine.core.ResourceName;
 
 public class GameResourceCache {
 
