@@ -32,10 +32,10 @@ public class ContentAreaController implements ChildController {
     GameSceneEditorControllerFactory sceneEditorControllerFactory;
 
     private Node view;
-    private Map<ContentChildController, Tab> visibleScenes;
+    private Map<ContentChildController, Tab> activeTabs;
 
     public ContentAreaController() {
-        visibleScenes = new HashMap<>();
+        activeTabs = new HashMap<>();
     }
 
     ContentAreaController initialize(Node aView) {
@@ -45,7 +45,7 @@ public class ContentAreaController implements ChildController {
             public void handle(KeyEvent aKeyEvent) {
                 Tab theSelectedTab = editorTabPane.getSelectionModel().getSelectedItem();
                 if (theSelectedTab != null) {
-                    for (Map.Entry<ContentChildController, Tab> theTab : visibleScenes.entrySet()) {
+                    for (Map.Entry<ContentChildController, Tab> theTab : activeTabs.entrySet()) {
                         if (theTab.getValue() == theSelectedTab) {
                             theTab.getKey().processKeyPressedEvent(aKeyEvent);
                         }
@@ -58,7 +58,7 @@ public class ContentAreaController implements ChildController {
             public void handle(KeyEvent aKeyEvent) {
                 Tab theSelectedTab = editorTabPane.getSelectionModel().getSelectedItem();
                 if (theSelectedTab != null) {
-                    for (Map.Entry<ContentChildController, Tab> theTab : visibleScenes.entrySet()) {
+                    for (Map.Entry<ContentChildController, Tab> theTab : activeTabs.entrySet()) {
                         if (theTab.getValue() == theSelectedTab) {
                             theTab.getKey().processKeyReleasedEvent(aKeyEvent);
                         }
@@ -80,6 +80,15 @@ public class ContentAreaController implements ChildController {
         welcomeBorderPane.setVisible(true);
     }
 
+    public void onNewGameEvent(@Observes NewGameEvent aEvent) {
+        for (Map.Entry<ContentChildController, Tab> theTabEntry : activeTabs.entrySet()) {
+            theTabEntry.getKey().removed();
+            editorTabPane.getTabs().remove(theTabEntry.getValue());
+        }
+        editorTabPane.setVisible(false);
+        welcomeBorderPane.setVisible(true);
+    }
+
     void addTab(final Tab aTab) {
         editorTabPane.setVisible(true);
         welcomeBorderPane.setVisible(false);
@@ -94,36 +103,36 @@ public class ContentAreaController implements ChildController {
     }
 
     void onTabClose(Tab aTab) {
-        for (Map.Entry<ContentChildController, Tab> theTabEntry : visibleScenes.entrySet()) {
+        for (Map.Entry<ContentChildController, Tab> theTabEntry : activeTabs.entrySet()) {
             if (theTabEntry.getValue() == aTab) {
                 theTabEntry.getKey().removed();
-                visibleScenes.remove(theTabEntry.getKey());
+                activeTabs.remove(theTabEntry.getKey());
                 return;
             }
         }
     }
 
     public void onObjectUpdated(@Observes ObjectUpdatedEvent aEvent) {
-        for (Map.Entry<ContentChildController, Tab> theTabEntry : visibleScenes.entrySet()) {
+        for (Map.Entry<ContentChildController, Tab> theTabEntry : activeTabs.entrySet()) {
             theTabEntry.getKey().onObjectUpdated(theTabEntry.getValue(), aEvent);
         }
     }
 
     public void onShutdown(@Observes ShutdownEvent aEvent) {
-        for (Map.Entry<ContentChildController, Tab> theTabEntry : visibleScenes.entrySet()) {
+        for (Map.Entry<ContentChildController, Tab> theTabEntry : activeTabs.entrySet()) {
             theTabEntry.getKey().onShutdown(aEvent);
         }
     }
 
     public void onObjectSelected(@Observes ObjectSelectedEvent aEvent) {
-        for (Map.Entry<ContentChildController, Tab> theTabEntry : visibleScenes.entrySet()) {
+        for (Map.Entry<ContentChildController, Tab> theTabEntry : activeTabs.entrySet()) {
             theTabEntry.getKey().onObjectSelected(aEvent);
         }
     }
 
     public void onGameSceneSelected(@Observes GameSceneSelectedEvent aEvent) {
         GameScene theScene = aEvent.getScene();
-        for (Map.Entry<ContentChildController, Tab> theTabEntry : visibleScenes.entrySet()) {
+        for (Map.Entry<ContentChildController, Tab> theTabEntry : activeTabs.entrySet()) {
             if (theTabEntry.getKey().getEditingObject() == theScene) {
                 editorTabPane.getSelectionModel().select(theTabEntry.getValue());
                 return;
@@ -136,13 +145,13 @@ public class ContentAreaController implements ChildController {
 
         addTab(theTab);
 
-        visibleScenes.put(theSceneEditorController, theTab);
+        activeTabs.put(theSceneEditorController, theTab);
 
         theSceneEditorController.addedAsTab();
     }
 
     public void onFlushResourceCache(@Observes FlushResourceCacheEvent aEvent) {
-        for (Map.Entry<ContentChildController, Tab> theTabEntry : visibleScenes.entrySet()) {
+        for (Map.Entry<ContentChildController, Tab> theTabEntry : activeTabs.entrySet()) {
             theTabEntry.getKey().onFlushResourceCache(aEvent);
         }
     }
