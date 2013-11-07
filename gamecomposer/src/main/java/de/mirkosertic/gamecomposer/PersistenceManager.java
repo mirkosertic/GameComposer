@@ -1,9 +1,7 @@
 package de.mirkosertic.gamecomposer;
 
-import de.mirkosertic.gameengine.core.Game;
-import de.mirkosertic.gameengine.core.GameResourceLoader;
-import de.mirkosertic.gameengine.core.GameScene;
-import de.mirkosertic.gameengine.core.ResourceName;
+import de.mirkosertic.gameengine.core.*;
+import org.apache.commons.io.FileUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.ObjectReader;
 import org.codehaus.jackson.map.ObjectWriter;
@@ -21,7 +19,10 @@ import java.util.Map;
 public class PersistenceManager {
 
     @Inject
-    Event<GameLoadedEvent> gameLoadedEventEvent;
+    Event<GameLoadedEvent> gameLoadedEvent;
+
+    @Inject
+    Event<GameSceneCreatedEvent> gameSceneCreatedEvent;
 
     @Inject
     GameRuntimeFactory gameRuntimeFactory;
@@ -50,6 +51,23 @@ public class PersistenceManager {
 
     public GameScene getScene(String aSceneName) {
         return gameScenes.get(aSceneName);
+    }
+
+    public void onNewGameScene(@Observes NewGameSceneEvent aEvent) {
+
+        String theSceneID = "scene" + gameScenes.size() + 1;
+        GameResourceLoader theResourceLoader = new JavaFXFileGameResourceLoader(new File(currentGameDirectory, theSceneID));
+        GameRuntime theRuntime = gameRuntimeFactory.create(theResourceLoader);
+
+        GameScene theNewGameScene = new GameScene(theRuntime);
+        gameScenes.put(theSceneID, theNewGameScene);
+
+        if (game.getScenes().size() == 0) {
+            game.setDefaultScene(theSceneID);
+        }
+        game.addScene(theSceneID);
+
+        gameSceneCreatedEvent.fire(new GameSceneCreatedEvent(theNewGameScene));
     }
 
     public void onSaveGame(@Observes SaveGameEvent aEvent) throws IOException {
@@ -82,7 +100,7 @@ public class PersistenceManager {
 
         game = theLoadedGame;
         gameScenes = theLoadedScenes;
-        gameLoadedEventEvent.fire(new GameLoadedEvent());
+        gameLoadedEvent.fire(new GameLoadedEvent());
         currentGameDirectory = theGameDirectory;
     }
 
@@ -114,5 +132,9 @@ public class PersistenceManager {
             }
         }
         throw new RuntimeException("Cannot find scene directory for " + aGameScene.getName());
+    }
+
+    public void copyGameTo(File aTargetDirectory) throws IOException {
+        FileUtils.copyDirectory(currentGameDirectory, aTargetDirectory);
     }
 }

@@ -13,10 +13,8 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import de.mirkosertic.gameengine.camera.CameraComponent;
-import de.mirkosertic.gameengine.camera.CameraComponentTemplate;
 import de.mirkosertic.gameengine.camera.FollowCameraProcess;
 import de.mirkosertic.gameengine.core.*;
-import de.mirkosertic.gameengine.physics.PlatformComponent;
 import de.mirkosertic.gameengine.processes.StartProcessEvent;
 
 public class GWTRenderer implements EntryPoint {
@@ -79,20 +77,12 @@ public class GWTRenderer implements EntryPoint {
         GameObjectInstanceFactory theInstanceFactory = new GameObjectInstanceFactory(theRuntime);
 
         // Detect and create a camera
-        GameObjectInstance theCameraObject = null;
-        GameObjectInstance thePlayerInstance = null;
-        CameraComponent theCameraComponent = null;
+        GameObjectInstance theCameraObject = theInstanceFactory.createFrom(aGameScene.getCameraObject());
+        CameraComponent theCameraComponent = theCameraObject.getComponent(CameraComponent.class);
 
-        for (GameObject theObject : aGameScene.getObjects()) {
-            CameraComponentTemplate theTemplate = theObject.getComponentTemplate(CameraComponentTemplate.class);
-            if (theTemplate != null) {
-                theCameraObject = theInstanceFactory.createFrom(theObject);
-                theCameraComponent = theCameraObject.getComponent(CameraComponent.class);
-            }
-        }
+        GameObjectInstance thePlayerInstance = null;
         for (GameObjectInstance theInstance : aGameScene.getInstances()) {
-            PlatformComponent thePlatform = theInstance.getComponent(PlatformComponent.class);
-            if (thePlatform != null) {
+            if (theInstance.getOwnerGameObject() == aGameScene.getDefaultPlayer()) {
                 thePlayerInstance = theInstance;
             }
         }
@@ -131,7 +121,16 @@ public class GWTRenderer implements EntryPoint {
             }
         });
 
-        theEventManager.fire(new StartProcessEvent(new FollowCameraProcess(theCameraObject, thePlayerInstance)));
+        switch (theCameraComponent.getTemplate().getType()) {
+            case FOLLOWPLAYER:
+                theCameraComponent.centerOn(thePlayerInstance);
+                theEventManager.fire(new StartProcessEvent(new FollowCameraProcess(theCameraObject, thePlayerInstance)));
+                break;
+            case CENTERONSCENE:
+                break;
+        }
+
+        canvas.setFocus(true);
     }
 
     void resizeCanvas(int aWidth, int aHeight) {

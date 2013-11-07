@@ -9,4 +9,6 @@ public interface GameComponent {
     Map<String, Object> serialize();
 
     String getTypeKey();
+
+    <T extends GameComponentTemplate> T getTemplate();
 }

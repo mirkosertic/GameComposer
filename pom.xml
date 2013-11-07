@@ -8,6 +8,7 @@
     <artifactId>gamecreator</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
+    <name>GameComposer Parent POM</name>
 
     <modules>
         <module>gameengine</module>
@@ -17,7 +18,44 @@
         <module>sampleplatformer</module>
     </modules>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>de.mirkosertic</groupId>
+                <artifactId>gameengine</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.mirkosertic</groupId>
+                <artifactId>gameengine-fxrenderer</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.mirkosertic</groupId>
+                <artifactId>gameengine-gwtrenderer</artifactId>
+                <version>${project.version}</version>
+                <type>war</type>
+            </dependency>
+            <dependency>
+                <groupId>com.oracle</groupId>
+                <artifactId>javafx</artifactId>
+                <version>2.2</version>
+                <systemPath>${java.home}/lib/jfxrt.jar</systemPath>
+                <scope>system</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>2.3.1</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

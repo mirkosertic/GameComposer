@@ -36,6 +36,12 @@ public class ProjectStructureController implements ChildController {
     @Inject
     Event<GameSceneSelectedEvent> sceneSelectedEventEvent;
 
+    @Inject
+    Event<DeleteGameObjectInstanceEvent> deleteGameObjectInstanceEvent;
+
+    @Inject
+    Event<DeleteGameObjectEvent> deleteGameObjectEvent;
+
     private Node view;
     private Map<Object, TreeItem> treeItemMap;
 
@@ -44,7 +50,22 @@ public class ProjectStructureController implements ChildController {
     }
 
     ProjectStructureController initialize(Node aView) {
-        projectStructureTreeView.setCellFactory(new StructureTreeCellFactory());
+        projectStructureTreeView.setCellFactory(new StructureTreeCellFactory(new ContextMenuListener() {
+            @Override
+            public void onDeleteGameScene(GameScene aGameScene) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
+            public void onDeleteGameObject(GameObject aGameObject) {
+                deleteGameObjectEvent.fire(new DeleteGameObjectEvent(aGameObject));
+            }
+
+            @Override
+            public void onDeleteGameObjectInstance(GameObjectInstance aGameObjectInstance) {
+                deleteGameObjectInstanceEvent.fire(new DeleteGameObjectInstanceEvent(aGameObjectInstance));
+            }
+        }));
         projectStructureTreeView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observableValue, Object aOldValue, Object aNewValue) {
@@ -109,20 +130,35 @@ public class ProjectStructureController implements ChildController {
         }
     }
 
+    public void onGameObjectInstanceDeleted(@Observes DeleteGameObjectInstanceEvent aEvent) {
+        initializeTree(persistenceManager.getGame());
+    }
+
+    public void onGameObjectDeleted(@Observes DeleteGameObjectEvent aEvent) {
+        initializeTree(persistenceManager.getGame());
+    }
+
+    public void onNewGameSceneCreated(@Observes GameSceneCreatedEvent aEvent) {
+        initializeTree(persistenceManager.getGame());
+    }
+
     public void onGameLoaded(@Observes GameLoadedEvent aEvent) {
+        initializeTree(persistenceManager.getGame());
+    }
+
+    private void initializeTree(Game aGame) {
         treeItemMap.clear();
-        Game theCurrentGame = persistenceManager.getGame();
 
-        TreeItem theRootTreeItem = new TreeItem(theCurrentGame.getName());
-        theRootTreeItem.setValue(theCurrentGame);
+        TreeItem theRootTreeItem = new TreeItem(aGame.getName());
+        theRootTreeItem.setValue(aGame);
         theRootTreeItem.setExpanded(true);
-        treeItemMap.put(theCurrentGame, theRootTreeItem);
+        treeItemMap.put(aGame, theRootTreeItem);
 
-        for (String theSceneName : theCurrentGame.getScenes()) {
-            TreeItem theSceneTreeItem = new TreeItem(theSceneName);
+        for (String theSceneIDs : aGame.getScenes()) {
+            TreeItem theSceneTreeItem = new TreeItem(theSceneIDs);
             theSceneTreeItem.setExpanded(true);
 
-            GameScene theLoadedScene = persistenceManager.getScene(theSceneName);
+            GameScene theLoadedScene = persistenceManager.getScene(theSceneIDs);
             theSceneTreeItem.setValue(theLoadedScene);
 
             TreeItem theObjectsTreeItem = new TreeItem();

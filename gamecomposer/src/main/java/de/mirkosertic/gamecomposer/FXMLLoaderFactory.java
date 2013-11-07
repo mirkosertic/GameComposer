@@ -15,7 +15,6 @@ public class FXMLLoaderFactory {
     @Inject
     Instance<Object> instance;
 
-    @Produces
     public FXMLLoader createLoader() {
         FXMLLoader theLoader = new FXMLLoader();
         theLoader.setBuilderFactory(new JavaFXBuilderFactory());

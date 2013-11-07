@@ -1,12 +1,6 @@
 package de.mirkosertic.gameengine.core;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class GameScene {
 
@@ -63,6 +57,7 @@ public class GameScene {
 
     public void addGameObject(GameObject aObject) {
         objects.add(aObject);
+        gameRuntime.getEventManager().fire(new GameObjectAddedToSceneEvent(aObject));
     }
 
     public void addGameObjectInstance(GameObjectInstance aInstance) {
@@ -170,5 +165,16 @@ public class GameScene {
                 gameRuntime.getEventManager().fire(new GameObjectInstanceSizeChangedEvent(theInstance, aNewSize));
             }
         }
+    }
+
+    public void removeGameObject(GameObject aGameObject) {
+        Set<GameObjectInstance> theInstances = new HashSet<GameObjectInstance>(instances);
+        for (GameObjectInstance theInstance : theInstances) {
+            if (theInstance.getOwnerGameObject() == aGameObject) {
+                removeGameObjectInstance(theInstance);
+            }
+        }
+        objects.remove(aGameObject);
+        gameRuntime.getEventManager().fire(new GameObjectRemovedFromSceneEvent(aGameObject));
     }
 }

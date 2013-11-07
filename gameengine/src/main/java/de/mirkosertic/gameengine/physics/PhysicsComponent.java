@@ -3,7 +3,9 @@ package de.mirkosertic.gameengine.physics;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.mirkosertic.gameengine.camera.CameraComponentTemplate;
 import de.mirkosertic.gameengine.core.GameComponent;
+import de.mirkosertic.gameengine.core.GameComponentTemplate;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 
 public class PhysicsComponent implements GameComponent {
@@ -26,6 +28,11 @@ public class PhysicsComponent implements GameComponent {
         Map<String, Object> theStructure = new HashMap<String, Object>();
         theStructure.put(TYPE_ATTRIBUTE, TYPE);
         return theStructure;
+    }
+
+    @Override
+    public CameraComponentTemplate getTemplate() {
+        return objectInstance.getOwnerGameObject().getComponentTemplate(CameraComponentTemplate.class);
     }
 
     public static PhysicsComponent deserialize(GameObjectInstance aObjectInstance, Map<String,Object> aSerializedData) {

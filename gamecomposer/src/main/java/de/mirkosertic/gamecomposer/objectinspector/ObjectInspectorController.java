@@ -1,6 +1,7 @@
 package de.mirkosertic.gamecomposer.objectinspector;
 
 import de.mirkosertic.gamecomposer.ChildController;
+import de.mirkosertic.gamecomposer.GameSceneCreatedEvent;
 import de.mirkosertic.gamecomposer.ObjectSelectedEvent;
 import de.mirkosertic.gamecomposer.objectinspector.cameratemplate.CameraTemplateEditorControllerFactory;
 import de.mirkosertic.gamecomposer.objectinspector.game.GameEditorControllerFactory;
@@ -76,22 +77,29 @@ public class ObjectInspectorController implements ChildController {
         return view;
     }
 
-    public void onObjectSelected(@Observes ObjectSelectedEvent aEvent) {
-        propertyPanels.getChildren().clear();
-        Object theSelectedObject = aEvent.getSelectedObject();
-        if (theSelectedObject instanceof Game) {
-            ChildController theController = gameEditorControllerFactory.create((Game) theSelectedObject);
-            TitledPane thePane = new TitledPane("Properties", theController.getView());
-            propertyPanels.getChildren().add(thePane);
-        }
-        if (theSelectedObject instanceof GameScene) {
-            ChildController theController = gameSceneEditorControllerFactory.create((GameScene) theSelectedObject);
-            TitledPane thePane = new TitledPane("Properties", theController.getView());
-            propertyPanels.getChildren().add(thePane);
-        }
-        if (theSelectedObject instanceof GameObject) {
+    public void onGameSceneCreated(@Observes GameSceneCreatedEvent aEvent) {
+        selectObject(aEvent.getGameScene());
+    }
 
-            GameObject theGameObject = (GameObject) theSelectedObject;
+    public void onObjectSelected(@Observes ObjectSelectedEvent aEvent) {
+        selectObject(aEvent.getSelectedObject());
+    }
+
+    private void selectObject(Object aPbject) {
+        propertyPanels.getChildren().clear();
+        if (aPbject instanceof Game) {
+            ChildController theController = gameEditorControllerFactory.create((Game) aPbject);
+            TitledPane thePane = new TitledPane("Properties", theController.getView());
+            propertyPanels.getChildren().add(thePane);
+        }
+        if (aPbject instanceof GameScene) {
+            ChildController theController = gameSceneEditorControllerFactory.create((GameScene) aPbject);
+            TitledPane thePane = new TitledPane("Properties", theController.getView());
+            propertyPanels.getChildren().add(thePane);
+        }
+        if (aPbject instanceof GameObject) {
+
+            GameObject theGameObject = (GameObject) aPbject;
 
             ChildController theController = gameObjectEditorControllerFactory.create(theGameObject);
             TitledPane thePane = new TitledPane("Properties", theController.getView());
@@ -133,11 +141,10 @@ public class ObjectInspectorController implements ChildController {
             }
 
         }
-        if (theSelectedObject instanceof GameObjectInstance) {
-            ChildController theController = gameObjectInstanceEditorControllerFactory.create((GameObjectInstance) theSelectedObject);
+        if (aPbject instanceof GameObjectInstance) {
+            ChildController theController = gameObjectInstanceEditorControllerFactory.create((GameObjectInstance) aPbject);
             TitledPane thePane = new TitledPane("Properties", theController.getView());
             propertyPanels.getChildren().add(thePane);
         }
-
     }
 }

@@ -37,7 +37,7 @@
         </VBox>
         <HBox prefHeight="54.0" prefWidth="-1.0">
           <children>
-            <Hyperlink prefWidth="-1.0" text="Create new scene..." />
+            <Hyperlink id="newScene" onAction="#onNewScene" prefWidth="-1.0" text="Create new scene..." />
           </children>
           <padding>
             <Insets top="20.0" />
