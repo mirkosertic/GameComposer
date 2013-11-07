@@ -97,6 +97,11 @@ public class PlatformComponent implements GameComponent {
         return theResult;
     }
 
+    @Override
+    public PlatformComponentTemplate getTemplate() {
+        return objectInstance.getOwnerGameObject().getComponentTemplate(PlatformComponentTemplate.class);
+    }
+
     public static PlatformComponent deserialize(GameObjectInstance aObjectInstance, Map<String, Object> aSerializedData, GameRuntime aGameRuntime) {
         PlatformComponent theComponent = new PlatformComponent(aObjectInstance, aGameRuntime);
         theComponent.registerEvents(aGameRuntime);

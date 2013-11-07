@@ -9,6 +9,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
     <artifactId>gameengine</artifactId>
+    <name>GameComposer Core GameEngine</name>
     <build>
         <plugins>
             <plugin>

@@ -308,4 +308,14 @@ public class GameSceneEditorController implements ContentChildController<GameSce
     public void onFlushResourceCache(FlushResourceCacheEvent aEvent) {
         gameRuntime.getResourceCache().flush();
     }
+
+    @Override
+    public void onDeleteGameObjectInstance(DeleteGameObjectInstanceEvent aEvent) {
+        gameScene.removeGameObjectInstance(aEvent.getGameObjectInstance());
+    }
+
+    @Override
+    public void onDeleteGameObject(DeleteGameObjectEvent aEvent) {
+        gameScene.removeGameObject(aEvent.getGameObject());
+    }
 }

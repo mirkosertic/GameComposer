@@ -86,7 +86,22 @@ public class CameraComponent implements GameComponent {
         return theResult;
     }
 
+    @Override
+    public CameraComponentTemplate getTemplate() {
+        return objectInstance.getOwnerGameObject().getComponentTemplate(CameraComponentTemplate.class);
+    }
+
     public static CameraComponent deserialize(GameObjectInstance aObjectInstance, Map<String, Object> aSerializedData) {
         return new CameraComponent(aObjectInstance);
+    }
+
+    public void centerOn(GameObjectInstance aGameObjectInstance) {
+        Position theObjectPosition = aGameObjectInstance.getPosition();
+        Size theObjectSize = aGameObjectInstance.getOwnerGameObject().getSize();
+
+        float theCenterX = theObjectPosition.x + theObjectSize.width / 2;
+        float theCenterY = theObjectPosition.y + theObjectSize.height / 2;
+
+        objectInstance.setPosition(new Position(theCenterX - screenSize.width / 2, theCenterY - screenSize.height / 2));
     }
 }

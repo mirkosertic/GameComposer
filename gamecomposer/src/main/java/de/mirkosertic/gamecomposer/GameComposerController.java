@@ -2,6 +2,8 @@ package de.mirkosertic.gamecomposer;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.stage.DirectoryChooser;
@@ -16,6 +18,7 @@ import java.util.prefs.Preferences;
 public class GameComposerController {
 
     private static final String GAME_DIRECTORY_PREF_KEY = "GameDirectory";
+    private static final String GAME_EXPORTDIRECTORY_PREF_KEY = "GameExportDirectory";
 
     @Inject
     @ObjectInspector
@@ -41,14 +44,21 @@ public class GameComposerController {
     @Inject
     Event<SaveGameEvent> saveGameEvent;
 
+    @Inject
+    Event<ExportGameHTML5Event> exportGameHTML5Event;
+
     @FXML
     HBox childViews;
+
+    @FXML
+    Menu exportMenu;
 
     private Preferences directoryPreferences;
 
     public void initialize(Stage aStage) {
 
         directoryPreferences = Preferences.userNodeForPackage(GameComposerController.class);
+        exportMenu.setDisable(true);
 
         childViews.getChildren().add(objectInspector.getView());
         childViews.getChildren().add(contentArea.getView());
@@ -74,22 +84,26 @@ public class GameComposerController {
     @FXML
     public void onNew() {
         DirectoryChooser theDirectoryChooser = new DirectoryChooser();
+        theDirectoryChooser.setTitle("Choose target directory");
         File theProjectDirectory = theDirectoryChooser.showDialog(null);
         if (theProjectDirectory != null) {
             newGameEvent.fire(new NewGameEvent(theProjectDirectory));
 
             directoryPreferences.put(GAME_DIRECTORY_PREF_KEY, theProjectDirectory.toString());
+            exportMenu.setDisable(false);
         }
     }
 
     @FXML
     public void onSave() {
         saveGameEvent.fire(new SaveGameEvent());
+        exportMenu.setDisable(false);
     }
 
     @FXML
     public void onOpen() {
         FileChooser theFileChooser = new FileChooser();
+        theFileChooser.setTitle("Open game");
 
         String theLastDirectory = directoryPreferences.get(GAME_DIRECTORY_PREF_KEY, null);
         if (theLastDirectory != null) {
@@ -108,6 +122,25 @@ public class GameComposerController {
             loadGameEvent.fire(new LoadGameEvent(theSelectedFile));
 
             directoryPreferences.put(GAME_DIRECTORY_PREF_KEY, theSelectedFile.getParentFile().toString());
+            exportMenu.setDisable(false);
+        }
+    }
+
+    @FXML
+    public void onSaveAndExportHTML5() {
+        DirectoryChooser theDirectoryChooser = new DirectoryChooser();
+        theDirectoryChooser.setTitle("Choose target directory");
+
+        String theLastExportDir = directoryPreferences.get(GAME_EXPORTDIRECTORY_PREF_KEY, null);
+        if (theLastExportDir != null) {
+            theDirectoryChooser.setInitialDirectory(new File(theLastExportDir));
+        }
+
+        File theTargetDirectory = theDirectoryChooser.showDialog(null);
+        if (theTargetDirectory != null) {
+            exportGameHTML5Event.fire(new ExportGameHTML5Event(theTargetDirectory));
+
+            directoryPreferences.put(GAME_EXPORTDIRECTORY_PREF_KEY, theTargetDirectory.toString());
         }
     }
 }

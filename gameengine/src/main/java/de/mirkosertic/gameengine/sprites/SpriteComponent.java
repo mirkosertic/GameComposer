@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.mirkosertic.gameengine.core.GameComponent;
+import de.mirkosertic.gameengine.core.GameComponentTemplate;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.ResourceName;
 
@@ -27,6 +28,11 @@ public class SpriteComponent implements GameComponent {
         Map<String, Object> theResult = new HashMap<String, Object>();
         theResult.put(TYPE_ATTRIBUTE, TYPE);
         return theResult;
+    }
+
+    @Override
+    public SpriteComponentTemplate getTemplate() {
+        return objectInstance.getOwnerGameObject().getComponentTemplate(SpriteComponentTemplate.class);
     }
 
     public static SpriteComponent deserialize(GameObjectInstance aObjectInstance, Map<String, Object> aSerializedData) {

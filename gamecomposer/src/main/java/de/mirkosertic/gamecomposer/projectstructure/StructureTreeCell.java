@@ -5,11 +5,9 @@ import de.mirkosertic.gameengine.core.Game;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameScene;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.Label;
-import javafx.scene.control.TreeCell;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
@@ -18,9 +16,11 @@ import javafx.scene.input.TransferMode;
 public class StructureTreeCell extends TreeCell {
 
     private TreeView treeView;
+    private ContextMenuListener contextMenuListener;
 
-    public StructureTreeCell(TreeView aTreeView) {
+    public StructureTreeCell(ContextMenuListener aContextMenuListener, TreeView aTreeView) {
         treeView = aTreeView;
+        contextMenuListener = aContextMenuListener;
         setOnDragDetected(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent aEvent) {
@@ -51,18 +51,53 @@ public class StructureTreeCell extends TreeCell {
         super.updateItem(aValue, aEmpty);
         if (aValue instanceof String) {
             setText((String) aValue);
+            setContextMenu(null);
         }
         if (aValue instanceof Game) {
             setText(((Game) aValue).getName());
+            setContextMenu(null);
         }
         if (aValue instanceof GameScene) {
-            setText(((GameScene) aValue).getName());
+            final GameScene theGameScene = (GameScene) aValue;
+            setText(theGameScene.getName());
+            ContextMenu theContextMenu = new ContextMenu();
+            MenuItem theDeleteItem = new MenuItem("Delete");
+            theDeleteItem.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    contextMenuListener.onDeleteGameScene(theGameScene);
+                }
+            });
+            theContextMenu.getItems().add(theDeleteItem);
+            setContextMenu(theContextMenu);
         }
         if (aValue instanceof GameObject) {
-            setText(((GameObject) aValue).getName());
+            final GameObject theGameObject = (GameObject) aValue;
+            setText(theGameObject.getName());
+            ContextMenu theContextMenu = new ContextMenu();
+            MenuItem theDeleteItem = new MenuItem("Delete");
+            theDeleteItem.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    contextMenuListener.onDeleteGameObject(theGameObject);
+                }
+            });
+            theContextMenu.getItems().add(theDeleteItem);
+            setContextMenu(theContextMenu);
         }
         if (aValue instanceof GameObjectInstance) {
-            setText(((GameObjectInstance) aValue).getName());
+            final GameObjectInstance theGameObjectInstance = (GameObjectInstance) aValue;
+            setText(theGameObjectInstance.getName());
+            ContextMenu theContextMenu = new ContextMenu();
+            MenuItem theDeleteItem = new MenuItem("Delete");
+            theDeleteItem.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    contextMenuListener.onDeleteGameObjectInstance(theGameObjectInstance);
+                }
+            });
+            theContextMenu.getItems().add(theDeleteItem);
+            setContextMenu(theContextMenu);
         }
     }
 }

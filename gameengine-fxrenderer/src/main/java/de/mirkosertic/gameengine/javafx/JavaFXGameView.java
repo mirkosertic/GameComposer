@@ -44,7 +44,7 @@ public class JavaFXGameView extends Canvas implements GameView {
             Position thePosition = cameraComponent.transformToScreenPosition(theInstance.getPosition());
             Size theSize = theInstance.getOwnerGameObject().getSize();
             SpriteComponentTemplate theTemplateComponent = theInstance.getOwnerGameObject().getComponentTemplate(SpriteComponentTemplate.class);
-            if (theTemplateComponent != null) {
+            if (theTemplateComponent != null && theTemplateComponent.getResourceName() != null) {
                 try {
                     JavaFXBitmapResource theBitmap = gameRuntime.getResourceCache().getResourceFor(theTemplateComponent.getResourceName());
                     drawGameObjectInstance(theContext, theInstance, thePosition, theSize, theBitmap);

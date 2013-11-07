@@ -29,6 +29,11 @@
             <MenuItem mnemonicParsing="false" onAction="#onClose" text="%menu.close" />
           </items>
         </Menu>
+        <Menu mnemonicParsing="false" text="%menu.export" fx:id="exportMenu">
+          <items>
+            <MenuItem mnemonicParsing="false" onAction="#onSaveAndExportHTML5" text="%menu.exportashtml" />
+          </items>
+        </Menu>
       </menus>
     </MenuBar>
   </top>

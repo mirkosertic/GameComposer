@@ -1,6 +1,7 @@
 package de.mirkosertic.gamecomposer.objectinspector.game;
 
 import de.mirkosertic.gamecomposer.ChildController;
+import de.mirkosertic.gamecomposer.NewGameSceneEvent;
 import de.mirkosertic.gamecomposer.ObjectUpdatedEvent;
 import de.mirkosertic.gameengine.core.Game;
 import javafx.beans.value.ChangeListener;
@@ -24,6 +25,9 @@ public class GameEditorController implements ChildController {
 
     @Inject
     Event<ObjectUpdatedEvent> objectUpdatedEvent;
+
+    @Inject
+    Event<NewGameSceneEvent> newGameSceneEvent;
 
     private Parent view;
     private Game game;
@@ -58,5 +62,10 @@ public class GameEditorController implements ChildController {
     @Override
     public Node getView() {
         return view;
+    }
+
+    @FXML
+    public void onNewScene() {
+        newGameSceneEvent.fire(new NewGameSceneEvent());
     }
 }

@@ -23,4 +23,8 @@ public interface ContentChildController<T> extends ChildController {
     void onObjectUpdated(Tab aTab, ObjectUpdatedEvent aEvent);
 
     void onFlushResourceCache(FlushResourceCacheEvent aEvent);
+
+    void onDeleteGameObjectInstance(DeleteGameObjectInstanceEvent aEvent);
+
+    void onDeleteGameObject(DeleteGameObjectEvent aEvent);
 }

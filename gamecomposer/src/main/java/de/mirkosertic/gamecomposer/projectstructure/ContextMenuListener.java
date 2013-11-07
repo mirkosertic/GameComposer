@@ -1,0 +1,14 @@
+package de.mirkosertic.gamecomposer.projectstructure;
+
+import de.mirkosertic.gameengine.core.GameObject;
+import de.mirkosertic.gameengine.core.GameObjectInstance;
+import de.mirkosertic.gameengine.core.GameScene;
+
+public interface ContextMenuListener {
+
+    void onDeleteGameScene(GameScene aGameScene);
+
+    void onDeleteGameObject(GameObject aGameObject);
+
+    void onDeleteGameObjectInstance(GameObjectInstance aGameObjectInstance);
+}

@@ -25,7 +25,9 @@ public class JSONUtils {
                     if (theSingleObject != null) {
                         theSingle.add(toMap(theSingleValue));
                     } else {
-                        theSingle.add(theSingleValue.isString().stringValue());
+                        if (theSingleValue.isNull() == null) {
+                            theSingle.add(theSingleValue.isString().stringValue());
+                        }
                     }
                 }
                 theResult.put(theKey, theSingle);
@@ -33,7 +35,9 @@ public class JSONUtils {
                 if (theValue.isObject() != null) {
                     theResult.put(theKey, toMap(theValue));
                 } else {
-                    theResult.put(theKey, theValue.isString().stringValue());
+                    if (theValue.isNull() == null) {
+                        theResult.put(theKey, theValue.isString().stringValue());
+                    }
                 }
             }
         }
