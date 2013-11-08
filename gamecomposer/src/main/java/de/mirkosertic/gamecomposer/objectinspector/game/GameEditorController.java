@@ -24,10 +24,7 @@ public class GameEditorController implements ChildController {
     ComboBox defaultSceneComboBox;
 
     @Inject
-    Event<ObjectUpdatedEvent> objectUpdatedEvent;
-
-    @Inject
-    Event<NewGameSceneEvent> newGameSceneEvent;
+    Event<Object> eventGateway;
 
     private Parent view;
     private Game game;
@@ -46,13 +43,14 @@ public class GameEditorController implements ChildController {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String aOldValue, String aNewValue) {
                 game.setName(aNewValue);
-                objectUpdatedEvent.fire(new ObjectUpdatedEvent(game));
+                eventGateway.fire(new ObjectUpdatedEvent(game));
             }
         });
         defaultSceneComboBox.itemsProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observableValue, Object aOldValue, Object aNewValue) {
                 game.setDefaultScene((String) aNewValue);
+                eventGateway.fire(new ObjectUpdatedEvent(game));
             }
         });
 
@@ -66,6 +64,6 @@ public class GameEditorController implements ChildController {
 
     @FXML
     public void onNewScene() {
-        newGameSceneEvent.fire(new NewGameSceneEvent());
+        eventGateway.fire(new NewGameSceneEvent());
     }
 }

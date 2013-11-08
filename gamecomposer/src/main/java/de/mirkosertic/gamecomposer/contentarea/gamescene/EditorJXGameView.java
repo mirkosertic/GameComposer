@@ -112,8 +112,8 @@ public class EditorJXGameView extends JavaFXGameView {
 
             float theStartX = theCameraPosition.x - (theCameraPosition.x % theGridsizeWidth);
             float theStartY = theCameraPosition.y - (theCameraPosition.y % theGridsizeHeight);
-            int theCols = (int) (theScreenSize.width / theGridsizeWidth) + 1;
-            int theRows = (int) (theScreenSize.height / theGridsizeHeight) + 1;
+            int theCols = theScreenSize.width / theGridsizeWidth + 1;
+            int theRows = theScreenSize.height / theGridsizeHeight + 1;
 
             for (int theRow = 0; theRow < theRows; theRow++) {
                 for (int theCol = 0; theCol < theCols; theCol++) {

@@ -1,6 +1,7 @@
 package de.mirkosertic.gamecomposer.objectinspector.cameratemplate;
 
 import de.mirkosertic.gamecomposer.ChildController;
+import de.mirkosertic.gamecomposer.ObjectUpdatedEvent;
 import de.mirkosertic.gameengine.camera.CameraComponentTemplate;
 import de.mirkosertic.gameengine.camera.CameraType;
 import de.mirkosertic.gameengine.physics.StaticComponentTemplate;
@@ -12,6 +13,8 @@ import javafx.scene.Parent;
 import javafx.scene.control.ComboBox;
 import javafx.util.StringConverter;
 
+import javax.enterprise.event.Event;
+import javax.inject.Inject;
 import java.util.Arrays;
 
 public class CameraTemplateEditorController implements ChildController {
@@ -31,6 +34,9 @@ public class CameraTemplateEditorController implements ChildController {
     @FXML
     ComboBox cameraType;
 
+    @Inject
+    Event<Object> eventGateway;
+
     private Parent view;
     private CameraComponentTemplate object;
 
@@ -46,6 +52,7 @@ public class CameraTemplateEditorController implements ChildController {
             @Override
             public void handle(ActionEvent aEvent) {
                 object.setType((CameraType) cameraType.getValue());
+                eventGateway.fire(new ObjectUpdatedEvent(object));
             }
         });
 

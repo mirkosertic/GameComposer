@@ -3,10 +3,11 @@ package de.mirkosertic.gamecomposer.objectinspector.spritetemplate;
 import de.mirkosertic.gamecomposer.ChildController;
 import de.mirkosertic.gamecomposer.FlushResourceCacheEvent;
 import de.mirkosertic.gamecomposer.PersistenceManager;
+import de.mirkosertic.gameengine.core.GameResourceLoader;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.core.ResourceName;
+import de.mirkosertic.gameengine.core.Size;
 import de.mirkosertic.gameengine.javafx.JavaFXBitmapResource;
-import de.mirkosertic.gameengine.core.GameResourceLoader;
 import de.mirkosertic.gameengine.sprites.SpriteComponentTemplate;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -68,6 +69,7 @@ public class SpriteTemplateEditorController implements ChildController {
                 spritePreview.setImage(theResource);
 
                 assetName.setText(theResourceName.getName());
+                object.getOwner().getGameScene().updateObjectSize(object.getOwner(), new Size((int) theResource.getWidth(), (int) theResource.getHeight()));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

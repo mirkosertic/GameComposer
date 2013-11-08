@@ -3,9 +3,9 @@ package de.mirkosertic.gamecomposer.objectinspector.gameobjectinstance;
 import de.mirkosertic.gamecomposer.ChildController;
 import de.mirkosertic.gamecomposer.ObjectSelectedEvent;
 import de.mirkosertic.gamecomposer.ObjectUpdatedEvent;
+import de.mirkosertic.gameengine.core.Angle;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.Position;
-import de.mirkosertic.gameengine.core.Size;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -32,13 +32,13 @@ public class GameObjectInstanceEditorController implements ChildController {
     TextField yTextField;
 
     @FXML
+    TextField rotationTextField;
+
+    @FXML
     Hyperlink jumpToObject;
 
     @Inject
-    Event<ObjectUpdatedEvent> objectUpdatedEvent;
-
-    @Inject
-    Event<ObjectSelectedEvent> objectSelectedEvent;
+    Event<Object> eventGateway;
 
     private Parent view;
     private GameObjectInstance object;
@@ -50,12 +50,13 @@ public class GameObjectInstanceEditorController implements ChildController {
         nameTextField.setText(object.getName());
         xTextField.setText(Integer.toString((int) aObject.getPosition().x));
         yTextField.setText(Integer.toString((int) aObject.getPosition().y));
+        rotationTextField.setText(Integer.toString(aObject.getRotationAngle().angleInDegrees));
 
         nameTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String aOldValue, String aNewValue) {
                 object.setName(aNewValue);
-                objectUpdatedEvent.fire(new ObjectUpdatedEvent(object));
+                eventGateway.fire(new ObjectUpdatedEvent(object));
             }
         });
         xTextField.textProperty().addListener(new ChangeListener<String>() {
@@ -64,7 +65,7 @@ public class GameObjectInstanceEditorController implements ChildController {
                 if (!StringUtils.isEmpty(aNewValue)) {
                     Position thePosition = object.getPosition();
                     object.getOwnerGameObject().getGameScene().updateObjectInstancePosition(object, new Position(Integer.valueOf(aNewValue), thePosition.y));
-                    objectUpdatedEvent.fire(new ObjectUpdatedEvent(object));
+                    eventGateway.fire(new ObjectUpdatedEvent(object));
                 }
             }
         });
@@ -74,14 +75,23 @@ public class GameObjectInstanceEditorController implements ChildController {
                 if (!StringUtils.isEmpty(aNewValue)) {
                     Position thePosition = object.getPosition();
                     object.getOwnerGameObject().getGameScene().updateObjectInstancePosition(object, new Position(thePosition.x, Integer.valueOf(aNewValue)));
-                    objectUpdatedEvent.fire(new ObjectUpdatedEvent(object));
+                    eventGateway.fire(new ObjectUpdatedEvent(object));
+                }
+            }
+        });
+        rotationTextField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String aOldValue, String aNewValue) {
+                if (!StringUtils.isEmpty(aNewValue)) {
+                    object.getOwnerGameObject().getGameScene().updateObjectInstanceAngle(object, new Angle(Integer.valueOf(aNewValue)));
+                    eventGateway.fire(new ObjectUpdatedEvent(object));
                 }
             }
         });
         jumpToObject.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                objectSelectedEvent.fire(new ObjectSelectedEvent(object.getOwnerGameObject()));
+                eventGateway.fire(new ObjectSelectedEvent(object.getOwnerGameObject()));
             }
         });
 

@@ -49,9 +49,29 @@ public class StructureTreeCell extends TreeCell {
     @Override
     protected void updateItem(Object aValue, boolean aEmpty) {
         super.updateItem(aValue, aEmpty);
-        if (aValue instanceof String) {
-            setText((String) aValue);
-            setContextMenu(null);
+        if (aValue instanceof TreeObjectTypes) {
+            switch((TreeObjectTypes) aValue) {
+                case INSTANCES:
+                    setText("Instances");
+                    setContextMenu(null);
+                    break;
+                case OBJECTS:
+                    setText("Objects");
+
+                    ContextMenu theContextMenu = new ContextMenu();
+                    MenuItem theCreateObject = new MenuItem("New GameObject");
+                    theCreateObject.setOnAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent actionEvent) {
+                            GameScene theScene = (GameScene) getTreeItem().getParent().getValue();
+                            contextMenuListener.onCreateNewGameObject(theScene);
+                        }
+                    });
+                    theContextMenu.getItems().add(theCreateObject);
+
+                    setContextMenu(theContextMenu);
+                    break;
+            }
         }
         if (aValue instanceof Game) {
             setText(((Game) aValue).getName());

@@ -2,11 +2,13 @@ package de.mirkosertic.gameengine.javafx;
 
 import de.mirkosertic.gameengine.camera.CameraComponent;
 import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.physics.PhysicsComponent;
 import de.mirkosertic.gameengine.sprites.SpriteComponentTemplate;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.transform.Rotate;
 
 import java.io.IOException;
 
@@ -38,16 +40,27 @@ public class JavaFXGameView extends Canvas implements GameView {
         Color theFXColor = Color.rgb(theBGColor.getR(), theBGColor.getG(), theBGColor.getB());
         theContext.setFill(theFXColor);
         theContext.setStroke(theFXColor);
-        theContext.fillRect(0,0, getWidth(), getHeight());
+        theContext.fillRect(0, 0, getWidth(), getHeight());
 
         for (GameObjectInstance theInstance : cameraComponent.getObjectsToDrawInRightOrder(gameScene)) {
             Position thePosition = cameraComponent.transformToScreenPosition(theInstance.getPosition());
+
             Size theSize = theInstance.getOwnerGameObject().getSize();
+
+            theContext.save();
+
+            float theHalfWidth = theSize.width / 2;
+            float theHalfHeight = theSize.height / 2;
+
+            Rotate r = new Rotate(theInstance.getRotationAngle().angleInDegrees, thePosition.x + theHalfWidth, thePosition.y + theHalfHeight);
+            theContext.setTransform(r.getMxx(), r.getMyx(), r.getMxy(), r.getMyy(), r.getTx(), r.getTy());
+
             SpriteComponentTemplate theTemplateComponent = theInstance.getOwnerGameObject().getComponentTemplate(SpriteComponentTemplate.class);
             if (theTemplateComponent != null && theTemplateComponent.getResourceName() != null) {
                 try {
                     JavaFXBitmapResource theBitmap = gameRuntime.getResourceCache().getResourceFor(theTemplateComponent.getResourceName());
                     drawGameObjectInstance(theContext, theInstance, thePosition, theSize, theBitmap);
+                    //drawGameObjectInstance(theContext, theInstance, new Position(theSize.width / 2, theSize.height / 2), theSize, theBitmap);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -57,6 +70,8 @@ public class JavaFXGameView extends Canvas implements GameView {
                 theContext.setLineWidth(1);
                 theContext.strokeRect(thePosition.x, thePosition.y, theSize.width, theSize.height);
             }
+
+            theContext.restore();
         }
         afterRendering(theContext);
     }

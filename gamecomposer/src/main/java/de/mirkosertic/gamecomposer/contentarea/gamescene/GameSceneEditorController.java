@@ -42,6 +42,7 @@ public class GameSceneEditorController implements ContentChildController<GameSce
     private EditorJXGameView gameView;
     private Thread gameLoopThread;
     private CameraComponent cameraComponent;
+
     private Event<ObjectSelectedEvent> objectSelectedEventEvent;
 
     private GameObjectInstance dndCreateInstance;
@@ -307,15 +308,5 @@ public class GameSceneEditorController implements ContentChildController<GameSce
     @Override
     public void onFlushResourceCache(FlushResourceCacheEvent aEvent) {
         gameRuntime.getResourceCache().flush();
-    }
-
-    @Override
-    public void onDeleteGameObjectInstance(DeleteGameObjectInstanceEvent aEvent) {
-        gameScene.removeGameObjectInstance(aEvent.getGameObjectInstance());
-    }
-
-    @Override
-    public void onDeleteGameObject(DeleteGameObjectEvent aEvent) {
-        gameScene.removeGameObject(aEvent.getGameObject());
     }
 }

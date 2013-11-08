@@ -1,9 +1,6 @@
 package de.mirkosertic.gameengine.physics.jbox2d;
 
-import de.mirkosertic.gameengine.core.GameEventManager;
-import de.mirkosertic.gameengine.core.GameObjectInstance;
-import de.mirkosertic.gameengine.core.Position;
-import de.mirkosertic.gameengine.core.Size;
+import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.physics.*;
 import org.jbox2d.callbacks.ContactImpulse;
 import org.jbox2d.callbacks.ContactListener;
@@ -15,7 +12,9 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.*;
 import org.jbox2d.dynamics.contacts.Contact;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class JBox2DGamePhysicsManager implements GamePhysicsManager {
@@ -64,7 +63,6 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
                 theSimulatedBody = staticObjects.remove(aInstance);
             }
             if (theSimulatedBody != null) {
-                int count = physicsWorld.getBodyCount();
                 physicsWorld.destroyBody(theSimulatedBody);
                 return theSimulatedBody;
             }
@@ -81,6 +79,14 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
     }
 
     void gameObjectInstanceSizeChanged(GameObjectInstance aInstance, Size aNewSize) {
+        Body theOldBody = gameObjectInstanceRemovedFromScene(aInstance);
+        Body theNewBody = gameObjectInstanceAddedToScene(aInstance);
+        if (theOldBody != null && theNewBody != null) {
+            theNewBody.setActive(theOldBody.isActive());
+        }
+    }
+
+    void gameObjectInstanceRotationChanged(GameObjectInstance aInstance, Angle aNewAngle) {
         Body theOldBody = gameObjectInstanceRemovedFromScene(aInstance);
         Body theNewBody = gameObjectInstanceAddedToScene(aInstance);
         if (theOldBody != null && theNewBody != null) {
@@ -109,6 +115,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
                 BodyDef theStaticBodyDef = new BodyDef();
                 theStaticBodyDef.type = BodyType.STATIC;
                 theStaticBodyDef.userData = aInstance;
+                theStaticBodyDef.setAngle(aInstance.getRotationAngle().invert().toRadians());
                 // The position is the CENTER of MASS, not the X/Y Coordinate
                 theStaticBodyDef.position = new Vec2(SIZE_FACTOR * (theInstancePosition.x + theInstanceSize.width / 2), -SIZE_FACTOR * (theInstancePosition.y + theInstanceSize.height / 2));
                 Body theBody = physicsWorld.createBody(theStaticBodyDef);
@@ -133,6 +140,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
 
                 BodyDef thePlatformBodyDef = new BodyDef();
                 thePlatformBodyDef.type = BodyType.DYNAMIC;
+                thePlatformBodyDef.setAngle(aInstance.getRotationAngle().invert().toRadians());
                 // The position is the CENTER of MASS, not the X/Y Coordinate
                 thePlatformBodyDef.position = new Vec2(SIZE_FACTOR * (theInstancePosition.x + theInstanceSize.width / 2), SIZE_FACTOR * (theInstancePosition.y + theInstanceSize.height / 2));
                 thePlatformBodyDef.userData = aInstance;
@@ -142,6 +150,36 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
                 thePlatformBody.createFixture(thePlatformFixture);
 
                 return thePlatformBody;
+            }
+
+            // Additional physics
+            PhysicsComponent thePhysicscomponent = aInstance.getComponent(PhysicsComponent.class);
+            if (thePhysicscomponent != null) {
+
+                PhysicsComponentTemplate theTemplate = aInstance.getOwnerGameObject().getComponentTemplate(PhysicsComponentTemplate.class);
+
+                PolygonShape thePhysicsShape = new PolygonShape();
+                thePhysicsShape.setAsBox(SIZE_FACTOR * theInstanceSize.width / 2, SIZE_FACTOR * theInstanceSize.height / 2);
+
+                FixtureDef thePhysicsFixture = new FixtureDef();
+                thePhysicsFixture.density = 1;
+                thePhysicsFixture.friction = 0.1f;
+                thePhysicsFixture.restitution = 0;
+                thePhysicsFixture.shape = thePhysicsShape;
+
+                BodyDef thePhysicsBodyDef = new BodyDef();
+                thePhysicsBodyDef.type = BodyType.DYNAMIC;
+                // The position is the CENTER of MASS, not the X/Y Coordinate
+                thePhysicsBodyDef.position = new Vec2(SIZE_FACTOR * (theInstancePosition.x + theInstanceSize.width / 2), SIZE_FACTOR * (theInstancePosition.y + theInstanceSize.height / 2));
+                thePhysicsBodyDef.userData = aInstance;
+                thePhysicsBodyDef.setAngle(aInstance.getRotationAngle().invert().toRadians());
+                thePhysicsBodyDef.setFixedRotation(theTemplate.isFixedRotation());
+
+                Body thePhysicsBody = physicsWorld.createBody(thePhysicsBodyDef);
+                dynamicObjects.put(aInstance, thePhysicsBody);
+                thePhysicsBody.createFixture(thePhysicsFixture);
+
+                return thePhysicsBody;
             }
         }
         return null;
@@ -179,6 +217,14 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
         }
     }
 
+    public void updateGameObjectConfiguration(GameObject aGameObject) {
+        for (GameObjectInstance theInstance : aGameObject.getGameScene().getInstances()) {
+            if (theInstance.getOwnerGameObject() == aGameObject) {
+                gameObjectInstanceRemovedFromScene(theInstance);
+                gameObjectInstanceAddedToScene(theInstance);
+            }
+        }
+    }
 
     public void proceedGame(long aGameTime, long aElapsedTimeSinceLastLoop) {
 
@@ -209,6 +255,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
                     if (theSimulatedBody.isActive()) {
                         // Now we have to use the XY coordinates again
                         theGameObject.setPosition(new Position((thePosition.x / SIZE_FACTOR) - theInstanceSize.width / 2, -(thePosition.y / SIZE_FACTOR) - theInstanceSize.height / 2));
+                        theGameObject.setRotationAngle(Angle.fromRadians(theSimulatedBody.getAngle()).invert());
                     }
                 }
 
@@ -222,16 +269,21 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
         return new Position(aVec.x / SIZE_FACTOR, -aVec.y / SIZE_FACTOR);
     }
 
-    private Position toPosition(Vec2 aVec, Vec2 aOffset) {
-        return new Position((aVec.x + aOffset.x) / SIZE_FACTOR, -(aVec.y + aOffset.y) / SIZE_FACTOR);
-    }
+    private Position toPosition(Vec2 aVec, Vec2 aOffset, float aAngleInRadians) {
 
+        float theRotatedX = (float) (Math.cos(aAngleInRadians) * aVec.x - Math.sin(aAngleInRadians) * aVec.y);
+        float theRotatedY = (float) (Math.sin(aAngleInRadians) * aVec.x + Math.cos(aAngleInRadians) * aVec.y);
+
+        return new Position((theRotatedX + aOffset.x) / SIZE_FACTOR, -(theRotatedY + aOffset.y) / SIZE_FACTOR);
+    }
 
     @Override
     public void drawDebug(PhysicsDebugCanvas aCanvas) {
         synchronized (physicsWorld) {
             Body theBody = physicsWorld.getBodyList();
             while (theBody != null) {
+
+                float theRotatedAngle = theBody.getAngle();
 
                 Vec2 theBodyPosition = theBody.getPosition();
                 aCanvas.drawPosition(toPosition(theBodyPosition));
@@ -242,9 +294,9 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
                     if (theShape.getType() == ShapeType.POLYGON) {
                         PolygonShape thePolyShape = (PolygonShape) theShape;
                         for (int i = 1; i < thePolyShape.getVertexCount(); i++) {
-                            aCanvas.drawLine(toPosition(thePolyShape.getVertex(i - 1), theBodyPosition), toPosition(thePolyShape.getVertex(i), theBodyPosition), theBody.isAwake());
+                            aCanvas.drawLine(toPosition(thePolyShape.getVertex(i - 1), theBodyPosition, theRotatedAngle), toPosition(thePolyShape.getVertex(i), theBodyPosition, theRotatedAngle), theBody.isAwake());
                         }
-                        aCanvas.drawLine(toPosition(thePolyShape.getVertex(thePolyShape.getVertexCount() - 1), theBodyPosition), toPosition(thePolyShape.getVertex(0), theBodyPosition), theBody.isAwake());
+                        aCanvas.drawLine(toPosition(thePolyShape.getVertex(thePolyShape.getVertexCount() - 1), theBodyPosition, theRotatedAngle), toPosition(thePolyShape.getVertex(0), theBodyPosition, theRotatedAngle), theBody.isAwake());
                     }
                     theFixture = theFixture.getNext();
                 }
