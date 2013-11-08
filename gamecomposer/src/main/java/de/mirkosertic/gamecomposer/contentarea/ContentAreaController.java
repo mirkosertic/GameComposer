@@ -112,18 +112,6 @@ public class ContentAreaController implements ChildController {
         }
     }
 
-    public void onDeleteGameObjectInstance(@Observes DeleteGameObjectInstanceEvent aEvent) {
-        for (Map.Entry<ContentChildController, Tab> theTabEntry : activeTabs.entrySet()) {
-            theTabEntry.getKey().onDeleteGameObjectInstance(aEvent);
-        }
-    }
-
-    public void onDeleteGameObject(@Observes DeleteGameObjectEvent aEvent) {
-        for (Map.Entry<ContentChildController, Tab> theTabEntry : activeTabs.entrySet()) {
-            theTabEntry.getKey().onDeleteGameObject(aEvent);
-        }
-    }
-
     public void onObjectUpdated(@Observes ObjectUpdatedEvent aEvent) {
         for (Map.Entry<ContentChildController, Tab> theTabEntry : activeTabs.entrySet()) {
             theTabEntry.getKey().onObjectUpdated(theTabEntry.getValue(), aEvent);

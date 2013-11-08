@@ -99,9 +99,8 @@ public class GameObject {
 
         GameObject that = (GameObject) o;
 
-        if (uuid != null ? !uuid.equals(that.uuid) : that.uuid != null) return false;
+        return !(uuid != null ? !uuid.equals(that.uuid) : that.uuid != null);
 
-        return true;
     }
 
     @Override

@@ -18,11 +18,15 @@ import java.util.Map;
 @Singleton
 public class PersistenceManager {
 
-    @Inject
-    Event<GameLoadedEvent> gameLoadedEvent;
+    class EventCDIForwarder<T extends GameEvent> implements GameEventListener<T> {
+        @Override
+        public void handleGameEvent(GameEvent aEvent) {
+            eventGateway.fire(aEvent);
+        }
+    }
 
     @Inject
-    Event<GameSceneCreatedEvent> gameSceneCreatedEvent;
+    Event<Object> eventGateway;
 
     @Inject
     GameRuntimeFactory gameRuntimeFactory;
@@ -67,7 +71,7 @@ public class PersistenceManager {
         }
         game.addScene(theSceneID);
 
-        gameSceneCreatedEvent.fire(new GameSceneCreatedEvent(theNewGameScene));
+        eventGateway.fire(new GameSceneCreatedEvent(theNewGameScene));
     }
 
     public void onSaveGame(@Observes SaveGameEvent aEvent) throws IOException {
@@ -100,10 +104,13 @@ public class PersistenceManager {
 
         game = theLoadedGame;
         gameScenes = theLoadedScenes;
-        gameLoadedEvent.fire(new GameLoadedEvent());
+        eventGateway.fire(new GameLoadedEvent());
         currentGameDirectory = theGameDirectory;
-    }
 
+        for (Map.Entry<String, GameScene> theEntry : gameScenes.entrySet()) {
+            theEntry.getValue().getRuntime().getEventManager().register(null, GameEvent.class, new EventCDIForwarder());
+        }
+    }
 
     public GameResourceLoader createResourceLoaderFor(GameScene aScene) {
         for (Map.Entry<String, GameScene> theEntry : gameScenes.entrySet()) {

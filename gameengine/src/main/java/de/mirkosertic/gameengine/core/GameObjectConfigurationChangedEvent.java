@@ -1,10 +1,10 @@
 package de.mirkosertic.gameengine.core;
 
-public class GameObjectRemovedFromSceneEvent extends GameEvent {
+public class GameObjectConfigurationChangedEvent extends GameEvent {
 
     private GameObject object;
 
-    public GameObjectRemovedFromSceneEvent(GameObject aObject) {
+    public GameObjectConfigurationChangedEvent(GameObject aObject) {
         object = aObject;
     }
 

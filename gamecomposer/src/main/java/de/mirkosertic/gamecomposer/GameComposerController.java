@@ -3,7 +3,6 @@ package de.mirkosertic.gamecomposer;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Menu;
-import javafx.scene.control.MenuItem;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.stage.DirectoryChooser;
@@ -33,19 +32,7 @@ public class GameComposerController {
     ChildController projectStructure;
 
     @Inject
-    Event<ApplicationStartedEvent> applicationStartedEvent;
-
-    @Inject
-    Event<NewGameEvent> newGameEvent;
-
-    @Inject
-    Event<LoadGameEvent> loadGameEvent;
-
-    @Inject
-    Event<SaveGameEvent> saveGameEvent;
-
-    @Inject
-    Event<ExportGameHTML5Event> exportGameHTML5Event;
+    Event<Object> eventGateway;
 
     @FXML
     HBox childViews;
@@ -68,7 +55,7 @@ public class GameComposerController {
         HBox.setHgrow(contentArea.getView(), Priority.ALWAYS);
         HBox.setHgrow(projectStructure.getView(), Priority.SOMETIMES);
 
-        applicationStartedEvent.fire(new ApplicationStartedEvent());
+        eventGateway.fire(new ApplicationStartedEvent());
     }
 
     @FXML
@@ -87,7 +74,7 @@ public class GameComposerController {
         theDirectoryChooser.setTitle("Choose target directory");
         File theProjectDirectory = theDirectoryChooser.showDialog(null);
         if (theProjectDirectory != null) {
-            newGameEvent.fire(new NewGameEvent(theProjectDirectory));
+            eventGateway.fire(new NewGameEvent(theProjectDirectory));
 
             directoryPreferences.put(GAME_DIRECTORY_PREF_KEY, theProjectDirectory.toString());
             exportMenu.setDisable(false);
@@ -96,7 +83,7 @@ public class GameComposerController {
 
     @FXML
     public void onSave() {
-        saveGameEvent.fire(new SaveGameEvent());
+        eventGateway.fire(new SaveGameEvent());
         exportMenu.setDisable(false);
     }
 
@@ -119,7 +106,7 @@ public class GameComposerController {
 
         File theSelectedFile = theFileChooser.showOpenDialog(null);
         if (theSelectedFile != null) {
-            loadGameEvent.fire(new LoadGameEvent(theSelectedFile));
+            eventGateway.fire(new LoadGameEvent(theSelectedFile));
 
             directoryPreferences.put(GAME_DIRECTORY_PREF_KEY, theSelectedFile.getParentFile().toString());
             exportMenu.setDisable(false);
@@ -138,7 +125,7 @@ public class GameComposerController {
 
         File theTargetDirectory = theDirectoryChooser.showDialog(null);
         if (theTargetDirectory != null) {
-            exportGameHTML5Event.fire(new ExportGameHTML5Event(theTargetDirectory));
+            eventGateway.fire(new ExportGameHTML5Event(theTargetDirectory));
 
             directoryPreferences.put(GAME_EXPORTDIRECTORY_PREF_KEY, theTargetDirectory.toString());
         }

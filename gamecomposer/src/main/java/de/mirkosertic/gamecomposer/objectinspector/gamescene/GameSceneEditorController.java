@@ -76,6 +76,7 @@ public class GameSceneEditorController implements ChildController {
             public void handle(ActionEvent actionEvent) {
                 Color theColor = backgroundColorPicker.getValue();
                 gameScene.setBackgroundColor(new de.mirkosertic.gameengine.core.Color((int) (255 * theColor.getRed()), (int) (255 * theColor.getGreen()), (int) (255 * theColor.getBlue())));
+                objectUpdatedEvent.fire(new ObjectUpdatedEvent(gameScene));
             }
         });
 
@@ -91,6 +92,7 @@ public class GameSceneEditorController implements ChildController {
             @Override
             public void changed(ObservableValue observableValue, Object aOldValue, Object aNewValue) {
                 gameScene.setCameraObject((GameObject) aNewValue);
+                objectUpdatedEvent.fire(new ObjectUpdatedEvent(gameScene));
             }
         });
 
@@ -98,6 +100,7 @@ public class GameSceneEditorController implements ChildController {
             @Override
             public void changed(ObservableValue observableValue, Object aOldValue, Object aNewValue) {
                 gameScene.setDefaultPlayer((GameObject) aNewValue);
+                objectUpdatedEvent.fire(new ObjectUpdatedEvent(gameScene));
             }
         });
 

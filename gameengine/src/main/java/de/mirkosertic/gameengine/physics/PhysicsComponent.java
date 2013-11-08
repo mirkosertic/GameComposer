@@ -1,12 +1,11 @@
 package de.mirkosertic.gameengine.physics;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import de.mirkosertic.gameengine.camera.CameraComponentTemplate;
 import de.mirkosertic.gameengine.core.GameComponent;
-import de.mirkosertic.gameengine.core.GameComponentTemplate;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class PhysicsComponent implements GameComponent {
 

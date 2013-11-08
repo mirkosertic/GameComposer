@@ -1,10 +1,7 @@
 package de.mirkosertic.gamecomposer.projectstructure;
 
 import de.mirkosertic.gamecomposer.*;
-import de.mirkosertic.gameengine.core.Game;
-import de.mirkosertic.gameengine.core.GameObject;
-import de.mirkosertic.gameengine.core.GameObjectInstance;
-import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
@@ -24,6 +21,12 @@ import java.util.Map;
 @Singleton
 public class ProjectStructureController implements ChildController {
 
+    class SceneTreeDescriptor {
+        TreeItem sceneTreeItem;
+        TreeItem objectsItem;
+        TreeItem instancesItem;
+    }
+
     @FXML
     TreeView projectStructureTreeView;
 
@@ -31,39 +34,38 @@ public class ProjectStructureController implements ChildController {
     PersistenceManager persistenceManager;
 
     @Inject
-    Event<ObjectSelectedEvent> objectSelectedEvent;
-
-    @Inject
-    Event<GameSceneSelectedEvent> sceneSelectedEventEvent;
-
-    @Inject
-    Event<DeleteGameObjectInstanceEvent> deleteGameObjectInstanceEvent;
-
-    @Inject
-    Event<DeleteGameObjectEvent> deleteGameObjectEvent;
+    Event<Object> eventGateway;
 
     private Node view;
+    private Map<GameScene, SceneTreeDescriptor> sceneTreeDescriptorMap;
     private Map<Object, TreeItem> treeItemMap;
 
     ProjectStructureController() {
         treeItemMap = new HashMap<>();
+        sceneTreeDescriptorMap = new HashMap<>();
     }
 
     ProjectStructureController initialize(Node aView) {
         projectStructureTreeView.setCellFactory(new StructureTreeCellFactory(new ContextMenuListener() {
             @Override
             public void onDeleteGameScene(GameScene aGameScene) {
-                //To change body of implemented methods use File | Settings | File Templates.
+                // TODO:
             }
 
             @Override
             public void onDeleteGameObject(GameObject aGameObject) {
-                deleteGameObjectEvent.fire(new DeleteGameObjectEvent(aGameObject));
+                aGameObject.getGameScene().removeGameObject(aGameObject);
             }
 
             @Override
             public void onDeleteGameObjectInstance(GameObjectInstance aGameObjectInstance) {
-                deleteGameObjectInstanceEvent.fire(new DeleteGameObjectInstanceEvent(aGameObjectInstance));
+                aGameObjectInstance.getOwnerGameObject().getGameScene().removeGameObjectInstance(aGameObjectInstance);
+            }
+
+            @Override
+            public void onCreateNewGameObject(GameScene aGameScene) {
+                GameObject theGameObject = new GameObject(aGameScene, "New Object");
+                aGameScene.addGameObject(theGameObject);
             }
         }));
         projectStructureTreeView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
@@ -73,8 +75,8 @@ public class ProjectStructureController implements ChildController {
                 if (aNewValue instanceof TreeItem) {
                     theNewValue = ((TreeItem) aNewValue).getValue();
                 }
-                if (!(theNewValue instanceof String)) {
-                    objectSelectedEvent.fire(new ObjectSelectedEvent(theNewValue));
+                if (!(theNewValue instanceof TreeObjectTypes)) {
+                    eventGateway.fire(new ObjectSelectedEvent(theNewValue));
                 }
             }
         });
@@ -97,7 +99,7 @@ public class ProjectStructureController implements ChildController {
         TreeItem theSelectedItem = (TreeItem) projectStructureTreeView.getSelectionModel().getSelectedItem();
         if (aEvent.getClickCount() == 2) {
             if (theSelectedItem.getValue() instanceof GameScene) {
-                sceneSelectedEventEvent.fire(new GameSceneSelectedEvent((GameScene) theSelectedItem.getValue()));
+                eventGateway.fire(new GameSceneSelectedEvent((GameScene) theSelectedItem.getValue()));
             }
         }
     }
@@ -114,7 +116,7 @@ public class ProjectStructureController implements ChildController {
         projectStructureTreeView.setRoot(theRootTreeItem);
         projectStructureTreeView.getSelectionModel().select(theRootTreeItem);
 
-        objectSelectedEvent.fire(new ObjectSelectedEvent(theCurrentGame));
+        eventGateway.fire(new ObjectSelectedEvent(theCurrentGame));
     }
 
     public void onApplicationStarted(@Observes ApplicationStartedEvent aEvent) {
@@ -130,12 +132,52 @@ public class ProjectStructureController implements ChildController {
         }
     }
 
-    public void onGameObjectInstanceDeleted(@Observes DeleteGameObjectInstanceEvent aEvent) {
-        initializeTree(persistenceManager.getGame());
+    public void onGameObjectAdded(@Observes GameObjectAddedToSceneEvent aEvent) {
+        GameScene theScene = aEvent.getGameObject().getGameScene();
+        SceneTreeDescriptor theDesc = sceneTreeDescriptorMap.get(theScene);
+
+        TreeItem theObjectTreeItem = new TreeItem();
+        theObjectTreeItem.setValue(aEvent.getGameObject());
+        theDesc.objectsItem.getChildren().add(theObjectTreeItem);
+        treeItemMap.put(aEvent.getGameObject(), theObjectTreeItem);
     }
 
-    public void onGameObjectDeleted(@Observes DeleteGameObjectEvent aEvent) {
-        initializeTree(persistenceManager.getGame());
+    public void onGameObjectRemoved(@Observes GameObjectRemovedFromSceneEvent aEvent) {
+        GameScene theScene = aEvent.getGameObject().getGameScene();
+        SceneTreeDescriptor theDesc = sceneTreeDescriptorMap.get(theScene);
+
+        TreeItem theObjectTreeItem = treeItemMap.get(aEvent.getGameObject());
+        theDesc.objectsItem.getChildren().remove(theObjectTreeItem);
+
+        treeItemMap.remove(aEvent.getGameObject());
+    }
+
+    public void onGameObjectInstanceAdded(@Observes GameObjectInstanceAddedToSceneEvent aEvent) {
+        GameScene theScene = aEvent.getGameObjectInstance().getOwnerGameObject().getGameScene();
+        SceneTreeDescriptor theDesc = sceneTreeDescriptorMap.get(theScene);
+
+        TreeItem theObjectTreeItem = new TreeItem();
+        theObjectTreeItem.setValue(aEvent.getGameObjectInstance());
+        theDesc.instancesItem.getChildren().add(theObjectTreeItem);
+        treeItemMap.put(aEvent.getGameObjectInstance(), theObjectTreeItem);
+    }
+
+    public void onGameObjectInstanceRemoved(@Observes GameObjectInstanceRemovedFromSceneEvent aEvent) {
+        GameScene theScene = aEvent.getGameObjectInstance().getOwnerGameObject().getGameScene();
+        SceneTreeDescriptor theDesc = sceneTreeDescriptorMap.get(theScene);
+
+        TreeItem theObjectTreeItem = treeItemMap.get(aEvent.getGameObjectInstance());
+        theDesc.objectsItem.getChildren().remove(theObjectTreeItem);
+
+        treeItemMap.remove(aEvent.getGameObjectInstance());
+    }
+
+    public void onObjectUpdatedEvent(@Observes ObjectUpdatedEvent aEvent) {
+        TreeItem theItem = treeItemMap.get(aEvent.getObject());
+        if (theItem != null) {
+            theItem.setValue(null);
+            theItem.setValue(aEvent.getObject());
+        }
     }
 
     public void onNewGameSceneCreated(@Observes GameSceneCreatedEvent aEvent) {
@@ -148,6 +190,7 @@ public class ProjectStructureController implements ChildController {
 
     private void initializeTree(Game aGame) {
         treeItemMap.clear();
+        sceneTreeDescriptorMap.clear();
 
         TreeItem theRootTreeItem = new TreeItem(aGame.getName());
         theRootTreeItem.setValue(aGame);
@@ -155,27 +198,28 @@ public class ProjectStructureController implements ChildController {
         treeItemMap.put(aGame, theRootTreeItem);
 
         for (String theSceneIDs : aGame.getScenes()) {
-            TreeItem theSceneTreeItem = new TreeItem(theSceneIDs);
-            theSceneTreeItem.setExpanded(true);
 
             GameScene theLoadedScene = persistenceManager.getScene(theSceneIDs);
+
+            TreeItem theSceneTreeItem = new TreeItem(theSceneIDs);
+            theSceneTreeItem.setExpanded(true);
             theSceneTreeItem.setValue(theLoadedScene);
 
             TreeItem theObjectsTreeItem = new TreeItem();
-            theObjectsTreeItem.setValue("Objects");
+            theObjectsTreeItem.setValue(TreeObjectTypes.OBJECTS);
             theObjectsTreeItem.setExpanded(true);
 
             for (GameObject theGameObject : theLoadedScene.getObjects()) {
                 TreeItem theObjectTreeItem = new TreeItem();
                 theObjectTreeItem.setValue(theGameObject);
                 theObjectsTreeItem.getChildren().add(theObjectTreeItem);
-                treeItemMap.put(theGameObject, theObjectsTreeItem);
+                treeItemMap.put(theGameObject, theObjectTreeItem);
             }
 
             theSceneTreeItem.getChildren().add(theObjectsTreeItem);
 
             TreeItem theInstancesTreeItem = new TreeItem();
-            theInstancesTreeItem.setValue("Instances");
+            theInstancesTreeItem.setValue(TreeObjectTypes.INSTANCES);
             theInstancesTreeItem.setExpanded(true);
 
             for (GameObjectInstance theGameObjectInstance : theLoadedScene.getInstances()) {
@@ -186,8 +230,13 @@ public class ProjectStructureController implements ChildController {
             }
 
             theSceneTreeItem.getChildren().add(theInstancesTreeItem);
-
             theRootTreeItem.getChildren().add(theSceneTreeItem);
+
+            SceneTreeDescriptor theDesc = new SceneTreeDescriptor();
+            theDesc.sceneTreeItem = theSceneTreeItem;
+            theDesc.objectsItem = theObjectsTreeItem;
+            theDesc.instancesItem = theInstancesTreeItem;
+            sceneTreeDescriptorMap.put(theLoadedScene, theDesc);
         }
 
         projectStructureTreeView.setRoot(theRootTreeItem);

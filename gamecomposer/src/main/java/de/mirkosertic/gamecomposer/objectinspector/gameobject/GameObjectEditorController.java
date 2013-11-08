@@ -45,10 +45,7 @@ public class GameObjectEditorController implements ChildController {
     TextField heightTextField;
 
     @Inject
-    Event<ObjectUpdatedEvent> objectUpdatedEvent;
-
-    @Inject
-    Event<ObjectSelectedEvent> objectSelectedEvent;
+    Event<Object> eventGateway;
 
     @FXML
     VBox componentAddHyperlinks;
@@ -69,6 +66,7 @@ public class GameObjectEditorController implements ChildController {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String aOldValue, String aNewValue) {
                 gameObject.setName(aNewValue);
+                eventGateway.fire(new ObjectUpdatedEvent(gameObject));
             }
         });
         widthTextField.textProperty().addListener(new ChangeListener<String>() {
@@ -77,7 +75,7 @@ public class GameObjectEditorController implements ChildController {
                 if (!StringUtils.isEmpty(aNewValue)) {
                     Size theSize = gameObject.getSize();
                     gameObject.getGameScene().updateObjectSize(gameObject, new Size(Integer.valueOf(aNewValue), theSize.height));
-                    objectUpdatedEvent.fire(new ObjectUpdatedEvent(gameObject));
+                    eventGateway.fire(new ObjectUpdatedEvent(gameObject));
                 }
             }
         });
@@ -87,7 +85,7 @@ public class GameObjectEditorController implements ChildController {
                 if (!StringUtils.isEmpty(aNewValue)) {
                     Size theSize = gameObject.getSize();
                     gameObject.getGameScene().updateObjectSize(gameObject, new Size(theSize.width, Integer.valueOf(aNewValue)));
-                    objectUpdatedEvent.fire(new ObjectUpdatedEvent(gameObject));
+                    eventGateway.fire(new ObjectUpdatedEvent(gameObject));
                 }
             }
         });
@@ -122,8 +120,10 @@ public class GameObjectEditorController implements ChildController {
             GameComponentTemplate theTemplate = aClass.getConstructor(GameObject.class).newInstance(gameObject);
             gameObject.add(theTemplate);
 
-            objectUpdatedEvent.fire(new ObjectUpdatedEvent(gameObject));
-            objectSelectedEvent.fire(new ObjectSelectedEvent(gameObject));
+            eventGateway.fire(new ObjectUpdatedEvent(gameObject));
+            eventGateway.fire(new ObjectSelectedEvent(gameObject));
+
+            gameObject.getGameScene().updateObjectConfiguration(gameObject);
         } catch (Exception e) {
             e.printStackTrace();
         }

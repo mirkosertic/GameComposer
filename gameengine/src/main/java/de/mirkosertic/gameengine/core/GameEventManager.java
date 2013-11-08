@@ -28,7 +28,14 @@ public class GameEventManager {
     }
 
     public void fire(GameEvent aEvent) {
-        List<GameEventListener> theRegisteredListener = registeredListeners.get(aEvent.getClass());
+        List<GameEventListener> theRegisteredListener = registeredListeners.get(GameEvent.class);
+        if (theRegisteredListener != null) {
+            for (GameEventListener theListener : theRegisteredListener) {
+                theListener.handleGameEvent(aEvent);
+            }
+        }
+
+        theRegisteredListener = registeredListeners.get(aEvent.getClass());
         if (theRegisteredListener != null) {
             for (GameEventListener theListener : theRegisteredListener) {
                 theListener.handleGameEvent(aEvent);

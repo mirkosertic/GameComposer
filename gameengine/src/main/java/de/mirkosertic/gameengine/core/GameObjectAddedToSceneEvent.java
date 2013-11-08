@@ -8,7 +8,7 @@ public class GameObjectAddedToSceneEvent extends GameEvent {
         object = aObject;
     }
 
-    public GameObject getGameObjectInstance() {
+    public GameObject getGameObject() {
         return object;
     }
 }

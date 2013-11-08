@@ -158,6 +158,11 @@ public class GameScene {
         gameRuntime.getEventManager().fire(new GameObjectInstancePositionChangedEvent(aInstance, aNewPosition));
     }
 
+    public void updateObjectInstanceAngle(GameObjectInstance aInstance, Angle aNewAngle) {
+        aInstance.setRotationAngle(aNewAngle);
+        gameRuntime.getEventManager().fire(new GameObjectInstanceAngleChangedEvent(aInstance, aNewAngle));
+    }
+
     public void updateObjectSize(GameObject aObject, Size aNewSize) {
         aObject.setSize(aNewSize);
         for (GameObjectInstance theInstance : instances) {
@@ -176,5 +181,9 @@ public class GameScene {
         }
         objects.remove(aGameObject);
         gameRuntime.getEventManager().fire(new GameObjectRemovedFromSceneEvent(aGameObject));
+    }
+
+    public void updateObjectConfiguration(GameObject aGameObject) {
+        gameRuntime.getEventManager().fire(new GameObjectConfigurationChangedEvent(aGameObject));
     }
 }

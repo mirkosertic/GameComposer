@@ -26,6 +26,16 @@
             <TextField fx:id="yTextField" prefWidth="45.0" />
           </children>
         </HBox>
+        <HBox alignment="CENTER_LEFT" prefHeight="-1.0" prefWidth="-1.0">
+          <children>
+            <Label prefWidth="58.0" text="Rot." />
+            <TextField id="widthTextField" fx:id="rotationTextField" prefWidth="45.0" />
+            <Label prefWidth="-1.0" text="Degrees" />
+          </children>
+          <padding>
+            <Insets bottom="10.0" />
+          </padding>
+        </HBox>
         <Hyperlink fx:id="jumpToObject" text="Jump to object...">
           <VBox.margin>
             <Insets top="20.0" />

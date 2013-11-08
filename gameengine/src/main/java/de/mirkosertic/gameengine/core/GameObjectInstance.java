@@ -8,11 +8,13 @@ public class GameObjectInstance {
     private Position position;
     private String name;
     private GameObject ownerGameObject;
+    private Angle rotationAngle;
 
     GameObjectInstance(GameObject aOwnerGameObject) {
         ownerGameObject = aOwnerGameObject;
         components = new HashMap<Class<GameComponent>, GameComponent>();
         position = new Position();
+        rotationAngle = new Angle(0);
     }
 
     public boolean contains(Position aPosition) {
@@ -38,6 +40,14 @@ public class GameObjectInstance {
         this.name = name;
     }
 
+    public Angle getRotationAngle() {
+        return rotationAngle;
+    }
+
+    public void setRotationAngle(Angle rotationAngle) {
+        this.rotationAngle = rotationAngle;
+    }
+
     public GameObject getOwnerGameObject() {
         return ownerGameObject;
     }
@@ -61,6 +71,7 @@ public class GameObjectInstance {
 
         theResult.put("position", position.serializeToMap());
         theResult.put("name", name);
+        theResult.put("rotationangle", rotationAngle.serialize());
 
         List<Map<String, Object>> theComponents = new ArrayList<Map<String, Object>>();
         for (GameComponent theComponent : components.values()) {
@@ -82,6 +93,11 @@ public class GameObjectInstance {
         GameObjectInstance theResult = new GameObjectInstance(theGameObject);
         theResult.position = Position.deserialize((Map<String, Object>) theInstance.get("position"));
         theResult.name = (String) theInstance.get("name");
+
+        Map<String, Object> theRotationAngle = (Map<String, Object>) theInstance.get("rotationangle");
+        if (theRotationAngle != null) {
+            theResult.rotationAngle = Angle.deserialize(theRotationAngle);
+        }
 
         List<Map<String, Object>> theComponents = (List<Map<String, Object>>) theInstance.get("components");
         for (Map<String, Object> theStructure : theComponents) {

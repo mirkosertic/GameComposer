@@ -49,6 +49,18 @@ public class JBox2DGamePhysicsManagerFactory implements GamePhysicsManagerFactor
                 thePhysicsManager.enableDynamicPhysicsOn(aEvent.getObject());
             }
         });
+        aEventManager.register(null, GameObjectConfigurationChangedEvent.class, new GameEventListener<GameObjectConfigurationChangedEvent>() {
+            @Override
+            public void handleGameEvent(GameObjectConfigurationChangedEvent aEvent) {
+                thePhysicsManager.updateGameObjectConfiguration(aEvent.getGameObject());
+            }
+        });
+        aEventManager.register(null, GameObjectInstanceAngleChangedEvent.class, new GameEventListener<GameObjectInstanceAngleChangedEvent>() {
+            @Override
+            public void handleGameEvent(GameObjectInstanceAngleChangedEvent aEvent) {
+                thePhysicsManager.gameObjectInstanceRotationChanged(aEvent.getGameObjectInstance(), aEvent.getNewAngle());
+            }
+        });
         return thePhysicsManager;
     }
 }

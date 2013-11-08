@@ -39,13 +39,23 @@ public class GWTGameView implements GameView {
         theContext.fillRect(0, 0, currentSize.width, currentSize.height);
 
         for (GameObjectInstance theInstance : cameraComponent.getObjectsToDrawInRightOrder(aScene)) {
+
             Position thePosition = cameraComponent.transformToScreenPosition(theInstance.getPosition());
             Size theSize = theInstance.getOwnerGameObject().getSize();
+
+            float theHalfWidth = theSize.width / 2;
+            float theHalfHeight = theSize.height / 2;
+
+            theContext.save();
+
+            theContext.translate(thePosition.x + theHalfWidth, thePosition.y + theHalfHeight);
+            theContext.rotate(theInstance.getRotationAngle().toRadians());
+
             SpriteComponentTemplate theTemplateComponent = theInstance.getOwnerGameObject().getComponentTemplate(SpriteComponentTemplate.class);
             if (theTemplateComponent != null) {
                 try {
                     GWTBitmapResource theBitmap = gameRuntime.getResourceCache().getResourceFor(theTemplateComponent.getResourceName());
-                    drawGameObjectInstance(theContext, theInstance, thePosition, theSize, theBitmap);
+                    drawGameObjectInstance(theContext, theInstance, new Position(-theHalfWidth, -theHalfHeight), theSize, theBitmap);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -53,13 +63,15 @@ public class GWTGameView implements GameView {
                 theContext.setFillStyle(CssColor.make(255, 255, 255));
                 theContext.setStrokeStyle(CssColor.make(255, 255, 255));
                 theContext.setLineWidth(1);
-                theContext.strokeRect(thePosition.x, thePosition.y, theSize.width, theSize.height);
+                theContext.strokeRect(-theHalfWidth, -theHalfHeight, theSize.width, theSize.height);
             }
+
+            theContext.restore();
         }
         counter++;
         theContext.setFillStyle(CssColor.make(255, 255, 255));
         theContext.setStrokeStyle(CssColor.make(255, 255, 255));
-        theContext.fillText("Frame "+counter, 50, 50);
+        theContext.fillText("Frame " + counter, 50, 50);
     }
 
     protected void drawGameObjectInstance(Context2d aContext, GameObjectInstance aInstance, Position aPosition, Size aSize, GWTBitmapResource aBitmapResource) {
