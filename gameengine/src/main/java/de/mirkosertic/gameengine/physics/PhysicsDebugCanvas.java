@@ -1,6 +1,6 @@
 package de.mirkosertic.gameengine.physics;
 
-import de.mirkosertic.gameengine.core.Position;
+import de.mirkosertic.gameengine.types.Position;
 
 public interface PhysicsDebugCanvas {
 

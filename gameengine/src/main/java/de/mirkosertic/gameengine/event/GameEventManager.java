@@ -1,16 +1,11 @@
-package de.mirkosertic.gameengine.core;
+package de.mirkosertic.gameengine.event;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GameEventManager {
-
-    class RegisteredListener {
-        GameObjectInstance owningInstance;
-        GameEventListener eventListener;
-    }
+public class GameEventManager implements GameEventListener {
 
     private Map<Class<GameEvent>, List<GameEventListener>> registeredListeners;
 
@@ -18,7 +13,7 @@ public class GameEventManager {
         registeredListeners = new HashMap<Class<GameEvent>, List<GameEventListener>>();
     }
 
-    public <T extends GameEvent> void register(GameObjectInstance aOwningInstance, Class<T> aEvent, GameEventListener<T> aEventListener) {
+    public <T extends GameEvent> void register(Object aOwningInstance, Class<T> aEvent, GameEventListener<T> aEventListener) {
         List<GameEventListener> theListener = registeredListeners.get(aEvent);
         if (theListener == null) {
             theListener = new ArrayList<GameEventListener>();
@@ -41,6 +36,11 @@ public class GameEventManager {
                 theListener.handleGameEvent(aEvent);
             }
         }
+    }
+
+    @Override
+    public void handleGameEvent(GameEvent aEvent) {
+        fire(aEvent);
     }
 
     public void clearListener() {

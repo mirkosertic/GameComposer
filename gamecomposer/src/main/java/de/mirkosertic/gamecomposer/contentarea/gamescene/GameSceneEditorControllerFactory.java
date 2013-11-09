@@ -4,6 +4,7 @@ import de.mirkosertic.gamecomposer.FXMLLoaderFactory;
 import de.mirkosertic.gamecomposer.ObjectSelectedEvent;
 import de.mirkosertic.gameengine.camera.CameraComponent;
 import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.physics.GamePhysicsManager;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;

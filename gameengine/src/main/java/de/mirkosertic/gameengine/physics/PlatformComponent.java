@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.event.GameEventListener;
+import de.mirkosertic.gameengine.types.Position;
 
 public class PlatformComponent implements GameComponent {
 
@@ -72,12 +74,14 @@ public class PlatformComponent implements GameComponent {
     public void handleCollision(GameObjectCollisionEvent aEvent) {
         GameObjectInstance theOtherInstance = aEvent.getOtherInstanceOrNullIfNotAffected(objectInstance);
         if (theOtherInstance != null && theOtherInstance.getComponent(StaticComponent.class) != null) {
-            double my = theOtherInstance.getPosition().y - objectInstance.getPosition().y;
+            Position theOtherPosition = theOtherInstance.positionProperty().get();
+            Position thePosition = objectInstance.positionProperty().get();
+            double my = theOtherPosition.y - thePosition.y;
             if (my > 0) {
                 // Object is under the game object
                 setJumping(false);
             } else {
-                double mx = theOtherInstance.getPosition().x - objectInstance.getPosition().x;
+                double mx = theOtherPosition.x - thePosition.x;
                 // Object is on the right side
                 if (mx > 0) {
                     setJumping(false);

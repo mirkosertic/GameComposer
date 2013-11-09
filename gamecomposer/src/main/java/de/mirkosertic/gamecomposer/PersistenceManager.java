@@ -1,6 +1,8 @@
 package de.mirkosertic.gamecomposer;
 
 import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.event.GameEvent;
+import de.mirkosertic.gameengine.event.GameEventListener;
 import org.apache.commons.io.FileUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.ObjectReader;

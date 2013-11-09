@@ -1,5 +1,7 @@
 package de.mirkosertic.gameengine.core;
 
+import de.mirkosertic.gameengine.event.GameEvent;
+
 public class GameObjectConfigurationChangedEvent extends GameEvent {
 
     private GameObject object;

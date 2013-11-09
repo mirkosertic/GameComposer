@@ -1,4 +1,4 @@
-package de.mirkosertic.gameengine.core;
+package de.mirkosertic.gameengine.event;
 
 public interface GameEventListener<T extends GameEvent> {
 

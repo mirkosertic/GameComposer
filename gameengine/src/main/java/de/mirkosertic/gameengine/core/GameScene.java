@@ -1,5 +1,10 @@
 package de.mirkosertic.gameengine.core;
 
+import de.mirkosertic.gameengine.types.Angle;
+import de.mirkosertic.gameengine.types.Color;
+import de.mirkosertic.gameengine.types.Position;
+import de.mirkosertic.gameengine.types.Size;
+
 import java.util.*;
 
 public class GameScene {
@@ -7,6 +12,7 @@ public class GameScene {
     private String name;
     private Set<GameObject> objects;
     private Set<GameObjectInstance> instances;
+    private Set<EventSheet> eventSheets;
     private GameRuntime gameRuntime;
     private GameObject cameraObject;
     private GameObject defaultPlayer;
@@ -16,6 +22,7 @@ public class GameScene {
         backgroundColor = new Color(0, 0, 0);
         instances = new HashSet<GameObjectInstance>();
         objects = new HashSet<GameObject>();
+        eventSheets = new HashSet<EventSheet>();
         gameRuntime = aGameRuntime;
     }
 
@@ -73,6 +80,10 @@ public class GameScene {
         return Collections.unmodifiableSet(objects);
     }
 
+    public Set<EventSheet> getEventSheets() {
+        return Collections.unmodifiableSet(eventSheets);
+    }
+
     public List<GameObjectInstance> findAllAt(Position aPosition) {
         List<GameObjectInstance> theResult = new ArrayList<GameObjectInstance>();
         for (GameObjectInstance theInstance : instances) {
@@ -93,13 +104,13 @@ public class GameScene {
         }
         theResult.put("objects", theObjects);
         if (cameraObject != null) {
-            theResult.put("cameraobjectid", cameraObject.getUuid());
+            theResult.put("cameraobjectid", cameraObject.uuidProperty().get());
         }
         if (backgroundColor != null) {
             theResult.put("backgroundcolor", backgroundColor.serialize());
         }
         if (defaultPlayer != null) {
-            theResult.put("defaultplayerobjectid", defaultPlayer.getUuid());
+            theResult.put("defaultplayerobjectid", defaultPlayer.uuidProperty().get());
         }
 
         List<Map<String, Object>> theInstances = new ArrayList<Map<String, Object>>();
@@ -112,7 +123,7 @@ public class GameScene {
 
     public GameObject findGameObjectByID(String aObjectID) {
         for (GameObject theObject : objects) {
-            if (theObject.getUuid().equals(aObjectID)) {
+            if (theObject.uuidProperty().get().equals(aObjectID)) {
                 return theObject;
             }
         }
@@ -154,17 +165,17 @@ public class GameScene {
     }
 
     public void updateObjectInstancePosition(GameObjectInstance aInstance, Position aNewPosition) {
-        aInstance.setPosition(aNewPosition);
+        aInstance.positionProperty().set(aNewPosition);
         gameRuntime.getEventManager().fire(new GameObjectInstancePositionChangedEvent(aInstance, aNewPosition));
     }
 
     public void updateObjectInstanceAngle(GameObjectInstance aInstance, Angle aNewAngle) {
-        aInstance.setRotationAngle(aNewAngle);
+        aInstance.rotationAngleProperty().set(aNewAngle);
         gameRuntime.getEventManager().fire(new GameObjectInstanceAngleChangedEvent(aInstance, aNewAngle));
     }
 
     public void updateObjectSize(GameObject aObject, Size aNewSize) {
-        aObject.setSize(aNewSize);
+        aObject.sizeProperty().set(aNewSize);
         for (GameObjectInstance theInstance : instances) {
             if (theInstance.getOwnerGameObject() == aObject) {
                 gameRuntime.getEventManager().fire(new GameObjectInstanceSizeChangedEvent(theInstance, aNewSize));

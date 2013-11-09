@@ -1,5 +1,7 @@
 package de.mirkosertic.gameengine.core;
 
+import de.mirkosertic.gameengine.event.GameEventListener;
+
 public class GameLoopFactory {
 
     public GameLoop create(GameScene aGameScene, GameView aHumanGameView, GameRuntime aRuntime) {

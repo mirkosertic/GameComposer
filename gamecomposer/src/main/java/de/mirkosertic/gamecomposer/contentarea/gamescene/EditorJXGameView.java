@@ -7,6 +7,8 @@ import de.mirkosertic.gameengine.javafx.JavaFXBitmapResource;
 import de.mirkosertic.gameengine.javafx.JavaFXGameView;
 import de.mirkosertic.gameengine.physics.GamePhysicsManager;
 import de.mirkosertic.gameengine.physics.PhysicsDebugCanvas;
+import de.mirkosertic.gameengine.types.Position;
+import de.mirkosertic.gameengine.types.Size;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -107,7 +109,7 @@ public class EditorJXGameView extends JavaFXGameView {
             int theGridsizeWidth = gridsizeWidthProperty().get();
             int theGridsizeHeight = gridsizeHeightProperty().get();
 
-            Position theCameraPosition = theCameraComponent.getObjectInstance().getPosition();
+            Position theCameraPosition = theCameraComponent.getObjectInstance().positionProperty().get();
             Size theScreenSize = theCameraComponent.getScreenSize();
 
             float theStartX = theCameraPosition.x - (theCameraPosition.x % theGridsizeWidth);

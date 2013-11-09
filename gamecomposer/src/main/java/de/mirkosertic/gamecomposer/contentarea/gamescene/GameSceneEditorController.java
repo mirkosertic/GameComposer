@@ -6,6 +6,7 @@ import de.mirkosertic.gameengine.camera.CameraComponent;
 import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.physics.DisableDynamicPhysicsEvent;
 import de.mirkosertic.gameengine.physics.EnableDynamicPhysicsEvent;
+import de.mirkosertic.gameengine.types.Position;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
@@ -153,7 +154,7 @@ public class GameSceneEditorController implements ContentChildController<GameSce
 
             GameObjectInstanceFactory theInstanceFactory = new GameObjectInstanceFactory(gameScene.getRuntime());
             GameObjectInstance theInstance = theInstanceFactory.createFrom(theGameObject);
-            theInstance.setPosition(cameraComponent.transformFromScreen(new Position(aEvent.getX(), aEvent.getY())));
+            theInstance.positionProperty().set(cameraComponent.transformFromScreen(new Position(aEvent.getX(), aEvent.getY())));
 
             gameScene.addGameObjectInstance(theInstance);
 
@@ -178,7 +179,7 @@ public class GameSceneEditorController implements ContentChildController<GameSce
             aEvent.setDropCompleted(true);
             aEvent.consume();
             if (snapToGrid.isSelected()) {
-                gameScene.updateObjectInstancePosition(dndCreateInstance, gameView.snapToGrid(dndCreateInstance.getPosition()));
+                gameScene.updateObjectInstancePosition(dndCreateInstance, gameView.snapToGrid(dndCreateInstance.positionProperty().get()));
             }
 
             gameScene.getRuntime().getEventManager().fire(new EnableDynamicPhysicsEvent(dndCreateInstance));
@@ -214,7 +215,7 @@ public class GameSceneEditorController implements ContentChildController<GameSce
                 float theDX = theWorldPosition.x - draggingMouseWorldPosition.x;
                 float theDY = theWorldPosition.y - draggingMouseWorldPosition.y;
 
-                Position theObjectPosition = draggingInstance.getPosition();
+                Position theObjectPosition = draggingInstance.positionProperty().get();
                 gameScene.updateObjectInstancePosition(draggingInstance, new Position(theObjectPosition.x + theDX, theObjectPosition.y + theDY));
 
                 draggingMouseWorldPosition = theWorldPosition;
@@ -226,7 +227,7 @@ public class GameSceneEditorController implements ContentChildController<GameSce
                 float theDY = theScreenPosition.y - draggingMouseWorldPosition.y;
 
                 // Move camera
-                Position theObjectPosition = cameraComponent.getObjectInstance().getPosition();
+                Position theObjectPosition = cameraComponent.getObjectInstance().positionProperty().get();
                 gameScene.updateObjectInstancePosition(cameraComponent.getObjectInstance(), new Position(theObjectPosition.x - theDX, theObjectPosition.y - theDY));
 
                 draggingMouseWorldPosition = theScreenPosition;
@@ -237,7 +238,7 @@ public class GameSceneEditorController implements ContentChildController<GameSce
     private void onMouseReleased(MouseEvent aEvent) {
         if (draggingInstance != null) {
             if (snapToGrid.isSelected()) {
-                gameScene.updateObjectInstancePosition(draggingInstance, gameView.snapToGrid(draggingInstance.getPosition()));
+                gameScene.updateObjectInstancePosition(draggingInstance, gameView.snapToGrid(draggingInstance.positionProperty().get()));
             }
             gameScene.getRuntime().getEventManager().fire(new EnableDynamicPhysicsEvent(draggingInstance));
         }

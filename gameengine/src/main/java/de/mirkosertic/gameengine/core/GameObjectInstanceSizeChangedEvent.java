@@ -1,5 +1,8 @@
 package de.mirkosertic.gameengine.core;
 
+import de.mirkosertic.gameengine.event.GameEvent;
+import de.mirkosertic.gameengine.types.Size;
+
 public class GameObjectInstanceSizeChangedEvent extends GameEvent {
 
     private GameObjectInstance instance;

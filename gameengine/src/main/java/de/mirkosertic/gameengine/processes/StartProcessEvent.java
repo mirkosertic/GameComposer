@@ -1,6 +1,6 @@
 package de.mirkosertic.gameengine.processes;
 
-import de.mirkosertic.gameengine.core.GameEvent;
+import de.mirkosertic.gameengine.event.GameEvent;
 
 public class StartProcessEvent extends GameEvent {
 

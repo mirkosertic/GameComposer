@@ -1,6 +1,6 @@
 package de.mirkosertic.gameengine.physics;
 
-import de.mirkosertic.gameengine.core.GameEventManager;
+import de.mirkosertic.gameengine.event.GameEventManager;
 
 public interface GamePhysicsManagerFactory {
 

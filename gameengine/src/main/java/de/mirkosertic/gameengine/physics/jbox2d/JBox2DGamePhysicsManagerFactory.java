@@ -1,6 +1,8 @@
 package de.mirkosertic.gameengine.physics.jbox2d;
 
 import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.event.GameEventListener;
+import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.physics.*;
 
 public class JBox2DGamePhysicsManagerFactory implements GamePhysicsManagerFactory {

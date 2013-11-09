@@ -2,8 +2,9 @@ package de.mirkosertic.gameengine.javafx;
 
 import de.mirkosertic.gameengine.camera.CameraComponent;
 import de.mirkosertic.gameengine.core.*;
-import de.mirkosertic.gameengine.physics.PhysicsComponent;
 import de.mirkosertic.gameengine.sprites.SpriteComponentTemplate;
+import de.mirkosertic.gameengine.types.Position;
+import de.mirkosertic.gameengine.types.Size;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -35,7 +36,7 @@ public class JavaFXGameView extends Canvas implements GameView {
     private void renderScene() {
         GraphicsContext theContext = getGraphicsContext2D();
 
-        de.mirkosertic.gameengine.core.Color theBGColor = gameScene.getBackgroundColor();
+        de.mirkosertic.gameengine.types.Color theBGColor = gameScene.getBackgroundColor();
 
         Color theFXColor = Color.rgb(theBGColor.getR(), theBGColor.getG(), theBGColor.getB());
         theContext.setFill(theFXColor);
@@ -43,16 +44,16 @@ public class JavaFXGameView extends Canvas implements GameView {
         theContext.fillRect(0, 0, getWidth(), getHeight());
 
         for (GameObjectInstance theInstance : cameraComponent.getObjectsToDrawInRightOrder(gameScene)) {
-            Position thePosition = cameraComponent.transformToScreenPosition(theInstance.getPosition());
+            Position thePosition = cameraComponent.transformToScreenPosition(theInstance.positionProperty().get());
 
-            Size theSize = theInstance.getOwnerGameObject().getSize();
+            Size theSize = theInstance.getOwnerGameObject().sizeProperty().get();
 
             theContext.save();
 
             float theHalfWidth = theSize.width / 2;
             float theHalfHeight = theSize.height / 2;
 
-            Rotate r = new Rotate(theInstance.getRotationAngle().angleInDegrees, thePosition.x + theHalfWidth, thePosition.y + theHalfHeight);
+            Rotate r = new Rotate(theInstance.rotationAngleProperty().get().angleInDegrees, thePosition.x + theHalfWidth, thePosition.y + theHalfHeight);
             theContext.setTransform(r.getMxx(), r.getMyx(), r.getMxy(), r.getMyy(), r.getTx(), r.getTy());
 
             SpriteComponentTemplate theTemplateComponent = theInstance.getOwnerGameObject().getComponentTemplate(SpriteComponentTemplate.class);

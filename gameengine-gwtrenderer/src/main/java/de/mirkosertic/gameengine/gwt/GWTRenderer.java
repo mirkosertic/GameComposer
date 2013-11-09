@@ -15,7 +15,9 @@ import com.google.gwt.user.client.ui.RootPanel;
 import de.mirkosertic.gameengine.camera.CameraComponent;
 import de.mirkosertic.gameengine.camera.FollowCameraProcess;
 import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.processes.StartProcessEvent;
+import de.mirkosertic.gameengine.types.Size;
 
 public class GWTRenderer implements EntryPoint {
 
