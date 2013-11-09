@@ -1,8 +1,8 @@
 package de.mirkosertic.gameengine.camera;
 
 import de.mirkosertic.gameengine.core.GameObjectInstance;
-import de.mirkosertic.gameengine.core.Position;
-import de.mirkosertic.gameengine.core.Size;
+import de.mirkosertic.gameengine.types.Position;
+import de.mirkosertic.gameengine.types.Size;
 import de.mirkosertic.gameengine.processes.GameProcess;
 
 public class FollowCameraProcess implements GameProcess {
@@ -18,13 +18,13 @@ public class FollowCameraProcess implements GameProcess {
     public void proceedGame(long aGameTime, long aElapsedTimeSinceLastLoop) {
 
         CameraComponent theCameraComponent = cameraObject.getComponent(CameraComponent.class);
-        Position theCameraPosition = cameraObject.getPosition();
+        Position theCameraPosition = cameraObject.positionProperty().get();
         Size theCameraSize = theCameraComponent.getScreenSize();
 
         Position theCameraCenter = new Position(theCameraPosition.x + theCameraSize.width / 2, theCameraPosition.y + theCameraSize.height / 2);
 
-        Position thePlayerPosition = playerObject.getPosition();
-        Size thePlayerSize = playerObject.getOwnerGameObject().getSize();
+        Position thePlayerPosition = playerObject.positionProperty().get();
+        Size thePlayerSize = playerObject.getOwnerGameObject().sizeProperty().get();
 
         Position thePlayerCenter = new Position(thePlayerPosition.x + thePlayerSize.width / 2, thePlayerPosition.y + thePlayerSize.height / 2);
 
@@ -34,6 +34,6 @@ public class FollowCameraProcess implements GameProcess {
         float theMX = theDX / 300 * aElapsedTimeSinceLastLoop;
         float theMY = theDY / 300 * aElapsedTimeSinceLastLoop;
 
-        cameraObject.setPosition(new Position(theCameraPosition.x + theMX, theCameraPosition.y + theMY));
+        cameraObject.positionProperty().set(new Position(theCameraPosition.x + theMX, theCameraPosition.y + theMY));
     }
 }

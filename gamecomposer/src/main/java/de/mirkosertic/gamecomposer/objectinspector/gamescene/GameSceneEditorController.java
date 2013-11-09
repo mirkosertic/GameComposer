@@ -25,7 +25,7 @@ public class GameSceneEditorController implements ChildController {
     static class GameObjectToStringConverter extends StringConverter<GameObject> {
         @Override
         public String toString(GameObject aObject) {
-            return aObject.getName();
+            return aObject.nameProperty().get();
         }
 
         @Override
@@ -75,7 +75,7 @@ public class GameSceneEditorController implements ChildController {
             @Override
             public void handle(ActionEvent actionEvent) {
                 Color theColor = backgroundColorPicker.getValue();
-                gameScene.setBackgroundColor(new de.mirkosertic.gameengine.core.Color((int) (255 * theColor.getRed()), (int) (255 * theColor.getGreen()), (int) (255 * theColor.getBlue())));
+                gameScene.setBackgroundColor(new de.mirkosertic.gameengine.types.Color((int) (255 * theColor.getRed()), (int) (255 * theColor.getGreen()), (int) (255 * theColor.getBlue())));
                 objectUpdatedEvent.fire(new ObjectUpdatedEvent(gameScene));
             }
         });

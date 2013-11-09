@@ -6,7 +6,7 @@ import de.mirkosertic.gamecomposer.ObjectUpdatedEvent;
 import de.mirkosertic.gameengine.camera.CameraComponentTemplate;
 import de.mirkosertic.gameengine.core.GameComponentTemplate;
 import de.mirkosertic.gameengine.core.GameObject;
-import de.mirkosertic.gameengine.core.Size;
+import de.mirkosertic.gameengine.types.Size;
 import de.mirkosertic.gameengine.physics.PhysicsComponentTemplate;
 import de.mirkosertic.gameengine.physics.PlatformComponentTemplate;
 import de.mirkosertic.gameengine.physics.StaticComponentTemplate;
@@ -25,9 +25,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class GameObjectEditorController implements ChildController {
@@ -57,15 +55,16 @@ public class GameObjectEditorController implements ChildController {
         view = aView;
         gameObject = aObject;
 
-        uuidTextField.setText(gameObject.getUuid());
-        nameTextField.setText(gameObject.getName());
-        widthTextField.setText(Integer.toString(aObject.getSize().width));
-        heightTextField.setText(Integer.toString(aObject.getSize().height));
+        uuidTextField.setText(gameObject.uuidProperty().get());
+        nameTextField.setText(gameObject.nameProperty().get());
+        Size theSize = gameObject.sizeProperty().get();
+        widthTextField.setText(Integer.toString(theSize.width));
+        heightTextField.setText(Integer.toString(theSize.height));
 
         nameTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String aOldValue, String aNewValue) {
-                gameObject.setName(aNewValue);
+                gameObject.nameProperty().set(aNewValue);
                 eventGateway.fire(new ObjectUpdatedEvent(gameObject));
             }
         });
@@ -73,7 +72,7 @@ public class GameObjectEditorController implements ChildController {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String aOldValue, String aNewValue) {
                 if (!StringUtils.isEmpty(aNewValue)) {
-                    Size theSize = gameObject.getSize();
+                    Size theSize = gameObject.sizeProperty().get();
                     gameObject.getGameScene().updateObjectSize(gameObject, new Size(Integer.valueOf(aNewValue), theSize.height));
                     eventGateway.fire(new ObjectUpdatedEvent(gameObject));
                 }
@@ -83,7 +82,7 @@ public class GameObjectEditorController implements ChildController {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String aOldValue, String aNewValue) {
                 if (!StringUtils.isEmpty(aNewValue)) {
-                    Size theSize = gameObject.getSize();
+                    Size theSize = gameObject.sizeProperty().get();
                     gameObject.getGameScene().updateObjectSize(gameObject, new Size(theSize.width, Integer.valueOf(aNewValue)));
                     eventGateway.fire(new ObjectUpdatedEvent(gameObject));
                 }

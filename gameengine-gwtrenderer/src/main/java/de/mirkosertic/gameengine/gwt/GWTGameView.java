@@ -6,6 +6,9 @@ import com.google.gwt.canvas.dom.client.CssColor;
 import de.mirkosertic.gameengine.camera.CameraComponent;
 import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.sprites.SpriteComponentTemplate;
+import de.mirkosertic.gameengine.types.Color;
+import de.mirkosertic.gameengine.types.Position;
+import de.mirkosertic.gameengine.types.Size;
 
 import java.io.IOException;
 
@@ -31,7 +34,7 @@ public class GWTGameView implements GameView {
     public void renderGame(long aGameTime, long aElapsedTimeSinceLastLoop, GameScene aScene) {
         Context2d theContext = canvas.getContext2d();
 
-        de.mirkosertic.gameengine.core.Color theBGColor = aScene.getBackgroundColor();
+        Color theBGColor = aScene.getBackgroundColor();
 
         CssColor theCssBackground = CssColor.make(theBGColor.getR(), theBGColor.getG(), theBGColor.getB());
         theContext.setFillStyle(theCssBackground);
@@ -40,8 +43,8 @@ public class GWTGameView implements GameView {
 
         for (GameObjectInstance theInstance : cameraComponent.getObjectsToDrawInRightOrder(aScene)) {
 
-            Position thePosition = cameraComponent.transformToScreenPosition(theInstance.getPosition());
-            Size theSize = theInstance.getOwnerGameObject().getSize();
+            Position thePosition = cameraComponent.transformToScreenPosition(theInstance.positionProperty().get());
+            Size theSize = theInstance.getOwnerGameObject().sizeProperty().get();
 
             float theHalfWidth = theSize.width / 2;
             float theHalfHeight = theSize.height / 2;
@@ -49,7 +52,7 @@ public class GWTGameView implements GameView {
             theContext.save();
 
             theContext.translate(thePosition.x + theHalfWidth, thePosition.y + theHalfHeight);
-            theContext.rotate(theInstance.getRotationAngle().toRadians());
+            theContext.rotate(theInstance.rotationAngleProperty().get().toRadians());
 
             SpriteComponentTemplate theTemplateComponent = theInstance.getOwnerGameObject().getComponentTemplate(SpriteComponentTemplate.class);
             if (theTemplateComponent != null) {

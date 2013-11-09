@@ -1,7 +1,11 @@
 package de.mirkosertic.gameengine.physics.jbox2d;
 
 import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.physics.*;
+import de.mirkosertic.gameengine.types.Angle;
+import de.mirkosertic.gameengine.types.Position;
+import de.mirkosertic.gameengine.types.Size;
 import org.jbox2d.callbacks.ContactImpulse;
 import org.jbox2d.callbacks.ContactListener;
 import org.jbox2d.collision.Manifold;
@@ -12,9 +16,7 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.*;
 import org.jbox2d.dynamics.contacts.Contact;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class JBox2DGamePhysicsManager implements GamePhysicsManager {
@@ -96,8 +98,8 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
 
     Body gameObjectInstanceAddedToScene(GameObjectInstance aInstance) {
         synchronized (physicsWorld) {
-            Position theInstancePosition = aInstance.getPosition();
-            Size theInstanceSize = aInstance.getOwnerGameObject().getSize();
+            Position theInstancePosition = aInstance.positionProperty().get();
+            Size theInstanceSize = aInstance.getOwnerGameObject().sizeProperty().get();
 
             // Check if is a static component
             StaticComponent theStaticComponent = aInstance.getComponent(StaticComponent.class);
@@ -115,7 +117,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
                 BodyDef theStaticBodyDef = new BodyDef();
                 theStaticBodyDef.type = BodyType.STATIC;
                 theStaticBodyDef.userData = aInstance;
-                theStaticBodyDef.setAngle(aInstance.getRotationAngle().invert().toRadians());
+                theStaticBodyDef.setAngle(aInstance.rotationAngleProperty().get().invert().toRadians());
                 // The position is the CENTER of MASS, not the X/Y Coordinate
                 theStaticBodyDef.position = new Vec2(SIZE_FACTOR * (theInstancePosition.x + theInstanceSize.width / 2), -SIZE_FACTOR * (theInstancePosition.y + theInstanceSize.height / 2));
                 Body theBody = physicsWorld.createBody(theStaticBodyDef);
@@ -140,7 +142,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
 
                 BodyDef thePlatformBodyDef = new BodyDef();
                 thePlatformBodyDef.type = BodyType.DYNAMIC;
-                thePlatformBodyDef.setAngle(aInstance.getRotationAngle().invert().toRadians());
+                thePlatformBodyDef.setAngle(aInstance.rotationAngleProperty().get().invert().toRadians());
                 // The position is the CENTER of MASS, not the X/Y Coordinate
                 thePlatformBodyDef.position = new Vec2(SIZE_FACTOR * (theInstancePosition.x + theInstanceSize.width / 2), SIZE_FACTOR * (theInstancePosition.y + theInstanceSize.height / 2));
                 thePlatformBodyDef.userData = aInstance;
@@ -172,7 +174,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
                 // The position is the CENTER of MASS, not the X/Y Coordinate
                 thePhysicsBodyDef.position = new Vec2(SIZE_FACTOR * (theInstancePosition.x + theInstanceSize.width / 2), SIZE_FACTOR * (theInstancePosition.y + theInstanceSize.height / 2));
                 thePhysicsBodyDef.userData = aInstance;
-                thePhysicsBodyDef.setAngle(aInstance.getRotationAngle().invert().toRadians());
+                thePhysicsBodyDef.setAngle(aInstance.rotationAngleProperty().get().invert().toRadians());
                 thePhysicsBodyDef.setFixedRotation(theTemplate.isFixedRotation());
 
                 Body thePhysicsBody = physicsWorld.createBody(thePhysicsBodyDef);
@@ -247,15 +249,15 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
                 // Finally, we have to update the position of our game objects to sync them to the simulation
                 for (Map.Entry<GameObjectInstance, Body> theEntry : dynamicObjects.entrySet()) {
                     GameObjectInstance theGameObject = theEntry.getKey();
-                    Size theInstanceSize = theGameObject.getOwnerGameObject().getSize();
+                    Size theInstanceSize = theGameObject.getOwnerGameObject().sizeProperty().get();
                     Body theSimulatedBody = theEntry.getValue();
 
                     Vec2 thePosition = theSimulatedBody.getPosition();
 
                     if (theSimulatedBody.isActive()) {
                         // Now we have to use the XY coordinates again
-                        theGameObject.setPosition(new Position((thePosition.x / SIZE_FACTOR) - theInstanceSize.width / 2, -(thePosition.y / SIZE_FACTOR) - theInstanceSize.height / 2));
-                        theGameObject.setRotationAngle(Angle.fromRadians(theSimulatedBody.getAngle()).invert());
+                        theGameObject.positionProperty().setQuietly(new Position((thePosition.x / SIZE_FACTOR) - theInstanceSize.width / 2, -(thePosition.y / SIZE_FACTOR) - theInstanceSize.height / 2));
+                        theGameObject.rotationAngleProperty().setQuietly(Angle.fromRadians(theSimulatedBody.getAngle()).invert());
                     }
                 }
 

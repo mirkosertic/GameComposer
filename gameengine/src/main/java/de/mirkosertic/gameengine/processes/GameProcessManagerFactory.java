@@ -1,7 +1,7 @@
 package de.mirkosertic.gameengine.processes;
 
-import de.mirkosertic.gameengine.core.GameEventListener;
-import de.mirkosertic.gameengine.core.GameEventManager;
+import de.mirkosertic.gameengine.event.GameEventListener;
+import de.mirkosertic.gameengine.event.GameEventManager;
 
 public class GameProcessManagerFactory {
 

@@ -39,7 +39,7 @@ public class StructureTreeCell extends TreeCell {
             Dragboard theDragboard = startDragAndDrop(TransferMode.LINK);
 
             ClipboardContent theContent = new ClipboardContent();
-            theContent.put(GameObjectClipboardContent.FORMAT, new GameObjectClipboardContent(theGameObject.getUuid()));
+            theContent.put(GameObjectClipboardContent.FORMAT, new GameObjectClipboardContent(theGameObject.uuidProperty().get()));
             theDragboard.setContent(theContent);
 
             aEvent.consume();
@@ -93,7 +93,7 @@ public class StructureTreeCell extends TreeCell {
         }
         if (aValue instanceof GameObject) {
             final GameObject theGameObject = (GameObject) aValue;
-            setText(theGameObject.getName());
+            setText(theGameObject.nameProperty().get());
             ContextMenu theContextMenu = new ContextMenu();
             MenuItem theDeleteItem = new MenuItem("Delete");
             theDeleteItem.setOnAction(new EventHandler<ActionEvent>() {
@@ -107,7 +107,7 @@ public class StructureTreeCell extends TreeCell {
         }
         if (aValue instanceof GameObjectInstance) {
             final GameObjectInstance theGameObjectInstance = (GameObjectInstance) aValue;
-            setText(theGameObjectInstance.getName());
+            setText(theGameObjectInstance.nameProperty().get());
             ContextMenu theContextMenu = new ContextMenu();
             MenuItem theDeleteItem = new MenuItem("Delete");
             theDeleteItem.setOnAction(new EventHandler<ActionEvent>() {

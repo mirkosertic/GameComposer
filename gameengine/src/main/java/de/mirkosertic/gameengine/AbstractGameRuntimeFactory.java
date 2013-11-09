@@ -2,7 +2,7 @@ package de.mirkosertic.gameengine;
 
 import de.mirkosertic.gameengine.camera.CameraComponentTemplateUnmarshaller;
 import de.mirkosertic.gameengine.camera.CameraComponentUnmarshaller;
-import de.mirkosertic.gameengine.core.GameEventManager;
+import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.physics.*;
 import de.mirkosertic.gameengine.physics.jbox2d.JBox2DGamePhysicsManagerFactory;

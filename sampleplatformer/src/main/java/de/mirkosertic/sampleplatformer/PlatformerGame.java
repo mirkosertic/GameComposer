@@ -3,6 +3,7 @@ package de.mirkosertic.sampleplatformer;
 
 import de.mirkosertic.gameengine.camera.*;
 import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.javafx.JavaFXClasspathGameResourceLoader;
 import de.mirkosertic.gameengine.javafx.JavaFXGameView;
 import de.mirkosertic.gameengine.physics.*;
@@ -14,6 +15,7 @@ import de.mirkosertic.gameengine.processes.StartProcessEvent;
 import de.mirkosertic.gameengine.sprites.SpriteComponentTemplate;
 import de.mirkosertic.gameengine.sprites.SpriteComponentTemplateUnmarshaller;
 import de.mirkosertic.gameengine.sprites.SpriteComponentUnmarshaller;
+import de.mirkosertic.gameengine.types.Size;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -120,8 +122,8 @@ public class PlatformerGame extends Application {
 
         // Player
         GameObjectInstance thePlayerInstance = theInstanceFactory.createFrom(thePlayerObject);
-        thePlayerInstance.getOwnerGameObject().setSize(new Size(50, 50));
-        thePlayerInstance.setName("Player#1");
+        thePlayerInstance.getOwnerGameObject().sizeProperty().setQuietly(new Size(50, 50));
+        thePlayerInstance.nameProperty().set("Player#1");
         theCurrentScene.addGameObjectInstance(thePlayerInstance);
 
         Map<String, Object> theSerializedResult = theCurrentScene.serialize();

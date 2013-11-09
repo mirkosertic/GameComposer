@@ -1,5 +1,8 @@
 package de.mirkosertic.gameengine.core;
 
+import de.mirkosertic.gameengine.event.GameEvent;
+import de.mirkosertic.gameengine.types.Position;
+
 public class GameObjectInstancePositionChangedEvent extends GameEvent {
 
     private GameObjectInstance instance;

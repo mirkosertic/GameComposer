@@ -1,51 +1,55 @@
 package de.mirkosertic.gameengine.core;
 
+import de.mirkosertic.gameengine.event.GameEventManager;
+import de.mirkosertic.gameengine.event.Property;
+import de.mirkosertic.gameengine.types.Angle;
+import de.mirkosertic.gameengine.types.Position;
+import de.mirkosertic.gameengine.types.Size;
+
 import java.util.*;
+
+import static de.mirkosertic.gameengine.event.PropertyFactory.*;
 
 public class GameObjectInstance {
 
     private Map<Class<GameComponent>, GameComponent> components;
-    private Position position;
-    private String name;
+
     private GameObject ownerGameObject;
-    private Angle rotationAngle;
+
+    private Property<Position> position;
+    private Property<String> name;
+    private Property<Angle> rotationAngle;
 
     GameObjectInstance(GameObject aOwnerGameObject) {
+
+        GameEventManager theManager = aOwnerGameObject.getGameScene().getRuntime().getEventManager();
+
+        name = createStringProperty(this, "name", theManager);
+        position = createPositionProperty(this, "position", new Position(), theManager);
+        rotationAngle = createAngleProperty(this, "rotationAngle", theManager);
+
         ownerGameObject = aOwnerGameObject;
         components = new HashMap<Class<GameComponent>, GameComponent>();
-        position = new Position();
-        rotationAngle = new Angle(0);
     }
 
     public boolean contains(Position aPosition) {
-        Size theSize = ownerGameObject.getSize();
-        return (aPosition.x >= position.x && aPosition.y >= position.y &&
-                aPosition.x <= position.x + theSize.width &&
-                aPosition.y <= position.y + theSize.height);
+        Size theSize = ownerGameObject.sizeProperty().get();
+        Position thePosition = position.get();
+        return (aPosition.x >= thePosition.x && aPosition.y >= thePosition.y &&
+                aPosition.x <= thePosition.x + theSize.width &&
+                aPosition.y <= thePosition.y + theSize.height);
     }
 
-    public Position getPosition() {
+    public Property<Position> positionProperty() {
         return position;
     }
 
-    public void setPosition(Position position) {
-        this.position = position;
-    }
-
-    public String getName() {
+    public Property<String> nameProperty() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Angle getRotationAngle() {
+    public Property<Angle> rotationAngleProperty() {
         return rotationAngle;
-    }
-
-    public void setRotationAngle(Angle rotationAngle) {
-        this.rotationAngle = rotationAngle;
     }
 
     public GameObject getOwnerGameObject() {
@@ -67,11 +71,11 @@ public class GameObjectInstance {
 
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<String, Object>();
-        theResult.put("gameobjectuuid", ownerGameObject.getUuid());
+        theResult.put("gameobjectuuid", ownerGameObject.uuidProperty().get());
 
-        theResult.put("position", position.serializeToMap());
+        theResult.put("position", position.get().serializeToMap());
         theResult.put("name", name);
-        theResult.put("rotationangle", rotationAngle.serialize());
+        theResult.put("rotationangle", rotationAngle.get().serialize());
 
         List<Map<String, Object>> theComponents = new ArrayList<Map<String, Object>>();
         for (GameComponent theComponent : components.values()) {
@@ -91,12 +95,12 @@ public class GameObjectInstance {
         }
 
         GameObjectInstance theResult = new GameObjectInstance(theGameObject);
-        theResult.position = Position.deserialize((Map<String, Object>) theInstance.get("position"));
-        theResult.name = (String) theInstance.get("name");
+        theResult.position.setQuietly(Position.deserialize((Map<String, Object>) theInstance.get("position")));
+        theResult.name.setQuietly((String) theInstance.get("name"));
 
         Map<String, Object> theRotationAngle = (Map<String, Object>) theInstance.get("rotationangle");
         if (theRotationAngle != null) {
-            theResult.rotationAngle = Angle.deserialize(theRotationAngle);
+            theResult.rotationAngle.setQuietly(Angle.deserialize(theRotationAngle));
         }
 
         List<Map<String, Object>> theComponents = (List<Map<String, Object>>) theInstance.get("components");
