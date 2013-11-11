@@ -135,8 +135,6 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
             public void postSolve(Contact aContact, ContactImpulse aImpulse) {
             }
         });
-        // Dynamic objects must be awake by default, or they will wait for a kind of impulse
-        physicsWorld.setAllowSleep(false);
         dynamicObjects = new HashMap<GameObjectInstance, Body>();
         staticObjects = new HashMap<GameObjectInstance, Body>();
         physicsAmountOfTime = 0;
