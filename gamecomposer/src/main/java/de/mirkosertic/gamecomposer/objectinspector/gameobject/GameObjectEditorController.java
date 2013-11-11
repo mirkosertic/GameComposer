@@ -1,18 +1,7 @@
 package de.mirkosertic.gamecomposer.objectinspector.gameobject;
 
-import de.mirkosertic.gamecomposer.ChildController;
-import de.mirkosertic.gamecomposer.ObjectSelectedEvent;
-import de.mirkosertic.gamecomposer.ObjectUpdatedEvent;
-import de.mirkosertic.gameengine.camera.CameraComponentTemplate;
-import de.mirkosertic.gameengine.core.GameComponentTemplate;
-import de.mirkosertic.gameengine.core.GameObject;
-import de.mirkosertic.gameengine.types.Size;
-import de.mirkosertic.gameengine.physics.PhysicsComponentTemplate;
-import de.mirkosertic.gameengine.physics.PlatformComponentTemplate;
-import de.mirkosertic.gameengine.physics.StaticComponentTemplate;
-import de.mirkosertic.gameengine.sprites.SpriteComponentTemplate;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import java.util.HashMap;
+import java.util.Map;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -21,12 +10,22 @@ import javafx.scene.Parent;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
-import java.util.HashMap;
-import java.util.Map;
+
+import de.mirkosertic.gamecomposer.ChildController;
+import de.mirkosertic.gamecomposer.ObjectSelectedEvent;
+import de.mirkosertic.gamecomposer.ObjectUpdatedEvent;
+import de.mirkosertic.gamecomposer.PropertyBinder;
+import de.mirkosertic.gameengine.camera.CameraComponentTemplate;
+import de.mirkosertic.gameengine.core.GameComponentTemplate;
+import de.mirkosertic.gameengine.core.GameObject;
+import de.mirkosertic.gameengine.physics.PhysicsComponentTemplate;
+import de.mirkosertic.gameengine.physics.PlatformComponentTemplate;
+import de.mirkosertic.gameengine.physics.StaticComponentTemplate;
+import de.mirkosertic.gameengine.sprites.SpriteComponentTemplate;
+import de.mirkosertic.gameengine.types.Size;
 
 public class GameObjectEditorController implements ChildController {
 
@@ -55,37 +54,30 @@ public class GameObjectEditorController implements ChildController {
         view = aView;
         gameObject = aObject;
 
-        uuidTextField.setText(gameObject.uuidProperty().get());
-        nameTextField.setText(gameObject.nameProperty().get());
-        Size theSize = gameObject.sizeProperty().get();
-        widthTextField.setText(Integer.toString(theSize.width));
-        heightTextField.setText(Integer.toString(theSize.height));
+        PropertyBinder.bind(gameObject.uuidProperty(), uuidTextField.textProperty());
+        PropertyBinder.bind(gameObject.nameProperty(), nameTextField.textProperty());
+        PropertyBinder.bind(gameObject.sizeProperty(), widthTextField.textProperty(), new PropertyBinder.Converter<Size, String>() {
+            @Override
+            public String beanToUI(Size aValue) {
+                return Integer.toString(aValue.width);
+            }
 
-        nameTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
-            public void changed(ObservableValue<? extends String> observableValue, String aOldValue, String aNewValue) {
-                gameObject.nameProperty().set(aNewValue);
-                eventGateway.fire(new ObjectUpdatedEvent(gameObject));
+            public Size uiToBean(String aValue) {
+                Size theCurrentSize = gameObject.sizeProperty().get();
+                return new Size(Integer.parseInt(aValue), theCurrentSize.height);
             }
         });
-        widthTextField.textProperty().addListener(new ChangeListener<String>() {
+        PropertyBinder.bind(gameObject.sizeProperty(), heightTextField.textProperty(), new PropertyBinder.Converter<Size, String>() {
             @Override
-            public void changed(ObservableValue<? extends String> observableValue, String aOldValue, String aNewValue) {
-                if (!StringUtils.isEmpty(aNewValue)) {
-                    Size theSize = gameObject.sizeProperty().get();
-                    gameObject.getGameScene().updateObjectSize(gameObject, new Size(Integer.valueOf(aNewValue), theSize.height));
-                    eventGateway.fire(new ObjectUpdatedEvent(gameObject));
-                }
+            public String beanToUI(Size aValue) {
+                return Integer.toString(aValue.height);
             }
-        });
-        heightTextField.textProperty().addListener(new ChangeListener<String>() {
+
             @Override
-            public void changed(ObservableValue<? extends String> observableValue, String aOldValue, String aNewValue) {
-                if (!StringUtils.isEmpty(aNewValue)) {
-                    Size theSize = gameObject.sizeProperty().get();
-                    gameObject.getGameScene().updateObjectSize(gameObject, new Size(theSize.width, Integer.valueOf(aNewValue)));
-                    eventGateway.fire(new ObjectUpdatedEvent(gameObject));
-                }
+            public Size uiToBean(String aValue) {
+                Size theCurrentSize = gameObject.sizeProperty().get();
+                return new Size(theCurrentSize.width, Integer.parseInt(aValue));
             }
         });
 
@@ -119,7 +111,6 @@ public class GameObjectEditorController implements ChildController {
             GameComponentTemplate theTemplate = aClass.getConstructor(GameObject.class).newInstance(gameObject);
             gameObject.add(theTemplate);
 
-            eventGateway.fire(new ObjectUpdatedEvent(gameObject));
             eventGateway.fire(new ObjectSelectedEvent(gameObject));
 
             gameObject.getGameScene().updateObjectConfiguration(gameObject);

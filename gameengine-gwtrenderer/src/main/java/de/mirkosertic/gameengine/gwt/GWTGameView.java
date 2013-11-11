@@ -57,7 +57,7 @@ public class GWTGameView implements GameView {
             SpriteComponentTemplate theTemplateComponent = theInstance.getOwnerGameObject().getComponentTemplate(SpriteComponentTemplate.class);
             if (theTemplateComponent != null) {
                 try {
-                    GWTBitmapResource theBitmap = gameRuntime.getResourceCache().getResourceFor(theTemplateComponent.getResourceName());
+                    GWTBitmapResource theBitmap = gameRuntime.getResourceCache().getResourceFor(theTemplateComponent.resourceNameProperty().get());
                     drawGameObjectInstance(theContext, theInstance, new Position(-theHalfWidth, -theHalfHeight), theSize, theBitmap);
                 } catch (IOException e) {
                     throw new RuntimeException(e);

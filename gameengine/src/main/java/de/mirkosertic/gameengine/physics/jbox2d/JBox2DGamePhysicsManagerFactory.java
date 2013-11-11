@@ -1,9 +1,15 @@
 package de.mirkosertic.gameengine.physics.jbox2d;
 
-import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.core.GameObjectConfigurationChangedEvent;
+import de.mirkosertic.gameengine.core.GameObjectInstanceAddedToSceneEvent;
+import de.mirkosertic.gameengine.core.GameObjectInstanceRemovedFromSceneEvent;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.GameEventManager;
-import de.mirkosertic.gameengine.physics.*;
+import de.mirkosertic.gameengine.physics.ApplyForceToGameObjectInstance;
+import de.mirkosertic.gameengine.physics.ApplyImpulseToGameObjectInstance;
+import de.mirkosertic.gameengine.physics.DisableDynamicPhysicsEvent;
+import de.mirkosertic.gameengine.physics.EnableDynamicPhysicsEvent;
+import de.mirkosertic.gameengine.physics.GamePhysicsManagerFactory;
 
 public class JBox2DGamePhysicsManagerFactory implements GamePhysicsManagerFactory {
 
@@ -29,16 +35,6 @@ public class JBox2DGamePhysicsManagerFactory implements GamePhysicsManagerFactor
                 thePhysicsManager.applyForce(aEvent.getGameObjectInstance(), aEvent.getForceX(), aEvent.getForceY());
             }
         });
-        aEventManager.register(null, GameObjectInstancePositionChangedEvent.class, new GameEventListener<GameObjectInstancePositionChangedEvent>() {
-            public void handleGameEvent(GameObjectInstancePositionChangedEvent aEvent) {
-                thePhysicsManager.gameObjectInstancePositionChanged(aEvent.getGameObjectInstance(), aEvent.getPosition());
-            }
-        });
-        aEventManager.register(null, GameObjectInstanceSizeChangedEvent.class, new GameEventListener<GameObjectInstanceSizeChangedEvent>() {
-            public void handleGameEvent(GameObjectInstanceSizeChangedEvent aEvent) {
-                thePhysicsManager.gameObjectInstanceSizeChanged(aEvent.getGameObjectInstance(), aEvent.getSize());
-            }
-        });
         aEventManager.register(null, DisableDynamicPhysicsEvent.class, new GameEventListener<DisableDynamicPhysicsEvent>() {
             @Override
             public void handleGameEvent(DisableDynamicPhysicsEvent aEvent) {
@@ -55,12 +51,6 @@ public class JBox2DGamePhysicsManagerFactory implements GamePhysicsManagerFactor
             @Override
             public void handleGameEvent(GameObjectConfigurationChangedEvent aEvent) {
                 thePhysicsManager.updateGameObjectConfiguration(aEvent.getGameObject());
-            }
-        });
-        aEventManager.register(null, GameObjectInstanceAngleChangedEvent.class, new GameEventListener<GameObjectInstanceAngleChangedEvent>() {
-            @Override
-            public void handleGameEvent(GameObjectInstanceAngleChangedEvent aEvent) {
-                thePhysicsManager.gameObjectInstanceRotationChanged(aEvent.getGameObjectInstance(), aEvent.getNewAngle());
             }
         });
         return thePhysicsManager;

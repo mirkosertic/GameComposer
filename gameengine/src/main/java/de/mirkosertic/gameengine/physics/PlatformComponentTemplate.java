@@ -1,27 +1,36 @@
 package de.mirkosertic.gameengine.physics;
 
-import de.mirkosertic.gameengine.core.*;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import de.mirkosertic.gameengine.core.GameComponentTemplate;
+import de.mirkosertic.gameengine.core.GameKeyCode;
+import de.mirkosertic.gameengine.core.GameObject;
+import de.mirkosertic.gameengine.core.GameObjectInstance;
+import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.event.GameEventManager;
+import de.mirkosertic.gameengine.event.Property;
 
 public class PlatformComponentTemplate implements GameComponentTemplate<PlatformComponent> {
 
     private GameObject owner;
 
-    private GameKeyCode moveLeftKey;
-    private GameKeyCode moveRightKey;
-    private GameKeyCode jumpKey;
-    private float leftRightImpulse;
-    private float jumpImpulse;
+    private Property<GameKeyCode> moveLeftKey;
+    private Property<GameKeyCode> moveRightKey;
+    private Property<GameKeyCode> jumpKey;
+    private Property<Float> leftRightImpulse;
+    private Property<Float> jumpImpulse;
 
     public PlatformComponentTemplate(GameObject aOwner) {
+
+        GameEventManager theEventManager = aOwner.getGameScene().getRuntime().getEventManager();
+
         owner = aOwner;
-        moveLeftKey = GameKeyCode.LEFT;
-        moveRightKey = GameKeyCode.RIGHT;
-        jumpKey = GameKeyCode.UP;
-        leftRightImpulse = 9f;
-        jumpImpulse = 1.4f;
+        moveLeftKey = new Property<GameKeyCode>(this, "moveLeftKey", GameKeyCode.LEFT, theEventManager);
+        moveRightKey = new Property<GameKeyCode>(this, "moveRightKey", GameKeyCode.RIGHT, theEventManager);
+        jumpKey = new Property<GameKeyCode>(this, "jumpKey", GameKeyCode.UP, theEventManager);
+        leftRightImpulse = new Property<Float>(this, "leftRightImpulse", new Float(9f), theEventManager);
+        jumpImpulse = new Property<Float>(this, "jumpImpulse", new Float(1.4f), theEventManager);
     }
 
     @Override
@@ -29,44 +38,24 @@ public class PlatformComponentTemplate implements GameComponentTemplate<Platform
         return owner;
     }
 
-    public GameKeyCode getMoveLeftKey() {
+    public Property<GameKeyCode> moveLeftKeyProperty() {
         return moveLeftKey;
     }
 
-    public void setMoveLeftKey(GameKeyCode moveLeftKey) {
-        this.moveLeftKey = moveLeftKey;
-    }
-
-    public GameKeyCode getMoveRightKey() {
+    public Property<GameKeyCode> moveRightKeyProperty() {
         return moveRightKey;
     }
 
-    public void setMoveRightKey(GameKeyCode moveRightKey) {
-        this.moveRightKey = moveRightKey;
-    }
-
-    public GameKeyCode getJumpKey() {
+    public Property<GameKeyCode> jumpKeyProperty() {
         return jumpKey;
     }
 
-    public void setJumpKey(GameKeyCode jumpKey) {
-        this.jumpKey = jumpKey;
-    }
-
-    public float getLeftRightImpulse() {
+    public Property<Float> leftRightImpulseProperty() {
         return leftRightImpulse;
     }
 
-    public void setLeftRightImpulse(float leftRightImpulse) {
-        this.leftRightImpulse = leftRightImpulse;
-    }
-
-    public float getJumpImpulse() {
+    public Property<Float> jumpImpulseProperty() {
         return jumpImpulse;
-    }
-
-    public void setJumpImpulse(float jumpImpulse) {
-        this.jumpImpulse = jumpImpulse;
     }
 
     public PlatformComponent create(GameObjectInstance aInstance, GameRuntime aGameRuntime) {

@@ -1,12 +1,14 @@
 package de.mirkosertic.gameengine.core;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.types.Size;
-
-import java.util.*;
-
-import static de.mirkosertic.gameengine.event.PropertyFactory.createSizeProperty;
-import static de.mirkosertic.gameengine.event.PropertyFactory.createStringProperty;
 
 public class GameObject {
 
@@ -24,9 +26,9 @@ public class GameObject {
 
     GameObject(GameScene aScene, String aName, String aUUID) {
         gameScene = aScene;
-        uuid = createStringProperty(this, "uuid", aUUID, aScene.getRuntime().getEventManager());
-        name = createStringProperty(this, "name", aName, aScene.getRuntime().getEventManager());
-        size = createSizeProperty(this, "size", new Size(64, 64), aScene.getRuntime().getEventManager());
+        uuid = new Property<String>(this, "uuid", aUUID, aScene.getRuntime().getEventManager());
+        name = new Property<String>(this, "name", aName, aScene.getRuntime().getEventManager());
+        size = new Property<Size>(this, "size", new Size(64, 64), aScene.getRuntime().getEventManager());
         componentTemplates = new HashMap<Class<GameComponentTemplate>, GameComponentTemplate>();
 
         name.setQuietly(aName);

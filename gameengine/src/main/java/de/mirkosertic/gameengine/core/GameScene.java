@@ -1,11 +1,15 @@
 package de.mirkosertic.gameengine.core;
 
-import de.mirkosertic.gameengine.types.Angle;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import de.mirkosertic.gameengine.types.Color;
 import de.mirkosertic.gameengine.types.Position;
-import de.mirkosertic.gameengine.types.Size;
-
-import java.util.*;
 
 public class GameScene {
 
@@ -162,25 +166,6 @@ public class GameScene {
     public void removeGameObjectInstance(GameObjectInstance aInstance) {
         instances.remove(aInstance);
         gameRuntime.getEventManager().fire(new GameObjectInstanceRemovedFromSceneEvent(aInstance));
-    }
-
-    public void updateObjectInstancePosition(GameObjectInstance aInstance, Position aNewPosition) {
-        aInstance.positionProperty().set(aNewPosition);
-        gameRuntime.getEventManager().fire(new GameObjectInstancePositionChangedEvent(aInstance, aNewPosition));
-    }
-
-    public void updateObjectInstanceAngle(GameObjectInstance aInstance, Angle aNewAngle) {
-        aInstance.rotationAngleProperty().set(aNewAngle);
-        gameRuntime.getEventManager().fire(new GameObjectInstanceAngleChangedEvent(aInstance, aNewAngle));
-    }
-
-    public void updateObjectSize(GameObject aObject, Size aNewSize) {
-        aObject.sizeProperty().set(aNewSize);
-        for (GameObjectInstance theInstance : instances) {
-            if (theInstance.getOwnerGameObject() == aObject) {
-                gameRuntime.getEventManager().fire(new GameObjectInstanceSizeChangedEvent(theInstance, aNewSize));
-            }
-        }
     }
 
     public void removeGameObject(GameObject aGameObject) {
