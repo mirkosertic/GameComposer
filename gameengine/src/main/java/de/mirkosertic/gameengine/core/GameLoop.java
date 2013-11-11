@@ -23,7 +23,16 @@ public class GameLoop implements Runnable {
 
     public void run() {
         while (!shutdownSignal) {
+            long theStart = System.currentTimeMillis();
             singleRun();
+            long theDuration = System.currentTimeMillis() - theStart;
+            if (theDuration < 4) {
+                try {
+                    Thread.sleep(4);
+                } catch (InterruptedException e) {
+                    // Something is strange
+                }
+            }
         }
     }
 

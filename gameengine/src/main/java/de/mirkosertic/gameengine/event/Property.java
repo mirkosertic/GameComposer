@@ -43,7 +43,8 @@ public class Property<T> {
     public void set(T aValue) {
         T theOldValue = value;
         value = aValue;
-        for (GameEventListener<PropertyChangeEvent> theListener : changeListener) {
+        Set<GameEventListener> theKnownListener = new HashSet<GameEventListener>(changeListener);
+        for (GameEventListener<PropertyChangeEvent> theListener : theKnownListener) {
             theListener.handleGameEvent(new PropertyChangeEvent(this, theOldValue));
         }
     }
