@@ -194,7 +194,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
                 thePlatformBodyDef.setAngle(aInstance.rotationAngleProperty().get().invert().toRadians());
                 // The position is the CENTER of MASS, not the X/Y Coordinate
                 thePlatformBodyDef.position = new Vec2(SIZE_FACTOR
-                        * (theInstancePosition.x + theInstanceSize.width / 2), SIZE_FACTOR
+                        * (theInstancePosition.x + theInstanceSize.width / 2), -SIZE_FACTOR
                         * (theInstancePosition.y + theInstanceSize.height / 2));
                 thePlatformBodyDef.userData = aInstance;
 
@@ -226,7 +226,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
                 thePhysicsBodyDef.type = BodyType.DYNAMIC;
                 // The position is the CENTER of MASS, not the X/Y Coordinate
                 thePhysicsBodyDef.position = new Vec2(
-                        SIZE_FACTOR * (theInstancePosition.x + theInstanceSize.width / 2), SIZE_FACTOR
+                        SIZE_FACTOR * (theInstancePosition.x + theInstanceSize.width / 2), -SIZE_FACTOR
                                 * (theInstancePosition.y + theInstanceSize.height / 2));
                 thePhysicsBodyDef.userData = aInstance;
                 thePhysicsBodyDef.setAngle(aInstance.rotationAngleProperty().get().invert().toRadians());

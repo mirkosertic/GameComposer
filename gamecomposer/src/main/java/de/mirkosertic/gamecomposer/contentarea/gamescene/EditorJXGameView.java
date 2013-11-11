@@ -187,10 +187,46 @@ public class EditorJXGameView extends JavaFXGameView {
         }
         if (currentMousePosition != null) {
             if (aInstance.contains(currentMousePosition)) {
-                aContext.setFill(Color.GREEN);
-                aContext.setStroke(Color.GREEN);
+
+                int theColorOffset = (int) (System.currentTimeMillis() / 2) % 400;
+
+                int theRed = 0;
+                int theGreen;
+                if (theColorOffset > 200) {
+                    theGreen = 55 + 400 - theColorOffset;
+                } else {
+                    theGreen = 55 + theColorOffset;
+                }
+                int theBlue = 0;
+
+                Color theColor = Color.rgb(theRed, theGreen, theBlue);
+
+                aContext.setFill(theColor);
+                aContext.setStroke(theColor);
                 aContext.setLineWidth(3);
-                aContext.strokeRect(aPosition.x, aPosition.y, aSize.width, aSize.height);
+
+                int theOffset = 5;
+                Position theTopLeft = new Position(aPosition.x - theOffset, aPosition.y - theOffset);
+                Position theTopRight = new Position(aPosition.x + aSize.width + theOffset, aPosition.y - theOffset);
+                Position theBottomLeft = new Position(aPosition.x - theOffset, aPosition.y + aSize.height + theOffset);
+                Position theBottomRight = new Position(aPosition.x + aSize.width + theOffset, aPosition.y + aSize.height + theOffset);
+
+                // Top left
+                aContext.strokeLine(theTopLeft.x, theTopLeft.y, theTopLeft.x + theOffset, theTopLeft.y);
+                aContext.strokeLine(theTopLeft.x, theTopLeft.y, theTopLeft.x, theTopLeft.y + theOffset);
+
+                // Top right
+                aContext.strokeLine(theTopRight.x, theTopLeft.y, theTopRight.x - theOffset, theTopRight.y);
+                aContext.strokeLine(theTopRight.x, theTopRight.y, theTopRight.x, theTopRight.y + theOffset);
+
+                // Bottom left
+                aContext.strokeLine(theBottomLeft.x, theBottomLeft.y, theBottomLeft.x + theOffset, theBottomRight.y);
+                aContext.strokeLine(theBottomLeft.x, theBottomLeft.y, theBottomLeft.x, theBottomLeft.y - theOffset);
+
+                // Bottom right
+                aContext.strokeLine(theBottomRight.x, theBottomRight.y, theBottomRight.x - theOffset, theBottomRight.y);
+                aContext.strokeLine(theBottomRight.x, theBottomRight.y, theBottomRight.x, theBottomRight.y - theOffset);
+
             }
         }
 
