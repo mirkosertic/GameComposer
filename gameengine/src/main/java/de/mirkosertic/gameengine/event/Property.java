@@ -3,26 +3,30 @@ package de.mirkosertic.gameengine.event;
 import java.util.HashSet;
 import java.util.Set;
 
-public abstract class Property<T> {
+public class Property<T> {
 
     private String name;
     private T value;
     private Object owner;
     private Set<GameEventListener<PropertyChangeEvent>> changeListener;
 
-    Property(Object aOwner, String aName, T aDefaultValue, GameEventListener<PropertyChangeEvent> aListener) {
+    public Property(Object aOwner, String aName, T aDefaultValue, GameEventListener<PropertyChangeEvent> aListener) {
         changeListener = new HashSet<GameEventListener<PropertyChangeEvent>>();
         owner = aOwner;
         name = aName;
-        changeListener.add(aListener);
+        if (aListener != null) {
+            changeListener.add(aListener);
+        }
         value = aDefaultValue;
     }
 
-    Property(Object aOwner, String aName, GameEventListener<PropertyChangeEvent> aListener) {
+    public Property(Object aOwner, String aName, GameEventListener<PropertyChangeEvent> aListener) {
         this(aOwner, aName, null, aListener);
     }
 
-    abstract T createInitialValue();
+    public Property(Object aOwner, String aName, T aDefaultValue) {
+        this(aOwner, aName, aDefaultValue, null);
+    }
 
     public Object getOwner() {
         return owner;
@@ -42,6 +46,10 @@ public abstract class Property<T> {
         for (GameEventListener<PropertyChangeEvent> theListener : changeListener) {
             theListener.handleGameEvent(new PropertyChangeEvent(this, theOldValue));
         }
+    }
+
+    public boolean isNull() {
+        return value == null;
     }
 
     public void setQuietly(T aValue) {

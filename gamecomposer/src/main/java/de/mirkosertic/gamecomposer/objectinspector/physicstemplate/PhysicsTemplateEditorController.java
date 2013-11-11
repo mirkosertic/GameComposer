@@ -30,12 +30,12 @@ public class PhysicsTemplateEditorController implements ChildController {
         view = aView;
         object = aObject;
 
-        fixedRotation.setSelected(aObject.isFixedRotation());
+        fixedRotation.setSelected(aObject.fixedRotationProperty().get());
         fixedRotation.selectedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aOldValue, Boolean aNewValue) {
                 if (aNewValue != null) {
-                    object.setFixedRotation(aNewValue);
+                    object.fixedRotationProperty().set(aNewValue);
                     objectUpdatedEvent.fire(new ObjectUpdatedEvent(object.getOwner()));
                 }
             }

@@ -9,4 +9,12 @@ public class PropertyChangeEvent extends GameEvent {
         property = aProperty;
         oldValue = aOldValue;
     }
+
+    public Object getOwner() {
+        return property.getOwner();
+    }
+
+    public Object getNewValue() {
+        return property.get();
+    }
 }

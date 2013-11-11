@@ -7,14 +7,18 @@ import de.mirkosertic.gameengine.core.GameComponentTemplate;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.event.GameEventManager;
+import de.mirkosertic.gameengine.event.Property;
 
 public class CameraComponentTemplate implements GameComponentTemplate<CameraComponent> {
 
-    private CameraType type;
+    private Property<CameraType> type;
     private GameObject owner;
 
     public CameraComponentTemplate(GameObject aOwner) {
-        type = CameraType.FOLLOWPLAYER;
+        GameEventManager theManager = aOwner.getGameScene().getRuntime().getEventManager();
+
+        type = new Property<CameraType>(this, "type", CameraType.FOLLOWPLAYER, theManager);
         owner = aOwner;
     }
 
@@ -23,12 +27,8 @@ public class CameraComponentTemplate implements GameComponentTemplate<CameraComp
         return owner;
     }
 
-    public CameraType getType() {
+    public Property<CameraType> typeProperty() {
         return type;
-    }
-
-    public void setType(CameraType type) {
-        this.type = type;
     }
 
     public CameraComponent create(GameObjectInstance aInstance, GameRuntime aGameRuntime) {
@@ -46,7 +46,7 @@ public class CameraComponentTemplate implements GameComponentTemplate<CameraComp
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<String, Object>();
         theResult.put(CameraComponent.TYPE_ATTRIBUTE, CameraComponent.TYPE);
-        theResult.put("cameratype", type.name());
+        theResult.put("cameratype", type.get().name());
         return theResult;
     }
 
@@ -54,7 +54,7 @@ public class CameraComponentTemplate implements GameComponentTemplate<CameraComp
         CameraComponentTemplate theTemplate = new CameraComponentTemplate(aOwner);
         String theCameraType = (String) aSerializedData.get("cameratype");
         if (theCameraType != null) {
-            theTemplate.type = CameraType.valueOf(theCameraType);
+            theTemplate.type.setQuietly(CameraType.valueOf(theCameraType));
         }
         return theTemplate;
     }

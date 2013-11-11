@@ -8,8 +8,6 @@ import de.mirkosertic.gameengine.types.Size;
 
 import java.util.*;
 
-import static de.mirkosertic.gameengine.event.PropertyFactory.*;
-
 public class GameObjectInstance {
 
     private Map<Class<GameComponent>, GameComponent> components;
@@ -24,9 +22,9 @@ public class GameObjectInstance {
 
         GameEventManager theManager = aOwnerGameObject.getGameScene().getRuntime().getEventManager();
 
-        name = createStringProperty(this, "name", theManager);
-        position = createPositionProperty(this, "position", new Position(), theManager);
-        rotationAngle = createAngleProperty(this, "rotationAngle", theManager);
+        name = new Property<String>(this, "name", theManager);
+        position = new Property<Position>(this, "position", new Position(), theManager);
+        rotationAngle = new Property<Angle>(this, "rotationAngle", new Angle(0), theManager);
 
         ownerGameObject = aOwnerGameObject;
         components = new HashMap<Class<GameComponent>, GameComponent>();

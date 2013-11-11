@@ -123,7 +123,7 @@ public class GWTRenderer implements EntryPoint {
             }
         });
 
-        switch (theCameraComponent.getTemplate().getType()) {
+        switch (theCameraComponent.getTemplate().typeProperty().get()) {
             case FOLLOWPLAYER:
                 theCameraComponent.centerOn(thePlayerInstance);
                 theEventManager.fire(new StartProcessEvent(new FollowCameraProcess(theCameraObject, thePlayerInstance)));

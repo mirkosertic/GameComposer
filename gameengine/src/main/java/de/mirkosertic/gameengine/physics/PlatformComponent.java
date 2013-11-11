@@ -55,14 +55,14 @@ public class PlatformComponent implements GameComponent {
     }
 
     public void handleKeyPressed(KeyPressedGameEvent aEvent) {
-        if (aEvent.getKeyCode() == platformTemplate.getMoveLeftKey()) {
-            gameRuntime.getEventManager().fire(new ApplyForceToGameObjectInstance(objectInstance, -platformTemplate.getLeftRightImpulse(), 0));
+        if (aEvent.getKeyCode() == platformTemplate.moveLeftKeyProperty().get()) {
+            gameRuntime.getEventManager().fire(new ApplyForceToGameObjectInstance(objectInstance, -platformTemplate.leftRightImpulseProperty().get(), 0));
         }
-        if (aEvent.getKeyCode() == platformTemplate.getMoveRightKey()) {
-            gameRuntime.getEventManager().fire(new ApplyForceToGameObjectInstance(objectInstance, platformTemplate.getLeftRightImpulse(), 0f));
+        if (aEvent.getKeyCode() == platformTemplate.moveRightKeyProperty().get()) {
+            gameRuntime.getEventManager().fire(new ApplyForceToGameObjectInstance(objectInstance, platformTemplate.leftRightImpulseProperty().get(), 0f));
         }
-        if (aEvent.getKeyCode() == platformTemplate.getJumpKey() && !isJumping()) {
-            gameRuntime.getEventManager().fire(new ApplyImpulseToGameObjectInstance(objectInstance, 0, platformTemplate.getJumpImpulse()));
+        if (aEvent.getKeyCode() == platformTemplate.jumpKeyProperty().get() && !isJumping()) {
+            gameRuntime.getEventManager().fire(new ApplyImpulseToGameObjectInstance(objectInstance, 0, platformTemplate.jumpImpulseProperty().get()));
             setJumping(true);
         }
     }

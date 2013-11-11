@@ -98,7 +98,7 @@ public class PlatformerGame extends Application {
         GameObjectInstance theCameraInstance = theInstanceFactory.createFrom(theCameraObject);
 
         SpriteComponentTemplate theSpriteComponentFactory = new SpriteComponentTemplate(theBrickObject);
-        theSpriteComponentFactory.setResourceName(new ResourceName("/assets/tiles/wall2_1.png"));
+        theSpriteComponentFactory.resourceNameProperty().set(new ResourceName("/assets/tiles/wall2_1.png"));
         theBrickObject.add(theSpriteComponentFactory);
 
         final JavaFXGameView theGameView = new JavaFXGameView(theGameRuntime, theCameraInstance.getComponent(CameraComponent.class));

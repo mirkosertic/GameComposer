@@ -46,12 +46,12 @@ public class CameraTemplateEditorController implements ChildController {
 
         cameraType.getItems().clear();
         cameraType.getItems().addAll(Arrays.asList(CameraType.values()));
-        cameraType.setValue(object.getType());
+        cameraType.setValue(object.typeProperty().get());
         cameraType.setConverter(new CameraTypeToStringConverter());
         cameraType.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent aEvent) {
-                object.setType((CameraType) cameraType.getValue());
+                object.typeProperty().set((CameraType) cameraType.getValue());
                 eventGateway.fire(new ObjectUpdatedEvent(object));
             }
         });

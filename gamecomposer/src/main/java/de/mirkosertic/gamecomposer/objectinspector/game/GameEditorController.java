@@ -1,9 +1,5 @@
 package de.mirkosertic.gamecomposer.objectinspector.game;
 
-import de.mirkosertic.gamecomposer.ChildController;
-import de.mirkosertic.gamecomposer.NewGameSceneEvent;
-import de.mirkosertic.gamecomposer.ObjectUpdatedEvent;
-import de.mirkosertic.gameengine.core.Game;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -14,6 +10,11 @@ import javafx.scene.control.TextField;
 
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
+
+import de.mirkosertic.gamecomposer.ChildController;
+import de.mirkosertic.gamecomposer.NewGameSceneEvent;
+import de.mirkosertic.gamecomposer.ObjectUpdatedEvent;
+import de.mirkosertic.gameengine.core.Game;
 
 public class GameEditorController implements ChildController {
 

@@ -140,7 +140,7 @@ public class GameSceneEditorController implements ContentChildController<GameSce
 
         if (dndCreateInstance != null) {
             Position theNewPosition = cameraComponent.transformFromScreen(new Position(aEvent.getX(), aEvent.getY()));
-            gameScene.updateObjectInstancePosition(dndCreateInstance, theNewPosition);
+            dndCreateInstance.positionProperty().set(theNewPosition);
         }
 
         aEvent.consume();
@@ -179,7 +179,7 @@ public class GameSceneEditorController implements ContentChildController<GameSce
             aEvent.setDropCompleted(true);
             aEvent.consume();
             if (snapToGrid.isSelected()) {
-                gameScene.updateObjectInstancePosition(dndCreateInstance, gameView.snapToGrid(dndCreateInstance.positionProperty().get()));
+                dndCreateInstance.positionProperty().set(gameView.snapToGrid(dndCreateInstance.positionProperty().get()));
             }
 
             gameScene.getRuntime().getEventManager().fire(new EnableDynamicPhysicsEvent(dndCreateInstance));
@@ -216,7 +216,7 @@ public class GameSceneEditorController implements ContentChildController<GameSce
                 float theDY = theWorldPosition.y - draggingMouseWorldPosition.y;
 
                 Position theObjectPosition = draggingInstance.positionProperty().get();
-                gameScene.updateObjectInstancePosition(draggingInstance, new Position(theObjectPosition.x + theDX, theObjectPosition.y + theDY));
+                draggingInstance.positionProperty().set(new Position(theObjectPosition.x + theDX, theObjectPosition.y + theDY));
 
                 draggingMouseWorldPosition = theWorldPosition;
             } else {
@@ -228,7 +228,7 @@ public class GameSceneEditorController implements ContentChildController<GameSce
 
                 // Move camera
                 Position theObjectPosition = cameraComponent.getObjectInstance().positionProperty().get();
-                gameScene.updateObjectInstancePosition(cameraComponent.getObjectInstance(), new Position(theObjectPosition.x - theDX, theObjectPosition.y - theDY));
+                cameraComponent.getObjectInstance().positionProperty().set(new Position(theObjectPosition.x - theDX, theObjectPosition.y - theDY));
 
                 draggingMouseWorldPosition = theScreenPosition;
             }
@@ -238,7 +238,7 @@ public class GameSceneEditorController implements ContentChildController<GameSce
     private void onMouseReleased(MouseEvent aEvent) {
         if (draggingInstance != null) {
             if (snapToGrid.isSelected()) {
-                gameScene.updateObjectInstancePosition(draggingInstance, gameView.snapToGrid(draggingInstance.positionProperty().get()));
+                draggingInstance.positionProperty().set(gameView.snapToGrid(draggingInstance.positionProperty().get()));
             }
             gameScene.getRuntime().getEventManager().fire(new EnableDynamicPhysicsEvent(draggingInstance));
         }

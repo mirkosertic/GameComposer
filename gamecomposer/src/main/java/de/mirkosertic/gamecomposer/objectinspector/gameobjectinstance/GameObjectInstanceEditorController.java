@@ -1,11 +1,5 @@
 package de.mirkosertic.gamecomposer.objectinspector.gameobjectinstance;
 
-import de.mirkosertic.gamecomposer.ChildController;
-import de.mirkosertic.gamecomposer.ObjectSelectedEvent;
-import de.mirkosertic.gamecomposer.ObjectUpdatedEvent;
-import de.mirkosertic.gameengine.types.Angle;
-import de.mirkosertic.gameengine.core.GameObjectInstance;
-import de.mirkosertic.gameengine.types.Position;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -15,10 +9,18 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.TextField;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
+
+import org.apache.commons.lang3.StringUtils;
+
+import de.mirkosertic.gamecomposer.ChildController;
+import de.mirkosertic.gamecomposer.ObjectSelectedEvent;
+import de.mirkosertic.gamecomposer.ObjectUpdatedEvent;
+import de.mirkosertic.gameengine.core.GameObjectInstance;
+import de.mirkosertic.gameengine.types.Angle;
+import de.mirkosertic.gameengine.types.Position;
 
 public class GameObjectInstanceEditorController implements ChildController {
 
@@ -64,7 +66,7 @@ public class GameObjectInstanceEditorController implements ChildController {
             public void changed(ObservableValue<? extends String> observableValue, String aOldValue, String aNewValue) {
                 if (!StringUtils.isEmpty(aNewValue)) {
                     Position thePosition = object.positionProperty().get();
-                    object.getOwnerGameObject().getGameScene().updateObjectInstancePosition(object, new Position(Integer.valueOf(aNewValue), thePosition.y));
+                    object.positionProperty().set(new Position(Integer.valueOf(aNewValue), thePosition.y));
                     eventGateway.fire(new ObjectUpdatedEvent(object));
                 }
             }
@@ -74,7 +76,7 @@ public class GameObjectInstanceEditorController implements ChildController {
             public void changed(ObservableValue<? extends String> observableValue, String aOldValue, String aNewValue) {
                 if (!StringUtils.isEmpty(aNewValue)) {
                     Position thePosition = object.positionProperty().get();
-                    object.getOwnerGameObject().getGameScene().updateObjectInstancePosition(object, new Position(thePosition.x, Integer.valueOf(aNewValue)));
+                    object.positionProperty().set(new Position(thePosition.x, Integer.valueOf(aNewValue)));
                     eventGateway.fire(new ObjectUpdatedEvent(object));
                 }
             }
@@ -83,7 +85,7 @@ public class GameObjectInstanceEditorController implements ChildController {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String aOldValue, String aNewValue) {
                 if (!StringUtils.isEmpty(aNewValue)) {
-                    object.getOwnerGameObject().getGameScene().updateObjectInstanceAngle(object, new Angle(Integer.valueOf(aNewValue)));
+                    object.rotationAngleProperty().set(new Angle(Integer.valueOf(aNewValue)));
                     eventGateway.fire(new ObjectUpdatedEvent(object));
                 }
             }

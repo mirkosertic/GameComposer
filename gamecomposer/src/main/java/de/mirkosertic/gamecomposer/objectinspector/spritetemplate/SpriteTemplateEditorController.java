@@ -60,7 +60,7 @@ public class SpriteTemplateEditorController implements ChildController {
     }
 
     private void reloadSprite() {
-        ResourceName theResourceName = object.getResourceName();
+        ResourceName theResourceName = object.resourceNameProperty().get();
         assetName.setText("");
         if (theResourceName != null && theResourceName.getName() != null) {
             GameResourceLoader theLoader = persistenceManager.createResourceLoaderFor(object.getOwner().getGameScene());
@@ -69,7 +69,7 @@ public class SpriteTemplateEditorController implements ChildController {
                 spritePreview.setImage(theResource);
 
                 assetName.setText(theResourceName.getName());
-                object.getOwner().getGameScene().updateObjectSize(object.getOwner(), new Size((int) theResource.getWidth(), (int) theResource.getHeight()));
+                object.getOwner().sizeProperty().set(new Size((int) theResource.getWidth(), (int) theResource.getHeight()));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -89,7 +89,7 @@ public class SpriteTemplateEditorController implements ChildController {
         File theSelectedFile = theFileChooser.showOpenDialog(null);
         if (theSelectedFile != null) {
             ResourceName theName = persistenceManager.toResourceName(theScene, theSelectedFile);
-            object.setResourceName(theName);
+            object.resourceNameProperty().set(theName);
 
             reloadSprite();
 
