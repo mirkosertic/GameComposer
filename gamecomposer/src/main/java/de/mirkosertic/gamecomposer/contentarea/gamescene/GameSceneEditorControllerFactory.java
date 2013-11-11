@@ -5,6 +5,7 @@ import de.mirkosertic.gamecomposer.ObjectSelectedEvent;
 import de.mirkosertic.gameengine.camera.CameraComponent;
 import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.event.GameEventManager;
+import de.mirkosertic.gameengine.javafx.ThreadGameLoopThrottle;
 import de.mirkosertic.gameengine.physics.GamePhysicsManager;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -31,7 +32,7 @@ public class GameSceneEditorControllerFactory {
         GameRuntime theRuntime = aScene.getRuntime();
         GameObjectInstanceFactory theInstanceFactory = new GameObjectInstanceFactory(theRuntime);
 
-        GameObject theDefaultCamera = aScene.getCameraObject();
+        GameObject theDefaultCamera = aScene.cameraObjectProperty().get();
         if (theDefaultCamera == null) {
             throw new IllegalArgumentException("No camera set");
         }
@@ -53,9 +54,9 @@ public class GameSceneEditorControllerFactory {
         EditorJXGameView theGameView = new EditorJXGameView(theRuntime, theCameraComponent, thePhysicsManager);
 
         GameLoopFactory theGameLoopFactory = new GameLoopFactory();
-        GameLoop theMainLoop = theGameLoopFactory.create(aScene, theGameView, theRuntime);
+        GameLoop theMainLoop = theGameLoopFactory.create(aScene, theGameView, theRuntime, new ThreadGameLoopThrottle());
 
-        Thread theMainLoopThread = new Thread(theMainLoop, "MainLoop #" + aScene.getName());
+        Thread theMainLoopThread = new Thread(theMainLoop, "MainLoop #" + aScene.nameProperty().get());
 
         final CameraComponent theFinalCameraComponent = theCameraComponent;
 

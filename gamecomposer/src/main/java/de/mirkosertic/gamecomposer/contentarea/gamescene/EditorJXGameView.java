@@ -186,7 +186,7 @@ public class EditorJXGameView extends JavaFXGameView {
             aContext.strokeRect(aPosition.x, aPosition.y, aSize.width, aSize.height);
         }
         if (currentMousePosition != null) {
-            if (aInstance.contains(currentMousePosition)) {
+            if (aInstance.contains(getCameraComponent().transformFromScreen(currentMousePosition))) {
 
                 int theColorOffset = (int) (System.currentTimeMillis() / 2) % 400;
 

@@ -72,7 +72,7 @@ public class GameObjectInstance {
         theResult.put("gameobjectuuid", ownerGameObject.uuidProperty().get());
 
         theResult.put("position", position.get().serializeToMap());
-        theResult.put("name", name);
+        theResult.put("name", name.get());
         theResult.put("rotationangle", rotationAngle.get().serialize());
 
         List<Map<String, Object>> theComponents = new ArrayList<Map<String, Object>>();

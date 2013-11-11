@@ -13,23 +13,22 @@ import de.mirkosertic.gamecomposer.objectinspector.platformtemplate.PlatformTemp
 import de.mirkosertic.gamecomposer.objectinspector.spritetemplate.SpriteTemplateEditorControllerFactory;
 import de.mirkosertic.gamecomposer.objectinspector.statictemplate.StaticTemplateEditorControllerFactory;
 import de.mirkosertic.gameengine.camera.CameraComponentTemplate;
-import de.mirkosertic.gameengine.core.Game;
-import de.mirkosertic.gameengine.core.GameObject;
-import de.mirkosertic.gameengine.core.GameObjectInstance;
-import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.physics.PhysicsComponentTemplate;
 import de.mirkosertic.gameengine.physics.PlatformComponentTemplate;
 import de.mirkosertic.gameengine.physics.StaticComponentTemplate;
 import de.mirkosertic.gameengine.sprites.SpriteComponentTemplate;
+
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Accordion;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.VBox;
 
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.ArrayList;
+import java.util.List;
 
 @Singleton
 public class ObjectInspectorController implements ChildController {
@@ -65,10 +64,14 @@ public class ObjectInspectorController implements ChildController {
     GameObjectInstanceEditorControllerFactory gameObjectInstanceEditorControllerFactory;
 
     private Node view;
+    private Object currentSelection;
+    private List<ObjectInspectorChildController> currentController;
 
     ObjectInspectorController initialize(Node aView) {
+        currentController = new ArrayList<>();
         propertyPanels.getChildren().clear();
         view = aView;
+        currentSelection = null;
         return this;
     }
 
@@ -85,66 +88,89 @@ public class ObjectInspectorController implements ChildController {
         selectObject(aEvent.getSelectedObject());
     }
 
-    private void selectObject(Object aPbject) {
-        propertyPanels.getChildren().clear();
-        if (aPbject instanceof Game) {
-            ChildController theController = gameEditorControllerFactory.create((Game) aPbject);
-            TitledPane thePane = new TitledPane("Properties", theController.getView());
-            propertyPanels.getChildren().add(thePane);
-        }
-        if (aPbject instanceof GameScene) {
-            ChildController theController = gameSceneEditorControllerFactory.create((GameScene) aPbject);
-            TitledPane thePane = new TitledPane("Properties", theController.getView());
-            propertyPanels.getChildren().add(thePane);
-        }
-        if (aPbject instanceof GameObject) {
+    public void onGameObjectConfigurationChanged(@Observes GameObjectConfigurationChangedEvent aEvent) {
+        currentSelection = null;
+        selectObject(aEvent.getGameObject());
+    }
 
-            GameObject theGameObject = (GameObject) aPbject;
+    private void selectObject(Object aObject) {
+        if (currentSelection != aObject) {
+            currentSelection = aObject;
 
-            ChildController theController = gameObjectEditorControllerFactory.create(theGameObject);
-            TitledPane thePane = new TitledPane("Properties", theController.getView());
-            propertyPanels.getChildren().add(thePane);
-
-            StaticComponentTemplate theStaticComponentTemplate = theGameObject.getComponentTemplate(StaticComponentTemplate.class);
-            if (theStaticComponentTemplate != null) {
-                ChildController theEditor = staticTemplateEditorControllerFactory.create(theStaticComponentTemplate);
-                TitledPane theChildPane = new TitledPane("StaticComponent", theEditor.getView());
-                propertyPanels.getChildren().add(theChildPane);
+            for (ObjectInspectorChildController theChild : currentController) {
+                theChild.cleanup();
             }
+            propertyPanels.getChildren().clear();
+            currentController.clear();
 
-            CameraComponentTemplate theCameraComponentTemplate = theGameObject.getComponentTemplate(CameraComponentTemplate.class);
-            if (theCameraComponentTemplate != null) {
-                ChildController theEditor = cameraTemplateEditorControllerFactory.create(theCameraComponentTemplate);
-                TitledPane theChildPane = new TitledPane("CameraComponent", theEditor.getView());
-                propertyPanels.getChildren().add(theChildPane);
+            if (aObject instanceof Game) {
+                ObjectInspectorChildController theController = gameEditorControllerFactory.create((Game) aObject);
+                TitledPane thePane = new TitledPane("Properties", theController.getView());
+                propertyPanels.getChildren().add(thePane);
+                currentController.add(theController);
             }
-
-            PlatformComponentTemplate thePlatformComponentTemplate = theGameObject.getComponentTemplate(PlatformComponentTemplate.class);
-            if (thePlatformComponentTemplate != null) {
-                ChildController theEditor = platformTemplateEditorControllerFactory.create(thePlatformComponentTemplate);
-                TitledPane theChildPane = new TitledPane("PlatformComponent", theEditor.getView());
-                propertyPanels.getChildren().add(theChildPane);
+            if (aObject instanceof GameScene) {
+                ObjectInspectorChildController theController = gameSceneEditorControllerFactory.create((GameScene) aObject);
+                TitledPane thePane = new TitledPane("Properties", theController.getView());
+                propertyPanels.getChildren().add(thePane);
+                currentController.add(theController);
             }
+            if (aObject instanceof GameObject) {
 
-            PhysicsComponentTemplate thePhysicsComponentTemplate = theGameObject.getComponentTemplate(PhysicsComponentTemplate.class);
-            if (thePhysicsComponentTemplate != null) {
-                ChildController theEditor = physicsTemplateEditorControllerFactory.create(thePhysicsComponentTemplate);
-                TitledPane theChildPane = new TitledPane("PhysicsComponent", theEditor.getView());
-                propertyPanels.getChildren().add(theChildPane);
+                GameObject theGameObject = (GameObject) aObject;
+
+                ObjectInspectorChildController theController = gameObjectEditorControllerFactory.create(theGameObject);
+                TitledPane thePane = new TitledPane("Properties", theController.getView());
+                propertyPanels.getChildren().add(thePane);
+                currentController.add(theController);
+
+                StaticComponentTemplate theStaticComponentTemplate = theGameObject.getComponentTemplate(StaticComponentTemplate.class);
+                if (theStaticComponentTemplate != null) {
+                    ObjectInspectorChildController theEditor = staticTemplateEditorControllerFactory.create(theStaticComponentTemplate);
+                    TitledPane theChildPane = new TitledPane("StaticComponent", theEditor.getView());
+                    propertyPanels.getChildren().add(theChildPane);
+                    currentController.add(theEditor);
+                }
+
+                CameraComponentTemplate theCameraComponentTemplate = theGameObject.getComponentTemplate(CameraComponentTemplate.class);
+                if (theCameraComponentTemplate != null) {
+                    ObjectInspectorChildController theEditor = cameraTemplateEditorControllerFactory.create(theCameraComponentTemplate);
+                    TitledPane theChildPane = new TitledPane("CameraComponent", theEditor.getView());
+                    propertyPanels.getChildren().add(theChildPane);
+                    currentController.add(theEditor);
+                }
+
+                PlatformComponentTemplate thePlatformComponentTemplate = theGameObject.getComponentTemplate(PlatformComponentTemplate.class);
+                if (thePlatformComponentTemplate != null) {
+                    ObjectInspectorChildController theEditor = platformTemplateEditorControllerFactory.create(thePlatformComponentTemplate);
+                    TitledPane theChildPane = new TitledPane("PlatformComponent", theEditor.getView());
+                    propertyPanels.getChildren().add(theChildPane);
+                    currentController.add(theEditor);
+                }
+
+                PhysicsComponentTemplate thePhysicsComponentTemplate = theGameObject.getComponentTemplate(PhysicsComponentTemplate.class);
+                if (thePhysicsComponentTemplate != null) {
+                    ObjectInspectorChildController theEditor = physicsTemplateEditorControllerFactory.create(thePhysicsComponentTemplate);
+                    TitledPane theChildPane = new TitledPane("PhysicsComponent", theEditor.getView());
+                    propertyPanels.getChildren().add(theChildPane);
+                    currentController.add(theEditor);
+                }
+
+                SpriteComponentTemplate theSpriteComponentTemplate = theGameObject.getComponentTemplate(SpriteComponentTemplate.class);
+                if (theSpriteComponentTemplate != null) {
+                    ObjectInspectorChildController theEditor = spriteTemplateEditorControllerFactory.create(theSpriteComponentTemplate);
+                    TitledPane theChildPane = new TitledPane("SpriteComponent", theEditor.getView());
+                    propertyPanels.getChildren().add(theChildPane);
+                    currentController.add(theEditor);
+                }
+
             }
-
-            SpriteComponentTemplate theSpriteComponentTemplate = theGameObject.getComponentTemplate(SpriteComponentTemplate.class);
-            if (theSpriteComponentTemplate != null) {
-                ChildController theEditor = spriteTemplateEditorControllerFactory.create(theSpriteComponentTemplate);
-                TitledPane theChildPane = new TitledPane("SpriteComponent", theEditor.getView());
-                propertyPanels.getChildren().add(theChildPane);
+            if (aObject instanceof GameObjectInstance) {
+                ObjectInspectorChildController theController = gameObjectInstanceEditorControllerFactory.create((GameObjectInstance) aObject);
+                TitledPane thePane = new TitledPane("Properties", theController.getView());
+                propertyPanels.getChildren().add(thePane);
+                currentController.add(theController);
             }
-
-        }
-        if (aPbject instanceof GameObjectInstance) {
-            ChildController theController = gameObjectInstanceEditorControllerFactory.create((GameObjectInstance) aPbject);
-            TitledPane thePane = new TitledPane("Properties", theController.getView());
-            propertyPanels.getChildren().add(thePane);
         }
     }
 }

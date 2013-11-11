@@ -1,13 +1,10 @@
 package de.mirkosertic.gamecomposer.objectinspector.gamescene;
 
-import de.mirkosertic.gamecomposer.ChildController;
-import de.mirkosertic.gamecomposer.ObjectUpdatedEvent;
+import de.mirkosertic.gamecomposer.PropertyBinder;
+import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorChildController;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameScene;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -17,10 +14,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.util.StringConverter;
 
-import javax.enterprise.event.Event;
-import javax.inject.Inject;
-
-public class GameSceneEditorController implements ChildController {
+public class GameSceneEditorController implements ObjectInspectorChildController {
 
     static class GameObjectToStringConverter extends StringConverter<GameObject> {
         @Override
@@ -46,61 +40,42 @@ public class GameSceneEditorController implements ChildController {
     @FXML
     ColorPicker backgroundColorPicker;
 
-    @Inject
-    Event<ObjectUpdatedEvent> objectUpdatedEvent;
-
     private Parent view;
     private GameScene gameScene;
+
+    @Override
+    public void cleanup() {
+        PropertyBinder.unbind(gameScene.nameProperty());
+        PropertyBinder.unbind(gameScene.cameraObjectProperty());
+        PropertyBinder.unbind(gameScene.defaultPlayerProperty());
+        PropertyBinder.unbind(gameScene.backgroundColorProperty());
+    }
 
     public GameSceneEditorController initialize(Parent aView, GameScene aObject) {
         view = aView;
         gameScene = aObject;
 
-        nameTextField.setText(gameScene.getName());
+        PropertyBinder.bind(aObject.nameProperty(), nameTextField.textProperty());
 
         defaultCamera.getItems().clear();
         defaultCamera.getItems().addAll(aObject.getObjects());
-        defaultCamera.setValue(aObject.getCameraObject());
         defaultCamera.setConverter(new GameObjectToStringConverter());
+        PropertyBinder.bind(aObject.cameraObjectProperty(), defaultCamera.valueProperty());
 
         defaultPlayer.getItems().clear();
         defaultPlayer.getItems().addAll(aObject.getObjects());
-        defaultPlayer.setValue(aObject.getDefaultPlayer());
         defaultPlayer.setConverter(new GameObjectToStringConverter());
+        PropertyBinder.bind(aObject.defaultPlayerProperty(), defaultPlayer.valueProperty());
 
-        backgroundColorPicker.setValue(Color.rgb(aObject.getBackgroundColor().getR(),
-                aObject.getBackgroundColor().getG(),
-                aObject.getBackgroundColor().getB()));
-        backgroundColorPicker.setOnAction(new EventHandler<ActionEvent>() {
+        PropertyBinder.bind(aObject.backgroundColorProperty(), backgroundColorPicker.valueProperty(), new PropertyBinder.Converter<de.mirkosertic.gameengine.types.Color, Color>() {
             @Override
-            public void handle(ActionEvent actionEvent) {
-                Color theColor = backgroundColorPicker.getValue();
-                gameScene.setBackgroundColor(new de.mirkosertic.gameengine.types.Color((int) (255 * theColor.getRed()), (int) (255 * theColor.getGreen()), (int) (255 * theColor.getBlue())));
-                objectUpdatedEvent.fire(new ObjectUpdatedEvent(gameScene));
+            public Color beanToUI(de.mirkosertic.gameengine.types.Color aValue) {
+                return Color.rgb(aValue.r, aValue.g, aValue.b);
             }
-        });
 
-        nameTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
-            public void changed(ObservableValue<? extends String> observableValue, String aOldValue, String aNewValue) {
-                gameScene.setName(aNewValue);
-                objectUpdatedEvent.fire(new ObjectUpdatedEvent(gameScene));
-            }
-        });
-
-        defaultCamera.valueProperty().addListener(new ChangeListener() {
-            @Override
-            public void changed(ObservableValue observableValue, Object aOldValue, Object aNewValue) {
-                gameScene.setCameraObject((GameObject) aNewValue);
-                objectUpdatedEvent.fire(new ObjectUpdatedEvent(gameScene));
-            }
-        });
-
-        defaultPlayer.valueProperty().addListener(new ChangeListener() {
-            @Override
-            public void changed(ObservableValue observableValue, Object aOldValue, Object aNewValue) {
-                gameScene.setDefaultPlayer((GameObject) aNewValue);
-                objectUpdatedEvent.fire(new ObjectUpdatedEvent(gameScene));
+            public de.mirkosertic.gameengine.types.Color uiToBean(Color aValue) {
+                return new de.mirkosertic.gameengine.types.Color((int)(aValue.getRed() * 255), ((int) aValue.getGreen() * 255), ((int) aValue.getBlue() * 255));
             }
         });
 

@@ -1,14 +1,15 @@
 package de.mirkosertic.gamecomposer.objectinspector.spritetemplate;
 
-import de.mirkosertic.gamecomposer.ChildController;
 import de.mirkosertic.gamecomposer.FlushResourceCacheEvent;
 import de.mirkosertic.gamecomposer.PersistenceManager;
+import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorChildController;
 import de.mirkosertic.gameengine.core.GameResourceLoader;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.core.ResourceName;
 import de.mirkosertic.gameengine.types.Size;
 import de.mirkosertic.gameengine.javafx.JavaFXBitmapResource;
 import de.mirkosertic.gameengine.sprites.SpriteComponentTemplate;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -24,7 +25,7 @@ import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
 
-public class SpriteTemplateEditorController implements ChildController {
+public class SpriteTemplateEditorController implements ObjectInspectorChildController {
 
     @FXML
     ImageView spritePreview;
@@ -43,6 +44,10 @@ public class SpriteTemplateEditorController implements ChildController {
 
     private Parent view;
     private SpriteComponentTemplate object;
+
+    @Override
+    public void cleanup() {
+    }
 
     public SpriteTemplateEditorController initialize(Parent aView, SpriteComponentTemplate aObject) {
         view = aView;

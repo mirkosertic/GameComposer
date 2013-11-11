@@ -132,7 +132,7 @@ public class Undecorator extends StackPane {
                  fadeTransition.play();
                  fadeTransition.setOnFinished(new EventHandler<ActionEvent>() {
                  @Override
-                 public void handle(ActionEvent t) {*/
+                 public void perhapsThrottleDown(ActionEvent t) {*/
 
                 getController().minimize();
                 /*    }

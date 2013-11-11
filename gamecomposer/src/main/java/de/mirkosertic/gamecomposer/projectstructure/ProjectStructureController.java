@@ -2,6 +2,8 @@ package de.mirkosertic.gamecomposer.projectstructure;
 
 import de.mirkosertic.gamecomposer.*;
 import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.event.PropertyChangeEvent;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
@@ -67,6 +69,11 @@ public class ProjectStructureController implements ChildController {
                 GameObject theGameObject = new GameObject(aGameScene, "New Object");
                 aGameScene.addGameObject(theGameObject);
             }
+
+            @Override
+            public void onCreateNewGameScene() {
+                eventGateway.fire(new NewGameSceneEvent());
+            }
         }));
         projectStructureTreeView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
@@ -108,7 +115,7 @@ public class ProjectStructureController implements ChildController {
         treeItemMap.clear();
         Game theCurrentGame = persistenceManager.getGame();
 
-        TreeItem theRootTreeItem = new TreeItem(theCurrentGame.getName());
+        TreeItem theRootTreeItem = new TreeItem(theCurrentGame.nameProperty().get());
         theRootTreeItem.setValue(theCurrentGame);
         theRootTreeItem.setExpanded(true);
         treeItemMap.put(theCurrentGame, theRootTreeItem);
@@ -172,11 +179,11 @@ public class ProjectStructureController implements ChildController {
         treeItemMap.remove(aEvent.getGameObjectInstance());
     }
 
-    public void onObjectUpdatedEvent(@Observes ObjectUpdatedEvent aEvent) {
-        TreeItem theItem = treeItemMap.get(aEvent.getObject());
+    public void onObjectUpdatedEvent(@Observes PropertyChangeEvent aEvent) {
+        TreeItem theItem = treeItemMap.get(aEvent.getOwner());
         if (theItem != null) {
             theItem.setValue(null);
-            theItem.setValue(aEvent.getObject());
+            theItem.setValue(aEvent.getOwner());
         }
     }
 
@@ -192,7 +199,7 @@ public class ProjectStructureController implements ChildController {
         treeItemMap.clear();
         sceneTreeDescriptorMap.clear();
 
-        TreeItem theRootTreeItem = new TreeItem(aGame.getName());
+        TreeItem theRootTreeItem = new TreeItem(aGame.nameProperty().get());
         theRootTreeItem.setValue(aGame);
         theRootTreeItem.setExpanded(true);
         treeItemMap.put(aGame, theRootTreeItem);
@@ -236,7 +243,9 @@ public class ProjectStructureController implements ChildController {
             theDesc.sceneTreeItem = theSceneTreeItem;
             theDesc.objectsItem = theObjectsTreeItem;
             theDesc.instancesItem = theInstancesTreeItem;
+
             sceneTreeDescriptorMap.put(theLoadedScene, theDesc);
+            treeItemMap.put(theLoadedScene, theSceneTreeItem);
         }
 
         projectStructureTreeView.setRoot(theRootTreeItem);

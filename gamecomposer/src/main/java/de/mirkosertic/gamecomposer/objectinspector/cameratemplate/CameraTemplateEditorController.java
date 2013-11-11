@@ -1,10 +1,10 @@
 package de.mirkosertic.gamecomposer.objectinspector.cameratemplate;
 
-import de.mirkosertic.gamecomposer.ChildController;
-import de.mirkosertic.gamecomposer.ObjectUpdatedEvent;
+import de.mirkosertic.gamecomposer.PropertyBinder;
+import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorChildController;
 import de.mirkosertic.gameengine.camera.CameraComponentTemplate;
 import de.mirkosertic.gameengine.camera.CameraType;
-import de.mirkosertic.gameengine.physics.StaticComponentTemplate;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -13,11 +13,9 @@ import javafx.scene.Parent;
 import javafx.scene.control.ComboBox;
 import javafx.util.StringConverter;
 
-import javax.enterprise.event.Event;
-import javax.inject.Inject;
 import java.util.Arrays;
 
-public class CameraTemplateEditorController implements ChildController {
+public class CameraTemplateEditorController implements ObjectInspectorChildController {
 
     class CameraTypeToStringConverter extends StringConverter<CameraType> {
         @Override
@@ -34,11 +32,13 @@ public class CameraTemplateEditorController implements ChildController {
     @FXML
     ComboBox cameraType;
 
-    @Inject
-    Event<Object> eventGateway;
-
     private Parent view;
     private CameraComponentTemplate object;
+
+    @Override
+    public void cleanup() {
+        PropertyBinder.unbind(object.typeProperty());
+    }
 
     public CameraTemplateEditorController initialize(Parent aView, CameraComponentTemplate aObject) {
         view = aView;
@@ -46,13 +46,14 @@ public class CameraTemplateEditorController implements ChildController {
 
         cameraType.getItems().clear();
         cameraType.getItems().addAll(Arrays.asList(CameraType.values()));
-        cameraType.setValue(object.typeProperty().get());
         cameraType.setConverter(new CameraTypeToStringConverter());
+
+        PropertyBinder.bind(aObject.typeProperty(), cameraType.valueProperty());
+
         cameraType.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent aEvent) {
                 object.typeProperty().set((CameraType) cameraType.getValue());
-                eventGateway.fire(new ObjectUpdatedEvent(object));
             }
         });
 

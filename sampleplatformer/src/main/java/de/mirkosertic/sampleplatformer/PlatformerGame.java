@@ -6,6 +6,7 @@ import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.javafx.JavaFXClasspathGameResourceLoader;
 import de.mirkosertic.gameengine.javafx.JavaFXGameView;
+import de.mirkosertic.gameengine.javafx.ThreadGameLoopThrottle;
 import de.mirkosertic.gameengine.physics.*;
 import de.mirkosertic.gameengine.physics.jbox2d.JBox2DGamePhysicsManager;
 import de.mirkosertic.gameengine.physics.jbox2d.JBox2DGamePhysicsManagerFactory;
@@ -76,11 +77,11 @@ public class PlatformerGame extends Application {
         GameObjectInstanceFactory theInstanceFactory = new GameObjectInstanceFactory(theGameRuntime);
 
         Game theGame = new Game();
-        theGame.setName("Examplegame");
+        theGame.nameProperty().set("Examplegame");
         theGame.addScene("scene1");
 
         GameScene theCurrentScene = new GameScene(theGameRuntime);
-        theCurrentScene.setName("Testscene");
+        theCurrentScene.nameProperty().set("Testscene");
 
         GameObject thePlayerObject = new GameObject(theCurrentScene, "Player");
         thePlayerObject.add(new PlatformComponentTemplate(thePlayerObject));
@@ -135,7 +136,7 @@ public class PlatformerGame extends Application {
         theObjWriter.writeValue(new File("C:\\source\\idea_projects\\GameEngine\\sampleplatformer\\data\\game.json"), theGame.serialize());
 
         GameLoopFactory theGameLoopFactory = new GameLoopFactory();
-        GameLoop theMainLoop = theGameLoopFactory.create(theCurrentScene, theGameView, theGameRuntime);
+        GameLoop theMainLoop = theGameLoopFactory.create(theCurrentScene, theGameView, theGameRuntime,new ThreadGameLoopThrottle());
 
         theEventManager.fire(new StartProcessEvent(new FollowCameraProcess(theCameraInstance, thePlayerInstance)));
 

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.types.Size;
 
@@ -25,10 +26,13 @@ public class GameObject {
     }
 
     GameObject(GameScene aScene, String aName, String aUUID) {
+
+        GameEventManager theManager = aScene.getRuntime().getEventManager();
+
         gameScene = aScene;
-        uuid = new Property<String>(this, "uuid", aUUID, aScene.getRuntime().getEventManager());
-        name = new Property<String>(this, "name", aName, aScene.getRuntime().getEventManager());
-        size = new Property<Size>(this, "size", new Size(64, 64), aScene.getRuntime().getEventManager());
+        uuid = new Property<String>(this, "uuid", aUUID, theManager);
+        name = new Property<String>(this, "name", aName, theManager);
+        size = new Property<Size>(this, "size", new Size(64, 64), theManager);
         componentTemplates = new HashMap<Class<GameComponentTemplate>, GameComponentTemplate>();
 
         name.setQuietly(aName);
@@ -53,6 +57,7 @@ public class GameObject {
 
     public void add(GameComponentTemplate aComponentTemplate) {
         componentTemplates.put((Class<GameComponentTemplate>) aComponentTemplate.getClass(), aComponentTemplate);
+        gameScene.getRuntime().getEventManager().fire(new GameObjectConfigurationChangedEvent(this));
     }
 
     public <T extends GameComponentTemplate> T getComponentTemplate(Class<T> aComponentClass) {
@@ -67,8 +72,8 @@ public class GameObject {
 
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<String, Object>();
-        theResult.put("name", name);
-        theResult.put("uuid", uuid);
+        theResult.put("name", name.get());
+        theResult.put("uuid", uuid.get());
         theResult.put("size", size.get().serializeToMap());
         List<Map<String, Object>> theTemplates = new ArrayList<Map<String, Object>>();
         for (GameComponentTemplate theTemplate : componentTemplates.values()) {

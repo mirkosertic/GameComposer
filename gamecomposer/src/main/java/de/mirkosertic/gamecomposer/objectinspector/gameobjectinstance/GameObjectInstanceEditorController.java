@@ -1,7 +1,6 @@
 package de.mirkosertic.gamecomposer.objectinspector.gameobjectinstance;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorChildController;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -13,16 +12,13 @@ import javafx.scene.control.TextField;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
-import org.apache.commons.lang3.StringUtils;
-
-import de.mirkosertic.gamecomposer.ChildController;
+import de.mirkosertic.gamecomposer.PropertyBinder;
 import de.mirkosertic.gamecomposer.ObjectSelectedEvent;
-import de.mirkosertic.gamecomposer.ObjectUpdatedEvent;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.types.Angle;
 import de.mirkosertic.gameengine.types.Position;
 
-public class GameObjectInstanceEditorController implements ChildController {
+public class GameObjectInstanceEditorController implements ObjectInspectorChildController {
 
     @FXML
     TextField nameTextField;
@@ -45,51 +41,56 @@ public class GameObjectInstanceEditorController implements ChildController {
     private Parent view;
     private GameObjectInstance object;
 
+    @Override
+    public void cleanup() {
+        PropertyBinder.unbind(object.nameProperty());
+        PropertyBinder.unbind(object.positionProperty());
+        PropertyBinder.unbind(object.rotationAngleProperty());
+    }
+
     public GameObjectInstanceEditorController initialize(Parent aView, GameObjectInstance aObject) {
         view = aView;
         object = aObject;
 
-        nameTextField.setText(object.nameProperty().get());
-        xTextField.setText(Integer.toString((int) aObject.positionProperty().get().x));
-        yTextField.setText(Integer.toString((int) aObject.positionProperty().get().y));
+        PropertyBinder.bind(object.nameProperty(), nameTextField.textProperty());
+        PropertyBinder.bind(object.positionProperty(), xTextField.textProperty(), new PropertyBinder.Converter<Position, String>() {
+            @Override
+            public String beanToUI(Position aValue) {
+                return Integer.toString((int) aValue.x);
+            }
+
+            @Override
+            public Position uiToBean(String aValue) {
+                Position theCurrentPosition = object.positionProperty().get();
+                return new Position(Integer.parseInt(aValue), theCurrentPosition.y);
+            }
+        });
+        PropertyBinder.bind(object.positionProperty(), yTextField.textProperty(), new PropertyBinder.Converter<Position, String>() {
+            @Override
+            public String beanToUI(Position aValue) {
+                return Integer.toString((int) aValue.y);
+            }
+
+            @Override
+            public Position uiToBean(String aValue) {
+                Position theCurrentPosition = object.positionProperty().get();
+                return new Position(theCurrentPosition.x, Integer.parseInt(aValue));
+            }
+        });
+        PropertyBinder.bind(object.rotationAngleProperty(), rotationTextField.textProperty(), new PropertyBinder.Converter<Angle, String>() {
+            @Override
+            public String beanToUI(Angle aValue) {
+                return Integer.toString(aValue.angleInDegrees);
+            }
+
+            @Override
+            public Angle uiToBean(String aValue) {
+                return new Angle(Integer.parseInt(aValue));
+            }
+        });
+
         rotationTextField.setText(Integer.toString(aObject.rotationAngleProperty().get().angleInDegrees));
 
-        nameTextField.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String aOldValue, String aNewValue) {
-                object.nameProperty().set(aNewValue);
-                eventGateway.fire(new ObjectUpdatedEvent(object));
-            }
-        });
-        xTextField.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String aOldValue, String aNewValue) {
-                if (!StringUtils.isEmpty(aNewValue)) {
-                    Position thePosition = object.positionProperty().get();
-                    object.positionProperty().set(new Position(Integer.valueOf(aNewValue), thePosition.y));
-                    eventGateway.fire(new ObjectUpdatedEvent(object));
-                }
-            }
-        });
-        yTextField.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String aOldValue, String aNewValue) {
-                if (!StringUtils.isEmpty(aNewValue)) {
-                    Position thePosition = object.positionProperty().get();
-                    object.positionProperty().set(new Position(thePosition.x, Integer.valueOf(aNewValue)));
-                    eventGateway.fire(new ObjectUpdatedEvent(object));
-                }
-            }
-        });
-        rotationTextField.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String aOldValue, String aNewValue) {
-                if (!StringUtils.isEmpty(aNewValue)) {
-                    object.rotationAngleProperty().set(new Angle(Integer.valueOf(aNewValue)));
-                    eventGateway.fire(new ObjectUpdatedEvent(object));
-                }
-            }
-        });
         jumpToObject.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
