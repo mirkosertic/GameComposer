@@ -34,9 +34,9 @@ public class GWTGameView implements GameView {
     public void renderGame(long aGameTime, long aElapsedTimeSinceLastLoop, GameScene aScene) {
         Context2d theContext = canvas.getContext2d();
 
-        Color theBGColor = aScene.getBackgroundColor();
+        Color theBGColor = aScene.backgroundColorProperty().get();
 
-        CssColor theCssBackground = CssColor.make(theBGColor.getR(), theBGColor.getG(), theBGColor.getB());
+        CssColor theCssBackground = CssColor.make(theBGColor.r, theBGColor.g, theBGColor.b);
         theContext.setFillStyle(theCssBackground);
         theContext.setStrokeStyle(theCssBackground);
         theContext.fillRect(0, 0, currentSize.width, currentSize.height);

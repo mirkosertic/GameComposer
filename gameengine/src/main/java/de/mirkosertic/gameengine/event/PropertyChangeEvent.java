@@ -17,4 +17,8 @@ public class PropertyChangeEvent extends GameEvent {
     public Object getNewValue() {
         return property.get();
     }
+
+    public Property getProperty() {
+        return property;
+    }
 }

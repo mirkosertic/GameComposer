@@ -13,4 +13,6 @@ public interface ContextMenuListener {
     void onDeleteGameObjectInstance(GameObjectInstance aGameObjectInstance);
 
     void onCreateNewGameObject(GameScene aGameScene);
+
+    void onCreateNewGameScene();
 }

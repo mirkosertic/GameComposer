@@ -11,14 +11,16 @@ public class GameLoop implements Runnable {
     private GameRuntime runtime;
     private long startTime;
     private long lastInvocation;
+    private GameLoopThrottle throttle;
 
-    GameLoop(GameScene aScene, GameView aHumanGameView, GameRuntime aRuntime) {
+    GameLoop(GameScene aScene, GameView aHumanGameView, GameRuntime aRuntime, GameLoopThrottle aThrottle) {
         views = new HashSet<GameView>();
         views.add(aHumanGameView);
         shutdownSignal = false;
         runtime = aRuntime;
         scene = aScene;
         startTime = System.currentTimeMillis();
+        throttle = aThrottle;
     }
 
     public void run() {
@@ -26,13 +28,8 @@ public class GameLoop implements Runnable {
             long theStart = System.currentTimeMillis();
             singleRun();
             long theDuration = System.currentTimeMillis() - theStart;
-            if (theDuration < 4) {
-                try {
-                    Thread.sleep(4);
-                } catch (InterruptedException e) {
-                    // Something is strange
-                }
-            }
+
+            throttle.perhapsThrottleDown(theDuration);
         }
     }
 

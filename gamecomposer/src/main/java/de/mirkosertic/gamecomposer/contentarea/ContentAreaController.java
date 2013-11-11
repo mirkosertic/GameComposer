@@ -4,6 +4,7 @@ import de.mirkosertic.gamecomposer.*;
 import de.mirkosertic.gamecomposer.contentarea.gamescene.GameSceneEditorController;
 import de.mirkosertic.gamecomposer.contentarea.gamescene.GameSceneEditorControllerFactory;
 import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.event.PropertyChangeEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -112,7 +113,7 @@ public class ContentAreaController implements ChildController {
         }
     }
 
-    public void onObjectUpdated(@Observes ObjectUpdatedEvent aEvent) {
+    public void onObjectUpdated(@Observes PropertyChangeEvent aEvent) {
         for (Map.Entry<ContentChildController, Tab> theTabEntry : activeTabs.entrySet()) {
             theTabEntry.getKey().onObjectUpdated(theTabEntry.getValue(), aEvent);
         }
@@ -140,7 +141,7 @@ public class ContentAreaController implements ChildController {
         }
 
         GameSceneEditorController theSceneEditorController = sceneEditorControllerFactory.createFor(theScene);
-        Tab theTab = new Tab(theScene.getName());
+        Tab theTab = new Tab(theScene.nameProperty().get());
         theTab.setContent(theSceneEditorController.getView());
 
         addTab(theTab);

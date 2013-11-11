@@ -1,5 +1,6 @@
 package de.mirkosertic.gameengine.event;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -55,6 +56,10 @@ public class Property<T> {
 
     public void setQuietly(T aValue) {
         value = aValue;
+    }
+
+    public Set<GameEventListener<PropertyChangeEvent>> getChangeListener() {
+        return Collections.unmodifiableSet(changeListener);
     }
 
     public void addChangeListener(GameEventListener<PropertyChangeEvent> aListener) {

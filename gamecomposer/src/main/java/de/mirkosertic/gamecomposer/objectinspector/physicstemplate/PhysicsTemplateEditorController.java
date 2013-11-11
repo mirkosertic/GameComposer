@@ -1,45 +1,32 @@
 package de.mirkosertic.gamecomposer.objectinspector.physicstemplate;
 
-import de.mirkosertic.gamecomposer.ChildController;
-import de.mirkosertic.gamecomposer.ObjectUpdatedEvent;
+import de.mirkosertic.gamecomposer.PropertyBinder;
+import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorChildController;
 import de.mirkosertic.gameengine.physics.PhysicsComponentTemplate;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.CheckBox;
 
-import javax.enterprise.event.Event;
-import javax.inject.Inject;
-
-public class PhysicsTemplateEditorController implements ChildController {
+public class PhysicsTemplateEditorController implements ObjectInspectorChildController {
 
     @FXML
     CheckBox fixedRotation;
 
-    @Inject
-    Event<ObjectUpdatedEvent> objectUpdatedEvent;
-
     private Parent view;
     private PhysicsComponentTemplate object;
+
+    @Override
+    public void cleanup() {
+        PropertyBinder.unbind(object.fixedRotationProperty());
+    }
 
     public PhysicsTemplateEditorController initialize(Parent aView, PhysicsComponentTemplate aObject) {
         view = aView;
         object = aObject;
 
-        fixedRotation.setSelected(aObject.fixedRotationProperty().get());
-        fixedRotation.selectedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aOldValue, Boolean aNewValue) {
-                if (aNewValue != null) {
-                    object.fixedRotationProperty().set(aNewValue);
-                    objectUpdatedEvent.fire(new ObjectUpdatedEvent(object.getOwner()));
-                }
-            }
-        });
+        PropertyBinder.bind(object.fixedRotationProperty(), fixedRotation.selectedProperty());
 
         return this;
     }

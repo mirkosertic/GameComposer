@@ -1,6 +1,7 @@
 package de.mirkosertic.gamecomposer.projectstructure;
 
 import de.mirkosertic.gamecomposer.GameObjectClipboardContent;
+import de.mirkosertic.gamecomposer.PropertyBinder;
 import de.mirkosertic.gameengine.core.Game;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
@@ -74,12 +75,21 @@ public class StructureTreeCell extends TreeCell {
             }
         }
         if (aValue instanceof Game) {
-            setText(((Game) aValue).getName());
-            setContextMenu(null);
+            setText(((Game) aValue).nameProperty().get());
+            ContextMenu theContextMenu = new ContextMenu();
+            MenuItem theDeleteItem = new MenuItem("Create new GameScene");
+            theDeleteItem.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    contextMenuListener.onCreateNewGameScene();
+                }
+            });
+            theContextMenu.getItems().add(theDeleteItem);
+            setContextMenu(theContextMenu);
         }
         if (aValue instanceof GameScene) {
             final GameScene theGameScene = (GameScene) aValue;
-            setText(theGameScene.getName());
+            setText(theGameScene.nameProperty().get());
             ContextMenu theContextMenu = new ContextMenu();
             MenuItem theDeleteItem = new MenuItem("Delete");
             theDeleteItem.setOnAction(new EventHandler<ActionEvent>() {

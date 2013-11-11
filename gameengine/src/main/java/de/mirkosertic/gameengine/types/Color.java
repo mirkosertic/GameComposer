@@ -5,26 +5,14 @@ import java.util.Map;
 
 public class Color {
 
-    private int r;
-    private int g;
-    private int b;
+    public final int r;
+    public final int g;
+    public final int b;
 
     public Color(int aR, int aG, int aB) {
         r = aR;
         g = aG;
         b = aB;
-    }
-
-    public int getR() {
-        return r;
-    }
-
-    public int getG() {
-        return g;
-    }
-
-    public int getB() {
-        return b;
     }
 
     public Map<String, String> serialize() {

@@ -4,6 +4,7 @@ import de.mirkosertic.gamecomposer.*;
 import de.mirkosertic.gamecomposer.contentarea.ContentChildController;
 import de.mirkosertic.gameengine.camera.CameraComponent;
 import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.event.PropertyChangeEvent;
 import de.mirkosertic.gameengine.physics.DisableDynamicPhysicsEvent;
 import de.mirkosertic.gameengine.physics.EnableDynamicPhysicsEvent;
 import de.mirkosertic.gameengine.types.Position;
@@ -300,9 +301,9 @@ public class GameSceneEditorController implements ContentChildController<GameSce
         }
     }
 
-    public void onObjectUpdated(Tab aTab, ObjectUpdatedEvent aEvent) {
-        if (aEvent.getObject() == gameScene) {
-            aTab.setText(gameScene.getName());
+    public void onObjectUpdated(Tab aTab, PropertyChangeEvent aEvent) {
+        if (aEvent.getOwner() == gameScene) {
+            aTab.setText(gameScene.nameProperty().get());
         }
     }
 

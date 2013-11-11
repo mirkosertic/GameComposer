@@ -79,12 +79,12 @@ public class GWTRenderer implements EntryPoint {
         GameObjectInstanceFactory theInstanceFactory = new GameObjectInstanceFactory(theRuntime);
 
         // Detect and create a camera
-        GameObjectInstance theCameraObject = theInstanceFactory.createFrom(aGameScene.getCameraObject());
+        GameObjectInstance theCameraObject = theInstanceFactory.createFrom(aGameScene.cameraObjectProperty().get());
         CameraComponent theCameraComponent = theCameraObject.getComponent(CameraComponent.class);
 
         GameObjectInstance thePlayerInstance = null;
         for (GameObjectInstance theInstance : aGameScene.getInstances()) {
-            if (theInstance.getOwnerGameObject() == aGameScene.getDefaultPlayer()) {
+            if (theInstance.getOwnerGameObject() == aGameScene.defaultPlayerProperty().get()) {
                 thePlayerInstance = theInstance;
             }
         }
@@ -94,7 +94,7 @@ public class GWTRenderer implements EntryPoint {
         theEventManager.fire(new SetScreenResolutionEvent(Window.getClientWidth(), Window.getClientHeight()));
 
         GameLoopFactory theGameLoopFactory = new GameLoopFactory();
-        final GameLoop theMainLoop = theGameLoopFactory.create(aGameScene, theGameView, theRuntime);
+        final GameLoop theMainLoop = theGameLoopFactory.create(aGameScene, theGameView, theRuntime, new DefaultGameLoopThrottle());
         // setup timer
         final Timer theTimer = new Timer() {
             @Override

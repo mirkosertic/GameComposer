@@ -9,7 +9,7 @@
 
 <BorderPane id="BorderPane" maxHeight="-1.0" maxWidth="-1.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="-1.0" prefWidth="-1.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="de.mirkosertic.gamecomposer.objectinspector.gameobject.GameObjectEditorController">
   <center>
-    <VBox fx:id="componentAddHyperlinks" prefHeight="-1.0" prefWidth="-1.0" spacing="0.0">
+    <VBox id="componentAddHyperlinks" prefHeight="-1.0" prefWidth="-1.0" spacing="0.0">
       <children>
         <HBox id="uuidTextField" prefHeight="-1.0" prefWidth="-1.0" spacing="0.0" VBox.vgrow="NEVER">
           <children>
@@ -35,6 +35,7 @@
             <Insets bottom="10.0" />
           </padding>
         </HBox>
+        <VBox fx:id="componentAddHyperlinks" prefHeight="-1.0" prefWidth="-1.0" />
       </children>
     </VBox>
   </center>

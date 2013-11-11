@@ -36,9 +36,9 @@ public class JavaFXGameView extends Canvas implements GameView {
     private void renderScene() {
         GraphicsContext theContext = getGraphicsContext2D();
 
-        de.mirkosertic.gameengine.types.Color theBGColor = gameScene.getBackgroundColor();
+        de.mirkosertic.gameengine.types.Color theBGColor = gameScene.backgroundColorProperty().get();
 
-        Color theFXColor = Color.rgb(theBGColor.getR(), theBGColor.getG(), theBGColor.getB());
+        Color theFXColor = Color.rgb(theBGColor.r, theBGColor.g, theBGColor.b);
         theContext.setFill(theFXColor);
         theContext.setStroke(theFXColor);
         theContext.fillRect(0, 0, getWidth(), getHeight());

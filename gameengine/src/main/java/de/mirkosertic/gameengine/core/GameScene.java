@@ -8,22 +8,31 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import de.mirkosertic.gameengine.event.GameEventManager;
+import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.types.Color;
 import de.mirkosertic.gameengine.types.Position;
 
 public class GameScene {
 
-    private String name;
+    private Property<String> name;
     private Set<GameObject> objects;
     private Set<GameObjectInstance> instances;
+    private Property<GameObject> cameraObject;
+    private Property<GameObject> defaultPlayer;
+    private Property<Color> backgroundColor;
+
     private Set<EventSheet> eventSheets;
     private GameRuntime gameRuntime;
-    private GameObject cameraObject;
-    private GameObject defaultPlayer;
-    private Color backgroundColor;
 
     public GameScene(GameRuntime aGameRuntime) {
-        backgroundColor = new Color(0, 0, 0);
+
+        GameEventManager theManager = aGameRuntime.getEventManager();
+
+        name = new Property<String>(this, "name", null, theManager);
+        cameraObject = new Property<GameObject>(this, "cameraObject", null, theManager);
+        defaultPlayer = new Property<GameObject>(this, "defaultPlayer", null, theManager);
+        backgroundColor = new Property<Color>(this, "color", new Color(0, 0, 0), theManager);
         instances = new HashSet<GameObjectInstance>();
         objects = new HashSet<GameObject>();
         eventSheets = new HashSet<EventSheet>();
@@ -34,36 +43,20 @@ public class GameScene {
         return gameRuntime;
     }
 
-    public String getName() {
+    public Property<String> nameProperty() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public GameObject getCameraObject() {
+    public Property<GameObject> cameraObjectProperty() {
         return cameraObject;
     }
 
-    public void setCameraObject(GameObject cameraObject) {
-        this.cameraObject = cameraObject;
-    }
-
-    public Color getBackgroundColor() {
+    public Property<Color> backgroundColorProperty() {
         return backgroundColor;
     }
 
-    public void setBackgroundColor(Color backgroundColor) {
-        this.backgroundColor = backgroundColor;
-    }
-
-    public GameObject getDefaultPlayer() {
+    public Property<GameObject> defaultPlayerProperty() {
         return defaultPlayer;
-    }
-
-    public void setDefaultPlayer(GameObject defaultPlayer) {
-        this.defaultPlayer = defaultPlayer;
     }
 
     public void addGameObject(GameObject aObject) {
@@ -100,21 +93,21 @@ public class GameScene {
 
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<String, Object>();
-        theResult.put("name", name);
+        theResult.put("name", name.get());
 
         List<Map<String, Object>> theObjects = new ArrayList<Map<String, Object>>();
         for (GameObject theObject : objects) {
             theObjects.add(theObject.serialize());
         }
         theResult.put("objects", theObjects);
-        if (cameraObject != null) {
-            theResult.put("cameraobjectid", cameraObject.uuidProperty().get());
+        if (cameraObject.get() != null) {
+            theResult.put("cameraobjectid", cameraObject.get().uuidProperty().get());
         }
-        if (backgroundColor != null) {
-            theResult.put("backgroundcolor", backgroundColor.serialize());
+        if (backgroundColor.get() != null) {
+            theResult.put("backgroundcolor", backgroundColor.get().serialize());
         }
-        if (defaultPlayer != null) {
-            theResult.put("defaultplayerobjectid", defaultPlayer.uuidProperty().get());
+        if (defaultPlayer.get() != null) {
+            theResult.put("defaultplayerobjectid", defaultPlayer.get().uuidProperty().get());
         }
 
         List<Map<String, Object>> theInstances = new ArrayList<Map<String, Object>>();
@@ -136,7 +129,7 @@ public class GameScene {
 
     public static GameScene deserialize(GameRuntime aGameRuntime, Map<String, Object> aSerializedData) {
         GameScene theScene = new GameScene(aGameRuntime);
-        theScene.name = (String) aSerializedData.get("name");
+        theScene.name.setQuietly((String) aSerializedData.get("name"));
 
         List<Map<String, Object>> theObjects = (List<Map<String, Object>>) aSerializedData.get("objects");
         for (Map<String, Object> theObject : theObjects) {
@@ -150,15 +143,15 @@ public class GameScene {
 
         String theCameraObject = (String) aSerializedData.get("cameraobjectid");
         if (theCameraObject != null) {
-            theScene.cameraObject = theScene.findGameObjectByID(theCameraObject);
+            theScene.cameraObject.setQuietly(theScene.findGameObjectByID(theCameraObject));
         }
         String theDefaultPlayerObject = (String) aSerializedData.get("defaultplayerobjectid");
         if (theDefaultPlayerObject != null) {
-            theScene.defaultPlayer = theScene.findGameObjectByID(theDefaultPlayerObject);
+            theScene.defaultPlayer.setQuietly(theScene.findGameObjectByID(theDefaultPlayerObject));
         }
         Map<String, Object> theBackgroundColor = (Map<String, Object>) aSerializedData.get("backgroundcolor");
         if (theBackgroundColor != null) {
-            theScene.backgroundColor = Color.deserialize(theBackgroundColor);
+            theScene.backgroundColor.setQuietly(Color.deserialize(theBackgroundColor));
         }
         return theScene;
     }
@@ -177,9 +170,5 @@ public class GameScene {
         }
         objects.remove(aGameObject);
         gameRuntime.getEventManager().fire(new GameObjectRemovedFromSceneEvent(aGameObject));
-    }
-
-    public void updateObjectConfiguration(GameObject aGameObject) {
-        gameRuntime.getEventManager().fire(new GameObjectConfigurationChangedEvent(aGameObject));
     }
 }

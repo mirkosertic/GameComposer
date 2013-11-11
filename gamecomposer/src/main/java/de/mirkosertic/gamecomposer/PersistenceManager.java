@@ -60,18 +60,23 @@ public class PersistenceManager {
     }
 
     public void onNewGameScene(@Observes NewGameSceneEvent aEvent) {
+        String theSceneID = "scene" + (gameScenes.size() + 1);
 
-        String theSceneID = "scene" + gameScenes.size() + 1;
-        GameResourceLoader theResourceLoader = new JavaFXFileGameResourceLoader(new File(currentGameDirectory, theSceneID));
+        File theSceneDirectory = new File(currentGameDirectory, theSceneID);
+        theSceneDirectory.mkdirs();
+
+        GameResourceLoader theResourceLoader = new JavaFXFileGameResourceLoader(theSceneDirectory);
         GameRuntime theRuntime = gameRuntimeFactory.create(theResourceLoader);
 
         GameScene theNewGameScene = new GameScene(theRuntime);
         gameScenes.put(theSceneID, theNewGameScene);
 
         if (game.getScenes().size() == 0) {
-            game.setDefaultScene(theSceneID);
+            game.defaultSceneProperty().set(theSceneID);
         }
         game.addScene(theSceneID);
+
+        theRuntime.getEventManager().register(null, GameEvent.class, new EventCDIForwarder());
 
         eventGateway.fire(new GameSceneCreatedEvent(theNewGameScene));
     }
@@ -120,7 +125,7 @@ public class PersistenceManager {
                 return new JavaFXFileGameResourceLoader(new File(currentGameDirectory, theEntry.getKey()));
             }
         }
-        throw new RuntimeException("Cannot find scene directory for " + aScene.getName());
+        throw new RuntimeException("Cannot find scene directory for " + aScene.nameProperty().get());
     }
 
     public File getAssetsDirectoryFor(GameScene aGameScene) {
@@ -129,7 +134,7 @@ public class PersistenceManager {
                 return new File(currentGameDirectory, theEntry.getKey());
             }
         }
-        throw new RuntimeException("Cannot find scene directory for " + aGameScene.getName());
+        throw new RuntimeException("Cannot find scene directory for " + aGameScene.nameProperty().get());
     }
 
     public ResourceName toResourceName(GameScene aGameScene, File theSelectedFile) {
@@ -140,7 +145,7 @@ public class PersistenceManager {
                 return new ResourceName(theResourceName.replace('\\', '/'));
             }
         }
-        throw new RuntimeException("Cannot find scene directory for " + aGameScene.getName());
+        throw new RuntimeException("Cannot find scene directory for " + aGameScene.nameProperty().get());
     }
 
     public void copyGameTo(File aTargetDirectory) throws IOException {

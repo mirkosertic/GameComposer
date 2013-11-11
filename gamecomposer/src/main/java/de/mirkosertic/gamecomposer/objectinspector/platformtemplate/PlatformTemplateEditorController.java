@@ -1,14 +1,19 @@
 package de.mirkosertic.gamecomposer.objectinspector.platformtemplate;
 
-import de.mirkosertic.gamecomposer.ChildController;
+import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorChildController;
 import de.mirkosertic.gameengine.physics.PlatformComponentTemplate;
+
 import javafx.scene.Node;
 import javafx.scene.Parent;
 
-public class PlatformTemplateEditorController implements ChildController {
+public class PlatformTemplateEditorController implements ObjectInspectorChildController {
 
     private Parent view;
     private PlatformComponentTemplate object;
+
+    @Override
+    public void cleanup() {
+    }
 
     public PlatformTemplateEditorController initialize(Parent aView, PlatformComponentTemplate aObject) {
         view = aView;
