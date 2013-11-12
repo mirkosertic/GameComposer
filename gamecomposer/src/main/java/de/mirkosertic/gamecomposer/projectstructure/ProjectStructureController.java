@@ -140,43 +140,43 @@ public class ProjectStructureController implements ChildController {
     }
 
     public void onGameObjectAdded(@Observes GameObjectAddedToSceneEvent aEvent) {
-        GameScene theScene = aEvent.getGameObject().getGameScene();
+        GameScene theScene = aEvent.objectProperty().get().getGameScene();
         SceneTreeDescriptor theDesc = sceneTreeDescriptorMap.get(theScene);
 
         TreeItem theObjectTreeItem = new TreeItem();
-        theObjectTreeItem.setValue(aEvent.getGameObject());
+        theObjectTreeItem.setValue(aEvent.objectProperty().get());
         theDesc.objectsItem.getChildren().add(theObjectTreeItem);
-        treeItemMap.put(aEvent.getGameObject(), theObjectTreeItem);
+        treeItemMap.put(aEvent.objectProperty().getName(), theObjectTreeItem);
     }
 
     public void onGameObjectRemoved(@Observes GameObjectRemovedFromSceneEvent aEvent) {
-        GameScene theScene = aEvent.getGameObject().getGameScene();
+        GameScene theScene = aEvent.objectProperty().get().getGameScene();
         SceneTreeDescriptor theDesc = sceneTreeDescriptorMap.get(theScene);
 
-        TreeItem theObjectTreeItem = treeItemMap.get(aEvent.getGameObject());
+        TreeItem theObjectTreeItem = treeItemMap.get(aEvent.objectProperty().get());
         theDesc.objectsItem.getChildren().remove(theObjectTreeItem);
 
-        treeItemMap.remove(aEvent.getGameObject());
+        treeItemMap.remove(aEvent.objectProperty().get());
     }
 
     public void onGameObjectInstanceAdded(@Observes GameObjectInstanceAddedToSceneEvent aEvent) {
-        GameScene theScene = aEvent.getGameObjectInstance().getOwnerGameObject().getGameScene();
+        GameScene theScene = aEvent.instanceProperty().get().getOwnerGameObject().getGameScene();
         SceneTreeDescriptor theDesc = sceneTreeDescriptorMap.get(theScene);
 
         TreeItem theObjectTreeItem = new TreeItem();
-        theObjectTreeItem.setValue(aEvent.getGameObjectInstance());
+        theObjectTreeItem.setValue(aEvent.instanceProperty().get());
         theDesc.instancesItem.getChildren().add(theObjectTreeItem);
-        treeItemMap.put(aEvent.getGameObjectInstance(), theObjectTreeItem);
+        treeItemMap.put(aEvent.instanceProperty().get(), theObjectTreeItem);
     }
 
     public void onGameObjectInstanceRemoved(@Observes GameObjectInstanceRemovedFromSceneEvent aEvent) {
-        GameScene theScene = aEvent.getGameObjectInstance().getOwnerGameObject().getGameScene();
+        GameScene theScene = aEvent.instanceProperty().get().getOwnerGameObject().getGameScene();
         SceneTreeDescriptor theDesc = sceneTreeDescriptorMap.get(theScene);
 
-        TreeItem theObjectTreeItem = treeItemMap.get(aEvent.getGameObjectInstance());
+        TreeItem theObjectTreeItem = treeItemMap.get(aEvent.instanceProperty().get());
         theDesc.objectsItem.getChildren().remove(theObjectTreeItem);
 
-        treeItemMap.remove(aEvent.getGameObjectInstance());
+        treeItemMap.remove(aEvent.instanceProperty().get());
     }
 
     public void onObjectUpdatedEvent(@Observes PropertyChangeEvent aEvent) {

@@ -2,23 +2,24 @@ package de.mirkosertic.gameengine.event;
 
 public class PropertyChangeEvent extends GameEvent {
 
-    private Property property;
-    private Object oldValue;
+    private ReadOnlyProperty<Property> property;
+    private ReadOnlyProperty<Object> oldValue;
 
     PropertyChangeEvent(Property aProperty, Object aOldValue) {
-        property = aProperty;
-        oldValue = aOldValue;
+        super("PropertyChangeEvent");
+        property = registerProperty(new ReadOnlyProperty<Property>(this, "property", aProperty));
+        oldValue = registerProperty(new ReadOnlyProperty<Object>(this, "oldValue", aOldValue));
     }
 
     public Object getOwner() {
-        return property.getOwner();
+        return property.get().getOwner();
     }
 
-    public Object getNewValue() {
-        return property.get();
-    }
-
-    public Property getProperty() {
+    public ReadOnlyProperty<Property> propertyProperty() {
         return property;
+    }
+
+    public ReadOnlyProperty<Object> oldValueProperty() {
+        return oldValue;
     }
 }

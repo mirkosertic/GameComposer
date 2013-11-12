@@ -90,7 +90,7 @@ public class ObjectInspectorController implements ChildController {
 
     public void onGameObjectConfigurationChanged(@Observes GameObjectConfigurationChangedEvent aEvent) {
         currentSelection = null;
-        selectObject(aEvent.getGameObject());
+        selectObject(aEvent.objectProperty().get());
     }
 
     private void selectObject(Object aObject) {

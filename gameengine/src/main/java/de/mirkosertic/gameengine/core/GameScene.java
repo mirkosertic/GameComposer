@@ -115,6 +115,12 @@ public class GameScene {
             theInstances.add(theInstance.serialize());
         }
         theResult.put("instances", theInstances);
+
+        List<Map<String, Object>> theEventSheets = new ArrayList<Map<String, Object>>();
+        for (EventSheet theSheet : eventSheets) {
+            theEventSheets.add(theSheet.serialize());
+        }
+        theResult.put("eventsheets", theEventSheets);
         return theResult;
     }
 
@@ -139,6 +145,13 @@ public class GameScene {
         List<Map<String, Object>> theInstances = (List<Map<String, Object>>) aSerializedData.get("instances");
         for (Map<String, Object> theInstance : theInstances) {
             theScene.addGameObjectInstance(GameObjectInstance.deserialize(aGameRuntime, theScene, theInstance));
+        }
+
+        List<Map<String, Object>> theEventSheets = (List<Map<String, Object>>) aSerializedData.get("eventsheets");
+        if (theEventSheets != null) {
+            for (Map<String, Object> theSheet : theEventSheets) {
+                theScene.eventSheets.add(EventSheet.unmarshall(aGameRuntime.getIORegistry(), theSheet));
+            }
         }
 
         String theCameraObject = (String) aSerializedData.get("cameraobjectid");

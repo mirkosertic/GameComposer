@@ -1,15 +1,16 @@
 package de.mirkosertic.gameengine.gwt;
 
+import java.util.Map;
+
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.RequestCallback;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONValue;
+
 import de.mirkosertic.gameengine.AbstractGameRuntimeFactory;
 import de.mirkosertic.gameengine.core.GameScene;
-
-import java.util.Map;
 
 public class GWTGameSceneLoader {
 
@@ -52,6 +53,6 @@ public class GWTGameSceneLoader {
     private GameScene parse(Response aResponse) {
         JSONValue theJSONParsed = JSONParser.parseStrict(aResponse.getText());
         Map<String, Object> theResult = JSONUtils.toMap(theJSONParsed);
-        return GameScene.deserialize(runtimeFactory.create(gwtGameResourceLoader), theResult);
+        return GameScene.deserialize(runtimeFactory.create(gwtGameResourceLoader, new GWTGameSoundSystemFactory()), theResult);
     }
 }

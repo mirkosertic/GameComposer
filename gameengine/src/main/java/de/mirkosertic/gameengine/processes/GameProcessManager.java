@@ -19,10 +19,12 @@ public class GameProcessManager implements GameSystem {
 
     void start(GameProcess aProcess) {
         runningProcesses.add(aProcess);
+        aProcess.started(this);
     }
 
     void kill(GameProcess aProcess) {
         killedProcesses.add(aProcess);
+        aProcess.killed();
     }
 
     public void proceedGame(long aGameTime, long aElapsedTimeSinceLastLoop) {

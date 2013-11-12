@@ -4,21 +4,16 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Property<T> {
+public class Property<T> extends ReadOnlyProperty<T> {
 
-    private String name;
-    private T value;
-    private Object owner;
     private Set<GameEventListener<PropertyChangeEvent>> changeListener;
 
     public Property(Object aOwner, String aName, T aDefaultValue, GameEventListener<PropertyChangeEvent> aListener) {
+        super(aOwner, aName, aDefaultValue);
         changeListener = new HashSet<GameEventListener<PropertyChangeEvent>>();
-        owner = aOwner;
-        name = aName;
         if (aListener != null) {
             changeListener.add(aListener);
         }
-        value = aDefaultValue;
     }
 
     public Property(Object aOwner, String aName, GameEventListener<PropertyChangeEvent> aListener) {
@@ -29,18 +24,6 @@ public class Property<T> {
         this(aOwner, aName, aDefaultValue, null);
     }
 
-    public Object getOwner() {
-        return owner;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public T get() {
-        return value;
-    }
-
     public void set(T aValue) {
         T theOldValue = value;
         value = aValue;
@@ -48,10 +31,6 @@ public class Property<T> {
         for (GameEventListener<PropertyChangeEvent> theListener : theKnownListener) {
             theListener.handleGameEvent(new PropertyChangeEvent(this, theOldValue));
         }
-    }
-
-    public boolean isNull() {
-        return value == null;
     }
 
     public void setQuietly(T aValue) {
