@@ -22,16 +22,16 @@ public class GWTGameResourceLoader implements GameResourceLoader {
 
     @Override
     public GameResource load(ResourceName aResourceName) throws IOException {
-        if (aResourceName.getName().endsWith(".png")) {
+        if (aResourceName.name.endsWith(".png")) {
             Image theImage = new Image();
             theImage.setVisible(false);
-            theImage.setUrl(baseDirectory + aResourceName.getName().replace('\\', '/'));
+            theImage.setUrl(baseDirectory + aResourceName.name.replace('\\', '/'));
             RootPanel.get(holderId).add(theImage);
             return new GWTBitmapResource(theImage);
         }
-        if (aResourceName.getName().endsWith(".wav")) {
+        if (aResourceName.name.endsWith(".wav")) {
             Audio theAudio = Audio.createIfSupported();
-            theAudio.setSrc(baseDirectory + aResourceName.getName().replace('\\', '/'));
+            theAudio.setSrc(baseDirectory + aResourceName.name.replace('\\', '/'));
             return new GWTAudioResource(theAudio);
         }
 

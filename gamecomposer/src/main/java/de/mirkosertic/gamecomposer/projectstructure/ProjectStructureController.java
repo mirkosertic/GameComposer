@@ -74,6 +74,15 @@ public class ProjectStructureController implements ChildController {
             public void onCreateNewGameScene() {
                 eventGateway.fire(new NewGameSceneEvent());
             }
+
+            @Override
+            public void onNewEventSheet(GameScene aGameScene) {
+                aGameScene.addEventSheet(new EventSheet(aGameScene));
+            }
+
+            @Override
+            public void onDeleteEventSheet(EventSheet aEventSheet) {
+            }
         }));
         projectStructureTreeView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
@@ -107,6 +116,9 @@ public class ProjectStructureController implements ChildController {
         if (aEvent.getClickCount() == 2) {
             if (theSelectedItem.getValue() instanceof GameScene) {
                 eventGateway.fire(new GameSceneSelectedEvent((GameScene) theSelectedItem.getValue()));
+            }
+            if (theSelectedItem.getValue() instanceof EventSheet) {
+                eventGateway.fire(new EventSheetSelectedEvent((EventSheet) theSelectedItem.getValue()));
             }
         }
     }
@@ -157,6 +169,10 @@ public class ProjectStructureController implements ChildController {
         theDesc.objectsItem.getChildren().remove(theObjectTreeItem);
 
         treeItemMap.remove(aEvent.objectProperty().get());
+    }
+
+    public void onEventSheetAdded(@Observes EventSheetAddedToSceneEvent aEvent) {
+        initializeTree(persistenceManager.getGame());
     }
 
     public void onGameObjectInstanceAdded(@Observes GameObjectInstanceAddedToSceneEvent aEvent) {
@@ -224,6 +240,19 @@ public class ProjectStructureController implements ChildController {
             }
 
             theSceneTreeItem.getChildren().add(theObjectsTreeItem);
+
+            TreeItem theEventSheetsTreeItem = new TreeItem();
+            theEventSheetsTreeItem.setValue(TreeObjectTypes.EVENTSHEETS);
+            theEventSheetsTreeItem.setExpanded(true);
+
+            for (EventSheet theEventSheet : theLoadedScene.getEventSheets()) {
+                TreeItem theSheetTreeItem = new TreeItem();
+                theSheetTreeItem.setValue(theEventSheet);
+                theEventSheetsTreeItem.getChildren().add(theSheetTreeItem);
+                treeItemMap.put(theEventSheet, theSheetTreeItem);
+            }
+
+            theSceneTreeItem.getChildren().add(theEventSheetsTreeItem);
 
             TreeItem theInstancesTreeItem = new TreeItem();
             theInstancesTreeItem.setValue(TreeObjectTypes.INSTANCES);

@@ -1,8 +1,11 @@
 package de.mirkosertic.gamecomposer.contentarea;
 
 import de.mirkosertic.gamecomposer.*;
+import de.mirkosertic.gamecomposer.contentarea.eventsheet.EventSheetEditorController;
+import de.mirkosertic.gamecomposer.contentarea.eventsheet.EventSheetEditorControllerFactory;
 import de.mirkosertic.gamecomposer.contentarea.gamescene.GameSceneEditorController;
 import de.mirkosertic.gamecomposer.contentarea.gamescene.GameSceneEditorControllerFactory;
+import de.mirkosertic.gameengine.core.EventSheet;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.event.PropertyChangeEvent;
 import javafx.event.Event;
@@ -31,6 +34,9 @@ public class ContentAreaController implements ChildController {
 
     @Inject
     GameSceneEditorControllerFactory sceneEditorControllerFactory;
+
+    @Inject
+    EventSheetEditorControllerFactory eventSheetEditorControllerFactory;
 
     private Node view;
     private Map<ContentChildController, Tab> activeTabs;
@@ -129,6 +135,26 @@ public class ContentAreaController implements ChildController {
         for (Map.Entry<ContentChildController, Tab> theTabEntry : activeTabs.entrySet()) {
             theTabEntry.getKey().onObjectSelected(aEvent);
         }
+    }
+
+    public void onEventSheetSelected(@Observes EventSheetSelectedEvent aEvent) {
+        EventSheet theSheet = aEvent.getEventSheet();
+        for (Map.Entry<ContentChildController, Tab> theTabEntry : activeTabs.entrySet()) {
+            if (theTabEntry.getKey().getEditingObject() == theSheet) {
+                editorTabPane.getSelectionModel().select(theTabEntry.getValue());
+                return;
+            }
+        }
+
+        EventSheetEditorController theController = eventSheetEditorControllerFactory.createFor(theSheet);
+        Tab theTab = new Tab(theSheet.nameProperty().get());
+        theTab.setContent(theController.getView());
+
+        addTab(theTab);
+
+        activeTabs.put(theController, theTab);
+
+        theController.addedAsTab();
     }
 
     public void onGameSceneSelected(@Observes GameSceneSelectedEvent aEvent) {

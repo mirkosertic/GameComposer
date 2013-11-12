@@ -2,10 +2,7 @@ package de.mirkosertic.gamecomposer.projectstructure;
 
 import de.mirkosertic.gamecomposer.GameObjectClipboardContent;
 import de.mirkosertic.gamecomposer.PropertyBinder;
-import de.mirkosertic.gameengine.core.Game;
-import de.mirkosertic.gameengine.core.GameObject;
-import de.mirkosertic.gameengine.core.GameObjectInstance;
-import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.*;
@@ -52,11 +49,12 @@ public class StructureTreeCell extends TreeCell {
         super.updateItem(aValue, aEmpty);
         if (aValue instanceof TreeObjectTypes) {
             switch((TreeObjectTypes) aValue) {
-                case INSTANCES:
+                case INSTANCES: {
                     setText("Instances");
                     setContextMenu(null);
                     break;
-                case OBJECTS:
+                }
+                case OBJECTS: {
                     setText("Objects");
 
                     ContextMenu theContextMenu = new ContextMenu();
@@ -72,6 +70,24 @@ public class StructureTreeCell extends TreeCell {
 
                     setContextMenu(theContextMenu);
                     break;
+                }
+                case EVENTSHEETS: {
+                    setText("Eventsheets");
+
+                    ContextMenu theContextMenu = new ContextMenu();
+                    MenuItem theCreateObject = new MenuItem("New EventSheet");
+                    theCreateObject.setOnAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent actionEvent) {
+                            GameScene theScene = (GameScene) getTreeItem().getParent().getValue();
+                            contextMenuListener.onNewEventSheet(theScene);
+                        }
+                    });
+                    theContextMenu.getItems().add(theCreateObject);
+
+                    setContextMenu(theContextMenu);
+                    break;
+                }
             }
         }
         if (aValue instanceof Game) {
@@ -110,6 +126,20 @@ public class StructureTreeCell extends TreeCell {
                 @Override
                 public void handle(ActionEvent actionEvent) {
                     contextMenuListener.onDeleteGameObject(theGameObject);
+                }
+            });
+            theContextMenu.getItems().add(theDeleteItem);
+            setContextMenu(theContextMenu);
+        }
+        if (aValue instanceof EventSheet) {
+            final EventSheet theEventSheet = (EventSheet) aValue;
+            setText(theEventSheet.nameProperty().get());
+            ContextMenu theContextMenu = new ContextMenu();
+            MenuItem theDeleteItem = new MenuItem("Delete");
+            theDeleteItem.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    contextMenuListener.onDeleteEventSheet(theEventSheet);
                 }
             });
             theContextMenu.getItems().add(theDeleteItem);

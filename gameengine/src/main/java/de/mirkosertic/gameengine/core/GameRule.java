@@ -1,5 +1,7 @@
 package de.mirkosertic.gameengine.core;
 
+import de.mirkosertic.gameengine.event.Property;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -8,14 +10,20 @@ import java.util.Map;
 
 public class GameRule {
 
-    private Condition condition;
+    private Property<String> name;
+    private Property<Condition> condition;
     private List<Action> actions = new ArrayList<Action>();
 
-    public GameRule(Condition aCondition) {
-        condition = aCondition;
+    public GameRule() {
+        name = new Property<String>(this, "name", (String) null);
+        condition = new Property<Condition>(this, "condition", (Condition) null);
     }
 
-    public Condition getCondition() {
+    public Property<String> nameProperty() {
+        return name;
+    }
+
+    public Property<Condition> conditionProperty() {
         return condition;
     }
 
@@ -23,9 +31,18 @@ public class GameRule {
         return Collections.unmodifiableList(actions);
     }
 
+    public void addAction(Action aAction) {
+        actions.add(aAction);
+    }
+
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<String, Object>();
-        theResult.put("condition", condition.serialize());
+        if (!name.isNull()) {
+            theResult.put("name", name.get());
+        }
+        if (!condition.isNull()) {
+            theResult.put("condition", condition.get().serialize());
+        }
         List<Map<String, Object>> theActionList = new ArrayList<Map<String, Object>>();
         for (Action theAction : actions) {
             theActionList.add(theAction.serialize());
@@ -35,10 +52,19 @@ public class GameRule {
     }
 
     public static GameRule unmarshall(IORegistry aIORegistry, Map<String, Object> aSerializedData) {
+        GameRule theResult =  new GameRule();
+
+        String theName = (String) aSerializedData.get("name");
+        if (theName != null) {
+            theResult.nameProperty().setQuietly(theName);
+        }
+
         Map<String, Object> theConditionData = (Map<String, Object>) aSerializedData.get("condition");
-        String theConditionType = (String) theConditionData.get(Condition.TYPE_ATTRIBUTE);
-        Condition theCondition = aIORegistry.getConditionUnmarshallerFor(theConditionType).unmarshall(theConditionData);
-        GameRule theResult =  new GameRule(theCondition);
+        if (theConditionData != null) {
+            String theConditionType = (String) theConditionData.get(Condition.TYPE_ATTRIBUTE);
+            Condition theCondition = aIORegistry.getConditionUnmarshallerFor(theConditionType).unmarshall(theConditionData);
+            theResult.condition.setQuietly(theCondition);
+        }
         List<Map<String, Object>> theActions = (List<Map<String, Object>>) aSerializedData.get("actions");
         if (theActions != null) {
             for (Map<String, Object> theActionData : theActions) {

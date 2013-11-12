@@ -150,7 +150,7 @@ public class GameScene {
         List<Map<String, Object>> theEventSheets = (List<Map<String, Object>>) aSerializedData.get("eventsheets");
         if (theEventSheets != null) {
             for (Map<String, Object> theSheet : theEventSheets) {
-                theScene.eventSheets.add(EventSheet.unmarshall(aGameRuntime.getIORegistry(), theSheet));
+                theScene.eventSheets.add(EventSheet.unmarshall(aGameRuntime.getIORegistry(), theScene, theSheet));
             }
         }
 
@@ -183,5 +183,10 @@ public class GameScene {
         }
         objects.remove(aGameObject);
         gameRuntime.getEventManager().fire(new GameObjectRemovedFromSceneEvent(aGameObject));
+    }
+
+    public void addEventSheet(EventSheet aEventSheet) {
+        eventSheets.add(aEventSheet);
+        gameRuntime.getEventManager().fire(new EventSheetAddedToSceneEvent(aEventSheet));
     }
 }

@@ -36,7 +36,7 @@ public class PlaySoundAction implements Action {
         Map<String, Object> theResult = new HashMap<String, Object>();
         theResult.put(TYPE_ATTRIBUTE, TYPE_VALUE);
         if (resourceName.get() != null) {
-            theResult.put("resourceName", resourceName.get().getName());
+            theResult.put("resourceName", resourceName.get().name);
         }
         return theResult;
     }

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.collections.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+
+<BorderPane id="BorderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="-1.0" prefWidth="-1.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="de.mirkosertic.gamecomposer.contentarea.eventsheet.RuleEditorController">
+  <center>
+    <VBox prefHeight="-1.0" prefWidth="-1.0">
+      <children>
+        <TextField fx:id="ruleName" maxWidth="1.7976931348623157E308" prefWidth="-1.0" />
+        <HBox prefHeight="-1.0" prefWidth="-1.0">
+          <children>
+            <VBox prefHeight="-1.0" prefWidth="255.0" HBox.hgrow="NEVER">
+              <children>
+                <Label contentDisplay="TOP" prefWidth="-1.0" text="Event type :" VBox.vgrow="NEVER" />
+                <ComboBox fx:id="eventType" maxWidth="1.7976931348623157E308" onAction="#setEventType" VBox.vgrow="ALWAYS">
+                  <items>
+                    <FXCollections fx:factory="observableArrayList">
+                      <String fx:value="Item 1" />
+                      <String fx:value="Item 2" />
+                      <String fx:value="Item 3" />
+                    </FXCollections>
+                  </items>
+                  <VBox.margin>
+                    <Insets top="5.0" fx:id="x2" />
+                  </VBox.margin>
+                </ComboBox>
+              </children>
+              <padding>
+                <Insets />
+              </padding>
+              <HBox.margin>
+                <Insets right="5.0" fx:id="x1" />
+              </HBox.margin>
+            </VBox>
+            <VBox maxWidth="1.7976931348623157E308" prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="SOMETIMES" HBox.margin="$x1">
+              <children>
+                <Label prefWidth="-1.0" text="Filter conditions" />
+                <VBox fx:id="filterCoditions" maxWidth="1.7976931348623157E308" prefHeight="-1.0" prefWidth="-1.0" VBox.margin="$x2" />
+              </children>
+            </VBox>
+            <VBox maxWidth="1.7976931348623157E308" prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="SOMETIMES" HBox.margin="$x1">
+              <children>
+                <Label prefWidth="-1.0" text="Actions">
+                  <VBox.margin>
+                    <Insets />
+                  </VBox.margin>
+                </Label>
+                <Hyperlink onAction="#onAddNewAction" text="Add new action..." />
+                <VBox fx:id="actions" maxWidth="1.7976931348623157E308" prefHeight="-1.0" prefWidth="-1.0" VBox.margin="$x2" />
+              </children>
+            </VBox>
+            <Hyperlink onAction="#onRemoveRule" text="Remove rule" />
+          </children>
+          <VBox.margin>
+            <Insets top="5.0" fx:id="x2" />
+          </VBox.margin>
+        </HBox>
+      </children>
+    </VBox>
+  </center>
+  <padding>
+    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+  </padding>
+</BorderPane>
