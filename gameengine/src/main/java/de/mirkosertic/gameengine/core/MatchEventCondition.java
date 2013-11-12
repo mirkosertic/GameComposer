@@ -19,6 +19,14 @@ public class MatchEventCondition implements Condition {
         eventProperties = new HashMap<String, String>();
     }
 
+    public Property<String> eventTypeProperty() {
+        return eventType;
+    }
+
+    public void setFilterValue(String aPropertyName, String aPropertyValue) {
+        eventProperties.put(aPropertyName, aPropertyValue);
+    }
+
     @Override
     public boolean appliesTo(GameEvent aEvent) {
         String theEventType = aEvent.typeProperty().get();

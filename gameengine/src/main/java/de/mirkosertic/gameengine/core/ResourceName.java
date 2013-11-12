@@ -5,14 +5,10 @@ import java.util.Map;
 
 public class ResourceName {
 
-    private String name;
+    public final String name;
 
     public ResourceName(String aName) {
         name = aName;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public Map<String, Object> serialize() {

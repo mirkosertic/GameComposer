@@ -67,13 +67,13 @@ public class SpriteTemplateEditorController implements ObjectInspectorChildContr
     private void reloadSprite() {
         ResourceName theResourceName = object.resourceNameProperty().get();
         assetName.setText("");
-        if (theResourceName != null && theResourceName.getName() != null) {
+        if (theResourceName != null && theResourceName.name != null) {
             GameResourceLoader theLoader = persistenceManager.createResourceLoaderFor(object.getOwner().getGameScene());
             try {
                 JavaFXBitmapResource theResource = (JavaFXBitmapResource) theLoader.load(theResourceName);
                 spritePreview.setImage(theResource);
 
-                assetName.setText(theResourceName.getName());
+                assetName.setText(theResourceName.name);
                 object.getOwner().sizeProperty().set(new Size((int) theResource.getWidth(), (int) theResource.getHeight()));
             } catch (IOException e) {
                 throw new RuntimeException(e);

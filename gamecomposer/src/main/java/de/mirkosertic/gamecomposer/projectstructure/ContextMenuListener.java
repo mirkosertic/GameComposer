@@ -1,5 +1,6 @@
 package de.mirkosertic.gamecomposer.projectstructure;
 
+import de.mirkosertic.gameengine.core.EventSheet;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameScene;
@@ -15,4 +16,8 @@ public interface ContextMenuListener {
     void onCreateNewGameObject(GameScene aGameScene);
 
     void onCreateNewGameScene();
+
+    void onNewEventSheet(GameScene aGameScene);
+
+    void onDeleteEventSheet(EventSheet aEventSheet);
 }

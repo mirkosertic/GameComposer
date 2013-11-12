@@ -15,13 +15,13 @@ public class GameResourceCache {
     }
 
     public <T extends GameResource> T getResourceFor(ResourceName aResourceName) throws IOException {
-        T theResource = (T) cachedResources.get(aResourceName.getName());
+        T theResource = (T) cachedResources.get(aResourceName.name);
         if (theResource == null) {
             theResource = (T) resourceLoader.load(aResourceName);
             if (theResource == null) {
-                throw new IOException("Cannot load resource " + aResourceName.getName());
+                throw new IOException("Cannot load resource " + aResourceName.name);
             }
-            cachedResources.put(aResourceName.getName(), theResource);
+            cachedResources.put(aResourceName.name, theResource);
             return theResource;
         }
         return theResource;

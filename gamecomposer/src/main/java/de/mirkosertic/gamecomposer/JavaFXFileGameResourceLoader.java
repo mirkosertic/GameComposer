@@ -17,6 +17,6 @@ public class JavaFXFileGameResourceLoader extends JavaFXAbstractGameResourceLoad
     }
 
     protected InputStream getInputStreamFor(ResourceName aResourceName) throws IOException {
-        return new FileInputStream(new File(baseDirectory, aResourceName.getName()));
+        return new FileInputStream(new File(baseDirectory, aResourceName.name));
     }
 }

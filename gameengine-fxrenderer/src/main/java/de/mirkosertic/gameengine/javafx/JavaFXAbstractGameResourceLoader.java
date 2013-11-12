@@ -19,14 +19,14 @@ public abstract class JavaFXAbstractGameResourceLoader implements GameResourceLo
         if (theStream == null) {
             return null;
         }
-        if (aResourceName.getName().toLowerCase().endsWith(".png")) {
+        if (aResourceName.name.toLowerCase().endsWith(".png")) {
             return new JavaFXBitmapResource(theStream);
         }
         try {
-            if (aResourceName.getName().toLowerCase().endsWith(".au")) {
+            if (aResourceName.name.toLowerCase().endsWith(".au")) {
                 return new JavaFXAudioResource(theStream);
             }
-            if (aResourceName.getName().toLowerCase().endsWith(".wav")) {
+            if (aResourceName.name.toLowerCase().endsWith(".wav")) {
                 return new JavaFXAudioResource(theStream);
             }
         } catch (IOException e) {
