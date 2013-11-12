@@ -105,7 +105,7 @@ public class GameObjectInstance {
         for (Map<String, Object> theStructure : theComponents) {
             String theType = (String) theStructure.get(GameComponent.TYPE_ATTRIBUTE);
 
-            GameComponentUnmarshaller theUnmarshaller = aGameRuntime.getComponentUnmarshallerFor(theType);
+            GameComponentUnmarshaller theUnmarshaller = aGameRuntime.getIORegistry().getComponentUnmarshallerFor(theType);
             theResult.addComponent(theUnmarshaller.deserialize(aGameRuntime, theResult, theStructure));
         }
 

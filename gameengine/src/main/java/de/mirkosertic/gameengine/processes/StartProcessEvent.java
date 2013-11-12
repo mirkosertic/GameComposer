@@ -1,16 +1,18 @@
 package de.mirkosertic.gameengine.processes;
 
 import de.mirkosertic.gameengine.event.GameEvent;
+import de.mirkosertic.gameengine.event.ReadOnlyProperty;
 
 public class StartProcessEvent extends GameEvent {
 
-    private GameProcess process;
+    private ReadOnlyProperty<GameProcess> process;
 
     public StartProcessEvent(GameProcess aProcess) {
-        process = aProcess;
+        super("StartProcessEvent");
+        process = registerProperty(new ReadOnlyProperty<GameProcess>(this, "process", aProcess));
     }
 
-    public GameProcess getProcess() {
+    public ReadOnlyProperty<GameProcess> processProperty() {
         return process;
     }
 }

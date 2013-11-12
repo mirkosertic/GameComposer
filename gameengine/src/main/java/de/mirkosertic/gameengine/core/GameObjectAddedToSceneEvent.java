@@ -1,16 +1,18 @@
 package de.mirkosertic.gameengine.core;
 
 import de.mirkosertic.gameengine.event.GameEvent;
+import de.mirkosertic.gameengine.event.ReadOnlyProperty;
 
 public class GameObjectAddedToSceneEvent extends GameEvent {
 
-    private GameObject object;
+    private ReadOnlyProperty<GameObject> object;
 
     public GameObjectAddedToSceneEvent(GameObject aObject) {
-        object = aObject;
+        super("GameObjectAddedToSceneEvent");
+        object = registerProperty(new ReadOnlyProperty<GameObject>(this, "object", aObject));
     }
 
-    public GameObject getGameObject() {
+    public ReadOnlyProperty<GameObject> objectProperty() {
         return object;
     }
 }

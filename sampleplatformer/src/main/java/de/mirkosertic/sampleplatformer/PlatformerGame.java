@@ -62,17 +62,19 @@ public class PlatformerGame extends Application {
         GameRuntime theGameRuntime = new GameRuntime(theEventManager, new JavaFXClasspathGameResourceLoader());
         theGameRuntime.addSystem(theProcessManager);
         theGameRuntime.addSystem(thePhysicsManager);
-        theGameRuntime.registeredTemplateUnmarshaller(new PhysicsComponentTemplateUnmarshaller());
-        theGameRuntime.registeredTemplateUnmarshaller(new CameraComponentTemplateUnmarshaller());
-        theGameRuntime.registeredTemplateUnmarshaller(new SpriteComponentTemplateUnmarshaller());
-        theGameRuntime.registeredTemplateUnmarshaller(new StaticComponentTemplateUnmarshaller());
-        theGameRuntime.registeredTemplateUnmarshaller(new PlatformComponentTemplateUnmarshaller());
 
-        theGameRuntime.registeredComponentUnmarshaller(new PhysicsComponentUnmarshaller());
-        theGameRuntime.registeredComponentUnmarshaller(new CameraComponentUnmarshaller());
-        theGameRuntime.registeredComponentUnmarshaller(new SpriteComponentUnmarshaller());
-        theGameRuntime.registeredComponentUnmarshaller(new StaticComponentUnmarshaller());
-        theGameRuntime.registeredComponentUnmarshaller(new PlatformComponentUnmarshaller());
+        IORegistry theRegistry = theGameRuntime.getIORegistry();
+        theRegistry.registerTemplateUnmarshaller(new PhysicsComponentTemplateUnmarshaller());
+        theRegistry.registerTemplateUnmarshaller(new CameraComponentTemplateUnmarshaller());
+        theRegistry.registerTemplateUnmarshaller(new SpriteComponentTemplateUnmarshaller());
+        theRegistry.registerTemplateUnmarshaller(new StaticComponentTemplateUnmarshaller());
+        theRegistry.registerTemplateUnmarshaller(new PlatformComponentTemplateUnmarshaller());
+
+        theRegistry.registerComponentUnmarshaller(new PhysicsComponentUnmarshaller());
+        theRegistry.registerComponentUnmarshaller(new CameraComponentUnmarshaller());
+        theRegistry.registerComponentUnmarshaller(new SpriteComponentUnmarshaller());
+        theRegistry.registerComponentUnmarshaller(new StaticComponentUnmarshaller());
+        theRegistry.registerComponentUnmarshaller(new PlatformComponentUnmarshaller());
 
         GameObjectInstanceFactory theInstanceFactory = new GameObjectInstanceFactory(theGameRuntime);
 
@@ -108,12 +110,12 @@ public class PlatformerGame extends Application {
 
         theScene.widthProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
-                theEventManager.fire(new SetScreenResolutionEvent((int) theScene.getWidth(), (int) theScene.getHeight()));
+                theEventManager.fire(new SetScreenResolutionEvent(new Size((int) theScene.getWidth(), (int) theScene.getHeight())));
             }
         });
         theScene.heightProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
-                theEventManager.fire(new SetScreenResolutionEvent((int) theScene.getWidth(), (int) theScene.getHeight()));
+                theEventManager.fire(new SetScreenResolutionEvent(new Size((int) theScene.getWidth(), (int) theScene.getHeight())));
             }
         });
 
@@ -156,7 +158,7 @@ public class PlatformerGame extends Application {
         theRoot.getChildren().add(theGameView);
         aPrimaryStage.setScene(theScene);
 
-        theEventManager.fire(new SetScreenResolutionEvent((int) theScene.getWidth(), (int) theScene.getHeight()));
+        theEventManager.fire(new SetScreenResolutionEvent(new Size((int) theScene.getWidth(), (int) theScene.getHeight())));
 
         aPrimaryStage.show();
         aPrimaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {

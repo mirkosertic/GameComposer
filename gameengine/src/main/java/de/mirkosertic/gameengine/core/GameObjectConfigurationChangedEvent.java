@@ -1,16 +1,18 @@
 package de.mirkosertic.gameengine.core;
 
 import de.mirkosertic.gameengine.event.GameEvent;
+import de.mirkosertic.gameengine.event.ReadOnlyProperty;
 
 public class GameObjectConfigurationChangedEvent extends GameEvent {
 
-    private GameObject object;
+    private ReadOnlyProperty<GameObject> object;
 
     public GameObjectConfigurationChangedEvent(GameObject aObject) {
-        object = aObject;
+        super("GameObjectConfigurationChangedEvent");
+        object = registerProperty(new ReadOnlyProperty<GameObject>(this, "object", aObject));
     }
 
-    public GameObject getGameObject() {
+    public ReadOnlyProperty<GameObject> objectProperty() {
         return object;
     }
 }

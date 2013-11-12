@@ -26,9 +26,12 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <runTarget>org.codehaus.mojo.gwt.test.Hello/Hello.html</runTarget>
-                    <draftCompile>true</draftCompile>
+                    <runTarget>de.mirkosertic.gameengine.gwt.GWTRenderer/index.html</runTarget>
+                    <draftCompile>false</draftCompile>
                     <optimizationLevel>1</optimizationLevel>
+                    <disableCastChecking>true</disableCastChecking>
+                    <enableClosureCompiler>true</enableClosureCompiler>
+                    <disableClassMetaData>true</disableClassMetaData>
                 </configuration>
             </plugin>
             <plugin>
@@ -56,7 +59,7 @@
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-servlet</artifactId>
             <version>2.5.1</version>
-            <scope>runtime</scope>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

@@ -1,17 +1,19 @@
 package de.mirkosertic.gameengine.physics;
 
-import de.mirkosertic.gameengine.event.GameEvent;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
+import de.mirkosertic.gameengine.event.GameEvent;
+import de.mirkosertic.gameengine.event.ReadOnlyProperty;
 
 public class DisableDynamicPhysicsEvent extends GameEvent {
 
-    private GameObjectInstance object;
+    private ReadOnlyProperty<GameObjectInstance> object;
 
     public DisableDynamicPhysicsEvent(GameObjectInstance aObject) {
-        object = aObject;
+        super("DisableDynamicPhysicsEvent");
+        object = registerProperty(new ReadOnlyProperty<GameObjectInstance>(this, "object", aObject));
     }
 
-    public GameObjectInstance getObject() {
+    public ReadOnlyProperty<GameObjectInstance> objectProperty() {
         return object;
     }
 }

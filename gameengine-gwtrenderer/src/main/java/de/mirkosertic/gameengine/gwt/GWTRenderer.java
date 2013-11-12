@@ -1,5 +1,8 @@
 package de.mirkosertic.gameengine.gwt;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.dom.client.KeyDownEvent;
@@ -12,14 +15,28 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
+
 import de.mirkosertic.gameengine.camera.CameraComponent;
 import de.mirkosertic.gameengine.camera.FollowCameraProcess;
-import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.core.DefaultGameLoopThrottle;
+import de.mirkosertic.gameengine.core.Game;
+import de.mirkosertic.gameengine.core.GameKeyCode;
+import de.mirkosertic.gameengine.core.GameLoop;
+import de.mirkosertic.gameengine.core.GameLoopFactory;
+import de.mirkosertic.gameengine.core.GameObjectInstance;
+import de.mirkosertic.gameengine.core.GameObjectInstanceFactory;
+import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.KeyPressedGameEvent;
+import de.mirkosertic.gameengine.core.KeyReleasedGameEvent;
+import de.mirkosertic.gameengine.core.SetScreenResolutionEvent;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.processes.StartProcessEvent;
 import de.mirkosertic.gameengine.types.Size;
 
 public class GWTRenderer implements EntryPoint {
+
+    private final static Logger LOGGER = Logger.getLogger(GWTRenderer.class.getName());
 
     static final String holderId = "canvasholder";
     static final String upgradeMessage = "Your browser does not support the HTML5 Canvas. Please upgrade your browser to view this demo.";
@@ -34,28 +51,31 @@ public class GWTRenderer implements EntryPoint {
             return;
         }
 
-        GWTGameRuntimeFactory theRuntimeFactory = new GWTGameRuntimeFactory();
-        final GWTGameSceneLoader theSceneLoader = new GWTGameSceneLoader(new GWTGameSceneLoader.GameSceneLoadedListener() {
-            @Override
-            public void onGameSceneLoaded(GameScene aScene) {
-                playScene(aScene);
-            }
-
-            @Override
-            public void onGameSceneLoadedError(Throwable aThrowable) {
-                System.out.println("Error loading scene"+aThrowable);
-            }
-        }, theRuntimeFactory, new GWTGameResourceLoader("scene1"));
+        final GWTGameRuntimeFactory theRuntimeFactory = new GWTGameRuntimeFactory();
 
         GWTGameLoader theLoader = new GWTGameLoader(new GWTGameLoader.GameLoadedListener() {
             @Override
             public void onGameLoaded(Game aGame) {
-                theSceneLoader.loadFromServer("scene1");
+                GWTGameSceneLoader theSceneLoader = new GWTGameSceneLoader(
+                        new GWTGameSceneLoader.GameSceneLoadedListener() {
+                            @Override
+                            public void onGameSceneLoaded(GameScene aScene) {
+                                LOGGER.info("Game loaded, loading scene " + aScene.nameProperty().get());
+                                playScene(aScene);
+                            }
+
+                            @Override
+                            public void onGameSceneLoadedError(Throwable aThrowable) {
+                                LOGGER.log(Level.SEVERE, "Error loading game scene", aThrowable);
+                            }
+                        }, theRuntimeFactory, new GWTGameResourceLoader(aGame.defaultSceneProperty().get()));
+
+                theSceneLoader.loadFromServer(aGame.defaultSceneProperty().get());
             }
 
             @Override
             public void onGameLoadedError(Throwable aThrowable) {
-                System.out.println("Error loading game"+aThrowable);
+                LOGGER.log(Level.SEVERE, "Error loading game", aThrowable);
             }
         });
         theLoader.loadFromServer();
@@ -91,10 +111,11 @@ public class GWTRenderer implements EntryPoint {
         GWTGameView theGameView = new GWTGameView(theRuntime, canvas, theCameraComponent);
 
         theGameView.setSize(new Size(Window.getClientWidth(), Window.getClientHeight()));
-        theEventManager.fire(new SetScreenResolutionEvent(Window.getClientWidth(), Window.getClientHeight()));
+        theEventManager.fire(new SetScreenResolutionEvent(new Size(Window.getClientWidth(), Window.getClientHeight())));
 
         GameLoopFactory theGameLoopFactory = new GameLoopFactory();
-        final GameLoop theMainLoop = theGameLoopFactory.create(aGameScene, theGameView, theRuntime, new DefaultGameLoopThrottle());
+        final GameLoop theMainLoop = theGameLoopFactory.create(aGameScene, theGameView, theRuntime,
+                new DefaultGameLoopThrottle());
         // setup timer
         final Timer theTimer = new Timer() {
             @Override
@@ -124,12 +145,12 @@ public class GWTRenderer implements EntryPoint {
         });
 
         switch (theCameraComponent.getTemplate().typeProperty().get()) {
-            case FOLLOWPLAYER:
-                theCameraComponent.centerOn(thePlayerInstance);
-                theEventManager.fire(new StartProcessEvent(new FollowCameraProcess(theCameraObject, thePlayerInstance)));
-                break;
-            case CENTERONSCENE:
-                break;
+        case FOLLOWPLAYER:
+            theCameraComponent.centerOn(thePlayerInstance);
+            theEventManager.fire(new StartProcessEvent(new FollowCameraProcess(theCameraObject, thePlayerInstance)));
+            break;
+        case CENTERONSCENE:
+            break;
         }
 
         canvas.setFocus(true);

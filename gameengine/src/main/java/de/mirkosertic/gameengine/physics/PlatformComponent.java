@@ -55,13 +55,13 @@ public class PlatformComponent implements GameComponent {
     }
 
     public void handleKeyPressed(KeyPressedGameEvent aEvent) {
-        if (aEvent.getKeyCode() == platformTemplate.moveLeftKeyProperty().get()) {
+        if (aEvent.keyCodeProperty().get() == platformTemplate.moveLeftKeyProperty().get()) {
             gameRuntime.getEventManager().fire(new ApplyForceToGameObjectInstance(objectInstance, -platformTemplate.leftRightImpulseProperty().get(), 0));
         }
-        if (aEvent.getKeyCode() == platformTemplate.moveRightKeyProperty().get()) {
+        if (aEvent.keyCodeProperty().get() == platformTemplate.moveRightKeyProperty().get()) {
             gameRuntime.getEventManager().fire(new ApplyForceToGameObjectInstance(objectInstance, platformTemplate.leftRightImpulseProperty().get(), 0f));
         }
-        if (aEvent.getKeyCode() == platformTemplate.jumpKeyProperty().get() && !isJumping()) {
+        if (aEvent.keyCodeProperty().get() == platformTemplate.jumpKeyProperty().get() && !isJumping()) {
             gameRuntime.getEventManager().fire(new ApplyImpulseToGameObjectInstance(objectInstance, 0, platformTemplate.jumpImpulseProperty().get()));
             setJumping(true);
         }

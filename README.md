@@ -33,11 +33,11 @@ Core concepts and components of the game engine are:
 GameEngine-FXRenderer
 ---------------------
 
-This is the game presentation logic by implementing a GameView using JavaFX2.
+This is the game presentation logic by implementing a GameView using JavaFX2. This also includes a Soundsystem implementation based on Java Sound API.
 
 GameEngine-GWTRenderer
 --------------
 
-This is the game presentation logic using GWT and HTML5(JavaScript) by implementing a GameView.
+This is the game presentation logic using GWT and HTML5(JavaScript) by implementing a GameView. This also includes a SoundSystem implementation based on HTML5 Media API.
 There will also be WebGL support in the future as the HTML5 Canvas can be pretty slow and we are
 dealing with a lot of visible objects.

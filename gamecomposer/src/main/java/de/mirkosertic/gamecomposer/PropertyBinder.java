@@ -5,6 +5,7 @@ import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.event.PropertyChangeEvent;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.Node;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -24,13 +25,16 @@ public class PropertyBinder {
         aBeanProperty.addChangeListener(new JavaFXPropertyChangeListener() {
             @Override
             public void handleGameEvent(PropertyChangeEvent aEvent) {
-                aFXProperty.setValue((T) aEvent.getNewValue());
+                aFXProperty.setValue((T) aEvent.propertyProperty().get().get());
             }
         });
-        aFXProperty.addListener(new ChangeListener<T>() {
+        Node theNode = (Node) aFXProperty.getBean();
+        theNode.focusedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
-            public void changed(ObservableValue<? extends T> observableValue, T aOldValue, T aNewValue) {
-                aBeanProperty.set(aNewValue);
+            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aOldValue, Boolean aNewValue) {
+                if (aOldValue && !aNewValue) {
+                    aBeanProperty.set(aFXProperty.getValue());
+                }
             }
         });
         aFXProperty.setValue(aBeanProperty.get());
@@ -40,13 +44,16 @@ public class PropertyBinder {
         aBeanProperty.addChangeListener(new JavaFXPropertyChangeListener() {
             @Override
             public void handleGameEvent(PropertyChangeEvent aEvent) {
-                aFXProperty.setValue(aConverter.beanToUI((T) aEvent.getNewValue()));
+                aFXProperty.setValue(aConverter.beanToUI((T) aEvent.propertyProperty().get().get()));
             }
         });
-        aFXProperty.addListener(new ChangeListener<V>() {
+        Node theNode = (Node) aFXProperty.getBean();
+        theNode.focusedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
-            public void changed(ObservableValue<? extends V> observableValue, V aOldValue, V aNewValue) {
-                aBeanProperty.set(aConverter.uiToBean(aNewValue));
+            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aOldValue, Boolean aNewValue) {
+                if (aOldValue && !aNewValue) {
+                    aBeanProperty.set(aConverter.uiToBean(aFXProperty.getValue()));
+                }
             }
         });
         aFXProperty.setValue(aConverter.beanToUI(aBeanProperty.get()));

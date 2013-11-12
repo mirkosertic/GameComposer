@@ -1,11 +1,11 @@
 package de.mirkosertic.gameengine.camera;
 
 import de.mirkosertic.gameengine.core.GameObjectInstance;
+import de.mirkosertic.gameengine.processes.AbstractGameProcess;
 import de.mirkosertic.gameengine.types.Position;
 import de.mirkosertic.gameengine.types.Size;
-import de.mirkosertic.gameengine.processes.GameProcess;
 
-public class FollowCameraProcess implements GameProcess {
+public class FollowCameraProcess extends AbstractGameProcess {
 
     private GameObjectInstance cameraObject;
     private GameObjectInstance playerObject;
@@ -15,6 +15,7 @@ public class FollowCameraProcess implements GameProcess {
         playerObject = aPlayerInstance;
     }
 
+    @Override
     public void proceedGame(long aGameTime, long aElapsedTimeSinceLastLoop) {
 
         CameraComponent theCameraComponent = cameraObject.getComponent(CameraComponent.class);
