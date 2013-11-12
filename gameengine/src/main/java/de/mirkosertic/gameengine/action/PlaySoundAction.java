@@ -5,7 +5,7 @@ import java.util.Map;
 
 import de.mirkosertic.gameengine.core.Action;
 import de.mirkosertic.gameengine.core.GameScene;
-import de.mirkosertic.gameengine.core.ResourceName;
+import de.mirkosertic.gameengine.types.ResourceName;
 import de.mirkosertic.gameengine.event.GameEvent;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;

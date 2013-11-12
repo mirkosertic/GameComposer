@@ -3,11 +3,9 @@ package de.mirkosertic.gameengine.javafx;
 import java.io.IOException;
 import java.io.InputStream;
 
-import javax.sound.sampled.LineUnavailableException;
-
 import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.core.GameResourceLoader;
-import de.mirkosertic.gameengine.core.ResourceName;
+import de.mirkosertic.gameengine.types.ResourceName;
 
 public abstract class JavaFXAbstractGameResourceLoader implements GameResourceLoader {
 

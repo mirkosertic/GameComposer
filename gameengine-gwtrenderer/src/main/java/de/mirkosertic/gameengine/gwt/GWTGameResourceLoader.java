@@ -8,7 +8,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 
 import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.core.GameResourceLoader;
-import de.mirkosertic.gameengine.core.ResourceName;
+import de.mirkosertic.gameengine.types.ResourceName;
 
 public class GWTGameResourceLoader implements GameResourceLoader {
 

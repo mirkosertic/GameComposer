@@ -1,6 +1,6 @@
 package de.mirkosertic.gameengine.sound;
 
-import de.mirkosertic.gameengine.core.ResourceName;
+import de.mirkosertic.gameengine.types.ResourceName;
 
 public interface GameSoundSystem<T> {
 

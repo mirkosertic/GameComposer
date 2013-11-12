@@ -19,7 +19,7 @@ import de.mirkosertic.gameengine.core.Game;
 import de.mirkosertic.gameengine.core.GameResourceLoader;
 import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.core.GameScene;
-import de.mirkosertic.gameengine.core.ResourceName;
+import de.mirkosertic.gameengine.types.ResourceName;
 import de.mirkosertic.gameengine.event.GameEvent;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.javafx.JavaSoundAPISoundSystemFactory;

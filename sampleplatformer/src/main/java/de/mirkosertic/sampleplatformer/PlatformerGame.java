@@ -16,6 +16,7 @@ import de.mirkosertic.gameengine.processes.StartProcessEvent;
 import de.mirkosertic.gameengine.sprites.SpriteComponentTemplate;
 import de.mirkosertic.gameengine.sprites.SpriteComponentTemplateUnmarshaller;
 import de.mirkosertic.gameengine.sprites.SpriteComponentUnmarshaller;
+import de.mirkosertic.gameengine.types.ResourceName;
 import de.mirkosertic.gameengine.types.Size;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;

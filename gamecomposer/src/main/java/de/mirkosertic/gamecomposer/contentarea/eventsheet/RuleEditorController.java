@@ -8,6 +8,7 @@ import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.event.ReadOnlyProperty;
 import de.mirkosertic.gameengine.physics.GameObjectCollisionEvent;
 
+import de.mirkosertic.gameengine.types.ResourceName;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
