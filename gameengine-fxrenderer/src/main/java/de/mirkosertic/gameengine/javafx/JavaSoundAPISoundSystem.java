@@ -7,7 +7,7 @@ import javax.sound.sampled.Clip;
 import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.core.GameResourceCache;
 import de.mirkosertic.gameengine.core.GameResourceType;
-import de.mirkosertic.gameengine.core.ResourceName;
+import de.mirkosertic.gameengine.types.ResourceName;
 import de.mirkosertic.gameengine.sound.GameSoundSystem;
 
 public class JavaSoundAPISoundSystem implements GameSoundSystem<Clip> {

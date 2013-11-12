@@ -1,4 +1,4 @@
-package de.mirkosertic.gameengine.core;
+package de.mirkosertic.gameengine.types;
 
 import java.util.HashMap;
 import java.util.Map;
