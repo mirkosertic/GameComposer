@@ -73,7 +73,7 @@ public class PlatformComponent implements GameComponent {
 
     public void handleCollision(GameObjectCollisionEvent aEvent) {
         GameObjectInstance theOtherInstance = aEvent.getOtherInstanceOrNullIfNotAffected(objectInstance);
-        if (theOtherInstance != null && theOtherInstance.getComponent(StaticComponent.class) != null) {
+        if (theOtherInstance != null) {
             Position theOtherPosition = theOtherInstance.positionProperty().get();
             Position thePosition = objectInstance.positionProperty().get();
             double my = theOtherPosition.y - thePosition.y;

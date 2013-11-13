@@ -162,6 +162,21 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
                 * (thePosition.y + theSize.height / 2));
     }
 
+    private BodyDef createBodyDefFor(GameObjectInstance aInstance, BodyType aBodyType) {
+        BodyDef theBodyDef = new BodyDef();
+        theBodyDef.userData = aInstance;
+        theBodyDef.type = aBodyType;
+        theBodyDef.setAngle(aInstance.rotationAngleProperty().get().invert().toRadians());
+        theBodyDef.position = computePosition(aInstance);
+
+        PhysicsComponentTemplate theTemplate = aInstance.getOwnerGameObject().getComponentTemplate(PhysicsComponentTemplate.class);
+        if (theTemplate != null) {
+            theBodyDef.setFixedRotation(theTemplate.fixedRotationProperty().get());
+        }
+
+        return theBodyDef;
+    }
+
     Body gameObjectInstanceAddedToScene(GameObjectInstance aInstance) {
         synchronized (physicsWorld) {
             aInstance.positionProperty().addChangeListener(positionChangeListener);
@@ -190,12 +205,8 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
                 theStaticFixture.friction = 1.8f;
                 theStaticFixture.restitution = 0;
 
-                BodyDef theStaticBodyDef = new BodyDef();
-                theStaticBodyDef.type = BodyType.STATIC;
-                theStaticBodyDef.userData = aInstance;
-                theStaticBodyDef.setAngle(aInstance.rotationAngleProperty().get().invert().toRadians());
-                theStaticBodyDef.position = computePosition(aInstance);
-                Body theBody = physicsWorld.createBody(theStaticBodyDef);
+                BodyDef theBodyDef = createBodyDefFor(aInstance, BodyType.STATIC);
+                Body theBody = physicsWorld.createBody(theBodyDef);
                 theBody.createFixture(theStaticFixture);
 
                 staticObjects.put(aInstance, theBody);
@@ -216,25 +227,17 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
                 thePlatformFixture.restitution = 0;
                 thePlatformFixture.shape = thePlatformShape;
 
-                BodyDef thePlatformBodyDef = new BodyDef();
-                thePlatformBodyDef.type = BodyType.DYNAMIC;
-                thePlatformBodyDef.setAngle(aInstance.rotationAngleProperty().get().invert().toRadians());
-                thePlatformBodyDef.position = computePosition(aInstance);
-                thePlatformBodyDef.userData = aInstance;
+                BodyDef theBodyDef = createBodyDefFor(aInstance, BodyType.DYNAMIC);
+                Body theBody = physicsWorld.createBody(theBodyDef);
+                dynamicObjects.put(aInstance, theBody);
+                theBody.createFixture(thePlatformFixture);
 
-                Body thePlatformBody = physicsWorld.createBody(thePlatformBodyDef);
-                dynamicObjects.put(aInstance, thePlatformBody);
-                thePlatformBody.createFixture(thePlatformFixture);
-
-                return thePlatformBody;
+                return theBody;
             }
 
             // Additional physics
             PhysicsComponent thePhysicscomponent = aInstance.getComponent(PhysicsComponent.class);
             if (thePhysicscomponent != null) {
-
-                PhysicsComponentTemplate theTemplate = aInstance.getOwnerGameObject().getComponentTemplate(
-                        PhysicsComponentTemplate.class);
 
                 PolygonShape thePhysicsShape = new PolygonShape();
                 thePhysicsShape.setAsBox(SIZE_FACTOR * theInstanceSize.width / 2, SIZE_FACTOR * theInstanceSize.height
@@ -246,19 +249,12 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
                 thePhysicsFixture.restitution = 0;
                 thePhysicsFixture.shape = thePhysicsShape;
 
-                BodyDef thePhysicsBodyDef = new BodyDef();
-                thePhysicsBodyDef.type = BodyType.DYNAMIC;
-                // The position is the CENTER of MASS, not the X/Y Coordinate
-                thePhysicsBodyDef.position = computePosition(aInstance);
-                thePhysicsBodyDef.userData = aInstance;
-                thePhysicsBodyDef.setAngle(aInstance.rotationAngleProperty().get().invert().toRadians());
-                thePhysicsBodyDef.setFixedRotation(theTemplate.fixedRotationProperty().get());
+                BodyDef theBodyDef = createBodyDefFor(aInstance, BodyType.DYNAMIC);
+                Body theBody = physicsWorld.createBody(theBodyDef);
+                dynamicObjects.put(aInstance, theBody);
+                theBody.createFixture(thePhysicsFixture);
 
-                Body thePhysicsBody = physicsWorld.createBody(thePhysicsBodyDef);
-                dynamicObjects.put(aInstance, thePhysicsBody);
-                thePhysicsBody.createFixture(thePhysicsFixture);
-
-                return thePhysicsBody;
+                return theBody;
             }
         }
         return null;
@@ -317,9 +313,8 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
             // lesser performance. The recommended position iteration value is 3.
             int thePositionIterations = 2;
 
-            float theTimestep = 1f / 60f * physicsAmountOfTime / 16;
+            float theTimestep = 1f / 60f;
 
-            // The time measure of JBox2D is 1/60 seconds
             physicsWorld.step(theTimestep, theVelocityIterations, thePositionIterations);
 
             // Finally, we have to update the position of our game objects to sync them to the simulation

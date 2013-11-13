@@ -10,6 +10,7 @@ public class GameObjectInstanceFactory {
 
     public GameObjectInstance createFrom(GameObject aGameObject) {
         GameObjectInstance theInstance = new GameObjectInstance(aGameObject);
+        theInstance.nameProperty().setQuietly(aGameObject.nameProperty().get() + "_" + System.currentTimeMillis());
         for (GameComponentTemplate theFactory : aGameObject.getComponentTemplates()) {
             theInstance.addComponent(theFactory.create(theInstance, gameRuntime));
         }
