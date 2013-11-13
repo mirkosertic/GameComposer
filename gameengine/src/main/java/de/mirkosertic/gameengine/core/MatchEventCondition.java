@@ -35,7 +35,7 @@ public class MatchEventCondition implements Condition {
     @Override
     public boolean appliesTo(GameEvent aEvent) {
         String theEventType = aEvent.typeProperty().get();
-        if (theEventType.equals(eventType)) {
+        if (theEventType.equals(eventType.get())) {
             for (Map.Entry<String, Object> theEventPropertiesKey : eventProperties.entrySet()) {
                 String thePropertyname = theEventPropertiesKey.getKey();
                 Object theObjectValue = theEventPropertiesKey.getValue();
@@ -43,28 +43,41 @@ public class MatchEventCondition implements Condition {
                 if (theEventProperty != null) {
                     Object thePropertyValue = theEventProperty.get();
                     if (thePropertyValue instanceof String) {
-                        return thePropertyValue.equals(theObjectValue);
+                        if (!thePropertyValue.equals(theObjectValue)) {
+                            return false;
+                        }
                     }
                     if (thePropertyValue instanceof ResourceName) {
-                        return ((ResourceName) thePropertyValue).name.equals(((ResourceName) theObjectValue).name);
+                        if (!((ResourceName) thePropertyValue).name.equals(((ResourceName) theObjectValue).name)) {
+                            return false;
+                        }
                     }
                     if (thePropertyValue instanceof GameKeyCode) {
-                        return ((GameKeyCode) thePropertyValue).name().equals(((GameKeyCode) theObjectValue).name());
+                        if (!((GameKeyCode) thePropertyValue).name().equals(((GameKeyCode) theObjectValue).name())) {
+                            return false;
+                        }
                     }
                     if (thePropertyValue instanceof GameObjectInstance) {
-                        return ((GameObjectInstance) thePropertyValue).uuidProperty().get()
-                                .equals(((GameObjectInstance) theObjectValue).uuidProperty().get());
+                        if (!((GameObjectInstance) thePropertyValue).uuidProperty().get()
+                                .equals(((GameObjectInstance) theObjectValue).uuidProperty().get())) {
+                            return false;
+                        }
                     }
                     if (thePropertyValue instanceof GameObject) {
-                        return ((GameObject) thePropertyValue).uuidProperty().get()
-                                .equals(((GameObject) theObjectValue).uuidProperty().get());
+                        if (!((GameObject) thePropertyValue).uuidProperty().get()
+                                .equals(((GameObject) theObjectValue).uuidProperty().get())) {
+                            return false;
+                        }
                     }
                     if (thePropertyValue instanceof Boolean) {
-                        return ((Boolean) thePropertyValue).booleanValue() == ((Boolean) theObjectValue).booleanValue();
+                        if (!((Boolean) thePropertyValue).booleanValue() == ((Boolean) theObjectValue).booleanValue()) {
+                            return false;
+                        }
                     }
+                } else {
+                    // Property not found, so condition not met
+                    return false;
                 }
-                // Property not found, so condition not met
-                return false;
             }
             return true;
         }

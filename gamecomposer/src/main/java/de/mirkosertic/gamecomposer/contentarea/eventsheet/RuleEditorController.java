@@ -2,8 +2,11 @@ package de.mirkosertic.gamecomposer.contentarea.eventsheet;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+
+import de.mirkosertic.gamecomposer.GameAssetSelector;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -40,6 +43,8 @@ import de.mirkosertic.gameengine.event.ReadOnlyProperty;
 import de.mirkosertic.gameengine.physics.GameObjectCollisionEvent;
 import de.mirkosertic.gameengine.types.ResourceName;
 
+import javax.inject.Inject;
+
 public class RuleEditorController implements ChildController {
 
     @FXML
@@ -53,6 +58,9 @@ public class RuleEditorController implements ChildController {
 
     @FXML
     VBox actions;
+
+    @Inject
+    GameAssetSelector gameAssetSelector;
 
     private Node view;
     private GameRule gameRule;
@@ -129,7 +137,15 @@ public class RuleEditorController implements ChildController {
             VBox theActionInfo = new VBox();
             HBox.setMargin(theActionBox, new Insets(0, 0, 5, 0));
 
+            final Action theFinalAction = theAction;
             Hyperlink theRemoveActionLink = new Hyperlink("Remove");
+            theRemoveActionLink.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    gameRule.removeAction(theFinalAction);
+                    updateActions();
+                }
+            });
             theActionInfo.getChildren().add(new Label(theAction.getClass().getSimpleName()));
             theActionInfo.getChildren().add(theRemoveActionLink);
 
@@ -156,24 +172,33 @@ public class RuleEditorController implements ChildController {
                     if (theParamType.getActualTypeArguments()[0] == ResourceName.class) {
 
                         try {
-                            ResourceName theResourceNameProperty = (ResourceName) ((Property) theField.get(theAction))
-                                    .get();
+                            final Property theResourceNameProperty = (Property) theField.get(theAction);
+                            ResourceName theResourceName = (ResourceName) theResourceNameProperty.get();
 
                             VBox theResourceInfo = new VBox();
-                            theResourceInfo.setStyle("-fx-background-color: red");
                             HBox.setMargin(theResourceInfo, new Insets(0, 5, 0, 0));
 
-                            TextField theResourceName = new TextField();
-                            theResourceName.setDisable(true);
-                            theResourceName.setEditable(false);
-                            theResourceName.setMaxWidth(Double.MAX_VALUE);
-                            if (theResourceNameProperty != null) {
-                                theResourceName.setText(theResourceNameProperty.name);
+                            final TextField theResourceNameTextField = new TextField();
+                            theResourceNameTextField.setDisable(true);
+                            theResourceNameTextField.setEditable(false);
+                            theResourceNameTextField.setMaxWidth(Double.MAX_VALUE);
+                            if (theResourceName != null) {
+                                theResourceNameTextField.setText(theResourceName.name);
                             }
-                            HBox.setHgrow(theResourceName, Priority.SOMETIMES);
-                            theResourceInfo.getChildren().add(theResourceName);
+                            HBox.setHgrow(theResourceNameTextField, Priority.SOMETIMES);
+                            theResourceInfo.getChildren().add(theResourceNameTextField);
 
                             Hyperlink theSelectAssetLink = new Hyperlink("Select asset...");
+                            theSelectAssetLink.setOnAction(new EventHandler<ActionEvent>() {
+                                @Override
+                                public void handle(ActionEvent actionEvent) {
+                                    ResourceName theNewResourceName = gameAssetSelector.selectAudioAssetFrom(eventSheet.getGameScene());
+                                    if (theNewResourceName != null) {
+                                        theResourceNameTextField.setText(theNewResourceName.name);
+                                        theResourceNameProperty.set(theNewResourceName);
+                                    }
+                                }
+                            });
                             theResourceInfo.getChildren().add(theSelectAssetLink);
 
                             HBox.setMargin(theSelectAssetLink, new Insets(5, 0, 0, 0));
@@ -237,7 +262,7 @@ public class RuleEditorController implements ChildController {
                     if (theParamType.getActualTypeArguments()[0] == GameKeyCode.class) {
                         final ComboBox theCombobox = new ComboBox();
                         theCombobox.getItems().clear();
-                        theCombobox.getItems().addAll(GameKeyCode.values());
+                        theCombobox.getItems().addAll(Arrays.asList(GameKeyCode.values()));
                         theCombobox.getSelectionModel().select(theFilterValue);
                         theCombobox.setConverter(new StringConverter<GameKeyCode>() {
                             @Override

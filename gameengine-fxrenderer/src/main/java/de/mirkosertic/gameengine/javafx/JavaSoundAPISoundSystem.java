@@ -23,12 +23,13 @@ public class JavaSoundAPISoundSystem implements GameSoundSystem<Clip> {
         try {
             GameResource theResource = resourceCache.getResourceFor(aResourceName);
             if (theResource.getType() == GameResourceType.SOUND) {
-                Clip theClip = ((JavaFXAudioResource) theResource).getClip();
+                Clip theClip = ((JavaFXAudioResource) theResource).createClip();
                 theClip.start();
                 return theClip;
             }
             return null;
-        } catch (IOException e) {
+        } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }

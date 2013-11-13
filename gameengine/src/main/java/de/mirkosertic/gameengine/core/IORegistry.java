@@ -29,6 +29,10 @@ public class IORegistry {
         registeredConditionUnmarshaller.put(aUnmarshaller.getTypeKey(), aUnmarshaller);
     }
 
+    public void registerActionUnmarshaller(ActionUnmarshaller aUnmarshaller) {
+        registeredActionUnmarshaller.put(aUnmarshaller.getTypeKey(), aUnmarshaller);
+    }
+
     public GameComponentTemplateUnmarshaller getTemplateUnmarshallerFor(String aTypeKey) {
         return registeredTemplateUnmarshaller.get(aTypeKey);
     }

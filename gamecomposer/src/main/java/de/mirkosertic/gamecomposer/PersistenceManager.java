@@ -10,15 +10,12 @@ import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import de.mirkosertic.gameengine.core.*;
 import org.apache.commons.io.FileUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.ObjectReader;
 import org.codehaus.jackson.map.ObjectWriter;
 
-import de.mirkosertic.gameengine.core.Game;
-import de.mirkosertic.gameengine.core.GameResourceLoader;
-import de.mirkosertic.gameengine.core.GameRuntime;
-import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.types.ResourceName;
 import de.mirkosertic.gameengine.event.GameEvent;
 import de.mirkosertic.gameengine.event.GameEventListener;
@@ -112,7 +109,15 @@ public class PersistenceManager {
             GameResourceLoader theResourceLoader = new JavaFXFileGameResourceLoader(new File(theGameDirectory, theSceneName));
 
             File theSceneDescriptor = new File(new File(theGameDirectory, theSceneName), "scene.json");
-            GameScene theLoadedScene = GameScene.deserialize(gameRuntimeFactory.create(theResourceLoader, new JavaSoundAPISoundSystemFactory()), theReader.<Map<String, Object>>readValue(theSceneDescriptor));
+            Map<String, Object> theSerializedData = theReader.readValue(theSceneDescriptor);
+
+            GameScene theLoadedScene = GameScene.deserialize(gameRuntimeFactory.create(theResourceLoader, new JavaSoundAPISoundSystemFactory()), theSerializedData);
+
+            // Finally we need to initialize the Action system, as now the scene is completely loaded
+            ActionManagerFactory theActionManagerFactory = new ActionManagerFactory();
+            theLoadedScene.getRuntime().addSystem(theActionManagerFactory.create(theLoadedScene, theLoadedScene.getRuntime().getEventManager()));
+
+            // Ok, we are done here
             theLoadedScenes.put(theSceneName, theLoadedScene);
         }
 

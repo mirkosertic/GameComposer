@@ -1,6 +1,7 @@
 package de.mirkosertic.gamecomposer.objectinspector.spritetemplate;
 
 import de.mirkosertic.gamecomposer.FlushResourceCacheEvent;
+import de.mirkosertic.gamecomposer.GameAssetSelector;
 import de.mirkosertic.gamecomposer.PersistenceManager;
 import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorChildController;
 import de.mirkosertic.gameengine.core.GameResourceLoader;
@@ -18,11 +19,9 @@ import javafx.scene.Parent;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
-import javafx.stage.FileChooser;
 
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
-import java.io.File;
 import java.io.IOException;
 
 public class SpriteTemplateEditorController implements ObjectInspectorChildController {
@@ -41,6 +40,9 @@ public class SpriteTemplateEditorController implements ObjectInspectorChildContr
 
     @Inject
     Event<FlushResourceCacheEvent> flushResourceCacheEvent;
+
+    @Inject
+    GameAssetSelector gameAssetSelector;
 
     private Parent view;
     private SpriteComponentTemplate object;
@@ -85,16 +87,9 @@ public class SpriteTemplateEditorController implements ObjectInspectorChildContr
 
         GameScene theScene = object.getOwner().getGameScene();
 
-        FileChooser theFileChooser = new FileChooser();
-
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("PNG files (*.png)","*.png");
-        theFileChooser.getExtensionFilters().add(extFilter);
-        theFileChooser.setInitialDirectory(persistenceManager.getAssetsDirectoryFor(theScene));
-
-        File theSelectedFile = theFileChooser.showOpenDialog(null);
-        if (theSelectedFile != null) {
-            ResourceName theName = persistenceManager.toResourceName(theScene, theSelectedFile);
-            object.resourceNameProperty().set(theName);
+        ResourceName theNewResourceName = gameAssetSelector.selectImageAssetFrom(theScene);
+        if (theNewResourceName != null) {
+            object.resourceNameProperty().set(theNewResourceName);
 
             reloadSprite();
 

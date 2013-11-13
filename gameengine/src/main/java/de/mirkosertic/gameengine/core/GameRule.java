@@ -35,6 +35,10 @@ public class GameRule {
         actions.add(aAction);
     }
 
+    public void removeAction(Action aAction) {
+        actions.remove(aAction);
+    }
+
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<String, Object>();
         if (!name.isNull()) {
