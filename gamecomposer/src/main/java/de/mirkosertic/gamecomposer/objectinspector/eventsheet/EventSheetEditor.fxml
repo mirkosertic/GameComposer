@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.collections.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane id="BorderPane" minHeight="-Infinity" minWidth="-Infinity" xmlns:fx="http://javafx.com/fxml" fx:controller="de.mirkosertic.gamecomposer.objectinspector.eventsheet.EventSheetEditorController">
+  <center>
+    <VBox>
+      <children>
+        <HBox>
+          <children>
+            <Label prefWidth="70.0" text="Name" />
+            <TextField fx:id="nameTextField" HBox.hgrow="ALWAYS" />
+          </children>
+        </HBox>
+      </children>
+    </VBox>
+  </center>
+  <padding>
+    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+  </padding>
+</BorderPane>

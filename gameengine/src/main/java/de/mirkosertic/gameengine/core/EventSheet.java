@@ -50,7 +50,7 @@ public class EventSheet {
         List<Map<String, Object>> theRules = (List<Map<String, Object>>) aSerializedData.get("rules");
         if (theRules != null) {
             for (Map<String, Object> theRuleData : theRules) {
-                theResult.rules.add(GameRule.unmarshall(aIORegistry, theRuleData));
+                theResult.rules.add(GameRule.unmarshall(aIORegistry, theResult, theRuleData));
             }
         }
         return theResult;

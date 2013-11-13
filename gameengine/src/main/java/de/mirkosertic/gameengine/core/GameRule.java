@@ -51,7 +51,7 @@ public class GameRule {
         return theResult;
     }
 
-    public static GameRule unmarshall(IORegistry aIORegistry, Map<String, Object> aSerializedData) {
+    public static GameRule unmarshall(IORegistry aIORegistry, EventSheet aEventSheet, Map<String, Object> aSerializedData) {
         GameRule theResult =  new GameRule();
 
         String theName = (String) aSerializedData.get("name");
@@ -62,7 +62,7 @@ public class GameRule {
         Map<String, Object> theConditionData = (Map<String, Object>) aSerializedData.get("condition");
         if (theConditionData != null) {
             String theConditionType = (String) theConditionData.get(Condition.TYPE_ATTRIBUTE);
-            Condition theCondition = aIORegistry.getConditionUnmarshallerFor(theConditionType).unmarshall(theConditionData);
+            Condition theCondition = aIORegistry.getConditionUnmarshallerFor(theConditionType).unmarshall(aEventSheet.getGameScene(), theConditionData);
             theResult.condition.setQuietly(theCondition);
         }
         List<Map<String, Object>> theActions = (List<Map<String, Object>>) aSerializedData.get("actions");

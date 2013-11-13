@@ -2,7 +2,6 @@ package de.mirkosertic.gamecomposer.contentarea.eventsheet;
 
 import de.mirkosertic.gamecomposer.FlushResourceCacheEvent;
 import de.mirkosertic.gamecomposer.ObjectSelectedEvent;
-import de.mirkosertic.gamecomposer.PropertyBinder;
 import de.mirkosertic.gamecomposer.ShutdownEvent;
 import de.mirkosertic.gamecomposer.contentarea.ContentChildController;
 import de.mirkosertic.gameengine.core.EventSheet;
@@ -12,7 +11,6 @@ import de.mirkosertic.gameengine.event.PropertyChangeEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Tab;
-import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 
@@ -21,9 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EventSheetEditorController implements ContentChildController<EventSheet> {
-
-    @FXML
-    TextField eventSheetName;
 
     @FXML
     VBox rulesList;
@@ -40,7 +35,7 @@ public class EventSheetEditorController implements ContentChildController<EventS
         editingObject = aEventSheet;
         controllerList = new ArrayList<>();
 
-        PropertyBinder.bind(editingObject.nameProperty(), eventSheetName.textProperty());
+        initializeRuleList();
 
         return this;
     }
@@ -64,7 +59,6 @@ public class EventSheetEditorController implements ContentChildController<EventS
 
     @Override
     public void removed() {
-        PropertyBinder.unbind(editingObject.nameProperty());
     }
 
     @Override

@@ -124,10 +124,19 @@ public class GameScene {
         return theResult;
     }
 
-    public GameObject findGameObjectByID(String aObjectID) {
+    public GameObject findGameObjectByID(String aObjectUUID) {
         for (GameObject theObject : objects) {
-            if (theObject.uuidProperty().get().equals(aObjectID)) {
+            if (theObject.uuidProperty().get().equals(aObjectUUID)) {
                 return theObject;
+            }
+        }
+        return null;
+    }
+
+    public GameObjectInstance findGameObjectInstanceByID(String aInstanceUUID) {
+        for (GameObjectInstance theInstance : instances) {
+            if (theInstance.uuidProperty().get().equals(aInstanceUUID)) {
+                return theInstance;
             }
         }
         return null;

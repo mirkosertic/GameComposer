@@ -1,10 +1,5 @@
 package de.mirkosertic.gamecomposer.objectinspector.gamescene;
 
-import de.mirkosertic.gamecomposer.PropertyBinder;
-import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorChildController;
-import de.mirkosertic.gameengine.core.GameObject;
-import de.mirkosertic.gameengine.core.GameScene;
-
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -13,6 +8,11 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.util.StringConverter;
+
+import de.mirkosertic.gamecomposer.PropertyBinder;
+import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorChildController;
+import de.mirkosertic.gameengine.core.GameObject;
+import de.mirkosertic.gameengine.core.GameScene;
 
 public class GameSceneEditorController implements ObjectInspectorChildController {
 
@@ -67,17 +67,19 @@ public class GameSceneEditorController implements ObjectInspectorChildController
         defaultPlayer.setConverter(new GameObjectToStringConverter());
         PropertyBinder.bind(aObject.defaultPlayerProperty(), defaultPlayer.valueProperty());
 
-        PropertyBinder.bind(aObject.backgroundColorProperty(), backgroundColorPicker.valueProperty(), new PropertyBinder.Converter<de.mirkosertic.gameengine.types.Color, Color>() {
-            @Override
-            public Color beanToUI(de.mirkosertic.gameengine.types.Color aValue) {
-                return Color.rgb(aValue.r, aValue.g, aValue.b);
-            }
+        PropertyBinder.bind(aObject.backgroundColorProperty(), backgroundColorPicker.valueProperty(),
+                new PropertyBinder.Converter<de.mirkosertic.gameengine.types.Color, Color>() {
+                    @Override
+                    public Color beanToUI(de.mirkosertic.gameengine.types.Color aValue) {
+                        return Color.rgb(aValue.r, aValue.g, aValue.b);
+                    }
 
-            @Override
-            public de.mirkosertic.gameengine.types.Color uiToBean(Color aValue) {
-                return new de.mirkosertic.gameengine.types.Color((int)(aValue.getRed() * 255), ((int) aValue.getGreen() * 255), ((int) aValue.getBlue() * 255));
-            }
-        });
+                    @Override
+                    public de.mirkosertic.gameengine.types.Color uiToBean(Color aValue) {
+                        return new de.mirkosertic.gameengine.types.Color((int) (aValue.getRed() * 255), (int) (aValue
+                                .getGreen() * 255), (int) (aValue.getBlue() * 255));
+                    }
+                });
 
         return this;
     }
