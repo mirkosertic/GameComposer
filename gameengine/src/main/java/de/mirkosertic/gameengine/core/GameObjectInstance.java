@@ -2,9 +2,7 @@ package de.mirkosertic.gameengine.core;
 
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
-import de.mirkosertic.gameengine.types.Angle;
-import de.mirkosertic.gameengine.types.Position;
-import de.mirkosertic.gameengine.types.Size;
+import de.mirkosertic.gameengine.types.*;
 
 import java.util.*;
 
@@ -14,14 +12,16 @@ public class GameObjectInstance {
 
     private GameObject ownerGameObject;
 
-    private Property<Position> position;
+    private Property<String> uuid;
     private Property<String> name;
+    private Property<Position> position;
     private Property<Angle> rotationAngle;
 
     GameObjectInstance(GameObject aOwnerGameObject) {
 
         GameEventManager theManager = aOwnerGameObject.getGameScene().getRuntime().getEventManager();
 
+        uuid = new Property<String>(this, "uuid", de.mirkosertic.gameengine.types.UUID.randomUID(), theManager);
         name = new Property<String>(this, "name", theManager);
         position = new Property<Position>(this, "position", new Position(), theManager);
         rotationAngle = new Property<Angle>(this, "rotationAngle", new Angle(0), theManager);
@@ -36,6 +36,10 @@ public class GameObjectInstance {
         return (aPosition.x >= thePosition.x && aPosition.y >= thePosition.y &&
                 aPosition.x <= thePosition.x + theSize.width &&
                 aPosition.y <= thePosition.y + theSize.height);
+    }
+
+    public Property<String> uuidProperty() {
+        return uuid;
     }
 
     public Property<Position> positionProperty() {
@@ -69,6 +73,9 @@ public class GameObjectInstance {
 
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<String, Object>();
+        if (!uuidProperty().isNull()) {
+            theResult.put("uuid",  uuidProperty().get());
+        }
         theResult.put("gameobjectuuid", ownerGameObject.uuidProperty().get());
 
         theResult.put("position", position.get().serializeToMap());
@@ -86,15 +93,20 @@ public class GameObjectInstance {
 
     public static GameObjectInstance deserialize(GameRuntime aGameRuntime, GameScene aScene, Map<String, Object> theInstance) {
 
-        String theUUID = (String) theInstance.get("gameobjectuuid");
-        GameObject theGameObject = aScene.findGameObjectByID(theUUID);
+        String theGameObjectUUID = (String) theInstance.get("gameobjectuuid");
+        GameObject theGameObject = aScene.findGameObjectByID(theGameObjectUUID);
         if (theGameObject == null) {
-            throw new RuntimeException("Cannot find gameobject with uuid" + theUUID);
+            throw new RuntimeException("Cannot find gameobject with uuid" + theGameObjectUUID);
         }
 
         GameObjectInstance theResult = new GameObjectInstance(theGameObject);
         theResult.position.setQuietly(Position.deserialize((Map<String, Object>) theInstance.get("position")));
         theResult.name.setQuietly((String) theInstance.get("name"));
+
+        String theInstanceUUID = (String) theInstance.get("uuid");
+        if (theInstanceUUID != null) {
+            theResult.uuid.setQuietly(theInstanceUUID);
+        }
 
         Map<String, Object> theRotationAngle = (Map<String, Object>) theInstance.get("rotationangle");
         if (theRotationAngle != null) {

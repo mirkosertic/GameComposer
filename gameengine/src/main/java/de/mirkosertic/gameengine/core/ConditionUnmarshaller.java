@@ -6,5 +6,5 @@ public interface ConditionUnmarshaller {
 
     String getTypeKey();
 
-    Condition unmarshall(Map<String, Object> aSerializedData);
+    Condition unmarshall(GameScene aGameScene, Map<String, Object> aSerializedData);
 }

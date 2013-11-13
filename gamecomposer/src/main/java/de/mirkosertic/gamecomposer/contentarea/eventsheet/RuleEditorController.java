@@ -1,14 +1,9 @@
 package de.mirkosertic.gamecomposer.contentarea.eventsheet;
 
-import de.mirkosertic.gamecomposer.ChildController;
-import de.mirkosertic.gamecomposer.PropertyBinder;
-import de.mirkosertic.gameengine.action.PlaySoundAction;
-import de.mirkosertic.gameengine.core.*;
-import de.mirkosertic.gameengine.event.Property;
-import de.mirkosertic.gameengine.event.ReadOnlyProperty;
-import de.mirkosertic.gameengine.physics.GameObjectCollisionEvent;
-
-import de.mirkosertic.gameengine.types.ResourceName;
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.util.HashMap;
+import java.util.Map;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -27,10 +22,23 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.util.HashMap;
-import java.util.Map;
+import de.mirkosertic.gamecomposer.ChildController;
+import de.mirkosertic.gamecomposer.PropertyBinder;
+import de.mirkosertic.gameengine.action.PlaySoundAction;
+import de.mirkosertic.gameengine.core.Action;
+import de.mirkosertic.gameengine.core.EventSheet;
+import de.mirkosertic.gameengine.core.GameKeyCode;
+import de.mirkosertic.gameengine.core.GameLoopRunEvent;
+import de.mirkosertic.gameengine.core.GameObject;
+import de.mirkosertic.gameengine.core.GameObjectInstance;
+import de.mirkosertic.gameengine.core.GameRule;
+import de.mirkosertic.gameengine.core.KeyPressedGameEvent;
+import de.mirkosertic.gameengine.core.KeyReleasedGameEvent;
+import de.mirkosertic.gameengine.core.MatchEventCondition;
+import de.mirkosertic.gameengine.event.Property;
+import de.mirkosertic.gameengine.event.ReadOnlyProperty;
+import de.mirkosertic.gameengine.physics.GameObjectCollisionEvent;
+import de.mirkosertic.gameengine.types.ResourceName;
 
 public class RuleEditorController implements ChildController {
 
@@ -53,7 +61,8 @@ public class RuleEditorController implements ChildController {
 
     private Map<String, Class> knownEventTypes;
 
-    RuleEditorController initialize(EventSheetEditorController aParentController, BorderPane aView, EventSheet aEventSheet, GameRule aGameRule) {
+    RuleEditorController initialize(EventSheetEditorController aParentController, BorderPane aView,
+            EventSheet aEventSheet, GameRule aGameRule) {
         eventSheet = aEventSheet;
         view = aView;
         parentController = aParentController;
@@ -66,9 +75,17 @@ public class RuleEditorController implements ChildController {
         knownEventTypes.put(GameObjectCollisionEvent.class.getSimpleName(), GameObjectCollisionEvent.class);
 
         setupEventSelection();
+        updateActions();
         updateFilterConditions();
 
         PropertyBinder.bind(aGameRule.nameProperty(), ruleName.textProperty());
+
+        eventType.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                setEventType();
+            }
+        });
         return this;
     }
 
@@ -86,10 +103,14 @@ public class RuleEditorController implements ChildController {
                 return null;
             }
         });
+
+        if (!gameRule.conditionProperty().isNull()) {
+            MatchEventCondition theCondition = (MatchEventCondition) gameRule.conditionProperty().get();
+            eventType.setValue(knownEventTypes.get(theCondition.eventTypeProperty().get()));
+        }
     }
 
-    @FXML
-    public void setEventType() {
+    private void setEventType() {
         Class theEventType = (Class) eventType.valueProperty().get();
         MatchEventCondition theMatchEventCondition = new MatchEventCondition();
         theMatchEventCondition.eventTypeProperty().set(theEventType.getSimpleName());
@@ -104,48 +125,66 @@ public class RuleEditorController implements ChildController {
         actions.getChildren().clear();
         for (Action theAction : gameRule.getActions()) {
             HBox theActionBox = new HBox();
+
             VBox theActionInfo = new VBox();
-            theActionInfo.getChildren().add(new Label(theAction.getClass().getSimpleName()));
+            HBox.setMargin(theActionBox, new Insets(0, 0, 5, 0));
+
             Hyperlink theRemoveActionLink = new Hyperlink("Remove");
+            theActionInfo.getChildren().add(new Label(theAction.getClass().getSimpleName()));
             theActionInfo.getChildren().add(theRemoveActionLink);
+
+            HBox.setHgrow(theActionInfo, Priority.ALWAYS);
             theActionBox.getChildren().add(theActionInfo);
+
             VBox theProperties = new VBox();
+            HBox.setHgrow(theProperties, Priority.ALWAYS);
 
             for (Field theField : theAction.getClass().getDeclaredFields()) {
                 theField.setAccessible(true);
                 final String theFieldName = theField.getName();
                 if (theField.getType().isAssignableFrom(Property.class)) {
-                    HBox theHBox = new HBox();
+                    HBox thePropertyHBox = new HBox();
+                    theProperties.setMaxWidth(Double.MAX_VALUE);
+
                     Label theLabel = new Label(theFieldName + ":");
                     theLabel.setAlignment(Pos.CENTER_LEFT);
-                    HBox.setMargin(theLabel, new Insets(5, 5, 0, 0));
-                    theHBox.getChildren().add(theLabel);
+                    HBox.setMargin(theLabel, new Insets(0, 0, 5, 0));
+
+                    thePropertyHBox.getChildren().add(theLabel);
+
                     ParameterizedType theParamType = (ParameterizedType) theField.getGenericType();
                     if (theParamType.getActualTypeArguments()[0] == ResourceName.class) {
 
                         try {
-                            ResourceName theResourceNameProperty = (ResourceName) ((Property) theField.get(theAction)).get();
+                            ResourceName theResourceNameProperty = (ResourceName) ((Property) theField.get(theAction))
+                                    .get();
 
                             VBox theResourceInfo = new VBox();
+                            theResourceInfo.setStyle("-fx-background-color: red");
+                            HBox.setMargin(theResourceInfo, new Insets(0, 5, 0, 0));
+
                             TextField theResourceName = new TextField();
                             theResourceName.setDisable(true);
                             theResourceName.setEditable(false);
+                            theResourceName.setMaxWidth(Double.MAX_VALUE);
                             if (theResourceNameProperty != null) {
                                 theResourceName.setText(theResourceNameProperty.name);
                             }
+                            HBox.setHgrow(theResourceName, Priority.SOMETIMES);
                             theResourceInfo.getChildren().add(theResourceName);
-                            Hyperlink theLink = new Hyperlink("Select asset...");
-                            theResourceInfo.getChildren().add(theLink);
 
-                            HBox.setMargin(theLink, new Insets(5, 0, 5, 0));
+                            Hyperlink theSelectAssetLink = new Hyperlink("Select asset...");
+                            theResourceInfo.getChildren().add(theSelectAssetLink);
 
-                            theHBox.getChildren().add(theResourceInfo);
+                            HBox.setMargin(theSelectAssetLink, new Insets(5, 0, 0, 0));
+
+                            thePropertyHBox.getChildren().add(theResourceInfo);
                         } catch (IllegalAccessException e) {
                             // should not happen
                             throw new RuntimeException(e);
                         }
                     }
-                    theProperties.getChildren().add(theHBox);
+                    theProperties.getChildren().add(thePropertyHBox);
                 }
             }
 
@@ -165,28 +204,41 @@ public class RuleEditorController implements ChildController {
             for (Field theField : theFilterClass.getDeclaredFields()) {
                 final String theFieldName = theField.getName();
                 if (theField.getType().isAssignableFrom(ReadOnlyProperty.class)) {
-                    HBox theHBox = new HBox();
+
+                    Object theFilterValue = theCondition.getFilterValue(theFieldName);
+
+                    HBox thePropertyHBox = new HBox();
+                    VBox.setMargin(thePropertyHBox, new Insets(0, 0, 5, 0));
+
+                    thePropertyHBox.setMaxWidth(Double.MAX_VALUE);
+
                     Label theLabel = new Label(theFieldName + ":");
                     theLabel.setAlignment(Pos.CENTER_LEFT);
-                    HBox.setMargin(theLabel, new Insets(5, 5, 0, 0));
-                    theHBox.getChildren().add(theLabel);
+                    theLabel.setMaxHeight(Double.MAX_VALUE);
+
+                    thePropertyHBox.getChildren().add(theLabel);
+
                     ParameterizedType theParamType = (ParameterizedType) theField.getGenericType();
                     if (theParamType.getActualTypeArguments()[0] == String.class) {
                         TextField theTextfield = new TextField();
+                        if (theFilterValue != null) {
+                            theTextfield.setText((String) theCondition.getFilterValue(theFieldName));
+                        }
                         theTextfield.textProperty().addListener(new ChangeListener<String>() {
                             @Override
-                            public void changed(ObservableValue<? extends String> observableValue, String aOldValue, String aNewValue) {
+                            public void changed(ObservableValue<? extends String> observableValue, String aOldValue,
+                                    String aNewValue) {
                                 theCondition.setFilterValue(theFieldName, aNewValue);
                             }
                         });
-                        HBox.setHgrow(theTextfield, Priority.ALWAYS);
-                        HBox.setMargin(theTextfield, new Insets(5, 5, 0, 0));
-                        theHBox.getChildren().add(theTextfield);
+
+                        thePropertyHBox.getChildren().add(theTextfield);
                     }
                     if (theParamType.getActualTypeArguments()[0] == GameKeyCode.class) {
                         final ComboBox theCombobox = new ComboBox();
                         theCombobox.getItems().clear();
                         theCombobox.getItems().addAll(GameKeyCode.values());
+                        theCombobox.getSelectionModel().select(theFilterValue);
                         theCombobox.setConverter(new StringConverter<GameKeyCode>() {
                             @Override
                             public String toString(GameKeyCode o) {
@@ -201,19 +253,19 @@ public class RuleEditorController implements ChildController {
                         theCombobox.setOnAction(new EventHandler<ActionEvent>() {
                             @Override
                             public void handle(ActionEvent actionEvent) {
-                                theCondition.setFilterValue(theFieldName, ((GameKeyCode) theCombobox.getValue()).name());
+                                theCondition.setFilterValue(theFieldName, theCombobox.getValue());
                             }
                         });
-                        HBox.setHgrow(theCombobox, Priority.ALWAYS);
-                        HBox.setMargin(theCombobox, new Insets(5, 5, 0, 0));
-                        theHBox.getChildren().add(theCombobox);
+
+                        thePropertyHBox.getChildren().add(theCombobox);
                     }
-                    if ((theParamType.getActualTypeArguments()[0] == GameObjectInstance.class) ||
-                            ((theParamType.getActualTypeArguments()[0] == GameObject.class))) {
+                    if ((theParamType.getActualTypeArguments()[0] == GameObjectInstance.class)
+                            || ((theParamType.getActualTypeArguments()[0] == GameObject.class))) {
                         final ComboBox theCombobox = new ComboBox();
                         theCombobox.getItems().clear();
                         theCombobox.getItems().addAll(eventSheet.getGameScene().getObjects());
                         theCombobox.getItems().addAll(eventSheet.getGameScene().getInstances());
+                        theCombobox.getSelectionModel().select(theFilterValue);
                         theCombobox.setConverter(new StringConverter<Object>() {
                             @Override
                             public String toString(Object o) {
@@ -231,20 +283,14 @@ public class RuleEditorController implements ChildController {
                         theCombobox.setOnAction(new EventHandler<ActionEvent>() {
                             @Override
                             public void handle(ActionEvent actionEvent) {
-                                Object theValue = theCombobox.getValue();
-                                if (theValue instanceof GameObject) {
-                                    theCondition.setFilterValue(theFieldName, ((GameObject) theCombobox.getValue()).nameProperty().get());
-                                } else {
-                                    theCondition.setFilterValue(theFieldName, ((GameObjectInstance) theCombobox.getValue()).nameProperty().get());
-                                }
+                                theCondition.setFilterValue(theFieldName, theCombobox.getValue());
                             }
                         });
-                        HBox.setHgrow(theCombobox, Priority.ALWAYS);
-                        HBox.setMargin(theCombobox, new Insets(5, 5, 0, 0));
-                        theHBox.getChildren().add(theCombobox);
+
+                        thePropertyHBox.getChildren().add(theCombobox);
                     }
 
-                    filterCoditions.getChildren().add(theHBox);
+                    filterCoditions.getChildren().add(thePropertyHBox);
                 }
             }
         }

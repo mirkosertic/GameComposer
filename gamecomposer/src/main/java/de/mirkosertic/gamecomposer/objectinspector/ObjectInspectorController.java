@@ -4,6 +4,7 @@ import de.mirkosertic.gamecomposer.ChildController;
 import de.mirkosertic.gamecomposer.GameSceneCreatedEvent;
 import de.mirkosertic.gamecomposer.ObjectSelectedEvent;
 import de.mirkosertic.gamecomposer.objectinspector.cameratemplate.CameraTemplateEditorControllerFactory;
+import de.mirkosertic.gamecomposer.objectinspector.eventsheet.EventSheetEditorControllerFactory;
 import de.mirkosertic.gamecomposer.objectinspector.game.GameEditorControllerFactory;
 import de.mirkosertic.gamecomposer.objectinspector.gameobject.GameObjectEditorControllerFactory;
 import de.mirkosertic.gamecomposer.objectinspector.gameobjectinstance.GameObjectInstanceEditorControllerFactory;
@@ -63,6 +64,9 @@ public class ObjectInspectorController implements ChildController {
     @Inject
     GameObjectInstanceEditorControllerFactory gameObjectInstanceEditorControllerFactory;
 
+    @Inject
+    EventSheetEditorControllerFactory eventSheetEditorControllerFactory;
+
     private Node view;
     private Object currentSelection;
     private List<ObjectInspectorChildController> currentController;
@@ -111,6 +115,12 @@ public class ObjectInspectorController implements ChildController {
             }
             if (aObject instanceof GameScene) {
                 ObjectInspectorChildController theController = gameSceneEditorControllerFactory.create((GameScene) aObject);
+                TitledPane thePane = new TitledPane("Properties", theController.getView());
+                propertyPanels.getChildren().add(thePane);
+                currentController.add(theController);
+            }
+            if (aObject instanceof EventSheet) {
+                ObjectInspectorChildController theController = eventSheetEditorControllerFactory.create((EventSheet) aObject);
                 TitledPane thePane = new TitledPane("Properties", theController.getView());
                 propertyPanels.getChildren().add(thePane);
                 currentController.add(theController);

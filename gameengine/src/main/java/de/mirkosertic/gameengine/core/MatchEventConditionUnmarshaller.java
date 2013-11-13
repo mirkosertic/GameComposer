@@ -10,7 +10,7 @@ public class MatchEventConditionUnmarshaller implements ConditionUnmarshaller {
     }
 
     @Override
-    public Condition unmarshall(Map<String, Object> aSerializedData) {
-        return MatchEventCondition.unmarshall(aSerializedData);
+    public Condition unmarshall(GameScene aGameScene, Map<String, Object> aSerializedData) {
+        return MatchEventCondition.unmarshall(aGameScene, aSerializedData);
     }
 }
