@@ -1,16 +1,14 @@
 package de.mirkosertic.gameengine;
 
+import de.mirkosertic.gameengine.action.PlaySoundActionUnmarshaller;
 import de.mirkosertic.gameengine.camera.CameraComponentTemplateUnmarshaller;
 import de.mirkosertic.gameengine.camera.CameraComponentUnmarshaller;
-import de.mirkosertic.gameengine.core.IORegistry;
-import de.mirkosertic.gameengine.core.MatchEventConditionUnmarshaller;
+import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.event.GameEventManager;
-import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.physics.*;
 import de.mirkosertic.gameengine.physics.jbox2d.JBox2DGamePhysicsManagerFactory;
 import de.mirkosertic.gameengine.processes.GameProcessManager;
 import de.mirkosertic.gameengine.processes.GameProcessManagerFactory;
-import de.mirkosertic.gameengine.core.GameResourceLoader;
 import de.mirkosertic.gameengine.sound.GameSoundManager;
 import de.mirkosertic.gameengine.sound.GameSoundManagerFactory;
 import de.mirkosertic.gameengine.sound.GameSoundSystem;
@@ -54,6 +52,7 @@ public abstract class AbstractGameRuntimeFactory {
         theRegistry.registerComponentUnmarshaller(new PlatformComponentUnmarshaller());
 
         theRegistry.registerConditionUnmarshaller(new MatchEventConditionUnmarshaller());
+        theRegistry.registerActionUnmarshaller(new PlaySoundActionUnmarshaller());
 
         return theGameRuntime;
     }

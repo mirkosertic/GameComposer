@@ -107,6 +107,7 @@ public class ContentAreaController implements ChildController {
                 onTabClose(aTab);
             }
         });
+        editorTabPane.getSelectionModel().select(aTab);
     }
 
     void onTabClose(Tab aTab) {

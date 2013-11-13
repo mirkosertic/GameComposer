@@ -37,6 +37,7 @@ public class EventSheet {
 
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<String, Object>();
+        theResult.put("name", nameProperty.get());
         List<Map<String, Object>> theRuleList = new ArrayList<Map<String, Object>>();
         for (GameRule theRule : rules) {
             theRuleList.add(theRule.serialize());
@@ -47,6 +48,12 @@ public class EventSheet {
 
     public static EventSheet unmarshall(IORegistry aIORegistry, GameScene aGameScene, Map<String, Object> aSerializedData) {
         EventSheet theResult = new EventSheet(aGameScene);
+
+        String theName = (String) aSerializedData.get("name");
+        if (theName != null) {
+            theResult.nameProperty.setQuietly(theName);
+        }
+
         List<Map<String, Object>> theRules = (List<Map<String, Object>>) aSerializedData.get("rules");
         if (theRules != null) {
             for (Map<String, Object> theRuleData : theRules) {
