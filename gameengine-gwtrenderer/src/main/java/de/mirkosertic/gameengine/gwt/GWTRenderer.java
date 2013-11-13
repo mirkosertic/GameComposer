@@ -5,10 +5,7 @@ import java.util.logging.Logger;
 
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.event.dom.client.KeyDownHandler;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.event.dom.client.*;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.user.client.Timer;
@@ -18,18 +15,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 
 import de.mirkosertic.gameengine.camera.CameraComponent;
 import de.mirkosertic.gameengine.camera.FollowCameraProcess;
-import de.mirkosertic.gameengine.core.DefaultGameLoopThrottle;
-import de.mirkosertic.gameengine.core.Game;
-import de.mirkosertic.gameengine.core.GameKeyCode;
-import de.mirkosertic.gameengine.core.GameLoop;
-import de.mirkosertic.gameengine.core.GameLoopFactory;
-import de.mirkosertic.gameengine.core.GameObjectInstance;
-import de.mirkosertic.gameengine.core.GameObjectInstanceFactory;
-import de.mirkosertic.gameengine.core.GameRuntime;
-import de.mirkosertic.gameengine.core.GameScene;
-import de.mirkosertic.gameengine.core.KeyPressedGameEvent;
-import de.mirkosertic.gameengine.core.KeyReleasedGameEvent;
-import de.mirkosertic.gameengine.core.SetScreenResolutionEvent;
+import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.processes.StartProcessEvent;
 import de.mirkosertic.gameengine.types.Size;
@@ -61,6 +47,12 @@ public class GWTRenderer implements EntryPoint {
                             @Override
                             public void onGameSceneLoaded(GameScene aScene) {
                                 LOGGER.info("Game loaded, loading scene " + aScene.nameProperty().get());
+
+                                // Add the action manager to the running game, now we are ready to go!!
+                                ActionManagerFactory theActionManagerFactory = new ActionManagerFactory();
+                                ActionManager theActionManager = theActionManagerFactory.create(aScene, aScene.getRuntime().getEventManager());
+                                aScene.getRuntime().addSystem(theActionManager);
+
                                 playScene(aScene);
                             }
 
@@ -140,6 +132,15 @@ public class GWTRenderer implements EntryPoint {
                 GameKeyCode theCode = GWTKeyCodeTranslator.translate(aEvent.getNativeKeyCode());
                 if (theCode != null) {
                     theEventManager.fire(new KeyReleasedGameEvent(theCode));
+                }
+            }
+        });
+        canvas.addKeyPressHandler(new KeyPressHandler() {
+            @Override
+            public void onKeyPress(KeyPressEvent aKeyPressEvent) {
+                GameKeyCode theGameKeyCode = GameKeyCode.fromChar(aKeyPressEvent.getCharCode());
+                if (theGameKeyCode != null) {
+                    theEventManager.fire(new KeyPressedGameEvent(theGameKeyCode));
                 }
             }
         });

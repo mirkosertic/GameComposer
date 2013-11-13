@@ -8,7 +8,7 @@ public class EventSheetAddedToSceneEvent extends GameEvent {
     private ReadOnlyProperty<EventSheet> eventSheet;
 
     public EventSheetAddedToSceneEvent(EventSheet aEventSheet) {
-        super(EventSheetAddedToSceneEvent.class.getSimpleName());
+        super("EventSheetAddedToSceneEvent");
         eventSheet = registerProperty(new ReadOnlyProperty<EventSheet>(this, "eventSheet", aEventSheet));
     }
 

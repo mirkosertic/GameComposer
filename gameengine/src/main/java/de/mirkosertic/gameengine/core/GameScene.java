@@ -152,8 +152,10 @@ public class GameScene {
         }
 
         List<Map<String, Object>> theInstances = (List<Map<String, Object>>) aSerializedData.get("instances");
-        for (Map<String, Object> theInstance : theInstances) {
-            theScene.addGameObjectInstance(GameObjectInstance.deserialize(aGameRuntime, theScene, theInstance));
+        if (theInstances != null) {
+            for (Map<String, Object> theInstance : theInstances) {
+                theScene.addGameObjectInstance(GameObjectInstance.deserialize(aGameRuntime, theScene, theInstance));
+            }
         }
 
         List<Map<String, Object>> theEventSheets = (List<Map<String, Object>>) aSerializedData.get("eventsheets");

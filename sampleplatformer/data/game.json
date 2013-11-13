@@ -1,5 +1,5 @@
 {
   "scenes" : [ "scene1" ],
-  "name" : "Examplegame",
-  "defaultscene" : null
+  "name" : "Dukes Adventure",
+  "defaultscene" : "scene1"
 }
