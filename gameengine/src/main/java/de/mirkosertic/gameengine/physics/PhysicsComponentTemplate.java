@@ -12,15 +12,14 @@ import de.mirkosertic.gameengine.event.Property;
 
 public class PhysicsComponentTemplate implements GameComponentTemplate<PhysicsComponent> {
 
-    private GameObject owner;
+    private final GameObject owner;
     
-    private Property<Boolean> fixedRotation;
+    private final Property<Boolean> fixedRotation;
 
-    public PhysicsComponentTemplate(GameObject aOwner) {
-        GameEventManager theManager = aOwner.getGameScene().getRuntime().getEventManager();
+    public PhysicsComponentTemplate(GameEventManager aEventManager, GameObject aOwner) {
         owner = aOwner;
         
-        fixedRotation = new Property<Boolean>(this, "fixedRotation", Boolean.FALSE, theManager);
+        fixedRotation = new Property<Boolean>(this, "fixedRotation", Boolean.FALSE, aEventManager);
     }
 
     @Override
@@ -44,8 +43,8 @@ public class PhysicsComponentTemplate implements GameComponentTemplate<PhysicsCo
         return theResult;
     }
 
-    public static PhysicsComponentTemplate deserialize(GameObject aOwner, Map<String, Object> aSerializedData) {
-        PhysicsComponentTemplate theTemplate = new PhysicsComponentTemplate(aOwner);
+    public static PhysicsComponentTemplate deserialize(GameEventManager aEventManager, GameObject aOwner, Map<String, Object> aSerializedData) {
+        PhysicsComponentTemplate theTemplate = new PhysicsComponentTemplate(aEventManager, aOwner);
         String theFixedRotation = (String) aSerializedData.get("fixedrotation");
         if (theFixedRotation != null) {
             theTemplate.fixedRotation.setQuietly(Boolean.parseBoolean(theFixedRotation));

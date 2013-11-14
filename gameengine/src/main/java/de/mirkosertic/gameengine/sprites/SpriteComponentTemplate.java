@@ -13,14 +13,11 @@ import de.mirkosertic.gameengine.event.Property;
 
 public class SpriteComponentTemplate implements GameComponentTemplate<SpriteComponent> {
 
-    private Property<ResourceName> resourceName;
-    private GameObject owner;
+    private final Property<ResourceName> resourceName;
+    private final GameObject owner;
 
-    public SpriteComponentTemplate(GameObject aOwner) {
-        
-        GameEventManager theEventManager = aOwner.getGameScene().getRuntime().getEventManager();
-        
-        resourceName = new Property<ResourceName>(this, "resourceName", theEventManager);
+    public SpriteComponentTemplate(GameEventManager aEventManager, GameObject aOwner) {
+        resourceName = new Property<ResourceName>(this, "resourceName", aEventManager);
         owner = aOwner;
     }
 
@@ -52,8 +49,8 @@ public class SpriteComponentTemplate implements GameComponentTemplate<SpriteComp
         return theResult;
     }
 
-    public static SpriteComponentTemplate deserialize(GameObject aOwner, Map<String, Object> aSerializedData) {
-        SpriteComponentTemplate theResult = new SpriteComponentTemplate(aOwner);
+    public static SpriteComponentTemplate deserialize(GameEventManager aEventManager, GameObject aOwner, Map<String, Object> aSerializedData) {
+        SpriteComponentTemplate theResult = new SpriteComponentTemplate(aEventManager, aOwner);
         Map<String, Object> theResourceName = (Map<String, Object>) aSerializedData.get("resourcename");
         if (theResourceName != null) {
             theResult.resourceName.setQuietly(ResourceName.deserialize(theResourceName));

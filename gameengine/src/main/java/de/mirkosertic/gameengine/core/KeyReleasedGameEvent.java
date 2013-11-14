@@ -5,7 +5,7 @@ import de.mirkosertic.gameengine.event.ReadOnlyProperty;
 
 public class KeyReleasedGameEvent extends GameEvent {
 
-    private ReadOnlyProperty<GameKeyCode> keyCode;
+    private final ReadOnlyProperty<GameKeyCode> keyCode;
 
     public KeyReleasedGameEvent(GameKeyCode aKeyCode) {
         super("KeyReleasedGameEvent");

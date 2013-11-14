@@ -5,7 +5,7 @@ import de.mirkosertic.gameengine.event.ReadOnlyProperty;
 
 public class GameObjectConfigurationChangedEvent extends GameEvent {
 
-    private ReadOnlyProperty<GameObject> object;
+    private final ReadOnlyProperty<GameObject> object;
 
     public GameObjectConfigurationChangedEvent(GameObject aObject) {
         super("GameObjectConfigurationChangedEvent");

@@ -2,7 +2,7 @@ package de.mirkosertic.gamecomposer;
 
 public class ObjectSelectedEvent {
 
-    private Object selectedObject;
+    private final Object selectedObject;
 
     public ObjectSelectedEvent(Object aObject) {
         selectedObject = aObject;

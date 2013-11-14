@@ -12,13 +12,11 @@ import de.mirkosertic.gameengine.event.Property;
 
 public class CameraComponentTemplate implements GameComponentTemplate<CameraComponent> {
 
-    private Property<CameraType> type;
-    private GameObject owner;
+    private final Property<CameraType> type;
+    private final GameObject owner;
 
-    public CameraComponentTemplate(GameObject aOwner) {
-        GameEventManager theManager = aOwner.getGameScene().getRuntime().getEventManager();
-
-        type = new Property<CameraType>(this, "type", CameraType.FOLLOWPLAYER, theManager);
+    public CameraComponentTemplate(GameEventManager aEventManager, GameObject aOwner) {
+        type = new Property<CameraType>(this, "type", CameraType.FOLLOWPLAYER, aEventManager);
         owner = aOwner;
     }
 
@@ -50,8 +48,8 @@ public class CameraComponentTemplate implements GameComponentTemplate<CameraComp
         return theResult;
     }
 
-    public static CameraComponentTemplate deserialize(GameObject aOwner, Map<String, Object> aSerializedData) {
-        CameraComponentTemplate theTemplate = new CameraComponentTemplate(aOwner);
+    public static CameraComponentTemplate deserialize(GameEventManager aEventManager, GameObject aOwner, Map<String, Object> aSerializedData) {
+        CameraComponentTemplate theTemplate = new CameraComponentTemplate(aEventManager, aOwner);
         String theCameraType = (String) aSerializedData.get("cameratype");
         if (theCameraType != null) {
             theTemplate.type.setQuietly(CameraType.valueOf(theCameraType));

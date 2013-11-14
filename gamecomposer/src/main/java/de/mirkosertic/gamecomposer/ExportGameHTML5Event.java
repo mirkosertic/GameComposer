@@ -4,7 +4,7 @@ import java.io.File;
 
 public class ExportGameHTML5Event {
 
-    private File gameDirectory;
+    private final File gameDirectory;
 
     public ExportGameHTML5Event(File aGameDirectory) {
         gameDirectory = aGameDirectory;

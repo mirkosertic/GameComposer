@@ -5,5 +5,5 @@ import de.mirkosertic.gameengine.AbstractGameRuntimeFactory;
 import javax.inject.Singleton;
 
 @Singleton
-public class GameRuntimeFactory extends AbstractGameRuntimeFactory {
+class GameRuntimeFactory extends AbstractGameRuntimeFactory {
 }

@@ -5,7 +5,7 @@ import de.mirkosertic.gameengine.event.ReadOnlyProperty;
 
 public class StartProcessEvent extends GameEvent {
 
-    private ReadOnlyProperty<GameProcess> process;
+    private final ReadOnlyProperty<GameProcess> process;
 
     public StartProcessEvent(GameProcess aProcess) {
         super("StartProcessEvent");

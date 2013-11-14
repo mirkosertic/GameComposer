@@ -16,7 +16,7 @@ import de.mirkosertic.gameengine.core.GameScene;
 
 public class GameSceneEditorController implements ObjectInspectorChildController {
 
-    static class GameObjectToStringConverter extends StringConverter<GameObject> {
+    private static class GameObjectToStringConverter extends StringConverter<GameObject> {
         @Override
         public String toString(GameObject aObject) {
             return aObject.nameProperty().get();

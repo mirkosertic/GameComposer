@@ -6,8 +6,8 @@ import de.mirkosertic.gameengine.event.ReadOnlyProperty;
 
 public class GameObjectCollisionEvent extends GameEvent {
 
-    private ReadOnlyProperty<GameObjectInstance> instance1;
-    private ReadOnlyProperty<GameObjectInstance> instance2;
+    private final ReadOnlyProperty<GameObjectInstance> instance1;
+    private final ReadOnlyProperty<GameObjectInstance> instance2;
 
     public GameObjectCollisionEvent(GameObjectInstance aInstance1, GameObjectInstance aInstance2) {
         super("GameObjectCollisionEvent");

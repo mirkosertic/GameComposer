@@ -6,15 +6,15 @@ import de.mirkosertic.gameengine.event.ReadOnlyProperty;
 
 public class ApplyForceToGameObjectInstance extends GameEvent {
 
-    private ReadOnlyProperty<GameObjectInstance> instance;
-    private ReadOnlyProperty<Float> forceX;
-    private ReadOnlyProperty<Float> forceY;
+    private final ReadOnlyProperty<GameObjectInstance> instance;
+    private final ReadOnlyProperty<Float> forceX;
+    private final ReadOnlyProperty<Float> forceY;
 
     public ApplyForceToGameObjectInstance(GameObjectInstance aInstance, float aForceX, float aForceY) {
         super("ApplyForceToGameObjectInstance");
         instance = registerProperty(new ReadOnlyProperty<GameObjectInstance>(this, "instance", aInstance));
-        forceX = registerProperty(new ReadOnlyProperty<Float>(this, "forceX", Float.valueOf(aForceX)));
-        forceY = registerProperty(new ReadOnlyProperty<Float>(this, "forceY", Float.valueOf(aForceY)));
+        forceX = registerProperty(new ReadOnlyProperty<Float>(this, "forceX", aForceX));
+        forceY = registerProperty(new ReadOnlyProperty<Float>(this, "forceY", aForceY));
     }
 
     public ReadOnlyProperty<GameObjectInstance> instanceProperty() {

@@ -6,7 +6,7 @@ import java.util.Set;
 
 public class Property<T> extends ReadOnlyProperty<T> {
 
-    private Set<GameEventListener<PropertyChangeEvent>> changeListener;
+    private final Set<GameEventListener<PropertyChangeEvent>> changeListener;
 
     public Property(Object aOwner, String aName, T aDefaultValue, GameEventListener<PropertyChangeEvent> aListener) {
         super(aOwner, aName, aDefaultValue);

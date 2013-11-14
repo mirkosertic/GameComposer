@@ -22,22 +22,23 @@ import java.util.logging.Level;
  */
 public class UndecoratorController {
 
-    static final int DOCK_NONE = 0x0;
-    static final int DOCK_LEFT = 0x1;
-    static final int DOCK_RIGHT = 0x2;
-    static final int DOCK_TOP = 0x4;
-    int lastDocked = DOCK_NONE;
+    private static final int DOCK_NONE = 0x0;
+    private static final int DOCK_LEFT = 0x1;
+    private static final int DOCK_RIGHT = 0x2;
+    private static final int DOCK_TOP = 0x4;
+    private int lastDocked = DOCK_NONE;
     private static double initX = -1;
     private static double initY = -1;
     private static double newX;
     private static double newY;
     private static int RESIZE_PADDING;
     private static int SHADOW_WIDTH;
-    Undecorator undecorator;
-    BoundingBox savedBounds, savedFullScreenBounds;
-    boolean maximized = false;
-    static boolean isMacOS = false;
-    static final int MAXIMIZE_BORDER = 20;  // Allow double click to maximize on top of the Scene
+    private final Undecorator undecorator;
+    private BoundingBox savedBounds;
+    private BoundingBox savedFullScreenBounds;
+    private boolean maximized = false;
+    private static boolean isMacOS = false;
+    private static final int MAXIMIZE_BORDER = 20;  // Allow double click to maximize on top of the Scene
 
     {
         String os = System.getProperty("os.name").toLowerCase();
@@ -54,7 +55,7 @@ public class UndecoratorController {
     /*
      * Actions
      */
-    protected void maximizeOrRestore() {
+    void maximizeOrRestore() {
         Stage stage = undecorator.getStage();
 
         if (maximized) {
@@ -89,7 +90,7 @@ public class UndecoratorController {
         savedFullScreenBounds = new BoundingBox(stage.getX(), stage.getY(), stage.getWidth(), stage.getHeight());
     }
 
-    public void restoreSavedBounds(Stage stage, boolean fullscreen) {
+    void restoreSavedBounds(Stage stage, boolean fullscreen) {
 
         stage.setX(savedBounds.getMinX());
         stage.setY(savedBounds.getMinY());
@@ -107,7 +108,7 @@ public class UndecoratorController {
         savedFullScreenBounds = null;
     }
 
-    protected void setFullScreen(boolean value) {
+    void setFullScreen(boolean value) {
         Stage stage = undecorator.getStage();
         stage.setFullScreen(value);
     }
@@ -525,35 +526,35 @@ public class UndecoratorController {
 
     }
 
-    public boolean isRightEdge(double x, double y, Bounds boundsInParent) {
+    boolean isRightEdge(double x, double y, Bounds boundsInParent) {
         if (x < boundsInParent.getWidth() && x > boundsInParent.getWidth() - RESIZE_PADDING - SHADOW_WIDTH) {
             return true;
         }
         return false;
     }
 
-    public boolean isTopEdge(double x, double y, Bounds boundsInParent) {
+    boolean isTopEdge(double x, double y, Bounds boundsInParent) {
         if (y >= 0 && y < RESIZE_PADDING + SHADOW_WIDTH) {
             return true;
         }
         return false;
     }
 
-    public boolean isBottomEdge(double x, double y, Bounds boundsInParent) {
+    boolean isBottomEdge(double x, double y, Bounds boundsInParent) {
         if (y < boundsInParent.getHeight() && y > boundsInParent.getHeight() - RESIZE_PADDING - SHADOW_WIDTH) {
             return true;
         }
         return false;
     }
 
-    public boolean isLeftEdge(double x, double y, Bounds boundsInParent) {
+    boolean isLeftEdge(double x, double y, Bounds boundsInParent) {
         if (x >= 0 && x < RESIZE_PADDING + SHADOW_WIDTH) {
             return true;
         }
         return false;
     }
 
-    public void setCursor(Node n, Cursor c) {
+    void setCursor(Node n, Cursor c) {
         n.setCursor(c);
     }
 }

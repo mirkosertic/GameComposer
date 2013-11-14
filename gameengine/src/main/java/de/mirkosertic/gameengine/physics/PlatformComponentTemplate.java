@@ -13,24 +13,21 @@ import de.mirkosertic.gameengine.event.Property;
 
 public class PlatformComponentTemplate implements GameComponentTemplate<PlatformComponent> {
 
-    private GameObject owner;
+    private final GameObject owner;
 
-    private Property<GameKeyCode> moveLeftKey;
-    private Property<GameKeyCode> moveRightKey;
-    private Property<GameKeyCode> jumpKey;
-    private Property<Float> leftRightImpulse;
-    private Property<Float> jumpImpulse;
+    private final Property<GameKeyCode> moveLeftKey;
+    private final Property<GameKeyCode> moveRightKey;
+    private final Property<GameKeyCode> jumpKey;
+    private final Property<Float> leftRightImpulse;
+    private final Property<Float> jumpImpulse;
 
-    public PlatformComponentTemplate(GameObject aOwner) {
-
-        GameEventManager theEventManager = aOwner.getGameScene().getRuntime().getEventManager();
-
+    public PlatformComponentTemplate(GameEventManager aEventManager, GameObject aOwner) {
         owner = aOwner;
-        moveLeftKey = new Property<GameKeyCode>(this, "moveLeftKey", GameKeyCode.LEFT, theEventManager);
-        moveRightKey = new Property<GameKeyCode>(this, "moveRightKey", GameKeyCode.RIGHT, theEventManager);
-        jumpKey = new Property<GameKeyCode>(this, "jumpKey", GameKeyCode.UP, theEventManager);
-        leftRightImpulse = new Property<Float>(this, "leftRightImpulse", 9f, theEventManager);
-        jumpImpulse = new Property<Float>(this, "jumpImpulse", 1.4f, theEventManager);
+        moveLeftKey = new Property<GameKeyCode>(this, "moveLeftKey", GameKeyCode.LEFT, aEventManager);
+        moveRightKey = new Property<GameKeyCode>(this, "moveRightKey", GameKeyCode.RIGHT, aEventManager);
+        jumpKey = new Property<GameKeyCode>(this, "jumpKey", GameKeyCode.UP, aEventManager);
+        leftRightImpulse = new Property<Float>(this, "leftRightImpulse", 9f, aEventManager);
+        jumpImpulse = new Property<Float>(this, "jumpImpulse", 1.4f, aEventManager);
     }
 
     @Override
@@ -71,8 +68,8 @@ public class PlatformComponentTemplate implements GameComponentTemplate<Platform
         return theResult;
     }
 
-    public static PlatformComponentTemplate deserialize(GameObject aObject, Map<String, Object> aSerializedData) {
-        return new PlatformComponentTemplate(aObject);
+    public static PlatformComponentTemplate deserialize(GameEventManager aEventManager, GameObject aObject, Map<String, Object> aSerializedData) {
+        return new PlatformComponentTemplate(aEventManager, aObject);
     }
 
     @Override

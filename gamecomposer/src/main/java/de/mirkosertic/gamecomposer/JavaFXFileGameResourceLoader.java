@@ -10,7 +10,7 @@ import java.io.InputStream;
 
 public class JavaFXFileGameResourceLoader extends JavaFXAbstractGameResourceLoader {
 
-    private File baseDirectory;
+    private final File baseDirectory;
 
     public JavaFXFileGameResourceLoader(File aBaseDirectory) {
         baseDirectory = aBaseDirectory;

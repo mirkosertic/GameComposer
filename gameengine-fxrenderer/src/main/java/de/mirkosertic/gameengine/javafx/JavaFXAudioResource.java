@@ -19,7 +19,7 @@ public class JavaFXAudioResource implements GameResource {
 
     private byte[] data;
 
-    JavaFXAudioResource(InputStream inputStream) throws IOException, UnsupportedAudioFileException, LineUnavailableException {
+    JavaFXAudioResource(InputStream inputStream) throws IOException {
         data = IOUtils.toByteArray(inputStream);
     }
 

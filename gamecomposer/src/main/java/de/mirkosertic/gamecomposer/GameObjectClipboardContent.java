@@ -8,7 +8,7 @@ public class GameObjectClipboardContent implements Serializable {
 
     public static final DataFormat FORMAT = new DataFormat("GameObject.custom");
 
-    public String gameObjectId;
+    private String gameObjectId;
 
     public GameObjectClipboardContent() {
     }

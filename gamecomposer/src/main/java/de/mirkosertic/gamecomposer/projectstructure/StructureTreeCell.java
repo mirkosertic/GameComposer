@@ -11,10 +11,10 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 
-public class StructureTreeCell extends TreeCell {
+class StructureTreeCell extends TreeCell {
 
-    private TreeView treeView;
-    private ContextMenuListener contextMenuListener;
+    private final TreeView treeView;
+    private final ContextMenuListener contextMenuListener;
 
     public StructureTreeCell(ContextMenuListener aContextMenuListener, TreeView aTreeView) {
         treeView = aTreeView;

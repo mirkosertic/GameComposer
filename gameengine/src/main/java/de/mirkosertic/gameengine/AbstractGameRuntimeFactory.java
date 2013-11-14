@@ -19,6 +19,7 @@ import de.mirkosertic.gameengine.sprites.SpriteComponentUnmarshaller;
 public abstract class AbstractGameRuntimeFactory {
 
     public GameRuntime create(GameResourceLoader aResourceLoader, GameSoundSystemFactory aSoundSystemFactory) {
+
         GameEventManager theEventManager = new GameEventManager();
         GameProcessManagerFactory theProcessManagerFactory = new GameProcessManagerFactory();
         GameProcessManager theProcessManager = theProcessManagerFactory.create(theEventManager);
@@ -31,7 +32,7 @@ public abstract class AbstractGameRuntimeFactory {
         GameRuntime theGameRuntime = new GameRuntime(theEventManager, aResourceLoader);
 
         // Sound
-        GameSoundManager theSoundManager = GameSoundManagerFactory.create(theEventManager, aSoundSystemFactory.create(theGameRuntime.getResourceCache()));
+        GameSoundManager theSoundManager = GameSoundManagerFactory.create(theEventManager, aSoundSystemFactory.create(theGameRuntime));
 
         theGameRuntime.addSystem(theProcessManager);
         theGameRuntime.addSystem(thePhysicsManager);

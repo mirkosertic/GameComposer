@@ -5,10 +5,10 @@ import java.util.Map;
 
 public class IORegistry {
 
-    private Map<String, GameComponentTemplateUnmarshaller> registeredTemplateUnmarshaller;
-    private Map<String, GameComponentUnmarshaller> registeredComponentUnmarshaller;
-    private Map<String, ConditionUnmarshaller> registeredConditionUnmarshaller;
-    private Map<String, ActionUnmarshaller> registeredActionUnmarshaller;
+    private final Map<String, GameComponentTemplateUnmarshaller> registeredTemplateUnmarshaller;
+    private final Map<String, GameComponentUnmarshaller> registeredComponentUnmarshaller;
+    private final Map<String, ConditionUnmarshaller> registeredConditionUnmarshaller;
+    private final Map<String, ActionUnmarshaller> registeredActionUnmarshaller;
 
     IORegistry() {
         registeredTemplateUnmarshaller = new HashMap<String, GameComponentTemplateUnmarshaller>();

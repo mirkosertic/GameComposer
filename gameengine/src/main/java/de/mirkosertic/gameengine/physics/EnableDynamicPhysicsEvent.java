@@ -6,7 +6,7 @@ import de.mirkosertic.gameengine.event.ReadOnlyProperty;
 
 public class EnableDynamicPhysicsEvent extends GameEvent {
 
-    private ReadOnlyProperty<GameObjectInstance> object;
+    private final ReadOnlyProperty<GameObjectInstance> object;
 
     public EnableDynamicPhysicsEvent(GameObjectInstance aObject) {
         super("EnableDynamicPhysicsEvent");

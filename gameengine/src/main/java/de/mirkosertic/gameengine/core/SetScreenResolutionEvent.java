@@ -6,7 +6,7 @@ import de.mirkosertic.gameengine.types.Size;
 
 public class SetScreenResolutionEvent extends GameEvent {
 
-    private ReadOnlyProperty<Size> screenSize;
+    private final ReadOnlyProperty<Size> screenSize;
 
     public SetScreenResolutionEvent(Size aSize) {
         super("SetScreenResolutionEvent");

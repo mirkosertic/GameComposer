@@ -22,12 +22,12 @@ public class EditorJXGameView extends JavaFXGameView {
 
     private Object selectedObject;
     private Position currentMousePosition;
-    private GamePhysicsManager physicsManager;
+    private final GamePhysicsManager physicsManager;
 
-    private BooleanProperty snapToGrid;
-    private BooleanProperty renderPhysicsDebug;
-    private IntegerProperty gridsizeWidth;
-    private IntegerProperty gridsizeHeight;
+    private final BooleanProperty snapToGrid;
+    private final BooleanProperty renderPhysicsDebug;
+    private final IntegerProperty gridsizeWidth;
+    private final IntegerProperty gridsizeHeight;
 
     public EditorJXGameView(GameRuntime aGameRuntime, CameraComponent aCameraComponent, GamePhysicsManager aPhysicsManager) {
         super(aGameRuntime, aCameraComponent);

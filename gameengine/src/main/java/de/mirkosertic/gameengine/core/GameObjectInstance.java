@@ -8,23 +8,21 @@ import java.util.*;
 
 public class GameObjectInstance {
 
-    private Map<Class<GameComponent>, GameComponent> components;
+    private final Map<Class<GameComponent>, GameComponent> components;
 
-    private GameObject ownerGameObject;
+    private final GameObject ownerGameObject;
 
-    private Property<String> uuid;
-    private Property<String> name;
-    private Property<Position> position;
-    private Property<Angle> rotationAngle;
+    private final Property<String> uuid;
+    private final Property<String> name;
+    private final Property<Position> position;
+    private final Property<Angle> rotationAngle;
 
-    GameObjectInstance(GameObject aOwnerGameObject) {
+    GameObjectInstance(GameEventManager aEventManager, GameObject aOwnerGameObject) {
 
-        GameEventManager theManager = aOwnerGameObject.getGameScene().getRuntime().getEventManager();
-
-        uuid = new Property<String>(this, "uuid", de.mirkosertic.gameengine.types.UUID.randomUID(), theManager);
-        name = new Property<String>(this, "name", theManager);
-        position = new Property<Position>(this, "position", new Position(), theManager);
-        rotationAngle = new Property<Angle>(this, "rotationAngle", new Angle(0), theManager);
+        uuid = new Property<String>(this, "uuid", de.mirkosertic.gameengine.types.UUID.randomUID(), aEventManager);
+        name = new Property<String>(this, "name", aEventManager);
+        position = new Property<Position>(this, "position", new Position(), aEventManager);
+        rotationAngle = new Property<Angle>(this, "rotationAngle", new Angle(0), aEventManager);
 
         ownerGameObject = aOwnerGameObject;
         components = new HashMap<Class<GameComponent>, GameComponent>();
@@ -99,7 +97,7 @@ public class GameObjectInstance {
             throw new RuntimeException("Cannot find gameobject with uuid" + theGameObjectUUID);
         }
 
-        GameObjectInstance theResult = new GameObjectInstance(theGameObject);
+        GameObjectInstance theResult = new GameObjectInstance(aGameRuntime.getEventManager(), theGameObject);
         theResult.position.setQuietly(Position.deserialize((Map<String, Object>) theInstance.get("position")));
         theResult.name.setQuietly((String) theInstance.get("name"));
 

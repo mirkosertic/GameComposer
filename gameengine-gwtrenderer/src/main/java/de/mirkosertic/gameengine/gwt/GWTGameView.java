@@ -6,6 +6,7 @@ import com.google.gwt.canvas.dom.client.CssColor;
 import de.mirkosertic.gameengine.camera.CameraComponent;
 import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.sprites.SpriteComponentTemplate;
+import de.mirkosertic.gameengine.types.Angle;
 import de.mirkosertic.gameengine.types.Color;
 import de.mirkosertic.gameengine.types.Position;
 import de.mirkosertic.gameengine.types.Size;
@@ -14,9 +15,9 @@ import java.io.IOException;
 
 public class GWTGameView implements GameView {
 
-    private GameRuntime gameRuntime;
-    private Canvas canvas;
-    private CameraComponent cameraComponent;
+    private final GameRuntime gameRuntime;
+    private final Canvas canvas;
+    private final CameraComponent cameraComponent;
     private Size currentSize;
     private int counter;
 
@@ -51,8 +52,12 @@ public class GWTGameView implements GameView {
 
             theContext.save();
 
+            Angle theAngle = theInstance.rotationAngleProperty().get();
+            int theAngleInDegrees = theAngle.angleInDegrees;
             theContext.translate(thePosition.x + theHalfWidth, thePosition.y + theHalfHeight);
-            theContext.rotate(theInstance.rotationAngleProperty().get().toRadians());
+            if (theAngleInDegrees % 360 != 0) {
+                theContext.rotate(theAngle.toRadians());
+            }
 
             SpriteComponentTemplate theTemplateComponent = theInstance.getOwnerGameObject().getComponentTemplate(SpriteComponentTemplate.class);
             if (theTemplateComponent != null) {
@@ -77,7 +82,7 @@ public class GWTGameView implements GameView {
         theContext.fillText("Frame " + counter, 50, 50);
     }
 
-    protected void drawGameObjectInstance(Context2d aContext, GameObjectInstance aInstance, Position aPosition, Size aSize, GWTBitmapResource aBitmapResource) {
+    void drawGameObjectInstance(Context2d aContext, GameObjectInstance aInstance, Position aPosition, Size aSize, GWTBitmapResource aBitmapResource) {
         if (aBitmapResource.isLoaded()) {
             aContext.drawImage(aBitmapResource.getImage(), aPosition.x, aPosition.y);
         } else {

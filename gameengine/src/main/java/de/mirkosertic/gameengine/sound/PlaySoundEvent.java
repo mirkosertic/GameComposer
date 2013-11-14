@@ -6,7 +6,7 @@ import de.mirkosertic.gameengine.event.ReadOnlyProperty;
 
 public class PlaySoundEvent extends GameEvent {
 
-    private ReadOnlyProperty<ResourceName> resourceName;
+    private final ReadOnlyProperty<ResourceName> resourceName;
 
     public PlaySoundEvent(ResourceName aResourceName) {
         super("PlaySoundEvent");

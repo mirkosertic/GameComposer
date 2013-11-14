@@ -10,7 +10,7 @@ public class SpriteComponent implements GameComponent {
 
     public static final String TYPE = "SpriteComponent";
 
-    private GameObjectInstance objectInstance;
+    private final GameObjectInstance objectInstance;
 
     SpriteComponent(GameObjectInstance aObjectInstance) {
         objectInstance = aObjectInstance;

@@ -6,12 +6,12 @@ import java.util.Set;
 public class GameLoop implements Runnable {
 
     private boolean shutdownSignal;
-    private Set<GameView> views;
-    private GameScene scene;
-    private GameRuntime runtime;
-    private long startTime;
+    private final Set<GameView> views;
+    private final GameScene scene;
+    private final GameRuntime runtime;
+    private final long startTime;
     private long lastInvocation;
-    private GameLoopThrottle throttle;
+    private final GameLoopThrottle throttle;
 
     GameLoop(GameScene aScene, GameView aHumanGameView, GameRuntime aRuntime, GameLoopThrottle aThrottle) {
         views = new HashSet<GameView>();
@@ -23,13 +23,13 @@ public class GameLoop implements Runnable {
         throttle = aThrottle;
     }
 
+    public GameScene getScene() {
+        return scene;
+    }
+
     public void run() {
         while (!shutdownSignal) {
-            long theStart = System.currentTimeMillis();
             singleRun();
-            long theDuration = System.currentTimeMillis() - theStart;
-
-            throttle.perhapsThrottleDown(theDuration);
         }
     }
 

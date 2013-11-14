@@ -2,9 +2,9 @@ package de.mirkosertic.gamecomposer;
 
 import java.io.File;
 
-public class LoadGameEvent {
+class LoadGameEvent {
 
-    private File gameFile;
+    private final File gameFile;
 
     public LoadGameEvent(File aGameFile) {
         gameFile = aGameFile;

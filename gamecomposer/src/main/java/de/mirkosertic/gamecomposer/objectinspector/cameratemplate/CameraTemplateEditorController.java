@@ -17,7 +17,7 @@ import java.util.Arrays;
 
 public class CameraTemplateEditorController implements ObjectInspectorChildController {
 
-    class CameraTypeToStringConverter extends StringConverter<CameraType> {
+    private class CameraTypeToStringConverter extends StringConverter<CameraType> {
         @Override
         public String toString(CameraType aType) {
             return aType.name();

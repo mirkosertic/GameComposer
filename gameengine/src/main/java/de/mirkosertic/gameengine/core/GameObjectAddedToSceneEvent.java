@@ -5,14 +5,20 @@ import de.mirkosertic.gameengine.event.ReadOnlyProperty;
 
 public class GameObjectAddedToSceneEvent extends GameEvent {
 
-    private ReadOnlyProperty<GameObject> object;
+    private final ReadOnlyProperty<GameScene> scene;
+    private final ReadOnlyProperty<GameObject> object;
 
-    public GameObjectAddedToSceneEvent(GameObject aObject) {
+    public GameObjectAddedToSceneEvent(GameScene aScene, GameObject aObject) {
         super("GameObjectAddedToSceneEvent");
+        scene = registerProperty(new ReadOnlyProperty<GameScene>(this, "scene", aScene));
         object = registerProperty(new ReadOnlyProperty<GameObject>(this, "object", aObject));
     }
 
     public ReadOnlyProperty<GameObject> objectProperty() {
         return object;
+    }
+
+    public ReadOnlyProperty<GameScene> sceneProperty() {
+        return scene;
     }
 }

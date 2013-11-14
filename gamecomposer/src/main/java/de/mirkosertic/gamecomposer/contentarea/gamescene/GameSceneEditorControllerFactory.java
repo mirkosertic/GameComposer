@@ -31,7 +31,6 @@ public class GameSceneEditorControllerFactory {
 
         final GameEventManager theEventManager = aScene.getRuntime().getEventManager();
         GameRuntime theRuntime = aScene.getRuntime();
-        GameObjectInstanceFactory theInstanceFactory = new GameObjectInstanceFactory(theRuntime);
 
         GameObject theDefaultCamera = aScene.cameraObjectProperty().get();
         if (theDefaultCamera == null) {
@@ -39,7 +38,7 @@ public class GameSceneEditorControllerFactory {
         }
 
         // Detect and create a camera
-        GameObjectInstance theCameraObject = theInstanceFactory.createFrom(theDefaultCamera);
+        GameObjectInstance theCameraObject = aScene.createFrom(theDefaultCamera);
         CameraComponent theCameraComponent = theCameraObject.getComponent(CameraComponent.class);
         if (theCameraComponent == null) {
             throw new IllegalArgumentException("No camera component in camera object");
@@ -56,8 +55,6 @@ public class GameSceneEditorControllerFactory {
 
         GameLoopFactory theGameLoopFactory = new GameLoopFactory();
         GameLoop theMainLoop = theGameLoopFactory.create(aScene, theGameView, theRuntime, new ThreadGameLoopThrottle());
-
-        Thread theMainLoopThread = new Thread(theMainLoop, "MainLoop #" + aScene.nameProperty().get());
 
         final CameraComponent theFinalCameraComponent = theCameraComponent;
 
@@ -86,7 +83,7 @@ public class GameSceneEditorControllerFactory {
             theGameView.widthProperty().bind(theController.centerBorderPane.widthProperty());
             theGameView.heightProperty().bind(theController.centerBorderPane.heightProperty());
 
-            return theController.initialize(theRuntime, aScene, root, theGameView, theMainLoopThread, theCameraComponent, objectSelectedEventEvent);
+            return theController.initialize(theRuntime, aScene, root, theGameView, theMainLoop, theCameraComponent, objectSelectedEventEvent);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -4,7 +4,7 @@ import java.io.File;
 
 public class NewGameEvent {
 
-    private File projectDirectory;
+    private final File projectDirectory;
 
     public NewGameEvent(File aProjectDirectory) {
         projectDirectory = aProjectDirectory;

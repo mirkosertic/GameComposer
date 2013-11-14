@@ -7,8 +7,8 @@ import java.util.Set;
 
 public class GameProcessManager implements GameSystem {
 
-    private Set<GameProcess> runningProcesses;
-    private Set<GameProcess> killedProcesses;
+    private final Set<GameProcess> runningProcesses;
+    private final Set<GameProcess> killedProcesses;
     private long processesAmountOfTime;
 
     GameProcessManager() {

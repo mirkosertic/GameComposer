@@ -14,7 +14,7 @@ public class CameraComponent implements GameComponent {
 
     public static final String TYPE = "CameraComponent";
 
-    private GameObjectInstance objectInstance;
+    private final GameObjectInstance objectInstance;
 
     private Size screenSize;
 
@@ -38,7 +38,7 @@ public class CameraComponent implements GameComponent {
         return screenSize;
     }
 
-    public void setScreenSize(Size screenSize) {
+    void setScreenSize(Size screenSize) {
         this.screenSize = screenSize;
     }
 

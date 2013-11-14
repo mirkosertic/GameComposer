@@ -5,9 +5,9 @@ import java.util.Map;
 
 public class GameEvent {
 
-    private Map<String, ReadOnlyProperty> properties;
+    private final Map<String, ReadOnlyProperty> properties;
 
-    private ReadOnlyProperty<String> type;
+    private final ReadOnlyProperty<String> type;
 
     protected GameEvent(String aType) {
         properties = new HashMap<String, ReadOnlyProperty>();
