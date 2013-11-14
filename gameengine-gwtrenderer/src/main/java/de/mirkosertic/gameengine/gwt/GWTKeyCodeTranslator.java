@@ -4,7 +4,7 @@ import com.google.gwt.event.dom.client.KeyCodes;
 
 import de.mirkosertic.gameengine.core.GameKeyCode;
 
-public class GWTKeyCodeTranslator {
+class GWTKeyCodeTranslator {
 
     public static GameKeyCode translate(int aNativeCode) {
         switch (aNativeCode) {

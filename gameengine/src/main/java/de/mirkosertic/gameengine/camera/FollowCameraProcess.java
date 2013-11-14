@@ -7,8 +7,8 @@ import de.mirkosertic.gameengine.types.Size;
 
 public class FollowCameraProcess extends AbstractGameProcess {
 
-    private GameObjectInstance cameraObject;
-    private GameObjectInstance playerObject;
+    private final GameObjectInstance cameraObject;
+    private final GameObjectInstance playerObject;
 
     public FollowCameraProcess(GameObjectInstance aCameraObject, GameObjectInstance aPlayerInstance) {
         cameraObject = aCameraObject;

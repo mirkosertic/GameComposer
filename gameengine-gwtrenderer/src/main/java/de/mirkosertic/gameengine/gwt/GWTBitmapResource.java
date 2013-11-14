@@ -9,7 +9,7 @@ import de.mirkosertic.gameengine.core.GameResourceType;
 
 public class GWTBitmapResource implements GameResource {
 
-    private Image image;
+    private final Image image;
     private boolean loaded;
     private ImageElement imageElement;
 

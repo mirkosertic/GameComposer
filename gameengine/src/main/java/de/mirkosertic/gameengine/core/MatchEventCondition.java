@@ -12,8 +12,8 @@ public class MatchEventCondition implements Condition {
 
     public static final String TYPE_VALUE = "MatchEventCondition";
 
-    private Property<String> eventType;
-    private Map<String, Object> eventProperties;
+    private final Property<String> eventType;
+    private final Map<String, Object> eventProperties;
 
     public MatchEventCondition() {
         eventType = new Property<String>(this, "eventType", (String) null);
@@ -70,7 +70,7 @@ public class MatchEventCondition implements Condition {
                         }
                     }
                     if (thePropertyValue instanceof Boolean) {
-                        if (!((Boolean) thePropertyValue).booleanValue() == ((Boolean) theObjectValue).booleanValue()) {
+                        if (!(Boolean) thePropertyValue == (Boolean) theObjectValue) {
                             return false;
                         }
                     }

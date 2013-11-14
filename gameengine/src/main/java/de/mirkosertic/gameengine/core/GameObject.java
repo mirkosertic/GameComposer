@@ -13,15 +13,15 @@ import de.mirkosertic.gameengine.types.Size;
 
 public class GameObject {
 
-    private GameScene gameScene;
+    private final GameScene gameScene;
 
-    private Property<String> uuid;
-    private Property<String> name;
-    private Property<Size> size;
+    private final Property<String> uuid;
+    private final Property<String> name;
+    private final Property<Size> size;
 
-    private Map<Class<GameComponentTemplate>, GameComponentTemplate> componentTemplates;
+    private final Map<Class<GameComponentTemplate>, GameComponentTemplate> componentTemplates;
 
-    public GameObject(GameScene aScene, String aName) {
+    GameObject(GameScene aScene, String aName) {
         this(aScene, aName, de.mirkosertic.gameengine.types.UUID.randomUID());
     }
 
@@ -96,7 +96,7 @@ public class GameObject {
         List<Map<String, Object>> theTemplates = (List<Map<String, Object>>) theSerializedData.get("templates");
         for (Map<String, Object> theTemplate : theTemplates) {
             String theTypeKey = (String) theTemplate.get(GameComponent.TYPE_ATTRIBUTE);
-            theObject.add(aGameRuntime.getIORegistry().getTemplateUnmarshallerFor(theTypeKey).deserialize(theObject, theTemplate));
+            theObject.add(aGameRuntime.getIORegistry().getTemplateUnmarshallerFor(theTypeKey).deserialize(aGameRuntime.getEventManager(), theObject, theTemplate));
         }
 
         return theObject;

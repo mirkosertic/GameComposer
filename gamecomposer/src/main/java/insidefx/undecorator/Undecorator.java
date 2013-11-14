@@ -65,14 +65,14 @@ import java.util.logging.Logger;
  */
 public class Undecorator extends StackPane {
 
-    static public int SHADOW_WIDTH = 15;
-    static public int SAVED_SHADOW_WIDTH = 15;
-    static public int RESIZE_PADDING = 7;
-    static public int FEEDBACK_SIZE = 60;
-    static public int FEEDBACK_STROKE = 4;
+    private static int SHADOW_WIDTH = 15;
+    private static int SAVED_SHADOW_WIDTH = 15;
+    private static int RESIZE_PADDING = 7;
+    static public final int FEEDBACK_SIZE = 60;
+    static public final int FEEDBACK_STROKE = 4;
     public static final Logger LOGGER = Logger.getLogger("Undecorator");
-    public static ResourceBundle LOC;
-    StageStyle stageStyle;
+    private static ResourceBundle LOC;
+    private StageStyle stageStyle;
     @FXML
     private Button menu;
     @FXML
@@ -83,29 +83,29 @@ public class Undecorator extends StackPane {
     private Button minimize;
     @FXML
     private Button resize;
-    MenuItem maximizeMenuItem;
-    CheckMenuItem fullScreenMenuItem;
-    Region clientArea;
-    Pane stageDecoration = null;
-    Rectangle shadowRectangle;
-    Pane glassPane;
-    Rectangle dockFeedback;
-    ParallelTransition parallelTransition;
-    DropShadow dsFocused;
-    DropShadow dsNotFocused;
-    UndecoratorController undecoratorController;
-    Stage stage;
-    Rectangle resizeRect;
-    SimpleBooleanProperty maximizeProperty;
-    SimpleBooleanProperty minimizeProperty;
-    SimpleBooleanProperty closeProperty;
-    String backgroundStyleClass = "undecorator-background";
+    private MenuItem maximizeMenuItem;
+    private CheckMenuItem fullScreenMenuItem;
+    private final Region clientArea;
+    private Pane stageDecoration = null;
+    private final Rectangle shadowRectangle;
+    private final Pane glassPane;
+    private Rectangle dockFeedback;
+    private ParallelTransition parallelTransition;
+    private final DropShadow dsFocused;
+    private final DropShadow dsNotFocused;
+    private final UndecoratorController undecoratorController;
+    private final Stage stage;
+    private final Rectangle resizeRect;
+    final SimpleBooleanProperty maximizeProperty;
+    private final SimpleBooleanProperty minimizeProperty;
+    private final SimpleBooleanProperty closeProperty;
+    private final String backgroundStyleClass = "undecorator-background";
 
     public Undecorator(Stage stage, Region root) {
         this(stage, root, "stagedecoration.fxml", StageStyle.UNDECORATED);
     }
 
-    public Undecorator(Stage stag, Region clientArea, String stageDecorationFxml, StageStyle st) {
+    private Undecorator(Stage stag, Region clientArea, String stageDecorationFxml, StageStyle st) {
         this.stage = stag;
         this.clientArea = clientArea;
 
@@ -281,7 +281,7 @@ public class Undecorator extends StackPane {
         return d2;
     }
 
-    public void setStageStyle(StageStyle st) {
+    void setStageStyle(StageStyle st) {
         stageStyle = st;
     }
 
@@ -326,7 +326,7 @@ public class Undecorator extends StackPane {
         return shadowRectangle;
     }
 
-    public void initDecoration() {
+    void initDecoration() {
         MenuItem minimizeMenuItem = null;
         // Menu
         final ContextMenu contextMenu = new ContextMenu();
@@ -440,11 +440,11 @@ public class Undecorator extends StackPane {
         return maximizeProperty;
     }
 
-    public SimpleBooleanProperty minimizeProperty() {
+    SimpleBooleanProperty minimizeProperty() {
         return minimizeProperty;
     }
 
-    public SimpleBooleanProperty closeProperty() {
+    SimpleBooleanProperty closeProperty() {
         return closeProperty;
     }
 
@@ -458,7 +458,7 @@ public class Undecorator extends StackPane {
         undecoratorController.setAsStageDraggable(stage, node);
     }
 
-    protected void setShadow(boolean shadow) {
+    void setShadow(boolean shadow) {
         // Already removed?
         if (!shadow && shadowRectangle.getEffect() == null) {
             return;
@@ -477,7 +477,7 @@ public class Undecorator extends StackPane {
         }
     }
 
-    protected void setShadowFocused(boolean b) {
+    void setShadowFocused(boolean b) {
         if (b) {
             shadowRectangle.setEffect(dsFocused);
         } else {
@@ -516,7 +516,7 @@ public class Undecorator extends StackPane {
     public int getShadowBorderSize(){
         return SHADOW_WIDTH*2+RESIZE_PADDING*2;
     }
-    public UndecoratorController getController() {
+    UndecoratorController getController() {
         return undecoratorController;
     }
 
@@ -528,7 +528,7 @@ public class Undecorator extends StackPane {
         return glassPane;
     }
 
-    public void addGlassPane(Node node) {
+    void addGlassPane(Node node) {
         glassPane.getChildren().add(node);
     }
 
@@ -602,7 +602,7 @@ public class Undecorator extends StackPane {
         }
     }
 
-    static void loadConfig() {
+    private static void loadConfig() {
         Properties prop = new Properties();
 
         try {

@@ -6,8 +6,8 @@ import de.mirkosertic.gameengine.processes.GameProcessManager;
 
 public class PlaySoundProcess extends AbstractGameProcess {
 
-    private GameSoundSystem gameSoundSystem;
-    private ResourceName resourceName;
+    private final GameSoundSystem gameSoundSystem;
+    private final ResourceName resourceName;
     private Object soundObject;
 
     PlaySoundProcess(GameSoundSystem aSoundSystem, ResourceName aResourceName) {

@@ -7,8 +7,8 @@ import de.mirkosertic.gameengine.processes.StartProcessEvent;
 
 public class GameSoundManager implements GameSystem {
 
-    private GameEventManager eventManager;
-    private GameSoundSystem soundSystem;
+    private final GameEventManager eventManager;
+    private final GameSoundSystem soundSystem;
 
     GameSoundManager(GameSoundSystem aGameSoundSystem, GameEventManager aEventManager) {
         soundSystem = aGameSoundSystem;

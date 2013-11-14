@@ -4,6 +4,7 @@ import java.util.Map;
 
 import de.mirkosertic.gameengine.core.GameComponentTemplateUnmarshaller;
 import de.mirkosertic.gameengine.core.GameObject;
+import de.mirkosertic.gameengine.event.GameEventManager;
 
 public class SpriteComponentTemplateUnmarshaller implements GameComponentTemplateUnmarshaller<SpriteComponentTemplate> {
 
@@ -13,7 +14,7 @@ public class SpriteComponentTemplateUnmarshaller implements GameComponentTemplat
     }
 
     @Override
-    public SpriteComponentTemplate deserialize(GameObject aOwner, Map<String, Object> aSerializedData) {
-        return SpriteComponentTemplate.deserialize(aOwner, aSerializedData);
+    public SpriteComponentTemplate deserialize(GameEventManager aEventmanager, GameObject aOwner, Map<String, Object> aSerializedData) {
+        return SpriteComponentTemplate.deserialize(aEventmanager, aOwner, aSerializedData);
     }
 }

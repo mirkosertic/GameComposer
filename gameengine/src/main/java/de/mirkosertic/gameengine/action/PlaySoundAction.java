@@ -15,7 +15,7 @@ public class PlaySoundAction implements Action {
 
     public static final String TYPE_VALUE = "PlaySoundAction";
 
-    private Property<ResourceName> resourceName;
+    private final Property<ResourceName> resourceName;
 
     public PlaySoundAction() {
         resourceName = new Property<ResourceName>(this, "resourceName", (ResourceName) null);

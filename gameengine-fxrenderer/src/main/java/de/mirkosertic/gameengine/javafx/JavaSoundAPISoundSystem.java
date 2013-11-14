@@ -12,7 +12,7 @@ import de.mirkosertic.gameengine.sound.GameSoundSystem;
 
 public class JavaSoundAPISoundSystem implements GameSoundSystem<Clip> {
 
-    private GameResourceCache resourceCache;
+    private final GameResourceCache resourceCache;
 
     JavaSoundAPISoundSystem(GameResourceCache aResourceCache) {
         resourceCache = aResourceCache;

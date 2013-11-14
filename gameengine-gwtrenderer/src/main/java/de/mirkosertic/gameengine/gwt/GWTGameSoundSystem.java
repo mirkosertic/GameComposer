@@ -10,7 +10,7 @@ import de.mirkosertic.gameengine.sound.GameSoundSystem;
 
 public class GWTGameSoundSystem implements GameSoundSystem<Audio> {
 
-    private GameResourceCache resourceCache;
+    private final GameResourceCache resourceCache;
 
     GWTGameSoundSystem(GameResourceCache aResourceCache) {
         resourceCache = aResourceCache;

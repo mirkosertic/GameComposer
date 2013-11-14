@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class GameEventManager implements GameEventListener {
 
-    private Map<Class<GameEvent>, List<GameEventListener>> registeredListeners;
+    private final Map<Class<GameEvent>, List<GameEventListener>> registeredListeners;
 
     public GameEventManager() {
         registeredListeners = new HashMap<Class<GameEvent>, List<GameEventListener>>();

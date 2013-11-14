@@ -9,11 +9,11 @@ import de.mirkosertic.gameengine.types.Position;
 
 public class PlatformComponent implements GameComponent {
 
-    public static String TYPE = "PlatformComponent";
+    public static final String TYPE = "PlatformComponent";
 
-    private GameRuntime gameRuntime;
-    private GameObjectInstance objectInstance;
-    private PlatformComponentTemplate platformTemplate;
+    private final GameRuntime gameRuntime;
+    private final GameObjectInstance objectInstance;
+    private final PlatformComponentTemplate platformTemplate;
 
     private boolean jumping;
 
@@ -46,15 +46,15 @@ public class PlatformComponent implements GameComponent {
         });
     }
 
-    public boolean isJumping() {
+    boolean isJumping() {
         return jumping;
     }
 
-    public void setJumping(boolean jumping) {
+    void setJumping(boolean jumping) {
         this.jumping = jumping;
     }
 
-    public void handleKeyPressed(KeyPressedGameEvent aEvent) {
+    void handleKeyPressed(KeyPressedGameEvent aEvent) {
         if (aEvent.keyCodeProperty().get() == platformTemplate.moveLeftKeyProperty().get()) {
             gameRuntime.getEventManager().fire(new ApplyForceToGameObjectInstance(objectInstance, -platformTemplate.leftRightImpulseProperty().get(), 0));
         }
@@ -67,11 +67,11 @@ public class PlatformComponent implements GameComponent {
         }
     }
 
-    public void handleKeyReleased(KeyReleasedGameEvent aEvent) {
+    void handleKeyReleased(KeyReleasedGameEvent aEvent) {
         // Reset Acceleration to zero ?
     }
 
-    public void handleCollision(GameObjectCollisionEvent aEvent) {
+    void handleCollision(GameObjectCollisionEvent aEvent) {
         GameObjectInstance theOtherInstance = aEvent.getOtherInstanceOrNullIfNotAffected(objectInstance);
         if (theOtherInstance != null) {
             Position theOtherPosition = theOtherInstance.positionProperty().get();

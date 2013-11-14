@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class JSONUtils {
+class JSONUtils {
 
     public static Map<String, Object> toMap(JSONValue aValue) {
         HashMap<String, Object> theResult = new HashMap<String, Object>();

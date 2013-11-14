@@ -7,7 +7,7 @@ import de.mirkosertic.gameengine.core.GameResourceType;
 
 public class GWTAudioResource implements GameResource {
 
-    private Audio audio;
+    private final Audio audio;
 
     public GWTAudioResource(Audio aAudio) {
         audio = aAudio;

@@ -15,15 +15,15 @@ import de.mirkosertic.gameengine.types.Position;
 
 public class GameScene {
 
-    private Property<String> name;
-    private Set<GameObject> objects;
-    private Set<GameObjectInstance> instances;
-    private Property<GameObject> cameraObject;
-    private Property<GameObject> defaultPlayer;
-    private Property<Color> backgroundColor;
+    private final Property<String> name;
+    private final Property<GameObject> cameraObject;
+    private final Property<GameObject> defaultPlayer;
+    private final Property<Color> backgroundColor;
+    private final List<GameObject> objects;
+    private final List<GameObjectInstance> instances;
+    private final List<EventSheet> eventSheets;
 
-    private Set<EventSheet> eventSheets;
-    private GameRuntime gameRuntime;
+    private final GameRuntime gameRuntime;
 
     public GameScene(GameRuntime aGameRuntime) {
 
@@ -33,9 +33,9 @@ public class GameScene {
         cameraObject = new Property<GameObject>(this, "cameraObject", null, theManager);
         defaultPlayer = new Property<GameObject>(this, "defaultPlayer", null, theManager);
         backgroundColor = new Property<Color>(this, "color", new Color(0, 0, 0), theManager);
-        instances = new HashSet<GameObjectInstance>();
-        objects = new HashSet<GameObject>();
-        eventSheets = new HashSet<EventSheet>();
+        instances = new ArrayList<GameObjectInstance>();
+        objects = new ArrayList<GameObject>();
+        eventSheets = new ArrayList<EventSheet>();
         gameRuntime = aGameRuntime;
     }
 
@@ -59,26 +59,32 @@ public class GameScene {
         return defaultPlayer;
     }
 
-    public void addGameObject(GameObject aObject) {
+    public GameObject createNewGameObject(String aName) {
+        GameObject theObject = new GameObject(this, aName);
+        addGameObject(theObject);
+        return theObject;
+    }
+
+    private void addGameObject(GameObject aObject) {
         objects.add(aObject);
-        gameRuntime.getEventManager().fire(new GameObjectAddedToSceneEvent(aObject));
+        gameRuntime.getEventManager().fire(new GameObjectAddedToSceneEvent(this, aObject));
     }
 
     public void addGameObjectInstance(GameObjectInstance aInstance) {
         instances.add(aInstance);
-        gameRuntime.getEventManager().fire(new GameObjectInstanceAddedToSceneEvent(aInstance));
+        gameRuntime.getEventManager().fire(new GameObjectInstanceAddedToSceneEvent(this, aInstance));
     }
 
-    public Set<GameObjectInstance> getInstances() {
-        return Collections.unmodifiableSet(instances);
+    public List<GameObjectInstance> getInstances() {
+        return Collections.unmodifiableList(instances);
     }
 
-    public Set<GameObject> getObjects() {
-        return Collections.unmodifiableSet(objects);
+    public List<GameObject> getObjects() {
+        return Collections.unmodifiableList(objects);
     }
 
-    public Set<EventSheet> getEventSheets() {
-        return Collections.unmodifiableSet(eventSheets);
+    public List<EventSheet> getEventSheets() {
+        return Collections.unmodifiableList(eventSheets);
     }
 
     public List<GameObjectInstance> findAllAt(Position aPosition) {
@@ -142,6 +148,15 @@ public class GameScene {
         return null;
     }
 
+    public GameObjectInstance createFrom(GameObject aGameObject) {
+        GameObjectInstance theInstance = new GameObjectInstance(gameRuntime.getEventManager(), aGameObject);
+        theInstance.nameProperty().setQuietly(aGameObject.nameProperty().get() + "_" + System.currentTimeMillis());
+        for (GameComponentTemplate theFactory : aGameObject.getComponentTemplates()) {
+            theInstance.addComponent(theFactory.create(theInstance, gameRuntime));
+        }
+        return theInstance;
+    }
+
     public static GameScene deserialize(GameRuntime aGameRuntime, Map<String, Object> aSerializedData) {
         GameScene theScene = new GameScene(aGameRuntime);
         theScene.name.setQuietly((String) aSerializedData.get("name"));
@@ -182,7 +197,7 @@ public class GameScene {
 
     public void removeGameObjectInstance(GameObjectInstance aInstance) {
         instances.remove(aInstance);
-        gameRuntime.getEventManager().fire(new GameObjectInstanceRemovedFromSceneEvent(aInstance));
+        gameRuntime.getEventManager().fire(new GameObjectInstanceRemovedFromSceneEvent(this, aInstance));
     }
 
     public void removeGameObject(GameObject aGameObject) {
@@ -193,11 +208,13 @@ public class GameScene {
             }
         }
         objects.remove(aGameObject);
-        gameRuntime.getEventManager().fire(new GameObjectRemovedFromSceneEvent(aGameObject));
+        gameRuntime.getEventManager().fire(new GameObjectRemovedFromSceneEvent(this, aGameObject));
     }
 
-    public void addEventSheet(EventSheet aEventSheet) {
-        eventSheets.add(aEventSheet);
-        gameRuntime.getEventManager().fire(new EventSheetAddedToSceneEvent(aEventSheet));
+    public EventSheet createNewEventSheet() {
+        EventSheet theSheet = new EventSheet(this);
+        eventSheets.add(theSheet);
+        gameRuntime.getEventManager().fire(new EventSheetAddedToSceneEvent(theSheet));
+        return theSheet;
     }
 }

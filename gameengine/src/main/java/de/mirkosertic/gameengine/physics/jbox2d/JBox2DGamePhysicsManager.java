@@ -97,15 +97,15 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
 
     private static final float SIZE_FACTOR = 0.01f;
 
-    private World physicsWorld;
-    private Map<GameObjectInstance, Body> dynamicObjects;
-    private Map<GameObjectInstance, Body> staticObjects;
+    private final World physicsWorld;
+    private final Map<GameObjectInstance, Body> dynamicObjects;
+    private final Map<GameObjectInstance, Body> staticObjects;
     private long physicsAmountOfTime;
-    private GameEventManager eventManager;
-    private PositionChangeListener positionChangeListener;
-    private SizeChangeListener sizeChangeListener;
-    private FixedAngleListener fixedAngleListener;
-    private Set<GameObject> alreadyRegisteredSizeListener;
+    private final GameEventManager eventManager;
+    private final PositionChangeListener positionChangeListener;
+    private final SizeChangeListener sizeChangeListener;
+    private final FixedAngleListener fixedAngleListener;
+    private final Set<GameObject> alreadyRegisteredSizeListener;
     private boolean insimulation;
 
     JBox2DGamePhysicsManager(GameEventManager aEventManager) {
@@ -303,8 +303,8 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
 
         physicsAmountOfTime += aElapsedTimeSinceLastLoop;
 
-        // We limit the physics system to 60 frames / second, or we are getting strange results
-        if (physicsAmountOfTime > 16) {
+        // We limit the physics system to 30 frames / second, or we are getting strange results
+        if (physicsAmountOfTime > 32) {
             // This define how accurately velocity will be simulated. Higher iteration value increases the accuracy
             // of velocity simulation but decreases the performance. The recommended velocity iteration value is 6.
             int theVelocityIterations = 6;
@@ -313,7 +313,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
             // lesser performance. The recommended position iteration value is 3.
             int thePositionIterations = 2;
 
-            float theTimestep = 1f / 60f;
+            float theTimestep = 1f / 30f;
 
             physicsWorld.step(theTimestep, theVelocityIterations, thePositionIterations);
 

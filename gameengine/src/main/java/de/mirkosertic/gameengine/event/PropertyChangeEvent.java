@@ -2,8 +2,8 @@ package de.mirkosertic.gameengine.event;
 
 public class PropertyChangeEvent extends GameEvent {
 
-    private ReadOnlyProperty<Property> property;
-    private ReadOnlyProperty<Object> oldValue;
+    private final ReadOnlyProperty<Property> property;
+    private final ReadOnlyProperty<Object> oldValue;
 
     PropertyChangeEvent(Property aProperty, Object aOldValue) {
         super("PropertyChangeEvent");

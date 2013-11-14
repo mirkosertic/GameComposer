@@ -12,16 +12,16 @@ import com.google.gwt.json.client.JSONValue;
 import de.mirkosertic.gameengine.AbstractGameRuntimeFactory;
 import de.mirkosertic.gameengine.core.GameScene;
 
-public class GWTGameSceneLoader {
+class GWTGameSceneLoader {
 
     public static interface GameSceneLoadedListener {
         void onGameSceneLoaded(GameScene aScene);
         void onGameSceneLoadedError(Throwable aThrowable);
     }
 
-    private GameSceneLoadedListener listener;
-    private AbstractGameRuntimeFactory runtimeFactory;
-    private GWTGameResourceLoader gwtGameResourceLoader;
+    private final GameSceneLoadedListener listener;
+    private final AbstractGameRuntimeFactory runtimeFactory;
+    private final GWTGameResourceLoader gwtGameResourceLoader;
 
     public GWTGameSceneLoader(GameSceneLoadedListener aListener, AbstractGameRuntimeFactory aRuntimeFactory, GWTGameResourceLoader aResourceLoader) {
         listener = aListener;

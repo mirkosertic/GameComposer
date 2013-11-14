@@ -12,9 +12,9 @@ import de.mirkosertic.gameengine.types.ResourceName;
 
 public class GWTGameResourceLoader implements GameResourceLoader {
 
-    static final String holderId = "resourcecache";
+    private static final String holderId = "resourcecache";
 
-    private String baseDirectory;
+    private final String baseDirectory;
 
     public GWTGameResourceLoader(String aBaseDirectory) {
         baseDirectory = aBaseDirectory;

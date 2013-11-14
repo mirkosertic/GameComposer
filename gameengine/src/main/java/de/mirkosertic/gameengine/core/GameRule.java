@@ -10,9 +10,9 @@ import java.util.Map;
 
 public class GameRule {
 
-    private Property<String> name;
-    private Property<Condition> condition;
-    private List<Action> actions = new ArrayList<Action>();
+    private final Property<String> name;
+    private final Property<Condition> condition;
+    private final List<Action> actions = new ArrayList<Action>();
 
     public GameRule() {
         name = new Property<String>(this, "name", (String) null);

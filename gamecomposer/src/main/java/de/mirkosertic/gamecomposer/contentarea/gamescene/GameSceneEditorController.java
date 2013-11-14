@@ -42,7 +42,7 @@ public class GameSceneEditorController implements ContentChildController<GameSce
     private GameScene gameScene;
     private Node view;
     private EditorJXGameView gameView;
-    private Thread gameLoopThread;
+    private GameLoop gameLoop;
     private CameraComponent cameraComponent;
 
     private Event<ObjectSelectedEvent> objectSelectedEventEvent;
@@ -52,7 +52,7 @@ public class GameSceneEditorController implements ContentChildController<GameSce
     private Position draggingMouseWorldPosition;
     private GameRuntime gameRuntime;
 
-    GameSceneEditorController initialize(GameRuntime aGameRuntime, GameScene aScene, Node aView, EditorJXGameView aGameView, Thread aGameLoopThread, CameraComponent aCameraComponent, Event<ObjectSelectedEvent> aSelectedEvent) {
+    GameSceneEditorController initialize(GameRuntime aGameRuntime, GameScene aScene, Node aView, EditorJXGameView aGameView, GameLoop aGameLoop, CameraComponent aCameraComponent, Event<ObjectSelectedEvent> aSelectedEvent) {
 
         gameRuntime = aGameRuntime;
 
@@ -61,7 +61,7 @@ public class GameSceneEditorController implements ContentChildController<GameSce
         gameScene = aScene;
         view = aView;
         gameView = aGameView;
-        gameLoopThread = aGameLoopThread;
+        gameLoop = aGameLoop;
         cameraComponent = aCameraComponent;
         objectSelectedEventEvent = aSelectedEvent;
 
@@ -153,8 +153,7 @@ public class GameSceneEditorController implements ContentChildController<GameSce
             GameObjectClipboardContent theContent = (GameObjectClipboardContent) theDragBoard.getContent(GameObjectClipboardContent.FORMAT);
             GameObject theGameObject = gameScene.findGameObjectByID(theContent.getGameObjectId());
 
-            GameObjectInstanceFactory theInstanceFactory = new GameObjectInstanceFactory(gameScene.getRuntime());
-            GameObjectInstance theInstance = theInstanceFactory.createFrom(theGameObject);
+            GameObjectInstance theInstance = gameScene.createFrom(theGameObject);
             theInstance.positionProperty().set(cameraComponent.transformFromScreen(new Position(aEvent.getX(), aEvent.getY())));
 
             gameScene.addGameObjectInstance(theInstance);
@@ -269,15 +268,13 @@ public class GameSceneEditorController implements ContentChildController<GameSce
 
     @Override
     public void addedAsTab() {
-        gameView.startTimer();
-        gameLoopThread.start();
+        gameView.startTimer(gameLoop);
     }
 
     @Override
     public void removed() {
         gameScene.getRuntime().getEventManager().fire(new GameShutdownEvent());
         gameView.stopTimer();
-        gameLoopThread.interrupt();
     }
 
     @Override
@@ -288,11 +285,10 @@ public class GameSceneEditorController implements ContentChildController<GameSce
     @Override
     public void onShutdown(ShutdownEvent aEvent) {
         gameView.stopTimer();
-        gameLoopThread.interrupt();
         gameScene.getRuntime().getEventManager().fire(new GameShutdownEvent());
     }
 
-    public void onMouseClicked(MouseEvent aEvent) {
+    void onMouseClicked(MouseEvent aEvent) {
         Position theClickPosition = new Position(aEvent.getX(), aEvent.getY());
         for (GameObjectInstance theInstance : cameraComponent.getObjectsToDrawInRightOrder(gameScene)) {
             if (theInstance.contains(theClickPosition)) {

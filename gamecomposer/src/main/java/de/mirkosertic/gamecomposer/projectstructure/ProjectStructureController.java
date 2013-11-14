@@ -17,7 +17,11 @@ import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Singleton
@@ -39,8 +43,8 @@ public class ProjectStructureController implements ChildController {
     Event<Object> eventGateway;
 
     private Node view;
-    private Map<GameScene, SceneTreeDescriptor> sceneTreeDescriptorMap;
-    private Map<Object, TreeItem> treeItemMap;
+    private final Map<GameScene, SceneTreeDescriptor> sceneTreeDescriptorMap;
+    private final Map<Object, TreeItem> treeItemMap;
 
     ProjectStructureController() {
         treeItemMap = new HashMap<>();
@@ -66,8 +70,7 @@ public class ProjectStructureController implements ChildController {
 
             @Override
             public void onCreateNewGameObject(GameScene aGameScene) {
-                GameObject theGameObject = new GameObject(aGameScene, "New Object");
-                aGameScene.addGameObject(theGameObject);
+                GameObject theGameObject = aGameScene.createNewGameObject("New Object");
             }
 
             @Override
@@ -77,7 +80,10 @@ public class ProjectStructureController implements ChildController {
 
             @Override
             public void onNewEventSheet(GameScene aGameScene) {
-                aGameScene.addEventSheet(new EventSheet(aGameScene));
+                EventSheet theSheet = aGameScene.createNewEventSheet();
+
+                initializeTree(persistenceManager.getGame());
+                projectStructureTreeView.getSelectionModel().select(treeItemMap.get(theSheet));
             }
 
             @Override
@@ -152,23 +158,12 @@ public class ProjectStructureController implements ChildController {
     }
 
     public void onGameObjectAdded(@Observes GameObjectAddedToSceneEvent aEvent) {
-        GameScene theScene = aEvent.objectProperty().get().getGameScene();
-        SceneTreeDescriptor theDesc = sceneTreeDescriptorMap.get(theScene);
-
-        TreeItem theObjectTreeItem = new TreeItem();
-        theObjectTreeItem.setValue(aEvent.objectProperty().get());
-        theDesc.objectsItem.getChildren().add(theObjectTreeItem);
-        treeItemMap.put(aEvent.objectProperty().getName(), theObjectTreeItem);
+        initializeTree(persistenceManager.getGame());
+        projectStructureTreeView.getSelectionModel().select(treeItemMap.get(aEvent.objectProperty().get()));
     }
 
     public void onGameObjectRemoved(@Observes GameObjectRemovedFromSceneEvent aEvent) {
-        GameScene theScene = aEvent.objectProperty().get().getGameScene();
-        SceneTreeDescriptor theDesc = sceneTreeDescriptorMap.get(theScene);
-
-        TreeItem theObjectTreeItem = treeItemMap.get(aEvent.objectProperty().get());
-        theDesc.objectsItem.getChildren().remove(theObjectTreeItem);
-
-        treeItemMap.remove(aEvent.objectProperty().get());
+        initializeTree(persistenceManager.getGame());
     }
 
     public void onEventSheetAdded(@Observes EventSheetAddedToSceneEvent aEvent) {
@@ -176,23 +171,12 @@ public class ProjectStructureController implements ChildController {
     }
 
     public void onGameObjectInstanceAdded(@Observes GameObjectInstanceAddedToSceneEvent aEvent) {
-        GameScene theScene = aEvent.instanceProperty().get().getOwnerGameObject().getGameScene();
-        SceneTreeDescriptor theDesc = sceneTreeDescriptorMap.get(theScene);
-
-        TreeItem theObjectTreeItem = new TreeItem();
-        theObjectTreeItem.setValue(aEvent.instanceProperty().get());
-        theDesc.instancesItem.getChildren().add(theObjectTreeItem);
-        treeItemMap.put(aEvent.instanceProperty().get(), theObjectTreeItem);
+        initializeTree(persistenceManager.getGame());
+        projectStructureTreeView.getSelectionModel().select(treeItemMap.get(aEvent.instanceProperty().get()));
     }
 
     public void onGameObjectInstanceRemoved(@Observes GameObjectInstanceRemovedFromSceneEvent aEvent) {
-        GameScene theScene = aEvent.instanceProperty().get().getOwnerGameObject().getGameScene();
-        SceneTreeDescriptor theDesc = sceneTreeDescriptorMap.get(theScene);
-
-        TreeItem theObjectTreeItem = treeItemMap.get(aEvent.instanceProperty().get());
-        theDesc.objectsItem.getChildren().remove(theObjectTreeItem);
-
-        treeItemMap.remove(aEvent.instanceProperty().get());
+        initializeTree(persistenceManager.getGame());
     }
 
     public void onObjectUpdatedEvent(@Observes PropertyChangeEvent aEvent) {
@@ -232,7 +216,15 @@ public class ProjectStructureController implements ChildController {
             theObjectsTreeItem.setValue(TreeObjectTypes.OBJECTS);
             theObjectsTreeItem.setExpanded(true);
 
-            for (GameObject theGameObject : theLoadedScene.getObjects()) {
+            List<GameObject> theSortedGameObjects = new ArrayList<>(theLoadedScene.getObjects());
+            Collections.sort(theSortedGameObjects, new Comparator<GameObject>() {
+                @Override
+                public int compare(GameObject o1, GameObject o2) {
+                    return o1.nameProperty().get().compareTo(o2.nameProperty().get());
+                }
+            });
+
+            for (GameObject theGameObject : theSortedGameObjects) {
                 TreeItem theObjectTreeItem = new TreeItem();
                 theObjectTreeItem.setValue(theGameObject);
                 theObjectsTreeItem.getChildren().add(theObjectTreeItem);
@@ -258,7 +250,15 @@ public class ProjectStructureController implements ChildController {
             theInstancesTreeItem.setValue(TreeObjectTypes.INSTANCES);
             theInstancesTreeItem.setExpanded(true);
 
-            for (GameObjectInstance theGameObjectInstance : theLoadedScene.getInstances()) {
+            List<GameObjectInstance> theSortedInstances = new ArrayList<>(theLoadedScene.getInstances());
+            Collections.sort(theSortedInstances, new Comparator<GameObjectInstance>() {
+                @Override
+                public int compare(GameObjectInstance o1, GameObjectInstance o2) {
+                    return o1.nameProperty().get().compareTo(o2.nameProperty().get());
+                }
+            });
+
+            for (GameObjectInstance theGameObjectInstance : theSortedInstances) {
                 TreeItem theObjectInstanceTreeItem = new TreeItem();
                 theObjectInstanceTreeItem.setValue(theGameObjectInstance);
                 theInstancesTreeItem.getChildren().add(theObjectInstanceTreeItem);

@@ -11,7 +11,7 @@ public class PhysicsComponent implements GameComponent {
 
     public static final String TYPE = "PhysicsComponent";
 
-    private GameObjectInstance objectInstance;
+    private final GameObjectInstance objectInstance;
 
     PhysicsComponent(GameObjectInstance aObjectInstance) {
         objectInstance = aObjectInstance;

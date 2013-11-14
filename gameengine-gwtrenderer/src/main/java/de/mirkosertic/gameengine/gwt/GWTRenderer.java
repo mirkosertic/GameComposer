@@ -3,17 +3,18 @@ package de.mirkosertic.gameengine.gwt;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.google.gwt.animation.client.AnimationScheduler;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
-import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 
 import de.mirkosertic.gameengine.camera.CameraComponent;
+import de.mirkosertic.gameengine.camera.CameraComponentTemplate;
 import de.mirkosertic.gameengine.camera.FollowCameraProcess;
 import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.event.GameEventManager;
@@ -24,8 +25,8 @@ public class GWTRenderer implements EntryPoint {
 
     private final static Logger LOGGER = Logger.getLogger(GWTRenderer.class.getName());
 
-    static final String holderId = "canvasholder";
-    static final String upgradeMessage = "Your browser does not support the HTML5 Canvas. Please upgrade your browser to view this demo.";
+    private static final String holderId = "canvasholder";
+    private static final String upgradeMessage = "Your browser does not support the HTML5 Canvas. Please upgrade your browser to view this demo.";
 
     private Canvas canvas;
 
@@ -88,11 +89,11 @@ public class GWTRenderer implements EntryPoint {
     private void playScene(GameScene aGameScene) {
         final GameEventManager theEventManager = aGameScene.getRuntime().getEventManager();
         GameRuntime theRuntime = aGameScene.getRuntime();
-        GameObjectInstanceFactory theInstanceFactory = new GameObjectInstanceFactory(theRuntime);
 
         // Detect and create a camera
-        GameObjectInstance theCameraObject = theInstanceFactory.createFrom(aGameScene.cameraObjectProperty().get());
-        CameraComponent theCameraComponent = theCameraObject.getComponent(CameraComponent.class);
+        GameObject theCameraObject = aGameScene.cameraObjectProperty().get();
+        GameObjectInstance theCameraObjectInstance = aGameScene.createFrom(theCameraObject);
+        CameraComponent theCameraComponent = theCameraObjectInstance.getComponent(CameraComponent.class);
 
         GameObjectInstance thePlayerInstance = null;
         for (GameObjectInstance theInstance : aGameScene.getInstances()) {
@@ -108,14 +109,15 @@ public class GWTRenderer implements EntryPoint {
         GameLoopFactory theGameLoopFactory = new GameLoopFactory();
         final GameLoop theMainLoop = theGameLoopFactory.create(aGameScene, theGameView, theRuntime,
                 new DefaultGameLoopThrottle());
-        // setup timer
-        final Timer theTimer = new Timer() {
+
+        AnimationScheduler.get().requestAnimationFrame(new AnimationScheduler.AnimationCallback() {
             @Override
-            public void run() {
+            public void execute(double v) {
                 theMainLoop.singleRun();
+                // Request another animation
+                AnimationScheduler.get().requestAnimationFrame(this);
             }
-        };
-        theTimer.scheduleRepeating(30);
+        });
 
         canvas.addKeyDownHandler(new KeyDownHandler() {
             @Override
@@ -148,7 +150,7 @@ public class GWTRenderer implements EntryPoint {
         switch (theCameraComponent.getTemplate().typeProperty().get()) {
         case FOLLOWPLAYER:
             theCameraComponent.centerOn(thePlayerInstance);
-            theEventManager.fire(new StartProcessEvent(new FollowCameraProcess(theCameraObject, thePlayerInstance)));
+            theEventManager.fire(new StartProcessEvent(new FollowCameraProcess(theCameraObjectInstance, thePlayerInstance)));
             break;
         case CENTERONSCENE:
             break;

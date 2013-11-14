@@ -2,9 +2,9 @@ package de.mirkosertic.gameengine.event;
 
 public class ReadOnlyProperty<T> {
 
-    private String name;
-    protected T value;
-    private Object owner;
+    private final String name;
+    T value;
+    private final Object owner;
 
     public ReadOnlyProperty(Object aOwner, String aName, T aDefaultValue) {
         owner = aOwner;

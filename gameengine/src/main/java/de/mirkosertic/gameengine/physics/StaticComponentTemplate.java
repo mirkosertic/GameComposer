@@ -10,7 +10,7 @@ import de.mirkosertic.gameengine.core.GameRuntime;
 
 public class StaticComponentTemplate implements GameComponentTemplate<StaticComponent> {
 
-    private GameObject owner;
+    private final GameObject owner;
 
     public StaticComponentTemplate(GameObject aOwner) {
         owner = aOwner;

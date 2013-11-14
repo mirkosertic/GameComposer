@@ -4,7 +4,7 @@ import de.mirkosertic.gameengine.core.EventSheet;
 
 public class EventSheetSelectedEvent {
 
-    private EventSheet eventSheet;
+    private final EventSheet eventSheet;
 
     public EventSheetSelectedEvent(EventSheet aSheet) {
         eventSheet = aSheet;

@@ -4,9 +4,9 @@ import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeView;
 import javafx.util.Callback;
 
-public class StructureTreeCellFactory implements Callback<TreeView, TreeCell> {
+class StructureTreeCellFactory implements Callback<TreeView, TreeCell> {
 
-    private ContextMenuListener contextMenuListener;
+    private final ContextMenuListener contextMenuListener;
 
     public StructureTreeCellFactory(ContextMenuListener aListener) {
         contextMenuListener = aListener;

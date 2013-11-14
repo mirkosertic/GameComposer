@@ -8,8 +8,8 @@ import java.util.Map;
 
 public class GameResourceCache {
 
-    private Map<String, GameResource> cachedResources;
-    private GameResourceLoader resourceLoader;
+    private final Map<String, GameResource> cachedResources;
+    private final GameResourceLoader resourceLoader;
 
     public GameResourceCache(GameResourceLoader aResourceLoader) {
         cachedResources = new HashMap<String, GameResource>();

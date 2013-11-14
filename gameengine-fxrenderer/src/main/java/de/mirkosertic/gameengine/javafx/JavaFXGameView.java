@@ -1,35 +1,32 @@
 package de.mirkosertic.gameengine.javafx;
 
-import de.mirkosertic.gameengine.camera.CameraComponent;
-import de.mirkosertic.gameengine.core.*;
-import de.mirkosertic.gameengine.sprites.SpriteComponentTemplate;
-import de.mirkosertic.gameengine.types.Position;
-import de.mirkosertic.gameengine.types.Size;
+import java.io.IOException;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Rotate;
 
-import java.io.IOException;
+import de.mirkosertic.gameengine.camera.CameraComponent;
+import de.mirkosertic.gameengine.core.GameLoop;
+import de.mirkosertic.gameengine.core.GameObjectInstance;
+import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.GameView;
+import de.mirkosertic.gameengine.sprites.SpriteComponentTemplate;
+import de.mirkosertic.gameengine.types.Angle;
+import de.mirkosertic.gameengine.types.Position;
+import de.mirkosertic.gameengine.types.Size;
 
 public class JavaFXGameView extends Canvas implements GameView {
 
     private AnimationTimer animationTimer;
     private GameScene gameScene;
-    private GameRuntime gameRuntime;
-    private CameraComponent cameraComponent;
+    private final GameRuntime gameRuntime;
+    private final CameraComponent cameraComponent;
 
-    public JavaFXGameView(GameRuntime aRuntime, CameraComponent aCameraComponent) {
+    protected JavaFXGameView(GameRuntime aRuntime, CameraComponent aCameraComponent) {
         cameraComponent = aCameraComponent;
-        animationTimer = new AnimationTimer() {
-            @Override
-            public void handle(long l) {
-                if (gameScene != null) {
-                    renderScene();
-                }
-            }
-        };
         gameRuntime = aRuntime;
     }
 
@@ -53,15 +50,20 @@ public class JavaFXGameView extends Canvas implements GameView {
             float theHalfWidth = theSize.width / 2;
             float theHalfHeight = theSize.height / 2;
 
-            Rotate r = new Rotate(theInstance.rotationAngleProperty().get().angleInDegrees, thePosition.x + theHalfWidth, thePosition.y + theHalfHeight);
-            theContext.setTransform(r.getMxx(), r.getMyx(), r.getMxy(), r.getMyy(), r.getTx(), r.getTy());
+            Angle theAngle = theInstance.rotationAngleProperty().get();
+            int theAngleInDegrees = theAngle.angleInDegrees;
+            if (theAngleInDegrees % 360 != 0) {
+                Rotate r = new Rotate(theAngleInDegrees, thePosition.x + theHalfWidth, thePosition.y + theHalfHeight);
+                theContext.setTransform(r.getMxx(), r.getMyx(), r.getMxy(), r.getMyy(), r.getTx(), r.getTy());
+            }
 
-            SpriteComponentTemplate theTemplateComponent = theInstance.getOwnerGameObject().getComponentTemplate(SpriteComponentTemplate.class);
+            SpriteComponentTemplate theTemplateComponent = theInstance.getOwnerGameObject().getComponentTemplate(
+                    SpriteComponentTemplate.class);
             if (theTemplateComponent != null && !theTemplateComponent.resourceNameProperty().isNull()) {
                 try {
-                    JavaFXBitmapResource theBitmap = gameRuntime.getResourceCache().getResourceFor(theTemplateComponent.resourceNameProperty().get());
+                    JavaFXBitmapResource theBitmap = gameRuntime.getResourceCache().getResourceFor(
+                            theTemplateComponent.resourceNameProperty().get());
                     drawGameObjectInstance(theContext, theInstance, thePosition, theSize, theBitmap);
-                    //drawGameObjectInstance(theContext, theInstance, new Position(theSize.width / 2, theSize.height / 2), theSize, theBitmap);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -80,20 +82,33 @@ public class JavaFXGameView extends Canvas implements GameView {
     protected void afterRendering(GraphicsContext aContext) {
     }
 
-    protected void drawGameObjectInstance(GraphicsContext aContext, GameObjectInstance aInstance, Position aPosition, Size aSize, JavaFXBitmapResource aBitmapResource) {
+    protected void drawGameObjectInstance(GraphicsContext aContext, GameObjectInstance aInstance, Position aPosition,
+            Size aSize, JavaFXBitmapResource aBitmapResource) {
         aContext.drawImage(aBitmapResource, aPosition.x, aPosition.y);
     }
 
-    public void startTimer() {
-        animationTimer.start();
+    public void startTimer(final GameLoop aGameLoop) {
+        if (animationTimer == null) {
+            gameScene = aGameLoop.getScene();
+            animationTimer = new AnimationTimer() {
+                @Override
+                public void handle(long l) {
+                    aGameLoop.singleRun();
+                    renderScene();
+                }
+            };
+            animationTimer.start();
+        }
     }
 
     public void stopTimer() {
-        animationTimer.stop();
+        if (animationTimer != null) {
+            animationTimer.stop();
+        }
     }
 
     public void renderGame(long aGameTime, long aElapsedTimeSinceLastLoop, GameScene aScene) {
-        gameScene = aScene;
+        // Do just nothing here, as the real rendering is done by the animation timer
     }
 
     protected GameScene getGameScene() {

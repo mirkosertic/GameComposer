@@ -12,14 +12,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GWTGameLoader {
+class GWTGameLoader {
     
     public static interface GameLoadedListener {
         void onGameLoaded(Game aGame);
         void onGameLoadedError(Throwable aThrowable);
     }
     
-    private GameLoadedListener listener;
+    private final GameLoadedListener listener;
 
     public GWTGameLoader(GameLoadedListener aListener) {
         listener = aListener;    

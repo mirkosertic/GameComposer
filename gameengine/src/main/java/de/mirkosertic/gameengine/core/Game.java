@@ -6,9 +6,9 @@ import java.util.*;
 
 public class Game {
 
-    private Property<String> name;
-    private Set<String> scenes;
-    private Property<String> defaultScene;
+    private final Property<String> name;
+    private final Set<String> scenes;
+    private final Property<String> defaultScene;
 
     public Game() {
         name = new Property<String>(this, "name", (String) null);

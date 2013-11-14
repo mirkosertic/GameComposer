@@ -12,7 +12,7 @@ public class StaticComponent implements GameComponent {
     
     public static final String TYPE = "StaticComponent";
 
-    private GameObjectInstance objectInstance;
+    private final GameObjectInstance objectInstance;
 
     StaticComponent(GameObjectInstance aObjectInstance) {
         objectInstance = aObjectInstance;

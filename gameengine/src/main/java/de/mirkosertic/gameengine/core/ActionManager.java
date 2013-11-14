@@ -4,7 +4,7 @@ import de.mirkosertic.gameengine.event.GameEvent;
 
 public class ActionManager implements GameSystem {
 
-    private GameScene scene;
+    private final GameScene scene;
 
     ActionManager(GameScene aScene) {
         scene = aScene;

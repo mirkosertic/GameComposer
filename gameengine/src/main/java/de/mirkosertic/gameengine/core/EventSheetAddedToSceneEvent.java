@@ -5,7 +5,7 @@ import de.mirkosertic.gameengine.event.ReadOnlyProperty;
 
 public class EventSheetAddedToSceneEvent extends GameEvent {
 
-    private ReadOnlyProperty<EventSheet> eventSheet;
+    private final ReadOnlyProperty<EventSheet> eventSheet;
 
     public EventSheetAddedToSceneEvent(EventSheet aEventSheet) {
         super("EventSheetAddedToSceneEvent");

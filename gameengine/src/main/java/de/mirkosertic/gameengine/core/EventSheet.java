@@ -11,11 +11,12 @@ import java.util.Map;
 
 public class EventSheet {
 
-    private Property<String> nameProperty;
-    private List<GameRule> rules;
-    private GameScene gameScene;
+    private final Property<String> nameProperty;
+    private final List<GameRule> rules;
 
-    public EventSheet(GameScene aGameScene) {
+    private final GameScene gameScene;
+
+    EventSheet(GameScene aGameScene) {
         GameEventManager theEventManager = aGameScene.getRuntime().getEventManager();
 
         nameProperty = new Property<String>(this, "name", theEventManager);

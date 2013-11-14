@@ -39,7 +39,7 @@ public class ContentAreaController implements ChildController {
     EventSheetEditorControllerFactory eventSheetEditorControllerFactory;
 
     private Node view;
-    private Map<ContentChildController, Tab> activeTabs;
+    private final Map<ContentChildController, Tab> activeTabs;
 
     public ContentAreaController() {
         activeTabs = new HashMap<>();
