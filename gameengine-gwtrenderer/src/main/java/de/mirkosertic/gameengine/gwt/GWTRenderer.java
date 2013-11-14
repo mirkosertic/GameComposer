@@ -13,8 +13,9 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 
+import de.mirkosertic.gameengine.action.ActionManager;
+import de.mirkosertic.gameengine.action.ActionManagerFactory;
 import de.mirkosertic.gameengine.camera.CameraComponent;
-import de.mirkosertic.gameengine.camera.CameraComponentTemplate;
 import de.mirkosertic.gameengine.camera.FollowCameraProcess;
 import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.event.GameEventManager;
