@@ -20,7 +20,7 @@ import java.util.logging.Level;
  *
  * @author in-sideFX
  */
-public class UndecoratorController {
+class UndecoratorController {
 
     private static final int DOCK_NONE = 0x0;
     private static final int DOCK_LEFT = 0x1;

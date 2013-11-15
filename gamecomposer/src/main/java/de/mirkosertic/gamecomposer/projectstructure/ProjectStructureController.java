@@ -27,12 +27,6 @@ import java.util.Map;
 @Singleton
 public class ProjectStructureController implements ChildController {
 
-    class SceneTreeDescriptor {
-        TreeItem sceneTreeItem;
-        TreeItem objectsItem;
-        TreeItem instancesItem;
-    }
-
     @FXML
     TreeView projectStructureTreeView;
 
@@ -43,12 +37,10 @@ public class ProjectStructureController implements ChildController {
     Event<Object> eventGateway;
 
     private Node view;
-    private final Map<GameScene, SceneTreeDescriptor> sceneTreeDescriptorMap;
     private final Map<Object, TreeItem> treeItemMap;
 
     ProjectStructureController() {
         treeItemMap = new HashMap<>();
-        sceneTreeDescriptorMap = new HashMap<>();
     }
 
     ProjectStructureController initialize(Node aView) {
@@ -197,7 +189,6 @@ public class ProjectStructureController implements ChildController {
 
     private void initializeTree(Game aGame) {
         treeItemMap.clear();
-        sceneTreeDescriptorMap.clear();
 
         TreeItem theRootTreeItem = new TreeItem(aGame.nameProperty().get());
         theRootTreeItem.setValue(aGame);
@@ -268,12 +259,6 @@ public class ProjectStructureController implements ChildController {
             theSceneTreeItem.getChildren().add(theInstancesTreeItem);
             theRootTreeItem.getChildren().add(theSceneTreeItem);
 
-            SceneTreeDescriptor theDesc = new SceneTreeDescriptor();
-            theDesc.sceneTreeItem = theSceneTreeItem;
-            theDesc.objectsItem = theObjectsTreeItem;
-            theDesc.instancesItem = theInstancesTreeItem;
-
-            sceneTreeDescriptorMap.put(theLoadedScene, theDesc);
             treeItemMap.put(theLoadedScene, theSceneTreeItem);
         }
 

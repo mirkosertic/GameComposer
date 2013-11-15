@@ -8,6 +8,7 @@ import java.util.Set;
 import org.jbox2d.callbacks.ContactImpulse;
 import org.jbox2d.callbacks.ContactListener;
 import org.jbox2d.collision.Manifold;
+import org.jbox2d.collision.shapes.MassData;
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.collision.shapes.Shape;
 import org.jbox2d.collision.shapes.ShapeType;
@@ -171,10 +172,28 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
 
         PhysicsComponentTemplate theTemplate = aInstance.getOwnerGameObject().getComponentTemplate(PhysicsComponentTemplate.class);
         if (theTemplate != null) {
+            theBodyDef.setActive(theTemplate.activeProperty().get());
             theBodyDef.setFixedRotation(theTemplate.fixedRotationProperty().get());
         }
 
         return theBodyDef;
+    }
+
+    private FixtureDef createFixtureDefFor(GameObjectInstance aInstance, PolygonShape aShape) {
+        FixtureDef theFixture = new FixtureDef();
+        theFixture.shape = aShape;
+        theFixture.density = 1;
+        theFixture.friction = 1.8f;
+        theFixture.restitution = 0;
+
+        PhysicsComponentTemplate theTemplate = aInstance.getOwnerGameObject().getComponentTemplate(PhysicsComponentTemplate.class);
+        if (theTemplate != null) {
+            theFixture.density = theTemplate.densityProperty().get();
+            theFixture.friction = theTemplate.frictionProperty().get();
+            theFixture.restitution = theTemplate.restitutionProperty().get();
+        }
+
+        return theFixture;
     }
 
     Body gameObjectInstanceAddedToScene(GameObjectInstance aInstance) {
@@ -199,12 +218,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
                 theStaticShape.setAsBox(SIZE_FACTOR * theInstanceSize.width / 2, SIZE_FACTOR * theInstanceSize.height
                         / 2);
 
-                FixtureDef theStaticFixture = new FixtureDef();
-                theStaticFixture.shape = theStaticShape;
-                theStaticFixture.density = 1;
-                theStaticFixture.friction = 1.8f;
-                theStaticFixture.restitution = 0;
-
+                FixtureDef theStaticFixture = createFixtureDefFor(aInstance, theStaticShape);
                 BodyDef theBodyDef = createBodyDefFor(aInstance, BodyType.STATIC);
                 Body theBody = physicsWorld.createBody(theBodyDef);
                 theBody.createFixture(theStaticFixture);
@@ -221,11 +235,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
                 thePlatformShape.setAsBox(SIZE_FACTOR * theInstanceSize.width / 2, SIZE_FACTOR * theInstanceSize.height
                         / 2);
 
-                FixtureDef thePlatformFixture = new FixtureDef();
-                thePlatformFixture.density = 1;
-                thePlatformFixture.friction = 0.1f;
-                thePlatformFixture.restitution = 0;
-                thePlatformFixture.shape = thePlatformShape;
+                FixtureDef thePlatformFixture = createFixtureDefFor(aInstance, thePlatformShape);
 
                 BodyDef theBodyDef = createBodyDefFor(aInstance, BodyType.DYNAMIC);
                 Body theBody = physicsWorld.createBody(theBodyDef);
@@ -243,14 +253,11 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
                 thePhysicsShape.setAsBox(SIZE_FACTOR * theInstanceSize.width / 2, SIZE_FACTOR * theInstanceSize.height
                         / 2);
 
-                FixtureDef thePhysicsFixture = new FixtureDef();
-                thePhysicsFixture.density = 1;
-                thePhysicsFixture.friction = 0.1f;
-                thePhysicsFixture.restitution = 0;
-                thePhysicsFixture.shape = thePhysicsShape;
+                FixtureDef thePhysicsFixture = createFixtureDefFor(aInstance, thePhysicsShape);
 
                 BodyDef theBodyDef = createBodyDefFor(aInstance, BodyType.DYNAMIC);
                 Body theBody = physicsWorld.createBody(theBodyDef);
+
                 dynamicObjects.put(aInstance, theBody);
                 theBody.createFixture(thePhysicsFixture);
 
@@ -304,7 +311,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
         physicsAmountOfTime += aElapsedTimeSinceLastLoop;
 
         // We limit the physics system to 30 frames / second, or we are getting strange results
-        if (physicsAmountOfTime > 32) {
+        if (physicsAmountOfTime >= 32) {
             // This define how accurately velocity will be simulated. Higher iteration value increases the accuracy
             // of velocity simulation but decreases the performance. The recommended velocity iteration value is 6.
             int theVelocityIterations = 6;

@@ -58,15 +58,35 @@ public class MatchEventCondition implements Condition {
                         }
                     }
                     if (thePropertyValue instanceof GameObjectInstance) {
-                        if (!((GameObjectInstance) thePropertyValue).uuidProperty().get()
-                                .equals(((GameObjectInstance) theObjectValue).uuidProperty().get())) {
-                            return false;
+                        GameObjectInstance theInstance = (GameObjectInstance) thePropertyValue;
+                        if (theObjectValue instanceof GameObjectInstance) {
+                            GameObjectInstance theOtherInstance = (GameObjectInstance) theObjectValue;
+                            if (!theInstance.uuidProperty().get()
+                                    .equals(theOtherInstance.uuidProperty().get())) {
+                                return false;
+                            }
+                        } else {
+                            GameObject theOtherObject = (GameObject) theObjectValue;
+                            if (!theInstance.getOwnerGameObject().uuidProperty().get()
+                                    .equals(theOtherObject.uuidProperty().get())) {
+                                return false;
+                            }
                         }
                     }
                     if (thePropertyValue instanceof GameObject) {
-                        if (!((GameObject) thePropertyValue).uuidProperty().get()
-                                .equals(((GameObject) theObjectValue).uuidProperty().get())) {
-                            return false;
+                        GameObject theObject = (GameObject) thePropertyValue;
+                        if (theObjectValue instanceof GameObject) {
+                            GameObject theOtherValue = (GameObject) theObjectValue;
+                            if (!theObject.uuidProperty().get()
+                                    .equals(theOtherValue.uuidProperty().get())) {
+                                return false;
+                            }
+                        } else {
+                            GameObjectInstance theOtherInstance = (GameObjectInstance) theObjectValue;
+                            if (!theObject.uuidProperty().get()
+                                    .equals(theOtherInstance.getOwnerGameObject().uuidProperty().get())) {
+                                return false;
+                            }
                         }
                     }
                     if (thePropertyValue instanceof Boolean) {

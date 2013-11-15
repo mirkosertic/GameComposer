@@ -20,6 +20,7 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -130,6 +131,7 @@ public class RuleEditorController implements ChildController {
     }
 
     private void updateActions() {
+        //TODO: This can be better with GridPane layout
         actions.getChildren().clear();
         for (Action theAction : gameRule.getActions()) {
             HBox theActionBox = new HBox();
@@ -226,22 +228,20 @@ public class RuleEditorController implements ChildController {
 
             Class theFilterClass = knownEventTypes.get(theCondition.eventTypeProperty().get());
 
+            GridPane theFilterConditions = new GridPane();
+            theFilterConditions.setPadding(new Insets(5, 5, 5, 5));
+            filterCoditions.getChildren().add(theFilterConditions);
+
+            int theRow = 0;
+
             for (Field theField : theFilterClass.getDeclaredFields()) {
                 final String theFieldName = theField.getName();
                 if (theField.getType().isAssignableFrom(ReadOnlyProperty.class)) {
 
                     Object theFilterValue = theCondition.getFilterValue(theFieldName);
 
-                    HBox thePropertyHBox = new HBox();
-                    VBox.setMargin(thePropertyHBox, new Insets(0, 0, 5, 0));
-
-                    thePropertyHBox.setMaxWidth(Double.MAX_VALUE);
-
                     Label theLabel = new Label(theFieldName + ":");
-                    theLabel.setAlignment(Pos.CENTER_LEFT);
-                    theLabel.setMaxHeight(Double.MAX_VALUE);
-
-                    thePropertyHBox.getChildren().add(theLabel);
+                    theFilterConditions.add(theLabel, 0, theRow);
 
                     ParameterizedType theParamType = (ParameterizedType) theField.getGenericType();
                     if (theParamType.getActualTypeArguments()[0] == String.class) {
@@ -257,12 +257,12 @@ public class RuleEditorController implements ChildController {
                             }
                         });
 
-                        thePropertyHBox.getChildren().add(theTextfield);
+                        theFilterConditions.add(theTextfield, 1, theRow);
                     }
                     if (theParamType.getActualTypeArguments()[0] == GameKeyCode.class) {
                         final ComboBox theCombobox = new ComboBox();
                         theCombobox.getItems().clear();
-                        theCombobox.getItems().addAll(Arrays.asList(GameKeyCode.values()));
+                        theCombobox.getItems().addAll(GameKeyCode.allKeysAsSortedList());
                         theCombobox.getSelectionModel().select(theFilterValue);
                         theCombobox.setConverter(new StringConverter<GameKeyCode>() {
                             @Override
@@ -281,8 +281,7 @@ public class RuleEditorController implements ChildController {
                                 theCondition.setFilterValue(theFieldName, theCombobox.getValue());
                             }
                         });
-
-                        thePropertyHBox.getChildren().add(theCombobox);
+                        theFilterConditions.add(theCombobox, 1, theRow);
                     }
                     if ((theParamType.getActualTypeArguments()[0] == GameObjectInstance.class)
                             || ((theParamType.getActualTypeArguments()[0] == GameObject.class))) {
@@ -312,10 +311,10 @@ public class RuleEditorController implements ChildController {
                             }
                         });
 
-                        thePropertyHBox.getChildren().add(theCombobox);
+                        theFilterConditions.add(theCombobox, 1, theRow);
                     }
 
-                    filterCoditions.getChildren().add(thePropertyHBox);
+                    theRow++;
                 }
             }
         }
