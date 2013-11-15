@@ -1,5 +1,6 @@
-package de.mirkosertic.gameengine.core;
+package de.mirkosertic.gameengine.action;
 
+import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.event.GameEvent;
 
 public class ActionManager implements GameSystem {
