@@ -1,7 +1,5 @@
 package de.mirkosertic.gameengine.javafx;
 
-import java.io.IOException;
-
 import javax.sound.sampled.Clip;
 
 import de.mirkosertic.gameengine.core.GameResource;
