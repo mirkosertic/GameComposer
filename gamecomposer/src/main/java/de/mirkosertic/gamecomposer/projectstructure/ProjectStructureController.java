@@ -207,7 +207,7 @@ public class ProjectStructureController implements ChildController {
         theRootTreeItem.setExpanded(true);
         treeItemMap.put(aGame, theRootTreeItem);
 
-        for (String theSceneIDs : aGame.getScenes()) {
+        for (String theSceneIDs : persistenceManager.getScenes()) {
 
             GameScene theLoadedScene = persistenceManager.getScene(theSceneIDs);
 

@@ -32,6 +32,8 @@
                     <disableCastChecking>true</disableCastChecking>
                     <enableClosureCompiler>true</enableClosureCompiler>
                     <disableClassMetaData>true</disableClassMetaData>
+                    <!--<style>DETAILED</style>
+                    <disableCastChecking>true</disableCastChecking>-->
                 </configuration>
             </plugin>
             <plugin>

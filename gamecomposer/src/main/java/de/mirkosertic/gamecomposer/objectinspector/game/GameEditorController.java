@@ -1,19 +1,21 @@
 package de.mirkosertic.gamecomposer.objectinspector.game;
 
+import de.mirkosertic.gamecomposer.PersistenceManager;
 import de.mirkosertic.gamecomposer.PropertyBinder;
-
 import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorChildController;
+import de.mirkosertic.gamecomposer.NewGameSceneEvent;
+import de.mirkosertic.gameengine.core.Game;
+
+import de.mirkosertic.gameengine.core.GameScene;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.util.StringConverter;
 
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
-
-import de.mirkosertic.gamecomposer.NewGameSceneEvent;
-import de.mirkosertic.gameengine.core.Game;
 
 public class GameEditorController implements ObjectInspectorChildController {
 
@@ -25,6 +27,9 @@ public class GameEditorController implements ObjectInspectorChildController {
 
     @Inject
     Event<Object> eventGateway;
+
+    @Inject
+    PersistenceManager persistenceManager;
 
     private Parent view;
     private Game game;
@@ -40,7 +45,19 @@ public class GameEditorController implements ObjectInspectorChildController {
         game = aObject;
 
         defaultSceneComboBox.getItems().clear();
-        defaultSceneComboBox.getItems().addAll(aObject.getScenes());
+        defaultSceneComboBox.getItems().addAll(persistenceManager.getScenes());
+        defaultSceneComboBox.setConverter(new StringConverter<String>() {
+            @Override
+            public String toString(String aSceneID) {
+                GameScene theScene = persistenceManager.getScene(aSceneID);
+                return theScene.nameProperty().get();
+            }
+
+            @Override
+            public String fromString(String s) {
+                return null;
+            }
+        });
 
         PropertyBinder.bind(aObject.nameProperty(), nameTextField.textProperty());
         PropertyBinder.bind(aObject.defaultSceneProperty(), defaultSceneComboBox.valueProperty());

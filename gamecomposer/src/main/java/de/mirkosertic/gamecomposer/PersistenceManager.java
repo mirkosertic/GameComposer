@@ -2,8 +2,7 @@ package de.mirkosertic.gamecomposer;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
@@ -76,10 +75,9 @@ public class PersistenceManager {
         GameScene theNewGameScene = new GameScene(theRuntime);
         gameScenes.put(theSceneID, theNewGameScene);
 
-        if (game.getScenes().size() == 0) {
+        if (game.defaultSceneProperty().isNull()) {
             game.defaultSceneProperty().set(theSceneID);
         }
-        game.addScene(theSceneID);
 
         theRuntime.getEventManager().register(null, GameEvent.class, new EventCDIForwarder());
 
@@ -105,21 +103,31 @@ public class PersistenceManager {
         Game theLoadedGame = Game.deserialize(theReader.<Map<String, Object>>readValue(aEvent.getGameFile()));
 
         Map<String, GameScene> theLoadedScenes = new HashMap<>();
-        for (String theSceneName : theLoadedGame.getScenes()) {
 
-            GameResourceLoader theResourceLoader = new JavaFXFileGameResourceLoader(new File(theGameDirectory, theSceneName));
+        // We detect scenes by scanning the directory for subdirectories with a game scene definition
+        // this is much better than storing the list of scenes in the game.json
+        // as this might lead to inconsistancies.
+        for (File theFile : theGameDirectory.listFiles()) {
+            if (theFile.isDirectory()) {
+                File theSceneDescriptor = new File(theFile, "scene.json");
+                if (theSceneDescriptor.exists()) {
 
-            File theSceneDescriptor = new File(new File(theGameDirectory, theSceneName), "scene.json");
-            Map<String, Object> theSerializedData = theReader.readValue(theSceneDescriptor);
+                    String theSceneName = theFile.getName();
 
-            GameScene theLoadedScene = GameScene.deserialize(gameRuntimeFactory.create(theResourceLoader, new JavaSoundAPISoundSystemFactory()), theSerializedData);
+                    GameResourceLoader theResourceLoader = new JavaFXFileGameResourceLoader(theFile);
 
-            // Finally we need to initialize the Action system, as now the scene is completely loaded
-            ActionManagerFactory theActionManagerFactory = new ActionManagerFactory();
-            theLoadedScene.getRuntime().addSystem(theActionManagerFactory.create(theLoadedScene, theLoadedScene.getRuntime().getEventManager()));
+                    Map<String, Object> theSerializedData = theReader.readValue(theSceneDescriptor);
 
-            // Ok, we are done here
-            theLoadedScenes.put(theSceneName, theLoadedScene);
+                    GameScene theLoadedScene = GameScene.deserialize(gameRuntimeFactory.create(theResourceLoader, new JavaSoundAPISoundSystemFactory()), theSerializedData);
+
+                    // Finally we need to initialize the Action system, as now the scene is completely loaded
+                    ActionManagerFactory theActionManagerFactory = new ActionManagerFactory();
+                    theLoadedScene.getRuntime().addSystem(theActionManagerFactory.create(theLoadedScene, theLoadedScene.getRuntime().getEventManager()));
+
+                    // Ok, we are done here
+                    theLoadedScenes.put(theSceneName, theLoadedScene);
+                }
+            }
         }
 
         game = theLoadedGame;
@@ -180,5 +188,9 @@ public class PersistenceManager {
                 return;
             }
         }
+    }
+
+    public Set<String> getScenes() {
+        return Collections.unmodifiableSet(gameScenes.keySet());
     }
 }
