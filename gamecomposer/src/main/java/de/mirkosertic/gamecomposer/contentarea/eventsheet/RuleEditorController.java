@@ -71,7 +71,7 @@ public class RuleEditorController implements ChildController {
     private Map<String, Class> knownEventTypes;
 
     RuleEditorController initialize(EventSheetEditorController aParentController, BorderPane aView,
-            EventSheet aEventSheet, GameRule aGameRule) {
+                                    EventSheet aEventSheet, GameRule aGameRule) {
         eventSheet = aEventSheet;
         view = aView;
         parentController = aParentController;
@@ -194,7 +194,7 @@ public class RuleEditorController implements ChildController {
                             theSelectAssetLink.setOnAction(new EventHandler<ActionEvent>() {
                                 @Override
                                 public void handle(ActionEvent actionEvent) {
-                                    ResourceName theNewResourceName = gameAssetSelector.selectAudioAssetFrom(eventSheet.getGameScene());
+                                    ResourceName theNewResourceName = gameAssetSelector.selectAudioAssetFrom(eventSheet.getGameScene(), view.getScene().getWindow());
                                     if (theNewResourceName != null) {
                                         theResourceNameTextField.setText(theNewResourceName.name);
                                         theResourceNameProperty.set(theNewResourceName);
@@ -252,7 +252,7 @@ public class RuleEditorController implements ChildController {
                         theTextfield.textProperty().addListener(new ChangeListener<String>() {
                             @Override
                             public void changed(ObservableValue<? extends String> observableValue, String aOldValue,
-                                    String aNewValue) {
+                                                String aNewValue) {
                                 theCondition.setFilterValue(theFieldName, aNewValue);
                             }
                         });

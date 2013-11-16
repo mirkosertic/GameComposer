@@ -3,6 +3,7 @@ package de.mirkosertic.gameengine.event;
 public class ReadOnlyProperty<T> {
 
     private final String name;
+
     T value;
     private final Object owner;
 

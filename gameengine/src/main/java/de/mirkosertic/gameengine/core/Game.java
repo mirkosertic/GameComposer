@@ -24,6 +24,13 @@ public class Game {
         scenes.add(aSceneName);
     }
 
+    public void removeScene(String aSceneName) {
+        scenes.remove(aSceneName);
+        if (aSceneName.equals(defaultScene.get())) {
+            defaultScene.set(null);
+        }
+    }
+
     public Set<String> getScenes() {
         return Collections.unmodifiableSet(scenes);
     }

@@ -87,7 +87,7 @@ public class SpriteTemplateEditorController implements ObjectInspectorChildContr
 
         GameScene theScene = object.getOwner().getGameScene();
 
-        ResourceName theNewResourceName = gameAssetSelector.selectImageAssetFrom(theScene);
+        ResourceName theNewResourceName = gameAssetSelector.selectImageAssetFrom(theScene, view.getScene().getWindow());
         if (theNewResourceName != null) {
             object.resourceNameProperty().set(theNewResourceName);
 

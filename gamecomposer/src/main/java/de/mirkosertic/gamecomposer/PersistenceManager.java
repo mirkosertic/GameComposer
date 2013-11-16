@@ -164,4 +164,21 @@ public class PersistenceManager {
     public void copyGameTo(File aTargetDirectory) throws IOException {
         FileUtils.copyDirectory(currentGameDirectory, aTargetDirectory);
     }
+
+    public void deleteScene(GameScene aGameScene) {
+        for (Map.Entry<String, GameScene> theEntry : gameScenes.entrySet()) {
+            if (theEntry.getValue() == aGameScene) {
+                game.removeScene(aGameScene.nameProperty().get());
+                File theSceneDirectory = new File(currentGameDirectory, theEntry.getKey());
+                try {
+                    FileUtils.deleteDirectory(theSceneDirectory);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
+                gameScenes.remove(theEntry.getKey());
+                return;
+            }
+        }
+    }
 }

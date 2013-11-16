@@ -41,8 +41,11 @@ public class GameComposerController {
     Menu exportMenu;
 
     private Preferences directoryPreferences;
+    private Stage stage;
 
     public void initialize(Stage aStage) {
+
+        stage = aStage;
 
         directoryPreferences = Preferences.userNodeForPackage(GameComposerController.class);
         exportMenu.setDisable(true);
@@ -72,7 +75,7 @@ public class GameComposerController {
     public void onNew() {
         DirectoryChooser theDirectoryChooser = new DirectoryChooser();
         theDirectoryChooser.setTitle("Choose target directory");
-        File theProjectDirectory = theDirectoryChooser.showDialog(null);
+        File theProjectDirectory = theDirectoryChooser.showDialog(stage);
         if (theProjectDirectory != null) {
             eventGateway.fire(new NewGameEvent(theProjectDirectory));
 
@@ -123,7 +126,7 @@ public class GameComposerController {
             theDirectoryChooser.setInitialDirectory(new File(theLastExportDir));
         }
 
-        File theTargetDirectory = theDirectoryChooser.showDialog(null);
+        File theTargetDirectory = theDirectoryChooser.showDialog(stage);
         if (theTargetDirectory != null) {
             eventGateway.fire(new ExportGameHTML5Event(theTargetDirectory));
 
