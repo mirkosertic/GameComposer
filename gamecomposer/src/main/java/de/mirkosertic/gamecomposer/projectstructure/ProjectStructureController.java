@@ -17,12 +17,7 @@ import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Singleton
 public class ProjectStructureController implements ChildController {
@@ -219,7 +214,7 @@ public class ProjectStructureController implements ChildController {
             theObjectsTreeItem.setValue(TreeObjectTypes.OBJECTS);
             theObjectsTreeItem.setExpanded(true);
 
-            List<GameObject> theSortedGameObjects = new ArrayList<>(theLoadedScene.getObjects());
+            List<GameObject> theSortedGameObjects = Arrays.asList(theLoadedScene.getObjects());
             Collections.sort(theSortedGameObjects, new Comparator<GameObject>() {
                 @Override
                 public int compare(GameObject o1, GameObject o2) {
@@ -253,7 +248,7 @@ public class ProjectStructureController implements ChildController {
             theInstancesTreeItem.setValue(TreeObjectTypes.INSTANCES);
             theInstancesTreeItem.setExpanded(true);
 
-            List<GameObjectInstance> theSortedInstances = new ArrayList<>(theLoadedScene.getInstances());
+            List<GameObjectInstance> theSortedInstances = Arrays.asList(theLoadedScene.getInstances());
             Collections.sort(theSortedInstances, new Comparator<GameObjectInstance>() {
                 @Override
                 public int compare(GameObjectInstance o1, GameObjectInstance o2) {
