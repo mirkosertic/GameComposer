@@ -36,6 +36,9 @@ public class ProjectStructureController implements ChildController {
     @Inject
     Event<Object> eventGateway;
 
+    @Inject
+    MessageBox messageBox;
+
     private Node view;
     private final Map<Object, TreeItem> treeItemMap;
 
@@ -47,7 +50,10 @@ public class ProjectStructureController implements ChildController {
         projectStructureTreeView.setCellFactory(new StructureTreeCellFactory(new ContextMenuListener() {
             @Override
             public void onDeleteGameScene(GameScene aGameScene) {
-                // TODO:
+                if (messageBox.showMessageBox(view, "Delete scene", "Do you really want to delete the scene?", MessageBox.ButtonType.YES, MessageBox.ButtonType.NO) == MessageBox.ButtonType.YES) {
+                    persistenceManager.deleteScene(aGameScene);
+                    initializeTree(persistenceManager.getGame());
+                }
             }
 
             @Override
@@ -62,7 +68,8 @@ public class ProjectStructureController implements ChildController {
 
             @Override
             public void onCreateNewGameObject(GameScene aGameScene) {
-                GameObject theGameObject = aGameScene.createNewGameObject("New Object");
+                // Selecting this object will be done by the the game event handler registered below.
+                aGameScene.createNewGameObject("New Object");
             }
 
             @Override
@@ -80,6 +87,7 @@ public class ProjectStructureController implements ChildController {
 
             @Override
             public void onDeleteEventSheet(EventSheet aEventSheet) {
+                aEventSheet.getGameScene().removeEventSheet(aEventSheet);
             }
         }));
         projectStructureTreeView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
@@ -168,6 +176,10 @@ public class ProjectStructureController implements ChildController {
     }
 
     public void onGameObjectInstanceRemoved(@Observes GameObjectInstanceRemovedFromSceneEvent aEvent) {
+        initializeTree(persistenceManager.getGame());
+    }
+
+    public void onEventSheetRemoved(@Observes EventSheetRemovedFromSceneEvent aEvent) {
         initializeTree(persistenceManager.getGame());
     }
 

@@ -97,6 +97,64 @@ public class GameScene {
         return theResult;
     }
 
+    public GameObject findGameObjectByID(String aObjectUUID) {
+        for (GameObject theObject : objects) {
+            if (theObject.uuidProperty().get().equals(aObjectUUID)) {
+                return theObject;
+            }
+        }
+        return null;
+    }
+
+    public GameObjectInstance findGameObjectInstanceByID(String aInstanceUUID) {
+        for (GameObjectInstance theInstance : instances) {
+            if (theInstance.uuidProperty().get().equals(aInstanceUUID)) {
+                return theInstance;
+            }
+        }
+        return null;
+    }
+
+    public GameObjectInstance createFrom(GameObject aGameObject) {
+        GameObjectInstance theInstance = new GameObjectInstance(gameRuntime.getEventManager(), aGameObject);
+        theInstance.nameProperty().setQuietly(aGameObject.nameProperty().get() + "_" + System.currentTimeMillis());
+        for (GameComponentTemplate theFactory : aGameObject.getComponentTemplates()) {
+            theInstance.addComponent(theFactory.create(theInstance, gameRuntime));
+        }
+        return theInstance;
+    }
+
+    public void removeGameObjectInstance(GameObjectInstance aInstance) {
+        if (instances.remove(aInstance)) {
+            gameRuntime.getEventManager().fire(new GameObjectInstanceRemovedFromSceneEvent(this, aInstance));
+        }
+    }
+
+    public void removeGameObject(GameObject aGameObject) {
+        Set<GameObjectInstance> theInstances = new HashSet<GameObjectInstance>(instances);
+        for (GameObjectInstance theInstance : theInstances) {
+            if (theInstance.getOwnerGameObject() == aGameObject) {
+                removeGameObjectInstance(theInstance);
+            }
+        }
+        if (objects.remove(aGameObject)) {
+            gameRuntime.getEventManager().fire(new GameObjectRemovedFromSceneEvent(this, aGameObject));
+        }
+    }
+
+    public EventSheet createNewEventSheet() {
+        EventSheet theSheet = new EventSheet(this);
+        eventSheets.add(theSheet);
+        gameRuntime.getEventManager().fire(new EventSheetAddedToSceneEvent(theSheet));
+        return theSheet;
+    }
+
+    public void removeEventSheet(EventSheet aEventSheet) {
+        if (eventSheets.remove(aEventSheet)) {
+            gameRuntime.getEventManager().fire(new EventSheetRemovedFromSceneEvent(aEventSheet));
+        }
+    }
+
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<String, Object>();
         theResult.put("name", name.get());
@@ -128,33 +186,6 @@ public class GameScene {
         }
         theResult.put("eventsheets", theEventSheets);
         return theResult;
-    }
-
-    public GameObject findGameObjectByID(String aObjectUUID) {
-        for (GameObject theObject : objects) {
-            if (theObject.uuidProperty().get().equals(aObjectUUID)) {
-                return theObject;
-            }
-        }
-        return null;
-    }
-
-    public GameObjectInstance findGameObjectInstanceByID(String aInstanceUUID) {
-        for (GameObjectInstance theInstance : instances) {
-            if (theInstance.uuidProperty().get().equals(aInstanceUUID)) {
-                return theInstance;
-            }
-        }
-        return null;
-    }
-
-    public GameObjectInstance createFrom(GameObject aGameObject) {
-        GameObjectInstance theInstance = new GameObjectInstance(gameRuntime.getEventManager(), aGameObject);
-        theInstance.nameProperty().setQuietly(aGameObject.nameProperty().get() + "_" + System.currentTimeMillis());
-        for (GameComponentTemplate theFactory : aGameObject.getComponentTemplates()) {
-            theInstance.addComponent(theFactory.create(theInstance, gameRuntime));
-        }
-        return theInstance;
     }
 
     public static GameScene deserialize(GameRuntime aGameRuntime, Map<String, Object> aSerializedData) {
@@ -193,28 +224,5 @@ public class GameScene {
             theScene.backgroundColor.setQuietly(Color.deserialize(theBackgroundColor));
         }
         return theScene;
-    }
-
-    public void removeGameObjectInstance(GameObjectInstance aInstance) {
-        instances.remove(aInstance);
-        gameRuntime.getEventManager().fire(new GameObjectInstanceRemovedFromSceneEvent(this, aInstance));
-    }
-
-    public void removeGameObject(GameObject aGameObject) {
-        Set<GameObjectInstance> theInstances = new HashSet<GameObjectInstance>(instances);
-        for (GameObjectInstance theInstance : theInstances) {
-            if (theInstance.getOwnerGameObject() == aGameObject) {
-                removeGameObjectInstance(theInstance);
-            }
-        }
-        objects.remove(aGameObject);
-        gameRuntime.getEventManager().fire(new GameObjectRemovedFromSceneEvent(this, aGameObject));
-    }
-
-    public EventSheet createNewEventSheet() {
-        EventSheet theSheet = new EventSheet(this);
-        eventSheets.add(theSheet);
-        gameRuntime.getEventManager().fire(new EventSheetAddedToSceneEvent(theSheet));
-        return theSheet;
     }
 }
