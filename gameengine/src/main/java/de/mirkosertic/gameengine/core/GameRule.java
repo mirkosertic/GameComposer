@@ -1,20 +1,18 @@
 package de.mirkosertic.gameengine.core;
 
+import de.mirkosertic.gameengine.ArrayUtils;
 import de.mirkosertic.gameengine.event.Property;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class GameRule {
 
     private final Property<String> name;
     private final Property<Condition> condition;
-    private final List<Action> actions = new ArrayList<Action>();
+    private Action[] actions;
 
     public GameRule() {
+        actions = new Action[0];
         name = new Property<String>(this, "name", (String) null);
         condition = new Property<Condition>(this, "condition", (Condition) null);
     }
@@ -27,16 +25,20 @@ public class GameRule {
         return condition;
     }
 
-    public List<Action> getActions() {
-        return Collections.unmodifiableList(actions);
+    public Action[] getActions() {
+        return actions;
     }
 
     public void addAction(Action aAction) {
-        actions.add(aAction);
+        List<Action> theActions = ArrayUtils.asList(actions);
+        theActions.add(aAction);
+        actions = theActions.toArray(new Action[theActions.size()]);
     }
 
     public void removeAction(Action aAction) {
-        actions.remove(aAction);
+        List<Action> theActions = ArrayUtils.asList(actions);
+        theActions.remove(aAction);
+        actions = theActions.toArray(new Action[theActions.size()]);
     }
 
     public Map<String, Object> serialize() {
@@ -70,12 +72,14 @@ public class GameRule {
             theResult.condition.setQuietly(theCondition);
         }
         List<Map<String, Object>> theActions = (List<Map<String, Object>>) aSerializedData.get("actions");
+        List<Action> theActionList = new ArrayList<Action>();
         if (theActions != null) {
             for (Map<String, Object> theActionData : theActions) {
                 String theActionTypeKey = (String) theActionData.get(Action.TYPE_ATTRIBUTE);
-                theResult.actions.add(aIORegistry.getActionUnmarshallerFor(theActionTypeKey).unmarshall(aIORegistry, theActionData));
+                theActionList.add(aIORegistry.getActionUnmarshallerFor(theActionTypeKey).unmarshall(aIORegistry, theActionData));
             }
         }
+        theResult.actions = theActionList.toArray(new Action[theActionList.size()]);
         return theResult;
     }
 }

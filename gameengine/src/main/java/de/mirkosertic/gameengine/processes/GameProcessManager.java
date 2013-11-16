@@ -1,24 +1,29 @@
 package de.mirkosertic.gameengine.processes;
 
+import de.mirkosertic.gameengine.ArrayUtils;
 import de.mirkosertic.gameengine.core.GameSystem;
 
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class GameProcessManager implements GameSystem {
 
-    private final Set<GameProcess> runningProcesses;
+    private GameProcess[] runningProcesses;
     private final Set<GameProcess> killedProcesses;
     private long processesAmountOfTime;
 
     GameProcessManager() {
-        runningProcesses = new HashSet<GameProcess>();
+        runningProcesses = new GameProcess[0];
         killedProcesses = new HashSet<GameProcess>();
         processesAmountOfTime = 0;
     }
 
     void start(GameProcess aProcess) {
-        runningProcesses.add(aProcess);
+        List<GameProcess> theProcesses = ArrayUtils.asList(runningProcesses);
+        theProcesses.add(aProcess);
+        runningProcesses = theProcesses.toArray(new GameProcess[theProcesses.size()]);
         aProcess.started(this);
     }
 
@@ -35,8 +40,13 @@ public class GameProcessManager implements GameSystem {
             for (GameProcess theProcess : runningProcesses) {
                 theProcess.proceedGame(aGameTime, processesAmountOfTime);
             }
-            runningProcesses.removeAll(killedProcesses);
-            killedProcesses.clear();
+
+            if (killedProcesses.size() > 0) {
+                List<GameProcess> theRunningProcesses = ArrayUtils.asList(runningProcesses);
+                theRunningProcesses.removeAll(killedProcesses);
+                runningProcesses = theRunningProcesses.toArray(new GameProcess[theRunningProcesses.size()]);
+                killedProcesses.clear();
+            }
             processesAmountOfTime = 0;
         }
     }

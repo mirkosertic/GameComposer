@@ -15,7 +15,7 @@ import java.util.ResourceBundle;
 public class MessageBox {
 
     public enum ButtonType {
-        YES, NO;
+        YES, NO
     }
 
     @Inject

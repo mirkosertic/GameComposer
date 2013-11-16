@@ -121,7 +121,7 @@ public class GWTRenderer implements EntryPoint {
             }
         });
 
-        canvas.addKeyDownHandler(new KeyDownHandler() {
+        RootPanel.get().addHandler(new KeyDownHandler() {
             @Override
             public void onKeyDown(KeyDownEvent aEvent) {
                 GameKeyCode theCode = GWTKeyCodeTranslator.translate(aEvent.getNativeKeyCode());
@@ -129,33 +129,34 @@ public class GWTRenderer implements EntryPoint {
                     theEventManager.fire(new KeyPressedGameEvent(theCode));
                 }
             }
-        });
-        canvas.addKeyUpHandler(new KeyUpHandler() {
+        }, KeyDownEvent.getType());
+        RootPanel.get().addHandler(new KeyUpHandler() {
             @Override
-            public void onKeyUp(KeyUpEvent aEvent) {
-                GameKeyCode theCode = GWTKeyCodeTranslator.translate(aEvent.getNativeKeyCode());
+            public void onKeyUp(KeyUpEvent keyDownEvent) {
+                GameKeyCode theCode = GWTKeyCodeTranslator.translate(keyDownEvent.getNativeKeyCode());
                 if (theCode != null) {
                     theEventManager.fire(new KeyReleasedGameEvent(theCode));
                 }
             }
-        });
-        canvas.addKeyPressHandler(new KeyPressHandler() {
+        }, KeyUpEvent.getType());
+        RootPanel.get().addHandler(new KeyPressHandler() {
             @Override
-            public void onKeyPress(KeyPressEvent aKeyPressEvent) {
-                GameKeyCode theGameKeyCode = GameKeyCode.fromChar(aKeyPressEvent.getCharCode());
+            public void onKeyPress(KeyPressEvent aEvent) {
+                GameKeyCode theGameKeyCode = GameKeyCode.fromChar(aEvent.getCharCode());
                 if (theGameKeyCode != null) {
                     theEventManager.fire(new KeyPressedGameEvent(theGameKeyCode));
                 }
             }
-        });
+        }, KeyPressEvent.getType());
+        RootPanel.get().sinkEvents(Event.KEYEVENTS);
 
         switch (theCameraComponent.getTemplate().typeProperty().get()) {
-        case FOLLOWPLAYER:
-            theCameraComponent.centerOn(thePlayerInstance);
-            theEventManager.fire(new StartProcessEvent(new FollowCameraProcess(theCameraObjectInstance, thePlayerInstance)));
-            break;
-        case CENTERONSCENE:
-            break;
+            case FOLLOWPLAYER:
+                theCameraComponent.centerOn(thePlayerInstance);
+                theEventManager.fire(new StartProcessEvent(new FollowCameraProcess(theCameraObjectInstance, thePlayerInstance)));
+                break;
+            case CENTERONSCENE:
+                break;
         }
 
         canvas.setFocus(true);

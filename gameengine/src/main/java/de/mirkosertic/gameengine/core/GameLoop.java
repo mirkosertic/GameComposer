@@ -1,12 +1,9 @@
 package de.mirkosertic.gameengine.core;
 
-import java.util.HashSet;
-import java.util.Set;
-
 public class GameLoop implements Runnable {
 
     private boolean shutdownSignal;
-    private final Set<GameView> views;
+    private final GameView[] views;
     private final GameScene scene;
     private final GameRuntime runtime;
     private final long startTime;
@@ -14,8 +11,7 @@ public class GameLoop implements Runnable {
     private final GameLoopThrottle throttle;
 
     GameLoop(GameScene aScene, GameView aHumanGameView, GameRuntime aRuntime, GameLoopThrottle aThrottle) {
-        views = new HashSet<GameView>();
-        views.add(aHumanGameView);
+        views = new GameView[] {aHumanGameView};
         shutdownSignal = false;
         runtime = aRuntime;
         scene = aScene;

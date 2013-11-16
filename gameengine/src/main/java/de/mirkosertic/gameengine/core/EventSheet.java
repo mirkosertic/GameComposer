@@ -1,18 +1,15 @@
 package de.mirkosertic.gameengine.core;
 
+import de.mirkosertic.gameengine.ArrayUtils;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class EventSheet {
 
     private final Property<String> nameProperty;
-    private final List<GameRule> rules;
+    private GameRule[] rules;
 
     private final GameScene gameScene;
 
@@ -20,7 +17,7 @@ public class EventSheet {
         GameEventManager theEventManager = aGameScene.getRuntime().getEventManager();
 
         nameProperty = new Property<String>(this, "name", theEventManager);
-        rules = new ArrayList<GameRule>();
+        rules = new GameRule[]{};
         gameScene = aGameScene;
     }
 
@@ -32,8 +29,8 @@ public class EventSheet {
         return nameProperty;
     }
 
-    public List<GameRule> getRules() {
-        return Collections.unmodifiableList(rules);
+    public GameRule[] getRules() {
+        return rules;
     }
 
     public Map<String, Object> serialize() {
@@ -56,19 +53,25 @@ public class EventSheet {
         }
 
         List<Map<String, Object>> theRules = (List<Map<String, Object>>) aSerializedData.get("rules");
+        List<GameRule> theRuleList = new ArrayList<GameRule>();
         if (theRules != null) {
             for (Map<String, Object> theRuleData : theRules) {
-                theResult.rules.add(GameRule.unmarshall(aIORegistry, theResult, theRuleData));
+                theRuleList.add(GameRule.unmarshall(aIORegistry, theResult, theRuleData));
             }
         }
+        theResult.rules = theRuleList.toArray(new GameRule[theRuleList.size()]);
         return theResult;
     }
 
     public void addRule(GameRule aNewRule) {
-        rules.add(aNewRule);
+        List<GameRule> theRules = ArrayUtils.asList(rules);
+        theRules.add(aNewRule);
+        rules = theRules.toArray(new GameRule[theRules.size()]);
     }
 
     public void removeRule(GameRule aGameRule) {
-        rules.remove(aGameRule);
+        List<GameRule> theRules = ArrayUtils.asList(rules);
+        theRules.remove(aGameRule);
+        rules = theRules.toArray(new GameRule[theRules.size()]);
     }
 }
