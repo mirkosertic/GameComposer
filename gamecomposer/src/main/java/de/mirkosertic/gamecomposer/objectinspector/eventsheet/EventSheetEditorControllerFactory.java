@@ -3,15 +3,20 @@ package de.mirkosertic.gamecomposer.objectinspector.eventsheet;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ResourceBundle;
+
+import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorFactory;
+import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorFactoryType;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
 import de.mirkosertic.gamecomposer.FXMLLoaderFactory;
 import de.mirkosertic.gameengine.core.EventSheet;
 
-public class EventSheetEditorControllerFactory {
+@ObjectInspectorFactoryType(clazz = EventSheet.class)
+public class EventSheetEditorControllerFactory implements ObjectInspectorFactory<EventSheet, EventSheetEditorController> {
 
     @Inject
     FXMLLoaderFactory fxmlLoaderFactory;

@@ -1,6 +1,8 @@
 package de.mirkosertic.gamecomposer.objectinspector.statictemplate;
 
 import de.mirkosertic.gamecomposer.FXMLLoaderFactory;
+import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorFactory;
+import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorFactoryType;
 import de.mirkosertic.gameengine.physics.StaticComponentTemplate;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,7 +12,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ResourceBundle;
 
-public class StaticTemplateEditorControllerFactory {
+@ObjectInspectorFactoryType(clazz = StaticComponentTemplate.class)
+public class StaticTemplateEditorControllerFactory implements ObjectInspectorFactory<StaticComponentTemplate, StaticTemplateEditorController> {
 
     @Inject
     FXMLLoaderFactory fxmlLoaderFactory;
