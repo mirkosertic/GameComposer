@@ -1,5 +1,6 @@
 package de.mirkosertic.gamecomposer.contentarea.eventsheet;
 
+import de.mirkosertic.gamecomposer.ChildController;
 import de.mirkosertic.gamecomposer.FlushResourceCacheEvent;
 import de.mirkosertic.gamecomposer.ObjectSelectedEvent;
 import de.mirkosertic.gamecomposer.ShutdownEvent;

@@ -1,13 +1,10 @@
 package de.mirkosertic.gamecomposer.contentarea;
 
 import de.mirkosertic.gamecomposer.*;
-import de.mirkosertic.gamecomposer.contentarea.eventsheet.EventSheetEditorController;
-import de.mirkosertic.gamecomposer.contentarea.eventsheet.EventSheetEditorControllerFactory;
-import de.mirkosertic.gamecomposer.contentarea.gamescene.GameSceneEditorController;
-import de.mirkosertic.gamecomposer.contentarea.gamescene.GameSceneEditorControllerFactory;
 import de.mirkosertic.gameengine.core.EventSheet;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.event.PropertyChanged;
+
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -18,8 +15,11 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 
 import javax.enterprise.event.Observes;
+import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,10 +33,8 @@ public class ContentAreaController implements ChildController {
     BorderPane welcomeBorderPane;
 
     @Inject
-    GameSceneEditorControllerFactory sceneEditorControllerFactory;
-
-    @Inject
-    EventSheetEditorControllerFactory eventSheetEditorControllerFactory;
+    @Any
+    Instance<Object> singleObjectFactory;
 
     private Node view;
     private final Map<ContentChildController, Tab> activeTabs;
@@ -138,6 +136,20 @@ public class ContentAreaController implements ChildController {
         }
     }
 
+    private ContentAreaFactoryType createQualifier(final Class aClass) {
+        return new ContentAreaFactoryType() {
+            @Override
+            public Class clazz() {
+                return aClass;
+            }
+
+            @Override
+            public Class<? extends Annotation> annotationType() {
+                return ContentAreaFactoryType.class;
+            }
+        };
+    }
+
     public void onEventSheetSelected(@Observes EventSheetSelectedEvent aEvent) {
         EventSheet theSheet = aEvent.getEventSheet();
         for (Map.Entry<ContentChildController, Tab> theTabEntry : activeTabs.entrySet()) {
@@ -147,7 +159,7 @@ public class ContentAreaController implements ChildController {
             }
         }
 
-        EventSheetEditorController theController = eventSheetEditorControllerFactory.createFor(theSheet);
+        ContentChildController theController = (ContentChildController) ((ContentAreaFactory) singleObjectFactory.select(createQualifier(EventSheet.class)).get()).create(theSheet);
         Tab theTab = new Tab(theSheet.nameProperty().get());
         theTab.setContent(theController.getView());
 
@@ -167,7 +179,7 @@ public class ContentAreaController implements ChildController {
             }
         }
 
-        GameSceneEditorController theSceneEditorController = sceneEditorControllerFactory.createFor(theScene);
+        ContentChildController theSceneEditorController = (ContentChildController) ((ContentAreaFactory) singleObjectFactory.select(createQualifier(GameScene.class)).get()).create(theScene);
         Tab theTab = new Tab(theScene.nameProperty().get());
         theTab.setContent(theSceneEditorController.getView());
 

@@ -2,6 +2,8 @@ package de.mirkosertic.gamecomposer.contentarea.gamescene;
 
 import de.mirkosertic.gamecomposer.FXMLLoaderFactory;
 import de.mirkosertic.gamecomposer.ObjectSelectedEvent;
+import de.mirkosertic.gamecomposer.contentarea.ContentAreaFactory;
+import de.mirkosertic.gamecomposer.contentarea.ContentAreaFactoryType;
 import de.mirkosertic.gameengine.camera.CameraComponent;
 import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.event.GameEventManager;
@@ -18,7 +20,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ResourceBundle;
 
-public class GameSceneEditorControllerFactory {
+@ContentAreaFactoryType(clazz = GameScene.class)
+public class GameSceneEditorControllerFactory implements ContentAreaFactory<GameScene, GameSceneEditorController> {
 
     @Inject
     Event<ObjectSelectedEvent> objectSelectedEventEvent;
@@ -26,7 +29,8 @@ public class GameSceneEditorControllerFactory {
     @Inject
     FXMLLoaderFactory fxmlLoaderFactory;
 
-    public GameSceneEditorController createFor(GameScene aScene) {
+    @Override
+    public GameSceneEditorController create(GameScene aScene) {
 
         final GameEventManager theEventManager = aScene.getRuntime().getEventManager();
         GameRuntime theRuntime = aScene.getRuntime();
