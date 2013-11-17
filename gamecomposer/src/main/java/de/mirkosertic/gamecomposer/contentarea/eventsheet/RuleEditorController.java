@@ -8,14 +8,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.mirkosertic.gameengine.action.SetPropertyCommand;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -33,9 +31,15 @@ import de.mirkosertic.gameengine.action.PlaySoundAction;
 import de.mirkosertic.gameengine.core.KeyReleased;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.physics.GameObjectCollision;
-import de.mirkosertic.gameengine.types.ResourceName;
 import de.mirkosertic.gameengine.action.SetGameObjectInstancePropertyAction;
 import de.mirkosertic.gameengine.action.SetGameObjectPropertyAction;
+import de.mirkosertic.gamecomposer.contentarea.eventsheet.playsound.PlaySoundEditorController;
+import de.mirkosertic.gamecomposer.contentarea.eventsheet.playsound.PlaySoundEditorControllerFactory;
+import de.mirkosertic.gamecomposer.contentarea.eventsheet.setgameobjectinstanceproperty.SetGameObjectInstancePropertyEditorController;
+import de.mirkosertic.gamecomposer.contentarea.eventsheet.setgameobjectinstanceproperty.SetGameObjectInstancePropertyEditorControllerFactory;
+import de.mirkosertic.gamecomposer.contentarea.eventsheet.setgameobjectproperty.SetGameObjectPropertyEditorController;
+import de.mirkosertic.gamecomposer.contentarea.eventsheet.setgameobjectproperty.SetGameObjectPropertyEditorControllerFactory;
+
 
 import javax.inject.Inject;
 
@@ -59,6 +63,15 @@ public class RuleEditorController implements ChildController {
     @Inject
     ControlFactory controlFactory;
 
+    @Inject
+    PlaySoundEditorControllerFactory playSoundEditorControllerFactory;
+
+    @Inject
+    SetGameObjectInstancePropertyEditorControllerFactory setGameObjectInstancePropertyEditorFactory;
+
+    @Inject
+    SetGameObjectPropertyEditorControllerFactory setGameObjectPropertyEditorControllerFactory;
+
     private Node view;
     private GameRule gameRule;
     private EventSheet eventSheet;
@@ -76,7 +89,7 @@ public class RuleEditorController implements ChildController {
 
         knownEventTypes = new HashMap<>();
         knownEventTypes.put(GameLoopRun.class.getSimpleName(), GameLoopRun.class);
-        knownEventTypes.put(KeyPressedGame.class.getSimpleName(), KeyPressedGame.class);
+        knownEventTypes.put(KeyPressed.class.getSimpleName(), KeyPressed.class);
         knownEventTypes.put(KeyReleased.class.getSimpleName(), KeyReleased.class);
         knownEventTypes.put(GameObjectCollision.class.getSimpleName(), GameObjectCollision.class);
 
@@ -154,116 +167,18 @@ public class RuleEditorController implements ChildController {
 
             actions.getChildren().add(theActionInfo);
 
-            GridPane theActionProperties = new GridPane();
-            theActionProperties.setPadding(new Insets(5, 5, 5, 5));
-            theActionProperties.setVgap(5);
-            int theActionRow = 0;
-
-            for (Field theField : theAction.getClass().getDeclaredFields()) {
-                theField.setAccessible(true);
-                final String theFieldName = theField.getName();
-                if (theField.getType().isAssignableFrom(Property.class)) {
-
-                    ParameterizedType theParamType = (ParameterizedType) theField.getGenericType();
-                    Type thePropertyType = theParamType.getActualTypeArguments()[0];
-                    if (thePropertyType == ResourceName.class) {
-                        try {
-                            Label theLabel = new Label(theFieldName + ":");
-                            theLabel.setAlignment(Pos.CENTER_LEFT);
-                            theActionProperties.add(theLabel, 0, theActionRow);
-
-                            Property<ResourceName> theProperty = (Property<ResourceName>) theField.get(theAction);
-                            Node theNode = controlFactory.createResourceSelectorFor(theProperty, eventSheet.getGameScene(), view);
-                            theActionProperties.add(theNode, 1, theActionRow);
-                        } catch (IllegalAccessException e) {
-                            // should not happen
-                            throw new RuntimeException(e);
-                        }
-                    }
-                    if (thePropertyType == String.class) {
-                        try {
-                            Label theLabel = new Label(theFieldName + ":");
-                            theLabel.setAlignment(Pos.CENTER_LEFT);
-                            theActionProperties.add(theLabel, 0, theActionRow);
-
-                            final Property<String> theProperty = (Property<String>) theField.get(theAction);
-                            TextField theNode = new TextField();
-                            PropertyBinder.bindUIToBean(theProperty, theNode.textProperty());
-                            theActionProperties.add(theNode, 1, theActionRow);
-                        } catch (Exception e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                    if (thePropertyType == Boolean.class) {
-                        try {
-                            final Property<Boolean> theProperty = (Property<Boolean>) theField.get(theAction);
-                            CheckBox theNode = new CheckBox();
-                            theNode.setText(theFieldName);
-                            PropertyBinder.bindUIToBean(theProperty, theNode.selectedProperty());
-                            theActionProperties.add(theNode, 1, theActionRow);
-                        } catch (Exception e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                    if (thePropertyType == GameKeyCode.class) {
-                        try {
-                            Label theLabel = new Label(theFieldName + ":");
-                            theLabel.setAlignment(Pos.CENTER_LEFT);
-                            theActionProperties.add(theLabel, 0, theActionRow);
-
-
-                            final Property<GameKeyCode> theProperty = (Property<GameKeyCode>) theField.get(theAction);
-                            ComboBox theNode = controlFactory.createKeyCodeCombobox(theProperty.get());
-                            PropertyBinder.bindUIToBean(theProperty, theNode.valueProperty());
-                            theActionProperties.add(theNode, 1, theActionRow);
-                        } catch (Exception e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                    if (thePropertyType == GameObject.class) {
-                        try {
-                            Label theLabel = new Label(theFieldName + ":");
-                            theLabel.setAlignment(Pos.CENTER_LEFT);
-                            theActionProperties.add(theLabel, 0, theActionRow);
-
-
-                            final Property<GameObject> theProperty = (Property<GameObject>) theField.get(theAction);
-                            ComboBox theNode = controlFactory.createGameObjectCombobox(theProperty.get(), eventSheet.getGameScene());
-                            PropertyBinder.bindUIToBean(theProperty, theNode.valueProperty());
-                            theActionProperties.add(theNode, 1, theActionRow);
-                        } catch (Exception e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                    if (thePropertyType == GameObjectInstance.class) {
-                        try {
-                            Label theLabel = new Label(theFieldName + ":");
-                            theLabel.setAlignment(Pos.CENTER_LEFT);
-                            theActionProperties.add(theLabel, 0, theActionRow);
-
-                            final Property<GameObjectInstance> theProperty = (Property<GameObjectInstance>) theField.get(theAction);
-                            ComboBox theNode = controlFactory.createGameObjectInstanceCombobox(theProperty.get(), eventSheet.getGameScene());
-                            PropertyBinder.bindUIToBean(theProperty, theNode.valueProperty());
-                            theActionProperties.add(theNode, 1, theActionRow);
-                        } catch (Exception e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-
-                    if (thePropertyType == SetPropertyCommand.class) {
-                        try {
-                            final Property<SetPropertyCommand> theProperty = (Property<SetPropertyCommand>) theField.get(theAction);
-                            //TODO: Implement here the generic stuff like property lookup
-                        } catch (Exception e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-
-                    theActionRow++;
-                }
+            if (theAction instanceof PlaySoundAction) {
+                PlaySoundEditorController theController = playSoundEditorControllerFactory.createFor(eventSheet.getGameScene(), (PlaySoundAction) theAction);
+                actions.getChildren().add(theController.getView());
             }
-
-            actions.getChildren().add(theActionProperties);
+            if (theAction instanceof SetGameObjectInstancePropertyAction) {
+                SetGameObjectInstancePropertyEditorController theController = setGameObjectInstancePropertyEditorFactory.createFor(eventSheet.getGameScene(), (SetGameObjectInstancePropertyAction) theAction);
+                actions.getChildren().add(theController.getView());
+            }
+            if (theAction instanceof SetGameObjectPropertyAction) {
+                SetGameObjectPropertyEditorController theController = setGameObjectPropertyEditorControllerFactory.createFor(eventSheet.getGameScene(), (SetGameObjectPropertyAction) theAction);
+                actions.getChildren().add(theController.getView());
+            }
         }
     }
 

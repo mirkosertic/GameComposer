@@ -20,7 +20,7 @@ public class PropertyAware {
         return properties.get(aPropertyName);
     }
 
-    protected boolean setPropertyByName(String aPropertyName, Object aPropertyValue) {
+    public boolean setPropertyByName(String aPropertyName, Object aPropertyValue) {
         Property theProperty = properties.get(aPropertyName);
         if (theProperty == null) {
             return false;

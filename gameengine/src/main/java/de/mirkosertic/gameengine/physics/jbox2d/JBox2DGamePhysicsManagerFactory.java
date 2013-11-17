@@ -1,8 +1,10 @@
 package de.mirkosertic.gameengine.physics.jbox2d;
 
+import de.mirkosertic.gameengine.core.GameLoopRun;
 import de.mirkosertic.gameengine.core.GameObjectConfigurationChanged;
 import de.mirkosertic.gameengine.core.GameObjectInstanceAddedToScene;
 import de.mirkosertic.gameengine.core.GameObjectInstanceRemovedFromScene;
+import de.mirkosertic.gameengine.event.GameEvent;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.physics.*;
@@ -48,6 +50,12 @@ public class JBox2DGamePhysicsManagerFactory implements GamePhysicsManagerFactor
             @Override
             public void handleGameEvent(GameObjectConfigurationChanged aEvent) {
                 thePhysicsManager.updateGameObjectConfiguration(aEvent.objectProperty().get());
+            }
+        });
+        aEventManager.register(null, GameLoopRun.class, new GameEventListener<GameLoopRun>() {
+            @Override
+            public void handleGameEvent(GameLoopRun aEvent) {
+                thePhysicsManager.proceedGame(aEvent.gameTimeProperty().get(), aEvent.elapsedTimeSinceLastLoopProperty().get());
             }
         });
         return thePhysicsManager;

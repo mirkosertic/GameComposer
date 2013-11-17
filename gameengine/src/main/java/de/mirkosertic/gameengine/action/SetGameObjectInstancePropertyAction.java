@@ -11,18 +11,19 @@ public class SetGameObjectInstancePropertyAction implements Action {
     public static final String TYPE_VALUE = "SetGameObjectInstancePropertyAction";
 
     private final Property<GameObjectInstance> instance;
-    private final Property<SetPropertyCommand> value;
+    private final Property<String> propertyName;
+    private final Property<Object> propertyValue;
 
     public SetGameObjectInstancePropertyAction() {
         instance = new Property<GameObjectInstance>(this, "gameObject", (GameObjectInstance) null);
-        value = new Property<SetPropertyCommand>(this, "value", (SetPropertyCommand) null);
+        propertyName = new Property<String>(this, "propertyName", (String) null);
+        propertyValue = new Property<Object>(this, "propertyValue", (Object) null);
     }
 
     @Override
     public void invoke(GameScene aScene) {
         GameObjectInstance theObject = instance.get();
-        SetPropertyCommand theCommand = value.get();
-        theObject.setPropertyByName(theCommand.propertyName, theCommand.propertyValue);
+        theObject.setPropertyByName(propertyName.get(), propertyValue.get());
     }
 
     @Override
@@ -30,15 +31,17 @@ public class SetGameObjectInstancePropertyAction implements Action {
         Map<String, Object> theResult = new HashMap<String, Object>();
         theResult.put(TYPE_ATTRIBUTE, TYPE_VALUE);
         theResult.put("instance", instance.get().uuidProperty().get());
-        theResult.put("value", value.get().serialize());
+        theResult.put("propertyName", propertyName.get());
+        theResult.put("propertyValue", ObjectValueOrReferenceEncoder.encodeValueOrReference(propertyValue.get()));
         return theResult;
     }
 
     public static SetGameObjectInstancePropertyAction unmarshall(Map<String, Object> aSerializedData, GameScene aGameScene) {
         SetGameObjectInstancePropertyAction theResult = new SetGameObjectInstancePropertyAction();
         theResult.instance.setQuietly(aGameScene.findGameObjectInstanceByID((String) aSerializedData.get("instance")));
-        Map<String, Object> thePropertyValue = (Map<String, Object>) aSerializedData.get("value");
-        theResult.value.setQuietly(SetPropertyCommand.deserialize(aGameScene, thePropertyValue));
+        theResult.propertyName.setQuietly((String) aSerializedData.get("propertyName"));
+        Map<String, Object> thePropertyValue = (Map<String, Object>) aSerializedData.get("propertyValue");
+        theResult.propertyValue.setQuietly(ObjectValueOrReferenceEncoder.decodeValueOrReference(aGameScene, thePropertyValue));
         return theResult;
     }
 }

@@ -26,8 +26,8 @@ public class PlatformComponentTemplate extends GameComponentTemplate<PlatformCom
         moveLeftKey = registerProperty(new Property<GameKeyCode>(this, "moveLeftKey", GameKeyCode.LEFT, aEventManager));
         moveRightKey = registerProperty(new Property<GameKeyCode>(this, "moveRightKey", GameKeyCode.RIGHT, aEventManager));
         jumpKey = registerProperty(new Property<GameKeyCode>(this, "jumpKey", GameKeyCode.UP, aEventManager));
-        leftRightImpulse = registerProperty(new Property<Float>(this, "leftRightImpulse", 9f, aEventManager));
-        jumpImpulse = registerProperty(new Property<Float>(this, "jumpImpulse", 1.4f, aEventManager));
+        leftRightImpulse = registerProperty(new Property<Float>(this, "leftRightImpulse", 4f, aEventManager));
+        jumpImpulse = registerProperty(new Property<Float>(this, "jumpImpulse", 2f, aEventManager));
     }
 
     @Override

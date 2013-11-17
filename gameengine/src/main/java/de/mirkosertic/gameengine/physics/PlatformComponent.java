@@ -16,6 +16,9 @@ public class PlatformComponent extends GameComponent {
     private final PlatformComponentTemplate platformTemplate;
 
     private boolean jumping;
+    private boolean leftKeyDown;
+    private boolean rightKeyDown;
+    private boolean upKeyDown;
 
     PlatformComponent(GameObjectInstance aObjectInstance, GameRuntime aGameRuntime) {
         gameRuntime = aGameRuntime;
@@ -29,8 +32,8 @@ public class PlatformComponent extends GameComponent {
     }
 
     public void registerEvents(GameRuntime aGameRuntime) {
-        aGameRuntime.getEventManager().register(objectInstance, KeyPressedGame.class, new GameEventListener<KeyPressedGame>() {
-            public void handleGameEvent(KeyPressedGame aEvent) {
+        aGameRuntime.getEventManager().register(objectInstance, KeyPressed.class, new GameEventListener<KeyPressed>() {
+            public void handleGameEvent(KeyPressed aEvent) {
                 handleKeyPressed(aEvent);
             }
         });
@@ -44,6 +47,12 @@ public class PlatformComponent extends GameComponent {
                 handleCollision(aEvent);
             }
         });
+        aGameRuntime.getEventManager().register(objectInstance, GameLoopRun.class, new GameEventListener<GameLoopRun>() {
+            public void handleGameEvent(GameLoopRun aEvent) {
+                handleGameLoop(aEvent);
+            }
+        });
+
     }
 
     boolean isJumping() {
@@ -54,21 +63,41 @@ public class PlatformComponent extends GameComponent {
         this.jumping = jumping;
     }
 
-    void handleKeyPressed(KeyPressedGame aEvent) {
-        if (aEvent.keyCodeProperty().get() == platformTemplate.moveLeftKeyProperty().get()) {
-            gameRuntime.getEventManager().fire(new ApplyForceToGameObjectInstance(objectInstance, -platformTemplate.leftRightImpulseProperty().get(), 0));
-        }
-        if (aEvent.keyCodeProperty().get() == platformTemplate.moveRightKeyProperty().get()) {
-            gameRuntime.getEventManager().fire(new ApplyForceToGameObjectInstance(objectInstance, platformTemplate.leftRightImpulseProperty().get(), 0f));
-        }
-        if (aEvent.keyCodeProperty().get() == platformTemplate.jumpKeyProperty().get() && !isJumping()) {
+    void handleGameLoop(GameLoopRun aEvent) {
+        if (upKeyDown && !isJumping()) {
             gameRuntime.getEventManager().fire(new ApplyImpulseToGameObjectInstance(objectInstance, 0, platformTemplate.jumpImpulseProperty().get()));
             setJumping(true);
+        }
+        if (rightKeyDown) {
+            gameRuntime.getEventManager().fire(new ApplyForceToGameObjectInstance(objectInstance, platformTemplate.leftRightImpulseProperty().get(), 0f));
+        }
+        if (leftKeyDown) {
+            gameRuntime.getEventManager().fire(new ApplyForceToGameObjectInstance(objectInstance, -platformTemplate.leftRightImpulseProperty().get(), 0));
+        }
+    }
+
+    void handleKeyPressed(KeyPressed aEvent) {
+        if (aEvent.keyCodeProperty().get() == platformTemplate.moveLeftKeyProperty().get()) {
+            leftKeyDown = true;
+        }
+        if (aEvent.keyCodeProperty().get() == platformTemplate.moveRightKeyProperty().get()) {
+            rightKeyDown = true;
+        }
+        if (aEvent.keyCodeProperty().get() == platformTemplate.jumpKeyProperty().get()) {
+            upKeyDown = true;
         }
     }
 
     void handleKeyReleased(KeyReleased aEvent) {
-        // Reset Acceleration to zero ?
+        if (aEvent.keyCodeProperty().get() == platformTemplate.moveLeftKeyProperty().get()) {
+            leftKeyDown = false;
+        }
+        if (aEvent.keyCodeProperty().get() == platformTemplate.moveRightKeyProperty().get()) {
+            rightKeyDown = false;
+        }
+        if (aEvent.keyCodeProperty().get() == platformTemplate.jumpKeyProperty().get()) {
+            upKeyDown = false;
+        }
     }
 
     void handleCollision(GameObjectCollision aEvent) {

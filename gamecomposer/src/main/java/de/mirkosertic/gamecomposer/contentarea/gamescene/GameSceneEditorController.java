@@ -253,7 +253,7 @@ public class GameSceneEditorController implements ContentChildController<GameSce
 
     @Override
     public void processKeyPressedEvent(KeyEvent aKeyEvent) {
-        gameScene.getRuntime().getEventManager().fire(new KeyPressedGame(GameKeyCode.valueOf(aKeyEvent.getCode().name())));
+        gameScene.getRuntime().getEventManager().fire(new KeyPressed(GameKeyCode.valueOf(aKeyEvent.getCode().name())));
     }
 
     @Override
