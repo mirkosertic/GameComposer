@@ -3,18 +3,8 @@ package de.mirkosertic.gamecomposer.objectinspector;
 import de.mirkosertic.gamecomposer.ChildController;
 import de.mirkosertic.gamecomposer.GameSceneCreatedEvent;
 import de.mirkosertic.gamecomposer.ObjectSelectedEvent;
-import de.mirkosertic.gamecomposer.objectinspector.cameratemplate.CameraTemplateEditorControllerFactory;
-import de.mirkosertic.gamecomposer.objectinspector.eventsheet.EventSheetEditorControllerFactory;
-import de.mirkosertic.gamecomposer.objectinspector.game.GameEditorControllerFactory;
-import de.mirkosertic.gamecomposer.objectinspector.gameobject.GameObjectEditorControllerFactory;
-import de.mirkosertic.gamecomposer.objectinspector.gameobjectinstance.GameObjectInstanceEditorControllerFactory;
-import de.mirkosertic.gamecomposer.objectinspector.gamescene.GameSceneEditorControllerFactory;
-import de.mirkosertic.gamecomposer.objectinspector.physicstemplate.PhysicsTemplateEditorControllerFactory;
-import de.mirkosertic.gamecomposer.objectinspector.platformtemplate.PlatformTemplateEditorControllerFactory;
-import de.mirkosertic.gamecomposer.objectinspector.spritetemplate.SpriteTemplateEditorControllerFactory;
-import de.mirkosertic.gamecomposer.objectinspector.statictemplate.StaticTemplateEditorControllerFactory;
-import de.mirkosertic.gameengine.camera.CameraComponentTemplate;
 import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.camera.CameraComponentTemplate;
 import de.mirkosertic.gameengine.physics.PhysicsComponentTemplate;
 import de.mirkosertic.gameengine.physics.PlatformComponentTemplate;
 import de.mirkosertic.gameengine.physics.StaticComponentTemplate;
@@ -26,8 +16,11 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.layout.VBox;
 
 import javax.enterprise.event.Observes;
+import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,34 +31,8 @@ public class ObjectInspectorController implements ChildController {
     VBox propertyPanels;
 
     @Inject
-    GameObjectEditorControllerFactory gameObjectEditorControllerFactory;
-
-    @Inject
-    GameSceneEditorControllerFactory gameSceneEditorControllerFactory;
-
-    @Inject
-    GameEditorControllerFactory gameEditorControllerFactory;
-
-    @Inject
-    StaticTemplateEditorControllerFactory staticTemplateEditorControllerFactory;
-
-    @Inject
-    CameraTemplateEditorControllerFactory cameraTemplateEditorControllerFactory;
-
-    @Inject
-    PlatformTemplateEditorControllerFactory platformTemplateEditorControllerFactory;
-
-    @Inject
-    PhysicsTemplateEditorControllerFactory physicsTemplateEditorControllerFactory;
-
-    @Inject
-    SpriteTemplateEditorControllerFactory spriteTemplateEditorControllerFactory;
-
-    @Inject
-    GameObjectInstanceEditorControllerFactory gameObjectInstanceEditorControllerFactory;
-
-    @Inject
-    EventSheetEditorControllerFactory eventSheetEditorControllerFactory;
+    @Any
+    Instance<Object> singleObjectFactory;
 
     private Node view;
     private Object currentSelection;
@@ -97,6 +64,20 @@ public class ObjectInspectorController implements ChildController {
         selectObject(aEvent.objectProperty().get());
     }
 
+    private ObjectInspectorFactoryType createQualifier(final Class aClass) {
+        return new ObjectInspectorFactoryType() {
+            @Override
+            public Class clazz() {
+                return aClass;
+            }
+
+            @Override
+            public Class<? extends Annotation> annotationType() {
+                return ObjectInspectorFactoryType.class;
+            }
+        };
+    }
+
     private void selectObject(Object aObject) {
         if (currentSelection != aObject) {
             currentSelection = aObject;
@@ -108,19 +89,19 @@ public class ObjectInspectorController implements ChildController {
             currentController.clear();
 
             if (aObject instanceof Game) {
-                ObjectInspectorChildController theController = gameEditorControllerFactory.create((Game) aObject);
+                ObjectInspectorChildController theController = (ObjectInspectorChildController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(Game.class)).get()).create(aObject);
                 TitledPane thePane = new TitledPane("Properties", theController.getView());
                 propertyPanels.getChildren().add(thePane);
                 currentController.add(theController);
             }
             if (aObject instanceof GameScene) {
-                ObjectInspectorChildController theController = gameSceneEditorControllerFactory.create((GameScene) aObject);
+                ObjectInspectorChildController theController = (ObjectInspectorChildController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(GameScene.class)).get()).create(aObject);
                 TitledPane thePane = new TitledPane("Properties", theController.getView());
                 propertyPanels.getChildren().add(thePane);
                 currentController.add(theController);
             }
             if (aObject instanceof EventSheet) {
-                ObjectInspectorChildController theController = eventSheetEditorControllerFactory.create((EventSheet) aObject);
+                ObjectInspectorChildController theController = (ObjectInspectorChildController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(EventSheet.class)).get()).create(aObject);
                 TitledPane thePane = new TitledPane("Properties", theController.getView());
                 propertyPanels.getChildren().add(thePane);
                 currentController.add(theController);
@@ -129,14 +110,14 @@ public class ObjectInspectorController implements ChildController {
 
                 GameObject theGameObject = (GameObject) aObject;
 
-                ObjectInspectorChildController theController = gameObjectEditorControllerFactory.create(theGameObject);
+                ObjectInspectorChildController theController = (ObjectInspectorChildController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(GameObject.class)).get()).create(aObject);
                 TitledPane thePane = new TitledPane("Properties", theController.getView());
                 propertyPanels.getChildren().add(thePane);
                 currentController.add(theController);
 
                 StaticComponentTemplate theStaticComponentTemplate = theGameObject.getComponentTemplate(StaticComponentTemplate.class);
                 if (theStaticComponentTemplate != null) {
-                    ObjectInspectorChildController theEditor = staticTemplateEditorControllerFactory.create(theStaticComponentTemplate);
+                    ObjectInspectorChildController theEditor = (ObjectInspectorChildController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(StaticComponentTemplate.class)).get()).create(theStaticComponentTemplate);
                     TitledPane theChildPane = new TitledPane("StaticComponent", theEditor.getView());
                     propertyPanels.getChildren().add(theChildPane);
                     currentController.add(theEditor);
@@ -144,7 +125,7 @@ public class ObjectInspectorController implements ChildController {
 
                 CameraComponentTemplate theCameraComponentTemplate = theGameObject.getComponentTemplate(CameraComponentTemplate.class);
                 if (theCameraComponentTemplate != null) {
-                    ObjectInspectorChildController theEditor = cameraTemplateEditorControllerFactory.create(theCameraComponentTemplate);
+                    ObjectInspectorChildController theEditor = (ObjectInspectorChildController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(CameraComponentTemplate.class)).get()).create(theCameraComponentTemplate);
                     TitledPane theChildPane = new TitledPane("CameraComponent", theEditor.getView());
                     propertyPanels.getChildren().add(theChildPane);
                     currentController.add(theEditor);
@@ -152,7 +133,7 @@ public class ObjectInspectorController implements ChildController {
 
                 PlatformComponentTemplate thePlatformComponentTemplate = theGameObject.getComponentTemplate(PlatformComponentTemplate.class);
                 if (thePlatformComponentTemplate != null) {
-                    ObjectInspectorChildController theEditor = platformTemplateEditorControllerFactory.create(thePlatformComponentTemplate);
+                    ObjectInspectorChildController theEditor = (ObjectInspectorChildController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(PlatformComponentTemplate.class)).get()).create(thePlatformComponentTemplate);
                     TitledPane theChildPane = new TitledPane("PlatformComponent", theEditor.getView());
                     propertyPanels.getChildren().add(theChildPane);
                     currentController.add(theEditor);
@@ -160,7 +141,7 @@ public class ObjectInspectorController implements ChildController {
 
                 PhysicsComponentTemplate thePhysicsComponentTemplate = theGameObject.getComponentTemplate(PhysicsComponentTemplate.class);
                 if (thePhysicsComponentTemplate != null) {
-                    ObjectInspectorChildController theEditor = physicsTemplateEditorControllerFactory.create(thePhysicsComponentTemplate);
+                    ObjectInspectorChildController theEditor = (ObjectInspectorChildController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(PhysicsComponentTemplate.class)).get()).create(thePhysicsComponentTemplate);
                     TitledPane theChildPane = new TitledPane("PhysicsComponent", theEditor.getView());
                     propertyPanels.getChildren().add(theChildPane);
                     currentController.add(theEditor);
@@ -168,7 +149,7 @@ public class ObjectInspectorController implements ChildController {
 
                 SpriteComponentTemplate theSpriteComponentTemplate = theGameObject.getComponentTemplate(SpriteComponentTemplate.class);
                 if (theSpriteComponentTemplate != null) {
-                    ObjectInspectorChildController theEditor = spriteTemplateEditorControllerFactory.create(theSpriteComponentTemplate);
+                    ObjectInspectorChildController theEditor = (ObjectInspectorChildController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(SpriteComponentTemplate.class)).get()).create(theSpriteComponentTemplate);
                     TitledPane theChildPane = new TitledPane("SpriteComponent", theEditor.getView());
                     propertyPanels.getChildren().add(theChildPane);
                     currentController.add(theEditor);
@@ -176,7 +157,7 @@ public class ObjectInspectorController implements ChildController {
 
             }
             if (aObject instanceof GameObjectInstance) {
-                ObjectInspectorChildController theController = gameObjectInstanceEditorControllerFactory.create((GameObjectInstance) aObject);
+                ObjectInspectorChildController theController = (ObjectInspectorChildController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(GameObjectInstance.class)).get()).create(aObject);
                 TitledPane thePane = new TitledPane("Properties", theController.getView());
                 propertyPanels.getChildren().add(thePane);
                 currentController.add(theController);

@@ -1,6 +1,8 @@
 package de.mirkosertic.gamecomposer.objectinspector.spritetemplate;
 
 import de.mirkosertic.gamecomposer.FXMLLoaderFactory;
+import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorFactory;
+import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorFactoryType;
 import de.mirkosertic.gameengine.sprites.SpriteComponentTemplate;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,7 +12,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ResourceBundle;
 
-public class SpriteTemplateEditorControllerFactory {
+@ObjectInspectorFactoryType(clazz = SpriteComponentTemplate.class)
+public class SpriteTemplateEditorControllerFactory implements ObjectInspectorFactory<SpriteComponentTemplate, SpriteTemplateEditorController> {
 
     @Inject
     FXMLLoaderFactory fxmlLoaderFactory;

@@ -1,6 +1,8 @@
 package de.mirkosertic.gamecomposer.objectinspector.cameratemplate;
 
 import de.mirkosertic.gamecomposer.FXMLLoaderFactory;
+import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorFactory;
+import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorFactoryType;
 import de.mirkosertic.gameengine.camera.CameraComponentTemplate;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,7 +12,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ResourceBundle;
 
-public class CameraTemplateEditorControllerFactory {
+@ObjectInspectorFactoryType(clazz = CameraComponentTemplate.class)
+public class CameraTemplateEditorControllerFactory implements ObjectInspectorFactory<CameraComponentTemplate, CameraTemplateEditorController> {
 
     @Inject
     FXMLLoaderFactory fxmlLoaderFactory;

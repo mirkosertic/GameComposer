@@ -1,6 +1,8 @@
 package de.mirkosertic.gamecomposer.objectinspector.gameobjectinstance;
 
 import de.mirkosertic.gamecomposer.FXMLLoaderFactory;
+import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorFactory;
+import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorFactoryType;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,7 +12,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ResourceBundle;
 
-public class GameObjectInstanceEditorControllerFactory {
+@ObjectInspectorFactoryType(clazz = GameObjectInstance.class)
+public class GameObjectInstanceEditorControllerFactory implements ObjectInspectorFactory<GameObjectInstance, GameObjectInstanceEditorController> {
 
     @Inject
     FXMLLoaderFactory fxmlLoaderFactory;
