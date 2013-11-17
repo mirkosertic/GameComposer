@@ -6,10 +6,9 @@ import java.util.Map;
 import de.mirkosertic.gameengine.core.Action;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.types.ResourceName;
-import de.mirkosertic.gameengine.event.GameEvent;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
-import de.mirkosertic.gameengine.sound.PlaySoundEvent;
+import de.mirkosertic.gameengine.sound.PlaySound;
 
 public class PlaySoundAction implements Action {
 
@@ -22,9 +21,9 @@ public class PlaySoundAction implements Action {
     }
 
     @Override
-    public void invoke(GameScene aScene, GameEvent aEvent) {
+    public void invoke(GameScene aScene) {
         GameEventManager theManager = aScene.getRuntime().getEventManager();
-        theManager.fire(new PlaySoundEvent(resourceName.get()));
+        theManager.fire(new PlaySound(resourceName.get()));
     }
 
     public Property<ResourceName> resourceNameProperty() {

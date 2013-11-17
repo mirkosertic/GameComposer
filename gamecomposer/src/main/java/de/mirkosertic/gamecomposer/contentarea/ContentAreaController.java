@@ -7,7 +7,7 @@ import de.mirkosertic.gamecomposer.contentarea.gamescene.GameSceneEditorControll
 import de.mirkosertic.gamecomposer.contentarea.gamescene.GameSceneEditorControllerFactory;
 import de.mirkosertic.gameengine.core.EventSheet;
 import de.mirkosertic.gameengine.core.GameScene;
-import de.mirkosertic.gameengine.event.PropertyChangeEvent;
+import de.mirkosertic.gameengine.event.PropertyChanged;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -120,7 +120,7 @@ public class ContentAreaController implements ChildController {
         }
     }
 
-    public void onObjectUpdated(@Observes PropertyChangeEvent aEvent) {
+    public void onObjectUpdated(@Observes PropertyChanged aEvent) {
         for (Map.Entry<ContentChildController, Tab> theTabEntry : activeTabs.entrySet()) {
             theTabEntry.getKey().onObjectUpdated(theTabEntry.getValue(), aEvent);
         }

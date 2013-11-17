@@ -7,8 +7,8 @@ public class GameProcessManagerFactory {
 
     public GameProcessManager create(GameEventManager aEventManager) {
         final GameProcessManager theManager = new GameProcessManager();
-        aEventManager.register(null, StartProcessEvent.class, new GameEventListener<StartProcessEvent>() {
-            public void handleGameEvent(StartProcessEvent aEvent) {
+        aEventManager.register(null, StartProcess.class, new GameEventListener<StartProcess>() {
+            public void handleGameEvent(StartProcess aEvent) {
                 theManager.start(aEvent.processProperty().get());
             }
         });

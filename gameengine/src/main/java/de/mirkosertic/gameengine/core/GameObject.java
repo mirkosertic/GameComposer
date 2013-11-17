@@ -9,9 +9,10 @@ import java.util.Set;
 
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
+import de.mirkosertic.gameengine.event.PropertyAware;
 import de.mirkosertic.gameengine.types.Size;
 
-public class GameObject {
+public class GameObject extends PropertyAware {
 
     private final GameScene gameScene;
 
@@ -30,9 +31,9 @@ public class GameObject {
         GameEventManager theManager = aScene.getRuntime().getEventManager();
 
         gameScene = aScene;
-        uuid = new Property<String>(this, "uuid", aUUID, theManager);
-        name = new Property<String>(this, "name", aName, theManager);
-        size = new Property<Size>(this, "size", new Size(64, 64), theManager);
+        uuid = registerProperty(new Property<String>(this, "uuid", aUUID, theManager));
+        name = registerProperty(new Property<String>(this, "name", aName, theManager));
+        size = registerProperty(new Property<Size>(this, "size", new Size(64, 64), theManager));
         componentTemplates = new HashMap<Class<GameComponentTemplate>, GameComponentTemplate>();
 
         name.setQuietly(aName);
@@ -55,9 +56,35 @@ public class GameObject {
         return size;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        GameObject that = (GameObject) o;
+
+        return !(uuid != null ? !uuid.equals(that.uuid) : that.uuid != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return uuid != null ? uuid.hashCode() : 0;
+    }
+
+    @Override
+    public boolean setPropertyByName(String aPropertyName, Object aPropertyValue) {
+        for (GameComponentTemplate theTemplate : componentTemplates.values()) {
+            if (theTemplate.setPropertyByName(aPropertyName, aPropertyValue)) {
+                return true;
+            }
+        }
+        return super.setPropertyByName(aPropertyName, aPropertyValue);
+    }
+
     public void add(GameComponentTemplate aComponentTemplate) {
         componentTemplates.put((Class<GameComponentTemplate>) aComponentTemplate.getClass(), aComponentTemplate);
-        gameScene.getRuntime().getEventManager().fire(new GameObjectConfigurationChangedEvent(this));
+        gameScene.getRuntime().getEventManager().fire(new GameObjectConfigurationChanged(this));
     }
 
     public <T extends GameComponentTemplate> T getComponentTemplate(Class<T> aComponentClass) {
@@ -100,21 +127,5 @@ public class GameObject {
         }
 
         return theObject;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        GameObject that = (GameObject) o;
-
-        return !(uuid != null ? !uuid.equals(that.uuid) : that.uuid != null);
-
-    }
-
-    @Override
-    public int hashCode() {
-        return uuid != null ? uuid.hashCode() : 0;
     }
 }

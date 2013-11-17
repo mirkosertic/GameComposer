@@ -10,7 +10,7 @@ import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
 
-public class PhysicsComponentTemplate implements GameComponentTemplate<PhysicsComponent> {
+public class PhysicsComponentTemplate extends GameComponentTemplate<PhysicsComponent> {
 
     private final GameObject owner;
 
@@ -23,11 +23,11 @@ public class PhysicsComponentTemplate implements GameComponentTemplate<PhysicsCo
     public PhysicsComponentTemplate(GameEventManager aEventManager, GameObject aOwner) {
         owner = aOwner;
 
-        active = new Property<Boolean>(this, "active", Boolean.TRUE, aEventManager);
-        fixedRotation = new Property<Boolean>(this, "fixedRotation", Boolean.FALSE, aEventManager);
-        density = new Property<Float>(this, "density", 1f, aEventManager);
-        friction = new Property<Float>(this, "friction", 1.8f, aEventManager);
-        restitution = new Property<Float>(this, "restitution", 0f, aEventManager);
+        active = registerProperty(new Property<Boolean>(this, "active", Boolean.TRUE, aEventManager));
+        fixedRotation = registerProperty(new Property<Boolean>(this, "fixedRotation", Boolean.FALSE, aEventManager));
+        density = registerProperty(new Property<Float>(this, "density", 1f, aEventManager));
+        friction = registerProperty(new Property<Float>(this, "friction", 1.8f, aEventManager));
+        restitution = registerProperty(new Property<Float>(this, "restitution", 0f, aEventManager));
     }
 
     @Override

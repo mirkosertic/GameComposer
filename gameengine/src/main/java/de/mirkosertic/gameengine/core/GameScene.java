@@ -64,7 +64,7 @@ public class GameScene {
         List<GameObject> theObjects = ArrayUtils.asList(objects);
         if (theObjects.add(aObject)) {
             objects = theObjects.toArray(new GameObject[theObjects.size()]);
-            gameRuntime.getEventManager().fire(new GameObjectAddedToSceneEvent(this, aObject));
+            gameRuntime.getEventManager().fire(new GameObjectAddedToScene(this, aObject));
         }
     }
 
@@ -72,7 +72,7 @@ public class GameScene {
         List<GameObjectInstance> theInstances = ArrayUtils.asList(instances);
         if (theInstances.add(aInstance)) {
             instances = theInstances.toArray(new GameObjectInstance[theInstances.size()]);
-            gameRuntime.getEventManager().fire(new GameObjectInstanceAddedToSceneEvent(this, aInstance));
+            gameRuntime.getEventManager().fire(new GameObjectInstanceAddedToScene(this, aInstance));
         }
     }
 
@@ -129,7 +129,7 @@ public class GameScene {
         List<GameObjectInstance> theInstances = ArrayUtils.asList(instances);
         if (theInstances.remove(aInstance)) {
             instances = theInstances.toArray(new GameObjectInstance[theInstances.size()]);
-            gameRuntime.getEventManager().fire(new GameObjectInstanceRemovedFromSceneEvent(this, aInstance));
+            gameRuntime.getEventManager().fire(new GameObjectInstanceRemovedFromScene(this, aInstance));
         }
     }
 
@@ -143,7 +143,7 @@ public class GameScene {
         List<GameObject> theObjects = ArrayUtils.asList(objects);
         if (theObjects.remove(aGameObject)) {
             objects = theObjects.toArray(new GameObject[theObjects.size()]);
-            gameRuntime.getEventManager().fire(new GameObjectRemovedFromSceneEvent(this, aGameObject));
+            gameRuntime.getEventManager().fire(new GameObjectRemovedFromScene(this, aGameObject));
         }
     }
 
@@ -153,7 +153,7 @@ public class GameScene {
         theSheets.add(theSheet);
         eventSheets = theSheets.toArray(new EventSheet[theSheets.size()]);
 
-        gameRuntime.getEventManager().fire(new EventSheetAddedToSceneEvent(theSheet));
+        gameRuntime.getEventManager().fire(new EventSheetAddedToScene(theSheet));
         return theSheet;
     }
 
@@ -161,7 +161,7 @@ public class GameScene {
         List<EventSheet> theSheets = ArrayUtils.asList(eventSheets);
         if (theSheets.remove(aEventSheet)) {
             eventSheets = theSheets.toArray(new EventSheet[theSheets.size()]);
-            gameRuntime.getEventManager().fire(new EventSheetRemovedFromSceneEvent(aEventSheet));
+            gameRuntime.getEventManager().fire(new EventSheetRemovedFromScene(aEventSheet));
         }
     }
 

@@ -4,9 +4,9 @@ import de.mirkosertic.gamecomposer.*;
 import de.mirkosertic.gamecomposer.contentarea.ContentChildController;
 import de.mirkosertic.gameengine.camera.CameraComponent;
 import de.mirkosertic.gameengine.core.*;
-import de.mirkosertic.gameengine.event.PropertyChangeEvent;
-import de.mirkosertic.gameengine.physics.DisableDynamicPhysicsEvent;
-import de.mirkosertic.gameengine.physics.EnableDynamicPhysicsEvent;
+import de.mirkosertic.gameengine.event.PropertyChanged;
+import de.mirkosertic.gameengine.physics.DisableDynamicPhysics;
+import de.mirkosertic.gameengine.physics.EnableDynamicPhysics;
 import de.mirkosertic.gameengine.types.Position;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -158,7 +158,7 @@ public class GameSceneEditorController implements ContentChildController<GameSce
 
             gameScene.addGameObjectInstance(theInstance);
 
-            gameScene.getRuntime().getEventManager().fire(new DisableDynamicPhysicsEvent(theInstance));
+            gameScene.getRuntime().getEventManager().fire(new DisableDynamicPhysics(theInstance));
 
             dndCreateInstance = theInstance;
 
@@ -182,7 +182,7 @@ public class GameSceneEditorController implements ContentChildController<GameSce
                 dndCreateInstance.positionProperty().set(gameView.snapToGrid(dndCreateInstance.positionProperty().get()));
             }
 
-            gameScene.getRuntime().getEventManager().fire(new EnableDynamicPhysicsEvent(dndCreateInstance));
+            gameScene.getRuntime().getEventManager().fire(new EnableDynamicPhysics(dndCreateInstance));
 
             dndCreateInstance = null;
         }
@@ -196,7 +196,7 @@ public class GameSceneEditorController implements ContentChildController<GameSce
             draggingInstance = theFoundInstances.get(0);
             draggingMouseWorldPosition = theWorldPosition;
 
-            gameScene.getRuntime().getEventManager().fire(new DisableDynamicPhysicsEvent(draggingInstance));
+            gameScene.getRuntime().getEventManager().fire(new DisableDynamicPhysics(draggingInstance));
 
             objectSelectedEventEvent.fire(new ObjectSelectedEvent(draggingInstance));
         } else {
@@ -240,7 +240,7 @@ public class GameSceneEditorController implements ContentChildController<GameSce
             if (snapToGrid.isSelected()) {
                 draggingInstance.positionProperty().set(gameView.snapToGrid(draggingInstance.positionProperty().get()));
             }
-            gameScene.getRuntime().getEventManager().fire(new EnableDynamicPhysicsEvent(draggingInstance));
+            gameScene.getRuntime().getEventManager().fire(new EnableDynamicPhysics(draggingInstance));
         }
         draggingMouseWorldPosition = null;
         draggingInstance = null;
@@ -253,12 +253,12 @@ public class GameSceneEditorController implements ContentChildController<GameSce
 
     @Override
     public void processKeyPressedEvent(KeyEvent aKeyEvent) {
-        gameScene.getRuntime().getEventManager().fire(new KeyPressedGameEvent(GameKeyCode.valueOf(aKeyEvent.getCode().name())));
+        gameScene.getRuntime().getEventManager().fire(new KeyPressedGame(GameKeyCode.valueOf(aKeyEvent.getCode().name())));
     }
 
     @Override
     public void processKeyReleasedEvent(KeyEvent aKeyEvent) {
-        gameScene.getRuntime().getEventManager().fire(new KeyReleasedGameEvent(GameKeyCode.valueOf(aKeyEvent.getCode().name())));
+        gameScene.getRuntime().getEventManager().fire(new KeyReleased(GameKeyCode.valueOf(aKeyEvent.getCode().name())));
     }
 
     @Override
@@ -273,7 +273,7 @@ public class GameSceneEditorController implements ContentChildController<GameSce
 
     @Override
     public void removed() {
-        gameScene.getRuntime().getEventManager().fire(new GameShutdownEvent());
+        gameScene.getRuntime().getEventManager().fire(new GameShutdown());
         gameView.stopTimer();
     }
 
@@ -285,7 +285,7 @@ public class GameSceneEditorController implements ContentChildController<GameSce
     @Override
     public void onShutdown(ShutdownEvent aEvent) {
         gameView.stopTimer();
-        gameScene.getRuntime().getEventManager().fire(new GameShutdownEvent());
+        gameScene.getRuntime().getEventManager().fire(new GameShutdown());
     }
 
     void onMouseClicked(MouseEvent aEvent) {
@@ -297,7 +297,7 @@ public class GameSceneEditorController implements ContentChildController<GameSce
         }
     }
 
-    public void onObjectUpdated(Tab aTab, PropertyChangeEvent aEvent) {
+    public void onObjectUpdated(Tab aTab, PropertyChanged aEvent) {
         if (aEvent.getOwner() == gameScene) {
             aTab.setText(gameScene.nameProperty().get());
         }

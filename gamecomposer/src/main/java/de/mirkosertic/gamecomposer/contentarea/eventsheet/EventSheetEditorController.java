@@ -6,7 +6,7 @@ import de.mirkosertic.gamecomposer.ShutdownEvent;
 import de.mirkosertic.gamecomposer.contentarea.ContentChildController;
 import de.mirkosertic.gameengine.core.EventSheet;
 import de.mirkosertic.gameengine.core.GameRule;
-import de.mirkosertic.gameengine.event.PropertyChangeEvent;
+import de.mirkosertic.gameengine.event.PropertyChanged;
 
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -70,7 +70,7 @@ public class EventSheetEditorController implements ContentChildController<EventS
     }
 
     @Override
-    public void onObjectUpdated(Tab aTab, PropertyChangeEvent aEvent) {
+    public void onObjectUpdated(Tab aTab, PropertyChanged aEvent) {
         if (aEvent.getOwner() == editingObject) {
             aTab.setText(editingObject.nameProperty().get());
         }

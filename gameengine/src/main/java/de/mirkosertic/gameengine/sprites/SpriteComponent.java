@@ -6,9 +6,9 @@ import java.util.Map;
 import de.mirkosertic.gameengine.core.GameComponent;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 
-public class SpriteComponent implements GameComponent {
+public class SpriteComponent extends GameComponent {
 
-    public static final String TYPE = "SpriteComponent";
+    static final String TYPE = "SpriteComponent";
 
     private final GameObjectInstance objectInstance;
 

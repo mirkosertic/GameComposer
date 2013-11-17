@@ -10,7 +10,7 @@
           }
         },
         "type" : "MatchEventCondition",
-        "eventtype" : "KeyPressedGameEvent"
+        "eventtype" : "KeyPressedGame"
       },
       "name" : "Play a sound while duke jumps",
       "actions" : [ {
