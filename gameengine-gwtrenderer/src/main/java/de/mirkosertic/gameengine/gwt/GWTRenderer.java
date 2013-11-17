@@ -109,8 +109,7 @@ public class GWTRenderer implements EntryPoint {
         theEventManager.fire(new SetScreenResolution(new Size(Window.getClientWidth(), Window.getClientHeight())));
 
         GameLoopFactory theGameLoopFactory = new GameLoopFactory();
-        final GameLoop theMainLoop = theGameLoopFactory.create(aGameScene, theGameView, theRuntime,
-                new DefaultGameLoopThrottle());
+        final GameLoop theMainLoop = theGameLoopFactory.create(aGameScene, theGameView, theRuntime);
 
         AnimationScheduler.get().requestAnimationFrame(new AnimationScheduler.AnimationCallback() {
             @Override
@@ -126,7 +125,7 @@ public class GWTRenderer implements EntryPoint {
             public void onKeyDown(KeyDownEvent aEvent) {
                 GameKeyCode theCode = GWTKeyCodeTranslator.translate(aEvent.getNativeKeyCode());
                 if (theCode != null) {
-                    theEventManager.fire(new KeyPressedGame(theCode));
+                    theEventManager.fire(new KeyPressed(theCode));
                 }
             }
         }, KeyDownEvent.getType());
@@ -144,7 +143,7 @@ public class GWTRenderer implements EntryPoint {
             public void onKeyPress(KeyPressEvent aEvent) {
                 GameKeyCode theGameKeyCode = GameKeyCode.fromChar(aEvent.getCharCode());
                 if (theGameKeyCode != null) {
-                    theEventManager.fire(new KeyPressedGame(theGameKeyCode));
+                    theEventManager.fire(new KeyPressed(theGameKeyCode));
                 }
             }
         }, KeyPressEvent.getType());

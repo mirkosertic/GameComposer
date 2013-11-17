@@ -5,7 +5,6 @@ import de.mirkosertic.gamecomposer.ObjectSelectedEvent;
 import de.mirkosertic.gameengine.camera.CameraComponent;
 import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.event.GameEventManager;
-import de.mirkosertic.gameengine.javafx.ThreadGameLoopThrottle;
 import de.mirkosertic.gameengine.physics.GamePhysicsManager;
 import de.mirkosertic.gameengine.types.Size;
 import javafx.beans.value.ChangeListener;
@@ -54,7 +53,7 @@ public class GameSceneEditorControllerFactory {
         EditorJXGameView theGameView = new EditorJXGameView(theRuntime, theCameraComponent, thePhysicsManager);
 
         GameLoopFactory theGameLoopFactory = new GameLoopFactory();
-        GameLoop theMainLoop = theGameLoopFactory.create(aScene, theGameView, theRuntime, new ThreadGameLoopThrottle());
+        GameLoop theMainLoop = theGameLoopFactory.create(aScene, theGameView, theRuntime);
 
         final CameraComponent theFinalCameraComponent = theCameraComponent;
 

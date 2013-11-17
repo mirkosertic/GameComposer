@@ -11,10 +11,6 @@ public class ActionManager implements GameSystem {
         scene = aScene;
     }
 
-    @Override
-    public void proceedGame(long aGameTime, long aElapsedTimeSinceLastLoop) {
-    }
-
     void onEvent(GameEvent aEvent) {
         for (EventSheet theSheet : scene.getEventSheets()) {
             for (GameRule theRule : theSheet.getRules()) {

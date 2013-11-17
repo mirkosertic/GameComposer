@@ -1,5 +1,4 @@
 {
-  "scenes" : [ "scene1" ],
   "name" : "Dukes Adventure",
   "defaultscene" : "scene1"
 }

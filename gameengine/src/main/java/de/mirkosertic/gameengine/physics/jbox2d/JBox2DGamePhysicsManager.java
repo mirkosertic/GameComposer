@@ -298,7 +298,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
         }
     }
 
-    public void proceedGame(long aGameTime, long aElapsedTimeSinceLastLoop) {
+    void proceedGame(long aGameTime, long aElapsedTimeSinceLastLoop) {
 
         insimulation = true;
 

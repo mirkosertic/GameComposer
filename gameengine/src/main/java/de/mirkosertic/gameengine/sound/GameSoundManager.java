@@ -18,8 +18,4 @@ public class GameSoundManager implements GameSystem {
     void onPlaySoundEvent(ResourceName aResourceName) {
         eventManager.fire(new StartProcess(new PlaySoundProcess(soundSystem, aResourceName)));
     }
-
-    @Override
-    public void proceedGame(long aGameTime, long aElapsedTimeSinceLastLoop) {
-    }
 }

@@ -8,15 +8,13 @@ public class GameLoop implements Runnable {
     private final GameRuntime runtime;
     private final long startTime;
     private long lastInvocation;
-    private final GameLoopThrottle throttle;
 
-    GameLoop(GameScene aScene, GameView aHumanGameView, GameRuntime aRuntime, GameLoopThrottle aThrottle) {
+    GameLoop(GameScene aScene, GameView aHumanGameView, GameRuntime aRuntime) {
         views = new GameView[] {aHumanGameView};
         shutdownSignal = false;
         runtime = aRuntime;
         scene = aScene;
         startTime = System.currentTimeMillis();
-        throttle = aThrottle;
     }
 
     public GameScene getScene() {
@@ -35,12 +33,9 @@ public class GameLoop implements Runnable {
         long theElapsedTime = theCurrentTime - lastInvocation;
         if (theElapsedTime > 0) {
 
-            runtime.getEventManager().fire(new GameLoopRun());
-
-            // Every game system gets a chance to do something
-            for (GameSystem theSystem : runtime.getSystems()) {
-                theSystem.proceedGame(theGameTime, theElapsedTime);
-            }
+            // The game systems like physics or process can react on this event
+            // and do something useful...
+            runtime.getEventManager().fire(new GameLoopRun(theGameTime, theElapsedTime));
 
             // Trigger re-rendering of all game views
             for (GameView aView : views) {
