@@ -2,7 +2,7 @@ package de.mirkosertic.gamecomposer.projectstructure;
 
 import de.mirkosertic.gamecomposer.*;
 import de.mirkosertic.gameengine.core.*;
-import de.mirkosertic.gameengine.event.PropertyChangeEvent;
+import de.mirkosertic.gameengine.event.PropertyChanged;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -152,33 +152,33 @@ public class ProjectStructureController implements ChildController {
         }
     }
 
-    public void onGameObjectAdded(@Observes GameObjectAddedToSceneEvent aEvent) {
+    public void onGameObjectAdded(@Observes GameObjectAddedToScene aEvent) {
         initializeTree(persistenceManager.getGame());
         projectStructureTreeView.getSelectionModel().select(treeItemMap.get(aEvent.objectProperty().get()));
     }
 
-    public void onGameObjectRemoved(@Observes GameObjectRemovedFromSceneEvent aEvent) {
+    public void onGameObjectRemoved(@Observes GameObjectRemovedFromScene aEvent) {
         initializeTree(persistenceManager.getGame());
     }
 
-    public void onEventSheetAdded(@Observes EventSheetAddedToSceneEvent aEvent) {
+    public void onEventSheetAdded(@Observes EventSheetAddedToScene aEvent) {
         initializeTree(persistenceManager.getGame());
     }
 
-    public void onGameObjectInstanceAdded(@Observes GameObjectInstanceAddedToSceneEvent aEvent) {
+    public void onGameObjectInstanceAdded(@Observes GameObjectInstanceAddedToScene aEvent) {
         initializeTree(persistenceManager.getGame());
         projectStructureTreeView.getSelectionModel().select(treeItemMap.get(aEvent.instanceProperty().get()));
     }
 
-    public void onGameObjectInstanceRemoved(@Observes GameObjectInstanceRemovedFromSceneEvent aEvent) {
+    public void onGameObjectInstanceRemoved(@Observes GameObjectInstanceRemovedFromScene aEvent) {
         initializeTree(persistenceManager.getGame());
     }
 
-    public void onEventSheetRemoved(@Observes EventSheetRemovedFromSceneEvent aEvent) {
+    public void onEventSheetRemoved(@Observes EventSheetRemovedFromScene aEvent) {
         initializeTree(persistenceManager.getGame());
     }
 
-    public void onObjectUpdatedEvent(@Observes PropertyChangeEvent aEvent) {
+    public void onObjectUpdatedEvent(@Observes PropertyChanged aEvent) {
         TreeItem theItem = treeItemMap.get(aEvent.getOwner());
         if (theItem != null) {
             theItem.setValue(null);

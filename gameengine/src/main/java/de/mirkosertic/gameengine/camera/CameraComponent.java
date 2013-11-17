@@ -10,9 +10,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CameraComponent implements GameComponent {
+public class CameraComponent extends GameComponent {
 
-    public static final String TYPE = "CameraComponent";
+    static final String TYPE = "CameraComponent";
 
     private final GameObjectInstance objectInstance;
 
@@ -23,8 +23,8 @@ public class CameraComponent implements GameComponent {
     }
 
     void registerEvents(GameRuntime aGameRuntime) {
-        aGameRuntime.getEventManager().register(objectInstance, SetScreenResolutionEvent.class, new GameEventListener<SetScreenResolutionEvent>() {
-            public void handleGameEvent(SetScreenResolutionEvent aEvent) {
+        aGameRuntime.getEventManager().register(objectInstance, SetScreenResolution.class, new GameEventListener<SetScreenResolution>() {
+            public void handleGameEvent(SetScreenResolution aEvent) {
                 setScreenSize(new Size(aEvent.screenSizeProperty().get().width, aEvent.screenSizeProperty().get().height));
             }
         });

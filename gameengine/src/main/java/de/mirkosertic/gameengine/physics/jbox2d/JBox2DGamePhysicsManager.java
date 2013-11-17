@@ -5,10 +5,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import de.mirkosertic.gameengine.event.PropertyChanged;
+import de.mirkosertic.gameengine.physics.*;
 import org.jbox2d.callbacks.ContactImpulse;
 import org.jbox2d.callbacks.ContactListener;
 import org.jbox2d.collision.Manifold;
-import org.jbox2d.collision.shapes.MassData;
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.collision.shapes.Shape;
 import org.jbox2d.collision.shapes.ShapeType;
@@ -25,23 +26,16 @@ import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.GameEventManager;
-import de.mirkosertic.gameengine.event.PropertyChangeEvent;
-import de.mirkosertic.gameengine.physics.GameObjectCollisionEvent;
-import de.mirkosertic.gameengine.physics.GamePhysicsManager;
-import de.mirkosertic.gameengine.physics.PhysicsComponent;
-import de.mirkosertic.gameengine.physics.PhysicsComponentTemplate;
-import de.mirkosertic.gameengine.physics.PhysicsDebugCanvas;
-import de.mirkosertic.gameengine.physics.PlatformComponent;
-import de.mirkosertic.gameengine.physics.StaticComponent;
+import de.mirkosertic.gameengine.physics.GameObjectCollision;
 import de.mirkosertic.gameengine.types.Angle;
 import de.mirkosertic.gameengine.types.Position;
 import de.mirkosertic.gameengine.types.Size;
 
 public class JBox2DGamePhysicsManager implements GamePhysicsManager {
 
-    private class FixedAngleListener implements GameEventListener<PropertyChangeEvent> {
+    private class FixedAngleListener implements GameEventListener<PropertyChanged> {
         @Override
-        public void handleGameEvent(PropertyChangeEvent aEvent) {
+        public void handleGameEvent(PropertyChanged aEvent) {
             PhysicsComponentTemplate thePhysicsComponentTemplate = (PhysicsComponentTemplate) aEvent.getOwner();
             for (Map.Entry<GameObjectInstance, Body> theEntry : dynamicObjects.entrySet()) {
                 if (theEntry.getKey().getOwnerGameObject() == thePhysicsComponentTemplate.getOwner()) {
@@ -51,9 +45,9 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
         }
     }
 
-    private class PositionChangeListener implements GameEventListener<PropertyChangeEvent> {
+    private class PositionChangeListener implements GameEventListener<PropertyChanged> {
         @Override
-        public void handleGameEvent(PropertyChangeEvent aEvent) {
+        public void handleGameEvent(PropertyChanged aEvent) {
             synchronized (physicsWorld) {
                 GameObjectInstance theInstance = (GameObjectInstance) aEvent.getOwner();
                 Body theBody = staticObjects.get(theInstance);
@@ -67,9 +61,9 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
         }
     }
 
-    private class SizeChangeListener implements GameEventListener<PropertyChangeEvent> {
+    private class SizeChangeListener implements GameEventListener<PropertyChanged> {
         @Override
-        public void handleGameEvent(PropertyChangeEvent aEvent) {
+        public void handleGameEvent(PropertyChanged aEvent) {
             if (!insimulation) {
                 GameObject theChangedObject = (GameObject) aEvent.getOwner();
 
@@ -123,7 +117,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
             public void beginContact(Contact aContact) {
                 Body theObjectA = aContact.getFixtureA().getBody();
                 Body theObjectB = aContact.getFixtureB().getBody();
-                eventManager.fire(new GameObjectCollisionEvent((GameObjectInstance) theObjectA.getUserData(),
+                eventManager.fire(new GameObjectCollision((GameObjectInstance) theObjectA.getUserData(),
                         (GameObjectInstance) theObjectB.getUserData()));
             }
 

@@ -1,7 +1,7 @@
 package de.mirkosertic.gamecomposer.contentarea;
 
 import de.mirkosertic.gamecomposer.*;
-import de.mirkosertic.gameengine.event.PropertyChangeEvent;
+import de.mirkosertic.gameengine.event.PropertyChanged;
 import javafx.scene.control.Tab;
 import javafx.scene.input.KeyEvent;
 
@@ -21,7 +21,7 @@ public interface ContentChildController<T> extends ChildController {
 
     void onShutdown(ShutdownEvent aEvent);
 
-    void onObjectUpdated(Tab aTab, PropertyChangeEvent aEvent);
+    void onObjectUpdated(Tab aTab, PropertyChanged aEvent);
 
     void onFlushResourceCache(FlushResourceCacheEvent aEvent);
 }

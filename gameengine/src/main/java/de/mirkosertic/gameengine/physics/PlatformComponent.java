@@ -7,9 +7,9 @@ import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.types.Position;
 
-public class PlatformComponent implements GameComponent {
+public class PlatformComponent extends GameComponent {
 
-    public static final String TYPE = "PlatformComponent";
+    static final String TYPE = "PlatformComponent";
 
     private final GameRuntime gameRuntime;
     private final GameObjectInstance objectInstance;
@@ -29,18 +29,18 @@ public class PlatformComponent implements GameComponent {
     }
 
     public void registerEvents(GameRuntime aGameRuntime) {
-        aGameRuntime.getEventManager().register(objectInstance, KeyPressedGameEvent.class, new GameEventListener<KeyPressedGameEvent>() {
-            public void handleGameEvent(KeyPressedGameEvent aEvent) {
+        aGameRuntime.getEventManager().register(objectInstance, KeyPressedGame.class, new GameEventListener<KeyPressedGame>() {
+            public void handleGameEvent(KeyPressedGame aEvent) {
                 handleKeyPressed(aEvent);
             }
         });
-        aGameRuntime.getEventManager().register(objectInstance, KeyReleasedGameEvent.class, new GameEventListener<KeyReleasedGameEvent>() {
-            public void handleGameEvent(KeyReleasedGameEvent aEvent) {
+        aGameRuntime.getEventManager().register(objectInstance, KeyReleased.class, new GameEventListener<KeyReleased>() {
+            public void handleGameEvent(KeyReleased aEvent) {
                 handleKeyReleased(aEvent);
             }
         });
-        aGameRuntime.getEventManager().register(objectInstance, GameObjectCollisionEvent.class, new GameEventListener<GameObjectCollisionEvent>() {
-            public void handleGameEvent(GameObjectCollisionEvent aEvent) {
+        aGameRuntime.getEventManager().register(objectInstance, GameObjectCollision.class, new GameEventListener<GameObjectCollision>() {
+            public void handleGameEvent(GameObjectCollision aEvent) {
                 handleCollision(aEvent);
             }
         });
@@ -54,7 +54,7 @@ public class PlatformComponent implements GameComponent {
         this.jumping = jumping;
     }
 
-    void handleKeyPressed(KeyPressedGameEvent aEvent) {
+    void handleKeyPressed(KeyPressedGame aEvent) {
         if (aEvent.keyCodeProperty().get() == platformTemplate.moveLeftKeyProperty().get()) {
             gameRuntime.getEventManager().fire(new ApplyForceToGameObjectInstance(objectInstance, -platformTemplate.leftRightImpulseProperty().get(), 0));
         }
@@ -67,11 +67,11 @@ public class PlatformComponent implements GameComponent {
         }
     }
 
-    void handleKeyReleased(KeyReleasedGameEvent aEvent) {
+    void handleKeyReleased(KeyReleased aEvent) {
         // Reset Acceleration to zero ?
     }
 
-    void handleCollision(GameObjectCollisionEvent aEvent) {
+    void handleCollision(GameObjectCollision aEvent) {
         GameObjectInstance theOtherInstance = aEvent.getOtherInstanceOrNullIfNotAffected(objectInstance);
         if (theOtherInstance != null) {
             Position theOtherPosition = theOtherInstance.positionProperty().get();

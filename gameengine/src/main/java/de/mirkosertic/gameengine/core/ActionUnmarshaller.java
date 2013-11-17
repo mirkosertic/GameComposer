@@ -6,5 +6,5 @@ public interface ActionUnmarshaller {
 
     String getTypeKey();
 
-    Action unmarshall(IORegistry aRegistry, Map<String, Object> aSerializedData);
+    Action unmarshall(Map<String, Object> aSerializedData, GameScene aGameScene);
 }

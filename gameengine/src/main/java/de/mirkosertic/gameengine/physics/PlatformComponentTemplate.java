@@ -11,7 +11,7 @@ import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
 
-public class PlatformComponentTemplate implements GameComponentTemplate<PlatformComponent> {
+public class PlatformComponentTemplate extends GameComponentTemplate<PlatformComponent> {
 
     private final GameObject owner;
 
@@ -23,11 +23,11 @@ public class PlatformComponentTemplate implements GameComponentTemplate<Platform
 
     public PlatformComponentTemplate(GameEventManager aEventManager, GameObject aOwner) {
         owner = aOwner;
-        moveLeftKey = new Property<GameKeyCode>(this, "moveLeftKey", GameKeyCode.LEFT, aEventManager);
-        moveRightKey = new Property<GameKeyCode>(this, "moveRightKey", GameKeyCode.RIGHT, aEventManager);
-        jumpKey = new Property<GameKeyCode>(this, "jumpKey", GameKeyCode.UP, aEventManager);
-        leftRightImpulse = new Property<Float>(this, "leftRightImpulse", 9f, aEventManager);
-        jumpImpulse = new Property<Float>(this, "jumpImpulse", 1.4f, aEventManager);
+        moveLeftKey = registerProperty(new Property<GameKeyCode>(this, "moveLeftKey", GameKeyCode.LEFT, aEventManager));
+        moveRightKey = registerProperty(new Property<GameKeyCode>(this, "moveRightKey", GameKeyCode.RIGHT, aEventManager));
+        jumpKey = registerProperty(new Property<GameKeyCode>(this, "jumpKey", GameKeyCode.UP, aEventManager));
+        leftRightImpulse = registerProperty(new Property<Float>(this, "leftRightImpulse", 9f, aEventManager));
+        jumpImpulse = registerProperty(new Property<Float>(this, "jumpImpulse", 1.4f, aEventManager));
     }
 
     @Override

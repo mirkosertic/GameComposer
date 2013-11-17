@@ -7,9 +7,9 @@ import de.mirkosertic.gameengine.core.GameObjectInstance;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PhysicsComponent implements GameComponent {
+public class PhysicsComponent extends GameComponent {
 
-    public static final String TYPE = "PhysicsComponent";
+    static final String TYPE = "PhysicsComponent";
 
     private final GameObjectInstance objectInstance;
 

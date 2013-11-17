@@ -35,7 +35,7 @@ public class GameLoop implements Runnable {
         long theElapsedTime = theCurrentTime - lastInvocation;
         if (theElapsedTime > 0) {
 
-            runtime.getEventManager().fire(new GameLoopRunEvent());
+            runtime.getEventManager().fire(new GameLoopRun());
 
             // Every game system gets a chance to do something
             for (GameSystem theSystem : runtime.getSystems()) {

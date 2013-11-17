@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
 
-<BorderPane id="BorderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" xmlns:fx="http://javafx.com/fxml" fx:controller="de.mirkosertic.gamecomposer.contentarea.eventsheet.RuleEditorController">
+<BorderPane id="BorderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="de.mirkosertic.gamecomposer.contentarea.eventsheet.RuleEditorController">
   <center>
     <VBox>
       <children>
@@ -38,7 +38,11 @@
             <VBox maxWidth="1.7976931348623157E308" HBox.hgrow="SOMETIMES" HBox.margin="$x1">
               <children>
                 <Label text="Filter conditions" />
-                <VBox fx:id="filterCoditions" maxWidth="1.7976931348623157E308" VBox.margin="$x2" />
+                <VBox fx:id="filterCoditions" maxWidth="1.7976931348623157E308">
+                  <VBox.margin>
+                    <Insets />
+                  </VBox.margin>
+                </VBox>
               </children>
             </VBox>
             <VBox maxWidth="1.7976931348623157E308" HBox.hgrow="SOMETIMES" HBox.margin="$x1">
@@ -48,8 +52,8 @@
                     <Insets />
                   </VBox.margin>
                 </Label>
-                <Hyperlink onAction="#onAddNewAction" text="Add new action..." />
-                <VBox fx:id="actions" maxWidth="1.7976931348623157E308" VBox.margin="$x2" />
+                <Hyperlink fx:id="addNewAction" onAction="#onAddNewAction" text="Add new action..." />
+                <HBox fx:id="actions" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="NEVER" />
               </children>
             </VBox>
             <Hyperlink onAction="#onRemoveRule" text="Remove rule" />

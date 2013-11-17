@@ -76,7 +76,7 @@ public class GameRule {
         if (theActions != null) {
             for (Map<String, Object> theActionData : theActions) {
                 String theActionTypeKey = (String) theActionData.get(Action.TYPE_ATTRIBUTE);
-                theActionList.add(aIORegistry.getActionUnmarshallerFor(theActionTypeKey).unmarshall(aIORegistry, theActionData));
+                theActionList.add(aIORegistry.getActionUnmarshallerFor(theActionTypeKey).unmarshall(theActionData, aEventSheet.getGameScene()));
             }
         }
         theResult.actions = theActionList.toArray(new Action[theActionList.size()]);

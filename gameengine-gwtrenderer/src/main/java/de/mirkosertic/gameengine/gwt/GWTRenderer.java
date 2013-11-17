@@ -20,7 +20,7 @@ import de.mirkosertic.gameengine.camera.CameraComponent;
 import de.mirkosertic.gameengine.camera.FollowCameraProcess;
 import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.event.GameEventManager;
-import de.mirkosertic.gameengine.processes.StartProcessEvent;
+import de.mirkosertic.gameengine.processes.StartProcess;
 import de.mirkosertic.gameengine.types.Size;
 
 public class GWTRenderer implements EntryPoint {
@@ -106,7 +106,7 @@ public class GWTRenderer implements EntryPoint {
         GWTGameView theGameView = new GWTGameView(theRuntime, canvas, theCameraComponent);
 
         theGameView.setSize(new Size(Window.getClientWidth(), Window.getClientHeight()));
-        theEventManager.fire(new SetScreenResolutionEvent(new Size(Window.getClientWidth(), Window.getClientHeight())));
+        theEventManager.fire(new SetScreenResolution(new Size(Window.getClientWidth(), Window.getClientHeight())));
 
         GameLoopFactory theGameLoopFactory = new GameLoopFactory();
         final GameLoop theMainLoop = theGameLoopFactory.create(aGameScene, theGameView, theRuntime,
@@ -126,7 +126,7 @@ public class GWTRenderer implements EntryPoint {
             public void onKeyDown(KeyDownEvent aEvent) {
                 GameKeyCode theCode = GWTKeyCodeTranslator.translate(aEvent.getNativeKeyCode());
                 if (theCode != null) {
-                    theEventManager.fire(new KeyPressedGameEvent(theCode));
+                    theEventManager.fire(new KeyPressedGame(theCode));
                 }
             }
         }, KeyDownEvent.getType());
@@ -135,7 +135,7 @@ public class GWTRenderer implements EntryPoint {
             public void onKeyUp(KeyUpEvent keyDownEvent) {
                 GameKeyCode theCode = GWTKeyCodeTranslator.translate(keyDownEvent.getNativeKeyCode());
                 if (theCode != null) {
-                    theEventManager.fire(new KeyReleasedGameEvent(theCode));
+                    theEventManager.fire(new KeyReleased(theCode));
                 }
             }
         }, KeyUpEvent.getType());
@@ -144,7 +144,7 @@ public class GWTRenderer implements EntryPoint {
             public void onKeyPress(KeyPressEvent aEvent) {
                 GameKeyCode theGameKeyCode = GameKeyCode.fromChar(aEvent.getCharCode());
                 if (theGameKeyCode != null) {
-                    theEventManager.fire(new KeyPressedGameEvent(theGameKeyCode));
+                    theEventManager.fire(new KeyPressedGame(theGameKeyCode));
                 }
             }
         }, KeyPressEvent.getType());
@@ -153,7 +153,7 @@ public class GWTRenderer implements EntryPoint {
         switch (theCameraComponent.getTemplate().typeProperty().get()) {
             case FOLLOWPLAYER:
                 theCameraComponent.centerOn(thePlayerInstance);
-                theEventManager.fire(new StartProcessEvent(new FollowCameraProcess(theCameraObjectInstance, thePlayerInstance)));
+                theEventManager.fire(new StartProcess(new FollowCameraProcess(theCameraObjectInstance, thePlayerInstance)));
                 break;
             case CENTERONSCENE:
                 break;

@@ -2,11 +2,12 @@ package de.mirkosertic.gameengine.core;
 
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
+import de.mirkosertic.gameengine.event.PropertyAware;
 import de.mirkosertic.gameengine.types.*;
 
 import java.util.*;
 
-public class GameObjectInstance {
+public class GameObjectInstance extends PropertyAware {
 
     private final Map<Class<GameComponent>, GameComponent> components;
 
@@ -19,10 +20,10 @@ public class GameObjectInstance {
 
     GameObjectInstance(GameEventManager aEventManager, GameObject aOwnerGameObject) {
 
-        uuid = new Property<String>(this, "uuid", de.mirkosertic.gameengine.types.UUID.randomUID(), aEventManager);
-        name = new Property<String>(this, "name", aEventManager);
-        position = new Property<Position>(this, "position", new Position(), aEventManager);
-        rotationAngle = new Property<Angle>(this, "rotationAngle", new Angle(0), aEventManager);
+        uuid = registerProperty(new Property<String>(this, "uuid", de.mirkosertic.gameengine.types.UUID.randomUID(), aEventManager));
+        name = registerProperty(new Property<String>(this, "name", aEventManager));
+        position = registerProperty(new Property<Position>(this, "position", new Position(), aEventManager));
+        rotationAngle = registerProperty(new Property<Angle>(this, "rotationAngle", new Angle(0), aEventManager));
 
         ownerGameObject = aOwnerGameObject;
         components = new HashMap<Class<GameComponent>, GameComponent>();
@@ -62,6 +63,16 @@ public class GameObjectInstance {
 
     public <T extends GameComponent> T getComponent(Class<T> aComponentClass) {
         return (T) components.get(aComponentClass);
+    }
+
+    @Override
+    public boolean setPropertyByName(String aPropertyName, Object aPropertyValue) {
+        for (GameComponent theComponent : components.values()) {
+            if (theComponent.setPropertyByName(aPropertyName, aPropertyValue)) {
+                return true;
+            }
+        }
+        return super.setPropertyByName(aPropertyName, aPropertyValue);
     }
 
     public Set<GameComponent> getComponents() {

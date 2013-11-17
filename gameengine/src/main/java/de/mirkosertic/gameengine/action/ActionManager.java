@@ -21,7 +21,7 @@ public class ActionManager implements GameSystem {
                 if (!theRule.conditionProperty().isNull()) {
                     if (theRule.conditionProperty().get().appliesTo(aEvent)) {
                         for (Action theAction : theRule.getActions()) {
-                            theAction.invoke(scene, aEvent);
+                            theAction.invoke(scene);
                         }
                     }
                 }

@@ -6,17 +6,17 @@ import java.util.Set;
 
 public class Property<T> extends ReadOnlyProperty<T> {
 
-    private final Set<GameEventListener<PropertyChangeEvent>> changeListener;
+    private final Set<GameEventListener<PropertyChanged>> changeListener;
 
-    public Property(Object aOwner, String aName, T aDefaultValue, GameEventListener<PropertyChangeEvent> aListener) {
+    public Property(Object aOwner, String aName, T aDefaultValue, GameEventListener<PropertyChanged> aListener) {
         super(aOwner, aName, aDefaultValue);
-        changeListener = new HashSet<GameEventListener<PropertyChangeEvent>>();
+        changeListener = new HashSet<GameEventListener<PropertyChanged>>();
         if (aListener != null) {
             changeListener.add(aListener);
         }
     }
 
-    public Property(Object aOwner, String aName, GameEventListener<PropertyChangeEvent> aListener) {
+    public Property(Object aOwner, String aName, GameEventListener<PropertyChanged> aListener) {
         this(aOwner, aName, null, aListener);
     }
 
@@ -28,8 +28,8 @@ public class Property<T> extends ReadOnlyProperty<T> {
         T theOldValue = value;
         value = aValue;
         Set<GameEventListener> theKnownListener = new HashSet<GameEventListener>(changeListener);
-        for (GameEventListener<PropertyChangeEvent> theListener : theKnownListener) {
-            theListener.handleGameEvent(new PropertyChangeEvent(this, theOldValue));
+        for (GameEventListener<PropertyChanged> theListener : theKnownListener) {
+            theListener.handleGameEvent(new PropertyChanged(this, theOldValue));
         }
     }
 
@@ -37,15 +37,15 @@ public class Property<T> extends ReadOnlyProperty<T> {
         value = aValue;
     }
 
-    public Set<GameEventListener<PropertyChangeEvent>> getChangeListener() {
+    public Set<GameEventListener<PropertyChanged>> getChangeListener() {
         return Collections.unmodifiableSet(changeListener);
     }
 
-    public void addChangeListener(GameEventListener<PropertyChangeEvent> aListener) {
+    public void addChangeListener(GameEventListener<PropertyChanged> aListener) {
         changeListener.add(aListener);
     }
 
-    public void removeChangeListener(GameEventListener<PropertyChangeEvent> aListener) {
+    public void removeChangeListener(GameEventListener<PropertyChanged> aListener) {
         changeListener.remove(aListener);
     }
 }

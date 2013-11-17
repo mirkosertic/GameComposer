@@ -59,7 +59,7 @@ public class GameSceneEditorControllerFactory {
         final CameraComponent theFinalCameraComponent = theCameraComponent;
 
         // Set defaults, this will be overridden
-        theEventManager.fire(new SetScreenResolutionEvent(new Size(200, 200)));
+        theEventManager.fire(new SetScreenResolution(new Size(200, 200)));
 
         try (InputStream fxml = GameSceneEditorController.class.getResourceAsStream("GameSceneEditor.fxml")) {
             FXMLLoader theLoader = fxmlLoaderFactory.createLoader();
@@ -71,13 +71,13 @@ public class GameSceneEditorControllerFactory {
             theController.centerBorderPane.widthProperty().addListener(new ChangeListener<Number>() {
                 @Override
                 public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
-                    theEventManager.fire(new SetScreenResolutionEvent(new Size((int) ((double) number2), theFinalCameraComponent.getScreenSize().height)));
+                    theEventManager.fire(new SetScreenResolution(new Size((int) ((double) number2), theFinalCameraComponent.getScreenSize().height)));
                 }
             });
             theController.centerBorderPane.heightProperty().addListener(new ChangeListener<Number>() {
                 @Override
                 public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
-                    theEventManager.fire(new SetScreenResolutionEvent(new Size(theFinalCameraComponent.getScreenSize().width, (int) ((double) number2))));
+                    theEventManager.fire(new SetScreenResolution(new Size(theFinalCameraComponent.getScreenSize().width, (int) ((double) number2))));
                 }
             });
             theGameView.widthProperty().bind(theController.centerBorderPane.widthProperty());

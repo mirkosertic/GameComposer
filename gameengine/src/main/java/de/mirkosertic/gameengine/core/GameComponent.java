@@ -1,14 +1,16 @@
 package de.mirkosertic.gameengine.core;
 
+import de.mirkosertic.gameengine.event.PropertyAware;
+
 import java.util.Map;
 
-public interface GameComponent {
+public abstract class GameComponent extends PropertyAware {
 
-    String TYPE_ATTRIBUTE = "type";
+    public static final String TYPE_ATTRIBUTE = "type";
 
-    Map<String, Object> serialize();
+    public abstract Map<String, Object> serialize();
 
-    String getTypeKey();
+    public abstract String getTypeKey();
 
-    <T extends GameComponentTemplate> T getTemplate();
+    public abstract <T extends GameComponentTemplate> T getTemplate();
 }

@@ -5,7 +5,7 @@ import java.util.Map;
 
 import de.mirkosertic.gameengine.types.ResourceName;
 
-class ObjectValueOrReferenceEncoder {
+public class ObjectValueOrReferenceEncoder {
 
     public static Map<String, String> encodeValueOrReference(Object aValue) {
         Map<String, String> theResult = new HashMap<String, String>();

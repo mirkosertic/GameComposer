@@ -6,8 +6,8 @@ public class GameLoopFactory {
 
     public GameLoop create(GameScene aGameScene, GameView aHumanGameView, GameRuntime aRuntime, GameLoopThrottle aThrottle) {
         final GameLoop theLoop = new GameLoop(aGameScene, aHumanGameView, aRuntime, aThrottle);
-        aRuntime.getEventManager().register(null, GameShutdownEvent.class, new GameEventListener<GameShutdownEvent>() {
-            public void handleGameEvent(GameShutdownEvent aEvent) {
+        aRuntime.getEventManager().register(null, GameShutdown.class, new GameEventListener<GameShutdown>() {
+            public void handleGameEvent(GameShutdown aEvent) {
                 theLoop.shutdown();
             }
         });
