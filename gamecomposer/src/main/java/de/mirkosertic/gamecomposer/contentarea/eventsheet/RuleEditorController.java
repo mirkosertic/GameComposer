@@ -1,27 +1,22 @@
 package de.mirkosertic.gamecomposer.contentarea.eventsheet;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.mirkosertic.gamecomposer.contentarea.eventsheet.keyeventcondition.KeyEventConditionEditorController;
+import de.mirkosertic.gamecomposer.contentarea.eventsheet.keyeventcondition.KeyEventConditionEditorControllerFactory;
 import de.mirkosertic.gamecomposer.contentarea.eventsheet.setproperty.SetPropertyEditorController;
 import de.mirkosertic.gamecomposer.contentarea.eventsheet.setproperty.SetPropertyEditorControllerFactory;
 import de.mirkosertic.gameengine.action.SetPropertyAction;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -31,9 +26,6 @@ import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gamecomposer.ChildController;
 import de.mirkosertic.gamecomposer.PropertyBinder;
 import de.mirkosertic.gameengine.action.PlaySoundAction;
-import de.mirkosertic.gameengine.core.KeyReleased;
-import de.mirkosertic.gameengine.event.Property;
-import de.mirkosertic.gameengine.physics.GameObjectCollision;
 import de.mirkosertic.gamecomposer.contentarea.eventsheet.playsound.PlaySoundEditorController;
 import de.mirkosertic.gamecomposer.contentarea.eventsheet.playsound.PlaySoundEditorControllerFactory;
 
@@ -45,7 +37,7 @@ public class RuleEditorController implements ChildController {
     TextField ruleName;
 
     @FXML
-    ComboBox eventType;
+    ComboBox conditionType;
 
     @FXML
     VBox filterCoditions;
@@ -57,13 +49,13 @@ public class RuleEditorController implements ChildController {
     VBox actions;
 
     @Inject
-    ControlFactory controlFactory;
-
-    @Inject
     PlaySoundEditorControllerFactory playSoundEditorControllerFactory;
 
     @Inject
     SetPropertyEditorControllerFactory setGameObjectInstancePropertyEditorFactory;
+
+    @Inject
+    KeyEventConditionEditorControllerFactory keyEventConditionEditorControllerFactory;
 
     private Node view;
     private GameRule gameRule;
@@ -81,34 +73,31 @@ public class RuleEditorController implements ChildController {
         gameRule = aGameRule;
 
         knownEventTypes = new HashMap<>();
-        knownEventTypes.put(GameLoopRun.class.getSimpleName(), GameLoopRun.class);
-        knownEventTypes.put(KeyPressed.class.getSimpleName(), KeyPressed.class);
-        knownEventTypes.put(KeyReleased.class.getSimpleName(), KeyReleased.class);
-        knownEventTypes.put(GameObjectCollision.class.getSimpleName(), GameObjectCollision.class);
+        knownEventTypes.put(KeyEventCondition.class.getSimpleName(), KeyEventCondition.class);
 
         knownActions = new ArrayList<>();
         knownActions.add(PlaySoundAction.class);
         knownActions.add(SetPropertyAction.class);
 
-        setupEventSelection();
+        setupConditionSelection();
         updateActions();
         updateFilterConditions();
 
         PropertyBinder.bind(aGameRule.nameProperty(), ruleName.textProperty());
 
-        eventType.setOnAction(new EventHandler<ActionEvent>() {
+        conditionType.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                setEventType();
+                setConditionType();
             }
         });
         return this;
     }
 
-    private void setupEventSelection() {
-        eventType.getItems().clear();
-        eventType.getItems().addAll(knownEventTypes.values());
-        eventType.setConverter(new StringConverter<Class>() {
+    private void setupConditionSelection() {
+        conditionType.getItems().clear();
+        conditionType.getItems().addAll(knownEventTypes.values());
+        conditionType.setConverter(new StringConverter<Class>() {
             @Override
             public String toString(Class aClass) {
                 return aClass.getSimpleName();
@@ -121,20 +110,21 @@ public class RuleEditorController implements ChildController {
         });
 
         if (!gameRule.conditionProperty().isNull()) {
-            MatchEventCondition theCondition = (MatchEventCondition) gameRule.conditionProperty().get();
-            eventType.setValue(knownEventTypes.get(theCondition.eventTypeProperty().get()));
+            conditionType.setValue(gameRule.conditionProperty().get().getClass());
         }
     }
 
-    private void setEventType() {
-        Class theEventType = (Class) eventType.valueProperty().get();
-        MatchEventCondition theMatchEventCondition = new MatchEventCondition();
-        theMatchEventCondition.eventTypeProperty().set(theEventType.getSimpleName());
+    private void setConditionType() {
+        Class theEventType = (Class) conditionType.valueProperty().get();
+        try {
+            Condition theCondition = (Condition) theEventType.newInstance();
+            gameRule.conditionProperty().set(theCondition);
 
-        gameRule.conditionProperty().set(theMatchEventCondition);
-
-        updateFilterConditions();
-        updateActions();
+            updateFilterConditions();
+            updateActions();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void updateActions() {
@@ -167,81 +157,17 @@ public class RuleEditorController implements ChildController {
                 SetPropertyEditorController theController = setGameObjectInstancePropertyEditorFactory.createFor(eventSheet.getGameScene(), (SetPropertyAction) theAction);
                 actions.getChildren().add(theController.getView());
             }
-    }
+        }
     }
 
     private void updateFilterConditions() {
         filterCoditions.getChildren().clear();
-        final MatchEventCondition theCondition = (MatchEventCondition) gameRule.conditionProperty().get();
+        final Condition theCondition = gameRule.conditionProperty().get();
         if (theCondition != null) {
+            if (theCondition instanceof KeyEventCondition) {
 
-            Class theFilterClass = knownEventTypes.get(theCondition.eventTypeProperty().get());
-
-            GridPane theFilterConditions = new GridPane();
-            theFilterConditions.setPadding(new Insets(5, 5, 5, 5));
-            theFilterConditions.setVgap(5);
-            filterCoditions.getChildren().add(theFilterConditions);
-
-            int theRow = 0;
-
-            for (Field theField : theFilterClass.getDeclaredFields()) {
-                final String theFieldName = theField.getName();
-                if (theField.getType().isAssignableFrom(Property.class)) {
-
-                    Object theFilterValue = theCondition.getFilterValue(theFieldName);
-
-                    Label theLabel = new Label(theFieldName + ":");
-                    theFilterConditions.add(theLabel, 0, theRow);
-
-                    ParameterizedType theParamType = (ParameterizedType) theField.getGenericType();
-                    Type thePropertyType = theParamType.getActualTypeArguments()[0];
-                    if (thePropertyType == String.class) {
-                        TextField theTextfield = controlFactory.createTextField(new ChangeListener<String>() {
-                            @Override
-                            public void changed(ObservableValue<? extends String> observableValue, String aOldValue,
-                                                String aNewValue) {
-                                theCondition.setFilterValue(theFieldName, aNewValue);
-                            }
-                        });
-                        if (theFilterValue != null) {
-                            theTextfield.setText((String) theCondition.getFilterValue(theFieldName));
-                        }
-
-                        theFilterConditions.add(theTextfield, 1, theRow);
-                    }
-                    if (thePropertyType == GameKeyCode.class) {
-                        final ComboBox theCombobox = controlFactory.createKeyCodeCombobox(theFilterValue);
-                        theCombobox.setOnAction(new EventHandler<ActionEvent>() {
-                            @Override
-                            public void handle(ActionEvent actionEvent) {
-                                theCondition.setFilterValue(theFieldName, theCombobox.getValue());
-                            }
-                        });
-                        theFilterConditions.add(theCombobox, 1, theRow);
-                    }
-                    if (thePropertyType == GameObject.class) {
-                        final ComboBox theCombobox = controlFactory.createGameObjectCombobox(theFilterValue, eventSheet.getGameScene());
-                        theCombobox.setOnAction(new EventHandler<ActionEvent>() {
-                            @Override
-                            public void handle(ActionEvent actionEvent) {
-                                theCondition.setFilterValue(theFieldName, theCombobox.getValue());
-                            }
-                        });
-                        theFilterConditions.add(theCombobox, 1, theRow);
-                    }
-                    if (thePropertyType == GameObjectInstance.class) {
-                        final ComboBox theCombobox = controlFactory.createGameObjectInstanceCombobox(theFilterValue, eventSheet.getGameScene());
-                        theCombobox.setOnAction(new EventHandler<ActionEvent>() {
-                            @Override
-                            public void handle(ActionEvent actionEvent) {
-                                theCondition.setFilterValue(theFieldName, theCombobox.getValue());
-                            }
-                        });
-                        theFilterConditions.add(theCombobox, 1, theRow);
-                    }
-
-                    theRow++;
-                }
+                KeyEventConditionEditorController theController = keyEventConditionEditorControllerFactory.createFor(eventSheet.getGameScene(), (KeyEventCondition) theCondition);
+                filterCoditions.getChildren().add(theController.getView());
             }
         }
     }

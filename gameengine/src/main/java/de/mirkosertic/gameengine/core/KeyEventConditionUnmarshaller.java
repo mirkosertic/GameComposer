@@ -2,15 +2,15 @@ package de.mirkosertic.gameengine.core;
 
 import java.util.Map;
 
-public class MatchEventConditionUnmarshaller implements ConditionUnmarshaller {
+public class KeyEventConditionUnmarshaller implements ConditionUnmarshaller {
 
     @Override
     public String getTypeKey() {
-        return MatchEventCondition.TYPE_VALUE;
+        return KeyEventCondition.TYPE_VALUE;
     }
 
     @Override
     public Condition unmarshall(GameScene aGameScene, Map<String, Object> aSerializedData) {
-        return MatchEventCondition.unmarshall(aGameScene, aSerializedData);
+        return KeyEventCondition.unmarshall(aGameScene, aSerializedData);
     }
 }

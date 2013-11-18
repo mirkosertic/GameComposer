@@ -17,8 +17,8 @@
           <children>
             <VBox prefWidth="255.0" HBox.hgrow="NEVER">
               <children>
-                <Label contentDisplay="TOP" text="Event type :" VBox.vgrow="NEVER" />
-                <ComboBox fx:id="eventType" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+                <Label contentDisplay="TOP" text="Condition type:" VBox.vgrow="NEVER" />
+                <ComboBox id="eventType" fx:id="conditionType" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
                   <items>
                     <FXCollections fx:factory="observableArrayList">
                       <String fx:value="Item 1" />
@@ -37,7 +37,7 @@
             </VBox>
             <VBox maxWidth="1.7976931348623157E308" HBox.hgrow="SOMETIMES" HBox.margin="$x1">
               <children>
-                <Label text="Filter conditions" />
+                <Label text="Condition properties" />
                 <VBox fx:id="filterCoditions" maxWidth="1.7976931348623157E308">
                   <VBox.margin>
                     <Insets />
