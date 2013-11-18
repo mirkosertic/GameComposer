@@ -3,14 +3,9 @@
     "name" : "Here are our events",
     "rules" : [ {
       "condition" : {
-        "properties" : {
-          "keyCode" : {
-            "value" : "UP",
-            "type" : "GameKeyCode"
-          }
-        },
-        "type" : "MatchEventCondition",
-        "eventtype" : "KeyPressed"
+        "type" : "KeyEventCondition",
+        "eventType" : "PRESSED",
+        "keyCode" : "UP"
       },
       "name" : "Play a sound while duke jumps",
       "actions" : [ {
