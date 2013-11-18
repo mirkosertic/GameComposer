@@ -65,11 +65,38 @@ public class PlatformComponentTemplate extends GameComponentTemplate<PlatformCom
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<String, Object>();
         theResult.put(PlatformComponent.TYPE_ATTRIBUTE, PlatformComponent.TYPE);
+        theResult.put("moveLeftKey", moveLeftKey.get().name());
+        theResult.put("moveRightKey", moveRightKey.get().name());
+        theResult.put("jumpKey", jumpKey.get().name());
+        theResult.put("jumpImpulse", Float.toString(jumpImpulse.get()));
+        theResult.put("leftRightImpulse", Float.toString(leftRightImpulse.get()));
         return theResult;
     }
 
     public static PlatformComponentTemplate deserialize(GameEventManager aEventManager, GameObject aObject, Map<String, Object> aSerializedData) {
-        return new PlatformComponentTemplate(aEventManager, aObject);
+        PlatformComponentTemplate theResult =  new PlatformComponentTemplate(aEventManager, aObject);
+        String theLeftKey = (String) aSerializedData.get("moveLeftKey");
+        if (theLeftKey != null) {
+            theResult.moveLeftKey.setQuietly(GameKeyCode.valueOf(theLeftKey));
+        }
+        String theRightKey = (String) aSerializedData.get("moveRightKey");
+        if (theRightKey != null) {
+            theResult.moveRightKey.setQuietly(GameKeyCode.valueOf(theRightKey));
+        }
+        String theJumpKey = (String) aSerializedData.get("jumpKey");
+        if (theJumpKey != null) {
+            theResult.jumpKey.setQuietly(GameKeyCode.valueOf(theJumpKey));
+        }
+        String theJumpImpulse = (String) aSerializedData.get("jumpImpulse");
+        if (theJumpImpulse != null) {
+            theResult.jumpImpulse.setQuietly(Float.parseFloat(theJumpImpulse));
+        }
+        String theLeftRightUmpulse = (String) aSerializedData.get("leftRightImpulse");
+        if (theLeftRightUmpulse != null) {
+            theResult.leftRightImpulse.setQuietly(Float.parseFloat(theLeftRightUmpulse));
+        }
+
+        return theResult;
     }
 
     @Override

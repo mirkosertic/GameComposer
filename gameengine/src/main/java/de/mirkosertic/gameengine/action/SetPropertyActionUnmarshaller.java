@@ -6,15 +6,15 @@ import de.mirkosertic.gameengine.core.GameScene;
 
 import java.util.Map;
 
-public class SetGameObjectInstancePropertyActionUnmarshaller implements ActionUnmarshaller {
+public class SetPropertyActionUnmarshaller implements ActionUnmarshaller {
 
     @Override
     public String getTypeKey() {
-        return SetGameObjectInstancePropertyAction.TYPE_VALUE;
+        return SetPropertyAction.TYPE_VALUE;
     }
 
     @Override
     public Action unmarshall(Map<String, Object> aSerializedData, GameScene aGameScene) {
-        return SetGameObjectInstancePropertyAction.unmarshall(aSerializedData, aGameScene);
+        return SetPropertyAction.unmarshall(aSerializedData, aGameScene);
     }
 }

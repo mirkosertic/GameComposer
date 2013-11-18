@@ -53,7 +53,7 @@
                   </VBox.margin>
                 </Label>
                 <Hyperlink fx:id="addNewAction" onAction="#onAddNewAction" text="Add new action..." />
-                <HBox fx:id="actions" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="NEVER" />
+                <VBox fx:id="actions" prefHeight="-1.0" prefWidth="-1.0" />
               </children>
             </VBox>
             <Hyperlink onAction="#onRemoveRule" text="Remove rule" />

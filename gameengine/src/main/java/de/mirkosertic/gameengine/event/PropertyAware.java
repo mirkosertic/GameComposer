@@ -1,7 +1,6 @@
 package de.mirkosertic.gameengine.event;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class PropertyAware {
 
@@ -28,5 +27,9 @@ public class PropertyAware {
 
         theProperty.set(aPropertyValue);
         return true;
+    }
+
+    public List<Property> listProperties() {
+        return Collections.unmodifiableList(new ArrayList<Property>(properties.values()));
     }
 }

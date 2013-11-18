@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.mirkosertic.gamecomposer.contentarea.eventsheet.setproperty.SetPropertyEditorController;
+import de.mirkosertic.gamecomposer.contentarea.eventsheet.setproperty.SetPropertyEditorControllerFactory;
+import de.mirkosertic.gameengine.action.SetPropertyAction;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -31,15 +34,8 @@ import de.mirkosertic.gameengine.action.PlaySoundAction;
 import de.mirkosertic.gameengine.core.KeyReleased;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.physics.GameObjectCollision;
-import de.mirkosertic.gameengine.action.SetGameObjectInstancePropertyAction;
-import de.mirkosertic.gameengine.action.SetGameObjectPropertyAction;
 import de.mirkosertic.gamecomposer.contentarea.eventsheet.playsound.PlaySoundEditorController;
 import de.mirkosertic.gamecomposer.contentarea.eventsheet.playsound.PlaySoundEditorControllerFactory;
-import de.mirkosertic.gamecomposer.contentarea.eventsheet.setgameobjectinstanceproperty.SetGameObjectInstancePropertyEditorController;
-import de.mirkosertic.gamecomposer.contentarea.eventsheet.setgameobjectinstanceproperty.SetGameObjectInstancePropertyEditorControllerFactory;
-import de.mirkosertic.gamecomposer.contentarea.eventsheet.setgameobjectproperty.SetGameObjectPropertyEditorController;
-import de.mirkosertic.gamecomposer.contentarea.eventsheet.setgameobjectproperty.SetGameObjectPropertyEditorControllerFactory;
-
 
 import javax.inject.Inject;
 
@@ -58,7 +54,7 @@ public class RuleEditorController implements ChildController {
     Hyperlink addNewAction;
 
     @FXML
-    HBox actions;
+    VBox actions;
 
     @Inject
     ControlFactory controlFactory;
@@ -67,10 +63,7 @@ public class RuleEditorController implements ChildController {
     PlaySoundEditorControllerFactory playSoundEditorControllerFactory;
 
     @Inject
-    SetGameObjectInstancePropertyEditorControllerFactory setGameObjectInstancePropertyEditorFactory;
-
-    @Inject
-    SetGameObjectPropertyEditorControllerFactory setGameObjectPropertyEditorControllerFactory;
+    SetPropertyEditorControllerFactory setGameObjectInstancePropertyEditorFactory;
 
     private Node view;
     private GameRule gameRule;
@@ -95,8 +88,7 @@ public class RuleEditorController implements ChildController {
 
         knownActions = new ArrayList<>();
         knownActions.add(PlaySoundAction.class);
-        knownActions.add(SetGameObjectPropertyAction.class);
-        knownActions.add(SetGameObjectInstancePropertyAction.class);
+        knownActions.add(SetPropertyAction.class);
 
         setupEventSelection();
         updateActions();
@@ -171,15 +163,11 @@ public class RuleEditorController implements ChildController {
                 PlaySoundEditorController theController = playSoundEditorControllerFactory.createFor(eventSheet.getGameScene(), (PlaySoundAction) theAction);
                 actions.getChildren().add(theController.getView());
             }
-            if (theAction instanceof SetGameObjectInstancePropertyAction) {
-                SetGameObjectInstancePropertyEditorController theController = setGameObjectInstancePropertyEditorFactory.createFor(eventSheet.getGameScene(), (SetGameObjectInstancePropertyAction) theAction);
+            if (theAction instanceof SetPropertyAction) {
+                SetPropertyEditorController theController = setGameObjectInstancePropertyEditorFactory.createFor(eventSheet.getGameScene(), (SetPropertyAction) theAction);
                 actions.getChildren().add(theController.getView());
             }
-            if (theAction instanceof SetGameObjectPropertyAction) {
-                SetGameObjectPropertyEditorController theController = setGameObjectPropertyEditorControllerFactory.createFor(eventSheet.getGameScene(), (SetGameObjectPropertyAction) theAction);
-                actions.getChildren().add(theController.getView());
-            }
-        }
+    }
     }
 
     private void updateFilterConditions() {
