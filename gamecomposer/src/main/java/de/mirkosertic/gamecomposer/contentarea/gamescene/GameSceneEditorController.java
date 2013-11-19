@@ -1,7 +1,7 @@
 package de.mirkosertic.gamecomposer.contentarea.gamescene;
 
 import de.mirkosertic.gamecomposer.*;
-import de.mirkosertic.gamecomposer.contentarea.ContentChildController;
+import de.mirkosertic.gamecomposer.contentarea.ContentController;
 import de.mirkosertic.gameengine.camera.CameraComponent;
 import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.event.PropertyChanged;
@@ -22,7 +22,7 @@ import javafx.scene.layout.BorderPane;
 import javax.enterprise.event.Event;
 import java.util.List;
 
-public class GameSceneEditorController implements ContentChildController<GameScene> {
+public class GameSceneEditorController implements ContentController<GameScene> {
 
     @FXML
     BorderPane centerBorderPane;

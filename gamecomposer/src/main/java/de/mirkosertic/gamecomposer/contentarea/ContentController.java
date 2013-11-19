@@ -5,7 +5,7 @@ import de.mirkosertic.gameengine.event.PropertyChanged;
 import javafx.scene.control.Tab;
 import javafx.scene.input.KeyEvent;
 
-public interface ContentChildController<T> extends ChildController {
+public interface ContentController<T> extends Controller {
 
     T getEditingObject();
 

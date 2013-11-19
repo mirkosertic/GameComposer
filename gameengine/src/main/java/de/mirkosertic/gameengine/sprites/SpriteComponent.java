@@ -16,6 +16,10 @@ public class SpriteComponent extends GameComponent {
         objectInstance = aObjectInstance;
     }
 
+    SpriteComponent(GameObjectInstance aObjectInstance, SpriteComponentTemplate aTemplate) {
+        this(aObjectInstance);
+    }
+
     @Override
     public String getTypeKey() {
         return TYPE;

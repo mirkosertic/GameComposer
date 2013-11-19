@@ -1,5 +1,6 @@
 package de.mirkosertic.gamecomposer.contentarea.eventsheet.playsound;
 
+import de.mirkosertic.gamecomposer.Controller;
 import de.mirkosertic.gamecomposer.GameAssetSelector;
 import de.mirkosertic.gameengine.action.PlaySoundAction;
 import de.mirkosertic.gameengine.core.GameScene;
@@ -10,7 +11,7 @@ import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import javax.inject.Inject;
 
-public class PlaySoundEditorController {
+public class PlaySoundEditorController implements Controller {
 
     @Inject
     GameAssetSelector gameAssetSelector;

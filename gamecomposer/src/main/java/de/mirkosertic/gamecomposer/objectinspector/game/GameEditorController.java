@@ -2,7 +2,7 @@ package de.mirkosertic.gamecomposer.objectinspector.game;
 
 import de.mirkosertic.gamecomposer.PersistenceManager;
 import de.mirkosertic.gamecomposer.PropertyBinder;
-import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorChildController;
+import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorElementController;
 import de.mirkosertic.gamecomposer.NewGameSceneEvent;
 import de.mirkosertic.gameengine.core.Game;
 
@@ -17,7 +17,7 @@ import javafx.util.StringConverter;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
-public class GameEditorController implements ObjectInspectorChildController {
+public class GameEditorController implements ObjectInspectorElementController {
 
     @FXML
     TextField nameTextField;

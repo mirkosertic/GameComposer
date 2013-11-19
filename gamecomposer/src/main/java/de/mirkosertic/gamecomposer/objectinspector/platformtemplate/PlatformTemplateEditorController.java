@@ -1,7 +1,7 @@
 package de.mirkosertic.gamecomposer.objectinspector.platformtemplate;
 
 import de.mirkosertic.gamecomposer.PropertyBinder;
-import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorChildController;
+import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorElementController;
 import de.mirkosertic.gameengine.core.GameKeyCode;
 import de.mirkosertic.gameengine.physics.PlatformComponentTemplate;
 
@@ -12,7 +12,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.util.StringConverter;
 
-public class PlatformTemplateEditorController implements ObjectInspectorChildController {
+public class PlatformTemplateEditorController implements ObjectInspectorElementController {
 
     private static class GameKeyCodeConverter extends StringConverter<GameKeyCode> {
         @Override

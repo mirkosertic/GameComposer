@@ -1,11 +1,12 @@
 package de.mirkosertic.gamecomposer.objectinspector.gameobjectinstance;
 
-import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorChildController;
+import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorElementController;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.TextField;
 
@@ -18,7 +19,7 @@ import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.types.Angle;
 import de.mirkosertic.gameengine.types.Position;
 
-public class GameObjectInstanceEditorController implements ObjectInspectorChildController {
+public class GameObjectInstanceEditorController implements ObjectInspectorElementController {
 
     @FXML
     TextField nameTextField;
@@ -31,6 +32,9 @@ public class GameObjectInstanceEditorController implements ObjectInspectorChildC
 
     @FXML
     TextField rotationTextField;
+
+    @FXML
+    CheckBox visible;
 
     @FXML
     Hyperlink jumpToObject;
@@ -46,6 +50,7 @@ public class GameObjectInstanceEditorController implements ObjectInspectorChildC
         PropertyBinder.unbind(object.nameProperty());
         PropertyBinder.unbind(object.positionProperty());
         PropertyBinder.unbind(object.rotationAngleProperty());
+        PropertyBinder.unbind(object.visibleProperty());
     }
 
     public GameObjectInstanceEditorController initialize(Parent aView, GameObjectInstance aObject) {
@@ -88,6 +93,7 @@ public class GameObjectInstanceEditorController implements ObjectInspectorChildC
                 return new Angle(Integer.parseInt(aValue));
             }
         });
+        PropertyBinder.bind(object.visibleProperty(), visible.selectedProperty());
 
         rotationTextField.setText(Integer.toString(aObject.rotationAngleProperty().get().angleInDegrees));
 

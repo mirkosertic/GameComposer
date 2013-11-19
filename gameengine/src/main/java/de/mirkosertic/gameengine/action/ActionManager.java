@@ -15,9 +15,10 @@ public class ActionManager implements GameSystem {
         for (EventSheet theSheet : scene.getEventSheets()) {
             for (GameRule theRule : theSheet.getRules()) {
                 if (!theRule.conditionProperty().isNull()) {
-                    if (theRule.conditionProperty().get().appliesTo(aEvent)) {
+                    ConditionResult theResult = theRule.conditionProperty().get().appliesTo(aEvent);
+                    if (theResult.isConditionTrue()) {
                         for (Action theAction : theRule.getActions()) {
-                            theAction.invoke(scene);
+                            theAction.invoke(scene, theResult);
                         }
                     }
                 }

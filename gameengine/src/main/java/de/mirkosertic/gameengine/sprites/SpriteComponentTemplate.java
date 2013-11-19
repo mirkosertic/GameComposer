@@ -27,7 +27,7 @@ public class SpriteComponentTemplate extends GameComponentTemplate<SpriteCompone
     }
 
     public SpriteComponent create(GameObjectInstance aInstance, GameRuntime aGameRuntime) {
-        return new SpriteComponent(aInstance);
+        return new SpriteComponent(aInstance, this);
     }
 
     @Override

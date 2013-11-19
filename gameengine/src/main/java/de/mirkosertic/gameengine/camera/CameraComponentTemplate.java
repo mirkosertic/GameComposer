@@ -30,7 +30,7 @@ public class CameraComponentTemplate extends GameComponentTemplate<CameraCompone
     }
 
     public CameraComponent create(GameObjectInstance aInstance, GameRuntime aGameRuntime) {
-        final CameraComponent theResult = new CameraComponent(aInstance);
+        final CameraComponent theResult = new CameraComponent(aInstance, this);
         theResult.registerEvents(aGameRuntime);
         return theResult;
     }

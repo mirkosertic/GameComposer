@@ -1,7 +1,7 @@
 package de.mirkosertic.gamecomposer.objectinspector.physicstemplate;
 
 import de.mirkosertic.gamecomposer.PropertyBinder;
-import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorChildController;
+import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorElementController;
 import de.mirkosertic.gameengine.physics.PhysicsComponentTemplate;
 
 import javafx.fxml.FXML;
@@ -10,7 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 
-public class PhysicsTemplateEditorController implements ObjectInspectorChildController {
+public class PhysicsTemplateEditorController implements ObjectInspectorElementController {
 
     @FXML
     CheckBox active;

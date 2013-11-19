@@ -1,5 +1,6 @@
 package de.mirkosertic.gamecomposer.objectinspector.gamescene;
 
+import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorElementController;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -10,11 +11,10 @@ import javafx.scene.paint.Color;
 import javafx.util.StringConverter;
 
 import de.mirkosertic.gamecomposer.PropertyBinder;
-import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorChildController;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameScene;
 
-public class GameSceneEditorController implements ObjectInspectorChildController {
+public class GameSceneEditorController implements ObjectInspectorElementController {
 
     private static class GameObjectToStringConverter extends StringConverter<GameObject> {
         @Override

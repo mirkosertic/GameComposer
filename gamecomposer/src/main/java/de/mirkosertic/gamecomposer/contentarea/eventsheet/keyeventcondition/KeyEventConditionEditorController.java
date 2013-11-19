@@ -1,5 +1,6 @@
 package de.mirkosertic.gamecomposer.contentarea.eventsheet.keyeventcondition;
 
+import de.mirkosertic.gamecomposer.Controller;
 import de.mirkosertic.gameengine.core.GameKeyCode;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.core.KeyEventCondition;
@@ -10,7 +11,7 @@ import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.util.StringConverter;
 
-public class KeyEventConditionEditorController {
+public class KeyEventConditionEditorController implements Controller {
 
     @FXML
     ComboBox eventType;

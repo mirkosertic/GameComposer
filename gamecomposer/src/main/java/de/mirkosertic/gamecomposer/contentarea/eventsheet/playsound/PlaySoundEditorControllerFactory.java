@@ -1,6 +1,8 @@
 package de.mirkosertic.gamecomposer.contentarea.eventsheet.playsound;
 
 import de.mirkosertic.gamecomposer.FXMLLoaderFactory;
+import de.mirkosertic.gamecomposer.contentarea.eventsheet.ActionControllerFactory;
+import de.mirkosertic.gamecomposer.contentarea.eventsheet.ActionEditorType;
 import de.mirkosertic.gameengine.action.PlaySoundAction;
 import de.mirkosertic.gameengine.core.GameScene;
 import javafx.fxml.FXMLLoader;
@@ -11,7 +13,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ResourceBundle;
 
-public class PlaySoundEditorControllerFactory {
+@ActionEditorType(clazz = PlaySoundAction.class)
+public class PlaySoundEditorControllerFactory implements ActionControllerFactory<PlaySoundEditorController, PlaySoundAction> {
 
     @Inject
     FXMLLoaderFactory fxmlLoaderFactory;

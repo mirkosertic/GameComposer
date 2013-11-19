@@ -21,15 +21,15 @@ public class GameComposerController {
 
     @Inject
     @ObjectInspector
-    ChildController objectInspector;
+    Controller objectInspector;
 
     @Inject
     @ContentArea
-    ChildController contentArea;
+    Controller contentArea;
 
     @Inject
     @ProjectStructure
-    ChildController projectStructure;
+    Controller projectStructure;
 
     @Inject
     Event<Object> eventGateway;

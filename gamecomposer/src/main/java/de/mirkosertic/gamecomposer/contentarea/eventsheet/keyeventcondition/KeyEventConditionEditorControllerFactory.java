@@ -1,6 +1,8 @@
 package de.mirkosertic.gamecomposer.contentarea.eventsheet.keyeventcondition;
 
 import de.mirkosertic.gamecomposer.FXMLLoaderFactory;
+import de.mirkosertic.gamecomposer.contentarea.eventsheet.ConditionControllerFactory;
+import de.mirkosertic.gamecomposer.contentarea.eventsheet.ConditionEditorType;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.core.KeyEventCondition;
 import javafx.fxml.FXMLLoader;
@@ -11,7 +13,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ResourceBundle;
 
-public class KeyEventConditionEditorControllerFactory {
+@ConditionEditorType(clazz = KeyEventCondition.class)
+public class KeyEventConditionEditorControllerFactory implements ConditionControllerFactory<KeyEventConditionEditorController, KeyEventCondition> {
 
     @Inject
     FXMLLoaderFactory fxmlLoaderFactory;

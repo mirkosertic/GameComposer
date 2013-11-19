@@ -17,12 +17,14 @@ public class GameObjectInstance extends PropertyAware {
     private final Property<String> name;
     private final Property<Position> position;
     private final Property<Angle> rotationAngle;
+    private final Property<Boolean> visible;
 
     GameObjectInstance(GameEventManager aEventManager, GameObject aOwnerGameObject) {
 
         uuid = registerProperty(new Property<String>(this, "uuid", de.mirkosertic.gameengine.types.UUID.randomUID(), aEventManager));
         name = registerProperty(new Property<String>(this, "name", aEventManager));
         position = registerProperty(new Property<Position>(this, "position", new Position(), aEventManager));
+        visible = registerProperty(new Property<Boolean>(this, "visible", aOwnerGameObject.visibleProperty().get(), aEventManager));
         rotationAngle = registerProperty(new Property<Angle>(this, "rotationAngle", new Angle(0), aEventManager));
 
         ownerGameObject = aOwnerGameObject;
@@ -51,6 +53,10 @@ public class GameObjectInstance extends PropertyAware {
 
     public Property<Angle> rotationAngleProperty() {
         return rotationAngle;
+    }
+
+    public Property<Boolean> visibleProperty() {
+        return visible;
     }
 
     public GameObject getOwnerGameObject() {
@@ -89,6 +95,7 @@ public class GameObjectInstance extends PropertyAware {
 
         theResult.put("position", position.get().serializeToMap());
         theResult.put("name", name.get());
+        theResult.put("visible", Boolean.toString(visible.get()));
         theResult.put("rotationangle", rotationAngle.get().serialize());
 
         List<Map<String, Object>> theComponents = new ArrayList<Map<String, Object>>();
@@ -115,6 +122,10 @@ public class GameObjectInstance extends PropertyAware {
         String theInstanceUUID = (String) theInstance.get("uuid");
         if (theInstanceUUID != null) {
             theResult.uuid.setQuietly(theInstanceUUID);
+        }
+        String theVisible = (String) theInstance.get("visible");
+        if (theVisible != null) {
+            theResult.visible.setQuietly(Boolean.parseBoolean(theVisible));
         }
 
         Map<String, Object> theRotationAngle = (Map<String, Object>) theInstance.get("rotationangle");
