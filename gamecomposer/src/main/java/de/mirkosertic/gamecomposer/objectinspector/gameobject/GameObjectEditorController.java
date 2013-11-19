@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorElementController;
+import de.mirkosertic.gameengine.event.GameEventManager;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -122,7 +123,8 @@ public class GameObjectEditorController implements ObjectInspectorElementControl
 
     private void addComponent(Class<? extends GameComponentTemplate> aClass) {
         try {
-            GameComponentTemplate theTemplate = aClass.getConstructor(GameObject.class).newInstance(gameObject);
+            GameEventManager theEventManager = gameObject.getGameScene().getRuntime().getEventManager();
+            GameComponentTemplate theTemplate = aClass.getConstructor(GameEventManager.class, GameObject.class).newInstance(theEventManager, gameObject);
             gameObject.add(theTemplate);
 
             initializeCreateComponentHyperlinks();

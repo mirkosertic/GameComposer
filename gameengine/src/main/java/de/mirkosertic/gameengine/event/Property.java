@@ -33,6 +33,10 @@ public class Property<T> extends ReadOnlyProperty<T> {
         }
     }
 
+    public void clear() {
+        value = null;
+    }
+
     public void setQuietly(T aValue) {
         value = aValue;
     }
