@@ -3,12 +3,13 @@ package de.mirkosertic.gamecomposer.objectinspector.gameobject;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorChildController;
+import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorElementController;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
@@ -23,7 +24,7 @@ import de.mirkosertic.gameengine.physics.StaticComponentTemplate;
 import de.mirkosertic.gameengine.sprites.SpriteComponentTemplate;
 import de.mirkosertic.gameengine.types.Size;
 
-public class GameObjectEditorController implements ObjectInspectorChildController {
+public class GameObjectEditorController implements ObjectInspectorElementController {
 
     @FXML
     TextField uuidTextField;
@@ -40,6 +41,9 @@ public class GameObjectEditorController implements ObjectInspectorChildControlle
     @FXML
     VBox componentAddHyperlinks;
 
+    @FXML
+    CheckBox visible;
+
     private Parent view;
     private GameObject gameObject;
 
@@ -48,6 +52,7 @@ public class GameObjectEditorController implements ObjectInspectorChildControlle
         PropertyBinder.unbind(gameObject.nameProperty());
         PropertyBinder.unbind(gameObject.uuidProperty());
         PropertyBinder.unbind(gameObject.sizeProperty());
+        PropertyBinder.unbind(gameObject.visibleProperty());
     }
 
     public GameObjectEditorController initialize(Parent aView, GameObject aObject) {
@@ -80,6 +85,7 @@ public class GameObjectEditorController implements ObjectInspectorChildControlle
                 return new Size(theCurrentSize.width, Integer.parseInt(aValue));
             }
         });
+        PropertyBinder.bind(gameObject.visibleProperty(), visible.selectedProperty());
 
         initializeCreateComponentHyperlinks();
 

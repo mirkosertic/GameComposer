@@ -3,7 +3,7 @@ package de.mirkosertic.gamecomposer.objectinspector.spritetemplate;
 import de.mirkosertic.gamecomposer.FlushResourceCacheEvent;
 import de.mirkosertic.gamecomposer.GameAssetSelector;
 import de.mirkosertic.gamecomposer.PersistenceManager;
-import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorChildController;
+import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorElementController;
 import de.mirkosertic.gameengine.core.GameResourceLoader;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.types.ResourceName;
@@ -24,7 +24,7 @@ import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import java.io.IOException;
 
-public class SpriteTemplateEditorController implements ObjectInspectorChildController {
+public class SpriteTemplateEditorController implements ObjectInspectorElementController {
 
     @FXML
     ImageView spritePreview;

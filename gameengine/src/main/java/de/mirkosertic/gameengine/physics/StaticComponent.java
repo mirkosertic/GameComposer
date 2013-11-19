@@ -18,6 +18,10 @@ public class StaticComponent extends GameComponent {
         objectInstance = aObjectInstance;
     }
 
+    StaticComponent(GameObjectInstance aObjectInstance, StaticComponentTemplate aTemplate) {
+        this(aObjectInstance);
+    }
+
     @Override
     public String getTypeKey() {
         return TYPE;

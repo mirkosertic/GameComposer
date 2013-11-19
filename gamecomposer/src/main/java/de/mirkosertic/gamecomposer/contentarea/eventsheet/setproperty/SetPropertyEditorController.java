@@ -1,10 +1,8 @@
 package de.mirkosertic.gamecomposer.contentarea.eventsheet.setproperty;
 
-import de.mirkosertic.gameengine.action.SetPropertyAction;
-import de.mirkosertic.gameengine.core.GameObjectInstance;
-import de.mirkosertic.gameengine.core.GameScene;
+import java.lang.reflect.Type;
 
-import de.mirkosertic.gameengine.event.Property;
+import de.mirkosertic.gamecomposer.Controller;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
@@ -12,13 +10,11 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.util.StringConverter;
 
-import java.lang.reflect.Type;
-import java.util.List;
+import de.mirkosertic.gameengine.action.SetPropertyAction;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.event.Property;
 
-public class SetPropertyEditorController {
-
-    @FXML
-    ComboBox objectInstance;
+public class SetPropertyEditorController implements Controller {
 
     @FXML
     ComboBox propertyName;
@@ -60,37 +56,7 @@ public class SetPropertyEditorController {
         propertyValueComboBox.setVisible(false);
         propertyValueCheckbox.setVisible(false);
 
-        objectInstance.getItems().clear();
-        objectInstance.getItems().addAll(aGameScene.getInstances());
-        objectInstance.setConverter(new StringConverter<GameObjectInstance>() {
-            @Override
-            public String toString(GameObjectInstance aValue) {
-                return aValue.nameProperty().get();
-            }
-
-            @Override
-            public GameObjectInstance fromString(String aValue) {
-                // Not implemented, nonsense here
-                return null;
-            }
-        });
-        if (!action.instanceProperty().isNull()) {
-            // Select first object
-            objectInstance.getSelectionModel().select(action.instanceProperty().get());
-        }
-
         return this;
-    }
-
-    @FXML
-    public void onSelectInstance() {
-        GameObjectInstance theSelectedInstance = (GameObjectInstance) objectInstance.getSelectionModel().getSelectedItem();
-        action.instanceProperty().set(theSelectedInstance);
-
-        List<Property> theProperties = theSelectedInstance.listProperties();
-        propertyName.getItems().clear();
-        propertyName.getItems().addAll(theProperties);
-        propertyName.setDisable(false);
     }
 
     @FXML

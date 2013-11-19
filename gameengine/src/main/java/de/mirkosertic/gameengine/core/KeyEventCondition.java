@@ -12,7 +12,7 @@ public class KeyEventCondition implements Condition {
         PRESSED, RELEASED
     }
 
-    public static final String TYPE_VALUE = "KeyEventCondition";
+    static final String TYPE_VALUE = "KeyEventCondition";
 
     private final Property<GameKeyCode> keyCode;
     private final Property<KeyEventType> eventType;
@@ -31,23 +31,26 @@ public class KeyEventCondition implements Condition {
     }
 
     @Override
-    public boolean appliesTo(GameEvent aEvent) {
+    public ConditionResult appliesTo(GameEvent aEvent) {
         switch (eventType.get()) {
-            case PRESSED:
-                if (aEvent instanceof KeyPressed) {
-                    KeyPressed theKeyPressed = (KeyPressed) aEvent;
-                    return theKeyPressed.keyCodeProperty().get() == keyCode.get();
+        case PRESSED:
+            if (aEvent instanceof KeyPressed) {
+                KeyPressed theKeyPressed = (KeyPressed) aEvent;
+                if (theKeyPressed.keyCodeProperty().get() == keyCode.get()) {
+                    return ConditionResult.FULFILLED;
                 }
-                return false;
-            case RELEASED:
-                if (aEvent instanceof KeyReleased) {
-                    KeyReleased theKeyReleased = (KeyReleased) aEvent;
-                    return theKeyReleased.keyCodeProperty().get() == keyCode.get();
+            }
+            break;
+        case RELEASED:
+            if (aEvent instanceof KeyReleased) {
+                KeyReleased theKeyReleased = (KeyReleased) aEvent;
+                if (theKeyReleased.keyCodeProperty().get() == keyCode.get()) {
+                    return ConditionResult.FULFILLED;
                 }
-                return false;
-
+            }
+            break;
         }
-        return false;
+        return ConditionResult.NOT_FULFILLED;
     }
 
     @Override

@@ -19,6 +19,7 @@ public class GameObject extends PropertyAware {
     private final Property<String> uuid;
     private final Property<String> name;
     private final Property<Size> size;
+    private final Property<Boolean> visible;
 
     private final Map<Class<GameComponentTemplate>, GameComponentTemplate> componentTemplates;
 
@@ -34,6 +35,7 @@ public class GameObject extends PropertyAware {
         uuid = registerProperty(new Property<String>(this, "uuid", aUUID, theManager));
         name = registerProperty(new Property<String>(this, "name", aName, theManager));
         size = registerProperty(new Property<Size>(this, "size", new Size(64, 64), theManager));
+        visible = registerProperty(new Property<Boolean>(this, "visible", Boolean.TRUE, theManager));
         componentTemplates = new HashMap<Class<GameComponentTemplate>, GameComponentTemplate>();
 
         name.setQuietly(aName);
@@ -54,6 +56,10 @@ public class GameObject extends PropertyAware {
 
     public Property<Size> sizeProperty() {
         return size;
+    }
+
+    public Property<Boolean> visibleProperty() {
+        return visible;
     }
 
     @Override

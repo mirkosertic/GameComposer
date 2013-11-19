@@ -26,6 +26,10 @@ public class PlatformComponent extends GameComponent {
         platformTemplate = aObjectInstance.getOwnerGameObject().getComponentTemplate(PlatformComponentTemplate.class);
     }
 
+    PlatformComponent(GameObjectInstance aObjectInstance, GameRuntime aGameRuntime, PlatformComponentTemplate aTemplate) {
+        this(aObjectInstance, aGameRuntime);
+    }
+
     @Override
     public String getTypeKey() {
         return TYPE;

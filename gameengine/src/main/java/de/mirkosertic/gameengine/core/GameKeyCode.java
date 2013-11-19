@@ -132,7 +132,7 @@ public enum GameKeyCode {
                 return CIRCUMFLEX;
             case '$':
                 return DOLLAR;
-            case '€':
+            case 'â‚¬':
                 return EURO_SIGN;
             case '!':
                 return EXCLAMATION_MARK;

@@ -1,37 +1,42 @@
 package de.mirkosertic.gamecomposer.contentarea.eventsheet;
 
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import de.mirkosertic.gamecomposer.contentarea.eventsheet.keyeventcondition.KeyEventConditionEditorController;
-import de.mirkosertic.gamecomposer.contentarea.eventsheet.keyeventcondition.KeyEventConditionEditorControllerFactory;
-import de.mirkosertic.gamecomposer.contentarea.eventsheet.setproperty.SetPropertyEditorController;
-import de.mirkosertic.gamecomposer.contentarea.eventsheet.setproperty.SetPropertyEditorControllerFactory;
-import de.mirkosertic.gameengine.action.SetPropertyAction;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Side;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Hyperlink;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 
-import de.mirkosertic.gameengine.core.*;
-import de.mirkosertic.gamecomposer.ChildController;
-import de.mirkosertic.gamecomposer.PropertyBinder;
-import de.mirkosertic.gameengine.action.PlaySoundAction;
-import de.mirkosertic.gamecomposer.contentarea.eventsheet.playsound.PlaySoundEditorController;
-import de.mirkosertic.gamecomposer.contentarea.eventsheet.playsound.PlaySoundEditorControllerFactory;
-
+import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
-public class RuleEditorController implements ChildController {
+import de.mirkosertic.gamecomposer.Controller;
+import de.mirkosertic.gamecomposer.PropertyBinder;
+import de.mirkosertic.gameengine.action.PlaySoundAction;
+import de.mirkosertic.gameengine.action.SetPropertyAction;
+import de.mirkosertic.gameengine.core.Action;
+import de.mirkosertic.gameengine.core.Condition;
+import de.mirkosertic.gameengine.core.EventSheet;
+import de.mirkosertic.gameengine.core.GameRule;
+import de.mirkosertic.gameengine.core.KeyEventCondition;
+
+public class RuleEditorController implements Controller {
 
     @FXML
     TextField ruleName;
@@ -49,13 +54,8 @@ public class RuleEditorController implements ChildController {
     VBox actions;
 
     @Inject
-    PlaySoundEditorControllerFactory playSoundEditorControllerFactory;
-
-    @Inject
-    SetPropertyEditorControllerFactory setGameObjectInstancePropertyEditorFactory;
-
-    @Inject
-    KeyEventConditionEditorControllerFactory keyEventConditionEditorControllerFactory;
+    @Any
+    Instance<Object> instances;
 
     private Node view;
     private GameRule gameRule;
@@ -149,26 +149,47 @@ public class RuleEditorController implements ChildController {
 
             actions.getChildren().add(theActionInfo);
 
-            if (theAction instanceof PlaySoundAction) {
-                PlaySoundEditorController theController = playSoundEditorControllerFactory.createFor(eventSheet.getGameScene(), (PlaySoundAction) theAction);
-                actions.getChildren().add(theController.getView());
-            }
-            if (theAction instanceof SetPropertyAction) {
-                SetPropertyEditorController theController = setGameObjectInstancePropertyEditorFactory.createFor(eventSheet.getGameScene(), (SetPropertyAction) theAction);
-                actions.getChildren().add(theController.getView());
-            }
+            ActionControllerFactory theFactory = (ActionControllerFactory) instances.select(createActionEditorQualifier(theAction.getClass())).get();
+            Controller theController = theFactory.createFor(eventSheet.getGameScene(), theAction);
+            actions.getChildren().add(theController.getView());
         }
+    }
+
+    private ConditionEditorType createConditionEditorQualifier(final Class aClass) {
+        return new ConditionEditorType() {
+            @Override
+            public Class clazz() {
+                return aClass;
+            }
+
+            @Override
+            public Class<? extends Annotation> annotationType() {
+                return ConditionEditorType.class;
+            }
+        };
+    }
+
+    private ActionEditorType createActionEditorQualifier(final Class aClass) {
+        return new ActionEditorType() {
+            @Override
+            public Class clazz() {
+                return aClass;
+            }
+
+            @Override
+            public Class<? extends Annotation> annotationType() {
+                return ActionEditorType.class;
+            }
+        };
     }
 
     private void updateFilterConditions() {
         filterCoditions.getChildren().clear();
         final Condition theCondition = gameRule.conditionProperty().get();
         if (theCondition != null) {
-            if (theCondition instanceof KeyEventCondition) {
-
-                KeyEventConditionEditorController theController = keyEventConditionEditorControllerFactory.createFor(eventSheet.getGameScene(), (KeyEventCondition) theCondition);
-                filterCoditions.getChildren().add(theController.getView());
-            }
+            ConditionControllerFactory theFactory = (ConditionControllerFactory) instances.select(createConditionEditorQualifier(theCondition.getClass())).get();
+            Controller theController = theFactory.createFor(eventSheet.getGameScene(), theCondition);
+            filterCoditions.getChildren().add(theController.getView());            
         }
     }
 

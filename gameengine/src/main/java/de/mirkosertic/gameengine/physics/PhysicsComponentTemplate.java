@@ -56,7 +56,7 @@ public class PhysicsComponentTemplate extends GameComponentTemplate<PhysicsCompo
     }
 
     public PhysicsComponent create(GameObjectInstance aInstance, GameRuntime aGameRuntime) {
-        return new PhysicsComponent(aInstance);
+        return new PhysicsComponent(aInstance, this);
     }
 
     @Override

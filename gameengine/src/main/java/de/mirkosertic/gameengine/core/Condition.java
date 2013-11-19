@@ -8,7 +8,7 @@ public interface Condition {
 
     String TYPE_ATTRIBUTE = "type";
 
-    boolean appliesTo(GameEvent aEvent);
+    ConditionResult appliesTo(GameEvent aEvent);
 
     Map<String, Object> serialize();
 }

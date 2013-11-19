@@ -1,15 +1,15 @@
 package de.mirkosertic.gamecomposer.objectinspector.eventsheet;
 
+import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorElementController;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.TextField;
 
 import de.mirkosertic.gamecomposer.PropertyBinder;
-import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorChildController;
 import de.mirkosertic.gameengine.core.EventSheet;
 
-public class EventSheetEditorController implements ObjectInspectorChildController {
+public class EventSheetEditorController implements ObjectInspectorElementController {
 
     @FXML
     TextField nameTextField;

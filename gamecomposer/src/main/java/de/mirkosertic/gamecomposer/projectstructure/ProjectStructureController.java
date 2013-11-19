@@ -20,7 +20,7 @@ import javax.inject.Singleton;
 import java.util.*;
 
 @Singleton
-public class ProjectStructureController implements ChildController {
+public class ProjectStructureController implements Controller {
 
     @FXML
     TreeView projectStructureTreeView;

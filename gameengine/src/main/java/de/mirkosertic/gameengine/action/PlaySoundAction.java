@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.mirkosertic.gameengine.core.Action;
+import de.mirkosertic.gameengine.core.ConditionResult;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.types.ResourceName;
 import de.mirkosertic.gameengine.event.GameEventManager;
@@ -21,7 +22,7 @@ public class PlaySoundAction implements Action {
     }
 
     @Override
-    public void invoke(GameScene aScene) {
+    public void invoke(GameScene aScene, ConditionResult aResult) {
         GameEventManager theManager = aScene.getRuntime().getEventManager();
         theManager.fire(new PlaySound(resourceName.get()));
     }

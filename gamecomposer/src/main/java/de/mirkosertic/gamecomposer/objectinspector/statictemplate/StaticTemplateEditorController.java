@@ -1,12 +1,12 @@
 package de.mirkosertic.gamecomposer.objectinspector.statictemplate;
 
-import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorChildController;
+import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorElementController;
 import de.mirkosertic.gameengine.physics.StaticComponentTemplate;
 
 import javafx.scene.Node;
 import javafx.scene.Parent;
 
-public class StaticTemplateEditorController implements ObjectInspectorChildController {
+public class StaticTemplateEditorController implements ObjectInspectorElementController {
 
     private Parent view;
     private StaticComponentTemplate object;

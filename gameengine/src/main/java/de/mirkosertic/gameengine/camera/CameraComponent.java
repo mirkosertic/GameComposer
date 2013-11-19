@@ -1,14 +1,18 @@
 package de.mirkosertic.gameengine.camera;
 
-import de.mirkosertic.gameengine.core.*;
-import de.mirkosertic.gameengine.event.GameEventListener;
-import de.mirkosertic.gameengine.types.Position;
-import de.mirkosertic.gameengine.types.Size;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import de.mirkosertic.gameengine.core.GameComponent;
+import de.mirkosertic.gameengine.core.GameObjectInstance;
+import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.SetScreenResolution;
+import de.mirkosertic.gameengine.event.GameEventListener;
+import de.mirkosertic.gameengine.types.Position;
+import de.mirkosertic.gameengine.types.Size;
 
 public class CameraComponent extends GameComponent {
 
@@ -22,12 +26,18 @@ public class CameraComponent extends GameComponent {
         objectInstance = aObjectInstance;
     }
 
+    CameraComponent(GameObjectInstance aObjectInstance, CameraComponentTemplate aTemplate) {
+        this(aObjectInstance);
+    }
+
     void registerEvents(GameRuntime aGameRuntime) {
-        aGameRuntime.getEventManager().register(objectInstance, SetScreenResolution.class, new GameEventListener<SetScreenResolution>() {
-            public void handleGameEvent(SetScreenResolution aEvent) {
-                setScreenSize(new Size(aEvent.screenSizeProperty().get().width, aEvent.screenSizeProperty().get().height));
-            }
-        });
+        aGameRuntime.getEventManager().register(objectInstance, SetScreenResolution.class,
+                new GameEventListener<SetScreenResolution>() {
+                    public void handleGameEvent(SetScreenResolution aEvent) {
+                        setScreenSize(new Size(aEvent.screenSizeProperty().get().width, aEvent.screenSizeProperty()
+                                .get().height));
+                    }
+                });
     }
 
     public GameObjectInstance getObjectInstance() {
@@ -42,21 +52,24 @@ public class CameraComponent extends GameComponent {
         this.screenSize = screenSize;
     }
 
-
     public List<GameObjectInstance> getObjectsToDrawInRightOrder(GameScene aScene) {
-        //TODO: Implement Z-Ordering here
+        // TODO: Implement Z-Ordering here
         List<GameObjectInstance> theResult = new ArrayList<GameObjectInstance>();
 
         Size theScreenSize = getScreenSize();
         if (theScreenSize != null) {
             Position theCameraPosition = objectInstance.positionProperty().get();
-
             for (GameObjectInstance theInstance : aScene.getInstances()) {
-                Position theInstancePosition = theInstance.positionProperty().get();
-                Size theSize = theInstance.getOwnerGameObject().sizeProperty().get();
-                if (theInstancePosition.x + theSize.width >= theCameraPosition.x && theInstancePosition.x <= theCameraPosition.x + theScreenSize.width &&
-                        theInstancePosition.y + theSize.height >= theCameraPosition.y && theInstancePosition.y <= theCameraPosition.y + theScreenSize.height) {
-                    theResult.add(theInstance);
+                // Just visible instances need to be drawn
+                if (theInstance.visibleProperty().get()) {
+                    Position theInstancePosition = theInstance.positionProperty().get();
+                    Size theSize = theInstance.getOwnerGameObject().sizeProperty().get();
+                    if (theInstancePosition.x + theSize.width >= theCameraPosition.x
+                            && theInstancePosition.x <= theCameraPosition.x + theScreenSize.width
+                            && theInstancePosition.y + theSize.height >= theCameraPosition.y
+                            && theInstancePosition.y <= theCameraPosition.y + theScreenSize.height) {
+                        theResult.add(theInstance);
+                    }
                 }
             }
         }
@@ -101,6 +114,7 @@ public class CameraComponent extends GameComponent {
         float theCenterX = theObjectPosition.x + theObjectSize.width / 2;
         float theCenterY = theObjectPosition.y + theObjectSize.height / 2;
 
-        objectInstance.positionProperty().set(new Position(theCenterX - screenSize.width / 2, theCenterY - screenSize.height / 2));
+        objectInstance.positionProperty().set(
+                new Position(theCenterX - screenSize.width / 2, theCenterY - screenSize.height / 2));
     }
 }

@@ -1,7 +1,7 @@
 package de.mirkosertic.gamecomposer.objectinspector.cameratemplate;
 
 import de.mirkosertic.gamecomposer.PropertyBinder;
-import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorChildController;
+import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorElementController;
 import de.mirkosertic.gameengine.camera.CameraComponentTemplate;
 import de.mirkosertic.gameengine.camera.CameraType;
 
@@ -15,7 +15,7 @@ import javafx.util.StringConverter;
 
 import java.util.Arrays;
 
-public class CameraTemplateEditorController implements ObjectInspectorChildController {
+public class CameraTemplateEditorController implements ObjectInspectorElementController {
 
     private class CameraTypeToStringConverter extends StringConverter<CameraType> {
         @Override

@@ -56,7 +56,7 @@ public class PlatformComponentTemplate extends GameComponentTemplate<PlatformCom
     }
 
     public PlatformComponent create(GameObjectInstance aInstance, GameRuntime aGameRuntime) {
-        PlatformComponent theSpriteComponent = new PlatformComponent(aInstance, aGameRuntime);
+        PlatformComponent theSpriteComponent = new PlatformComponent(aInstance, aGameRuntime, this);
         theSpriteComponent.registerEvents(aGameRuntime);
         return theSpriteComponent;
     }

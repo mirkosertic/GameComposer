@@ -1,14 +1,7 @@
 package de.mirkosertic.gamecomposer.contentarea.eventsheet;
 
-import de.mirkosertic.gamecomposer.ChildController;
-import de.mirkosertic.gamecomposer.FlushResourceCacheEvent;
-import de.mirkosertic.gamecomposer.ObjectSelectedEvent;
-import de.mirkosertic.gamecomposer.ShutdownEvent;
-import de.mirkosertic.gamecomposer.contentarea.ContentChildController;
-import de.mirkosertic.gameengine.core.EventSheet;
-import de.mirkosertic.gameengine.core.GameRule;
-import de.mirkosertic.gameengine.event.PropertyChanged;
-
+import java.util.ArrayList;
+import java.util.List;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Tab;
@@ -16,10 +9,16 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
 
-public class EventSheetEditorController implements ContentChildController<EventSheet> {
+import de.mirkosertic.gamecomposer.FlushResourceCacheEvent;
+import de.mirkosertic.gamecomposer.ObjectSelectedEvent;
+import de.mirkosertic.gamecomposer.ShutdownEvent;
+import de.mirkosertic.gamecomposer.contentarea.ContentController;
+import de.mirkosertic.gameengine.core.EventSheet;
+import de.mirkosertic.gameengine.core.GameRule;
+import de.mirkosertic.gameengine.event.PropertyChanged;
+
+public class EventSheetEditorController implements ContentController<EventSheet> {
 
     @FXML
     VBox rulesList;

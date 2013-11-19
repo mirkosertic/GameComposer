@@ -22,7 +22,7 @@ public class StaticComponentTemplate extends GameComponentTemplate<StaticCompone
     }
 
     public StaticComponent create(GameObjectInstance aInstance, GameRuntime aGameRuntime) {
-        return new StaticComponent(aInstance);
+        return new StaticComponent(aInstance, this);
     }
 
     @Override
