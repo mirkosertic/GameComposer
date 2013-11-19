@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import de.mirkosertic.gameengine.physics.ObjectCollisionCondition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -74,6 +76,7 @@ public class RuleEditorController implements Controller {
 
         knownEventTypes = new HashMap<>();
         knownEventTypes.put(KeyEventCondition.class.getSimpleName(), KeyEventCondition.class);
+        knownEventTypes.put(ObjectCollisionCondition.class.getSimpleName(), ObjectCollisionCondition.class);
 
         knownActions = new ArrayList<>();
         knownActions.add(PlaySoundAction.class);

@@ -25,6 +25,14 @@ public class ObjectCollisionCondition implements Condition {
         secondaryObject = new Property<GameObject>(this, "secondaryObject", (GameObject) null);
     }
 
+    public Property<GameObject> primaryObjectProperty() {
+        return primaryObject;
+    }
+
+    public Property<GameObject> secondaryObjectProperty() {
+        return secondaryObject;
+    }
+
     @Override
     public ConditionResult appliesTo(GameEvent aEvent) {
         if (aEvent instanceof GameObjectCollision) {

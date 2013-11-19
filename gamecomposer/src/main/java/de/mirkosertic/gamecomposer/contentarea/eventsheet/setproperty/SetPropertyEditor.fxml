@@ -8,24 +8,28 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
 
-<BorderPane id="BorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns:fx="http://javafx.com/fxml" fx:controller="de.mirkosertic.gamecomposer.contentarea.eventsheet.setproperty.SetPropertyEditorController">
+<BorderPane id="BorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="de.mirkosertic.gamecomposer.contentarea.eventsheet.setproperty.SetPropertyEditorController">
   <center>
     <GridPane hgap="5.0" vgap="5.0">
       <children>
         <Label text="Property:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
         <Label text="New Value:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-        <ComboBox fx:id="propertyName" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="0">
-          <items>
-            <FXCollections fx:factory="observableArrayList">
-              <String fx:value="Item 1" />
-              <String fx:value="Item 2" />
-              <String fx:value="Item 3" />
-            </FXCollections>
-          </items>
-        </ComboBox>
-        <TextField fx:id="propertyValueTextField" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-        <CheckBox fx:id="propertyValueCheckbox" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="CheckBox" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-        <ComboBox fx:id="propertyValueComboBox" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="1">
+        <VBox prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
+          <children>
+            <TextField fx:id="propertyValueTextField" maxWidth="1.7976931348623157E308" minHeight="-Infinity" visible="false" />
+            <CheckBox fx:id="propertyValueCheckbox" maxWidth="1.7976931348623157E308" minHeight="-Infinity" mnemonicParsing="false" text="" visible="true" />
+            <ComboBox fx:id="propertyValueComboBox" maxWidth="1.7976931348623157E308" minHeight="-Infinity" visible="false">
+              <items>
+                <FXCollections fx:factory="observableArrayList">
+                  <String fx:value="Item 1" />
+                  <String fx:value="Item 2" />
+                  <String fx:value="Item 3" />
+                </FXCollections>
+              </items>
+            </ComboBox>
+          </children>
+        </VBox>
+        <ComboBox fx:id="propertyName" maxWidth="1.7976931348623157E308" onAction="#onSelectProperty" GridPane.columnIndex="1" GridPane.rowIndex="0">
           <items>
             <FXCollections fx:factory="observableArrayList">
               <String fx:value="Item 1" />
