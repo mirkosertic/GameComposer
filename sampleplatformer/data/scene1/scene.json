@@ -13,6 +13,18 @@
         "type" : "PlaySoundAction",
         "resourceName" : "/assets/audio/boing.wav"
       } ]
+    }, {
+      "condition" : {
+        "secondaryObjectUuid" : "-279500599772276169",
+        "type" : "ObjectCollisionCondition",
+        "primaryObjectUuid" : "4343694719606608272"
+      },
+      "name" : "Collect a star",
+      "actions" : [ {
+        "propertyName" : "visible",
+        "propertyValue" : { },
+        "type" : "SetPropertyAction"
+      } ]
     } ]
   } ],
   "defaultplayerobjectid" : "-279500599772276169",
@@ -1099,8 +1111,8 @@
     "uuid" : "-1236704362356015084"
   }, {
     "position" : {
-      "y" : "252.49786",
-      "x" : "602.8897"
+      "y" : "252.58405",
+      "x" : "602.7759"
     },
     "visible" : "true",
     "rotationangle" : {
@@ -1109,16 +1121,16 @@
     "gameobjectuuid" : "427110152030095327",
     "name" : "bean_small_1384375980691",
     "components" : [ {
+      "type" : "SpriteComponent"
+    }, {
       "active" : "true",
       "type" : "PhysicsComponent"
-    }, {
-      "type" : "SpriteComponent"
     } ],
     "uuid" : "-6045248509559337206"
   }, {
     "position" : {
-      "y" : "252.49753",
-      "x" : "546.9516"
+      "y" : "252.58768",
+      "x" : "546.93726"
     },
     "visible" : "true",
     "rotationangle" : {
@@ -1127,16 +1139,16 @@
     "gameobjectuuid" : "427110152030095327",
     "name" : "bean_small_1384414773959",
     "components" : [ {
+      "type" : "SpriteComponent"
+    }, {
       "active" : "true",
       "type" : "PhysicsComponent"
-    }, {
-      "type" : "SpriteComponent"
     } ],
     "uuid" : "-6549010255961436150"
   }, {
     "position" : {
-      "y" : "217.13535",
-      "x" : "583.8634"
+      "y" : "217.23575",
+      "x" : "583.8009"
     },
     "visible" : "true",
     "rotationangle" : {
@@ -1145,10 +1157,10 @@
     "gameobjectuuid" : "427110152030095327",
     "name" : "bean_small_1384414777213",
     "components" : [ {
+      "type" : "SpriteComponent"
+    }, {
       "active" : "true",
       "type" : "PhysicsComponent"
-    }, {
-      "type" : "SpriteComponent"
     } ],
     "uuid" : "-5663747140516834865"
   }, {
@@ -1170,8 +1182,8 @@
     "uuid" : "-1353019716393943362"
   }, {
     "position" : {
-      "y" : "298.72003",
-      "x" : "516.47876"
+      "y" : "298.73975",
+      "x" : "516.46265"
     },
     "visible" : "true",
     "rotationangle" : {
@@ -1186,8 +1198,8 @@
     "uuid" : "5312266426240520798"
   }, {
     "position" : {
-      "y" : "298.66003",
-      "x" : "716.7003"
+      "y" : "298.67328",
+      "x" : "716.5593"
     },
     "visible" : "true",
     "rotationangle" : {
@@ -1250,8 +1262,8 @@
     "uuid" : "6105785280505011624"
   }, {
     "position" : {
-      "y" : "287.69995",
-      "x" : "495.4826"
+      "y" : "287.7615",
+      "x" : "495.4073"
     },
     "visible" : "true",
     "rotationangle" : {
@@ -1283,19 +1295,19 @@
     }
   }, {
     "templates" : [ {
-      "density" : "1.0",
-      "fixedrotation" : "true",
-      "friction" : "1.8",
-      "active" : "true",
-      "type" : "PhysicsComponent",
-      "restitution" : "0.0"
-    }, {
       "jumpKey" : "UP",
       "moveRightKey" : "RIGHT",
       "leftRightImpulse" : "4.0",
       "moveLeftKey" : "LEFT",
       "jumpImpulse" : "2.0",
       "type" : "PlatformComponent"
+    }, {
+      "density" : "1.0",
+      "fixedrotation" : "true",
+      "friction" : "1.8",
+      "active" : "true",
+      "type" : "PhysicsComponent",
+      "restitution" : "0.0"
     }, {
       "resourcename" : {
         "name" : "/assets/objects/duke_small.png"
