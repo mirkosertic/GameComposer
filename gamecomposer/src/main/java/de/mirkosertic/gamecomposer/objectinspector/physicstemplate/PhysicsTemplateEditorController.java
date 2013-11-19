@@ -27,6 +27,9 @@ public class PhysicsTemplateEditorController implements ObjectInspectorElementCo
     @FXML
     TextField restitution;
 
+    @FXML
+    TextField gravityScale;
+
     private Parent view;
     private PhysicsComponentTemplate object;
 
@@ -37,6 +40,7 @@ public class PhysicsTemplateEditorController implements ObjectInspectorElementCo
         PropertyBinder.unbind(object.densityProperty());
         PropertyBinder.unbind(object.frictionProperty());
         PropertyBinder.unbind(object.restitutionProperty());
+        PropertyBinder.unbind(object.gravityScaleProperty());
     }
 
     public PhysicsTemplateEditorController initialize(Parent aView, PhysicsComponentTemplate aObject) {
@@ -78,6 +82,18 @@ public class PhysicsTemplateEditorController implements ObjectInspectorElementCo
                 return Float.parseFloat(aValue);
             }
         });
+        PropertyBinder.bind(object.gravityScaleProperty(), gravityScale.textProperty(), new PropertyBinder.Converter<Float, String>() {
+            @Override
+            public String beanToUI(Float aValue) {
+                return Float.toString(aValue);
+            }
+
+            @Override
+            public Float uiToBean(String aValue) {
+                return Float.parseFloat(aValue);
+            }
+        });
+
 
         return this;
     }

@@ -72,7 +72,7 @@ public class CollisionEventConditionEditorController implements Controller {
                 return null;
             }
         });
-        secondaryObject.getSelectionModel().select(aCondition.primaryObjectProperty().get());
+        secondaryObject.getSelectionModel().select(aCondition.secondaryObjectProperty().get());
 
         primaryObject.setOnAction(new EventHandler<ActionEvent>() {
             @Override
