@@ -33,6 +33,20 @@ import de.mirkosertic.gameengine.types.Size;
 
 public class JBox2DGamePhysicsManager implements GamePhysicsManager {
 
+    private class VisibleListener implements GameEventListener<PropertyChanged> {
+        @Override
+        public void handleGameEvent(PropertyChanged aEvent) {
+            GameObjectInstance theInstance = (GameObjectInstance) aEvent.getOwner();
+            Body theBody = staticObjects.get(theInstance);
+            if (theBody == null) {
+                theBody = dynamicObjects.get(theInstance);
+            }
+            if (theBody != null) {
+                theBody.setActive(theInstance.visibleProperty().get());
+            }
+        }
+    }
+
     private class FixedAngleListener implements GameEventListener<PropertyChanged> {
         @Override
         public void handleGameEvent(PropertyChanged aEvent) {
@@ -100,6 +114,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
     private final PositionChangeListener positionChangeListener;
     private final SizeChangeListener sizeChangeListener;
     private final FixedAngleListener fixedAngleListener;
+    private final VisibleListener visibleListener;
     private final Set<GameObject> alreadyRegisteredSizeListener;
     private boolean insimulation;
 
@@ -109,6 +124,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
         positionChangeListener = new PositionChangeListener();
         sizeChangeListener = new SizeChangeListener();
         fixedAngleListener = new FixedAngleListener();
+        visibleListener = new VisibleListener();
 
         // This is the gravity vector, it goes down in our coordinate system, of course
         Vec2 gravity = new Vec2(0.0f, -10.0f);
@@ -163,11 +179,13 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
         theBodyDef.type = aBodyType;
         theBodyDef.setAngle(aInstance.rotationAngleProperty().get().invert().toRadians());
         theBodyDef.position = computePosition(aInstance);
+        theBodyDef.gravityScale = 1;
 
         PhysicsComponentTemplate theTemplate = aInstance.getOwnerGameObject().getComponentTemplate(PhysicsComponentTemplate.class);
         if (theTemplate != null) {
             theBodyDef.setActive(theTemplate.activeProperty().get());
             theBodyDef.setFixedRotation(theTemplate.fixedRotationProperty().get());
+            theBodyDef.setGravityScale(theTemplate.gravityScaleProperty().get());
         }
 
         return theBodyDef;
@@ -194,6 +212,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
         synchronized (physicsWorld) {
             aInstance.positionProperty().addChangeListener(positionChangeListener);
             aInstance.rotationAngleProperty().addChangeListener(positionChangeListener);
+            aInstance.visibleProperty().addChangeListener(visibleListener);
             if (alreadyRegisteredSizeListener.add(aInstance.getOwnerGameObject())) {
                 aInstance.getOwnerGameObject().sizeProperty().addChangeListener(sizeChangeListener);
                 PhysicsComponentTemplate theTemplate = aInstance.getOwnerGameObject().getComponentTemplate(PhysicsComponentTemplate.class);

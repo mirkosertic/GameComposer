@@ -19,6 +19,7 @@ public class PhysicsComponentTemplate extends GameComponentTemplate<PhysicsCompo
     private final Property<Float> density;
     private final Property<Float> friction;
     private final Property<Float> restitution;
+    private final Property<Float> gravityScale;
 
     public PhysicsComponentTemplate(GameEventManager aEventManager, GameObject aOwner) {
         owner = aOwner;
@@ -28,6 +29,7 @@ public class PhysicsComponentTemplate extends GameComponentTemplate<PhysicsCompo
         density = registerProperty(new Property<Float>(this, "density", 1f, aEventManager));
         friction = registerProperty(new Property<Float>(this, "friction", 1.8f, aEventManager));
         restitution = registerProperty(new Property<Float>(this, "restitution", 0f, aEventManager));
+        gravityScale = registerProperty(new Property<Float>(this, "gravityScale", 1f, aEventManager));
     }
 
     @Override
@@ -55,6 +57,10 @@ public class PhysicsComponentTemplate extends GameComponentTemplate<PhysicsCompo
         return restitution;
     }
 
+    public Property<Float> gravityScaleProperty() {
+        return gravityScale;
+    }
+
     public PhysicsComponent create(GameObjectInstance aInstance, GameRuntime aGameRuntime) {
         return new PhysicsComponent(aInstance, this);
     }
@@ -68,6 +74,7 @@ public class PhysicsComponentTemplate extends GameComponentTemplate<PhysicsCompo
         theResult.put("density", Float.toString(density.get()));
         theResult.put("friction", Float.toString(friction.get()));
         theResult.put("restitution", Float.toString(restitution.get()));
+        theResult.put("gravityScale", Float.toString(gravityScale.get()));
         return theResult;
     }
 
@@ -92,6 +99,10 @@ public class PhysicsComponentTemplate extends GameComponentTemplate<PhysicsCompo
         String theRestitution = (String) aSerializedData.get("restitution");
         if (theRestitution != null) {
             theTemplate.restitution.setQuietly(Float.parseFloat(theRestitution));
+        }
+        String theGravityScale = (String) aSerializedData.get("gravityScale");
+        if (theGravityScale != null) {
+            theTemplate.gravityScale.setQuietly(Float.parseFloat(theGravityScale));
         }
 
         return theTemplate;

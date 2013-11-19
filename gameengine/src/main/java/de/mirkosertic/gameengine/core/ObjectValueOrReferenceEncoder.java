@@ -9,6 +9,14 @@ public class ObjectValueOrReferenceEncoder {
 
     public static Map<String, String> encodeValueOrReference(Object aValue) {
         Map<String, String> theResult = new HashMap<String, String>();
+        if (aValue instanceof Boolean) {
+            theResult.put("type", "Boolean");
+            theResult.put("value", Boolean.toString((Boolean) aValue));
+        }
+        if (aValue instanceof Float) {
+            theResult.put("type", "Float");
+            theResult.put("value", Float.toString((Float) aValue));
+        }
         if (aValue instanceof String) {
             theResult.put("type", "String");
             theResult.put("value", (String) aValue);
@@ -36,6 +44,12 @@ public class ObjectValueOrReferenceEncoder {
         String theType = (String) aValue.get("type");
         if ("String".equals(theType)) {
             return aValue.get("value");
+        }
+        if ("Boolean".equals(theType)) {
+            return Boolean.valueOf((String) aValue.get("value"));
+        }
+        if ("Float".equals(theType)) {
+            return Float.valueOf((String) aValue.get("value"));
         }
         if ("GameKeyCode".equals(theType)) {
             return GameKeyCode.valueOf((String) aValue.get("value"));

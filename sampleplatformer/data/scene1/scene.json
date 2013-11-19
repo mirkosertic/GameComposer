@@ -22,8 +22,14 @@
       "name" : "Collect a star",
       "actions" : [ {
         "propertyName" : "visible",
-        "propertyValue" : { },
+        "propertyValue" : {
+          "value" : "false",
+          "type" : "Boolean"
+        },
         "type" : "SetPropertyAction"
+      }, {
+        "type" : "PlaySoundAction",
+        "resourceName" : "/assets/audio/pickup_gem_1.wav"
       } ]
     } ]
   } ],
@@ -50,93 +56,111 @@
   }, {
     "position" : {
       "y" : "187.0",
-      "x" : "304.0"
+      "x" : "284.0"
     },
     "visible" : "true",
     "rotationangle" : {
       "angleindegrees" : "0"
     },
     "gameobjectuuid" : "4343694719606608272",
-    "name" : "Star_1384887292492",
+    "name" : "Star_1384888985355",
     "components" : [ {
       "type" : "SpriteComponent"
+    }, {
+      "active" : "true",
+      "type" : "PhysicsComponent"
     } ],
-    "uuid" : "-2058762807588355802"
+    "uuid" : "1168806397977091524"
   }, {
     "position" : {
-      "y" : "182.0",
-      "x" : "416.0"
+      "y" : "185.0",
+      "x" : "407.0"
     },
     "visible" : "true",
     "rotationangle" : {
       "angleindegrees" : "0"
     },
     "gameobjectuuid" : "4343694719606608272",
-    "name" : "Star_1384887295886",
+    "name" : "Star_1384888988875",
     "components" : [ {
       "type" : "SpriteComponent"
+    }, {
+      "active" : "true",
+      "type" : "PhysicsComponent"
     } ],
-    "uuid" : "6363556220616322191"
+    "uuid" : "39450811341575419"
   }, {
     "position" : {
-      "y" : "123.0",
-      "x" : "538.0"
+      "y" : "142.0",
+      "x" : "525.0"
     },
     "visible" : "true",
     "rotationangle" : {
       "angleindegrees" : "0"
     },
     "gameobjectuuid" : "4343694719606608272",
-    "name" : "Star_1384887305059",
+    "name" : "Star_1384888993618",
     "components" : [ {
       "type" : "SpriteComponent"
+    }, {
+      "active" : "true",
+      "type" : "PhysicsComponent"
     } ],
-    "uuid" : "4605492740924336879"
+    "uuid" : "940107331463765884"
   }, {
     "position" : {
-      "y" : "135.0",
-      "x" : "665.0"
+      "y" : "136.0",
+      "x" : "641.0"
     },
     "visible" : "true",
     "rotationangle" : {
       "angleindegrees" : "0"
     },
     "gameobjectuuid" : "4343694719606608272",
-    "name" : "Star_1384887308681",
+    "name" : "Star_1384888996543",
     "components" : [ {
       "type" : "SpriteComponent"
+    }, {
+      "active" : "true",
+      "type" : "PhysicsComponent"
     } ],
-    "uuid" : "7145521159990069249"
+    "uuid" : "3860926572867008005"
   }, {
     "position" : {
-      "y" : "197.0",
-      "x" : "801.0"
+      "y" : "189.99998",
+      "x" : "756.0"
     },
     "visible" : "true",
     "rotationangle" : {
       "angleindegrees" : "0"
     },
     "gameobjectuuid" : "4343694719606608272",
-    "name" : "Star_1384887313018",
+    "name" : "Star_1384888999417",
     "components" : [ {
       "type" : "SpriteComponent"
+    }, {
+      "active" : "true",
+      "type" : "PhysicsComponent"
     } ],
-    "uuid" : "1006003799042971418"
+    "uuid" : "-8948331873596536217"
   }, {
     "position" : {
-      "y" : "251.0",
-      "x" : "906.0"
+      "y" : "263.0",
+      "x" : "864.99994"
     },
     "visible" : "true",
     "rotationangle" : {
       "angleindegrees" : "0"
     },
     "gameobjectuuid" : "4343694719606608272",
-    "name" : "Star_1384887315632",
+    "name" : "Star_1384889002239",
     "components" : [ {
       "type" : "SpriteComponent"
+    }, {
+      "active" : "true",
+      "type" : "PhysicsComponent"
     } ],
-    "uuid" : "8754419712979813908"
+    "uuid" : "6402095516018938434"
   }, {
     "position" : {
       "y" : "684.0",
@@ -1111,8 +1135,8 @@
     "uuid" : "-1236704362356015084"
   }, {
     "position" : {
-      "y" : "252.58405",
-      "x" : "602.7759"
+      "y" : "252.30167",
+      "x" : "602.683"
     },
     "visible" : "true",
     "rotationangle" : {
@@ -1129,8 +1153,8 @@
     "uuid" : "-6045248509559337206"
   }, {
     "position" : {
-      "y" : "252.58768",
-      "x" : "546.93726"
+      "y" : "252.30963",
+      "x" : "546.94275"
     },
     "visible" : "true",
     "rotationangle" : {
@@ -1147,8 +1171,8 @@
     "uuid" : "-6549010255961436150"
   }, {
     "position" : {
-      "y" : "217.23575",
-      "x" : "583.8009"
+      "y" : "216.91751",
+      "x" : "583.76025"
     },
     "visible" : "true",
     "rotationangle" : {
@@ -1182,8 +1206,8 @@
     "uuid" : "-1353019716393943362"
   }, {
     "position" : {
-      "y" : "298.73975",
-      "x" : "516.46265"
+      "y" : "298.6775",
+      "x" : "516.4561"
     },
     "visible" : "true",
     "rotationangle" : {
@@ -1198,8 +1222,8 @@
     "uuid" : "5312266426240520798"
   }, {
     "position" : {
-      "y" : "298.67328",
-      "x" : "716.5593"
+      "y" : "298.62653",
+      "x" : "716.43085"
     },
     "visible" : "true",
     "rotationangle" : {
@@ -1262,8 +1286,8 @@
     "uuid" : "6105785280505011624"
   }, {
     "position" : {
-      "y" : "287.7615",
-      "x" : "495.4073"
+      "y" : "287.56326",
+      "x" : "495.3507"
     },
     "visible" : "true",
     "rotationangle" : {
@@ -1295,6 +1319,11 @@
     }
   }, {
     "templates" : [ {
+      "resourcename" : {
+        "name" : "/assets/objects/duke_small.png"
+      },
+      "type" : "SpriteComponent"
+    }, {
       "jumpKey" : "UP",
       "moveRightKey" : "RIGHT",
       "leftRightImpulse" : "4.0",
@@ -1302,17 +1331,13 @@
       "jumpImpulse" : "2.0",
       "type" : "PlatformComponent"
     }, {
+      "gravityScale" : "1.0",
       "density" : "1.0",
       "fixedrotation" : "true",
       "friction" : "1.8",
       "active" : "true",
       "type" : "PhysicsComponent",
       "restitution" : "0.0"
-    }, {
-      "resourcename" : {
-        "name" : "/assets/objects/duke_small.png"
-      },
-      "type" : "SpriteComponent"
     } ],
     "name" : "Duke",
     "uuid" : "-279500599772276169",
@@ -1326,6 +1351,14 @@
         "name" : "/assets/objects/star.png"
       },
       "type" : "SpriteComponent"
+    }, {
+      "gravityScale" : "0.0",
+      "density" : "1.0",
+      "fixedrotation" : "false",
+      "friction" : "1.8",
+      "active" : "true",
+      "type" : "PhysicsComponent",
+      "restitution" : "0.0"
     } ],
     "name" : "Star",
     "uuid" : "4343694719606608272",
@@ -1335,12 +1368,12 @@
     }
   }, {
     "templates" : [ {
-      "type" : "StaticComponent"
-    }, {
       "resourcename" : {
         "name" : "/assets/tiles/wall1_4.png"
       },
       "type" : "SpriteComponent"
+    }, {
+      "type" : "StaticComponent"
     } ],
     "name" : "Walkway_botom_left",
     "uuid" : "-6077101624070649173",
@@ -1350,12 +1383,12 @@
     }
   }, {
     "templates" : [ {
-      "type" : "StaticComponent"
-    }, {
       "resourcename" : {
         "name" : "/assets/tiles/wall2_3.png"
       },
       "type" : "SpriteComponent"
+    }, {
+      "type" : "StaticComponent"
     } ],
     "name" : "Walkway_bottom_middle",
     "uuid" : "-7220657972923747107",
@@ -1365,12 +1398,12 @@
     }
   }, {
     "templates" : [ {
-      "type" : "StaticComponent"
-    }, {
       "resourcename" : {
         "name" : "/assets/tiles/wall1_3.png"
       },
       "type" : "SpriteComponent"
+    }, {
+      "type" : "StaticComponent"
     } ],
     "name" : "Walkway_bottom_right",
     "uuid" : "647197498473429375",
@@ -1380,12 +1413,12 @@
     }
   }, {
     "templates" : [ {
-      "type" : "StaticComponent"
-    }, {
       "resourcename" : {
         "name" : "/assets/tiles/wall3_2.png"
       },
       "type" : "SpriteComponent"
+    }, {
+      "type" : "StaticComponent"
     } ],
     "name" : "Walkway_left_middle",
     "uuid" : "-2648947804278990847",
@@ -1395,12 +1428,12 @@
     }
   }, {
     "templates" : [ {
-      "type" : "StaticComponent"
-    }, {
       "resourcename" : {
         "name" : "/assets/tiles/wall1_2.png"
       },
       "type" : "SpriteComponent"
+    }, {
+      "type" : "StaticComponent"
     } ],
     "name" : "Walkway_left_top",
     "uuid" : "6595711303285831883",
@@ -1410,12 +1443,12 @@
     }
   }, {
     "templates" : [ {
-      "type" : "StaticComponent"
-    }, {
       "resourcename" : {
         "name" : "/assets/tiles/wall2_1.png"
       },
       "type" : "SpriteComponent"
+    }, {
+      "type" : "StaticComponent"
     } ],
     "name" : "Walkway_middle_top_1",
     "uuid" : "2738111980994969784",
@@ -1425,12 +1458,12 @@
     }
   }, {
     "templates" : [ {
-      "type" : "StaticComponent"
-    }, {
       "resourcename" : {
         "name" : "/assets/tiles/wall2_2.png"
       },
       "type" : "SpriteComponent"
+    }, {
+      "type" : "StaticComponent"
     } ],
     "name" : "Walkway_middle_top_2",
     "uuid" : "7991002059236720051",
@@ -1440,12 +1473,12 @@
     }
   }, {
     "templates" : [ {
-      "type" : "StaticComponent"
-    }, {
       "resourcename" : {
         "name" : "/assets/tiles/wall3_1.png"
       },
       "type" : "SpriteComponent"
+    }, {
+      "type" : "StaticComponent"
     } ],
     "name" : "Walkway_right_middle",
     "uuid" : "-4597433157293241913",
@@ -1455,12 +1488,12 @@
     }
   }, {
     "templates" : [ {
-      "type" : "StaticComponent"
-    }, {
       "resourcename" : {
         "name" : "/assets/tiles/wall1_1.png"
       },
       "type" : "SpriteComponent"
+    }, {
+      "type" : "StaticComponent"
     } ],
     "name" : "Walkway_right_top",
     "uuid" : "7431117854133416743",
@@ -1483,17 +1516,18 @@
     }
   }, {
     "templates" : [ {
+      "resourcename" : {
+        "name" : "/assets/objects/bean_small.png"
+      },
+      "type" : "SpriteComponent"
+    }, {
+      "gravityScale" : "1.0",
       "density" : "1.0",
       "fixedrotation" : "false",
       "friction" : "1.8",
       "active" : "true",
       "type" : "PhysicsComponent",
       "restitution" : "0.0"
-    }, {
-      "resourcename" : {
-        "name" : "/assets/objects/bean_small.png"
-      },
-      "type" : "SpriteComponent"
     } ],
     "name" : "bean_small",
     "uuid" : "427110152030095327",
@@ -1503,12 +1537,12 @@
     }
   }, {
     "templates" : [ {
-      "type" : "StaticComponent"
-    }, {
       "resourcename" : {
         "name" : "/assets/objects/finish.png"
       },
       "type" : "SpriteComponent"
+    }, {
+      "type" : "StaticComponent"
     } ],
     "name" : "finish_sign",
     "uuid" : "-3769331226440908538",
@@ -1518,6 +1552,7 @@
     }
   }, {
     "templates" : [ {
+      "gravityScale" : "1.0",
       "density" : "1.0",
       "fixedrotation" : "false",
       "friction" : "1.8",
@@ -1533,6 +1568,7 @@
     }
   }, {
     "templates" : [ {
+      "gravityScale" : "1.0",
       "density" : "1.0",
       "fixedrotation" : "false",
       "friction" : "1.8",
