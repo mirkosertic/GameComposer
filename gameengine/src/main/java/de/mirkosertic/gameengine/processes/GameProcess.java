@@ -2,9 +2,15 @@ package de.mirkosertic.gameengine.processes;
 
 public interface GameProcess {
 
-    void started(GameProcessManager aProcessManager);
+    static enum ProceedResult {
+        STOPPED, CONTINUE_RUNNING
+    }
 
-    void proceedGame(long aGameTime, long aElapsedTimeSinceLastLoop);
+    void started();
+
+    ProceedResult proceedGame(long aGameTime, long aElapsedTimeSinceLastLoop);
 
     void killed();
+
+    GameProcess getChildProcess();
 }

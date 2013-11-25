@@ -12,7 +12,7 @@ public class SpriteComponent extends GameComponent {
 
     private final GameObjectInstance objectInstance;
 
-    SpriteComponent(GameObjectInstance aObjectInstance) {
+    private SpriteComponent(GameObjectInstance aObjectInstance) {
         objectInstance = aObjectInstance;
     }
 

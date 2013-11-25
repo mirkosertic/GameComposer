@@ -18,8 +18,8 @@ import java.util.List;
 public class SetPropertyEditorController implements Controller {
 
     class SupportedProperty {
-        String name;
-        Class type;
+        final String name;
+        final Class type;
 
         SupportedProperty(String aName, Class aType) {
             name = aName;
