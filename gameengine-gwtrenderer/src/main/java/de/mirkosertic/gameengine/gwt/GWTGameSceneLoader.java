@@ -21,21 +21,19 @@ class GWTGameSceneLoader {
 
     private final GameSceneLoadedListener listener;
     private final AbstractGameRuntimeFactory runtimeFactory;
-    private final GWTGameResourceLoader gwtGameResourceLoader;
 
-    public GWTGameSceneLoader(GameSceneLoadedListener aListener, AbstractGameRuntimeFactory aRuntimeFactory, GWTGameResourceLoader aResourceLoader) {
+    public GWTGameSceneLoader(GameSceneLoadedListener aListener, AbstractGameRuntimeFactory aRuntimeFactory) {
         listener = aListener;
         runtimeFactory = aRuntimeFactory;
-        gwtGameResourceLoader = aResourceLoader;
     }
 
-    public void loadFromServer(String aSceneName) {
+    public void loadFromServer(String aSceneName, final GWTGameResourceLoader aResourceLoader) {
         RequestBuilder theBuilder = new RequestBuilder(RequestBuilder.GET, aSceneName+"/scene.json");
         try {
             theBuilder.sendRequest(null, new RequestCallback() {
                 @Override
                 public void onResponseReceived(Request aRequest, Response aResponse) {
-                    listener.onGameSceneLoaded(parse(aResponse));
+                    listener.onGameSceneLoaded(parse(aResponse, aResourceLoader));
                 }
 
                 @Override
@@ -50,9 +48,9 @@ class GWTGameSceneLoader {
         }
     }
     
-    private GameScene parse(Response aResponse) {
+    private GameScene parse(Response aResponse, GWTGameResourceLoader aResourceLoader) {
         JSONValue theJSONParsed = JSONParser.parseStrict(aResponse.getText());
         Map<String, Object> theResult = JSONUtils.toMap(theJSONParsed);
-        return GameScene.deserialize(runtimeFactory.create(gwtGameResourceLoader, new GWTGameSoundSystemFactory()), theResult);
+        return GameScene.deserialize(runtimeFactory.create(aResourceLoader, new GWTGameSoundSystemFactory()), theResult);
     }
 }
