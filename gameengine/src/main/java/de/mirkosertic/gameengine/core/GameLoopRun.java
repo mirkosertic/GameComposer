@@ -12,8 +12,8 @@ public class GameLoopRun extends GameEvent {
     public GameLoopRun(long aGameTime, long aElapsedTimeSinceLastLoop) {
         super("GameLoopRun");
 
-        gameTime = registerProperty(new Property<Long>(this, "gameTime", Long.valueOf(aGameTime)));
-        elapsedTimeSinceLastLoop = registerProperty(new Property<Long>(this, "elapsedTimeSinceLastLoop", Long.valueOf(aElapsedTimeSinceLastLoop)));
+        gameTime = registerProperty(new Property<Long>(this, "gameTime", aGameTime));
+        elapsedTimeSinceLastLoop = registerProperty(new Property<Long>(this, "elapsedTimeSinceLastLoop", aElapsedTimeSinceLastLoop));
     }
 
     public ReadOnlyProperty<Long> gameTimeProperty() {

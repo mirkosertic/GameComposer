@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.mirkosertic.gameengine.action.RunSceneAction;
 import de.mirkosertic.gameengine.physics.ObjectCollisionCondition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -81,6 +82,7 @@ public class RuleEditorController implements Controller {
         knownActions = new ArrayList<>();
         knownActions.add(PlaySoundAction.class);
         knownActions.add(SetPropertyAction.class);
+        knownActions.add(RunSceneAction.class);
 
         setupConditionSelection();
         updateActions();

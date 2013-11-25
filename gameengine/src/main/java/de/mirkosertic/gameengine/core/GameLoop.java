@@ -44,10 +44,13 @@ public class GameLoop implements Runnable {
 
             lastInvocation = theCurrentTime;
         }
-
     }
 
     public void shutdown() {
         shutdownSignal = true;
+    }
+
+    public boolean isShutdown() {
+        return shutdownSignal;
     }
 }
