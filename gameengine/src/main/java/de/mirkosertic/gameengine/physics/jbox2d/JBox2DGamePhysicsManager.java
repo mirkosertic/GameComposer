@@ -1,10 +1,8 @@
 package de.mirkosertic.gameengine.physics.jbox2d;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
+import de.mirkosertic.gameengine.event.GameEvent;
 import de.mirkosertic.gameengine.event.PropertyChanged;
 import de.mirkosertic.gameengine.physics.*;
 import org.jbox2d.callbacks.ContactImpulse;
@@ -42,7 +40,9 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
                 theBody = dynamicObjects.get(theInstance);
             }
             if (theBody != null) {
-                theBody.setActive(theInstance.visibleProperty().get());
+                if (!theInstance.visibleProperty().isNull()) {
+                    theBody.setActive(theInstance.visibleProperty().get());
+                }
             }
         }
     }
@@ -117,8 +117,10 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
     private final VisibleListener visibleListener;
     private final Set<GameObject> alreadyRegisteredSizeListener;
     private boolean insimulation;
+    private List<GameEvent> queuedEventsOfLastLoop;
 
     JBox2DGamePhysicsManager(GameEventManager aEventManager) {
+        queuedEventsOfLastLoop = new ArrayList<GameEvent>();
         eventManager = aEventManager;
         alreadyRegisteredSizeListener = new HashSet<GameObject>();
         positionChangeListener = new PositionChangeListener();
@@ -133,7 +135,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
             public void beginContact(Contact aContact) {
                 Body theObjectA = aContact.getFixtureA().getBody();
                 Body theObjectB = aContact.getFixtureB().getBody();
-                eventManager.fire(new GameObjectCollision((GameObjectInstance) theObjectA.getUserData(),
+                queuedEventsOfLastLoop.add(new GameObjectCollision((GameObjectInstance) theObjectA.getUserData(),
                         (GameObjectInstance) theObjectB.getUserData()));
             }
 
@@ -336,6 +338,15 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
             float theTimestep = 1f / 30f;
 
             physicsWorld.step(theTimestep, theVelocityIterations, thePositionIterations);
+
+            // Fire the queued events
+            // Events caused by the simulation(collision) are fired after the simulation
+            // because events might change the world, and the world is locked
+            // while running the simulation
+            for (GameEvent theEvent : queuedEventsOfLastLoop) {
+                eventManager.fire(theEvent);
+            }
+            queuedEventsOfLastLoop.clear();
 
             // Finally, we have to update the position of our game objects to sync them to the simulation
             for (Map.Entry<GameObjectInstance, Body> theEntry : dynamicObjects.entrySet()) {

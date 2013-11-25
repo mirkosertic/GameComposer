@@ -31,22 +31,11 @@
         "type" : "PlaySoundAction",
         "resourceName" : "/assets/audio/pickup_gem_1.wav"
       } ]
-    }, {
-      "condition" : {
-        "secondaryObjectUuid" : "-3769331226440908538",
-        "type" : "ObjectCollisionCondition",
-        "primaryObjectUuid" : "-279500599772276169"
-      },
-      "name" : "Jump to next level if duke hits the sign",
-      "actions" : [ {
-        "gameScene" : "scene2",
-        "type" : "RunSceneAction"
-      } ]
     } ]
   } ],
   "defaultplayerobjectid" : "-279500599772276169",
   "cameraobjectid" : "-1997482371798076675",
-  "name" : "First level",
+  "name" : "Second level",
   "instances" : [ {
     "position" : {
       "y" : "298.00003",
@@ -120,8 +109,8 @@
     "uuid" : "940107331463765884"
   }, {
     "position" : {
-      "y" : "136.0",
-      "x" : "641.0"
+      "y" : "99.00001",
+      "x" : "457.99997"
     },
     "visible" : "true",
     "rotationangle" : {
@@ -138,8 +127,8 @@
     "uuid" : "3860926572867008005"
   }, {
     "position" : {
-      "y" : "189.99998",
-      "x" : "756.0"
+      "y" : "84.999985",
+      "x" : "331.0"
     },
     "visible" : "true",
     "rotationangle" : {
@@ -156,8 +145,8 @@
     "uuid" : "-8948331873596536217"
   }, {
     "position" : {
-      "y" : "263.0",
-      "x" : "864.99994"
+      "y" : "121.0",
+      "x" : "383.99994"
     },
     "visible" : "true",
     "rotationangle" : {
@@ -1146,8 +1135,8 @@
     "uuid" : "-1236704362356015084"
   }, {
     "position" : {
-      "y" : "252.5357",
-      "x" : "602.5587"
+      "y" : "252.46191",
+      "x" : "600.82184"
     },
     "visible" : "true",
     "rotationangle" : {
@@ -1164,8 +1153,8 @@
     "uuid" : "-6045248509559337206"
   }, {
     "position" : {
-      "y" : "252.535",
-      "x" : "546.9179"
+      "y" : "252.41693",
+      "x" : "547.0375"
     },
     "visible" : "true",
     "rotationangle" : {
@@ -1182,8 +1171,8 @@
     "uuid" : "-6549010255961436150"
   }, {
     "position" : {
-      "y" : "217.17853",
-      "x" : "583.6867"
+      "y" : "217.07832",
+      "x" : "585.49335"
     },
     "visible" : "true",
     "rotationangle" : {
@@ -1200,8 +1189,8 @@
     "uuid" : "-5663747140516834865"
   }, {
     "position" : {
-      "y" : "266.0",
-      "x" : "1024.0"
+      "y" : "171.0",
+      "x" : "666.0"
     },
     "visible" : "true",
     "rotationangle" : {
@@ -1217,8 +1206,8 @@
     "uuid" : "-1353019716393943362"
   }, {
     "position" : {
-      "y" : "298.72815",
-      "x" : "516.4357"
+      "y" : "298.70355",
+      "x" : "516.42236"
     },
     "visible" : "true",
     "rotationangle" : {
@@ -1233,8 +1222,8 @@
     "uuid" : "5312266426240520798"
   }, {
     "position" : {
-      "y" : "298.66568",
-      "x" : "716.28284"
+      "y" : "298.64905",
+      "x" : "716.1436"
     },
     "visible" : "true",
     "rotationangle" : {
@@ -1297,8 +1286,8 @@
     "uuid" : "6105785280505011624"
   }, {
     "position" : {
-      "y" : "287.7268",
-      "x" : "495.26508"
+      "y" : "287.64896",
+      "x" : "494.1422"
     },
     "visible" : "true",
     "rotationangle" : {
