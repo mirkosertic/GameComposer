@@ -117,7 +117,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
     private final VisibleListener visibleListener;
     private final Set<GameObject> alreadyRegisteredSizeListener;
     private boolean insimulation;
-    private List<GameEvent> queuedEventsOfLastLoop;
+    private final List<GameEvent> queuedEventsOfLastLoop;
 
     JBox2DGamePhysicsManager(GameEventManager aEventManager) {
         queuedEventsOfLastLoop = new ArrayList<GameEvent>();

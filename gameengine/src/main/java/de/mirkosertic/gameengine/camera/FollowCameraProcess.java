@@ -16,7 +16,7 @@ public class FollowCameraProcess extends AbstractGameProcess {
     }
 
     @Override
-    public void proceedGame(long aGameTime, long aElapsedTimeSinceLastLoop) {
+    public ProceedResult proceedGame(long aGameTime, long aElapsedTimeSinceLastLoop) {
 
         CameraComponent theCameraComponent = cameraObject.getComponent(CameraComponent.class);
         Position theCameraPosition = cameraObject.positionProperty().get();
@@ -36,5 +36,7 @@ public class FollowCameraProcess extends AbstractGameProcess {
         float theMY = theDY / 300 * aElapsedTimeSinceLastLoop;
 
         cameraObject.positionProperty().set(new Position(theCameraPosition.x + theMX, theCameraPosition.y + theMY));
+
+        return ProceedResult.CONTINUE_RUNNING;
     }
 }

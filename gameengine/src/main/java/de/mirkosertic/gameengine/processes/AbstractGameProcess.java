@@ -2,24 +2,26 @@ package de.mirkosertic.gameengine.processes;
 
 public abstract class AbstractGameProcess implements GameProcess {
 
-    private GameProcessManager processManager;
+    private GameProcess childProcess;
 
     @Override
-    public void started(GameProcessManager aProcessManager) {
-        processManager = aProcessManager;
-    }
-
-    protected void kill() {
-        if (processManager != null) {
-            processManager.kill(this);
-        }
+    public void started() {
     }
 
     @Override
-    public void proceedGame(long aGameTime, long aElapsedTimeSinceLastLoop) {
+    public ProceedResult proceedGame(long aGameTime, long aElapsedTimeSinceLastLoop) {
+        return ProceedResult.STOPPED;
     }
 
     @Override
     public void killed() {
+    }
+
+    public GameProcess getChildProcess() {
+        return childProcess;
+    }
+
+    public void setChildProcess(GameProcess childProcess) {
+        this.childProcess = childProcess;
     }
 }
