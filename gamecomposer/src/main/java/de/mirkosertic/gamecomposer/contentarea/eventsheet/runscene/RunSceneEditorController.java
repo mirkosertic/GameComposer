@@ -47,6 +47,9 @@ public class RunSceneEditorController implements Controller {
             }
         });
         scenes.getItems().addAll(persistenceManager.getScenes());
+        if (!aAction.gameSceneProperty().isNull()) {
+            scenes.getSelectionModel().select(aAction.gameSceneProperty().get());
+        }
         scenes.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
