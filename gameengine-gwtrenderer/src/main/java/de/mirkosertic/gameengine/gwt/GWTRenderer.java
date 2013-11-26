@@ -181,7 +181,7 @@ public class GWTRenderer implements EntryPoint {
             }
         });
 
-        GWTGameView theGameView = new GWTGameView(theRuntime, canvas, theCameraComponent);
+        GWTCanvasGameView theGameView = new GWTCanvasGameView(theRuntime, canvas, theCameraComponent);
 
         theGameView.setSize(new Size(Window.getClientWidth(), Window.getClientHeight()));
         theEventManager.fire(new SetScreenResolution(new Size(Window.getClientWidth(), Window.getClientHeight())));

@@ -13,7 +13,7 @@ import de.mirkosertic.gameengine.types.Size;
 
 import java.io.IOException;
 
-public class GWTGameView implements GameView {
+public class GWTCanvasGameView implements GameView {
 
     private final GameRuntime gameRuntime;
     private final Canvas canvas;
@@ -21,7 +21,7 @@ public class GWTGameView implements GameView {
     private Size currentSize;
     private int counter;
 
-    public GWTGameView(GameRuntime aGameRuntime, Canvas aCanvas, CameraComponent aCameraComponent) {
+    public GWTCanvasGameView(GameRuntime aGameRuntime, Canvas aCanvas, CameraComponent aCameraComponent) {
         gameRuntime = aGameRuntime;
         canvas = aCanvas;
         cameraComponent = aCameraComponent;
