@@ -5,6 +5,7 @@ import de.mirkosertic.gamecomposer.GameSceneCreatedEvent;
 import de.mirkosertic.gamecomposer.ObjectSelectedEvent;
 import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.camera.CameraComponentTemplate;
+import de.mirkosertic.gameengine.physics.ConstantMovementTemplate;
 import de.mirkosertic.gameengine.physics.PhysicsComponentTemplate;
 import de.mirkosertic.gameengine.physics.PlatformComponentTemplate;
 import de.mirkosertic.gameengine.physics.StaticComponentTemplate;
@@ -155,6 +156,13 @@ public class ObjectInspectorController implements Controller {
                     currentController.add(theEditor);
                 }
 
+                ConstantMovementTemplate theConstantMovement = theGameObject.getComponentTemplate(ConstantMovementTemplate.class);
+                if (theConstantMovement != null) {
+                    ObjectInspectorElementController theEditor = (ObjectInspectorElementController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(ConstantMovementTemplate.class)).get()).create(theConstantMovement);
+                    TitledPane theChildPane = new TitledPane("ConstantMovement", theEditor.getView());
+                    propertyPanels.getChildren().add(theChildPane);
+                    currentController.add(theEditor);
+                }
             }
             if (aObject instanceof GameObjectInstance) {
                 ObjectInspectorElementController theController = (ObjectInspectorElementController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(GameObjectInstance.class)).get()).create(aObject);
