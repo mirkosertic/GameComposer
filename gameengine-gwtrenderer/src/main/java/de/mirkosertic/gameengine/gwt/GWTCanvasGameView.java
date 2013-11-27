@@ -3,6 +3,7 @@ package de.mirkosertic.gameengine.gwt;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.canvas.dom.client.CssColor;
+import com.google.gwt.core.client.GWT;
 import de.mirkosertic.gameengine.camera.CameraComponent;
 import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.sprites.SpriteComponentTemplate;
@@ -13,12 +14,11 @@ import de.mirkosertic.gameengine.types.Size;
 
 import java.io.IOException;
 
-public class GWTCanvasGameView implements GameView {
+public class GWTCanvasGameView extends AbstractWebGameView {
 
     private final GameRuntime gameRuntime;
     private final Canvas canvas;
     private final CameraComponent cameraComponent;
-    private Size currentSize;
     private int counter;
 
     public GWTCanvasGameView(GameRuntime aGameRuntime, Canvas aCanvas, CameraComponent aCameraComponent) {
@@ -27,12 +27,10 @@ public class GWTCanvasGameView implements GameView {
         cameraComponent = aCameraComponent;
     }
 
-    public void setSize(Size aSize) {
-        currentSize = aSize;
-    }
-
     @Override
     public void renderGame(long aGameTime, long aElapsedTimeSinceLastLoop, GameScene aScene) {
+        Size theCurrentSize = getSize();
+
         Context2d theContext = canvas.getContext2d();
 
         Color theBGColor = aScene.backgroundColorProperty().get();
@@ -40,7 +38,7 @@ public class GWTCanvasGameView implements GameView {
         CssColor theCssBackground = CssColor.make(theBGColor.r, theBGColor.g, theBGColor.b);
         theContext.setFillStyle(theCssBackground);
         theContext.setStrokeStyle(theCssBackground);
-        theContext.fillRect(0, 0, currentSize.width, currentSize.height);
+        theContext.fillRect(0, 0, theCurrentSize.width, theCurrentSize.height);
 
         for (GameObjectInstance theInstance : cameraComponent.getObjectsToDrawInRightOrder(aScene)) {
 

@@ -23,6 +23,7 @@ import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.processes.StartProcess;
 import de.mirkosertic.gameengine.types.Size;
+import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 
 public class GWTRenderer implements EntryPoint {
 
@@ -32,8 +33,10 @@ public class GWTRenderer implements EntryPoint {
     private static final String upgradeMessage = "Your browser does not support the HTML5 Canvas. Please upgrade your browser to view this demo.";
 
     private Canvas canvas;
+    private WebGLRenderingContext webGLContext;
     private GWTGameRuntimeFactory runtimeFactory;
     private GWTGameSceneLoader sceneLoader;
+    private Game game;
     private GameLoop runningGameLoop;
     private GameScene loadedScene;
     private GameLoopFactory gameLoopFactory;
@@ -44,6 +47,10 @@ public class GWTRenderer implements EntryPoint {
         if (canvas == null) {
             RootPanel.get(holderId).add(new Label(upgradeMessage));
             return;
+        }
+        webGLContext = (WebGLRenderingContext) canvas.getContext("webgl");
+        if (webGLContext == null) {
+            webGLContext = (WebGLRenderingContext) canvas.getContext("experimental-webgl");
         }
 
         gameLoopFactory = new GameLoopFactory();
@@ -70,6 +77,7 @@ public class GWTRenderer implements EntryPoint {
         GWTGameLoader theLoader = new GWTGameLoader(new GWTGameLoader.GameLoadedListener() {
             @Override
             public void onGameLoaded(Game aGame) {
+                game = aGame;
                 sceneLoader.loadFromServer(aGame.defaultSceneProperty().get(), new GWTGameResourceLoader(aGame.defaultSceneProperty().get()));
             }
 
@@ -181,7 +189,12 @@ public class GWTRenderer implements EntryPoint {
             }
         });
 
-        GWTCanvasGameView theGameView = new GWTCanvasGameView(theRuntime, canvas, theCameraComponent);
+        AbstractWebGameView theGameView;
+        if (game.enableWebGLProperty().get() && webGLContext != null) {
+            theGameView = new GWTWebGLGameView(theRuntime, webGLContext, theCameraComponent);
+        } else {
+            theGameView = new GWTCanvasGameView(theRuntime, canvas, theCameraComponent);
+        }
 
         theGameView.setSize(new Size(Window.getClientWidth(), Window.getClientHeight()));
         theEventManager.fire(new SetScreenResolution(new Size(Window.getClientWidth(), Window.getClientHeight())));

@@ -10,6 +10,7 @@ import de.mirkosertic.gameengine.core.GameScene;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.util.StringConverter;
@@ -25,6 +26,9 @@ public class GameEditorController implements ObjectInspectorElementController {
     @FXML
     ComboBox defaultSceneComboBox;
 
+    @FXML
+    CheckBox webGLSupport;
+
     @Inject
     Event<Object> eventGateway;
 
@@ -38,6 +42,7 @@ public class GameEditorController implements ObjectInspectorElementController {
     public void cleanup() {
         PropertyBinder.unbind(game.nameProperty());
         PropertyBinder.unbind(game.defaultSceneProperty());
+        PropertyBinder.unbind(game.enableWebGLProperty());
     }
 
     public GameEditorController initialize(Parent aView, Game aObject) {
@@ -61,6 +66,7 @@ public class GameEditorController implements ObjectInspectorElementController {
 
         PropertyBinder.bind(aObject.nameProperty(), nameTextField.textProperty());
         PropertyBinder.bind(aObject.defaultSceneProperty(), defaultSceneComboBox.valueProperty());
+        PropertyBinder.bind(aObject.enableWebGLProperty(), webGLSupport.selectedProperty());
 
         return this;
     }
