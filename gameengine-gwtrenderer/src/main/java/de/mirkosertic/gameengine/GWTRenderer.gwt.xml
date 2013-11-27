@@ -1,6 +1,9 @@
 <module>
     <inherits name="com.google.gwt.user.User"/>
     <inherits name="com.google.gwt.json.JSON" />
+    <inherits name="thothbot.parallax.core.Core"/>
+    <inherits name="thothbot.parallax.plugins.sprite.Sprite"/>
+    <inherits name="thothbot.parallax.plugins.postprocessing.Postprocessing"/>
     <inherits name="de.mirkosertic.Engine"/>
     <entry-point class="de.mirkosertic.gameengine.gwt.GWTRenderer"/>
     <source path="gwt"/>

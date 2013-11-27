@@ -35,6 +35,14 @@
             <Insets top="10.0" />
           </padding>
         </VBox>
+        <HBox maxWidth="1.7976931348623157E308" prefHeight="-1.0" prefWidth="-1.0">
+          <children>
+            <CheckBox fx:id="webGLSupport" mnemonicParsing="false" text="Use WebGL if available" />
+          </children>
+          <VBox.margin>
+            <Insets top="10.0" />
+          </VBox.margin>
+        </HBox>
         <HBox prefHeight="54.0" prefWidth="-1.0">
           <children>
             <Hyperlink id="newScene" onAction="#onNewScene" prefWidth="-1.0" text="Create new scene..." />
