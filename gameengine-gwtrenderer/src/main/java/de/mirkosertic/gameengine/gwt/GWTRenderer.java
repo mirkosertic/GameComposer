@@ -33,7 +33,6 @@ public class GWTRenderer implements EntryPoint {
     private static final String upgradeMessage = "Your browser does not support the HTML5 Canvas. Please upgrade your browser to view this demo.";
 
     private Canvas canvas;
-    private WebGLRenderingContext webGLContext;
     private GWTGameRuntimeFactory runtimeFactory;
     private GWTGameSceneLoader sceneLoader;
     private Game game;
@@ -48,11 +47,6 @@ public class GWTRenderer implements EntryPoint {
             RootPanel.get(holderId).add(new Label(upgradeMessage));
             return;
         }
-        webGLContext = (WebGLRenderingContext) canvas.getContext("webgl");
-        if (webGLContext == null) {
-            webGLContext = (WebGLRenderingContext) canvas.getContext("experimental-webgl");
-        }
-
         gameLoopFactory = new GameLoopFactory();
 
         // We need a factory to create new game runtimes for every scene
@@ -190,8 +184,18 @@ public class GWTRenderer implements EntryPoint {
         });
 
         AbstractWebGameView theGameView;
-        if (game.enableWebGLProperty().get() && webGLContext != null) {
-            theGameView = new GWTWebGLGameView(theRuntime, webGLContext, theCameraComponent);
+        if (game.enableWebGLProperty().get()) {
+            WebGLRenderingContext theWebGLContext = (WebGLRenderingContext) canvas.getContext("webgl");
+            if (theWebGLContext == null) {
+                theWebGLContext = (WebGLRenderingContext) canvas.getContext("experimental-webgl");
+            }
+            if (theWebGLContext != null) {
+                // WebGL is supported
+                theGameView = new GWTWebGLGameView(theRuntime, theWebGLContext, theCameraComponent);
+            } else {
+                // Fallback to canvas
+                theGameView = new GWTCanvasGameView(theRuntime, canvas, theCameraComponent);
+            }
         } else {
             theGameView = new GWTCanvasGameView(theRuntime, canvas, theCameraComponent);
         }
