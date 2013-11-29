@@ -34,6 +34,19 @@ public class PropertyBinder {
         aFXProperty.setValue(aBeanProperty.get());
     }
 
+    public static <T, V> void bindUIToBean(final Property<T> aBeanProperty, final javafx.beans.property.Property<V> aFXProperty, final Converter<T, V> aConverter) {
+        Node theNode = (Node) aFXProperty.getBean();
+        theNode.focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aOldValue, Boolean aNewValue) {
+                if (aOldValue && !aNewValue) {
+                    aBeanProperty.set(aConverter.uiToBean(aFXProperty.getValue()));
+                }
+            }
+        });
+        aFXProperty.setValue(aConverter.beanToUI(aBeanProperty.get()));
+    }
+
     public static <T> void bind(final Property<T> aBeanProperty, final javafx.beans.property.Property<T> aFXProperty) {
         aBeanProperty.addChangeListener(new JavaFXPropertyChangeListener() {
             @Override

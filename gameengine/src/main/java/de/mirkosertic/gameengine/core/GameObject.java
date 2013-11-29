@@ -107,7 +107,7 @@ public class GameObject extends PropertyAware {
         Map<String, Object> theResult = new HashMap<String, Object>();
         theResult.put("name", name.get());
         theResult.put("uuid", uuid.get());
-        theResult.put("size", size.get().serializeToMap());
+        theResult.put("size", size.get().serialize());
         List<Map<String, Object>> theTemplates = new ArrayList<Map<String, Object>>();
         for (GameComponentTemplate theTemplate : componentTemplates.values()) {
            theTemplates.add(theTemplate.serialize());

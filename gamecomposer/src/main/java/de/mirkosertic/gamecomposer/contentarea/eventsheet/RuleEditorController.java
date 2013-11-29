@@ -1,24 +1,17 @@
 package de.mirkosertic.gamecomposer.contentarea.eventsheet;
 
-import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import de.mirkosertic.gameengine.action.RunSceneAction;
+import de.mirkosertic.gamecomposer.Controller;
+import de.mirkosertic.gamecomposer.PropertyBinder;
+import de.mirkosertic.gameengine.action.*;
+import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.physics.ObjectCollisionCondition;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Side;
 import javafx.scene.Node;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.Hyperlink;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -28,16 +21,11 @@ import javafx.util.StringConverter;
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
-
-import de.mirkosertic.gamecomposer.Controller;
-import de.mirkosertic.gamecomposer.PropertyBinder;
-import de.mirkosertic.gameengine.action.PlaySoundAction;
-import de.mirkosertic.gameengine.action.SetPropertyAction;
-import de.mirkosertic.gameengine.core.Action;
-import de.mirkosertic.gameengine.core.Condition;
-import de.mirkosertic.gameengine.core.EventSheet;
-import de.mirkosertic.gameengine.core.GameRule;
-import de.mirkosertic.gameengine.core.KeyEventCondition;
+import java.lang.annotation.Annotation;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class RuleEditorController implements Controller {
 
@@ -83,6 +71,8 @@ public class RuleEditorController implements Controller {
         knownActions.add(PlaySoundAction.class);
         knownActions.add(SetPropertyAction.class);
         knownActions.add(RunSceneAction.class);
+        knownActions.add(DeleteGameObjectInstanceAction.class);
+        knownActions.add(SpawnGameObjectInstanceAction.class);
 
         setupConditionSelection();
         updateActions();

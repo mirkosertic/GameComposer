@@ -1,8 +1,6 @@
 package de.mirkosertic.gameengine;
 
-import de.mirkosertic.gameengine.action.PlaySoundActionUnmarshaller;
-import de.mirkosertic.gameengine.action.RunSceneActionUnmarshaller;
-import de.mirkosertic.gameengine.action.SetPropertyActionUnmarshaller;
+import de.mirkosertic.gameengine.action.*;
 import de.mirkosertic.gameengine.camera.CameraComponentTemplateUnmarshaller;
 import de.mirkosertic.gameengine.camera.CameraComponentUnmarshaller;
 import de.mirkosertic.gameengine.core.*;
@@ -62,6 +60,8 @@ public abstract class AbstractGameRuntimeFactory {
         theRegistry.registerActionUnmarshaller(new PlaySoundActionUnmarshaller());
         theRegistry.registerActionUnmarshaller(new SetPropertyActionUnmarshaller());
         theRegistry.registerActionUnmarshaller(new RunSceneActionUnmarshaller());
+        theRegistry.registerActionUnmarshaller(new SpawnGameObjectInstanceActionUnmarshaller());
+        theRegistry.registerActionUnmarshaller(new DeleteGameObjectInstanceActionUnmarshaller());
 
         return theGameRuntime;
     }

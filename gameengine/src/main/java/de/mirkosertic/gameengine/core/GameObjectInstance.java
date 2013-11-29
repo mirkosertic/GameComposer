@@ -93,7 +93,7 @@ public class GameObjectInstance extends PropertyAware {
         }
         theResult.put("gameobjectuuid", ownerGameObject.uuidProperty().get());
 
-        theResult.put("position", position.get().serializeToMap());
+        theResult.put("position", position.get().serialize());
         theResult.put("name", name.get());
         theResult.put("visible", Boolean.toString(visible.get()));
         theResult.put("rotationangle", rotationAngle.get().serialize());
