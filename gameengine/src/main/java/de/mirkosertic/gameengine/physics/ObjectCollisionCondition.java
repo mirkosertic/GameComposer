@@ -34,7 +34,7 @@ public class ObjectCollisionCondition implements Condition {
     }
 
     @Override
-    public ConditionResult appliesTo(GameEvent aEvent) {
+    public ConditionResult appliesTo(GameScene aScene, GameEvent aEvent) {
         if (aEvent instanceof GameObjectCollision) {
             if (!primaryObject.isNull() && !secondaryObject.isNull()) {
                 GameObject thePrimaryObject = primaryObject.get();
@@ -47,17 +47,13 @@ public class ObjectCollisionCondition implements Condition {
                 if (thePrimaryObject.uuidProperty().get().equals(theO1.uuidProperty().get()) &&
                         theSecondaryObject.uuidProperty().get().equals(theO2.uuidProperty().get())) {
                     // Collision
-                    List<GameObjectInstance> theAffectedInstances = new ArrayList<GameObjectInstance>();
-                    theAffectedInstances.add(((GameObjectCollision) aEvent).instance1Property().get());
-                    return new ConditionResult(true, theAffectedInstances);
+                    return new ConditionResult(true, new GameObjectInstance[] {((GameObjectCollision) aEvent).instance1Property().get()});
                 }
 
                 if (theSecondaryObject.uuidProperty().get().equals(theO1.uuidProperty().get()) &&
                         thePrimaryObject.uuidProperty().get().equals(theO2.uuidProperty().get())) {
                     // Collision
-                    List<GameObjectInstance> theAffectedInstances = new ArrayList<GameObjectInstance>();
-                    theAffectedInstances.add(((GameObjectCollision) aEvent).instance2Property().get());
-                    return new ConditionResult(true, theAffectedInstances);
+                    return new ConditionResult(true, new GameObjectInstance[] {((GameObjectCollision) aEvent).instance2Property().get()});
                 }
             }
         }
