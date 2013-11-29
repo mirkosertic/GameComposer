@@ -12,10 +12,10 @@
   <center>
     <VBox>
       <children>
-        <TextField fx:id="ruleName" maxWidth="1.7976931348623157E308" />
-        <HBox>
+        <TextField fx:id="ruleName" maxWidth="1.7976931348623157E308" style="-fx-background-color: rgb(255,266,186);&#10;-fx-border-color: rgb(234,245,0);" />
+        <HBox VBox.vgrow="ALWAYS">
           <children>
-            <VBox prefWidth="255.0" HBox.hgrow="NEVER">
+            <VBox prefWidth="-1.0" style="-fx-background-color: rgb(243,241,255);&#10;&#10;&#10;" HBox.hgrow="NEVER">
               <children>
                 <Label contentDisplay="TOP" text="Condition type:" VBox.vgrow="NEVER" />
                 <ComboBox id="eventType" fx:id="conditionType" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
