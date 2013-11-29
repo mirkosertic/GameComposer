@@ -24,6 +24,9 @@ import java.util.List;
 public class SpawnIstanceEditorController implements Controller {
 
     @FXML
+    ComboBox referenceGameObject;
+
+    @FXML
     ComboBox gameObject;
 
     @FXML
@@ -55,6 +58,20 @@ public class SpawnIstanceEditorController implements Controller {
                 return null;
             }
         });
+        referenceGameObject.getItems().clear();
+        referenceGameObject.setConverter(new StringConverter<GameObject>() {
+            @Override
+            public String toString(GameObject aValue) {
+                return aValue.nameProperty().get();
+            }
+
+            @Override
+            public GameObject fromString(String aValue) {
+                // Nonsense here
+                return null;
+            }
+        });
+
 
         List<GameObject> theSortedGameObjects = Arrays.asList(aGameScene.getObjects());
         Collections.sort(theSortedGameObjects, new Comparator<GameObject>() {
@@ -65,8 +82,9 @@ public class SpawnIstanceEditorController implements Controller {
         });
 
         gameObject.getItems().addAll(theSortedGameObjects);
+        referenceGameObject.getItems().addAll(theSortedGameObjects);
         gameObject.getSelectionModel().select(action.gameObjectProperty().get());
-
+        referenceGameObject.getSelectionModel().select(action.referenceObjectProperty().get());
 
         PropertyBinder.bindUIToBean(action.offsetProperty(), offsetX.textProperty(), new PropertyBinder.Converter<Position, String>() {
             @Override
@@ -101,7 +119,12 @@ public class SpawnIstanceEditorController implements Controller {
     }
 
     @FXML
-    public void onSetGameObjectInstance() {
+    public void onSetGameObject() {
         action.gameObjectProperty().set((GameObject) gameObject.getSelectionModel().getSelectedItem());
+    }
+
+    @FXML
+    public void onSetGameObjectReference() {
+        action.gameObjectProperty().set((GameObject) referenceGameObject.getSelectionModel().getSelectedItem());
     }
 }

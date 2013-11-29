@@ -16,7 +16,7 @@ public class ActionManager implements GameSystem {
         for (EventSheet theSheet : scene.getEventSheets()) {
             for (GameRule theRule : theSheet.getRules()) {
                 if (!theRule.conditionProperty().isNull()) {
-                    ConditionResult theResult = theRule.conditionProperty().get().appliesTo(aEvent);
+                    ConditionResult theResult = theRule.conditionProperty().get().appliesTo(scene, aEvent);
                     if (theResult.isConditionTrue()) {
                         Action[] theActions = theRule.getActions();
                         if (theActions.length > 0) {

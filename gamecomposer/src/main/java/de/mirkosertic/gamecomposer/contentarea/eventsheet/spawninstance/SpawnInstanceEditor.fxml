@@ -11,12 +11,22 @@
   <center>
     <GridPane hgap="5.0" vgap="5.0">
       <children>
-        <Label text="Offset X" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-        <Label text="Offset Y" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-        <TextField fx:id="offsetX" maxWidth="1.7976931348623157E308" prefWidth="-1.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-        <TextField fx:id="offsetY" maxWidth="1.7976931348623157E308" prefWidth="-1.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-        <Label text="GameObject" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-        <ComboBox fx:id="gameObject" maxWidth="1.7976931348623157E308" onAction="#onSetGameObjectInstance" GridPane.columnIndex="1" GridPane.rowIndex="0">
+        <Label text="Reference" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+        <Label text="Offset X" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+        <Label text="Offset Y" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+        <TextField fx:id="offsetX" maxWidth="1.7976931348623157E308" prefWidth="-1.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+        <TextField fx:id="offsetY" maxWidth="1.7976931348623157E308" prefWidth="-1.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+        <Label text="GameObject" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+        <ComboBox fx:id="gameObject" maxWidth="1.7976931348623157E308" onAction="#onSetGameObject" GridPane.columnIndex="1" GridPane.rowIndex="1">
+          <items>
+            <FXCollections fx:factory="observableArrayList">
+              <String fx:value="Item 1" />
+              <String fx:value="Item 2" />
+              <String fx:value="Item 3" />
+            </FXCollections>
+          </items>
+        </ComboBox>
+        <ComboBox fx:id="referenceGameObject" maxWidth="1.7976931348623157E308" onAction="#onSetGameObjectReference" GridPane.columnIndex="1" GridPane.rowIndex="0">
           <items>
             <FXCollections fx:factory="observableArrayList">
               <String fx:value="Item 1" />
@@ -31,6 +41,7 @@
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="-1.0" />
       </columnConstraints>
       <rowConstraints>
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
