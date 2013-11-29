@@ -1,6 +1,5 @@
 package de.mirkosertic.gameengine.gwt;
 
-import com.google.gwt.canvas.dom.client.CssColor;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.resources.client.ClientBundle;
@@ -19,7 +18,7 @@ import thothbot.parallax.core.client.gl2.*;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.arrays.Uint16Array;
 import thothbot.parallax.core.client.gl2.enums.*;
-import thothbot.parallax.core.shared.core.Matrix4;
+import thothbot.parallax.core.shared.math.Matrix4;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -40,12 +39,12 @@ public class GWTWebGLGameView extends AbstractWebGameView {
 
     static class GLSprite {
 
-        Float32Array vertices;
-        Uint16Array faces;
+        final Float32Array vertices;
+        final Uint16Array faces;
 
-        WebGLBuffer vertexBuffer;
-        WebGLBuffer elementBuffer;
-        WebGLProgram program;
+        final WebGLBuffer vertexBuffer;
+        final WebGLBuffer elementBuffer;
+        final WebGLProgram program;
 
         WebGLUniformLocation modelViewTransform;
         WebGLUniformLocation screenPosition;
@@ -57,7 +56,7 @@ public class GWTWebGLGameView extends AbstractWebGameView {
         int vertexPositionVariable;
         int uvVariable;
 
-        private WebGLRenderingContext renderingContext;
+        private final WebGLRenderingContext renderingContext;
         Map<String, WebGLTexture> loadedTextures;
 
         GLSprite(WebGLRenderingContext aRenderingContext) {
@@ -170,7 +169,7 @@ public class GWTWebGLGameView extends AbstractWebGameView {
                     renderingContext.texParameteri(TextureTarget.TEXTURE_2D, TextureParameterName.TEXTURE_WRAP_S, WebGLConstants.CLAMP_TO_EDGE);
                     renderingContext.texParameteri(TextureTarget.TEXTURE_2D, TextureParameterName.TEXTURE_WRAP_T, WebGLConstants.CLAMP_TO_EDGE);
                     renderingContext.pixelStorei(PixelStoreParameter.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 0);
-                    renderingContext.texImage2D(TextureTarget.TEXTURE_2D, 0, PixelFormat.RGBA, PixelType.UNSIGNED_BYTE, (ImageElement) aResource.getImage());
+                    renderingContext.texImage2D(TextureTarget.TEXTURE_2D, 0, PixelFormat.RGBA, PixelType.UNSIGNED_BYTE, aResource.getImage());
                     renderingContext.bindTexture(TextureTarget.TEXTURE_2D, null);
 
                     loadedTextures.put(aResource.getImage().getSrc(), theTexture);

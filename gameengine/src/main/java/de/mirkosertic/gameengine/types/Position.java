@@ -22,7 +22,11 @@ public class Position {
         y = (float) aY;
     }
 
-    public Map<String, Object> serializeToMap() {
+    public Position add(Position aOffset) {
+        return new Position(x + aOffset.x, y + aOffset.y);
+    }
+
+    public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<String, Object>();
         theResult.put("x", Float.toString(x));
         theResult.put("y", Float.toString(y));

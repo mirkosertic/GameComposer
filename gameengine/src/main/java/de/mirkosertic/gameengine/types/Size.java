@@ -13,7 +13,7 @@ public class Size {
         height = aHeight;
     }
 
-    public Map<String, Object> serializeToMap() {
+    public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<String, Object>();
         theResult.put("width", "" + width);
         theResult.put("height", "" + height);
