@@ -51,8 +51,8 @@ public class PlatformComponent extends GameComponent {
                 handleCollision(aEvent);
             }
         });
-        aGameRuntime.getEventManager().register(objectInstance, GameLoopRun.class, new GameEventListener<GameLoopRun>() {
-            public void handleGameEvent(GameLoopRun aEvent) {
+        aGameRuntime.getEventManager().register(objectInstance, SystemTick.class, new GameEventListener<SystemTick>() {
+            public void handleGameEvent(SystemTick aEvent) {
                 handleGameLoop(aEvent);
             }
         });
@@ -67,7 +67,7 @@ public class PlatformComponent extends GameComponent {
         this.jumping = jumping;
     }
 
-    void handleGameLoop(GameLoopRun aEvent) {
+    void handleGameLoop(SystemTick aEvent) {
         if (upKeyDown && !isJumping()) {
             gameRuntime.getEventManager().fire(new ApplyImpulseToGameObjectInstance(objectInstance, 0, platformTemplate.jumpImpulseProperty().get()));
             setJumping(true);
