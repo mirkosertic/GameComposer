@@ -1,10 +1,9 @@
 package de.mirkosertic.gameengine.physics.jbox2d;
 
-import de.mirkosertic.gameengine.core.GameLoopRun;
+import de.mirkosertic.gameengine.core.SystemTick;
 import de.mirkosertic.gameengine.core.GameObjectConfigurationChanged;
 import de.mirkosertic.gameengine.core.GameObjectInstanceAddedToScene;
 import de.mirkosertic.gameengine.core.GameObjectInstanceRemovedFromScene;
-import de.mirkosertic.gameengine.event.GameEvent;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.physics.*;
@@ -52,9 +51,9 @@ public class JBox2DGamePhysicsManagerFactory implements GamePhysicsManagerFactor
                 thePhysicsManager.updateGameObjectConfiguration(aEvent.objectProperty().get());
             }
         });
-        aEventManager.register(null, GameLoopRun.class, new GameEventListener<GameLoopRun>() {
+        aEventManager.register(null, SystemTick.class, new GameEventListener<SystemTick>() {
             @Override
-            public void handleGameEvent(GameLoopRun aEvent) {
+            public void handleGameEvent(SystemTick aEvent) {
                 thePhysicsManager.proceedGame(aEvent.gameTimeProperty().get(), aEvent.elapsedTimeSinceLastLoopProperty().get());
             }
         });

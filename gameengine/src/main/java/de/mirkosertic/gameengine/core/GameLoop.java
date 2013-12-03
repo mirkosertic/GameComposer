@@ -8,6 +8,7 @@ public class GameLoop implements Runnable {
     private final GameRuntime runtime;
     private final long startTime;
     private long lastInvocation;
+    private long totalTicks;
 
     GameLoop(GameScene aScene, GameView aHumanGameView, GameRuntime aRuntime) {
         views = new GameView[] {aHumanGameView};
@@ -35,7 +36,7 @@ public class GameLoop implements Runnable {
 
             // The game systems like physics or process can react on this event
             // and do something useful...
-            runtime.getEventManager().fire(new GameLoopRun(theGameTime, theElapsedTime));
+            runtime.getEventManager().fire(new SystemTick(totalTicks, theGameTime, theElapsedTime));
 
             // Trigger re-rendering of all game views
             for (GameView aView : views) {
@@ -43,6 +44,7 @@ public class GameLoop implements Runnable {
             }
 
             lastInvocation = theCurrentTime;
+            totalTicks++;
         }
     }
 

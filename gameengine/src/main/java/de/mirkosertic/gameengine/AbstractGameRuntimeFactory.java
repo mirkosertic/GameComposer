@@ -57,6 +57,8 @@ public abstract class AbstractGameRuntimeFactory {
 
         theRegistry.registerConditionUnmarshaller(new KeyEventConditionUnmarshaller());
         theRegistry.registerConditionUnmarshaller(new ObjectCollisionConditionUnmarshaller());
+        theRegistry.registerConditionUnmarshaller(new SystemTickConditionUnmarshaller());
+
         theRegistry.registerActionUnmarshaller(new PlaySoundActionUnmarshaller());
         theRegistry.registerActionUnmarshaller(new SetPropertyActionUnmarshaller());
         theRegistry.registerActionUnmarshaller(new RunSceneActionUnmarshaller());
