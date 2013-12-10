@@ -1,4 +1,4 @@
-package de.mirkosertic.gameengine.action;
+package de.mirkosertic.gameengine.sound;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,7 +9,6 @@ import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.types.ResourceName;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
-import de.mirkosertic.gameengine.sound.PlaySound;
 
 public class PlaySoundAction implements Action {
 

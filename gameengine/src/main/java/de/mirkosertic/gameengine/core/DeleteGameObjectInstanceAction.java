@@ -1,9 +1,4 @@
-package de.mirkosertic.gameengine.action;
-
-import de.mirkosertic.gameengine.core.Action;
-import de.mirkosertic.gameengine.core.ConditionResult;
-import de.mirkosertic.gameengine.core.GameObjectInstance;
-import de.mirkosertic.gameengine.core.GameScene;
+package de.mirkosertic.gameengine.core;
 
 import java.util.HashMap;
 import java.util.Map;

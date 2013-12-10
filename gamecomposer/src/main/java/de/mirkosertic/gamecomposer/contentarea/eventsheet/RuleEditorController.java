@@ -2,9 +2,10 @@ package de.mirkosertic.gamecomposer.contentarea.eventsheet;
 
 import de.mirkosertic.gamecomposer.Controller;
 import de.mirkosertic.gamecomposer.PropertyBinder;
-import de.mirkosertic.gameengine.action.*;
+import de.mirkosertic.gameengine.arcade.ConstantMovementAction;
 import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.physics.ObjectCollisionCondition;
+import de.mirkosertic.gameengine.sound.PlaySoundAction;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -73,6 +74,7 @@ public class RuleEditorController implements Controller {
         knownActions.add(RunSceneAction.class);
         knownActions.add(DeleteGameObjectInstanceAction.class);
         knownActions.add(SpawnGameObjectInstanceAction.class);
+        knownActions.add(ConstantMovementAction.class);
 
         setupConditionSelection();
         updateActions();

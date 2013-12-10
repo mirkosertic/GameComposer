@@ -1,9 +1,5 @@
-package de.mirkosertic.gameengine.action;
+package de.mirkosertic.gameengine.core;
 
-import de.mirkosertic.gameengine.core.Action;
-import de.mirkosertic.gameengine.core.ConditionResult;
-import de.mirkosertic.gameengine.core.GameScene;
-import de.mirkosertic.gameengine.core.RunScene;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
 

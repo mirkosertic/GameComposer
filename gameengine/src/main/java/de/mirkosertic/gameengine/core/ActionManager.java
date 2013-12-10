@@ -1,7 +1,7 @@
-package de.mirkosertic.gameengine.action;
+package de.mirkosertic.gameengine.core;
 
-import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.event.GameEvent;
+import de.mirkosertic.gameengine.processes.InvokeActionProcess;
 import de.mirkosertic.gameengine.processes.StartProcess;
 
 public class ActionManager implements GameSystem {

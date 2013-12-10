@@ -3,10 +3,9 @@ package de.mirkosertic.gamecomposer.contentarea.eventsheet.spawninstance;
 import de.mirkosertic.gamecomposer.Controller;
 import de.mirkosertic.gamecomposer.PersistenceManager;
 import de.mirkosertic.gamecomposer.PropertyBinder;
-import de.mirkosertic.gameengine.action.SpawnGameObjectInstanceAction;
+import de.mirkosertic.gameengine.core.SpawnGameObjectInstanceAction;
 
 import de.mirkosertic.gameengine.core.GameObject;
-import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.types.Position;
 import javafx.fxml.FXML;

@@ -3,7 +3,7 @@ package de.mirkosertic.gamecomposer.contentarea.eventsheet.playsound;
 import de.mirkosertic.gamecomposer.FXMLLoaderFactory;
 import de.mirkosertic.gamecomposer.contentarea.eventsheet.ActionControllerFactory;
 import de.mirkosertic.gamecomposer.contentarea.eventsheet.ActionEditorType;
-import de.mirkosertic.gameengine.action.PlaySoundAction;
+import de.mirkosertic.gameengine.sound.PlaySoundAction;
 import de.mirkosertic.gameengine.core.GameScene;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.BorderPane;

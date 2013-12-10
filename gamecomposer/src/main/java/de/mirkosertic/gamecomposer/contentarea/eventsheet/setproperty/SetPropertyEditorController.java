@@ -1,7 +1,7 @@
 package de.mirkosertic.gamecomposer.contentarea.eventsheet.setproperty;
 
 import de.mirkosertic.gamecomposer.Controller;
-import de.mirkosertic.gameengine.action.SetPropertyAction;
+import de.mirkosertic.gameengine.core.SetPropertyAction;
 import de.mirkosertic.gameengine.core.GameScene;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;

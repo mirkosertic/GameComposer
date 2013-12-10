@@ -1,7 +1,4 @@
-package de.mirkosertic.gameengine.action;
-
-import de.mirkosertic.gameengine.core.ActionUnmarshaller;
-import de.mirkosertic.gameengine.core.GameScene;
+package de.mirkosertic.gameengine.core;
 
 import java.util.Map;
 
