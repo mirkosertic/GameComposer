@@ -2,7 +2,7 @@ package de.mirkosertic.gamecomposer.contentarea.eventsheet.deleteinstance;
 
 import de.mirkosertic.gamecomposer.Controller;
 import de.mirkosertic.gamecomposer.PersistenceManager;
-import de.mirkosertic.gameengine.action.DeleteGameObjectInstanceAction;
+import de.mirkosertic.gameengine.core.DeleteGameObjectInstanceAction;
 
 import javafx.scene.Node;
 

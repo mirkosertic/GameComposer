@@ -3,7 +3,7 @@ package de.mirkosertic.gamecomposer.contentarea.eventsheet.deleteinstance;
 import de.mirkosertic.gamecomposer.FXMLLoaderFactory;
 import de.mirkosertic.gamecomposer.contentarea.eventsheet.ActionControllerFactory;
 import de.mirkosertic.gamecomposer.contentarea.eventsheet.ActionEditorType;
-import de.mirkosertic.gameengine.action.DeleteGameObjectInstanceAction;
+import de.mirkosertic.gameengine.core.DeleteGameObjectInstanceAction;
 import de.mirkosertic.gameengine.core.GameScene;
 
 import javafx.fxml.FXMLLoader;

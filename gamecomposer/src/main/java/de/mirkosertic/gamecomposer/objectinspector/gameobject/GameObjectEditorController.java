@@ -5,7 +5,7 @@ import java.util.Map;
 
 import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorElementController;
 import de.mirkosertic.gameengine.event.GameEventManager;
-import de.mirkosertic.gameengine.physics.ConstantMovementTemplate;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -104,7 +104,6 @@ public class GameObjectEditorController implements ObjectInspectorElementControl
         theKnownTemplates.put(SpriteComponentTemplate.class, "SpriteComponent");
         theKnownTemplates.put(PhysicsComponentTemplate.class, "PhysicsComponent");
         theKnownTemplates.put(PlatformComponentTemplate.class, "PlatformComponent");
-        theKnownTemplates.put(ConstantMovementTemplate.class, "ConstantMovement");
         for (Map.Entry<Class<? extends GameComponentTemplate>, String> theEntry : theKnownTemplates.entrySet()) {
             if (gameObject.getComponentTemplate(theEntry.getKey()) == null) {
 

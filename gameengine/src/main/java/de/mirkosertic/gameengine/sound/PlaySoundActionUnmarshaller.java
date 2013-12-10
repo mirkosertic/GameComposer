@@ -1,4 +1,4 @@
-package de.mirkosertic.gameengine.action;
+package de.mirkosertic.gameengine.sound;
 
 import de.mirkosertic.gameengine.core.Action;
 import de.mirkosertic.gameengine.core.ActionUnmarshaller;

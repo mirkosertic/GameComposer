@@ -1,9 +1,8 @@
-package de.mirkosertic.gameengine.action;
+package de.mirkosertic.gameengine.processes;
 
 import de.mirkosertic.gameengine.core.Action;
 import de.mirkosertic.gameengine.core.ConditionResult;
 import de.mirkosertic.gameengine.core.GameScene;
-import de.mirkosertic.gameengine.processes.AbstractGameProcess;
 
 public class InvokeActionProcess extends AbstractGameProcess {
 

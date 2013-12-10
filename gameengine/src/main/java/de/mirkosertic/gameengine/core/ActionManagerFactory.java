@@ -1,6 +1,5 @@
-package de.mirkosertic.gameengine.action;
+package de.mirkosertic.gameengine.core;
 
-import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.event.GameEvent;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.GameEventManager;

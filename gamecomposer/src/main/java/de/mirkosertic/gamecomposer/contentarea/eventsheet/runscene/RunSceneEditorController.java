@@ -1,18 +1,14 @@
 package de.mirkosertic.gamecomposer.contentarea.eventsheet.runscene;
 
 import de.mirkosertic.gamecomposer.Controller;
-import de.mirkosertic.gamecomposer.GameAssetSelector;
 import de.mirkosertic.gamecomposer.PersistenceManager;
-import de.mirkosertic.gameengine.action.PlaySoundAction;
-import de.mirkosertic.gameengine.action.RunSceneAction;
+import de.mirkosertic.gameengine.core.RunSceneAction;
 import de.mirkosertic.gameengine.core.GameScene;
-import de.mirkosertic.gameengine.types.ResourceName;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
 import javafx.util.StringConverter;
 
 import javax.inject.Inject;
