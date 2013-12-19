@@ -12,6 +12,7 @@ public class SetPropertyAction implements Action {
     private final Property<String> propertyName;
     private final Property<Object> propertyValue;
 
+    @UsedByReflection
     public SetPropertyAction() {
         propertyName = new Property<String>(this, "propertyName", (String) null);
         propertyValue = new Property<Object>(this, "propertyValue", (Object) null);

@@ -12,6 +12,7 @@ public class RunSceneAction implements Action {
 
     private final Property<String> gameScene;
 
+    @UsedByReflection
     public RunSceneAction() {
         gameScene = new Property<String>(this, "gameScene", (String) null);
     }

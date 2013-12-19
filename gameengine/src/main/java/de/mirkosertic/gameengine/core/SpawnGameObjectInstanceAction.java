@@ -14,6 +14,7 @@ public class SpawnGameObjectInstanceAction implements Action {
     private final Property<GameObject> gameObject;
     private final Property<Position> offset;
 
+    @UsedByReflection
     public SpawnGameObjectInstanceAction() {
         gameObject = new Property<GameObject>(this, "gameObject", (GameObject) null);
         referenceObject = new Property<GameObject>(this, "referenceObject", (GameObject) null);
