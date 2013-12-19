@@ -7,6 +7,7 @@ public class DeleteGameObjectInstanceAction implements Action {
 
     public static final String TYPE_VALUE = "DeleteGameObjectInstanceAction";
 
+    @UsedByReflection
     public DeleteGameObjectInstanceAction() {
     }
 

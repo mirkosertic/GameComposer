@@ -12,6 +12,7 @@ public class GameObjectInstanceRemovedFromSceneCondition implements Condition {
 
     private final Property<GameObject> gameObject;
 
+    @UsedByReflection
     public GameObjectInstanceRemovedFromSceneCondition() {
         gameObject = new Property<GameObject>(this, "gameObject", (GameObject) null);
     }

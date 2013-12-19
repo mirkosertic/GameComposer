@@ -1,10 +1,6 @@
 package de.mirkosertic.gameengine.physics;
 
-import de.mirkosertic.gameengine.core.Condition;
-import de.mirkosertic.gameengine.core.ConditionResult;
-import de.mirkosertic.gameengine.core.GameObject;
-import de.mirkosertic.gameengine.core.GameObjectInstance;
-import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.event.GameEvent;
 import de.mirkosertic.gameengine.event.Property;
 
@@ -20,6 +16,7 @@ public class ObjectCollisionCondition implements Condition {
     private final Property<GameObject> primaryObject;
     private final Property<GameObject> secondaryObject;
 
+    @UsedByReflection
     public ObjectCollisionCondition() {
         primaryObject = new Property<GameObject>(this, "primaryObject", (GameObject) null);
         secondaryObject = new Property<GameObject>(this, "secondaryObject", (GameObject) null);

@@ -6,6 +6,7 @@ import java.util.Map;
 import de.mirkosertic.gameengine.core.Action;
 import de.mirkosertic.gameengine.core.ConditionResult;
 import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.UsedByReflection;
 import de.mirkosertic.gameengine.types.ResourceName;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
@@ -16,6 +17,7 @@ public class PlaySoundAction implements Action {
 
     private final Property<ResourceName> resourceName;
 
+    @UsedByReflection
     public PlaySoundAction() {
         resourceName = new Property<ResourceName>(this, "resourceName", (ResourceName) null);
     }

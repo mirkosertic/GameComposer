@@ -12,6 +12,7 @@ public class SystemTickCondition implements Condition {
 
     private final Property<Long> everyTicks;
 
+    @UsedByReflection
     public SystemTickCondition() {
         everyTicks = new Property<Long>(this, "everyTicks", 1l);
     }

@@ -12,6 +12,7 @@ public class GameObjectInstanceAddedToSceneCondition implements Condition {
 
     private final Property<GameObject> gameObject;
 
+    @UsedByReflection
     public GameObjectInstanceAddedToSceneCondition() {
         gameObject = new Property<GameObject>(this, "gameObject", (GameObject) null);
     }

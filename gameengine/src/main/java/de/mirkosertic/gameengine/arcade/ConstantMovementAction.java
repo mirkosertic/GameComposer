@@ -1,9 +1,6 @@
 package de.mirkosertic.gameengine.arcade;
 
-import de.mirkosertic.gameengine.core.Action;
-import de.mirkosertic.gameengine.core.ConditionResult;
-import de.mirkosertic.gameengine.core.GameObjectInstance;
-import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.processes.StartProcess;
 import de.mirkosertic.gameengine.types.Angle;
@@ -18,6 +15,7 @@ public class ConstantMovementAction implements Action {
     private final Property<Angle> movementDirection;
     private final Property<Float> movementForce;
 
+    @UsedByReflection
     public ConstantMovementAction() {
         movementDirection = new Property<Angle>(this, "movementDirection", new Angle(0));
         movementForce = new Property<Float>(this, "movementForce", 0f);
