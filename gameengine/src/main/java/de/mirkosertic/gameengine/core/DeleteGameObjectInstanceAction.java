@@ -25,7 +25,6 @@ public class DeleteGameObjectInstanceAction implements Action {
     }
 
     public static DeleteGameObjectInstanceAction unmarshall(Map<String, Object> aSerializedData) {
-        DeleteGameObjectInstanceAction theResult = new DeleteGameObjectInstanceAction();
-        return theResult;
+        return new DeleteGameObjectInstanceAction();
     }
 }

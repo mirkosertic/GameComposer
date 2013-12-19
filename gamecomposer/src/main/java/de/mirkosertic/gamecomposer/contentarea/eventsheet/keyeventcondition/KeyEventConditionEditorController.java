@@ -1,6 +1,7 @@
 package de.mirkosertic.gamecomposer.contentarea.eventsheet.keyeventcondition;
 
 import de.mirkosertic.gamecomposer.Controller;
+import de.mirkosertic.gamecomposer.StringConverterFactory;
 import de.mirkosertic.gameengine.core.GameKeyCode;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.core.KeyEventCondition;
@@ -11,7 +12,12 @@ import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.util.StringConverter;
 
+import javax.inject.Inject;
+
 public class KeyEventConditionEditorController implements Controller {
+
+    @Inject
+    StringConverterFactory stringConverterFactory;
 
     @FXML
     ComboBox eventType;
@@ -46,18 +52,7 @@ public class KeyEventConditionEditorController implements Controller {
 
         keyCode.getItems().clear();
         keyCode.getItems().addAll(GameKeyCode.allKeysAsSortedList());
-        keyCode.setConverter(new StringConverter<GameKeyCode>() {
-            @Override
-            public String toString(GameKeyCode aValue) {
-                return aValue.name();
-            }
-
-            @Override
-            public GameKeyCode fromString(String aValue) {
-                // Nonsense here
-                return null;
-            }
-        });
+        keyCode.setConverter(stringConverterFactory.createGameKeyCodeStringConverter());
         if (!condition.keyCodeProperty().isNull()) {
             keyCode.getSelectionModel().select(condition.keyCodeProperty().get());
         }

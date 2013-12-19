@@ -3,6 +3,7 @@ package de.mirkosertic.gamecomposer.contentarea.eventsheet.spawninstance;
 import de.mirkosertic.gamecomposer.Controller;
 import de.mirkosertic.gamecomposer.PersistenceManager;
 import de.mirkosertic.gamecomposer.PropertyBinder;
+import de.mirkosertic.gamecomposer.StringConverterFactory;
 import de.mirkosertic.gameengine.core.SpawnGameObjectInstanceAction;
 
 import de.mirkosertic.gameengine.core.GameObject;
@@ -12,7 +13,6 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
-import javafx.util.StringConverter;
 
 import javax.inject.Inject;
 import java.util.Arrays;
@@ -21,6 +21,9 @@ import java.util.Comparator;
 import java.util.List;
 
 public class SpawnIstanceEditorController implements Controller {
+
+    @Inject
+    StringConverterFactory stringConverterFactory;
 
     @FXML
     ComboBox referenceGameObject;
@@ -45,32 +48,9 @@ public class SpawnIstanceEditorController implements Controller {
         action = aAction;
 
         gameObject.getItems().clear();
-        gameObject.setConverter(new StringConverter<GameObject>() {
-            @Override
-            public String toString(GameObject aValue) {
-                return aValue.nameProperty().get();
-            }
-
-            @Override
-            public GameObject fromString(String aValue) {
-                // Nonsense here
-                return null;
-            }
-        });
+        gameObject.setConverter(stringConverterFactory.createGameObjectStringConverter());
         referenceGameObject.getItems().clear();
-        referenceGameObject.setConverter(new StringConverter<GameObject>() {
-            @Override
-            public String toString(GameObject aValue) {
-                return aValue.nameProperty().get();
-            }
-
-            @Override
-            public GameObject fromString(String aValue) {
-                // Nonsense here
-                return null;
-            }
-        });
-
+        referenceGameObject.setConverter(stringConverterFactory.createGameObjectStringConverter());
 
         List<GameObject> theSortedGameObjects = Arrays.asList(aGameScene.getObjects());
         Collections.sort(theSortedGameObjects, new Comparator<GameObject>() {

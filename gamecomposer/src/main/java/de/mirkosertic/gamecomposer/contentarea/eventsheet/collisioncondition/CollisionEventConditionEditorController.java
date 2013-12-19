@@ -1,6 +1,7 @@
 package de.mirkosertic.gamecomposer.contentarea.eventsheet.collisioncondition;
 
 import de.mirkosertic.gamecomposer.Controller;
+import de.mirkosertic.gamecomposer.StringConverterFactory;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.physics.ObjectCollisionCondition;
@@ -9,14 +10,17 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
-import javafx.util.StringConverter;
 
+import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 public class CollisionEventConditionEditorController implements Controller {
+
+    @Inject
+    StringConverterFactory stringConverterFactory;
 
     @FXML
     ComboBox primaryObject;
@@ -44,34 +48,12 @@ public class CollisionEventConditionEditorController implements Controller {
 
         primaryObject.getItems().clear();
         primaryObject.getItems().addAll(theSortedGameObjects);
-        primaryObject.setConverter(new StringConverter<GameObject>() {
-            @Override
-            public String toString(GameObject aValue) {
-                return aValue.nameProperty().get();
-            }
-
-            @Override
-            public GameObject fromString(String aValue) {
-                // Nonsense here
-                return null;
-            }
-        });
+        primaryObject.setConverter(stringConverterFactory.createGameObjectStringConverter());
         primaryObject.getSelectionModel().select(aCondition.primaryObjectProperty().get());
 
         secondaryObject.getItems().clear();
         secondaryObject.getItems().addAll(theSortedGameObjects);
-        secondaryObject.setConverter(new StringConverter<GameObject>() {
-            @Override
-            public String toString(GameObject aValue) {
-                return aValue.nameProperty().get();
-            }
-
-            @Override
-            public GameObject fromString(String aValue) {
-                // Nonsense here
-                return null;
-            }
-        });
+        secondaryObject.setConverter(stringConverterFactory.createGameObjectStringConverter());
         secondaryObject.getSelectionModel().select(aCondition.secondaryObjectProperty().get());
 
         primaryObject.setOnAction(new EventHandler<ActionEvent>() {
