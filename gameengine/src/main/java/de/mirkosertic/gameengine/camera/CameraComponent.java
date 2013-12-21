@@ -58,13 +58,17 @@ public class CameraComponent extends GameComponent {
             for (GameObjectInstance theInstance : aScene.getInstances()) {
                 // Just visible instances need to be drawn
                 if (theInstance.visibleProperty().get()) {
-                    Position theInstancePosition = theInstance.positionProperty().get();
-                    Size theSize = theInstance.getOwnerGameObject().sizeProperty().get();
-                    if (theInstancePosition.x + theSize.width >= theCameraPosition.x
-                            && theInstancePosition.x <= theCameraPosition.x + theScreenSize.width
-                            && theInstancePosition.y + theSize.height >= theCameraPosition.y
-                            && theInstancePosition.y <= theCameraPosition.y + theScreenSize.height) {
+                    if (theInstance.absolutePositionProperty().get()) {
                         theResult.add(theInstance);
+                    } else {
+                        Position theInstancePosition = theInstance.positionProperty().get();
+                        Size theSize = theInstance.getOwnerGameObject().sizeProperty().get();
+                        if (theInstancePosition.x + theSize.width >= theCameraPosition.x
+                                && theInstancePosition.x <= theCameraPosition.x + theScreenSize.width
+                                && theInstancePosition.y + theSize.height >= theCameraPosition.y
+                                && theInstancePosition.y <= theCameraPosition.y + theScreenSize.height) {
+                            theResult.add(theInstance);
+                        }
                     }
                 }
             }
