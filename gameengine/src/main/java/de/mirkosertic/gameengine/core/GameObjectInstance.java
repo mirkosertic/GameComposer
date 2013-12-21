@@ -18,6 +18,7 @@ public class GameObjectInstance extends PropertyAware {
     private final Property<Position> position;
     private final Property<Angle> rotationAngle;
     private final Property<Boolean> visible;
+    private final Property<Boolean> absolutePosition;
 
     GameObjectInstance(GameEventManager aEventManager, GameObject aOwnerGameObject) {
 
@@ -26,6 +27,7 @@ public class GameObjectInstance extends PropertyAware {
         position = registerProperty(new Property<Position>(this, "position", new Position(), aEventManager));
         visible = registerProperty(new Property<Boolean>(this, "visible", aOwnerGameObject.visibleProperty().get(), aEventManager));
         rotationAngle = registerProperty(new Property<Angle>(this, "rotationAngle", new Angle(0), aEventManager));
+        absolutePosition = registerProperty(new Property<Boolean>(this, "absolutePosition", Boolean.FALSE, aEventManager));
 
         ownerGameObject = aOwnerGameObject;
         components = new HashMap<Class<GameComponent>, GameComponent>();
@@ -57,6 +59,10 @@ public class GameObjectInstance extends PropertyAware {
 
     public Property<Boolean> visibleProperty() {
         return visible;
+    }
+
+    public Property<Boolean> absolutePositionProperty() {
+        return absolutePosition;
     }
 
     public GameObject getOwnerGameObject() {
@@ -96,6 +102,7 @@ public class GameObjectInstance extends PropertyAware {
         theResult.put("position", position.get().serialize());
         theResult.put("name", name.get());
         theResult.put("visible", Boolean.toString(visible.get()));
+        theResult.put("absolutePosition", Boolean.toString(absolutePosition.get()));
         theResult.put("rotationangle", rotationAngle.get().serialize());
 
         List<Map<String, Object>> theComponents = new ArrayList<Map<String, Object>>();
@@ -126,6 +133,10 @@ public class GameObjectInstance extends PropertyAware {
         String theVisible = (String) theInstance.get("visible");
         if (theVisible != null) {
             theResult.visible.setQuietly(Boolean.parseBoolean(theVisible));
+        }
+        String theAbsolutePositon = (String) theInstance.get("absolutePosition");
+        if (theAbsolutePositon != null) {
+            theResult.absolutePosition.setQuietly(Boolean.parseBoolean(theAbsolutePositon));
         }
 
         Map<String, Object> theRotationAngle = (Map<String, Object>) theInstance.get("rotationangle");
