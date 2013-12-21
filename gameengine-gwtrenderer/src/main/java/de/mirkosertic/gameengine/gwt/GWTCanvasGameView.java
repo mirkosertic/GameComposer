@@ -3,7 +3,7 @@ package de.mirkosertic.gameengine.gwt;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.canvas.dom.client.CssColor;
-import com.google.gwt.core.client.GWT;
+
 import de.mirkosertic.gameengine.camera.CameraComponent;
 import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.sprites.SpriteComponentTemplate;
@@ -42,7 +42,8 @@ public class GWTCanvasGameView extends AbstractWebGameView {
 
         for (GameObjectInstance theInstance : cameraComponent.getObjectsToDrawInRightOrder(aScene)) {
 
-            Position thePosition = cameraComponent.transformToScreenPosition(theInstance.positionProperty().get());
+            Position thePosition = cameraComponent.transformToScreenPosition(theInstance);
+
             Size theSize = theInstance.getOwnerGameObject().sizeProperty().get();
 
             float theHalfWidth = theSize.width / 2;

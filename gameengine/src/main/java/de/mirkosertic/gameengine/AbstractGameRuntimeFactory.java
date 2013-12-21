@@ -15,6 +15,8 @@ import de.mirkosertic.gameengine.sound.GameSoundSystemFactory;
 import de.mirkosertic.gameengine.sound.PlaySoundActionUnmarshaller;
 import de.mirkosertic.gameengine.sprites.SpriteComponentTemplateUnmarshaller;
 import de.mirkosertic.gameengine.sprites.SpriteComponentUnmarshaller;
+import de.mirkosertic.gameengine.text.TextComponentTemplateUnmarshaller;
+import de.mirkosertic.gameengine.text.TextComponentUnmarshaller;
 
 public abstract class AbstractGameRuntimeFactory {
 
@@ -45,12 +47,14 @@ public abstract class AbstractGameRuntimeFactory {
         theRegistry.registerTemplateUnmarshaller(new SpriteComponentTemplateUnmarshaller());
         theRegistry.registerTemplateUnmarshaller(new StaticComponentTemplateUnmarshaller());
         theRegistry.registerTemplateUnmarshaller(new PlatformComponentTemplateUnmarshaller());
+        theRegistry.registerTemplateUnmarshaller(new TextComponentTemplateUnmarshaller());
 
         theRegistry.registerComponentUnmarshaller(new PhysicsComponentUnmarshaller());
         theRegistry.registerComponentUnmarshaller(new CameraComponentUnmarshaller());
         theRegistry.registerComponentUnmarshaller(new SpriteComponentUnmarshaller());
         theRegistry.registerComponentUnmarshaller(new StaticComponentUnmarshaller());
         theRegistry.registerComponentUnmarshaller(new PlatformComponentUnmarshaller());
+        theRegistry.registerComponentUnmarshaller(new TextComponentUnmarshaller());
 
         theRegistry.registerConditionUnmarshaller(new KeyEventConditionUnmarshaller());
         theRegistry.registerConditionUnmarshaller(new ObjectCollisionConditionUnmarshaller());

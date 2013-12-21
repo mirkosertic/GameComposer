@@ -1,7 +1,6 @@
 package de.mirkosertic.gameengine.gwt;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.TextResource;
 import de.mirkosertic.gameengine.camera.CameraComponent;
@@ -251,7 +250,8 @@ public class GWTWebGLGameView extends AbstractWebGameView {
 
         for (GameObjectInstance theInstance : cameraComponent.getObjectsToDrawInRightOrder(aScene)) {
 
-            Position thePosition = cameraComponent.transformToScreenPosition(theInstance.positionProperty().get());
+            Position thePosition = cameraComponent.transformToScreenPosition(theInstance);
+
             Size theSize = theInstance.getOwnerGameObject().sizeProperty().get();
 
             SpriteComponentTemplate theTemplateComponent = theInstance.getOwnerGameObject().getComponentTemplate(SpriteComponentTemplate.class);

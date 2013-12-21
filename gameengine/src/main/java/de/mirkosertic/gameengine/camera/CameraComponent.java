@@ -71,6 +71,12 @@ public class CameraComponent extends GameComponent {
         }
         return theResult;
     }
+    public Position transformToScreenPosition(GameObjectInstance aInstance) {
+        if (aInstance.absolutePositionProperty().get()) {
+            return aInstance.positionProperty().get();
+        }
+        return transformToScreenPosition(aInstance.positionProperty().get());
+    }
 
     public Position transformToScreenPosition(Position aWorldPosition) {
         Position theCameraPosition = objectInstance.positionProperty().get();
