@@ -37,6 +37,9 @@ public class GameObjectInstanceEditorController implements ObjectInspectorElemen
     CheckBox visible;
 
     @FXML
+    CheckBox absolutePosition;
+
+    @FXML
     Hyperlink jumpToObject;
 
     @Inject
@@ -51,6 +54,7 @@ public class GameObjectInstanceEditorController implements ObjectInspectorElemen
         PropertyBinder.unbind(object.positionProperty());
         PropertyBinder.unbind(object.rotationAngleProperty());
         PropertyBinder.unbind(object.visibleProperty());
+        PropertyBinder.unbind(object.absolutePositionProperty());
     }
 
     public GameObjectInstanceEditorController initialize(Parent aView, GameObjectInstance aObject) {
@@ -94,6 +98,7 @@ public class GameObjectInstanceEditorController implements ObjectInspectorElemen
             }
         });
         PropertyBinder.bind(object.visibleProperty(), visible.selectedProperty());
+        PropertyBinder.bind(object.absolutePositionProperty(), absolutePosition.selectedProperty());
 
         rotationTextField.setText(Integer.toString(aObject.rotationAngleProperty().get().angleInDegrees));
 

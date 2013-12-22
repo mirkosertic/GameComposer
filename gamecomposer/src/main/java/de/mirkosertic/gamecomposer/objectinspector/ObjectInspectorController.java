@@ -10,6 +10,7 @@ import de.mirkosertic.gameengine.physics.PlatformComponentTemplate;
 import de.mirkosertic.gameengine.physics.StaticComponentTemplate;
 import de.mirkosertic.gameengine.sprites.SpriteComponentTemplate;
 
+import de.mirkosertic.gameengine.text.TextComponentTemplate;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.TitledPane;
@@ -154,6 +155,15 @@ public class ObjectInspectorController implements Controller {
                     propertyPanels.getChildren().add(theChildPane);
                     currentController.add(theEditor);
                 }
+
+                TextComponentTemplate theTextComponentTemplate = theGameObject.getComponentTemplate(TextComponentTemplate.class);
+                if (theTextComponentTemplate != null) {
+                    ObjectInspectorElementController theEditor = (ObjectInspectorElementController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(TextComponentTemplate.class)).get()).create(theTextComponentTemplate);
+                    TitledPane theChildPane = new TitledPane("TextComponent", theEditor.getView());
+                    propertyPanels.getChildren().add(theChildPane);
+                    currentController.add(theEditor);
+                }
+
             }
             if (aObject instanceof GameObjectInstance) {
                 ObjectInspectorElementController theController = (ObjectInspectorElementController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(GameObjectInstance.class)).get()).create(aObject);

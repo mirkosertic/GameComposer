@@ -6,7 +6,7 @@ import java.util.Map;
 public class Font {
 
     public static enum FontName {
-        ARIAL, VERDANA;
+        ARIAL, VERDANA
     }
 
     public static final Font DEFAULT_FONT = new Font(FontName.ARIAL, 10);
@@ -17,6 +17,14 @@ public class Font {
     public Font(FontName aFontName, int aSize) {
         name = aFontName;
         size = aSize;
+    }
+
+    public Font changeSize(int aSize) {
+        return new Font(name, aSize);
+    }
+
+    public Font changeName(FontName aName) {
+        return new Font(aName, size);
     }
 
     public Map<String, Object> serialize() {

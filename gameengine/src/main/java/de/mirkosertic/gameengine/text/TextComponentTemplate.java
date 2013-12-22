@@ -6,6 +6,7 @@ import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
+import de.mirkosertic.gameengine.types.Color;
 import de.mirkosertic.gameengine.types.Font;
 import de.mirkosertic.gameengine.types.TextExpression;
 
@@ -16,12 +17,14 @@ public class TextComponentTemplate extends GameComponentTemplate<TextComponent> 
 
     private final Property<Font> font;
     private final Property<TextExpression> textExpression;
+    private final Property<Color> color;
 
     private final GameObject owner;
 
     public TextComponentTemplate(GameEventManager aEventManager, GameObject aOwner) {
         font = registerProperty(new Property<Font>(this, "font", Font.DEFAULT_FONT, aEventManager));
         textExpression = registerProperty(new Property<TextExpression>(this, "textExpression", new TextExpression(""), aEventManager));
+        color = registerProperty(new Property<Color>(this, "color", Color.WHITE, aEventManager));
         owner = aOwner;
     }
 
@@ -36,6 +39,10 @@ public class TextComponentTemplate extends GameComponentTemplate<TextComponent> 
 
     public Property<TextExpression> textExpressionProperty() {
         return textExpression;
+    }
+
+    public Property<Color> colorProperty() {
+        return color;
     }
 
     public TextComponent create(GameObjectInstance aInstance, GameRuntime aGameRuntime) {
@@ -53,6 +60,7 @@ public class TextComponentTemplate extends GameComponentTemplate<TextComponent> 
         theResult.put(TextComponent.TYPE_ATTRIBUTE, TextComponent.TYPE);
         theResult.put("font", font.get().serialize());
         theResult.put("textExpression", textExpression.get().serialize());
+        theResult.put("color", color.get().serialize());
         return theResult;
     }
 
@@ -60,6 +68,7 @@ public class TextComponentTemplate extends GameComponentTemplate<TextComponent> 
         TextComponentTemplate theTemplate = new TextComponentTemplate(aEventManager, aOwner);
         theTemplate.font.setQuietly(Font.deserialize((Map<String, Object>) aSerializedData.get("font")));
         theTemplate.textExpression.setQuietly(TextExpression.deserialize((Map<String, Object>) aSerializedData.get("textExpression")));
+        theTemplate.color.setQuietly(Color.deserialize((Map<String, Object>) aSerializedData.get("color")));
         return theTemplate;
     }
 }

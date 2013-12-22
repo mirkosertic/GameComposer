@@ -3,6 +3,7 @@ package de.mirkosertic.gameengine.text;
 import de.mirkosertic.gameengine.core.GameComponent;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.event.Property;
+import de.mirkosertic.gameengine.types.Color;
 import de.mirkosertic.gameengine.types.Font;
 import de.mirkosertic.gameengine.types.TextExpression;
 
@@ -16,18 +17,21 @@ public class TextComponent extends GameComponent {
     private final GameObjectInstance objectInstance;
 
     private final Property<Font> font;
+    private final Property<Color> color;
     private final Property<TextExpression> textExpression;
 
     TextComponent(GameObjectInstance aObjectInstance) {
         objectInstance = aObjectInstance;
         font = registerProperty(new Property<Font>(this, "font", Font.DEFAULT_FONT));
+        color = registerProperty(new Property<Color>(this, "color", Color.WHITE));
         textExpression = registerProperty(new Property<TextExpression>(this, "textExpression", new TextExpression("")));
     }
 
     TextComponent(GameObjectInstance aObjectInstance, TextComponentTemplate aTemplate) {
         this(aObjectInstance);
         font.setQuietly(aTemplate.fontProperty().get());
-        textExpression.setQuietly(aTemplate.textExpressionProperty().get());;
+        textExpression.setQuietly(aTemplate.textExpressionProperty().get());
+        color.setQuietly(aTemplate.colorProperty().get());
     }
 
     public GameObjectInstance getObjectInstance() {
