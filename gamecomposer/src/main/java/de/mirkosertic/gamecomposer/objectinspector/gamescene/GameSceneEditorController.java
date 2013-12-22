@@ -1,6 +1,10 @@
 package de.mirkosertic.gamecomposer.objectinspector.gamescene;
 
+import de.mirkosertic.gamecomposer.PropertyBinder;
+import de.mirkosertic.gamecomposer.StringConverterFactory;
 import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorElementController;
+import de.mirkosertic.gameengine.core.GameScene;
+
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -8,25 +12,13 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
-import javafx.util.StringConverter;
 
-import de.mirkosertic.gamecomposer.PropertyBinder;
-import de.mirkosertic.gameengine.core.GameObject;
-import de.mirkosertic.gameengine.core.GameScene;
+import javax.inject.Inject;
 
 public class GameSceneEditorController implements ObjectInspectorElementController {
 
-    private static class GameObjectToStringConverter extends StringConverter<GameObject> {
-        @Override
-        public String toString(GameObject aObject) {
-            return aObject.nameProperty().get();
-        }
-
-        @Override
-        public GameObject fromString(String s) {
-            return null;
-        }
-    }
+    @Inject
+    StringConverterFactory stringConverterFactory;
 
     @FXML
     TextField nameTextField;
@@ -59,12 +51,12 @@ public class GameSceneEditorController implements ObjectInspectorElementControll
 
         defaultCamera.getItems().clear();
         defaultCamera.getItems().addAll(aObject.getObjects());
-        defaultCamera.setConverter(new GameObjectToStringConverter());
+        defaultCamera.setConverter(stringConverterFactory.createGameObjectStringConverter());
         PropertyBinder.bind(aObject.cameraObjectProperty(), defaultCamera.valueProperty());
 
         defaultPlayer.getItems().clear();
         defaultPlayer.getItems().addAll(aObject.getObjects());
-        defaultPlayer.setConverter(new GameObjectToStringConverter());
+        defaultPlayer.setConverter(stringConverterFactory.createGameObjectStringConverter());
         PropertyBinder.bind(aObject.defaultPlayerProperty(), defaultPlayer.valueProperty());
 
         PropertyBinder.bind(aObject.backgroundColorProperty(), backgroundColorPicker.valueProperty(),

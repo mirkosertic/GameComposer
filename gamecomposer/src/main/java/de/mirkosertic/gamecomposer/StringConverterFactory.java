@@ -2,6 +2,7 @@ package de.mirkosertic.gamecomposer;
 
 import de.mirkosertic.gameengine.core.GameKeyCode;
 import de.mirkosertic.gameengine.core.GameObject;
+import de.mirkosertic.gameengine.types.Font;
 import javafx.util.StringConverter;
 
 import javax.inject.Singleton;
@@ -35,6 +36,20 @@ public class StringConverterFactory {
             @Override
             public GameKeyCode fromString(String aValue) {
                 return GameKeyCode.valueOf(aValue);
+            }
+        };
+    }
+
+    public StringConverter<Font.FontName> createFontStringConverter() {
+        return new StringConverter<Font.FontName>() {
+            @Override
+            public String toString(Font.FontName aValue) {
+                return aValue.name();
+            }
+
+            @Override
+            public Font.FontName fromString(String aValue) {
+                return Font.FontName.valueOf(aValue);
             }
         };
     }

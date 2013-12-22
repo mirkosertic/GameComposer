@@ -5,6 +5,9 @@ import java.util.Map;
 
 public class Color {
 
+    public static final Color WHITE = new Color(255, 255, 255);
+    public static final Color BLACK = new Color(0, 0, 0);
+
     public final int r;
     public final int g;
     public final int b;
