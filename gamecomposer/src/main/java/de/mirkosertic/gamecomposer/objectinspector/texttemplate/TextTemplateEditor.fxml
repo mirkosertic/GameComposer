@@ -14,7 +14,7 @@
     <GridPane hgap="5.0" vgap="5.0">
       <children>
         <Label text="Font" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-        <ComboBox maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="0">
+        <ComboBox fx:id="fontCombobox" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="0">
           <items>
             <FXCollections fx:factory="observableArrayList">
               <String fx:value="Item 1" />
@@ -24,11 +24,11 @@
           </items>
         </ComboBox>
         <Label text="Font size" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-        <TextField maxWidth="1.7976931348623157E308" prefWidth="-1.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+        <TextField fx:id="fontSize" maxWidth="1.7976931348623157E308" prefWidth="-1.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
         <Label text="Color" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-        <ColorPicker maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+        <ColorPicker fx:id="textColor" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="2" />
         <Label text="Text" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-        <TextField maxWidth="1.7976931348623157E308" prefWidth="-1.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+        <TextField fx:id="textExpression" maxWidth="1.7976931348623157E308" prefWidth="-1.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
       </children>
       <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="-1.0" />

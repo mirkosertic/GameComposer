@@ -7,10 +7,8 @@ import com.google.gwt.canvas.dom.client.CssColor;
 import de.mirkosertic.gameengine.camera.CameraComponent;
 import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.sprites.SpriteComponentTemplate;
-import de.mirkosertic.gameengine.types.Angle;
-import de.mirkosertic.gameengine.types.Color;
-import de.mirkosertic.gameengine.types.Position;
-import de.mirkosertic.gameengine.types.Size;
+import de.mirkosertic.gameengine.text.TextComponent;
+import de.mirkosertic.gameengine.types.*;
 
 import java.io.IOException;
 
@@ -58,15 +56,26 @@ public class GWTCanvasGameView extends AbstractWebGameView {
                 theContext.rotate(theAngle.toRadians());
             }
 
+            boolean theSomethingRendered = false;
+
             SpriteComponentTemplate theTemplateComponent = theInstance.getOwnerGameObject().getComponentTemplate(SpriteComponentTemplate.class);
             if (theTemplateComponent != null) {
                 try {
                     GWTBitmapResource theBitmap = gameRuntime.getResourceCache().getResourceFor(theTemplateComponent.resourceNameProperty().get());
                     drawGameObjectInstance(theContext, theInstance, new Position(-theHalfWidth, -theHalfHeight), theSize, theBitmap);
+
+                    theSomethingRendered = true;
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-            } else {
+            }
+            TextComponent theTextComponent = theInstance.getComponent(TextComponent.class);
+            if (theTextComponent != null) {
+                drawText(theContext, theInstance, thePosition, theTextComponent.fontProperty().get(), theTextComponent.colorProperty().get(), theTextComponent.textExpressionProperty().get(), theSize);
+                theSomethingRendered = true;
+            }
+
+            if (!theSomethingRendered) {
                 theContext.setFillStyle(CssColor.make(255, 255, 255));
                 theContext.setStrokeStyle(CssColor.make(255, 255, 255));
                 theContext.setLineWidth(1);

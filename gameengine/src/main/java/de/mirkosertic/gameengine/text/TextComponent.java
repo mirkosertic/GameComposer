@@ -38,6 +38,18 @@ public class TextComponent extends GameComponent {
         return objectInstance;
     }
 
+    public Property<Font> fontProperty() {
+        return font;
+    }
+
+    public Property<Color> colorProperty() {
+        return color;
+    }
+
+    public Property<TextExpression> textExpressionProperty() {
+        return textExpression;
+    }
+
     @Override
     public String getTypeKey() {
         return TYPE;
@@ -47,6 +59,9 @@ public class TextComponent extends GameComponent {
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<String, Object>();
         theResult.put(TYPE_ATTRIBUTE, TYPE);
+        theResult.put("font", font.get().serialize());
+        theResult.put("textExpression", textExpression.get().serialize());
+        theResult.put("color", color.get().serialize());
         return theResult;
     }
 
@@ -56,6 +71,10 @@ public class TextComponent extends GameComponent {
     }
 
     public static TextComponent deserialize(GameObjectInstance aObjectInstance, Map<String, Object> aSerializedData) {
-        return new TextComponent(aObjectInstance);
+        TextComponent theTemplate =  new TextComponent(aObjectInstance);
+        theTemplate.font.setQuietly(Font.deserialize((Map<String, Object>) aSerializedData.get("font")));
+        theTemplate.textExpression.setQuietly(TextExpression.deserialize((Map<String, Object>) aSerializedData.get("textExpression")));
+        theTemplate.color.setQuietly(Color.deserialize((Map<String, Object>) aSerializedData.get("color")));
+        return theTemplate;
     }
 }

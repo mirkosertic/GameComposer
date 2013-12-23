@@ -88,11 +88,17 @@ public class GameScene {
         return eventSheets;
     }
 
-    public List<GameObjectInstance> findAllAt(Position aPosition) {
+    public List<GameObjectInstance> findAllAt(Position aScreenPosition, Position aWorldPosition) {
         List<GameObjectInstance> theResult = new ArrayList<GameObjectInstance>();
         for (GameObjectInstance theInstance : instances) {
-            if (theInstance.contains(aPosition)) {
-                theResult.add(theInstance);
+            if (theInstance.absolutePositionProperty().get()) {
+                if (theInstance.contains(aScreenPosition)) {
+                    theResult.add(theInstance);
+                }
+            } else {
+                if (theInstance.contains(aWorldPosition)) {
+                    theResult.add(theInstance);
+                }
             }
         }
         return theResult;

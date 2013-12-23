@@ -33,6 +33,7 @@ public class GWTRenderer implements EntryPoint {
     private static final String upgradeMessage = "Your browser does not support the HTML5 Canvas. Please upgrade your browser to view this demo.";
 
     private Canvas canvas;
+    private Canvas overlayCanvas;
     private GWTGameRuntimeFactory runtimeFactory;
     private GWTGameSceneLoader sceneLoader;
     private Game game;
@@ -47,6 +48,12 @@ public class GWTRenderer implements EntryPoint {
             RootPanel.get(holderId).add(new Label(upgradeMessage));
             return;
         }
+        overlayCanvas = Canvas.createIfSupported();
+        if (overlayCanvas == null) {
+            RootPanel.get(holderId).add(new Label(upgradeMessage));
+            return;
+        }
+
         gameLoopFactory = new GameLoopFactory();
 
         // We need a factory to create new game runtimes for every scene
@@ -84,6 +91,9 @@ public class GWTRenderer implements EntryPoint {
 
         canvas.setStyleName("mainCanvas");
         RootPanel.get(holderId).add(canvas);
+
+        overlayCanvas.setStyleName("overlayCanvas");
+        RootPanel.get(holderId).add(overlayCanvas);
 
         Window.addResizeHandler(new ResizeHandler() {
             @Override
@@ -191,7 +201,7 @@ public class GWTRenderer implements EntryPoint {
             }
             if (theWebGLContext != null) {
                 // WebGL is supported
-                theGameView = new GWTWebGLGameView(theRuntime, theWebGLContext, theCameraComponent);
+                theGameView = new GWTWebGLGameView(theRuntime, theWebGLContext, overlayCanvas, theCameraComponent);
             } else {
                 // Fallback to canvas
                 theGameView = new GWTCanvasGameView(theRuntime, canvas, theCameraComponent);
@@ -235,5 +245,10 @@ public class GWTRenderer implements EntryPoint {
         canvas.setHeight(aHeight + "px");
         canvas.setCoordinateSpaceWidth(aWidth);
         canvas.setCoordinateSpaceHeight(aHeight);
+
+        overlayCanvas.setWidth(aWidth + "px");
+        overlayCanvas.setHeight(aHeight + "px");
+        overlayCanvas.setCoordinateSpaceWidth(aWidth);
+        overlayCanvas.setCoordinateSpaceHeight(aHeight);
     }
 }

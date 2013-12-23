@@ -1,14 +1,20 @@
 package de.mirkosertic.gamecomposer.contentarea.gamescene;
 
+import com.sun.javafx.tk.FontMetrics;
+import com.sun.javafx.tk.Toolkit;
+
 import de.mirkosertic.gamecomposer.ObjectSelectedEvent;
 import de.mirkosertic.gameengine.camera.CameraComponent;
-import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.core.GameObjectInstance;
+import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.javafx.JavaFXBitmapResource;
 import de.mirkosertic.gameengine.javafx.JavaFXGameView;
 import de.mirkosertic.gameengine.physics.GamePhysicsManager;
 import de.mirkosertic.gameengine.physics.PhysicsDebugCanvas;
+import de.mirkosertic.gameengine.types.Font;
 import de.mirkosertic.gameengine.types.Position;
 import de.mirkosertic.gameengine.types.Size;
+import de.mirkosertic.gameengine.types.TextExpression;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -175,10 +181,27 @@ public class EditorJXGameView extends JavaFXGameView {
     }
 
     @Override
+    protected void drawText(GraphicsContext aContext, GameObjectInstance aInstance, Position aPosition, Font aFont, de.mirkosertic.gameengine.types.Color aColor, TextExpression aExpression, Size aSize) {
+        super.drawText(aContext, aInstance, aPosition, aFont, aColor, aExpression, aSize);
+
+        javafx.scene.text.Font theFont = toFont(aFont);
+        FontMetrics theMetrics = Toolkit.getToolkit().getFontLoader().getFontMetrics(theFont);
+        int theWidth = (int) theMetrics.computeStringWidth(aExpression.expression);
+        int theHeight = (int) theMetrics.getLineHeight();
+
+        drawSelectionAndHighlighting(aContext, aInstance, aPosition, new Size(theWidth, theHeight));
+    }
+
+    @Override
     protected void drawGameObjectInstance(GraphicsContext aContext, GameObjectInstance aInstance, Position aPosition, Size aSize, JavaFXBitmapResource aBitmapResource) {
         super.drawGameObjectInstance(aContext, aInstance, aPosition, aSize, aBitmapResource);
 
+        drawSelectionAndHighlighting(aContext, aInstance, aPosition, aSize);
+    }
+
+    protected void drawSelectionAndHighlighting(GraphicsContext aContext, GameObjectInstance aInstance, Position aPosition, Size aSize) {
         aContext.save();
+
         if (aInstance == selectedObject || aInstance.getOwnerGameObject() == selectedObject) {
             aContext.setFill(Color.WHITE);
             aContext.setStroke(Color.WHITE);
@@ -186,9 +209,19 @@ public class EditorJXGameView extends JavaFXGameView {
             aContext.strokeRect(aPosition.x, aPosition.y, aSize.width, aSize.height);
         }
         if (currentMousePosition != null) {
-            if (aInstance.contains(getCameraComponent().transformFromScreen(currentMousePosition))) {
+            boolean theHighlighted = false;
+            if (aInstance.absolutePositionProperty().get()) {
+                if (aInstance.contains(currentMousePosition)) {
+                    theHighlighted = true;
+                }
+            } else {
+                if (aInstance.contains(getCameraComponent().transformFromScreen(currentMousePosition))) {
+                    theHighlighted = true;
+                }
+            }
 
-                int theColorOffset = (int) (System.currentTimeMillis() / 2) % 400;
+            if (theHighlighted) {
+                int theColorOffset = (int) ((System.currentTimeMillis() / 2) % 400);
 
                 int theRed = 0;
                 int theGreen;

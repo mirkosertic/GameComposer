@@ -1,13 +1,18 @@
 package de.mirkosertic.gameengine.gwt;
 
+import com.google.gwt.canvas.client.Canvas;
+import com.google.gwt.canvas.dom.client.Context2d;
+import com.google.gwt.canvas.dom.client.CssColor;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.TextResource;
+
 import de.mirkosertic.gameengine.camera.CameraComponent;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.sprites.SpriteComponentTemplate;
+import de.mirkosertic.gameengine.text.TextComponent;
 import de.mirkosertic.gameengine.types.Angle;
 import de.mirkosertic.gameengine.types.Color;
 import de.mirkosertic.gameengine.types.Position;
@@ -205,24 +210,26 @@ public class GWTWebGLGameView extends AbstractWebGameView {
     }
 
     private final GameRuntime gameRuntime;
-    private final WebGLRenderingContext renderingContext;
+    private final WebGLRenderingContext webGLRenderingContext;
+    private final Canvas canvas;
     private final CameraComponent cameraComponent;
     private final GLSprite sprite;
 
     private Matrix4 transform;
 
-    public GWTWebGLGameView(GameRuntime aRuntime, WebGLRenderingContext aRenderingContext, CameraComponent aCameraComponent) {
+    public GWTWebGLGameView(GameRuntime aRuntime, WebGLRenderingContext aWebGLRenderingContext, Canvas aCanvas, CameraComponent aCameraComponent) {
         gameRuntime = aRuntime;
-        renderingContext = aRenderingContext;
+        webGLRenderingContext = aWebGLRenderingContext;
         cameraComponent = aCameraComponent;
+        canvas = aCanvas;
 
-        sprite = new GLSprite(aRenderingContext);
+        sprite = new GLSprite(aWebGLRenderingContext);
     }
 
     @Override
     public void setSize(Size aSize) {
         super.setSize(aSize);
-        renderingContext.viewport(0, 0, aSize.width, aSize.height);
+        webGLRenderingContext.viewport(0, 0, aSize.width, aSize.height);
 
         Matrix4 theMat4 = new Matrix4();
         theMat4.makeOrthographic(0, aSize.width, 0, aSize.height, -10, 10);
@@ -232,21 +239,30 @@ public class GWTWebGLGameView extends AbstractWebGameView {
 
     @Override
     public void renderGame(long aGameTime, long aElapsedTimeSinceLastLoop, GameScene aScene) {
+        Size theCurrentSize = getSize();
+
+        Context2d theContext = canvas.getContext2d();
 
         Color theBGColor = aScene.backgroundColorProperty().get();
 
-        renderingContext.clearColor(theBGColor.r / 255, theBGColor.g / 255, theBGColor.b / 255, 1);
-        renderingContext.clear(WebGLConstants.COLOR_BUFFER_BIT | WebGLConstants.DEPTH_BUFFER_BIT);
-        renderingContext.disable(EnableCap.DEPTH_TEST);
+        // Fill the context with transparent background
+        CssColor theCssBackground = CssColor.make("rgba(" + theBGColor.r + "," + theBGColor.g + "," + theBGColor.b + ",0)");
+        theContext.setFillStyle(theCssBackground);
+        theContext.setStrokeStyle(theCssBackground);
+        theContext.fillRect(0, 0, theCurrentSize.width, theCurrentSize.height);
 
-        renderingContext.blendFunc(BlendingFactorSrc.SRC_ALPHA, BlendingFactorDest.ONE_MINUS_SRC_ALPHA);
-        renderingContext.enable(EnableCap.BLEND);
-        renderingContext.depthMask(true);
+        webGLRenderingContext.clearColor(theBGColor.r / 255, theBGColor.g / 255, theBGColor.b / 255, 1);
+        webGLRenderingContext.clear(WebGLConstants.COLOR_BUFFER_BIT | WebGLConstants.DEPTH_BUFFER_BIT);
+        webGLRenderingContext.disable(EnableCap.DEPTH_TEST);
 
-        renderingContext.useProgram(sprite.program);
+        webGLRenderingContext.blendFunc(BlendingFactorSrc.SRC_ALPHA, BlendingFactorDest.ONE_MINUS_SRC_ALPHA);
+        webGLRenderingContext.enable(EnableCap.BLEND);
+        webGLRenderingContext.depthMask(true);
+
+        webGLRenderingContext.useProgram(sprite.program);
 
         // Setup model world transform
-        renderingContext.uniformMatrix4fv(sprite.modelViewTransform, false, transform.getArray());
+        webGLRenderingContext.uniformMatrix4fv(sprite.modelViewTransform, false, transform.getArray());
 
         for (GameObjectInstance theInstance : cameraComponent.getObjectsToDrawInRightOrder(aScene)) {
 
@@ -254,16 +270,26 @@ public class GWTWebGLGameView extends AbstractWebGameView {
 
             Size theSize = theInstance.getOwnerGameObject().sizeProperty().get();
 
+            boolean theSomethingRendered = false;
+
             SpriteComponentTemplate theTemplateComponent = theInstance.getOwnerGameObject().getComponentTemplate(SpriteComponentTemplate.class);
             if (theTemplateComponent != null) {
                 try {
                     GWTBitmapResource theBitmap = gameRuntime.getResourceCache().getResourceFor(theTemplateComponent.resourceNameProperty().get());
 
                     sprite.render(thePosition, theSize, theInstance.rotationAngleProperty().get(), theBitmap);
+                    theSomethingRendered = true;
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-            } else {
+            }
+            TextComponent theTextComponent = theInstance.getComponent(TextComponent.class);
+            if (theTextComponent != null) {
+                drawText(theContext, theInstance, thePosition, theTextComponent.fontProperty().get(), theTextComponent.colorProperty().get(), theTextComponent.textExpressionProperty().get(), theSize);
+                theSomethingRendered = true;
+            }
+
+            if (!theSomethingRendered) {
                 sprite.render(thePosition, theSize, theInstance.rotationAngleProperty().get(), null);
             }
         }
