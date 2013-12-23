@@ -6,6 +6,7 @@ import de.mirkosertic.gameengine.arcade.ConstantMovementAction;
 import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.physics.ObjectCollisionCondition;
 import de.mirkosertic.gameengine.sound.PlaySoundAction;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -68,6 +69,7 @@ public class RuleEditorController implements Controller {
         knownEventTypes.put(ObjectCollisionCondition.class.getSimpleName(), ObjectCollisionCondition.class);
         knownEventTypes.put(GameObjectInstanceAddedToSceneCondition.class.getSimpleName(), GameObjectInstanceAddedToSceneCondition.class);
         knownEventTypes.put(GameObjectInstanceRemovedFromSceneCondition.class.getSimpleName(), GameObjectInstanceRemovedFromSceneCondition.class);
+        knownEventTypes.put(SystemTickCondition.class.getSimpleName(), SystemTickCondition.class);
 
         knownActions = new ArrayList<>();
         knownActions.add(PlaySoundAction.class);

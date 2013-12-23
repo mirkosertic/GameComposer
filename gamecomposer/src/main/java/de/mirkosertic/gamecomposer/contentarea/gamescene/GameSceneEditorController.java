@@ -191,7 +191,7 @@ public class GameSceneEditorController implements ContentController<GameScene> {
     private void onMousePressed(MouseEvent aEvent) {
         Position theScreenPosition = new Position(aEvent.getX(), aEvent.getY());
         Position theWorldPosition = cameraComponent.transformFromScreen(theScreenPosition);
-        List<GameObjectInstance> theFoundInstances = gameScene.findAllAt(theWorldPosition);
+        List<GameObjectInstance> theFoundInstances = gameScene.findAllAt(theScreenPosition, theWorldPosition);
         if (theFoundInstances.size() == 1) {
             draggingInstance = theFoundInstances.get(0);
             draggingMouseWorldPosition = theWorldPosition;

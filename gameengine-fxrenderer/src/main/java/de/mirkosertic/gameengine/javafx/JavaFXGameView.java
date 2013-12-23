@@ -1,22 +1,22 @@
 package de.mirkosertic.gameengine.javafx;
 
-import java.io.IOException;
+import de.mirkosertic.gameengine.camera.CameraComponent;
+import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.sprites.SpriteComponentTemplate;
+import de.mirkosertic.gameengine.text.TextComponent;
+import de.mirkosertic.gameengine.types.Angle;
+import de.mirkosertic.gameengine.types.Position;
+import de.mirkosertic.gameengine.types.Size;
+import de.mirkosertic.gameengine.types.TextExpression;
+
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.transform.Rotate;
 
-import de.mirkosertic.gameengine.camera.CameraComponent;
-import de.mirkosertic.gameengine.core.GameLoop;
-import de.mirkosertic.gameengine.core.GameObjectInstance;
-import de.mirkosertic.gameengine.core.GameRuntime;
-import de.mirkosertic.gameengine.core.GameScene;
-import de.mirkosertic.gameengine.core.GameView;
-import de.mirkosertic.gameengine.sprites.SpriteComponentTemplate;
-import de.mirkosertic.gameengine.types.Angle;
-import de.mirkosertic.gameengine.types.Position;
-import de.mirkosertic.gameengine.types.Size;
+import java.io.IOException;
 
 public class JavaFXGameView extends Canvas implements GameView {
 
@@ -58,6 +58,8 @@ public class JavaFXGameView extends Canvas implements GameView {
                 theContext.setTransform(r.getMxx(), r.getMyx(), r.getMxy(), r.getMyy(), r.getTx(), r.getTy());
             }
 
+            boolean theSomethingRendered = false;
+
             SpriteComponentTemplate theTemplateComponent = theInstance.getOwnerGameObject().getComponentTemplate(
                     SpriteComponentTemplate.class);
             if (theTemplateComponent != null && !theTemplateComponent.resourceNameProperty().isNull()) {
@@ -65,10 +67,19 @@ public class JavaFXGameView extends Canvas implements GameView {
                     JavaFXBitmapResource theBitmap = gameRuntime.getResourceCache().getResourceFor(
                             theTemplateComponent.resourceNameProperty().get());
                     drawGameObjectInstance(theContext, theInstance, thePosition, theSize, theBitmap);
+
+                    theSomethingRendered = true;
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-            } else {
+            }
+            TextComponent theTextComponent = theInstance.getComponent(TextComponent.class);
+            if (theTextComponent != null) {
+                drawText(theContext, theInstance, thePosition, theTextComponent.fontProperty().get(), theTextComponent.colorProperty().get(), theTextComponent.textExpressionProperty().get(), theSize);
+                theSomethingRendered = true;
+            }
+
+            if (!theSomethingRendered) {
                 theContext.setFill(Color.WHITE);
                 theContext.setStroke(Color.WHITE);
                 theContext.setLineWidth(1);
@@ -80,7 +91,27 @@ public class JavaFXGameView extends Canvas implements GameView {
         afterRendering(theContext);
     }
 
+    protected Font toFont(de.mirkosertic.gameengine.types.Font aFont) {
+        switch (aFont.name) {
+            case ARIAL:
+                return new Font("Arial", aFont.size);
+            case VERDANA:
+                return new Font("Verdana", aFont.size);
+        }
+        throw new IllegalArgumentException("Wrong font name : "+aFont.name);
+    }
+
     protected void afterRendering(GraphicsContext aContext) {
+    }
+
+    protected void drawText(GraphicsContext aContext, GameObjectInstance aInstance, Position aPosition, de.mirkosertic.gameengine.types.Font aFont, de.mirkosertic.gameengine.types.Color aColor, TextExpression aExpression, Size aSize) {
+        aContext.save();
+        Color theTextColor = Color.rgb(aColor.r, aColor.g, aColor.b);
+        aContext.setFill(theTextColor);
+        aContext.setStroke(theTextColor);
+        aContext.setFont(toFont(aFont));
+        aContext.fillText(aExpression.expression, aPosition.x, aPosition.y + aFont.size);
+        aContext.restore();
     }
 
     protected void drawGameObjectInstance(GraphicsContext aContext, GameObjectInstance aInstance, Position aPosition,
