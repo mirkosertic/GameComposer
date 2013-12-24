@@ -5,15 +5,22 @@ import java.util.Map;
 
 import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.event.GameEventListener;
+import de.mirkosertic.gameengine.event.GameEventManager;
+import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.types.Position;
 
-public class PlatformComponent extends GameComponent {
+public class PlatformComponent extends GameComponent implements Platform {
 
     static final String TYPE = "PlatformComponent";
 
     private final GameRuntime gameRuntime;
     private final GameObjectInstance objectInstance;
-    private final PlatformComponentTemplate platformTemplate;
+
+    private final Property<GameKeyCode> moveLeftKey;
+    private final Property<GameKeyCode> moveRightKey;
+    private final Property<GameKeyCode> jumpKey;
+    private final Property<Float> leftRightImpulse;
+    private final Property<Float> jumpImpulse;
 
     private boolean jumping;
     private boolean leftKeyDown;
@@ -23,7 +30,15 @@ public class PlatformComponent extends GameComponent {
     PlatformComponent(GameObjectInstance aObjectInstance, GameRuntime aGameRuntime) {
         gameRuntime = aGameRuntime;
         objectInstance = aObjectInstance;
-        platformTemplate = aObjectInstance.getOwnerGameObject().getComponentTemplate(PlatformComponentTemplate.class);
+
+        PlatformComponentTemplate theTemplate = aObjectInstance.getOwnerGameObject().getComponentTemplate(PlatformComponentTemplate.class);
+        GameEventManager theEventManager = aObjectInstance.getOwnerGameObject().getGameScene().getRuntime().getEventManager();
+
+        moveLeftKey = registerProperty(new Property<GameKeyCode>(this, "moveLeftKey", theTemplate.moveLeftKeyProperty().get(), theEventManager));
+        moveRightKey = registerProperty(new Property<GameKeyCode>(this, "moveRightKey", theTemplate.moveRightKeyProperty().get(), theEventManager));
+        jumpKey = registerProperty(new Property<GameKeyCode>(this, "jumpKey", theTemplate.jumpKeyProperty().get(), theEventManager));
+        leftRightImpulse = registerProperty(new Property<Float>(this, "leftRightImpulse", theTemplate.leftRightImpulseProperty().get(), theEventManager));
+        jumpImpulse = registerProperty(new Property<Float>(this, "jumpImpulse", theTemplate.jumpImpulseProperty().get(), theEventManager));
     }
 
     PlatformComponent(GameObjectInstance aObjectInstance, GameRuntime aGameRuntime, PlatformComponentTemplate aTemplate) {
@@ -59,6 +74,26 @@ public class PlatformComponent extends GameComponent {
 
     }
 
+    public Property<GameKeyCode> moveLeftKeyProperty() {
+        return moveLeftKey;
+    }
+
+    public Property<GameKeyCode> moveRightKeyProperty() {
+        return moveRightKey;
+    }
+
+    public Property<GameKeyCode> jumpKeyProperty() {
+        return jumpKey;
+    }
+
+    public Property<Float> leftRightImpulseProperty() {
+        return leftRightImpulse;
+    }
+
+    public Property<Float> jumpImpulseProperty() {
+        return jumpImpulse;
+    }
+
     boolean isJumping() {
         return jumping;
     }
@@ -69,37 +104,37 @@ public class PlatformComponent extends GameComponent {
 
     void handleGameLoop(SystemTick aEvent) {
         if (upKeyDown && !isJumping()) {
-            gameRuntime.getEventManager().fire(new ApplyImpulseToGameObjectInstance(objectInstance, 0, platformTemplate.jumpImpulseProperty().get()));
+            gameRuntime.getEventManager().fire(new ApplyImpulseToGameObjectInstance(objectInstance, 0, jumpImpulse.get()));
             setJumping(true);
         }
         if (rightKeyDown) {
-            gameRuntime.getEventManager().fire(new ApplyForceToGameObjectInstance(objectInstance, platformTemplate.leftRightImpulseProperty().get(), 0f));
+            gameRuntime.getEventManager().fire(new ApplyForceToGameObjectInstance(objectInstance, leftRightImpulse.get(), 0f));
         }
         if (leftKeyDown) {
-            gameRuntime.getEventManager().fire(new ApplyForceToGameObjectInstance(objectInstance, -platformTemplate.leftRightImpulseProperty().get(), 0));
+            gameRuntime.getEventManager().fire(new ApplyForceToGameObjectInstance(objectInstance, -leftRightImpulse.get(), 0));
         }
     }
 
     void handleKeyPressed(KeyPressed aEvent) {
-        if (aEvent.keyCodeProperty().get() == platformTemplate.moveLeftKeyProperty().get()) {
+        if (aEvent.keyCodeProperty().get() == moveLeftKey.get()) {
             leftKeyDown = true;
         }
-        if (aEvent.keyCodeProperty().get() == platformTemplate.moveRightKeyProperty().get()) {
+        if (aEvent.keyCodeProperty().get() == moveRightKey.get()) {
             rightKeyDown = true;
         }
-        if (aEvent.keyCodeProperty().get() == platformTemplate.jumpKeyProperty().get()) {
+        if (aEvent.keyCodeProperty().get() == jumpKey.get()) {
             upKeyDown = true;
         }
     }
 
     void handleKeyReleased(KeyReleased aEvent) {
-        if (aEvent.keyCodeProperty().get() == platformTemplate.moveLeftKeyProperty().get()) {
+        if (aEvent.keyCodeProperty().get() == moveLeftKey.get()) {
             leftKeyDown = false;
         }
-        if (aEvent.keyCodeProperty().get() == platformTemplate.moveRightKeyProperty().get()) {
+        if (aEvent.keyCodeProperty().get() == moveRightKey.get()) {
             rightKeyDown = false;
         }
-        if (aEvent.keyCodeProperty().get() == platformTemplate.jumpKeyProperty().get()) {
+        if (aEvent.keyCodeProperty().get() == jumpKey.get()) {
             upKeyDown = false;
         }
     }

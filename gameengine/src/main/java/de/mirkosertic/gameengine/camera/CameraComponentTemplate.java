@@ -10,7 +10,7 @@ import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
 
-public class CameraComponentTemplate extends GameComponentTemplate<CameraComponent> {
+public class CameraComponentTemplate extends GameComponentTemplate<CameraComponent> implements Camera {
 
     private final Property<CameraType> type;
     private final GameObject owner;

@@ -11,7 +11,7 @@ import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
 
-public class PlatformComponentTemplate extends GameComponentTemplate<PlatformComponent> {
+public class PlatformComponentTemplate extends GameComponentTemplate<PlatformComponent> implements Platform {
 
     private final GameObject owner;
 

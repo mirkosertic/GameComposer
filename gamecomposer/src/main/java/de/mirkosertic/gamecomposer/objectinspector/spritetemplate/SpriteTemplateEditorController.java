@@ -4,8 +4,11 @@ import de.mirkosertic.gamecomposer.FlushResourceCacheEvent;
 import de.mirkosertic.gamecomposer.GameAssetSelector;
 import de.mirkosertic.gamecomposer.PersistenceManager;
 import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorElementController;
+import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameResourceLoader;
 import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.sprites.Sprite;
+import de.mirkosertic.gameengine.sprites.SpriteComponent;
 import de.mirkosertic.gameengine.types.ResourceName;
 import de.mirkosertic.gameengine.types.Size;
 import de.mirkosertic.gameengine.javafx.JavaFXBitmapResource;
@@ -45,13 +48,23 @@ public class SpriteTemplateEditorController implements ObjectInspectorElementCon
     GameAssetSelector gameAssetSelector;
 
     private Parent view;
-    private SpriteComponentTemplate object;
+    private Sprite object;
 
     @Override
     public void cleanup() {
     }
 
-    public SpriteTemplateEditorController initialize(Parent aView, SpriteComponentTemplate aObject) {
+    GameObject getGameObjectOwner() {
+        if (object instanceof SpriteComponent) {
+            return ((SpriteComponent) object).getTemplate().getOwner();
+        }
+        if (object instanceof SpriteComponentTemplate) {
+            return ((SpriteComponentTemplate) object).getOwner();
+        }
+        throw new IllegalArgumentException("Unknown type : "+object);
+    }
+
+    public SpriteTemplateEditorController initialize(Parent aView, Sprite aObject) {
         view = aView;
         object = aObject;
 
@@ -70,13 +83,13 @@ public class SpriteTemplateEditorController implements ObjectInspectorElementCon
         ResourceName theResourceName = object.resourceNameProperty().get();
         assetName.setText("");
         if (theResourceName != null && theResourceName.name != null) {
-            GameResourceLoader theLoader = persistenceManager.createResourceLoaderFor(object.getOwner().getGameScene());
+            GameResourceLoader theLoader = persistenceManager.createResourceLoaderFor(getGameObjectOwner().getGameScene());
             try {
                 JavaFXBitmapResource theResource = (JavaFXBitmapResource) theLoader.load(theResourceName);
                 spritePreview.setImage(theResource);
 
                 assetName.setText(theResourceName.name);
-                object.getOwner().sizeProperty().set(new Size((int) theResource.getWidth(), (int) theResource.getHeight()));
+                getGameObjectOwner().sizeProperty().set(new Size((int) theResource.getWidth(), (int) theResource.getHeight()));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -85,7 +98,7 @@ public class SpriteTemplateEditorController implements ObjectInspectorElementCon
 
     private void onSelectSpriteImage() {
 
-        GameScene theScene = object.getOwner().getGameScene();
+        GameScene theScene = getGameObjectOwner().getGameScene();
 
         ResourceName theNewResourceName = gameAssetSelector.selectImageAssetFrom(theScene, view.getScene().getWindow());
         if (theNewResourceName != null) {

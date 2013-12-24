@@ -5,28 +5,61 @@ import java.util.Map;
 
 import de.mirkosertic.gameengine.core.GameComponent;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
+import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
 
-public class PhysicsComponent extends GameComponent {
+public class PhysicsComponent extends GameComponent implements Physics {
 
     static final String TYPE = "PhysicsComponent";
 
     private final GameObjectInstance objectInstance;
 
     private final Property<Boolean> active;
+    private final Property<Boolean> fixedRotation;
+    private final Property<Float> density;
+    private final Property<Float> friction;
+    private final Property<Float> restitution;
+    private final Property<Float> gravityScale;
 
     PhysicsComponent(GameObjectInstance aObjectInstance) {
-        objectInstance = aObjectInstance;
-        active = registerProperty(new Property<Boolean>(this, "active", Boolean.TRUE));
+        this(aObjectInstance, aObjectInstance.getOwnerGameObject().getComponentTemplate(PhysicsComponentTemplate.class));
     }
 
     PhysicsComponent(GameObjectInstance aObjectInstance, PhysicsComponentTemplate aTemplate) {
-        this(aObjectInstance);
-        active.setQuietly(aTemplate.activeProperty().get());
+        objectInstance = aObjectInstance;
+
+        GameEventManager theEventManager = aObjectInstance.getOwnerGameObject().getGameScene().getRuntime().getEventManager();
+
+        active = registerProperty(new Property<Boolean>(this, "active", aTemplate.activeProperty().get(), theEventManager));
+        fixedRotation = registerProperty(new Property<Boolean>(this, "fixedRotation", aTemplate.fixedRotationProperty().get(), theEventManager));
+        density = registerProperty(new Property<Float>(this, "density", aTemplate.densityProperty().get(), theEventManager));
+        friction = registerProperty(new Property<Float>(this, "friction", aTemplate.frictionProperty().get(), theEventManager));
+        restitution = registerProperty(new Property<Float>(this, "restitution", aTemplate.restitutionProperty().get(), theEventManager));
+        gravityScale = registerProperty(new Property<Float>(this, "gravityScale", aTemplate.gravityScaleProperty().get(), theEventManager));
     }
 
     public Property<Boolean> activeProperty() {
         return active;
+    }
+
+    public Property<Boolean> fixedRotationProperty() {
+        return fixedRotation;
+    }
+
+    public Property<Float> densityProperty() {
+        return density;
+    }
+
+    public Property<Float> frictionProperty() {
+        return friction;
+    }
+
+    public Property<Float> restitutionProperty() {
+        return restitution;
+    }
+
+    public Property<Float> gravityScaleProperty() {
+        return gravityScale;
     }
 
     @Override
@@ -47,7 +80,7 @@ public class PhysicsComponent extends GameComponent {
         return objectInstance.getOwnerGameObject().getComponentTemplate(PhysicsComponentTemplate.class);
     }
 
-    public static PhysicsComponent deserialize(GameObjectInstance aObjectInstance, Map<String,Object> aSerializedData) {
+    public static PhysicsComponent deserialize(GameObjectInstance aObjectInstance, Map<String, Object> aSerializedData) {
         PhysicsComponent theResult = new PhysicsComponent(aObjectInstance);
         String theActiveValue = (String) aSerializedData.get("active");
         if (theActiveValue != null) {

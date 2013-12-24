@@ -11,7 +11,9 @@ import de.mirkosertic.gameengine.camera.CameraComponent;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.core.GameScene;
-import de.mirkosertic.gameengine.sprites.SpriteComponentTemplate;
+import de.mirkosertic.gameengine.sprites.Sprite;
+import de.mirkosertic.gameengine.sprites.SpriteComponent;
+import de.mirkosertic.gameengine.text.Text;
 import de.mirkosertic.gameengine.text.TextComponent;
 import de.mirkosertic.gameengine.types.Angle;
 import de.mirkosertic.gameengine.types.Color;
@@ -272,10 +274,10 @@ public class GWTWebGLGameView extends AbstractWebGameView {
 
             boolean theSomethingRendered = false;
 
-            SpriteComponentTemplate theTemplateComponent = theInstance.getOwnerGameObject().getComponentTemplate(SpriteComponentTemplate.class);
-            if (theTemplateComponent != null) {
+            Sprite theSpriteComponent = theInstance.getComponent(SpriteComponent.class);
+            if (theSpriteComponent != null) {
                 try {
-                    GWTBitmapResource theBitmap = gameRuntime.getResourceCache().getResourceFor(theTemplateComponent.resourceNameProperty().get());
+                    GWTBitmapResource theBitmap = gameRuntime.getResourceCache().getResourceFor(theSpriteComponent.resourceNameProperty().get());
 
                     sprite.render(thePosition, theSize, theInstance.rotationAngleProperty().get(), theBitmap);
                     theSomethingRendered = true;
@@ -283,7 +285,7 @@ public class GWTWebGLGameView extends AbstractWebGameView {
                     throw new RuntimeException(e);
                 }
             }
-            TextComponent theTextComponent = theInstance.getComponent(TextComponent.class);
+            Text theTextComponent = theInstance.getComponent(TextComponent.class);
             if (theTextComponent != null) {
                 drawText(theContext, theInstance, thePosition, theTextComponent.fontProperty().get(), theTextComponent.colorProperty().get(), theTextComponent.textExpressionProperty().get(), theSize);
                 theSomethingRendered = true;

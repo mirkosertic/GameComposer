@@ -8,7 +8,7 @@ import de.mirkosertic.gameengine.core.GameComponentTemplate;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
 
-public class StaticComponent extends GameComponent {
+public class StaticComponent extends GameComponent implements Static {
     
     static final String TYPE = "StaticComponent";
 

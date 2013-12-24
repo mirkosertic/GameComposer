@@ -10,7 +10,7 @@ import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
 
-public class PhysicsComponentTemplate extends GameComponentTemplate<PhysicsComponent> {
+public class PhysicsComponentTemplate extends GameComponentTemplate<PhysicsComponent> implements Physics {
 
     private final GameObject owner;
 

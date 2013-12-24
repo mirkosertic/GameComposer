@@ -11,7 +11,7 @@ import de.mirkosertic.gameengine.types.ResourceName;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
 
-public class SpriteComponentTemplate extends GameComponentTemplate<SpriteComponent> {
+public class SpriteComponentTemplate extends GameComponentTemplate<SpriteComponent> implements Sprite {
 
     private final Property<ResourceName> resourceName;
     private final GameObject owner;

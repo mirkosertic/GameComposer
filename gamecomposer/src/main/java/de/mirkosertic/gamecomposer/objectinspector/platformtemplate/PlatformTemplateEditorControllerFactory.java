@@ -3,7 +3,8 @@ package de.mirkosertic.gamecomposer.objectinspector.platformtemplate;
 import de.mirkosertic.gamecomposer.FXMLLoaderFactory;
 import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorFactory;
 import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorFactoryType;
-import de.mirkosertic.gameengine.physics.PlatformComponentTemplate;
+import de.mirkosertic.gameengine.physics.Platform;
+
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
@@ -12,13 +13,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ResourceBundle;
 
-@ObjectInspectorFactoryType(clazz = PlatformComponentTemplate.class)
-public class PlatformTemplateEditorControllerFactory implements ObjectInspectorFactory<PlatformComponentTemplate, PlatformTemplateEditorController> {
+@ObjectInspectorFactoryType(clazz = Platform.class)
+public class PlatformTemplateEditorControllerFactory implements ObjectInspectorFactory<Platform, PlatformTemplateEditorController> {
 
     @Inject
     FXMLLoaderFactory fxmlLoaderFactory;
 
-    public PlatformTemplateEditorController create(PlatformComponentTemplate aObject) {
+    public PlatformTemplateEditorController create(Platform aObject) {
         try (InputStream fxml = PlatformTemplateEditorController.class.getResourceAsStream("PlatformTemplateEditor.fxml")) {
             FXMLLoader theLoader = fxmlLoaderFactory.createLoader();
             ResourceBundle theBundle = ResourceBundle.getBundle("de.mirkosertic.gamecomposer.objectinspector.platformtemplate.PlatformTemplateEditor");

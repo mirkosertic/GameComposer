@@ -3,7 +3,7 @@ package de.mirkosertic.gamecomposer.objectinspector.texttemplate;
 import de.mirkosertic.gamecomposer.PropertyBinder;
 import de.mirkosertic.gamecomposer.StringConverterFactory;
 import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorElementController;
-import de.mirkosertic.gameengine.text.TextComponentTemplate;
+import de.mirkosertic.gameengine.text.Text;
 import de.mirkosertic.gameengine.types.Font;
 import de.mirkosertic.gameengine.types.TextExpression;
 
@@ -37,7 +37,7 @@ public class TextTemplateEditorController implements ObjectInspectorElementContr
     TextField textExpression;
 
     private Parent view;
-    private TextComponentTemplate textComponentTemplate;
+    private Text textComponentTemplate;
 
     @Override
     public void cleanup() {
@@ -47,7 +47,7 @@ public class TextTemplateEditorController implements ObjectInspectorElementContr
         PropertyBinder.unbind(textComponentTemplate.textExpressionProperty());
     }
 
-    public TextTemplateEditorController initialize(Parent aView, TextComponentTemplate aObject) {
+    public TextTemplateEditorController initialize(Parent aView, Text aObject) {
         view = aView;
         textComponentTemplate = aObject;
 
@@ -100,7 +100,7 @@ public class TextTemplateEditorController implements ObjectInspectorElementContr
             public TextExpression uiToBean(String aValue) {
                 return new TextExpression(aValue);
             }
-        });;
+        });
 
         return this;
     }

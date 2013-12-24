@@ -7,23 +7,30 @@ import java.util.Map;
 
 import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.event.GameEventListener;
+import de.mirkosertic.gameengine.event.GameEventManager;
+import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.types.Position;
 import de.mirkosertic.gameengine.types.Size;
 
-public class CameraComponent extends GameComponent {
+public class CameraComponent extends GameComponent implements Camera {
 
     static final String TYPE = "CameraComponent";
 
     private final GameObjectInstance objectInstance;
+    private final Property<CameraType> type;
 
     private Size screenSize;
 
     CameraComponent(GameObjectInstance aObjectInstance) {
-        objectInstance = aObjectInstance;
+        this(aObjectInstance, aObjectInstance.getOwnerGameObject().getComponentTemplate(CameraComponentTemplate.class));
     }
 
     CameraComponent(GameObjectInstance aObjectInstance, CameraComponentTemplate aTemplate) {
-        this(aObjectInstance);
+        objectInstance = aObjectInstance;
+
+        GameEventManager theEventManager = aObjectInstance.getOwnerGameObject().getGameScene().getRuntime().getEventManager();
+
+        type = registerProperty(new Property<CameraType>(this, "type", aTemplate.typeProperty().get(), theEventManager));
     }
 
     void registerEvents(GameRuntime aGameRuntime) {
@@ -38,6 +45,10 @@ public class CameraComponent extends GameComponent {
 
     public GameObjectInstance getObjectInstance() {
         return objectInstance;
+    }
+
+    public Property<CameraType> typeProperty() {
+        return type;
     }
 
     public Size getScreenSize() {

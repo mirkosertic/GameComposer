@@ -2,6 +2,7 @@ package de.mirkosertic.gameengine.text;
 
 import de.mirkosertic.gameengine.core.GameComponent;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
+import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.types.Color;
 import de.mirkosertic.gameengine.types.Font;
@@ -10,7 +11,7 @@ import de.mirkosertic.gameengine.types.TextExpression;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TextComponent extends GameComponent {
+public class TextComponent extends GameComponent implements Text {
 
     static final String TYPE = "TextComponent";
 
@@ -21,17 +22,17 @@ public class TextComponent extends GameComponent {
     private final Property<TextExpression> textExpression;
 
     TextComponent(GameObjectInstance aObjectInstance) {
-        objectInstance = aObjectInstance;
-        font = registerProperty(new Property<Font>(this, "font", Font.DEFAULT_FONT));
-        color = registerProperty(new Property<Color>(this, "color", Color.WHITE));
-        textExpression = registerProperty(new Property<TextExpression>(this, "textExpression", new TextExpression("")));
+        this(aObjectInstance, aObjectInstance.getOwnerGameObject().getComponentTemplate(TextComponentTemplate.class));
     }
 
     TextComponent(GameObjectInstance aObjectInstance, TextComponentTemplate aTemplate) {
-        this(aObjectInstance);
-        font.setQuietly(aTemplate.fontProperty().get());
-        textExpression.setQuietly(aTemplate.textExpressionProperty().get());
-        color.setQuietly(aTemplate.colorProperty().get());
+
+        GameEventManager theEventManager = aObjectInstance.getOwnerGameObject().getGameScene().getRuntime().getEventManager();
+
+        objectInstance = aObjectInstance;
+        font = registerProperty(new Property<Font>(this, "font", aTemplate.fontProperty().get(), theEventManager));
+        color = registerProperty(new Property<Color>(this, "color", aTemplate.colorProperty().get(), theEventManager));
+        textExpression = registerProperty(new Property<TextExpression>(this, "textExpression", aTemplate.textExpressionProperty().get(), theEventManager));
     }
 
     public GameObjectInstance getObjectInstance() {
