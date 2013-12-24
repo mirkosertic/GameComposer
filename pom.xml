@@ -14,6 +14,7 @@
         <module>gameengine</module>
         <module>gameengine-fxrenderer</module>
         <module>gameengine-gwtrenderer</module>
+        <module>gameengine-androidrenderer</module>
         <module>gamecomposer</module>
         <module>sampleplatformer</module>
     </modules>
@@ -35,6 +36,12 @@
                 <artifactId>gameengine-gwtrenderer</artifactId>
                 <version>${project.version}</version>
                 <type>war</type>
+            </dependency>
+            <dependency>
+                <groupId>de.mirkosertic</groupId>
+                <artifactId>gameengine-androidrenderer</artifactId>
+                <version>${project.version}</version>
+                <type>apk</type>
             </dependency>
             <dependency>
                 <groupId>com.oracle</groupId>
