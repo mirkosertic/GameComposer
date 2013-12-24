@@ -32,6 +32,12 @@
                     <include>**/*.war</include>
                 </includes>
             </resource>
+            <resource>
+                <directory>${project.build.directory}/androidruntime</directory>
+                <includes>
+                    <include>**/*.apk</include>
+                </includes>
+            </resource>
         </resources>
         <plugins>
             <plugin>
@@ -39,7 +45,7 @@
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>unpack</id>
+                        <id>unpack_war</id>
                         <phase>generate-resources</phase>
                         <goals>
                             <goal>copy-dependencies</goal>
@@ -47,6 +53,18 @@
                         <configuration>
                             <includeTypes>war</includeTypes>
                             <outputDirectory>${project.build.directory}/webruntime</outputDirectory>
+                            <stripVersion>true</stripVersion>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>unpack_apk</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeTypes>apk</includeTypes>
+                            <outputDirectory>${project.build.directory}/androidruntime</outputDirectory>
                             <stripVersion>true</stripVersion>
                         </configuration>
                     </execution>
@@ -113,6 +131,12 @@
             <groupId>de.mirkosertic</groupId>
             <artifactId>gameengine-gwtrenderer</artifactId>
             <type>war</type>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.mirkosertic</groupId>
+            <artifactId>gameengine-androidrenderer</artifactId>
+            <type>apk</type>
             <scope>provided</scope>
         </dependency>
     </dependencies>
