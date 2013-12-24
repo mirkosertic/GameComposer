@@ -20,7 +20,7 @@ abstract class AbstractWebGameView implements GameView {
         this.size = size;
     }
 
-    protected String toFont(de.mirkosertic.gameengine.types.Font aFont) {
+    String toFont(de.mirkosertic.gameengine.types.Font aFont) {
         switch (aFont.name) {
             case ARIAL:
                 return Integer.toString(aFont.size)+"px arial";
@@ -30,7 +30,7 @@ abstract class AbstractWebGameView implements GameView {
         throw new IllegalArgumentException("Wrong font name : "+aFont.name);
     }
 
-    protected void drawText(Context2d aContext, GameObjectInstance aInstance, Position aPosition, de.mirkosertic.gameengine.types.Font aFont, de.mirkosertic.gameengine.types.Color aColor, TextExpression aExpression, Size aSize) {
+    void drawText(Context2d aContext, GameObjectInstance aInstance, Position aPosition, de.mirkosertic.gameengine.types.Font aFont, de.mirkosertic.gameengine.types.Color aColor, TextExpression aExpression, Size aSize) {
         aContext.save();
         CssColor theTextColor = CssColor.make(aColor.r, aColor.g, aColor.b);
         aContext.setFillStyle(theTextColor);

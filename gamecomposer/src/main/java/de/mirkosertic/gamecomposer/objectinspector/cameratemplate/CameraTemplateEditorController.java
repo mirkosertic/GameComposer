@@ -2,7 +2,7 @@ package de.mirkosertic.gamecomposer.objectinspector.cameratemplate;
 
 import de.mirkosertic.gamecomposer.PropertyBinder;
 import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorElementController;
-import de.mirkosertic.gameengine.camera.CameraComponentTemplate;
+import de.mirkosertic.gameengine.camera.Camera;
 import de.mirkosertic.gameengine.camera.CameraType;
 
 import javafx.event.ActionEvent;
@@ -33,14 +33,14 @@ public class CameraTemplateEditorController implements ObjectInspectorElementCon
     ComboBox cameraType;
 
     private Parent view;
-    private CameraComponentTemplate object;
+    private Camera object;
 
     @Override
     public void cleanup() {
         PropertyBinder.unbind(object.typeProperty());
     }
 
-    public CameraTemplateEditorController initialize(Parent aView, CameraComponentTemplate aObject) {
+    public CameraTemplateEditorController initialize(Parent aView, Camera aObject) {
         view = aView;
         object = aObject;
 

@@ -1,7 +1,7 @@
 package de.mirkosertic.gamecomposer.objectinspector.statictemplate;
 
 import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorElementController;
-import de.mirkosertic.gameengine.physics.StaticComponentTemplate;
+import de.mirkosertic.gameengine.physics.Static;
 
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -9,13 +9,13 @@ import javafx.scene.Parent;
 public class StaticTemplateEditorController implements ObjectInspectorElementController {
 
     private Parent view;
-    private StaticComponentTemplate object;
+    private Static object;
 
     @Override
     public void cleanup() {
     }
 
-    public StaticTemplateEditorController initialize(Parent aView, StaticComponentTemplate aObject) {
+    public StaticTemplateEditorController initialize(Parent aView, Static aObject) {
         view = aView;
         object = aObject;
 

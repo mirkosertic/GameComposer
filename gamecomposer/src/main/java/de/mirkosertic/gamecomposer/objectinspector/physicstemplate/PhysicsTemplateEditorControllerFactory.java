@@ -3,7 +3,7 @@ package de.mirkosertic.gamecomposer.objectinspector.physicstemplate;
 import de.mirkosertic.gamecomposer.FXMLLoaderFactory;
 import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorFactory;
 import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorFactoryType;
-import de.mirkosertic.gameengine.physics.PhysicsComponentTemplate;
+import de.mirkosertic.gameengine.physics.Physics;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
@@ -12,13 +12,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ResourceBundle;
 
-@ObjectInspectorFactoryType(clazz = PhysicsComponentTemplate.class)
-public class PhysicsTemplateEditorControllerFactory implements ObjectInspectorFactory<PhysicsComponentTemplate, PhysicsTemplateEditorController> {
+@ObjectInspectorFactoryType(clazz = Physics.class)
+public class PhysicsTemplateEditorControllerFactory implements ObjectInspectorFactory<Physics, PhysicsTemplateEditorController> {
 
     @Inject
     FXMLLoaderFactory fxmlLoaderFactory;
 
-    public PhysicsTemplateEditorController create(PhysicsComponentTemplate aObject) {
+    public PhysicsTemplateEditorController create(Physics aObject) {
         try (InputStream fxml = PhysicsTemplateEditorController.class.getResourceAsStream("PhysicsTemplateEditor.fxml")) {
             FXMLLoader theLoader = fxmlLoaderFactory.createLoader();
             ResourceBundle theBundle = ResourceBundle.getBundle("de.mirkosertic.gamecomposer.objectinspector.physicstemplate.PhysicsTemplateEditor");

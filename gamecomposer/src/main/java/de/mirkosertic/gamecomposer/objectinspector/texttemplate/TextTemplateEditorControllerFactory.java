@@ -3,7 +3,7 @@ package de.mirkosertic.gamecomposer.objectinspector.texttemplate;
 import de.mirkosertic.gamecomposer.FXMLLoaderFactory;
 import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorFactory;
 import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorFactoryType;
-import de.mirkosertic.gameengine.text.TextComponentTemplate;
+import de.mirkosertic.gameengine.text.Text;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,13 +15,13 @@ import java.io.InputStream;
 import java.util.ResourceBundle;
 
 @Singleton
-@ObjectInspectorFactoryType(clazz = TextComponentTemplate.class)
-public class TextTemplateEditorControllerFactory implements ObjectInspectorFactory<TextComponentTemplate, TextTemplateEditorController> {
+@ObjectInspectorFactoryType(clazz = Text.class)
+public class TextTemplateEditorControllerFactory implements ObjectInspectorFactory<Text, TextTemplateEditorController> {
 
     @Inject
     FXMLLoaderFactory fxmlLoaderFactory;
 
-    public TextTemplateEditorController create(TextComponentTemplate aObject) {
+    public TextTemplateEditorController create(Text aObject) {
         try (InputStream fxml = TextTemplateEditorController.class.getResourceAsStream("TextTemplateEditor.fxml")) {
             FXMLLoader theLoader = fxmlLoaderFactory.createLoader();
             ResourceBundle theBundle = ResourceBundle.getBundle("de.mirkosertic.gamecomposer.objectinspector.texttemplate.TextTemplateEditor");

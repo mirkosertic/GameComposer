@@ -3,7 +3,8 @@ package de.mirkosertic.gamecomposer.objectinspector.statictemplate;
 import de.mirkosertic.gamecomposer.FXMLLoaderFactory;
 import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorFactory;
 import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorFactoryType;
-import de.mirkosertic.gameengine.physics.StaticComponentTemplate;
+import de.mirkosertic.gameengine.physics.Static;
+
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
@@ -12,13 +13,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ResourceBundle;
 
-@ObjectInspectorFactoryType(clazz = StaticComponentTemplate.class)
-public class StaticTemplateEditorControllerFactory implements ObjectInspectorFactory<StaticComponentTemplate, StaticTemplateEditorController> {
+@ObjectInspectorFactoryType(clazz = Static.class)
+public class StaticTemplateEditorControllerFactory implements ObjectInspectorFactory<Static, StaticTemplateEditorController> {
 
     @Inject
     FXMLLoaderFactory fxmlLoaderFactory;
 
-    public StaticTemplateEditorController create(StaticComponentTemplate aObject) {
+    public StaticTemplateEditorController create(Static aObject) {
         try (InputStream fxml = StaticTemplateEditorController.class.getResourceAsStream("StaticTemplateEditor.fxml")) {
             FXMLLoader theLoader = fxmlLoaderFactory.createLoader();
             ResourceBundle theBundle = ResourceBundle.getBundle("de.mirkosertic.gamecomposer.objectinspector.statictemplate.StaticTemplateEditor");

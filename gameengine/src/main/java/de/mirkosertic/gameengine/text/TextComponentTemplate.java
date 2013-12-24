@@ -13,7 +13,7 @@ import de.mirkosertic.gameengine.types.TextExpression;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TextComponentTemplate extends GameComponentTemplate<TextComponent> {
+public class TextComponentTemplate extends GameComponentTemplate<TextComponent> implements Text {
 
     private final Property<Font> font;
     private final Property<TextExpression> textExpression;

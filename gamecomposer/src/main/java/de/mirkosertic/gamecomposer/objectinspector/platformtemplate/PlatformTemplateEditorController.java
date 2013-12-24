@@ -3,7 +3,7 @@ package de.mirkosertic.gamecomposer.objectinspector.platformtemplate;
 import de.mirkosertic.gamecomposer.PropertyBinder;
 import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorElementController;
 import de.mirkosertic.gameengine.core.GameKeyCode;
-import de.mirkosertic.gameengine.physics.PlatformComponentTemplate;
+import de.mirkosertic.gameengine.physics.Platform;
 
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -42,7 +42,7 @@ public class PlatformTemplateEditorController implements ObjectInspectorElementC
     TextField jumpImpulse;
 
     private Parent view;
-    private PlatformComponentTemplate object;
+    private Platform object;
 
     @Override
     public void cleanup() {
@@ -53,7 +53,7 @@ public class PlatformTemplateEditorController implements ObjectInspectorElementC
         PropertyBinder.unbind(object.jumpImpulseProperty());
     }
 
-    public PlatformTemplateEditorController initialize(Parent aView, PlatformComponentTemplate aObject) {
+    public PlatformTemplateEditorController initialize(Parent aView, Platform aObject) {
         view = aView;
         object = aObject;
 

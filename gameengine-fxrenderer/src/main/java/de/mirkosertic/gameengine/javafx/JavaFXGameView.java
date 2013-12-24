@@ -2,7 +2,9 @@ package de.mirkosertic.gameengine.javafx;
 
 import de.mirkosertic.gameengine.camera.CameraComponent;
 import de.mirkosertic.gameengine.core.*;
-import de.mirkosertic.gameengine.sprites.SpriteComponentTemplate;
+import de.mirkosertic.gameengine.sprites.Sprite;
+import de.mirkosertic.gameengine.sprites.SpriteComponent;
+import de.mirkosertic.gameengine.text.Text;
 import de.mirkosertic.gameengine.text.TextComponent;
 import de.mirkosertic.gameengine.types.Angle;
 import de.mirkosertic.gameengine.types.Position;
@@ -60,8 +62,7 @@ public class JavaFXGameView extends Canvas implements GameView {
 
             boolean theSomethingRendered = false;
 
-            SpriteComponentTemplate theTemplateComponent = theInstance.getOwnerGameObject().getComponentTemplate(
-                    SpriteComponentTemplate.class);
+            Sprite theTemplateComponent = theInstance.getComponent(SpriteComponent.class);
             if (theTemplateComponent != null && !theTemplateComponent.resourceNameProperty().isNull()) {
                 try {
                     JavaFXBitmapResource theBitmap = gameRuntime.getResourceCache().getResourceFor(
@@ -73,7 +74,7 @@ public class JavaFXGameView extends Canvas implements GameView {
                     throw new RuntimeException(e);
                 }
             }
-            TextComponent theTextComponent = theInstance.getComponent(TextComponent.class);
+            Text theTextComponent = theInstance.getComponent(TextComponent.class);
             if (theTextComponent != null) {
                 drawText(theContext, theInstance, thePosition, theTextComponent.fontProperty().get(), theTextComponent.colorProperty().get(), theTextComponent.textExpressionProperty().get(), theSize);
                 theSomethingRendered = true;

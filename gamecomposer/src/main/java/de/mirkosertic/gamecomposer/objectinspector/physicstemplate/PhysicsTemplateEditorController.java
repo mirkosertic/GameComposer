@@ -2,7 +2,7 @@ package de.mirkosertic.gamecomposer.objectinspector.physicstemplate;
 
 import de.mirkosertic.gamecomposer.PropertyBinder;
 import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorElementController;
-import de.mirkosertic.gameengine.physics.PhysicsComponentTemplate;
+import de.mirkosertic.gameengine.physics.Physics;
 
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -31,7 +31,7 @@ public class PhysicsTemplateEditorController implements ObjectInspectorElementCo
     TextField gravityScale;
 
     private Parent view;
-    private PhysicsComponentTemplate object;
+    private Physics object;
 
     @Override
     public void cleanup() {
@@ -43,7 +43,7 @@ public class PhysicsTemplateEditorController implements ObjectInspectorElementCo
         PropertyBinder.unbind(object.gravityScaleProperty());
     }
 
-    public PhysicsTemplateEditorController initialize(Parent aView, PhysicsComponentTemplate aObject) {
+    public PhysicsTemplateEditorController initialize(Parent aView, Physics aObject) {
         view = aView;
         object = aObject;
 

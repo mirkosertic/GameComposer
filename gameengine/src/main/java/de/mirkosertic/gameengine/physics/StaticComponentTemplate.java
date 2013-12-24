@@ -8,7 +8,7 @@ import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
 
-public class StaticComponentTemplate extends GameComponentTemplate<StaticComponent> {
+public class StaticComponentTemplate extends GameComponentTemplate<StaticComponent> implements Static {
 
     private final GameObject owner;
 

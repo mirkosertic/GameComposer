@@ -6,7 +6,9 @@ import com.google.gwt.canvas.dom.client.CssColor;
 
 import de.mirkosertic.gameengine.camera.CameraComponent;
 import de.mirkosertic.gameengine.core.*;
-import de.mirkosertic.gameengine.sprites.SpriteComponentTemplate;
+import de.mirkosertic.gameengine.sprites.Sprite;
+import de.mirkosertic.gameengine.sprites.SpriteComponent;
+import de.mirkosertic.gameengine.text.Text;
 import de.mirkosertic.gameengine.text.TextComponent;
 import de.mirkosertic.gameengine.types.*;
 
@@ -58,10 +60,10 @@ public class GWTCanvasGameView extends AbstractWebGameView {
 
             boolean theSomethingRendered = false;
 
-            SpriteComponentTemplate theTemplateComponent = theInstance.getOwnerGameObject().getComponentTemplate(SpriteComponentTemplate.class);
-            if (theTemplateComponent != null) {
+            Sprite theSpriteComponent = theInstance.getComponent(SpriteComponent.class);
+            if (theSpriteComponent != null) {
                 try {
-                    GWTBitmapResource theBitmap = gameRuntime.getResourceCache().getResourceFor(theTemplateComponent.resourceNameProperty().get());
+                    GWTBitmapResource theBitmap = gameRuntime.getResourceCache().getResourceFor(theSpriteComponent.resourceNameProperty().get());
                     drawGameObjectInstance(theContext, theInstance, new Position(-theHalfWidth, -theHalfHeight), theSize, theBitmap);
 
                     theSomethingRendered = true;
@@ -69,7 +71,7 @@ public class GWTCanvasGameView extends AbstractWebGameView {
                     throw new RuntimeException(e);
                 }
             }
-            TextComponent theTextComponent = theInstance.getComponent(TextComponent.class);
+            Text theTextComponent = theInstance.getComponent(TextComponent.class);
             if (theTextComponent != null) {
                 drawText(theContext, theInstance, thePosition, theTextComponent.fontProperty().get(), theTextComponent.colorProperty().get(), theTextComponent.textExpressionProperty().get(), theSize);
                 theSomethingRendered = true;

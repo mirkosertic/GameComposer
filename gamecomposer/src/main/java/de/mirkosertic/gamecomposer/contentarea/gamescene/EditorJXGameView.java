@@ -199,7 +199,7 @@ public class EditorJXGameView extends JavaFXGameView {
         drawSelectionAndHighlighting(aContext, aInstance, aPosition, aSize);
     }
 
-    protected void drawSelectionAndHighlighting(GraphicsContext aContext, GameObjectInstance aInstance, Position aPosition, Size aSize) {
+    void drawSelectionAndHighlighting(GraphicsContext aContext, GameObjectInstance aInstance, Position aPosition, Size aSize) {
         aContext.save();
 
         if (aInstance == selectedObject || aInstance.getOwnerGameObject() == selectedObject) {
