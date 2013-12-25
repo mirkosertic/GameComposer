@@ -17,7 +17,8 @@ import java.util.prefs.Preferences;
 public class GameComposerController {
 
     private static final String GAME_DIRECTORY_PREF_KEY = "GameDirectory";
-    private static final String GAME_EXPORTDIRECTORY_PREF_KEY = "GameExportDirectory";
+    private static final String GAME_EXPORTDIRECTORY_HTML_PREF_KEY = "GameExportDirectoryHTML";
+    private static final String GAME_EXPORTDIRECTORY_ANDROID_PREF_KEY = "GameExportDirectoryAndroid";
 
     @Inject
     @ObjectInspector
@@ -121,7 +122,7 @@ public class GameComposerController {
         DirectoryChooser theDirectoryChooser = new DirectoryChooser();
         theDirectoryChooser.setTitle("Choose target directory");
 
-        String theLastExportDir = directoryPreferences.get(GAME_EXPORTDIRECTORY_PREF_KEY, null);
+        String theLastExportDir = directoryPreferences.get(GAME_EXPORTDIRECTORY_HTML_PREF_KEY, null);
         if (theLastExportDir != null) {
             theDirectoryChooser.setInitialDirectory(new File(theLastExportDir));
         }
@@ -130,7 +131,25 @@ public class GameComposerController {
         if (theTargetDirectory != null) {
             eventGateway.fire(new ExportGameHTML5Event(theTargetDirectory));
 
-            directoryPreferences.put(GAME_EXPORTDIRECTORY_PREF_KEY, theTargetDirectory.toString());
+            directoryPreferences.put(GAME_EXPORTDIRECTORY_HTML_PREF_KEY, theTargetDirectory.toString());
+        }
+    }
+
+    @FXML
+    public void onSaveAndExportAndroid() {
+        DirectoryChooser theDirectoryChooser = new DirectoryChooser();
+        theDirectoryChooser.setTitle("Choose target directory");
+
+        String theLastExportDir = directoryPreferences.get(GAME_EXPORTDIRECTORY_ANDROID_PREF_KEY, null);
+        if (theLastExportDir != null) {
+            theDirectoryChooser.setInitialDirectory(new File(theLastExportDir));
+        }
+
+        File theTargetDirectory = theDirectoryChooser.showDialog(stage);
+        if (theTargetDirectory != null) {
+            eventGateway.fire(new ExportGameAndroidEvent(theTargetDirectory));
+
+            directoryPreferences.put(GAME_EXPORTDIRECTORY_ANDROID_PREF_KEY, theTargetDirectory.toString());
         }
     }
 }

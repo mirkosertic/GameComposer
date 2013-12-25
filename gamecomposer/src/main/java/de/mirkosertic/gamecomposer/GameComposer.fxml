@@ -32,6 +32,7 @@
         <Menu mnemonicParsing="false" text="%menu.export" fx:id="exportMenu">
           <items>
             <MenuItem mnemonicParsing="false" onAction="#onSaveAndExportHTML5" text="%menu.exportashtml" />
+            <MenuItem mnemonicParsing="false" onAction="#onSaveAndExportAndroid" text="%menu.exportasandroid" />
           </items>
         </Menu>
       </menus>
