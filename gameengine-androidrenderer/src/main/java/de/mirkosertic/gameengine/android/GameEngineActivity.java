@@ -15,6 +15,15 @@ import java.io.InputStreamReader;
 
 public class GameEngineActivity extends Activity {
 
+    private AndroidGameResourceLoader resourceLoader;
+    private AndroidGameSoundSystemFactory gameSoundSystemFactory;
+    private AndroidGameRuntimeFactory gameRuntimeFactory;
+
+    public GameEngineActivity() {
+        gameRuntimeFactory = new AndroidGameRuntimeFactory();
+        gameSoundSystemFactory = new AndroidGameSoundSystemFactory();
+    }
+
     /**
      * Called when the activity is first created.
      *
@@ -25,6 +34,11 @@ public class GameEngineActivity extends Activity {
     @Override
     public void onCreate(Bundle aSavedState) {
         super.onCreate(aSavedState);
+
+        if (resourceLoader == null) {
+            resourceLoader = new AndroidGameResourceLoader(getAssets());
+        }
+
         setContentView(R.layout.activity_main);
 
         WebView theWebView = (WebView) findViewById(R.id.webview);
