@@ -1,13 +1,24 @@
 package de.mirkosertic.gamecomposer.contentarea.gamescene;
 
-import de.mirkosertic.gamecomposer.*;
+import de.mirkosertic.gamecomposer.FlushResourceCacheEvent;
+import de.mirkosertic.gamecomposer.GameObjectClipboardContent;
+import de.mirkosertic.gamecomposer.ObjectSelectedEvent;
+import de.mirkosertic.gamecomposer.ShutdownEvent;
 import de.mirkosertic.gamecomposer.contentarea.ContentController;
+
 import de.mirkosertic.gameengine.camera.CameraComponent;
-import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.core.GameKeyCode;
+import de.mirkosertic.gameengine.core.GameLoop;
+import de.mirkosertic.gameengine.core.GameObject;
+import de.mirkosertic.gameengine.core.GameObjectInstance;
+import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.GameShutdown;
 import de.mirkosertic.gameengine.event.PropertyChanged;
 import de.mirkosertic.gameengine.physics.DisableDynamicPhysics;
 import de.mirkosertic.gameengine.physics.EnableDynamicPhysics;
 import de.mirkosertic.gameengine.types.Position;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
@@ -16,7 +27,11 @@ import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
-import javafx.scene.input.*;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
 
 import javax.enterprise.event.Event;
@@ -253,12 +268,12 @@ public class GameSceneEditorController implements ContentController<GameScene> {
 
     @Override
     public void processKeyPressedEvent(KeyEvent aKeyEvent) {
-        gameScene.getRuntime().getEventManager().fire(new KeyPressed(GameKeyCode.valueOf(aKeyEvent.getCode().name())));
+        gameView.getGestureDetector().keyPressed(GameKeyCode.valueOf(aKeyEvent.getCode().name()));
     }
 
     @Override
     public void processKeyReleasedEvent(KeyEvent aKeyEvent) {
-        gameScene.getRuntime().getEventManager().fire(new KeyReleased(GameKeyCode.valueOf(aKeyEvent.getCode().name())));
+        gameView.getGestureDetector().keyReleased(GameKeyCode.valueOf(aKeyEvent.getCode().name()));
     }
 
     @Override

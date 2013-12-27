@@ -6,6 +6,7 @@ import com.google.gwt.canvas.dom.client.CssColor;
 
 import de.mirkosertic.gameengine.camera.CameraComponent;
 import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.input.DefaultGestureDetector;
 import de.mirkosertic.gameengine.sprites.Sprite;
 import de.mirkosertic.gameengine.sprites.SpriteComponent;
 import de.mirkosertic.gameengine.text.Text;
@@ -19,12 +20,19 @@ public class GWTCanvasGameView extends AbstractWebGameView {
     private final GameRuntime gameRuntime;
     private final Canvas canvas;
     private final CameraComponent cameraComponent;
+    private final GestureDetector gestureDetector;
     private int counter;
 
     public GWTCanvasGameView(GameRuntime aGameRuntime, Canvas aCanvas, CameraComponent aCameraComponent) {
         gameRuntime = aGameRuntime;
         canvas = aCanvas;
         cameraComponent = aCameraComponent;
+        gestureDetector = new DefaultGestureDetector(aGameRuntime.getEventManager());
+    }
+
+    @Override
+    public GestureDetector getGestureDetector() {
+        return gestureDetector;
     }
 
     @Override

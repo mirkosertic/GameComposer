@@ -11,6 +11,8 @@ import de.mirkosertic.gameengine.camera.CameraComponent;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.GestureDetector;
+import de.mirkosertic.gameengine.input.DefaultGestureDetector;
 import de.mirkosertic.gameengine.sprites.Sprite;
 import de.mirkosertic.gameengine.sprites.SpriteComponent;
 import de.mirkosertic.gameengine.text.Text;
@@ -216,6 +218,7 @@ public class GWTWebGLGameView extends AbstractWebGameView {
     private final Canvas canvas;
     private final CameraComponent cameraComponent;
     private final GLSprite sprite;
+    private final GestureDetector gestureDetector;
 
     private Matrix4 transform;
 
@@ -224,8 +227,14 @@ public class GWTWebGLGameView extends AbstractWebGameView {
         webGLRenderingContext = aWebGLRenderingContext;
         cameraComponent = aCameraComponent;
         canvas = aCanvas;
+        gestureDetector = new DefaultGestureDetector(aRuntime.getEventManager());
 
         sprite = new GLSprite(aWebGLRenderingContext);
+    }
+
+    @Override
+    public GestureDetector getGestureDetector() {
+        return gestureDetector;
     }
 
     @Override

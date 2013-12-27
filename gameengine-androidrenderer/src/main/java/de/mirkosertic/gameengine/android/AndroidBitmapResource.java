@@ -1,14 +1,15 @@
 package de.mirkosertic.gameengine.android;
 
+import android.graphics.Bitmap;
 import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.core.GameResourceType;
 
 public class AndroidBitmapResource implements GameResource {
 
-    private final byte[] data;
+    public final Bitmap bitmap;
 
-    AndroidBitmapResource(byte[] aData) {
-        data = aData;
+    AndroidBitmapResource(Bitmap aBitmap) {
+        bitmap = aBitmap;
     }
 
     @Override

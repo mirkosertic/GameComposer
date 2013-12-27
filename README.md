@@ -49,4 +49,4 @@ GameEngine-AndroidRenderer
 --------------
 
 This is the game presentation logic using the Android Java SDK. This also includes a SoundSystem Implementation for Android devices.
-We try to use OpenGL ES 2.0 for Game Rendering. If OpenGL is not available, we will use a Canvas as fallback.
+We use an Android SurfaceView for rendering. Future versions will include OpenGL ES support.
