@@ -1,12 +1,24 @@
 package de.mirkosertic.gameengine.gwt;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import com.google.gwt.animation.client.AnimationScheduler;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.event.dom.client.*;
+import com.google.gwt.core.client.JsArray;
+import com.google.gwt.dom.client.Touch;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.event.dom.client.TouchCancelEvent;
+import com.google.gwt.event.dom.client.TouchCancelHandler;
+import com.google.gwt.event.dom.client.TouchEndEvent;
+import com.google.gwt.event.dom.client.TouchEndHandler;
+import com.google.gwt.event.dom.client.TouchMoveEvent;
+import com.google.gwt.event.dom.client.TouchMoveHandler;
+import com.google.gwt.event.dom.client.TouchStartEvent;
+import com.google.gwt.event.dom.client.TouchStartHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.user.client.Event;
@@ -14,16 +26,31 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 
-import de.mirkosertic.gameengine.core.ActionManager;
-import de.mirkosertic.gameengine.core.ActionManagerFactory;
 import de.mirkosertic.gameengine.camera.CameraComponent;
 import de.mirkosertic.gameengine.camera.FollowCameraProcess;
-import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.core.ActionManager;
+import de.mirkosertic.gameengine.core.ActionManagerFactory;
+import de.mirkosertic.gameengine.core.Game;
+import de.mirkosertic.gameengine.core.GameKeyCode;
+import de.mirkosertic.gameengine.core.GameLoop;
+import de.mirkosertic.gameengine.core.GameLoopFactory;
+import de.mirkosertic.gameengine.core.GameObject;
+import de.mirkosertic.gameengine.core.GameObjectInstance;
+import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.GestureDetector;
+import de.mirkosertic.gameengine.core.RunScene;
+import de.mirkosertic.gameengine.core.SetScreenResolution;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.GameEventManager;
+import de.mirkosertic.gameengine.input.TouchPosition;
 import de.mirkosertic.gameengine.processes.StartProcess;
 import de.mirkosertic.gameengine.types.Size;
+
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class GWTRenderer implements EntryPoint {
 
@@ -124,35 +151,96 @@ public class GWTRenderer implements EntryPoint {
                 handleOnKeyPressedEvent(aEvent);
             }
         }, KeyPressEvent.getType());
+        RootPanel.get().addHandler(new TouchStartHandler() {
+            @Override
+            public void onTouchStart(TouchStartEvent aEvent) {
+                handleOnTouchStart(aEvent);
+            }
+        }, TouchStartEvent.getType());
+        RootPanel.get().addHandler(new TouchEndHandler() {
+            @Override
+            public void onTouchEnd(TouchEndEvent aEvent) {
+                handleOnTouchEnd(aEvent);
+            }
+        }, TouchEndEvent.getType());
+        RootPanel.get().addHandler(new TouchMoveHandler() {
+            @Override
+            public void onTouchMove(TouchMoveEvent aEvent) {
+                handleOnTouchMoved(aEvent);
+            }
+        }, TouchMoveEvent.getType());
+        RootPanel.get().addHandler(new TouchCancelHandler() {
+            @Override
+            public void onTouchCancel(TouchCancelEvent aEvent) {
+                handleOnTouchCanceled(aEvent);
+            }
+        }, TouchCancelEvent.getType());
 
         // This must be done or no events are fired at all
         RootPanel.get().sinkEvents(Event.KEYEVENTS);
     }
 
     private void handleOnKeyUpEvent(KeyUpEvent aEvent) {
-        if (loadedScene != null) {
+        if (runningGameLoop != null) {
             GameKeyCode theCode = GWTKeyCodeTranslator.translate(aEvent.getNativeKeyCode());
             if (theCode != null) {
-                loadedScene.getRuntime().getEventManager().fire(new KeyReleased(theCode));
+                runningGameLoop.getHumanGameView().getGestureDetector().keyReleased(theCode);
             }
         }
     }
 
     private void handleOnKeyDownEvent(KeyDownEvent aEvent) {
-        if (loadedScene != null) {
+        if (runningGameLoop != null) {
             GameKeyCode theCode = GWTKeyCodeTranslator.translate(aEvent.getNativeKeyCode());
             if (theCode != null) {
-                loadedScene.getRuntime().getEventManager().fire(new KeyPressed(theCode));
+                runningGameLoop.getHumanGameView().getGestureDetector().keyPressed(theCode);
             }
         }
     }
 
     private void handleOnKeyPressedEvent(KeyPressEvent aEvent) {
-        if (loadedScene != null) {
+        if (runningGameLoop != null) {
             GameKeyCode theCode = GameKeyCode.fromChar(aEvent.getCharCode());
             if (theCode != null) {
-                loadedScene.getRuntime().getEventManager().fire(new KeyPressed(theCode));
+                runningGameLoop.getHumanGameView().getGestureDetector().keyPressed(theCode);
             }
+        }
+    }
+
+    private TouchPosition[] toArray(JsArray<Touch> aTouches) {
+        TouchPosition[] thePositions = new TouchPosition[aTouches.length()];
+        for (int i=0;i<aTouches.length();i++) {
+            Touch theTouch = aTouches.get(i);
+            thePositions[i] = new TouchPosition(theTouch.getIdentifier(), theTouch.getScreenX(), theTouch.getScreenY());
+        }
+        return thePositions;
+    }
+
+    private void handleOnTouchStart(TouchStartEvent aEvent) {
+        if (runningGameLoop != null) {
+            GestureDetector theDetector = runningGameLoop.getHumanGameView().getGestureDetector();
+            theDetector.touchStarted(toArray(aEvent.getTouches()));
+        }
+    }
+
+    private void handleOnTouchEnd(TouchEndEvent aEvent) {
+        if (runningGameLoop != null) {
+            GestureDetector theDetector = runningGameLoop.getHumanGameView().getGestureDetector();
+            theDetector.touchEnded(toArray(aEvent.getTouches()));
+        }
+    }
+
+    private void handleOnTouchMoved(TouchMoveEvent aEvent) {
+        if (runningGameLoop != null) {
+            GestureDetector theDetector = runningGameLoop.getHumanGameView().getGestureDetector();
+            theDetector.touchMoved(toArray(aEvent.getTouches()));
+        }
+    }
+
+    private void handleOnTouchCanceled(TouchCancelEvent aEvent) {
+        if (runningGameLoop != null) {
+            GestureDetector theDetector = runningGameLoop.getHumanGameView().getGestureDetector();
+            theDetector.touchCanceled(toArray(aEvent.getTouches()));
         }
     }
 

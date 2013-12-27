@@ -5,6 +5,7 @@ import de.mirkosertic.gameengine.camera.CameraComponentTemplateUnmarshaller;
 import de.mirkosertic.gameengine.camera.CameraComponentUnmarshaller;
 import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.event.GameEventManager;
+import de.mirkosertic.gameengine.input.KeyEventConditionUnmarshaller;
 import de.mirkosertic.gameengine.physics.*;
 import de.mirkosertic.gameengine.physics.jbox2d.JBox2DGamePhysicsManagerFactory;
 import de.mirkosertic.gameengine.processes.GameProcessManager;

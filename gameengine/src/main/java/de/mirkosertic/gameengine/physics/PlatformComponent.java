@@ -7,6 +7,8 @@ import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
+import de.mirkosertic.gameengine.input.KeyPressed;
+import de.mirkosertic.gameengine.input.KeyReleased;
 import de.mirkosertic.gameengine.types.Position;
 
 public class PlatformComponent extends GameComponent implements Platform {

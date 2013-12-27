@@ -1,5 +1,6 @@
-package de.mirkosertic.gameengine.core;
+package de.mirkosertic.gameengine.input;
 
+import de.mirkosertic.gameengine.core.GameKeyCode;
 import de.mirkosertic.gameengine.event.GameEvent;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.event.ReadOnlyProperty;
@@ -8,7 +9,7 @@ public class KeyPressed extends GameEvent {
 
     private final Property<GameKeyCode> keyCode;
 
-    public KeyPressed(GameKeyCode aKeyCode) {
+    KeyPressed(GameKeyCode aKeyCode) {
         super("KeyPressed");
         keyCode = registerProperty(new Property<GameKeyCode>(this, "keyCode", aKeyCode));
     }

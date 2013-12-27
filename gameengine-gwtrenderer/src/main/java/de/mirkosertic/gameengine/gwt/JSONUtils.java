@@ -11,6 +11,9 @@ import java.util.Map;
 
 class JSONUtils {
 
+    private JSONUtils() {
+    }
+
     public static Map<String, Object> toMap(JSONValue aValue) {
         HashMap<String, Object> theResult = new HashMap<String, Object>();
         JSONObject theObject = aValue.isObject();

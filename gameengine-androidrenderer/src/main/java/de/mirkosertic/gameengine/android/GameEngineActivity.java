@@ -4,24 +4,52 @@ import android.app.Activity;
 import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.view.Menu;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import de.mirkosertic.gameengine.android.R;
 
-import java.io.BufferedReader;
+import android.view.MotionEvent;
+import android.view.View;
+import de.mirkosertic.gameengine.camera.CameraComponent;
+import de.mirkosertic.gameengine.camera.FollowCameraProcess;
+import de.mirkosertic.gameengine.core.Game;
+import de.mirkosertic.gameengine.core.GameLoop;
+import de.mirkosertic.gameengine.core.GameLoopFactory;
+import de.mirkosertic.gameengine.core.GameObject;
+import de.mirkosertic.gameengine.core.GameObjectInstance;
+import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.GestureDetector;
+import de.mirkosertic.gameengine.core.SetScreenResolution;
+import de.mirkosertic.gameengine.event.GameEventManager;
+import de.mirkosertic.gameengine.input.TouchIdentifier;
+import de.mirkosertic.gameengine.input.TouchPosition;
+import de.mirkosertic.gameengine.processes.StartProcess;
+import de.mirkosertic.gameengine.types.Size;
+
+import org.apache.commons.io.IOUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.InputStream;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class GameEngineActivity extends Activity {
 
-    private AndroidGameResourceLoader resourceLoader;
     private AndroidGameSoundSystemFactory gameSoundSystemFactory;
     private AndroidGameRuntimeFactory gameRuntimeFactory;
+    private GameLoopFactory gameLoopFactory;
+    private AndroidCanvas androidCanvas;
+
+    private Game game;
+
+    private GameLoop runningGameLoop;
 
     public GameEngineActivity() {
         gameRuntimeFactory = new AndroidGameRuntimeFactory();
         gameSoundSystemFactory = new AndroidGameSoundSystemFactory();
+        gameLoopFactory = new GameLoopFactory();
     }
 
     /**
@@ -35,33 +63,139 @@ public class GameEngineActivity extends Activity {
     public void onCreate(Bundle aSavedState) {
         super.onCreate(aSavedState);
 
-        if (resourceLoader == null) {
-            resourceLoader = new AndroidGameResourceLoader(getAssets());
-        }
-
         setContentView(R.layout.activity_main);
 
-        WebView theWebView = (WebView) findViewById(R.id.webview);
-        WebSettings theWebSettings = theWebView.getSettings();
-        theWebSettings.setJavaScriptEnabled(true);
-
-        // We load the HTML app stored in the asset folder and we are done here...
-        AssetManager theAssetManager = getAssets();
-
-        StringBuilder theHTML = new StringBuilder();
-        try (BufferedReader theReader = new BufferedReader(new InputStreamReader(theAssetManager.open("index.html")))) {
-            while(theReader.ready()) {
-                String theLine = theReader.readLine();
-                if (theLine != null) {
-                    theHTML.append(theLine);
-                }
+        androidCanvas = (AndroidCanvas) findViewById(R.id.canvasView);
+        androidCanvas.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View aView, MotionEvent aEvent) {
+                handleTouchEvent(aEvent);
+                return true;
             }
-        } catch (IOException e) {
+        });
+
+        // Load the game, this is done in another thread
+        Runnable theRunnable = new Runnable() {
+            @Override
+            public void run() {
+                loadGame();
+            }
+        };
+        new Thread(theRunnable).start();
+    }
+
+    private TouchPosition[] toArray(MotionEvent aEvent) {
+        TouchPosition[] thePosition = new TouchPosition[aEvent.getPointerCount()];
+        for (int i=0;i<aEvent.getPointerCount();i++) {
+            thePosition[i] = new TouchPosition(new TouchIdentifier(aEvent.getPointerId(i)), (int) aEvent.getX(i), (int) aEvent.getY(i));
+        }
+        return thePosition;
+    }
+
+    private void handleTouchEvent(MotionEvent aEvent) {
+        if (runningGameLoop != null) {
+            GestureDetector theGestureDetector = runningGameLoop.getHumanGameView().getGestureDetector();
+
+            switch(aEvent.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    theGestureDetector.touchStarted(toArray(aEvent));
+                    break;
+                case MotionEvent.ACTION_UP:
+                    theGestureDetector.touchEnded(toArray(aEvent));
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    theGestureDetector.touchMoved(toArray(aEvent));
+                    break;
+                case MotionEvent.ACTION_CANCEL:
+                    theGestureDetector.touchCanceled(toArray(aEvent));
+                    break;
+            }
+        }
+    }
+
+    private void loadGame() {
+        AssetManager theAssetManager = getAssets();
+        try (InputStream theStream = theAssetManager.open("game.json")) {
+            JSONObject theGameJSON = new JSONObject(IOUtils.toString(theStream));
+            Map<String, Object> theGameData = JSONUtils.toMap(theGameJSON);
+
+            game = Game.deserialize(theGameData);
+
+        } catch (IOException | JSONException e) {
             throw new RuntimeException(e);
         }
-//        theWebView.loadDataWithBaseURL("file:///android_asset/", theHTML.toString(),
-  //              "text/html", "UTF-8", null);
-        theWebView.loadUrl("http://www.mirkosertic.de/games/dukeplatform/index.html");
+
+        new Timer().scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                if (runningGameLoop != null && !runningGameLoop.isShutdown()) {
+                    runningGameLoop.singleRun();
+                }
+            }
+        }, 0, 16);
+
+        String theDefaultScene = game.defaultSceneProperty().get();
+        loadScene(theDefaultScene);
+    }
+
+    private void loadScene(String aSceneID) {
+        AssetManager theAssetManager = getAssets();
+
+        try (InputStream theStream = theAssetManager.open(aSceneID + "/scene.json")) {
+            JSONObject theSceneJSON = new JSONObject(IOUtils.toString(theStream));
+            Map<String, Object> theGameData = JSONUtils.toMap(theSceneJSON);
+
+            AndroidGameResourceLoader theResourceLoader = new AndroidGameResourceLoader(getAssets(), aSceneID);
+
+            GameRuntime theRuntime = gameRuntimeFactory.create(theResourceLoader, gameSoundSystemFactory);
+            GameScene theGameScene = GameScene.deserialize(theRuntime, theGameData);
+
+            playScene(theGameScene);
+
+        } catch (IOException | JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void playScene(GameScene aGameScene) {
+
+        if (runningGameLoop != null) {
+            runningGameLoop.shutdown();
+        }
+
+        GameRuntime theRuntime = aGameScene.getRuntime();
+        GameEventManager theEventManager = theRuntime.getEventManager();
+
+        GameObject theCameraObject = aGameScene.cameraObjectProperty().get();
+        GameObjectInstance theCameraObjectInstance = aGameScene.createFrom(theCameraObject);
+        CameraComponent theCameraComponent = theCameraObjectInstance.getComponent(CameraComponent.class);
+
+        GameObjectInstance thePlayerInstance = null;
+        for (GameObjectInstance theInstance : aGameScene.getInstances()) {
+            if (theInstance.getOwnerGameObject() == aGameScene.defaultPlayerProperty().get()) {
+                thePlayerInstance = theInstance;
+            }
+        }
+
+        AndroidGameView theGameView = new AndroidGameView(androidCanvas, theCameraComponent, theRuntime);
+
+        GameLoop theLoop = gameLoopFactory.create(aGameScene, theGameView, theRuntime);
+
+        theEventManager.fire(new SetScreenResolution(new Size(androidCanvas.getWidth(), androidCanvas.getHeight())));
+
+//        Thread theMainLoopThread = new Thread(theLoop);
+//        theMainLoopThread.start();
+
+        runningGameLoop = theLoop;
+
+        switch (theCameraComponent.getTemplate().typeProperty().get()) {
+            case FOLLOWPLAYER:
+                theCameraComponent.centerOn(thePlayerInstance);
+                theEventManager.fire(new StartProcess(new FollowCameraProcess(theCameraObjectInstance, thePlayerInstance)));
+                break;
+            case CENTERONSCENE:
+                break;
+        }
     }
 
     @Override

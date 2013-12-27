@@ -3,7 +3,7 @@ package de.mirkosertic.gameengine.core;
 public class GameLoop implements Runnable {
 
     private boolean shutdownSignal;
-    private final GameView[] views;
+    private final GameView humanGameView;
     private final GameScene scene;
     private final GameRuntime runtime;
     private final long startTime;
@@ -11,11 +11,15 @@ public class GameLoop implements Runnable {
     private long totalTicks;
 
     GameLoop(GameScene aScene, GameView aHumanGameView, GameRuntime aRuntime) {
-        views = new GameView[] {aHumanGameView};
+        humanGameView = aHumanGameView;
         shutdownSignal = false;
         runtime = aRuntime;
         scene = aScene;
         startTime = System.currentTimeMillis();
+    }
+
+    public GameView getHumanGameView() {
+        return humanGameView;
     }
 
     public GameScene getScene() {
@@ -38,10 +42,8 @@ public class GameLoop implements Runnable {
             // and do something useful...
             runtime.getEventManager().fire(new SystemTick(totalTicks, theGameTime, theElapsedTime));
 
-            // Trigger re-rendering of all game views
-            for (GameView aView : views) {
-                aView.renderGame(theGameTime, theElapsedTime, scene);
-            }
+            // Trigger rerendering of game view
+            humanGameView.renderGame(theGameTime, theElapsedTime, scene);
 
             lastInvocation = theCurrentTime;
             totalTicks++;

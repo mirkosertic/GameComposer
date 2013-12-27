@@ -4,7 +4,7 @@ import de.mirkosertic.gamecomposer.Controller;
 import de.mirkosertic.gamecomposer.StringConverterFactory;
 import de.mirkosertic.gameengine.core.GameKeyCode;
 import de.mirkosertic.gameengine.core.GameScene;
-import de.mirkosertic.gameengine.core.KeyEventCondition;
+import de.mirkosertic.gameengine.input.KeyEventCondition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;

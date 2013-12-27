@@ -4,6 +4,7 @@ import de.mirkosertic.gamecomposer.Controller;
 import de.mirkosertic.gamecomposer.PropertyBinder;
 import de.mirkosertic.gameengine.arcade.ConstantMovementAction;
 import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.input.KeyEventCondition;
 import de.mirkosertic.gameengine.physics.ObjectCollisionCondition;
 import de.mirkosertic.gameengine.sound.PlaySoundAction;
 

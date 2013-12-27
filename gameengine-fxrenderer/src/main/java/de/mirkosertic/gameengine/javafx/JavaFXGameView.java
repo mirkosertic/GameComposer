@@ -2,6 +2,7 @@ package de.mirkosertic.gameengine.javafx;
 
 import de.mirkosertic.gameengine.camera.CameraComponent;
 import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.input.DefaultGestureDetector;
 import de.mirkosertic.gameengine.sprites.Sprite;
 import de.mirkosertic.gameengine.sprites.SpriteComponent;
 import de.mirkosertic.gameengine.text.Text;
@@ -26,10 +27,12 @@ public class JavaFXGameView extends Canvas implements GameView {
     private GameScene gameScene;
     private final GameRuntime gameRuntime;
     private final CameraComponent cameraComponent;
+    private final GestureDetector gestureDetector;
 
     protected JavaFXGameView(GameRuntime aRuntime, CameraComponent aCameraComponent) {
         cameraComponent = aCameraComponent;
         gameRuntime = aRuntime;
+        gestureDetector = new DefaultGestureDetector(aRuntime.getEventManager());
     }
 
     private void renderScene() {
@@ -138,6 +141,11 @@ public class JavaFXGameView extends Canvas implements GameView {
         if (animationTimer != null) {
             animationTimer.stop();
         }
+    }
+
+    @Override
+    public GestureDetector getGestureDetector() {
+        return gestureDetector;
     }
 
     public void renderGame(long aGameTime, long aElapsedTimeSinceLastLoop, GameScene aScene) {

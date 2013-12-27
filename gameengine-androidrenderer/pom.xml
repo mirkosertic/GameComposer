@@ -28,7 +28,12 @@
             <groupId>de.mirkosertic</groupId>
             <artifactId>gameengine</artifactId>
         </dependency>
-	</dependencies>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.4</version>
+        </dependency>
+    </dependencies>
 	<build>
 		<finalName>${project.artifactId}</finalName>
 		<pluginManagement>
