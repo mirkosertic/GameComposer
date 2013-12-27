@@ -43,6 +43,7 @@ import de.mirkosertic.gameengine.core.RunScene;
 import de.mirkosertic.gameengine.core.SetScreenResolution;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.GameEventManager;
+import de.mirkosertic.gameengine.input.TouchIdentifier;
 import de.mirkosertic.gameengine.input.TouchPosition;
 import de.mirkosertic.gameengine.processes.StartProcess;
 import de.mirkosertic.gameengine.types.Size;
@@ -211,7 +212,7 @@ public class GWTRenderer implements EntryPoint {
         TouchPosition[] thePositions = new TouchPosition[aTouches.length()];
         for (int i=0;i<aTouches.length();i++) {
             Touch theTouch = aTouches.get(i);
-            thePositions[i] = new TouchPosition(theTouch.getIdentifier(), theTouch.getScreenX(), theTouch.getScreenY());
+            thePositions[i] = new TouchPosition(new TouchIdentifier(theTouch.getIdentifier()), theTouch.getScreenX(), theTouch.getScreenY());
         }
         return thePositions;
     }
