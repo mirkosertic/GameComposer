@@ -76,6 +76,47 @@ public class AndroidGameExporter {
 
         FileUtils.deleteDirectory(theTempDirectory);
 
+        String theJavaHome = System.getenv("JAVA_HOME");
+
+        if (theJavaHome != null) {
+            File theJavaHomeFile = new File(theJavaHome);
+            File theJavaBinFile = new File(theJavaHomeFile, "bin");
+            File theZipSigner;
+            if (SystemUtils.IS_OS_WINDOWS) {
+                theZipSigner = new File(theJavaBinFile, "jarsigner.exe");
+            } else {
+                theZipSigner = new File(theJavaBinFile, "jarsigner");
+            }
+            if (theZipSigner.exists()) {
+
+                File theUserHome = SystemUtils.getUserHome();
+                File theAndroidHome = new File(theUserHome, ".android");
+                File theAndroidDebugKeyStore = new File(theAndroidHome, "debug.keystore");
+
+                System.out.println(theZipSigner + " -keystore " + theAndroidDebugKeyStore + " -storepass android -keypass android " + theGameFile.toString() + " androiddebugkey");
+
+                Process theProcess = Runtime.getRuntime().exec(new String[]{theZipSigner.toString(),
+                        "-keystore",
+                        theAndroidDebugKeyStore.toString(),
+                        "storepass",
+                        "android",
+                        "-keypass",
+                        "android",
+                        theGameFile.toString(),
+                        "androiddebugkey"
+                });
+                try {
+                    int theResult = theProcess.waitFor();
+                    System.out.println("Got " + theResult);
+                } catch (InterruptedException e) {
+                    throw new IOException(e);
+                }
+            } else {
+                System.out.println("Does not exist " + theZipSigner);
+            }
+
+        }
+
         Desktop.getDesktop().browse(aEvent.getGameDirectory().toURI());
     }
 }

@@ -6,12 +6,8 @@ import de.mirkosertic.gameengine.event.GameEventManager;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class DefaultGestureDetector implements GestureDetector {
-
-    private static final Logger LOGGER = Logger.getLogger(DefaultGestureDetector.class.getSimpleName());
 
     private static final int THRESHOLD = 40;
 
@@ -38,8 +34,6 @@ public class DefaultGestureDetector implements GestureDetector {
     @Override
     public void touchStarted(TouchPosition[] aTouchPositions) {
 
-        LOGGER.info("touchStarted with " + aTouchPositions.length);
-
         currentTouchPositions.clear();
         clearLeftKeyDown();
         clearRightKeyDown();
@@ -51,8 +45,6 @@ public class DefaultGestureDetector implements GestureDetector {
 
     @Override
     public void touchEnded(TouchPosition[] aTouchPositions) {
-
-        LOGGER.info("touchEnded with " + aTouchPositions.length);
 
         for (TouchPosition thePosition : aTouchPositions) {
             currentTouchPositions.remove(thePosition.identifier);
@@ -66,8 +58,6 @@ public class DefaultGestureDetector implements GestureDetector {
     @Override
     public void touchMoved(TouchPosition[] aTouchPositions) {
 
-        LOGGER.info("touchMoved with " + aTouchPositions.length);
-
         if (aTouchPositions.length == 1) {
             TouchPosition theFirstPosition = aTouchPositions[0];
             TouchPosition theOriginTouchPosition = currentTouchPositions.get(theFirstPosition.identifier);
@@ -75,12 +65,8 @@ public class DefaultGestureDetector implements GestureDetector {
             int theDX = theFirstPosition.x - theOriginTouchPosition.x;
             int theDY = theFirstPosition.y - theOriginTouchPosition.y;
 
-            LOGGER.log(Level.INFO, "dx = " + theDX, " dy = " + theDY);
-            LOGGER.log(Level.INFO, "moveLeft = " + leftKeyDown + " moveRight = " + rightKeyDown);
-
             if (theDY < -THRESHOLD) {
                 if (!upKeyDown) {
-                    LOGGER.info("Emulating up key pressed");
                     eventManager.fire(new KeyPressed(GameKeyCode.UP));
                     upKeyDown = true;
                 }
@@ -88,7 +74,6 @@ public class DefaultGestureDetector implements GestureDetector {
 
             if (theDX > THRESHOLD) {
                 if (!rightKeyDown) {
-                    LOGGER.info("Emulating right key pressed");
                     clearLeftKeyDown();
                     eventManager.fire(new KeyPressed(GameKeyCode.RIGHT));
                     rightKeyDown = true;
@@ -101,7 +86,6 @@ public class DefaultGestureDetector implements GestureDetector {
             }
             if (theDX < -THRESHOLD) {
                 if (!leftKeyDown) {
-                    LOGGER.info("Emulating left key pressed");
                     clearRightKeyDown();
                     eventManager.fire(new KeyPressed(GameKeyCode.LEFT));
                     leftKeyDown = true;
