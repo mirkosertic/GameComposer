@@ -28,7 +28,7 @@ public class DefaultGestureDetector implements GestureDetector {
     }
 
     public void keyReleased(GameKeyCode aKeyCode) {
-        eventManager.fire(new KeyPressed(aKeyCode));
+        eventManager.fire(new KeyReleased(aKeyCode));
     }
 
     @Override

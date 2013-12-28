@@ -1,6 +1,6 @@
 {
   "eventsheets" : [ {
-    "name" : "Here are our events",
+    "name" : "Eventsheet first level",
     "rules" : [ {
       "condition" : {
         "keyCode" : "UP",
@@ -15,7 +15,9 @@
       } ]
     }, {
       "condition" : {
-        "type" : "ObjectCollisionCondition"
+        "secondaryObjectUuid" : "-279500599772276169",
+        "type" : "ObjectCollisionCondition",
+        "primaryObjectUuid" : "4343694719606608272"
       },
       "name" : "Collect a star",
       "actions" : [ {
@@ -31,7 +33,9 @@
       } ]
     }, {
       "condition" : {
-        "type" : "ObjectCollisionCondition"
+        "secondaryObjectUuid" : "-3769331226440908538",
+        "type" : "ObjectCollisionCondition",
+        "primaryObjectUuid" : "-279500599772276169"
       },
       "name" : "Jump to next level if duke hits the sign",
       "actions" : [ {
@@ -216,9 +220,9 @@
     "gameobjectuuid" : "-6077101624070649173",
     "name" : "Walkway_botom_left_1384373866404",
     "components" : [ {
-      "type" : "SpriteComponent"
-    }, {
       "type" : "StaticComponent"
+    }, {
+      "type" : "SpriteComponent"
     } ],
     "uuid" : "-9130541298977119470"
   }, {
@@ -234,9 +238,9 @@
     "gameobjectuuid" : "-6077101624070649173",
     "name" : "Walkway_botom_left_1384373869515",
     "components" : [ {
-      "type" : "SpriteComponent"
-    }, {
       "type" : "StaticComponent"
+    }, {
+      "type" : "SpriteComponent"
     } ],
     "uuid" : "2084723174261956618"
   }, {
@@ -252,9 +256,9 @@
     "gameobjectuuid" : "-7220657972923747107",
     "name" : "Walkway_bottom_middle_1384373937322",
     "components" : [ {
-      "type" : "SpriteComponent"
-    }, {
       "type" : "StaticComponent"
+    }, {
+      "type" : "SpriteComponent"
     } ],
     "uuid" : "-5924046217461532233"
   }, {
@@ -270,9 +274,9 @@
     "gameobjectuuid" : "-7220657972923747107",
     "name" : "Walkway_bottom_middle_1384373940351",
     "components" : [ {
-      "type" : "SpriteComponent"
-    }, {
       "type" : "StaticComponent"
+    }, {
+      "type" : "SpriteComponent"
     } ],
     "uuid" : "7276908389860950553"
   }, {
@@ -288,9 +292,9 @@
     "gameobjectuuid" : "-7220657972923747107",
     "name" : "Walkway_bottom_middle_1384373942839",
     "components" : [ {
-      "type" : "SpriteComponent"
-    }, {
       "type" : "StaticComponent"
+    }, {
+      "type" : "SpriteComponent"
     } ],
     "uuid" : "-2414861174645972307"
   }, {
@@ -306,9 +310,9 @@
     "gameobjectuuid" : "-7220657972923747107",
     "name" : "Walkway_bottom_middle_1384373945327",
     "components" : [ {
-      "type" : "SpriteComponent"
-    }, {
       "type" : "StaticComponent"
+    }, {
+      "type" : "SpriteComponent"
     } ],
     "uuid" : "9148903409216005804"
   }, {
@@ -324,9 +328,9 @@
     "gameobjectuuid" : "-7220657972923747107",
     "name" : "Walkway_bottom_middle_1384373947993",
     "components" : [ {
-      "type" : "SpriteComponent"
-    }, {
       "type" : "StaticComponent"
+    }, {
+      "type" : "SpriteComponent"
     } ],
     "uuid" : "6644550441668090506"
   }, {
@@ -342,9 +346,9 @@
     "gameobjectuuid" : "-7220657972923747107",
     "name" : "Walkway_bottom_middle_1384373950229",
     "components" : [ {
-      "type" : "SpriteComponent"
-    }, {
       "type" : "StaticComponent"
+    }, {
+      "type" : "SpriteComponent"
     } ],
     "uuid" : "-6276929232068228153"
   }, {
@@ -360,9 +364,9 @@
     "gameobjectuuid" : "-7220657972923747107",
     "name" : "Walkway_bottom_middle_1384373952212",
     "components" : [ {
-      "type" : "SpriteComponent"
-    }, {
       "type" : "StaticComponent"
+    }, {
+      "type" : "SpriteComponent"
     } ],
     "uuid" : "-3182057660233158510"
   }, {
@@ -378,9 +382,9 @@
     "gameobjectuuid" : "-7220657972923747107",
     "name" : "Walkway_bottom_middle_1384373954506",
     "components" : [ {
-      "type" : "SpriteComponent"
-    }, {
       "type" : "StaticComponent"
+    }, {
+      "type" : "SpriteComponent"
     } ],
     "uuid" : "-2863549189502005721"
   }, {
@@ -396,9 +400,9 @@
     "gameobjectuuid" : "647197498473429375",
     "name" : "Walkway_bottom_right_1384373903304",
     "components" : [ {
-      "type" : "SpriteComponent"
-    }, {
       "type" : "StaticComponent"
+    }, {
+      "type" : "SpriteComponent"
     } ],
     "uuid" : "8124995567563228431"
   }, {
@@ -414,9 +418,9 @@
     "gameobjectuuid" : "647197498473429375",
     "name" : "Walkway_bottom_right_1384373905720",
     "components" : [ {
-      "type" : "SpriteComponent"
-    }, {
       "type" : "StaticComponent"
+    }, {
+      "type" : "SpriteComponent"
     } ],
     "uuid" : "955418005072267144"
   }, {
@@ -432,9 +436,9 @@
     "gameobjectuuid" : "-2648947804278990847",
     "name" : "Walkway_left_middle_1384373702860",
     "components" : [ {
-      "type" : "SpriteComponent"
-    }, {
       "type" : "StaticComponent"
+    }, {
+      "type" : "SpriteComponent"
     } ],
     "uuid" : "4899214085185082707"
   }, {
@@ -450,9 +454,9 @@
     "gameobjectuuid" : "-2648947804278990847",
     "name" : "Walkway_left_middle_1384373742444",
     "components" : [ {
-      "type" : "SpriteComponent"
-    }, {
       "type" : "StaticComponent"
+    }, {
+      "type" : "SpriteComponent"
     } ],
     "uuid" : "2459193256519610896"
   }, {
@@ -468,9 +472,9 @@
     "gameobjectuuid" : "-2648947804278990847",
     "name" : "Walkway_left_middle_1384373786249",
     "components" : [ {
-      "type" : "SpriteComponent"
-    }, {
       "type" : "StaticComponent"
+    }, {
+      "type" : "SpriteComponent"
     } ],
     "uuid" : "1412930764447231900"
   }, {
@@ -486,9 +490,9 @@
     "gameobjectuuid" : "-2648947804278990847",
     "name" : "Walkway_left_middle_1384373788796",
     "components" : [ {
-      "type" : "SpriteComponent"
-    }, {
       "type" : "StaticComponent"
+    }, {
+      "type" : "SpriteComponent"
     } ],
     "uuid" : "-5337211145287793294"
   }, {
@@ -504,9 +508,9 @@
     "gameobjectuuid" : "-2648947804278990847",
     "name" : "Walkway_left_middle_1384373794008",
     "components" : [ {
-      "type" : "SpriteComponent"
-    }, {
       "type" : "StaticComponent"
+    }, {
+      "type" : "SpriteComponent"
     } ],
     "uuid" : "-1337944454046873726"
   }, {
@@ -522,9 +526,9 @@
     "gameobjectuuid" : "-2648947804278990847",
     "name" : "Walkway_left_middle_1384373796399",
     "components" : [ {
-      "type" : "SpriteComponent"
-    }, {
       "type" : "StaticComponent"
+    }, {
+      "type" : "SpriteComponent"
     } ],
     "uuid" : "4897812486001926900"
   }, {
@@ -540,9 +544,9 @@
     "gameobjectuuid" : "6595711303285831883",
     "name" : "Walkway_left_top_1384373708219",
     "components" : [ {
-      "type" : "SpriteComponent"
-    }, {
       "type" : "StaticComponent"
+    }, {
+      "type" : "SpriteComponent"
     } ],
     "uuid" : "-4623081538804671596"
   }, {
@@ -558,9 +562,9 @@
     "gameobjectuuid" : "6595711303285831883",
     "name" : "Walkway_left_top_1384373747571",
     "components" : [ {
-      "type" : "SpriteComponent"
-    }, {
       "type" : "StaticComponent"
+    }, {
+      "type" : "SpriteComponent"
     } ],
     "uuid" : "7618606351438302177"
   }, {
@@ -576,9 +580,9 @@
     "gameobjectuuid" : "2738111980994969784",
     "name" : "Walkway_middle_top_1_1384373723738",
     "components" : [ {
-      "type" : "SpriteComponent"
-    }, {
       "type" : "StaticComponent"
+    }, {
+      "type" : "SpriteComponent"
     } ],
     "uuid" : "1830815569162173433"
   }, {
@@ -594,9 +598,9 @@
     "gameobjectuuid" : "2738111980994969784",
     "name" : "Walkway_middle_top_1_1384373730420",
     "components" : [ {
-      "type" : "SpriteComponent"
-    }, {
       "type" : "StaticComponent"
+    }, {
+      "type" : "SpriteComponent"
     } ],
     "uuid" : "-6084733247009304075"
   }, {
@@ -612,9 +616,9 @@
     "gameobjectuuid" : "2738111980994969784",
     "name" : "Walkway_middle_top_1_1384373756271",
     "components" : [ {
-      "type" : "SpriteComponent"
-    }, {
       "type" : "StaticComponent"
+    }, {
+      "type" : "SpriteComponent"
     } ],
     "uuid" : "1907134997320601018"
   }, {
@@ -630,9 +634,9 @@
     "gameobjectuuid" : "2738111980994969784",
     "name" : "Walkway_middle_top_1_1384373766125",
     "components" : [ {
-      "type" : "SpriteComponent"
-    }, {
       "type" : "StaticComponent"
+    }, {
+      "type" : "SpriteComponent"
     } ],
     "uuid" : "-5682141513202019649"
   }, {
@@ -648,9 +652,9 @@
     "gameobjectuuid" : "7991002059236720051",
     "name" : "Walkway_middle_top_2_1384373718708",
     "components" : [ {
-      "type" : "SpriteComponent"
-    }, {
       "type" : "StaticComponent"
+    }, {
+      "type" : "SpriteComponent"
     } ],
     "uuid" : "3416998575014759515"
   }, {
@@ -666,9 +670,9 @@
     "gameobjectuuid" : "7991002059236720051",
     "name" : "Walkway_middle_top_2_1384373727382",
     "components" : [ {
-      "type" : "SpriteComponent"
-    }, {
       "type" : "StaticComponent"
+    }, {
+      "type" : "SpriteComponent"
     } ],
     "uuid" : "-7034660220744349773"
   }, {
@@ -684,9 +688,9 @@
     "gameobjectuuid" : "7991002059236720051",
     "name" : "Walkway_middle_top_2_1384373752335",
     "components" : [ {
-      "type" : "SpriteComponent"
-    }, {
       "type" : "StaticComponent"
+    }, {
+      "type" : "SpriteComponent"
     } ],
     "uuid" : "-3798169070298949750"
   }, {
@@ -702,9 +706,9 @@
     "gameobjectuuid" : "7991002059236720051",
     "name" : "Walkway_middle_top_2_1384373760777",
     "components" : [ {
-      "type" : "SpriteComponent"
-    }, {
       "type" : "StaticComponent"
+    }, {
+      "type" : "SpriteComponent"
     } ],
     "uuid" : "-2726851823993427772"
   }, {
@@ -720,9 +724,9 @@
     "gameobjectuuid" : "-4597433157293241913",
     "name" : "Walkway_right_middle_1384373738825",
     "components" : [ {
-      "type" : "SpriteComponent"
-    }, {
       "type" : "StaticComponent"
+    }, {
+      "type" : "SpriteComponent"
     } ],
     "uuid" : "2640340260337280351"
   }, {
@@ -738,9 +742,9 @@
     "gameobjectuuid" : "-4597433157293241913",
     "name" : "Walkway_right_middle_1384373775354",
     "components" : [ {
-      "type" : "SpriteComponent"
-    }, {
       "type" : "StaticComponent"
+    }, {
+      "type" : "SpriteComponent"
     } ],
     "uuid" : "-1829636652991652958"
   }, {
@@ -756,9 +760,9 @@
     "gameobjectuuid" : "-4597433157293241913",
     "name" : "Walkway_right_middle_1384373778182",
     "components" : [ {
-      "type" : "SpriteComponent"
-    }, {
       "type" : "StaticComponent"
+    }, {
+      "type" : "SpriteComponent"
     } ],
     "uuid" : "-2968653554644457718"
   }, {
@@ -774,9 +778,9 @@
     "gameobjectuuid" : "-4597433157293241913",
     "name" : "Walkway_right_middle_1384373780605",
     "components" : [ {
-      "type" : "SpriteComponent"
-    }, {
       "type" : "StaticComponent"
+    }, {
+      "type" : "SpriteComponent"
     } ],
     "uuid" : "-3114540901084116106"
   }, {
@@ -792,9 +796,9 @@
     "gameobjectuuid" : "-4597433157293241913",
     "name" : "Walkway_right_middle_1384373814800",
     "components" : [ {
-      "type" : "SpriteComponent"
-    }, {
       "type" : "StaticComponent"
+    }, {
+      "type" : "SpriteComponent"
     } ],
     "uuid" : "-6438995082162911799"
   }, {
@@ -810,9 +814,9 @@
     "gameobjectuuid" : "-4597433157293241913",
     "name" : "Walkway_right_middle_1384373817523",
     "components" : [ {
-      "type" : "SpriteComponent"
-    }, {
       "type" : "StaticComponent"
+    }, {
+      "type" : "SpriteComponent"
     } ],
     "uuid" : "9021703004368768177"
   }, {
@@ -828,9 +832,9 @@
     "gameobjectuuid" : "7431117854133416743",
     "name" : "Walkway_right_top_1384373733619",
     "components" : [ {
-      "type" : "SpriteComponent"
-    }, {
       "type" : "StaticComponent"
+    }, {
+      "type" : "SpriteComponent"
     } ],
     "uuid" : "-1212330343408472744"
   }, {
@@ -846,9 +850,9 @@
     "gameobjectuuid" : "7431117854133416743",
     "name" : "Walkway_right_top_1384373769677",
     "components" : [ {
-      "type" : "SpriteComponent"
-    }, {
       "type" : "StaticComponent"
+    }, {
+      "type" : "SpriteComponent"
     } ],
     "uuid" : "-1706163825880803156"
   }, {
@@ -1305,9 +1309,9 @@
     "gameobjectuuid" : "-3769331226440908538",
     "name" : "finish_sign_1384374697378",
     "components" : [ {
-      "type" : "SpriteComponent"
-    }, {
       "type" : "StaticComponent"
+    }, {
+      "type" : "SpriteComponent"
     } ],
     "uuid" : "-1353019716393943362"
   }, {
@@ -1431,17 +1435,17 @@
     }
   }, {
     "templates" : [ {
+      "resourcename" : {
+        "name" : "/assets/objects/duke_small.png"
+      },
+      "type" : "SpriteComponent"
+    }, {
       "jumpKey" : "UP",
       "moveRightKey" : "RIGHT",
       "leftRightImpulse" : "4.0",
       "moveLeftKey" : "LEFT",
       "jumpImpulse" : "2.0",
       "type" : "PlatformComponent"
-    }, {
-      "resourcename" : {
-        "name" : "/assets/objects/duke_small.png"
-      },
-      "type" : "SpriteComponent"
     }, {
       "gravityScale" : "1.0",
       "density" : "1.0",
@@ -1502,12 +1506,12 @@
     }
   }, {
     "templates" : [ {
+      "type" : "StaticComponent"
+    }, {
       "resourcename" : {
         "name" : "/assets/tiles/wall1_4.png"
       },
       "type" : "SpriteComponent"
-    }, {
-      "type" : "StaticComponent"
     } ],
     "name" : "Walkway_botom_left",
     "uuid" : "-6077101624070649173",
@@ -1517,12 +1521,12 @@
     }
   }, {
     "templates" : [ {
+      "type" : "StaticComponent"
+    }, {
       "resourcename" : {
         "name" : "/assets/tiles/wall2_3.png"
       },
       "type" : "SpriteComponent"
-    }, {
-      "type" : "StaticComponent"
     } ],
     "name" : "Walkway_bottom_middle",
     "uuid" : "-7220657972923747107",
@@ -1532,12 +1536,12 @@
     }
   }, {
     "templates" : [ {
+      "type" : "StaticComponent"
+    }, {
       "resourcename" : {
         "name" : "/assets/tiles/wall1_3.png"
       },
       "type" : "SpriteComponent"
-    }, {
-      "type" : "StaticComponent"
     } ],
     "name" : "Walkway_bottom_right",
     "uuid" : "647197498473429375",
@@ -1547,12 +1551,12 @@
     }
   }, {
     "templates" : [ {
+      "type" : "StaticComponent"
+    }, {
       "resourcename" : {
         "name" : "/assets/tiles/wall3_2.png"
       },
       "type" : "SpriteComponent"
-    }, {
-      "type" : "StaticComponent"
     } ],
     "name" : "Walkway_left_middle",
     "uuid" : "-2648947804278990847",
@@ -1562,12 +1566,12 @@
     }
   }, {
     "templates" : [ {
+      "type" : "StaticComponent"
+    }, {
       "resourcename" : {
         "name" : "/assets/tiles/wall1_2.png"
       },
       "type" : "SpriteComponent"
-    }, {
-      "type" : "StaticComponent"
     } ],
     "name" : "Walkway_left_top",
     "uuid" : "6595711303285831883",
@@ -1577,12 +1581,12 @@
     }
   }, {
     "templates" : [ {
+      "type" : "StaticComponent"
+    }, {
       "resourcename" : {
         "name" : "/assets/tiles/wall2_1.png"
       },
       "type" : "SpriteComponent"
-    }, {
-      "type" : "StaticComponent"
     } ],
     "name" : "Walkway_middle_top_1",
     "uuid" : "2738111980994969784",
@@ -1592,12 +1596,12 @@
     }
   }, {
     "templates" : [ {
+      "type" : "StaticComponent"
+    }, {
       "resourcename" : {
         "name" : "/assets/tiles/wall2_2.png"
       },
       "type" : "SpriteComponent"
-    }, {
-      "type" : "StaticComponent"
     } ],
     "name" : "Walkway_middle_top_2",
     "uuid" : "7991002059236720051",
@@ -1607,12 +1611,12 @@
     }
   }, {
     "templates" : [ {
+      "type" : "StaticComponent"
+    }, {
       "resourcename" : {
         "name" : "/assets/tiles/wall3_1.png"
       },
       "type" : "SpriteComponent"
-    }, {
-      "type" : "StaticComponent"
     } ],
     "name" : "Walkway_right_middle",
     "uuid" : "-4597433157293241913",
@@ -1622,12 +1626,12 @@
     }
   }, {
     "templates" : [ {
+      "type" : "StaticComponent"
+    }, {
       "resourcename" : {
         "name" : "/assets/tiles/wall1_1.png"
       },
       "type" : "SpriteComponent"
-    }, {
-      "type" : "StaticComponent"
     } ],
     "name" : "Walkway_right_top",
     "uuid" : "7431117854133416743",
@@ -1671,12 +1675,12 @@
     }
   }, {
     "templates" : [ {
+      "type" : "StaticComponent"
+    }, {
       "resourcename" : {
         "name" : "/assets/objects/finish.png"
       },
       "type" : "SpriteComponent"
-    }, {
-      "type" : "StaticComponent"
     } ],
     "name" : "finish_sign",
     "uuid" : "-3769331226440908538",
