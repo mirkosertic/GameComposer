@@ -3,10 +3,29 @@ package de.mirkosertic.gameengine;
 import de.mirkosertic.gameengine.arcade.ConstantMovementActionUnmarshaller;
 import de.mirkosertic.gameengine.camera.CameraComponentTemplateUnmarshaller;
 import de.mirkosertic.gameengine.camera.CameraComponentUnmarshaller;
-import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.core.ActionManagerFactory;
+import de.mirkosertic.gameengine.core.DeleteGameObjectInstanceActionUnmarshaller;
+import de.mirkosertic.gameengine.core.GameObjectInstanceAddedToSceneConditionUnmarshaller;
+import de.mirkosertic.gameengine.core.GameObjectInstanceRemovedFromSceneConditionUnmarshaller;
+import de.mirkosertic.gameengine.core.GameResourceLoader;
+import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.IORegistry;
+import de.mirkosertic.gameengine.core.RunSceneActionUnmarshaller;
+import de.mirkosertic.gameengine.core.SetPropertyActionUnmarshaller;
+import de.mirkosertic.gameengine.core.SpawnGameObjectInstanceActionUnmarshaller;
+import de.mirkosertic.gameengine.core.SystemTickConditionUnmarshaller;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.input.KeyEventConditionUnmarshaller;
-import de.mirkosertic.gameengine.physics.*;
+import de.mirkosertic.gameengine.physics.GamePhysicsManager;
+import de.mirkosertic.gameengine.physics.GamePhysicsManagerFactory;
+import de.mirkosertic.gameengine.physics.ObjectCollisionConditionUnmarshaller;
+import de.mirkosertic.gameengine.physics.PhysicsComponentTemplateUnmarshaller;
+import de.mirkosertic.gameengine.physics.PhysicsComponentUnmarshaller;
+import de.mirkosertic.gameengine.physics.PlatformComponentTemplateUnmarshaller;
+import de.mirkosertic.gameengine.physics.PlatformComponentUnmarshaller;
+import de.mirkosertic.gameengine.physics.StaticComponentTemplateUnmarshaller;
+import de.mirkosertic.gameengine.physics.StaticComponentUnmarshaller;
 import de.mirkosertic.gameengine.physics.jbox2d.JBox2DGamePhysicsManagerFactory;
 import de.mirkosertic.gameengine.processes.GameProcessManager;
 import de.mirkosertic.gameengine.processes.GameProcessManagerFactory;
@@ -71,5 +90,11 @@ public abstract class AbstractGameRuntimeFactory {
         theRegistry.registerActionUnmarshaller(new ConstantMovementActionUnmarshaller());
 
         return theGameRuntime;
+    }
+
+    public void loadingFinished(GameScene aLoadesScene) {
+        // Finally we need to initialize the Action system, as now the scene is completely loaded
+        ActionManagerFactory theActionManagerFactory = new ActionManagerFactory();
+        aLoadesScene.getRuntime().addSystem(theActionManagerFactory.create(aLoadesScene, aLoadesScene.getRuntime().getEventManager()));
     }
 }

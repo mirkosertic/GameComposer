@@ -28,8 +28,6 @@ import com.google.gwt.user.client.ui.RootPanel;
 
 import de.mirkosertic.gameengine.camera.CameraComponent;
 import de.mirkosertic.gameengine.camera.FollowCameraProcess;
-import de.mirkosertic.gameengine.core.ActionManager;
-import de.mirkosertic.gameengine.core.ActionManagerFactory;
 import de.mirkosertic.gameengine.core.Game;
 import de.mirkosertic.gameengine.core.GameKeyCode;
 import de.mirkosertic.gameengine.core.GameLoop;
@@ -256,10 +254,7 @@ public class GWTRenderer implements EntryPoint {
         GameEventManager theEventManager = aGameScene.getRuntime().getEventManager();
         GameRuntime theRuntime = aGameScene.getRuntime();
 
-        // Add the action manager to the running game, now we are ready to go!!
-        ActionManagerFactory theActionManagerFactory = new ActionManagerFactory();
-        ActionManager theActionManager = theActionManagerFactory.create(aGameScene, theEventManager);
-        theRuntime.addSystem(theActionManager);
+        runtimeFactory.loadingFinished(aGameScene);
 
         // Detect and create a camera
         GameObject theCameraObject = aGameScene.cameraObjectProperty().get();
