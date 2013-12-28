@@ -17,7 +17,9 @@ import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.core.GestureDetector;
+import de.mirkosertic.gameengine.core.RunScene;
 import de.mirkosertic.gameengine.core.SetScreenResolution;
+import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.input.TouchIdentifier;
 import de.mirkosertic.gameengine.input.TouchPosition;
@@ -167,6 +169,8 @@ public class GameEngineActivity extends Activity {
         GameRuntime theRuntime = aGameScene.getRuntime();
         GameEventManager theEventManager = theRuntime.getEventManager();
 
+        gameRuntimeFactory.loadingFinished(aGameScene);
+
         GameObject theCameraObject = aGameScene.cameraObjectProperty().get();
         GameObjectInstance theCameraObjectInstance = aGameScene.createFrom(theCameraObject);
         CameraComponent theCameraComponent = theCameraObjectInstance.getComponent(CameraComponent.class);
@@ -177,6 +181,15 @@ public class GameEngineActivity extends Activity {
                 thePlayerInstance = theInstance;
             }
         }
+
+        // This is our hook to load new scenes
+        theEventManager.register(null, RunScene.class, new GameEventListener<RunScene>() {
+            @Override
+            public void handleGameEvent(RunScene aEvent) {
+                String theSceneId = aEvent.sceneIdProperty().get();
+                loadScene(theSceneId);
+            }
+        });
 
         AndroidGameView theGameView = new AndroidGameView(androidCanvas, theCameraComponent, theRuntime);
 

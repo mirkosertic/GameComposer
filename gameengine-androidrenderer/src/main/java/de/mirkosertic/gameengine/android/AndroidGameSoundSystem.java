@@ -30,7 +30,7 @@ public class AndroidGameSoundSystem implements GameSoundSystem<AndroidStreamIden
         AndroidSoundResource theSound = resourceCache.getResourceFor(aResourceName);
         AndroidSoundIdentifier theIdentifier = loadedSounds.get(theSound.resourceName);
         if (theIdentifier == null) {
-            int theSoundID = soundPool.load(assetManager.openFd(aResourceName.name), 1);
+            int theSoundID = soundPool.load(assetManager.openFd(theSound.resourceName.name), 1);
             theIdentifier = new AndroidSoundIdentifier(theSoundID);
             loadedSounds.put(aResourceName, theIdentifier);
         }

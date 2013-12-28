@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class GameObjectInstanceAddedToSceneCondition implements Condition {
 
-    static final String TYPE_VALUE = "ObjectCollisionCondition";
+    static final String TYPE_VALUE = "GameObjectInstanceAddedToSceneCondition";
 
     private final Property<GameObject> gameObject;
 
