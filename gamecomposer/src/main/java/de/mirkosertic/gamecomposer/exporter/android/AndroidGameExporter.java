@@ -40,11 +40,13 @@ public class AndroidGameExporter {
         try (ZipInputStream theZipStream = new ZipInputStream(theStream)) {
             ZipEntry theEntry;
             while ((theEntry = theZipStream.getNextEntry()) != null) {
-
-                File theTargetFile = new File(theTempDirectory, theEntry.getName().replace('/', File.separatorChar));
-                theTargetFile.getParentFile().mkdirs();
-                try (FileOutputStream theFos = new FileOutputStream(theTargetFile)) {
-                    IOUtils.copy(theZipStream, theFos);
+                // Skip all files in META-INF, we do not want the certificate to get copied.
+                if (!theEntry.getName().startsWith("META-INF/")) {
+                    File theTargetFile = new File(theTempDirectory, theEntry.getName().replace('/', File.separatorChar));
+                    theTargetFile.getParentFile().mkdirs();
+                    try (FileOutputStream theFos = new FileOutputStream(theTargetFile)) {
+                        IOUtils.copy(theZipStream, theFos);
+                    }
                 }
             }
         }
@@ -96,6 +98,12 @@ public class AndroidGameExporter {
                 System.out.println(theZipSigner + " -keystore " + theAndroidDebugKeyStore + " -storepass android -keypass android " + theGameFile.toString() + " androiddebugkey");
 
                 Process theProcess = Runtime.getRuntime().exec(new String[]{theZipSigner.toString(),
+                        "-sigFile",
+                        "CERT",
+                        "-digestalg",
+                        "SHA1",
+                        "-sigalg",
+                        "MD5withRSA",
                         "-keystore",
                         theAndroidDebugKeyStore.toString(),
                         "storepass",

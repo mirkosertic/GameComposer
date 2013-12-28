@@ -120,9 +120,7 @@ public class PersistenceManager {
 
                     GameScene theLoadedScene = GameScene.deserialize(gameRuntimeFactory.create(theResourceLoader, new JavaSoundAPISoundSystemFactory()), theSerializedData);
 
-                    // Finally we need to initialize the Action system, as now the scene is completely loaded
-                    ActionManagerFactory theActionManagerFactory = new ActionManagerFactory();
-                    theLoadedScene.getRuntime().addSystem(theActionManagerFactory.create(theLoadedScene, theLoadedScene.getRuntime().getEventManager()));
+                    gameRuntimeFactory.loadingFinished(theLoadedScene);
 
                     // Ok, we are done here
                     theLoadedScenes.put(theSceneName, theLoadedScene);

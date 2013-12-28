@@ -5,7 +5,6 @@ import android.graphics.BitmapFactory;
 import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.core.GameResourceLoader;
 import de.mirkosertic.gameengine.types.ResourceName;
-import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,9 +26,7 @@ public class AndroidGameResourceLoader implements GameResourceLoader {
             return new AndroidBitmapResource(BitmapFactory.decodeStream(theStream));
         }
         if (aResourceName.name.endsWith(".wav")) {
-            InputStream theStream = assetManager.open(prefix + aResourceName.name);
-            byte[] theData = IOUtils.toByteArray(theStream);
-            return new AndroidSoundResource(theData);
+            return new AndroidSoundResource(new ResourceName(prefix + aResourceName.name));
         }
 
         return null;

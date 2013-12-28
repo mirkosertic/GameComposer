@@ -2,13 +2,14 @@ package de.mirkosertic.gameengine.android;
 
 import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.core.GameResourceType;
+import de.mirkosertic.gameengine.types.ResourceName;
 
 public class AndroidSoundResource implements GameResource {
 
-    private final byte[] data;
+    public final ResourceName resourceName;
 
-    AndroidSoundResource(byte[] aData) {
-        data = aData;
+    AndroidSoundResource(ResourceName aResourceName) {
+        resourceName = aResourceName;
     }
 
     @Override

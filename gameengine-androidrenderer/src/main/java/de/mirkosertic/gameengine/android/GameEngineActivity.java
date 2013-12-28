@@ -48,7 +48,6 @@ public class GameEngineActivity extends Activity {
 
     public GameEngineActivity() {
         gameRuntimeFactory = new AndroidGameRuntimeFactory();
-        gameSoundSystemFactory = new AndroidGameSoundSystemFactory();
         gameLoopFactory = new GameLoopFactory();
     }
 
@@ -62,6 +61,8 @@ public class GameEngineActivity extends Activity {
     @Override
     public void onCreate(Bundle aSavedState) {
         super.onCreate(aSavedState);
+
+        gameSoundSystemFactory = new AndroidGameSoundSystemFactory(getAssets());
 
         setContentView(R.layout.activity_main);
 
