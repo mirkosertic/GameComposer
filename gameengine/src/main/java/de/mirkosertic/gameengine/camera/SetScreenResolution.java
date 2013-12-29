@@ -1,4 +1,4 @@
-package de.mirkosertic.gameengine.core;
+package de.mirkosertic.gameengine.camera;
 
 import de.mirkosertic.gameengine.event.GameEvent;
 import de.mirkosertic.gameengine.event.Property;

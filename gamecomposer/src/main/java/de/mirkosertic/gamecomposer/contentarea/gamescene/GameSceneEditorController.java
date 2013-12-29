@@ -7,7 +7,7 @@ import de.mirkosertic.gamecomposer.ShutdownEvent;
 import de.mirkosertic.gamecomposer.contentarea.ContentController;
 
 import de.mirkosertic.gameengine.camera.CameraComponent;
-import de.mirkosertic.gameengine.core.GameKeyCode;
+import de.mirkosertic.gameengine.types.GameKeyCode;
 import de.mirkosertic.gameengine.core.GameLoop;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;

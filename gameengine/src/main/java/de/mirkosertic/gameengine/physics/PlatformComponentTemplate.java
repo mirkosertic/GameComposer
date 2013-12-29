@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.mirkosertic.gameengine.core.GameComponentTemplate;
-import de.mirkosertic.gameengine.core.GameKeyCode;
+import de.mirkosertic.gameengine.types.GameKeyCode;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;

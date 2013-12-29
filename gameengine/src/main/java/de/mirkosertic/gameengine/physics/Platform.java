@@ -1,6 +1,6 @@
 package de.mirkosertic.gameengine.physics;
 
-import de.mirkosertic.gameengine.core.GameKeyCode;
+import de.mirkosertic.gameengine.types.GameKeyCode;
 import de.mirkosertic.gameengine.event.Property;
 
 public interface Platform {
