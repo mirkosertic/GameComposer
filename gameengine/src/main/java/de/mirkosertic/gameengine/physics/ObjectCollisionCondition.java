@@ -1,12 +1,16 @@
 package de.mirkosertic.gameengine.physics;
 
-import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.core.Condition;
+import de.mirkosertic.gameengine.core.ConditionResult;
+import de.mirkosertic.gameengine.core.GameObject;
+import de.mirkosertic.gameengine.core.GameObjectInstance;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.UsedByReflection;
 import de.mirkosertic.gameengine.event.GameEvent;
 import de.mirkosertic.gameengine.event.Property;
+import de.mirkosertic.gameengine.types.CollisionPosition;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class ObjectCollisionCondition implements Condition {
@@ -15,11 +19,13 @@ public class ObjectCollisionCondition implements Condition {
 
     private final Property<GameObject> primaryObject;
     private final Property<GameObject> secondaryObject;
+    private final Property<CollisionPosition> position;
 
     @UsedByReflection
     public ObjectCollisionCondition() {
         primaryObject = new Property<GameObject>(this, "primaryObject", (GameObject) null);
         secondaryObject = new Property<GameObject>(this, "secondaryObject", (GameObject) null);
+        position = new Property<CollisionPosition>(this, "position", CollisionPosition.EVERYWHERE);
     }
 
     public Property<GameObject> primaryObjectProperty() {
@@ -30,6 +36,10 @@ public class ObjectCollisionCondition implements Condition {
         return secondaryObject;
     }
 
+    public Property<CollisionPosition> positionProperty() {
+        return position;
+    }
+
     @Override
     public ConditionResult appliesTo(GameScene aScene, GameEvent aEvent) {
         if (aEvent instanceof GameObjectCollision) {
@@ -37,20 +47,28 @@ public class ObjectCollisionCondition implements Condition {
                 GameObject thePrimaryObject = primaryObject.get();
                 GameObject theSecondaryObject = secondaryObject.get();
 
-                GameObject theO1 = ((GameObjectCollision) aEvent).instance1Property().get().getOwnerGameObject();
-                GameObject theO2 = ((GameObjectCollision) aEvent).instance2Property().get().getOwnerGameObject();
+                GameObjectCollision theCollision = (GameObjectCollision) aEvent;
+
+                GameObject theO1 = theCollision.instance1Property().get().getOwnerGameObject();
+                GameObject theO2 = theCollision.instance2Property().get().getOwnerGameObject();
+
+                CollisionPosition thePosition = position.get();
 
                 // Case 1
                 if (thePrimaryObject.uuidProperty().get().equals(theO1.uuidProperty().get()) &&
                         theSecondaryObject.uuidProperty().get().equals(theO2.uuidProperty().get())) {
                     // Collision
-                    return new ConditionResult(true, new GameObjectInstance[] {((GameObjectCollision) aEvent).instance1Property().get()});
+                    if (thePosition.detect(theCollision.instance1Property().get().positionProperty().get(), theCollision.instance2Property().get().positionProperty().get())) {
+                        return new ConditionResult(true, new GameObjectInstance[] {theCollision.instance1Property().get()});
+                    }
                 }
 
                 if (theSecondaryObject.uuidProperty().get().equals(theO1.uuidProperty().get()) &&
                         thePrimaryObject.uuidProperty().get().equals(theO2.uuidProperty().get())) {
                     // Collision
-                    return new ConditionResult(true, new GameObjectInstance[] {((GameObjectCollision) aEvent).instance2Property().get()});
+                    if (thePosition.detect(theCollision.instance2Property().get().positionProperty().get(), theCollision.instance1Property().get().positionProperty().get())) {
+                        return new ConditionResult(true, new GameObjectInstance[] {((GameObjectCollision) aEvent).instance2Property().get()});
+                    }
                 }
             }
         }
@@ -67,6 +85,9 @@ public class ObjectCollisionCondition implements Condition {
         if (!secondaryObject.isNull()) {
             theResult.put("secondaryObjectUuid", secondaryObject.get().uuidProperty().get());
         }
+        if (!position.isNull()) {
+            theResult.put("position", position.get().name());
+        }
         return theResult;
     }
 
@@ -79,6 +100,10 @@ public class ObjectCollisionCondition implements Condition {
         String theSecondaryObject = (String) aSerializedData.get("secondaryObjectUuid");
         if (theSecondaryObject != null) {
             theCondition.secondaryObject.setQuietly(aGameScene.findGameObjectByID(theSecondaryObject));
+        }
+        String thePositon = (String) aSerializedData.get("position");
+        if (thePositon != null) {
+            theCondition.position.setQuietly(CollisionPosition.valueOf(thePositon));
         }
         return theCondition;
     }
