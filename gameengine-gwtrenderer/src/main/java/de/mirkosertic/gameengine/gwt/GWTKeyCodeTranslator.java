@@ -2,7 +2,7 @@ package de.mirkosertic.gameengine.gwt;
 
 import com.google.gwt.event.dom.client.KeyCodes;
 
-import de.mirkosertic.gameengine.core.GameKeyCode;
+import de.mirkosertic.gameengine.types.GameKeyCode;
 
 class GWTKeyCodeTranslator {
 

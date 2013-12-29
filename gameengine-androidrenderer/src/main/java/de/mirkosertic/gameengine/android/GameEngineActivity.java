@@ -18,11 +18,11 @@ import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.core.GestureDetector;
 import de.mirkosertic.gameengine.core.RunScene;
-import de.mirkosertic.gameengine.core.SetScreenResolution;
+import de.mirkosertic.gameengine.camera.SetScreenResolution;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.GameEventManager;
-import de.mirkosertic.gameengine.input.TouchIdentifier;
-import de.mirkosertic.gameengine.input.TouchPosition;
+import de.mirkosertic.gameengine.types.TouchIdentifier;
+import de.mirkosertic.gameengine.types.TouchPosition;
 import de.mirkosertic.gameengine.processes.StartProcess;
 import de.mirkosertic.gameengine.types.Size;
 

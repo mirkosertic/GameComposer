@@ -48,5 +48,5 @@ Currently the HTML5 renderer tries to use WebGL. If WebGL is not available, it w
 GameEngine-AndroidRenderer
 --------------
 
-This is the game presentation logic using the Android Java SDK. This also includes a SoundSystem Implementation for Android devices.
+This is the game presentation logic using the Android Java SDK. This also includes a SoundSystem implementation for Android devices.
 We use an Android SurfaceView for rendering. Future versions will include OpenGL ES support.

@@ -1,6 +1,7 @@
 package de.mirkosertic.gameengine.core;
 
-import de.mirkosertic.gameengine.input.TouchPosition;
+import de.mirkosertic.gameengine.types.GameKeyCode;
+import de.mirkosertic.gameengine.types.TouchPosition;
 
 public interface GestureDetector {
 

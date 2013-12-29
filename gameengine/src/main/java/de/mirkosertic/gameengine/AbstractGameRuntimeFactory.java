@@ -3,7 +3,7 @@ package de.mirkosertic.gameengine;
 import de.mirkosertic.gameengine.arcade.ConstantMovementActionUnmarshaller;
 import de.mirkosertic.gameengine.camera.CameraComponentTemplateUnmarshaller;
 import de.mirkosertic.gameengine.camera.CameraComponentUnmarshaller;
-import de.mirkosertic.gameengine.core.ActionManagerFactory;
+import de.mirkosertic.gameengine.action.ActionManagerFactory;
 import de.mirkosertic.gameengine.core.DeleteGameObjectInstanceActionUnmarshaller;
 import de.mirkosertic.gameengine.core.GameObjectInstanceAddedToSceneConditionUnmarshaller;
 import de.mirkosertic.gameengine.core.GameObjectInstanceRemovedFromSceneConditionUnmarshaller;

@@ -1,4 +1,4 @@
-package de.mirkosertic.gameengine.input;
+package de.mirkosertic.gameengine.types;
 
 public class TouchIdentifier {
 
