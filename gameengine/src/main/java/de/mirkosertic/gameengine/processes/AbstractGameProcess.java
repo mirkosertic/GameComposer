@@ -1,5 +1,7 @@
 package de.mirkosertic.gameengine.processes;
 
+import de.mirkosertic.gameengine.core.GameObjectInstance;
+
 public abstract class AbstractGameProcess implements GameProcess {
 
     private GameProcess childProcess;
@@ -23,5 +25,10 @@ public abstract class AbstractGameProcess implements GameProcess {
 
     public void setChildProcess(GameProcess childProcess) {
         this.childProcess = childProcess;
+    }
+
+    @Override
+    public boolean affectsInstance(GameObjectInstance aInstance) {
+        return false;
     }
 }

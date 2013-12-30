@@ -9,6 +9,7 @@ import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.input.KeyPressed;
 import de.mirkosertic.gameengine.input.KeyReleased;
+import de.mirkosertic.gameengine.types.CollisionPosition;
 import de.mirkosertic.gameengine.types.GameKeyCode;
 import de.mirkosertic.gameengine.types.Position;
 
@@ -147,18 +148,16 @@ public class PlatformComponent extends GameComponent implements Platform {
         if (theOtherInstance != null) {
             Position theOtherPosition = theOtherInstance.positionProperty().get();
             Position thePosition = objectInstance.positionProperty().get();
-            double my = theOtherPosition.y - thePosition.y;
-            if (my > 0) {
+            if (CollisionPosition.BOTTOM.detect(thePosition, theOtherPosition)) {
                 // Object is under the game object
                 setJumping(false);
             } else {
-                double mx = theOtherPosition.x - thePosition.x;
                 // Object is on the right side
-                if (mx > 0) {
+                if (CollisionPosition.RIGHT.detect(thePosition, theOtherPosition)) {
                     setJumping(false);
                 }
                 // Object is on the left side
-                if (mx < 0) {
+                if (CollisionPosition.LEFT.detect(thePosition, theOtherPosition)) {
                     setJumping(false);
                 }
             }

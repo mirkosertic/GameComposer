@@ -1,5 +1,7 @@
 package de.mirkosertic.gameengine.processes;
 
+import de.mirkosertic.gameengine.core.GameObjectInstance;
+
 public interface GameProcess {
 
     static enum ProceedResult {
@@ -7,6 +9,8 @@ public interface GameProcess {
     }
 
     void started();
+
+    boolean affectsInstance(GameObjectInstance aInstance);
 
     ProceedResult proceedGame(long aGameTime, long aElapsedTimeSinceLastLoop);
 

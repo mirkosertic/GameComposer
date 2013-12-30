@@ -228,5 +228,6 @@ public class ObjectInspectorController implements Controller {
 
             }
         }
+        view.getScene().getRoot().layout();
     }
 }

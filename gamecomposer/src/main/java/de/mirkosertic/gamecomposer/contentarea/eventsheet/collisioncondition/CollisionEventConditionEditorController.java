@@ -5,6 +5,8 @@ import de.mirkosertic.gamecomposer.StringConverterFactory;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.physics.ObjectCollisionCondition;
+import de.mirkosertic.gameengine.types.CollisionPosition;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -27,6 +29,9 @@ public class CollisionEventConditionEditorController implements Controller {
 
     @FXML
     ComboBox secondaryObject;
+
+    @FXML
+    ComboBox position;
 
     private GameScene gameScene;
     private ObjectCollisionCondition condition;
@@ -56,6 +61,11 @@ public class CollisionEventConditionEditorController implements Controller {
         secondaryObject.setConverter(stringConverterFactory.createGameObjectStringConverter());
         secondaryObject.getSelectionModel().select(aCondition.secondaryObjectProperty().get());
 
+        position.getItems().clear();
+        position.getItems().addAll(CollisionPosition.values());
+        position.setConverter(stringConverterFactory.createEnumStringConverter());
+        position.getSelectionModel().select(aCondition.positionProperty().get());
+
         primaryObject.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -66,6 +76,12 @@ public class CollisionEventConditionEditorController implements Controller {
             @Override
             public void handle(ActionEvent actionEvent) {
                 onSecondarySelected();
+            }
+        });
+        position.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                onPositionSelected();
             }
         });
 
@@ -82,5 +98,9 @@ public class CollisionEventConditionEditorController implements Controller {
 
     private void onSecondarySelected() {
         condition.secondaryObjectProperty().set((GameObject) secondaryObject.getSelectionModel().getSelectedItem());
+    }
+
+    private void onPositionSelected() {
+        condition.positionProperty().set((CollisionPosition) position.getSelectionModel().getSelectedItem());
     }
 }

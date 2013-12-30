@@ -1,9 +1,13 @@
 package de.mirkosertic.gameengine.processes;
 
 import de.mirkosertic.gameengine.ArrayUtils;
+import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameSystem;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class GameProcessManager implements GameSystem {
 
@@ -27,6 +31,18 @@ public class GameProcessManager implements GameSystem {
     void kill(GameProcess aProcess) {
         killedProcesses.add(aProcess);
         aProcess.killed();
+    }
+
+    void killProcessesForInstance(GameObjectInstance aInstance) {
+        for (GameProcess theProcess : runningProcesses) {
+            if (theProcess.affectsInstance(aInstance)) {
+                kill(theProcess);
+            }
+        }
+    }
+
+    void instanceRemovedFromScene(GameObjectInstance aInstance) {
+        killProcessesForInstance(aInstance);
     }
 
     void proceedGame(long aGameTime, long aElapsedTimeSinceLastLoop) {

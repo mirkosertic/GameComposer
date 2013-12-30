@@ -1,6 +1,6 @@
 package de.mirkosertic.gameengine.android;
 
-public class AndroidSoundIdentifier {
+class AndroidSoundIdentifier {
 
     public final int identifier;
 

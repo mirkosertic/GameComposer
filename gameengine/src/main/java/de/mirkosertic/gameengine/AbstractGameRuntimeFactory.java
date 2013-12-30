@@ -1,9 +1,9 @@
 package de.mirkosertic.gameengine;
 
+import de.mirkosertic.gameengine.action.ActionManagerFactory;
 import de.mirkosertic.gameengine.arcade.ConstantMovementActionUnmarshaller;
 import de.mirkosertic.gameengine.camera.CameraComponentTemplateUnmarshaller;
 import de.mirkosertic.gameengine.camera.CameraComponentUnmarshaller;
-import de.mirkosertic.gameengine.action.ActionManagerFactory;
 import de.mirkosertic.gameengine.core.DeleteGameObjectInstanceActionUnmarshaller;
 import de.mirkosertic.gameengine.core.GameObjectInstanceAddedToSceneConditionUnmarshaller;
 import de.mirkosertic.gameengine.core.GameObjectInstanceRemovedFromSceneConditionUnmarshaller;
@@ -29,6 +29,7 @@ import de.mirkosertic.gameengine.physics.StaticComponentUnmarshaller;
 import de.mirkosertic.gameengine.physics.jbox2d.JBox2DGamePhysicsManagerFactory;
 import de.mirkosertic.gameengine.processes.GameProcessManager;
 import de.mirkosertic.gameengine.processes.GameProcessManagerFactory;
+import de.mirkosertic.gameengine.processes.KillProcessesForInstanceUnmarshaller;
 import de.mirkosertic.gameengine.sound.GameSoundManager;
 import de.mirkosertic.gameengine.sound.GameSoundManagerFactory;
 import de.mirkosertic.gameengine.sound.GameSoundSystemFactory;
@@ -88,6 +89,7 @@ public abstract class AbstractGameRuntimeFactory {
         theRegistry.registerActionUnmarshaller(new SpawnGameObjectInstanceActionUnmarshaller());
         theRegistry.registerActionUnmarshaller(new DeleteGameObjectInstanceActionUnmarshaller());
         theRegistry.registerActionUnmarshaller(new ConstantMovementActionUnmarshaller());
+        theRegistry.registerActionUnmarshaller(new KillProcessesForInstanceUnmarshaller());
 
         return theGameRuntime;
     }

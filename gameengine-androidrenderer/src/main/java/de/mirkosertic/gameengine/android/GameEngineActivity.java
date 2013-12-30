@@ -4,11 +4,12 @@ import android.app.Activity;
 import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.view.Menu;
-
 import android.view.MotionEvent;
 import android.view.View;
+
 import de.mirkosertic.gameengine.camera.CameraComponent;
 import de.mirkosertic.gameengine.camera.FollowCameraProcess;
+import de.mirkosertic.gameengine.camera.SetScreenResolution;
 import de.mirkosertic.gameengine.core.Game;
 import de.mirkosertic.gameengine.core.GameLoop;
 import de.mirkosertic.gameengine.core.GameLoopFactory;
@@ -18,16 +19,13 @@ import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.core.GestureDetector;
 import de.mirkosertic.gameengine.core.RunScene;
-import de.mirkosertic.gameengine.camera.SetScreenResolution;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.GameEventManager;
-import de.mirkosertic.gameengine.types.TouchIdentifier;
-import de.mirkosertic.gameengine.types.TouchPosition;
 import de.mirkosertic.gameengine.processes.StartProcess;
 import de.mirkosertic.gameengine.types.Size;
-
+import de.mirkosertic.gameengine.types.TouchIdentifier;
+import de.mirkosertic.gameengine.types.TouchPosition;
 import org.apache.commons.io.IOUtils;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -40,8 +38,8 @@ import java.util.TimerTask;
 public class GameEngineActivity extends Activity {
 
     private AndroidGameSoundSystemFactory gameSoundSystemFactory;
-    private AndroidGameRuntimeFactory gameRuntimeFactory;
-    private GameLoopFactory gameLoopFactory;
+    private final AndroidGameRuntimeFactory gameRuntimeFactory;
+    private final GameLoopFactory gameLoopFactory;
     private AndroidCanvas androidCanvas;
 
     private Game game;
@@ -89,7 +87,7 @@ public class GameEngineActivity extends Activity {
 
     private TouchPosition[] toArray(MotionEvent aEvent) {
         TouchPosition[] thePosition = new TouchPosition[aEvent.getPointerCount()];
-        for (int i=0;i<aEvent.getPointerCount();i++) {
+        for (int i = 0; i < aEvent.getPointerCount(); i++) {
             thePosition[i] = new TouchPosition(new TouchIdentifier(aEvent.getPointerId(i)), (int) aEvent.getX(i), (int) aEvent.getY(i));
         }
         return thePosition;
@@ -99,7 +97,7 @@ public class GameEngineActivity extends Activity {
         if (runningGameLoop != null) {
             GestureDetector theGestureDetector = runningGameLoop.getHumanGameView().getGestureDetector();
 
-            switch(aEvent.getAction()) {
+            switch (aEvent.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     theGestureDetector.touchStarted(toArray(aEvent));
                     break;
@@ -196,9 +194,6 @@ public class GameEngineActivity extends Activity {
         GameLoop theLoop = gameLoopFactory.create(aGameScene, theGameView, theRuntime);
 
         theEventManager.fire(new SetScreenResolution(new Size(androidCanvas.getWidth(), androidCanvas.getHeight())));
-
-//        Thread theMainLoopThread = new Thread(theLoop);
-//        theMainLoopThread.start();
 
         runningGameLoop = theLoop;
 

@@ -53,4 +53,19 @@ public class StringConverterFactory {
             }
         };
     }
+
+    public StringConverter<Enum> createEnumStringConverter() {
+        return new StringConverter<Enum>() {
+            @Override
+            public String toString(Enum anEnum) {
+                return anEnum.name();
+            }
+
+            @Override
+            public Enum fromString(String s) {
+                // nonsense here
+                return null;
+            }
+        };
+    }
 }
