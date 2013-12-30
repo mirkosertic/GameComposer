@@ -29,4 +29,9 @@ public class ConstantMovementProcess extends AbstractGameProcess {
 
         return ProceedResult.CONTINUE_RUNNING;
     }
+
+    @Override
+    public boolean affectsInstance(GameObjectInstance aInstance) {
+        return instance.uuidProperty().get().equals(aInstance.uuidProperty().get());
+    }
 }

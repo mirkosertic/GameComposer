@@ -5,7 +5,7 @@ import de.mirkosertic.gameengine.types.ResourceName;
 import de.mirkosertic.gameengine.event.GameEvent;
 import de.mirkosertic.gameengine.event.ReadOnlyProperty;
 
-public class PlaySound extends GameEvent {
+class PlaySound extends GameEvent {
 
     private final Property<ResourceName> resourceName;
 

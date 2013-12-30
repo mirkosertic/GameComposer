@@ -39,4 +39,11 @@ public class FollowCameraProcess extends AbstractGameProcess {
 
         return ProceedResult.CONTINUE_RUNNING;
     }
+
+    @Override
+    public boolean affectsInstance(GameObjectInstance aInstance) {
+        String theInstanceUID = aInstance.uuidProperty().get();
+        return cameraObject.uuidProperty().get().equals(theInstanceUID)
+                || playerObject.uuidProperty().get().equals(theInstanceUID);
+    }
 }
