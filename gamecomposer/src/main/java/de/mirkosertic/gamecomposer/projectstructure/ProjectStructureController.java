@@ -154,7 +154,7 @@ public class ProjectStructureController implements Controller {
 
     public void onGameObjectAdded(@Observes GameObjectAddedToScene aEvent) {
         initializeTree(persistenceManager.getGame());
-        projectStructureTreeView.getSelectionModel().select(treeItemMap.get(aEvent.objectProperty().get()));
+        projectStructureTreeView.getSelectionModel().select(treeItemMap.get(aEvent.object));
     }
 
     public void onGameObjectRemoved(@Observes GameObjectRemovedFromScene aEvent) {
@@ -167,7 +167,7 @@ public class ProjectStructureController implements Controller {
 
     public void onGameObjectInstanceAdded(@Observes GameObjectInstanceAddedToScene aEvent) {
         initializeTree(persistenceManager.getGame());
-        projectStructureTreeView.getSelectionModel().select(treeItemMap.get(aEvent.instanceProperty().get()));
+        projectStructureTreeView.getSelectionModel().select(treeItemMap.get(aEvent.instance));
     }
 
     public void onGameObjectInstanceRemoved(@Observes GameObjectInstanceRemovedFromScene aEvent) {

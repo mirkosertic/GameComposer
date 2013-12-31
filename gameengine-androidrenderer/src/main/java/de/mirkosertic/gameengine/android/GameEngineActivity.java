@@ -184,7 +184,7 @@ public class GameEngineActivity extends Activity {
         theEventManager.register(null, RunScene.class, new GameEventListener<RunScene>() {
             @Override
             public void handleGameEvent(RunScene aEvent) {
-                String theSceneId = aEvent.sceneIdProperty().get();
+                String theSceneId = aEvent.sceneId;
                 loadScene(theSceneId);
             }
         });

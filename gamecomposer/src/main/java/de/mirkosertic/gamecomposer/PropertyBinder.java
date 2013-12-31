@@ -51,7 +51,7 @@ public class PropertyBinder {
         aBeanProperty.addChangeListener(new JavaFXPropertyChangeListener() {
             @Override
             public void handleGameEvent(PropertyChanged aEvent) {
-                aFXProperty.setValue((T) aEvent.propertyProperty().get().get());
+                aFXProperty.setValue((T) aEvent.property.get());
             }
         });
         Node theNode = (Node) aFXProperty.getBean();
@@ -70,7 +70,7 @@ public class PropertyBinder {
         aBeanProperty.addChangeListener(new JavaFXPropertyChangeListener() {
             @Override
             public void handleGameEvent(PropertyChanged aEvent) {
-                aFXProperty.setValue(aConverter.beanToUI((T) aEvent.propertyProperty().get().get()));
+                aFXProperty.setValue(aConverter.beanToUI((T) aEvent.property.get()));
             }
         });
         Node theNode = (Node) aFXProperty.getBean();

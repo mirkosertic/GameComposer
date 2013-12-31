@@ -66,7 +66,7 @@ public class ObjectInspectorController implements Controller {
 
     public void onGameObjectConfigurationChanged(@Observes GameObjectConfigurationChanged aEvent) {
         currentSelection = null;
-        selectObject(aEvent.objectProperty().get());
+        selectObject(aEvent.object);
     }
 
     private ObjectInspectorFactoryType createQualifier(final Class aClass) {

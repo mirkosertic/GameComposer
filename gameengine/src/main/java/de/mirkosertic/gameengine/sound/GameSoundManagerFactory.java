@@ -10,7 +10,7 @@ public class GameSoundManagerFactory {
         aEventManager.register(null, PlaySound.class, new GameEventListener<PlaySound>() {
             @Override
             public void handleGameEvent(PlaySound aEvent) {
-                theManager.onPlaySoundEvent(aEvent.resourceNameProperty().get());
+                theManager.onPlaySoundEvent(aEvent.resourceName);
             }
         });
         return theManager;

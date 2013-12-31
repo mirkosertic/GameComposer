@@ -49,8 +49,8 @@ public class ObjectCollisionCondition implements Condition {
 
                 GameObjectCollision theCollision = (GameObjectCollision) aEvent;
 
-                GameObject theO1 = theCollision.instance1Property().get().getOwnerGameObject();
-                GameObject theO2 = theCollision.instance2Property().get().getOwnerGameObject();
+                GameObject theO1 = theCollision.instance1.getOwnerGameObject();
+                GameObject theO2 = theCollision.instance2.getOwnerGameObject();
 
                 CollisionPosition thePosition = position.get();
 
@@ -58,16 +58,16 @@ public class ObjectCollisionCondition implements Condition {
                 if (thePrimaryObject.uuidProperty().get().equals(theO1.uuidProperty().get()) &&
                         theSecondaryObject.uuidProperty().get().equals(theO2.uuidProperty().get())) {
                     // Collision
-                    if (thePosition.detect(theCollision.instance1Property().get().positionProperty().get(), theCollision.instance2Property().get().positionProperty().get())) {
-                        return new ConditionResult(true, new GameObjectInstance[] {theCollision.instance1Property().get()});
+                    if (thePosition.detect(theCollision.instance1.positionProperty().get(), theCollision.instance2.positionProperty().get())) {
+                        return new ConditionResult(true, new GameObjectInstance[] {theCollision.instance1});
                     }
                 }
 
                 if (theSecondaryObject.uuidProperty().get().equals(theO1.uuidProperty().get()) &&
                         thePrimaryObject.uuidProperty().get().equals(theO2.uuidProperty().get())) {
                     // Collision
-                    if (thePosition.detect(theCollision.instance2Property().get().positionProperty().get(), theCollision.instance1Property().get().positionProperty().get())) {
-                        return new ConditionResult(true, new GameObjectInstance[] {((GameObjectCollision) aEvent).instance2Property().get()});
+                    if (thePosition.detect(theCollision.instance2.positionProperty().get(), theCollision.instance1.positionProperty().get())) {
+                        return new ConditionResult(true, new GameObjectInstance[] {((GameObjectCollision) aEvent).instance2});
                     }
                 }
             }

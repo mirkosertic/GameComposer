@@ -272,7 +272,7 @@ public class GWTRenderer implements EntryPoint {
         theEventManager.register(null, RunScene.class, new GameEventListener<RunScene>() {
             @Override
             public void handleGameEvent(RunScene aEvent) {
-                String theSceneId = aEvent.sceneIdProperty().get();
+                String theSceneId = aEvent.sceneId;
                 sceneLoader.loadFromServer(theSceneId, new GWTGameResourceLoader(theSceneId));
             }
         });
