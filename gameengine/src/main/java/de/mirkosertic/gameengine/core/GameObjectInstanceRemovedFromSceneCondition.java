@@ -25,7 +25,7 @@ public class GameObjectInstanceRemovedFromSceneCondition implements Condition {
     public ConditionResult appliesTo(GameScene aScene, GameEvent aEvent) {
         if (aEvent instanceof GameObjectInstanceRemovedFromScene) {
             GameObjectInstanceRemovedFromScene theEvent = (GameObjectInstanceRemovedFromScene) aEvent;
-            GameObjectInstance theInstance = theEvent.instanceProperty().get();
+            GameObjectInstance theInstance = theEvent.instance;
             if (theInstance.getOwnerGameObject() == gameObject.get()) {
                 return new ConditionResult(true, new GameObjectInstance[] {theInstance});
             }

@@ -25,7 +25,7 @@ public class GameObjectInstanceAddedToSceneCondition implements Condition {
     public ConditionResult appliesTo(GameScene aScene, GameEvent aEvent) {
         if (aEvent instanceof GameObjectInstanceAddedToScene) {
             GameObjectInstanceAddedToScene theEvent = (GameObjectInstanceAddedToScene) aEvent;
-            GameObjectInstance theInstance = theEvent.instanceProperty().get();
+            GameObjectInstance theInstance = theEvent.instance;
             if (theInstance.getOwnerGameObject() == gameObject.get()) {
                 return new ConditionResult(true, new GameObjectInstance[] {theInstance});
             }

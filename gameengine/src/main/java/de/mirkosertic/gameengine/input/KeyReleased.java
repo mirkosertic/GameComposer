@@ -1,20 +1,14 @@
 package de.mirkosertic.gameengine.input;
 
-import de.mirkosertic.gameengine.types.GameKeyCode;
 import de.mirkosertic.gameengine.event.GameEvent;
-import de.mirkosertic.gameengine.event.Property;
-import de.mirkosertic.gameengine.event.ReadOnlyProperty;
+import de.mirkosertic.gameengine.types.GameKeyCode;
 
 public class KeyReleased extends GameEvent {
 
-    private final Property<GameKeyCode> keyCode;
+    public final GameKeyCode keyCode;
 
     KeyReleased(GameKeyCode aKeyCode) {
         super("KeyReleased");
-        keyCode = registerProperty(new Property<GameKeyCode>(this, "keyCode", aKeyCode));
-    }
-
-    public ReadOnlyProperty<GameKeyCode> keyCodeProperty() {
-        return keyCode;
+        keyCode = aKeyCode;
     }
 }

@@ -1,14 +1,10 @@
 package de.mirkosertic.gameengine.event;
 
-public class GameEvent extends PropertyAware {
+public class GameEvent {
 
-    private final ReadOnlyProperty<String> type;
+    public final String type;
 
     protected GameEvent(String aType) {
-        type = new ReadOnlyProperty<String>(this, "type", aType);
-    }
-
-    public ReadOnlyProperty<String> typeProperty() {
-        return type;
+        type = aType;
     }
 }

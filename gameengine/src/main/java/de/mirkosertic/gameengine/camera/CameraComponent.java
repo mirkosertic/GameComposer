@@ -41,8 +41,7 @@ public class CameraComponent extends GameComponent implements Camera {
         aGameRuntime.getEventManager().register(objectInstance, SetScreenResolution.class,
                 new GameEventListener<SetScreenResolution>() {
                     public void handleGameEvent(SetScreenResolution aEvent) {
-                        setScreenSize(new Size(aEvent.screenSizeProperty().get().width, aEvent.screenSizeProperty()
-                                .get().height));
+                        setScreenSize(new Size(aEvent.screenSize.width, aEvent.screenSize.height));
                     }
                 });
     }

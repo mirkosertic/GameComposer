@@ -120,25 +120,25 @@ public class PlatformComponent extends GameComponent implements Platform {
     }
 
     void handleKeyPressed(KeyPressed aEvent) {
-        if (aEvent.keyCodeProperty().get() == moveLeftKey.get()) {
+        if (aEvent.keyCode == moveLeftKey.get()) {
             leftKeyDown = true;
         }
-        if (aEvent.keyCodeProperty().get() == moveRightKey.get()) {
+        if (aEvent.keyCode == moveRightKey.get()) {
             rightKeyDown = true;
         }
-        if (aEvent.keyCodeProperty().get() == jumpKey.get()) {
+        if (aEvent.keyCode == jumpKey.get()) {
             upKeyDown = true;
         }
     }
 
     void handleKeyReleased(KeyReleased aEvent) {
-        if (aEvent.keyCodeProperty().get() == moveLeftKey.get()) {
+        if (aEvent.keyCode == moveLeftKey.get()) {
             leftKeyDown = false;
         }
-        if (aEvent.keyCodeProperty().get() == moveRightKey.get()) {
+        if (aEvent.keyCode == moveRightKey.get()) {
             rightKeyDown = false;
         }
-        if (aEvent.keyCodeProperty().get() == jumpKey.get()) {
+        if (aEvent.keyCode == jumpKey.get()) {
             upKeyDown = false;
         }
     }

@@ -42,7 +42,7 @@ public class KeyEventCondition implements Condition {
         case PRESSED:
             if (aEvent instanceof KeyPressed) {
                 KeyPressed theKeyPressed = (KeyPressed) aEvent;
-                if (theKeyPressed.keyCodeProperty().get() == keyCode.get()) {
+                if (theKeyPressed.keyCode == keyCode.get()) {
                     return new ConditionResult(true, aScene.getInstances());
                 }
             }
@@ -50,7 +50,7 @@ public class KeyEventCondition implements Condition {
         case RELEASED:
             if (aEvent instanceof KeyReleased) {
                 KeyReleased theKeyReleased = (KeyReleased) aEvent;
-                if (theKeyReleased.keyCodeProperty().get() == keyCode.get()) {
+                if (theKeyReleased.keyCode == keyCode.get()) {
                     return new ConditionResult(true, aScene.getInstances());
                 }
             }
@@ -63,7 +63,6 @@ public class KeyEventCondition implements Condition {
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<String, Object>();
         theResult.put(TYPE_ATTRIBUTE, TYPE_VALUE);
-        theResult.put("eventtype", eventType.get());
         theResult.put("keyCode", keyCode.get().name());
         theResult.put("eventType", eventType.get().name());
         return theResult;

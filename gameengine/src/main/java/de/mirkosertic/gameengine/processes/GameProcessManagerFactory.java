@@ -11,28 +11,28 @@ public class GameProcessManagerFactory {
         final GameProcessManager theManager = new GameProcessManager();
         aEventManager.register(null, StartProcess.class, new GameEventListener<StartProcess>() {
             public void handleGameEvent(StartProcess aEvent) {
-                theManager.start(aEvent.processProperty().get());
+                theManager.start(aEvent.process);
             }
         });
         aEventManager.register(null, KillProcessesForInstance.class, new GameEventListener<KillProcessesForInstance>() {
             public void handleGameEvent(KillProcessesForInstance aEvent) {
-                theManager.killProcessesForInstance(aEvent.instanceProperty().get());
+                theManager.killProcessesForInstance(aEvent.instance);
             }
         });
         aEventManager.register(null, StartProcess.class, new GameEventListener<StartProcess>() {
             public void handleGameEvent(StartProcess aEvent) {
-                theManager.start(aEvent.processProperty().get());
+                theManager.start(aEvent.process);
             }
         });
         aEventManager.register(null, GameObjectInstanceRemovedFromScene.class, new GameEventListener<GameObjectInstanceRemovedFromScene>() {
             public void handleGameEvent(GameObjectInstanceRemovedFromScene aEvent) {
-                theManager.instanceRemovedFromScene(aEvent.instanceProperty().get());
+                theManager.instanceRemovedFromScene(aEvent.instance);
             }
         });
         aEventManager.register(null, SystemTick.class, new GameEventListener<SystemTick>() {
             @Override
             public void handleGameEvent(SystemTick aEvent) {
-                theManager.proceedGame(aEvent.gameTimeProperty().get(), aEvent.elapsedTimeSinceLastLoopProperty().get());
+                theManager.proceedGame(aEvent.gameTime, aEvent.elapsedTimeSinceLastLoop);
             }
         });
         return theManager;

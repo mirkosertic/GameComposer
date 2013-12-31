@@ -25,7 +25,7 @@ public class SystemTickCondition implements Condition {
     public ConditionResult appliesTo(GameScene aScene, GameEvent aEvent) {
         if (aEvent instanceof SystemTick) {
             SystemTick theTick = (SystemTick) aEvent;
-            if (theTick.totalTicksProperty().get() % everyTicks.get() == 0) {
+            if (theTick.totalTicks % everyTicks.get() == 0) {
                 return new ConditionResult(true, aScene.getInstances());
             }
         }
