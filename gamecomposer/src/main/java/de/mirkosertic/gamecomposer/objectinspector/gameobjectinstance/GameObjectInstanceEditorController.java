@@ -1,12 +1,14 @@
 package de.mirkosertic.gamecomposer.objectinspector.gameobjectinstance;
 
 import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorElementController;
+import de.mirkosertic.gameengine.types.AbsolutePositionAnchor;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.TextField;
 
@@ -18,6 +20,7 @@ import de.mirkosertic.gamecomposer.ObjectSelectedEvent;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.types.Angle;
 import de.mirkosertic.gameengine.types.Position;
+import javafx.util.StringConverter;
 
 public class GameObjectInstanceEditorController implements ObjectInspectorElementController {
 
@@ -40,6 +43,9 @@ public class GameObjectInstanceEditorController implements ObjectInspectorElemen
     CheckBox absolutePosition;
 
     @FXML
+    ComboBox absolutePositionAnchor;
+
+    @FXML
     Hyperlink jumpToObject;
 
     @Inject
@@ -60,6 +66,28 @@ public class GameObjectInstanceEditorController implements ObjectInspectorElemen
     public GameObjectInstanceEditorController initialize(Parent aView, GameObjectInstance aObject) {
         view = aView;
         object = aObject;
+
+        absolutePositionAnchor.getItems().clear();
+        absolutePositionAnchor.getItems().addAll(AbsolutePositionAnchor.values());
+        absolutePositionAnchor.getSelectionModel().select(object.absolutePositionAnchorProperty().get());
+        absolutePositionAnchor.setConverter(new StringConverter<AbsolutePositionAnchor>() {
+            @Override
+            public String toString(AbsolutePositionAnchor aAnchor) {
+                return aAnchor.name();
+            }
+
+            @Override
+            public AbsolutePositionAnchor fromString(String aName) {
+                return AbsolutePositionAnchor.valueOf(aName);
+            }
+        });
+        absolutePositionAnchor.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                object.absolutePositionAnchorProperty().set((AbsolutePositionAnchor) absolutePositionAnchor.getSelectionModel().getSelectedItem());
+            }
+        });
+
 
         PropertyBinder.bind(object.nameProperty(), nameTextField.textProperty());
         PropertyBinder.bind(object.positionProperty(), xTextField.textProperty(), new PropertyBinder.Converter<Position, String>() {
