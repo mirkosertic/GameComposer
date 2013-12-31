@@ -1,16 +1,20 @@
 package de.mirkosertic.gameengine.camera;
 
+import de.mirkosertic.gameengine.core.GameComponent;
+import de.mirkosertic.gameengine.core.GameObjectInstance;
+import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.event.GameEventListener;
+import de.mirkosertic.gameengine.event.GameEventManager;
+import de.mirkosertic.gameengine.event.Property;
+import de.mirkosertic.gameengine.types.AbsolutePositionAnchor;
+import de.mirkosertic.gameengine.types.Position;
+import de.mirkosertic.gameengine.types.Size;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import de.mirkosertic.gameengine.core.*;
-import de.mirkosertic.gameengine.event.GameEventListener;
-import de.mirkosertic.gameengine.event.GameEventManager;
-import de.mirkosertic.gameengine.event.Property;
-import de.mirkosertic.gameengine.types.Position;
-import de.mirkosertic.gameengine.types.Size;
 
 public class CameraComponent extends GameComponent implements Camera {
 
@@ -88,7 +92,8 @@ public class CameraComponent extends GameComponent implements Camera {
     }
     public Position transformToScreenPosition(GameObjectInstance aInstance) {
         if (aInstance.absolutePositionProperty().get()) {
-            return aInstance.positionProperty().get();
+            AbsolutePositionAnchor theAnchor = aInstance.absolutePositionAnchorProperty().get();
+            return theAnchor.compute(aInstance.positionProperty().get(), screenSize);
         }
         return transformToScreenPosition(aInstance.positionProperty().get());
     }

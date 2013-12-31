@@ -3,9 +3,15 @@ package de.mirkosertic.gameengine.core;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.event.PropertyAware;
-import de.mirkosertic.gameengine.types.*;
+import de.mirkosertic.gameengine.types.AbsolutePositionAnchor;
+import de.mirkosertic.gameengine.types.Angle;
+import de.mirkosertic.gameengine.types.Position;
+import de.mirkosertic.gameengine.types.Size;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class GameObjectInstance extends PropertyAware {
 
@@ -19,6 +25,7 @@ public class GameObjectInstance extends PropertyAware {
     private final Property<Angle> rotationAngle;
     private final Property<Boolean> visible;
     private final Property<Boolean> absolutePosition;
+    private final Property<AbsolutePositionAnchor> absolutePositionAnchor;
 
     GameObjectInstance(GameEventManager aEventManager, GameObject aOwnerGameObject) {
 
@@ -28,6 +35,7 @@ public class GameObjectInstance extends PropertyAware {
         visible = registerProperty(new Property<Boolean>(this, "visible", aOwnerGameObject.visibleProperty().get(), aEventManager));
         rotationAngle = registerProperty(new Property<Angle>(this, "rotationAngle", new Angle(0), aEventManager));
         absolutePosition = registerProperty(new Property<Boolean>(this, "absolutePosition", Boolean.FALSE, aEventManager));
+        absolutePositionAnchor = registerProperty(new Property<AbsolutePositionAnchor>(this, "absolutePositionAnchor", AbsolutePositionAnchor.TOP_LEFT, aEventManager));
 
         ownerGameObject = aOwnerGameObject;
         components = new HashMap<Class<GameComponent>, GameComponent>();
@@ -65,6 +73,10 @@ public class GameObjectInstance extends PropertyAware {
         return absolutePosition;
     }
 
+    public Property<AbsolutePositionAnchor> absolutePositionAnchorProperty() {
+        return absolutePositionAnchor;
+    }
+
     public GameObject getOwnerGameObject() {
         return ownerGameObject;
     }
@@ -87,11 +99,6 @@ public class GameObjectInstance extends PropertyAware {
         return super.setPropertyByName(aPropertyName, aPropertyValue);
     }
 
-    public Set<GameComponent> getComponents() {
-        HashSet<GameComponent> theResult = new HashSet<GameComponent>(components.values());
-        return Collections.unmodifiableSet(theResult);
-    }
-
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<String, Object>();
         if (!uuidProperty().isNull()) {
@@ -103,6 +110,7 @@ public class GameObjectInstance extends PropertyAware {
         theResult.put("name", name.get());
         theResult.put("visible", Boolean.toString(visible.get()));
         theResult.put("absolutePosition", Boolean.toString(absolutePosition.get()));
+        theResult.put("absolutePositionAnchor", absolutePositionAnchor.get().name());
         theResult.put("rotationangle", rotationAngle.get().serialize());
 
         List<Map<String, Object>> theComponents = new ArrayList<Map<String, Object>>();
@@ -138,12 +146,14 @@ public class GameObjectInstance extends PropertyAware {
         if (theAbsolutePositon != null) {
             theResult.absolutePosition.setQuietly(Boolean.parseBoolean(theAbsolutePositon));
         }
-
+        String theAnchor = (String) theInstance.get("absolutePositionAnchor");
+        if (theAnchor != null) {
+            theResult.absolutePositionAnchor.setQuietly(AbsolutePositionAnchor.valueOf(theAnchor));
+        }
         Map<String, Object> theRotationAngle = (Map<String, Object>) theInstance.get("rotationangle");
         if (theRotationAngle != null) {
             theResult.rotationAngle.setQuietly(Angle.deserialize(theRotationAngle));
         }
-
         List<Map<String, Object>> theComponents = (List<Map<String, Object>>) theInstance.get("components");
         for (Map<String, Object> theStructure : theComponents) {
             String theType = (String) theStructure.get(GameComponent.TYPE_ATTRIBUTE);
