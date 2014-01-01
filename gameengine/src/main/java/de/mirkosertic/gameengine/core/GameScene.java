@@ -1,12 +1,16 @@
 package de.mirkosertic.gameengine.core;
 
-import java.util.*;
-
 import de.mirkosertic.gameengine.ArrayUtils;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.types.Color;
 import de.mirkosertic.gameengine.types.Position;
+import de.mirkosertic.gameengine.types.Rectangle;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class GameScene {
 
@@ -14,6 +18,8 @@ public class GameScene {
     private final Property<GameObject> cameraObject;
     private final Property<GameObject> defaultPlayer;
     private final Property<Color> backgroundColor;
+    private final Property<Rectangle> layoutBounds;
+
     private GameObject[] objects;
     private GameObjectInstance[] instances;
     private EventSheet[] eventSheets;
@@ -28,6 +34,7 @@ public class GameScene {
         cameraObject = new Property<GameObject>(this, "cameraObject", null, theManager);
         defaultPlayer = new Property<GameObject>(this, "defaultPlayer", null, theManager);
         backgroundColor = new Property<Color>(this, "color", new Color(0, 0, 0), theManager);
+        layoutBounds = new Property<Rectangle>(this, "layoutBounds", new Rectangle(), theManager);
         instances = new GameObjectInstance[0];
         objects = new GameObject[0];
         eventSheets = new EventSheet[0];
@@ -52,6 +59,10 @@ public class GameScene {
 
     public Property<GameObject> defaultPlayerProperty() {
         return defaultPlayer;
+    }
+
+    public Property<Rectangle> layoutBoundsProperty() {
+        return layoutBounds;
     }
 
     public GameObject createNewGameObject(String aName) {
@@ -201,6 +212,8 @@ public class GameScene {
             theEventSheets.add(theSheet.serialize());
         }
         theResult.put("eventsheets", theEventSheets);
+
+        theResult.put("layoutBounds", layoutBounds.get().serialize());
         return theResult;
     }
 
@@ -240,6 +253,10 @@ public class GameScene {
         Map<String, Object> theBackgroundColor = (Map<String, Object>) aSerializedData.get("backgroundcolor");
         if (theBackgroundColor != null) {
             theScene.backgroundColor.setQuietly(Color.deserialize(theBackgroundColor));
+        }
+        Map<String, Object> theLayoutBounds = (Map<String, Object>) aSerializedData.get("layoutBounds");
+        if (theLayoutBounds != null) {
+            theScene.layoutBounds.setQuietly(Rectangle.deserialize(theLayoutBounds));
         }
         return theScene;
     }
