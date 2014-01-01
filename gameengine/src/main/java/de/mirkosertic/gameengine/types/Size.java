@@ -8,6 +8,10 @@ public class Size {
     public final int width;
     public final int height;
 
+    public Size() {
+        this(0, 0);
+    }
+
     public Size(int aWidth, int aHeight) {
         width = aWidth;
         height = aHeight;

@@ -178,6 +178,8 @@ public class EditorJXGameView extends JavaFXGameView {
                 }
             });
         }
+
+        //TODO: draw layoutbounds here for debug reasons
     }
 
     @Override
