@@ -4,7 +4,7 @@ import android.content.res.AssetManager;
 import android.graphics.BitmapFactory;
 import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.core.GameResourceLoader;
-import de.mirkosertic.gameengine.types.ResourceName;
+import de.mirkosertic.gameengine.type.ResourceName;
 
 import java.io.IOException;
 import java.io.InputStream;

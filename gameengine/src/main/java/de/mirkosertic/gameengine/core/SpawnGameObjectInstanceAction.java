@@ -1,7 +1,7 @@
 package de.mirkosertic.gameengine.core;
 
 import de.mirkosertic.gameengine.event.Property;
-import de.mirkosertic.gameengine.types.Position;
+import de.mirkosertic.gameengine.type.Position;
 
 import java.util.HashMap;
 import java.util.Map;

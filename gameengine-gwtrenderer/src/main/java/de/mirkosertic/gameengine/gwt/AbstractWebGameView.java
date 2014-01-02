@@ -4,9 +4,9 @@ import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.canvas.dom.client.CssColor;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameView;
-import de.mirkosertic.gameengine.types.Position;
-import de.mirkosertic.gameengine.types.Size;
-import de.mirkosertic.gameengine.types.TextExpression;
+import de.mirkosertic.gameengine.type.Position;
+import de.mirkosertic.gameengine.type.Size;
+import de.mirkosertic.gameengine.type.TextExpression;
 
 abstract class AbstractWebGameView implements GameView {
 
@@ -20,7 +20,7 @@ abstract class AbstractWebGameView implements GameView {
         this.size = size;
     }
 
-    String toFont(de.mirkosertic.gameengine.types.Font aFont) {
+    String toFont(de.mirkosertic.gameengine.type.Font aFont) {
         switch (aFont.name) {
             case ARIAL:
                 return Integer.toString(aFont.size)+"px arial";
@@ -30,7 +30,7 @@ abstract class AbstractWebGameView implements GameView {
         throw new IllegalArgumentException("Wrong font name : "+aFont.name);
     }
 
-    void drawText(Context2d aContext, GameObjectInstance aInstance, Position aPosition, de.mirkosertic.gameengine.types.Font aFont, de.mirkosertic.gameengine.types.Color aColor, TextExpression aExpression, Size aSize) {
+    void drawText(Context2d aContext, GameObjectInstance aInstance, Position aPosition, de.mirkosertic.gameengine.type.Font aFont, de.mirkosertic.gameengine.type.Color aColor, TextExpression aExpression, Size aSize) {
         aContext.save();
         CssColor theTextColor = CssColor.make(aColor.r, aColor.g, aColor.b);
         aContext.setFillStyle(theTextColor);

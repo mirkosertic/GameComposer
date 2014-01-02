@@ -21,11 +21,11 @@ import de.mirkosertic.gamecomposer.PropertyBinder;
 import de.mirkosertic.gameengine.camera.CameraComponentTemplate;
 import de.mirkosertic.gameengine.core.GameComponentTemplate;
 import de.mirkosertic.gameengine.core.GameObject;
-import de.mirkosertic.gameengine.physics.PhysicsComponentTemplate;
-import de.mirkosertic.gameengine.physics.PlatformComponentTemplate;
-import de.mirkosertic.gameengine.physics.StaticComponentTemplate;
-import de.mirkosertic.gameengine.sprites.SpriteComponentTemplate;
-import de.mirkosertic.gameengine.types.Size;
+import de.mirkosertic.gameengine.physic.PhysicsComponentTemplate;
+import de.mirkosertic.gameengine.physic.PlatformComponentTemplate;
+import de.mirkosertic.gameengine.physic.StaticComponentTemplate;
+import de.mirkosertic.gameengine.sprite.SpriteComponentTemplate;
+import de.mirkosertic.gameengine.type.Size;
 
 public class GameObjectEditorController implements ObjectInspectorElementController {
 

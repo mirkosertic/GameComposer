@@ -1,7 +1,7 @@
 package de.mirkosertic.gamecomposer.objectinspector.statictemplate;
 
 import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorElementController;
-import de.mirkosertic.gameengine.physics.Static;
+import de.mirkosertic.gameengine.physic.Static;
 
 import javafx.scene.Node;
 import javafx.scene.Parent;

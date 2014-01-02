@@ -8,7 +8,7 @@ import de.mirkosertic.gameengine.core.SpawnGameObjectInstanceAction;
 
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameScene;
-import de.mirkosertic.gameengine.types.Position;
+import de.mirkosertic.gameengine.type.Position;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;

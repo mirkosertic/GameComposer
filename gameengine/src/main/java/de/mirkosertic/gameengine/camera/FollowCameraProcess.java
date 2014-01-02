@@ -1,9 +1,9 @@
 package de.mirkosertic.gameengine.camera;
 
 import de.mirkosertic.gameengine.core.GameObjectInstance;
-import de.mirkosertic.gameengine.processes.AbstractGameProcess;
-import de.mirkosertic.gameengine.types.Position;
-import de.mirkosertic.gameengine.types.Size;
+import de.mirkosertic.gameengine.process.AbstractGameProcess;
+import de.mirkosertic.gameengine.type.Position;
+import de.mirkosertic.gameengine.type.Size;
 
 public class FollowCameraProcess extends AbstractGameProcess {
 

@@ -1,7 +1,7 @@
 package de.mirkosertic.gameengine.input;
 
 import de.mirkosertic.gameengine.event.GameEvent;
-import de.mirkosertic.gameengine.types.GameKeyCode;
+import de.mirkosertic.gameengine.type.GameKeyCode;
 
 public class KeyPressed extends GameEvent {
 

@@ -5,7 +5,7 @@ import java.util.Map;
 
 import de.mirkosertic.gameengine.core.Condition;
 import de.mirkosertic.gameengine.core.ConditionResult;
-import de.mirkosertic.gameengine.types.GameKeyCode;
+import de.mirkosertic.gameengine.type.GameKeyCode;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.core.UsedByReflection;
 import de.mirkosertic.gameengine.event.GameEvent;

@@ -4,8 +4,8 @@ import de.mirkosertic.gamecomposer.Controller;
 import de.mirkosertic.gamecomposer.StringConverterFactory;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameScene;
-import de.mirkosertic.gameengine.physics.ObjectCollisionCondition;
-import de.mirkosertic.gameengine.types.CollisionPosition;
+import de.mirkosertic.gameengine.physic.ObjectCollisionCondition;
+import de.mirkosertic.gameengine.type.CollisionPosition;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

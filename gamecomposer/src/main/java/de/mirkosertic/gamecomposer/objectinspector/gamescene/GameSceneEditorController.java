@@ -4,7 +4,7 @@ import de.mirkosertic.gamecomposer.PropertyBinder;
 import de.mirkosertic.gamecomposer.StringConverterFactory;
 import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorElementController;
 import de.mirkosertic.gameengine.core.GameScene;
-import de.mirkosertic.gameengine.types.Rectangle;
+import de.mirkosertic.gameengine.type.Rectangle;
 
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -74,15 +74,15 @@ public class GameSceneEditorController implements ObjectInspectorElementControll
         PropertyBinder.bind(aObject.defaultPlayerProperty(), defaultPlayer.valueProperty());
 
         PropertyBinder.bind(aObject.backgroundColorProperty(), backgroundColorPicker.valueProperty(),
-                new PropertyBinder.Converter<de.mirkosertic.gameengine.types.Color, Color>() {
+                new PropertyBinder.Converter<de.mirkosertic.gameengine.type.Color, Color>() {
                     @Override
-                    public Color beanToUI(de.mirkosertic.gameengine.types.Color aValue) {
+                    public Color beanToUI(de.mirkosertic.gameengine.type.Color aValue) {
                         return Color.rgb(aValue.r, aValue.g, aValue.b);
                     }
 
                     @Override
-                    public de.mirkosertic.gameengine.types.Color uiToBean(Color aValue) {
-                        return new de.mirkosertic.gameengine.types.Color((int) (aValue.getRed() * 255), (int) (aValue
+                    public de.mirkosertic.gameengine.type.Color uiToBean(Color aValue) {
+                        return new de.mirkosertic.gameengine.type.Color((int) (aValue.getRed() * 255), (int) (aValue
                                 .getGreen() * 255), (int) (aValue.getBlue() * 255));
                     }
                 });

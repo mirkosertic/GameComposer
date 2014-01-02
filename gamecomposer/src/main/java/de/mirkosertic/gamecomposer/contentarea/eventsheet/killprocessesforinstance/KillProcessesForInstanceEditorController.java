@@ -2,7 +2,7 @@ package de.mirkosertic.gamecomposer.contentarea.eventsheet.killprocessesforinsta
 
 import de.mirkosertic.gamecomposer.Controller;
 import de.mirkosertic.gameengine.core.GameScene;
-import de.mirkosertic.gameengine.processes.KillProcessesForInstanceAction;
+import de.mirkosertic.gameengine.process.KillProcessesForInstanceAction;
 import javafx.scene.Node;
 
 public class KillProcessesForInstanceEditorController implements Controller {

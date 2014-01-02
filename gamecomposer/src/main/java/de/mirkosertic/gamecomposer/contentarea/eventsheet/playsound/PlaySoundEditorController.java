@@ -4,7 +4,7 @@ import de.mirkosertic.gamecomposer.Controller;
 import de.mirkosertic.gamecomposer.GameAssetSelector;
 import de.mirkosertic.gameengine.sound.PlaySoundAction;
 import de.mirkosertic.gameengine.core.GameScene;
-import de.mirkosertic.gameengine.types.ResourceName;
+import de.mirkosertic.gameengine.type.ResourceName;
 
 import javafx.fxml.FXML;
 import javafx.scene.Node;

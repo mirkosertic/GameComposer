@@ -3,7 +3,7 @@ package de.mirkosertic.gamecomposer.contentarea.eventsheet.constantmovement;
 import de.mirkosertic.gamecomposer.Controller;
 import de.mirkosertic.gamecomposer.PropertyBinder;
 import de.mirkosertic.gameengine.arcade.ConstantMovementAction;
-import de.mirkosertic.gameengine.types.Angle;
+import de.mirkosertic.gameengine.type.Angle;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;

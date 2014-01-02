@@ -2,7 +2,7 @@ package de.mirkosertic.gameengine.android;
 
 import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.core.GameResourceType;
-import de.mirkosertic.gameengine.types.ResourceName;
+import de.mirkosertic.gameengine.type.ResourceName;
 
 public class AndroidSoundResource implements GameResource {
 

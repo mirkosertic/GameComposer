@@ -13,16 +13,16 @@ import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.core.GameView;
 import de.mirkosertic.gameengine.core.GestureDetector;
 import de.mirkosertic.gameengine.input.DefaultGestureDetector;
-import de.mirkosertic.gameengine.sprites.Sprite;
-import de.mirkosertic.gameengine.sprites.SpriteComponent;
+import de.mirkosertic.gameengine.sprite.Sprite;
+import de.mirkosertic.gameengine.sprite.SpriteComponent;
 import de.mirkosertic.gameengine.text.Text;
 import de.mirkosertic.gameengine.text.TextComponent;
-import de.mirkosertic.gameengine.types.Angle;
-import de.mirkosertic.gameengine.types.Color;
-import de.mirkosertic.gameengine.types.Font;
-import de.mirkosertic.gameengine.types.Position;
-import de.mirkosertic.gameengine.types.Size;
-import de.mirkosertic.gameengine.types.TextExpression;
+import de.mirkosertic.gameengine.type.Angle;
+import de.mirkosertic.gameengine.type.Color;
+import de.mirkosertic.gameengine.type.Font;
+import de.mirkosertic.gameengine.type.Position;
+import de.mirkosertic.gameengine.type.Size;
+import de.mirkosertic.gameengine.type.TextExpression;
 
 import java.io.IOException;
 
@@ -139,7 +139,7 @@ public class AndroidGameView implements GameView {
         aCanvas.drawBitmap(aBitmap.bitmap, theMatrix, emptyPaint);
     }
 
-    private Paint toPaint(de.mirkosertic.gameengine.types.Color aColor) {
+    private Paint toPaint(de.mirkosertic.gameengine.type.Color aColor) {
         Paint thePaint = new Paint();
         thePaint.setARGB(255, aColor.r, aColor.g, aColor.b);
         thePaint.setStyle(Paint.Style.FILL);

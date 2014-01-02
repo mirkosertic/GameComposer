@@ -7,7 +7,7 @@ import de.mirkosertic.gamecomposer.ShutdownEvent;
 import de.mirkosertic.gamecomposer.contentarea.ContentController;
 
 import de.mirkosertic.gameengine.camera.CameraComponent;
-import de.mirkosertic.gameengine.types.GameKeyCode;
+import de.mirkosertic.gameengine.type.GameKeyCode;
 import de.mirkosertic.gameengine.core.GameLoop;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
@@ -15,9 +15,9 @@ import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.core.GameShutdown;
 import de.mirkosertic.gameengine.event.PropertyChanged;
-import de.mirkosertic.gameengine.physics.DisableDynamicPhysics;
-import de.mirkosertic.gameengine.physics.EnableDynamicPhysics;
-import de.mirkosertic.gameengine.types.Position;
+import de.mirkosertic.gameengine.physic.DisableDynamicPhysics;
+import de.mirkosertic.gameengine.physic.EnableDynamicPhysics;
+import de.mirkosertic.gameengine.type.Position;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;

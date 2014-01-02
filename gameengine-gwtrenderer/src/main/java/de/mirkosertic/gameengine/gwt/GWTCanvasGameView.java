@@ -8,11 +8,11 @@ import de.mirkosertic.gameengine.camera.CameraComponent;
 import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.input.DefaultGestureDetector;
 import de.mirkosertic.gameengine.core.GestureDetector;
-import de.mirkosertic.gameengine.sprites.Sprite;
-import de.mirkosertic.gameengine.sprites.SpriteComponent;
+import de.mirkosertic.gameengine.sprite.Sprite;
+import de.mirkosertic.gameengine.sprite.SpriteComponent;
 import de.mirkosertic.gameengine.text.Text;
 import de.mirkosertic.gameengine.text.TextComponent;
-import de.mirkosertic.gameengine.types.*;
+import de.mirkosertic.gameengine.type.*;
 
 import java.io.IOException;
 

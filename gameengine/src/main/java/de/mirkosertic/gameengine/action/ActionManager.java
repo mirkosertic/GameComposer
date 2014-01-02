@@ -7,8 +7,8 @@ import de.mirkosertic.gameengine.core.GameRule;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.core.GameSystem;
 import de.mirkosertic.gameengine.event.GameEvent;
-import de.mirkosertic.gameengine.processes.InvokeActionProcess;
-import de.mirkosertic.gameengine.processes.StartProcess;
+import de.mirkosertic.gameengine.process.InvokeActionProcess;
+import de.mirkosertic.gameengine.process.StartProcess;
 
 public class ActionManager implements GameSystem {
 

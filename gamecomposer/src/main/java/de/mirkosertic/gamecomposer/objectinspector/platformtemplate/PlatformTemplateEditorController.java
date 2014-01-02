@@ -2,8 +2,8 @@ package de.mirkosertic.gamecomposer.objectinspector.platformtemplate;
 
 import de.mirkosertic.gamecomposer.PropertyBinder;
 import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorElementController;
-import de.mirkosertic.gameengine.types.GameKeyCode;
-import de.mirkosertic.gameengine.physics.Platform;
+import de.mirkosertic.gameengine.type.GameKeyCode;
+import de.mirkosertic.gameengine.physic.Platform;
 
 import javafx.fxml.FXML;
 import javafx.scene.Node;

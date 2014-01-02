@@ -3,7 +3,7 @@ package de.mirkosertic.gamecomposer.objectinspector.spritetemplate;
 import de.mirkosertic.gamecomposer.FXMLLoaderFactory;
 import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorFactory;
 import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorFactoryType;
-import de.mirkosertic.gameengine.sprites.Sprite;
+import de.mirkosertic.gameengine.sprite.Sprite;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
