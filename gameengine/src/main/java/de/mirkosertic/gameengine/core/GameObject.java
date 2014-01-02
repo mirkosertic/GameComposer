@@ -14,6 +14,11 @@ import de.mirkosertic.gameengine.types.Size;
 
 public class GameObject extends PropertyAware {
 
+    public static final String UUID_PROPERTY = "uuid";
+    public static final String NAME_PROPERTY = "name";
+    public static final String SIZE_PROPERTY = "size";
+    public static final String VISIBLE_PROPERTY = "visible";
+
     private final GameScene gameScene;
 
     private final Property<String> uuid;
@@ -32,10 +37,10 @@ public class GameObject extends PropertyAware {
         GameEventManager theManager = aScene.getRuntime().getEventManager();
 
         gameScene = aScene;
-        uuid = registerProperty(new Property<String>(this, "uuid", aUUID, theManager));
-        name = registerProperty(new Property<String>(this, "name", aName, theManager));
-        size = registerProperty(new Property<Size>(this, "size", new Size(64, 64), theManager));
-        visible = registerProperty(new Property<Boolean>(this, "visible", Boolean.TRUE, theManager));
+        uuid = registerProperty(new Property<String>(this, UUID_PROPERTY, aUUID, theManager));
+        name = registerProperty(new Property<String>(this, NAME_PROPERTY, aName, theManager));
+        size = registerProperty(new Property<Size>(this, SIZE_PROPERTY, new Size(64, 64), theManager));
+        visible = registerProperty(new Property<Boolean>(this, VISIBLE_PROPERTY, Boolean.TRUE, theManager));
         componentTemplates = new HashMap<Class<GameComponentTemplate>, GameComponentTemplate>();
 
         name.setQuietly(aName);
@@ -105,9 +110,9 @@ public class GameObject extends PropertyAware {
 
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<String, Object>();
-        theResult.put("name", name.get());
-        theResult.put("uuid", uuid.get());
-        theResult.put("size", size.get().serialize());
+        theResult.put(NAME_PROPERTY, name.get());
+        theResult.put(UUID_PROPERTY, uuid.get());
+        theResult.put(SIZE_PROPERTY, size.get().serialize());
         List<Map<String, Object>> theTemplates = new ArrayList<Map<String, Object>>();
         for (GameComponentTemplate theTemplate : componentTemplates.values()) {
            theTemplates.add(theTemplate.serialize());
@@ -117,11 +122,11 @@ public class GameObject extends PropertyAware {
     }
 
     public static GameObject deserialize(GameRuntime aGameRuntime, GameScene aGameScene, Map<String, Object> theSerializedData) {
-        String theName = (String) theSerializedData.get("name");
-        String theUUID = (String) theSerializedData.get("uuid");
+        String theName = (String) theSerializedData.get(NAME_PROPERTY);
+        String theUUID = (String) theSerializedData.get(UUID_PROPERTY);
         GameObject theObject = new GameObject(aGameScene, theName, theUUID);
 
-        Map<String, Object> theSize = (Map<String, Object>) theSerializedData.get("size");
+        Map<String, Object> theSize = (Map<String, Object>) theSerializedData.get(SIZE_PROPERTY);
         if (theSize != null) {
             theObject.size.setQuietly(Size.deserialize(theSize));
         }

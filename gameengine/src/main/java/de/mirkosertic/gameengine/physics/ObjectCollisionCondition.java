@@ -17,15 +17,19 @@ public class ObjectCollisionCondition implements Condition {
 
     static final String TYPE_VALUE = "ObjectCollisionCondition";
 
+    public static final String PRIMARY_OBJECT_PROPERTY = "primaryObject";
+    public static final String SECONDARY_OBJECT_PROPERTY = "secondaryObject";
+    public static final String POSITION_PROPERTY = "position";
+
     private final Property<GameObject> primaryObject;
     private final Property<GameObject> secondaryObject;
     private final Property<CollisionPosition> position;
 
     @UsedByReflection
     public ObjectCollisionCondition() {
-        primaryObject = new Property<GameObject>(this, "primaryObject", (GameObject) null);
-        secondaryObject = new Property<GameObject>(this, "secondaryObject", (GameObject) null);
-        position = new Property<CollisionPosition>(this, "position", CollisionPosition.EVERYWHERE);
+        primaryObject = new Property<GameObject>(this, PRIMARY_OBJECT_PROPERTY, (GameObject) null);
+        secondaryObject = new Property<GameObject>(this, SECONDARY_OBJECT_PROPERTY, (GameObject) null);
+        position = new Property<CollisionPosition>(this, POSITION_PROPERTY, CollisionPosition.EVERYWHERE);
     }
 
     public Property<GameObject> primaryObjectProperty() {
@@ -86,7 +90,7 @@ public class ObjectCollisionCondition implements Condition {
             theResult.put("secondaryObjectUuid", secondaryObject.get().uuidProperty().get());
         }
         if (!position.isNull()) {
-            theResult.put("position", position.get().name());
+            theResult.put(POSITION_PROPERTY, position.get().name());
         }
         return theResult;
     }
@@ -101,7 +105,7 @@ public class ObjectCollisionCondition implements Condition {
         if (theSecondaryObject != null) {
             theCondition.secondaryObject.setQuietly(aGameScene.findGameObjectByID(theSecondaryObject));
         }
-        String thePositon = (String) aSerializedData.get("position");
+        String thePositon = (String) aSerializedData.get(POSITION_PROPERTY);
         if (thePositon != null) {
             theCondition.position.setQuietly(CollisionPosition.valueOf(thePositon));
         }

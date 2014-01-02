@@ -30,12 +30,12 @@ public class PhysicsComponent extends GameComponent implements Physics {
 
         GameEventManager theEventManager = aObjectInstance.getOwnerGameObject().getGameScene().getRuntime().getEventManager();
 
-        active = registerProperty(new Property<Boolean>(this, "active", aTemplate.activeProperty().get(), theEventManager));
-        fixedRotation = registerProperty(new Property<Boolean>(this, "fixedRotation", aTemplate.fixedRotationProperty().get(), theEventManager));
-        density = registerProperty(new Property<Float>(this, "density", aTemplate.densityProperty().get(), theEventManager));
-        friction = registerProperty(new Property<Float>(this, "friction", aTemplate.frictionProperty().get(), theEventManager));
-        restitution = registerProperty(new Property<Float>(this, "restitution", aTemplate.restitutionProperty().get(), theEventManager));
-        gravityScale = registerProperty(new Property<Float>(this, "gravityScale", aTemplate.gravityScaleProperty().get(), theEventManager));
+        active = registerProperty(new Property<Boolean>(this, ACTIVE_PROPERTY, aTemplate.activeProperty().get(), theEventManager));
+        fixedRotation = registerProperty(new Property<Boolean>(this, FIXED_ROTATION_PROPERTY, aTemplate.fixedRotationProperty().get(), theEventManager));
+        density = registerProperty(new Property<Float>(this, DENSITY_PROPERTY, aTemplate.densityProperty().get(), theEventManager));
+        friction = registerProperty(new Property<Float>(this, FRICTION_PROPERTY, aTemplate.frictionProperty().get(), theEventManager));
+        restitution = registerProperty(new Property<Float>(this, RESTITUTION_PROPERTY, aTemplate.restitutionProperty().get(), theEventManager));
+        gravityScale = registerProperty(new Property<Float>(this, GRAVITY_SCALE_PROPERTY, aTemplate.gravityScaleProperty().get(), theEventManager));
     }
 
     public Property<Boolean> activeProperty() {
@@ -71,7 +71,7 @@ public class PhysicsComponent extends GameComponent implements Physics {
     public Map<String, Object> serialize() {
         Map<String, Object> theStructure = new HashMap<String, Object>();
         theStructure.put(TYPE_ATTRIBUTE, TYPE);
-        theStructure.put("active", Boolean.toString(active.get()));
+        theStructure.put(ACTIVE_PROPERTY, Boolean.toString(active.get()));
         return theStructure;
     }
 
@@ -82,7 +82,7 @@ public class PhysicsComponent extends GameComponent implements Physics {
 
     public static PhysicsComponent deserialize(GameObjectInstance aObjectInstance, Map<String, Object> aSerializedData) {
         PhysicsComponent theResult = new PhysicsComponent(aObjectInstance);
-        String theActiveValue = (String) aSerializedData.get("active");
+        String theActiveValue = (String) aSerializedData.get(ACTIVE_PROPERTY);
         if (theActiveValue != null) {
             theResult.active.setQuietly(Boolean.parseBoolean(theActiveValue));
         }

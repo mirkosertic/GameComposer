@@ -17,7 +17,7 @@ public class SpriteComponentTemplate extends GameComponentTemplate<SpriteCompone
     private final GameObject owner;
 
     public SpriteComponentTemplate(GameEventManager aEventManager, GameObject aOwner) {
-        resourceName = registerProperty(new Property<ResourceName>(this, "resourceName", aEventManager));
+        resourceName = registerProperty(new Property<ResourceName>(this, RESOURCE_NAME_PROPERTY, aEventManager));
         owner = aOwner;
     }
 

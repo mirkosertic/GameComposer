@@ -24,12 +24,12 @@ public class PhysicsComponentTemplate extends GameComponentTemplate<PhysicsCompo
     public PhysicsComponentTemplate(GameEventManager aEventManager, GameObject aOwner) {
         owner = aOwner;
 
-        active = registerProperty(new Property<Boolean>(this, "active", Boolean.TRUE, aEventManager));
-        fixedRotation = registerProperty(new Property<Boolean>(this, "fixedRotation", Boolean.FALSE, aEventManager));
-        density = registerProperty(new Property<Float>(this, "density", 1f, aEventManager));
-        friction = registerProperty(new Property<Float>(this, "friction", 1.8f, aEventManager));
-        restitution = registerProperty(new Property<Float>(this, "restitution", 0f, aEventManager));
-        gravityScale = registerProperty(new Property<Float>(this, "gravityScale", 1f, aEventManager));
+        active = registerProperty(new Property<Boolean>(this, ACTIVE_PROPERTY, Boolean.TRUE, aEventManager));
+        fixedRotation = registerProperty(new Property<Boolean>(this, FIXED_ROTATION_PROPERTY, Boolean.FALSE, aEventManager));
+        density = registerProperty(new Property<Float>(this, DENSITY_PROPERTY, 1f, aEventManager));
+        friction = registerProperty(new Property<Float>(this, FRICTION_PROPERTY, 1.8f, aEventManager));
+        restitution = registerProperty(new Property<Float>(this, RESTITUTION_PROPERTY, 0f, aEventManager));
+        gravityScale = registerProperty(new Property<Float>(this, GRAVITY_SCALE_PROPERTY, 1f, aEventManager));
     }
 
     @Override
@@ -69,18 +69,18 @@ public class PhysicsComponentTemplate extends GameComponentTemplate<PhysicsCompo
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<String, Object>();
         theResult.put(PhysicsComponent.TYPE_ATTRIBUTE, PhysicsComponent.TYPE);
-        theResult.put("active", Boolean.toString(active.get()));
+        theResult.put(ACTIVE_PROPERTY, Boolean.toString(active.get()));
         theResult.put("fixedrotation", Boolean.toString(fixedRotation.get()));
-        theResult.put("density", Float.toString(density.get()));
-        theResult.put("friction", Float.toString(friction.get()));
-        theResult.put("restitution", Float.toString(restitution.get()));
-        theResult.put("gravityScale", Float.toString(gravityScale.get()));
+        theResult.put(DENSITY_PROPERTY, Float.toString(density.get()));
+        theResult.put(FRICTION_PROPERTY, Float.toString(friction.get()));
+        theResult.put(RESTITUTION_PROPERTY, Float.toString(restitution.get()));
+        theResult.put(GRAVITY_SCALE_PROPERTY, Float.toString(gravityScale.get()));
         return theResult;
     }
 
     public static PhysicsComponentTemplate deserialize(GameEventManager aEventManager, GameObject aOwner, Map<String, Object> aSerializedData) {
         PhysicsComponentTemplate theTemplate = new PhysicsComponentTemplate(aEventManager, aOwner);
-        String theActive = (String) aSerializedData.get("active");
+        String theActive = (String) aSerializedData.get(ACTIVE_PROPERTY);
         if (theActive != null) {
             theTemplate.active.setQuietly(Boolean.parseBoolean(theActive));
         }
@@ -88,19 +88,19 @@ public class PhysicsComponentTemplate extends GameComponentTemplate<PhysicsCompo
         if (theFixedRotation != null) {
             theTemplate.fixedRotation.setQuietly(Boolean.parseBoolean(theFixedRotation));
         }
-        String theDensity = (String) aSerializedData.get("density");
+        String theDensity = (String) aSerializedData.get(DENSITY_PROPERTY);
         if (theDensity != null) {
             theTemplate.density.setQuietly(Float.parseFloat(theDensity));
         }
-        String theFriction = (String) aSerializedData.get("friction");
+        String theFriction = (String) aSerializedData.get(FRICTION_PROPERTY);
         if (theFriction != null) {
             theTemplate.friction.setQuietly(Float.parseFloat(theFriction));
         }
-        String theRestitution = (String) aSerializedData.get("restitution");
+        String theRestitution = (String) aSerializedData.get(RESTITUTION_PROPERTY);
         if (theRestitution != null) {
             theTemplate.restitution.setQuietly(Float.parseFloat(theRestitution));
         }
-        String theGravityScale = (String) aSerializedData.get("gravityScale");
+        String theGravityScale = (String) aSerializedData.get(GRAVITY_SCALE_PROPERTY);
         if (theGravityScale != null) {
             theTemplate.gravityScale.setQuietly(Float.parseFloat(theGravityScale));
         }

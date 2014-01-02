@@ -17,6 +17,9 @@ public class KeyEventCondition implements Condition {
         PRESSED, RELEASED
     }
 
+    public static final String KEY_CODE_PROPERTY = "keyCode";
+    public static final String EVENT_TYPE_PROPERTY = "eventType";
+
     static final String TYPE_VALUE = "KeyEventCondition";
 
     private final Property<GameKeyCode> keyCode;
@@ -24,8 +27,8 @@ public class KeyEventCondition implements Condition {
 
     @UsedByReflection
     public KeyEventCondition() {
-        keyCode = new Property<GameKeyCode>(this, "keyCode", (GameKeyCode) null);
-        eventType = new Property<KeyEventType>(this, "eventType", KeyEventType.PRESSED);
+        keyCode = new Property<GameKeyCode>(this, KEY_CODE_PROPERTY, (GameKeyCode) null);
+        eventType = new Property<KeyEventType>(this, EVENT_TYPE_PROPERTY, KeyEventType.PRESSED);
     }
 
     public Property<GameKeyCode> keyCodeProperty() {
@@ -63,15 +66,15 @@ public class KeyEventCondition implements Condition {
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<String, Object>();
         theResult.put(TYPE_ATTRIBUTE, TYPE_VALUE);
-        theResult.put("keyCode", keyCode.get().name());
-        theResult.put("eventType", eventType.get().name());
+        theResult.put(KEY_CODE_PROPERTY, keyCode.get().name());
+        theResult.put(EVENT_TYPE_PROPERTY, eventType.get().name());
         return theResult;
     }
 
     public static KeyEventCondition unmarshall(GameScene aGameScene, Map<String, Object> aSerializedData) {
         KeyEventCondition theResult = new KeyEventCondition();
-        theResult.keyCode.setQuietly(GameKeyCode.valueOf((String) aSerializedData.get("keyCode")));
-        theResult.eventType.setQuietly(KeyEventType.valueOf((String) aSerializedData.get("eventType")));
+        theResult.keyCode.setQuietly(GameKeyCode.valueOf((String) aSerializedData.get(KEY_CODE_PROPERTY)));
+        theResult.eventType.setQuietly(KeyEventType.valueOf((String) aSerializedData.get(EVENT_TYPE_PROPERTY)));
         return theResult;
     }
 }

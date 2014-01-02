@@ -10,11 +10,13 @@ public class GameObjectInstanceRemovedFromSceneCondition implements Condition {
 
     static final String TYPE_VALUE = "GameObjectInstanceRemovedFromSceneCondition";
 
+    public static final String GAME_OBJECT_PROPERTY = "gameObject";
+
     private final Property<GameObject> gameObject;
 
     @UsedByReflection
     public GameObjectInstanceRemovedFromSceneCondition() {
-        gameObject = new Property<GameObject>(this, "gameObject", (GameObject) null);
+        gameObject = new Property<GameObject>(this, GAME_OBJECT_PROPERTY, (GameObject) null);
     }
 
     public Property<GameObject> gameObjectProperty() {

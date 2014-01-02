@@ -9,7 +9,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
     <artifactId>gameengine-gwtrenderer</artifactId>
-    <name>GameComposer GWT HTML5 Canvas Renderer</name>
+    <name>GameComposer GWT HTML5 Canvas / WebGL Renderer</name>
     <packaging>war</packaging>
     <build>
         <plugins>

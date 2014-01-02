@@ -26,6 +26,20 @@ public class Position {
         return new Position(x + aOffset.x, y + aOffset.y);
     }
 
+    public Position changeX(Float aNewX) {
+        return new Position(aNewX, y);
+    }
+
+    public Position changeY(Float aNewY) {
+        return new Position(x, aNewY);
+    }
+
+    public Position snapToGrid(int aGridWidth, int aGridHeight) {
+        float theSnapX = x - x % aGridWidth;
+        float theSnapY = y - y % aGridHeight;
+        return new Position(theSnapX, theSnapY);
+    }
+
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<String, Object>();
         theResult.put("x", Float.toString(x));

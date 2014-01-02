@@ -17,6 +17,14 @@ public class Size {
         height = aHeight;
     }
 
+    public Size changeWidth(int aNewWidth) {
+        return new Size(aNewWidth, height);
+    }
+
+    public Size changeHeight(int aNewHeight) {
+        return new Size(width, aNewHeight);
+    }
+
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<String, Object>();
         theResult.put("width", "" + width);

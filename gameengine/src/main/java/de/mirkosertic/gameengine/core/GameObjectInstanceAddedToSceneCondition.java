@@ -10,11 +10,13 @@ public class GameObjectInstanceAddedToSceneCondition implements Condition {
 
     static final String TYPE_VALUE = "GameObjectInstanceAddedToSceneCondition";
 
+    public static final String GAME_OBJECT_PROPERTY = "gameObject";
+
     private final Property<GameObject> gameObject;
 
     @UsedByReflection
     public GameObjectInstanceAddedToSceneCondition() {
-        gameObject = new Property<GameObject>(this, "gameObject", (GameObject) null);
+        gameObject = new Property<GameObject>(this, GAME_OBJECT_PROPERTY, (GameObject) null);
     }
 
     public Property<GameObject> gameObjectProperty() {

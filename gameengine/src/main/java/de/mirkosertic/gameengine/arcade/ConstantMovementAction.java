@@ -17,8 +17,8 @@ public class ConstantMovementAction implements Action {
 
     @UsedByReflection
     public ConstantMovementAction() {
-        movementDirection = new Property<Angle>(this, "movementDirection", new Angle(0));
-        movementForce = new Property<Float>(this, "movementForce", 0f);
+        movementDirection = new Property<Angle>(this, PROPERTY_MOVEMENT_DIRECTION, new Angle(0));
+        movementForce = new Property<Float>(this, PROPERTY_MOVEMENT_FORCE, 0f);
     }
 
     public Property<Angle> movementDirectionProperty() {
@@ -41,18 +41,18 @@ public class ConstantMovementAction implements Action {
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<String, Object>();
         theResult.put(TYPE_ATTRIBUTE, ConstantMovementAction.TYPE_VALUE);
-        theResult.put("movementDirection", movementDirection.get().serialize());
-        theResult.put("movementForce", Float.toString(movementForce.get()));
+        theResult.put(PROPERTY_MOVEMENT_DIRECTION, movementDirection.get().serialize());
+        theResult.put(PROPERTY_MOVEMENT_FORCE, Float.toString(movementForce.get()));
         return theResult;
     }
 
     public static ConstantMovementAction unmarshall(GameScene aGameScene, Map<String, Object> aSerializedData) {
         ConstantMovementAction theResult = new ConstantMovementAction();
-        Map<String, Object> theDirection = (Map<String, Object>) aSerializedData.get("movementDirection");
+        Map<String, Object> theDirection = (Map<String, Object>) aSerializedData.get(PROPERTY_MOVEMENT_DIRECTION);
         if (theDirection != null) {
             theResult.movementDirection.setQuietly(Angle.deserialize(theDirection));
         }
-        theResult.movementForce.setQuietly(Float.valueOf((String) aSerializedData.get("movementForce")));
+        theResult.movementForce.setQuietly(Float.valueOf((String) aSerializedData.get(PROPERTY_MOVEMENT_FORCE)));
         return theResult;
     }
 }
