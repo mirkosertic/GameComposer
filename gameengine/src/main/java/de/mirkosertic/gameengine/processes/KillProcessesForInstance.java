@@ -7,8 +7,8 @@ class KillProcessesForInstance extends GameEvent {
 
     public final GameObjectInstance instance;
 
-    public KillProcessesForInstance(GameObjectInstance aInstance) {
-        super("StartProcess");
+    KillProcessesForInstance(GameObjectInstance aInstance) {
+        super("KillProcessesForInstance");
         instance = aInstance;
     }
 }

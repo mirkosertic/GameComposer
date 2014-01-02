@@ -12,6 +12,9 @@ public class ConstantMovementAction implements Action {
 
     public static final String TYPE_VALUE = "ConstantMovementAction";
 
+    public static final String PROPERTY_MOVEMENT_DIRECTION = "movementDirection";
+    public static final String PROPERTY_MOVEMENT_FORCE = "movementForce";
+
     private final Property<Angle> movementDirection;
     private final Property<Float> movementForce;
 

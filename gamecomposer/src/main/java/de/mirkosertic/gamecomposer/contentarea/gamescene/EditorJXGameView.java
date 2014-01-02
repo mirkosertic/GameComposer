@@ -17,6 +17,7 @@ import de.mirkosertic.gameengine.types.Position;
 import de.mirkosertic.gameengine.types.Rectangle;
 import de.mirkosertic.gameengine.types.Size;
 import de.mirkosertic.gameengine.types.TextExpression;
+
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -187,14 +188,13 @@ public class EditorJXGameView extends JavaFXGameView {
         Position theCurrentCameraPosition = theCamera.positionProperty().get();
 
         // Draw layout bounds
-        double theBoundsX = theCurrentCameraPosition.x - theLayoutBounds.position.x;
-        double theBoundsY = theCurrentCameraPosition.y - theLayoutBounds.position.y;
+        double theBoundsX = theLayoutBounds.position.x - theCurrentCameraPosition.x;
+        double theBoundsY = theLayoutBounds.position.y - theCurrentCameraPosition.y;
 
-        aContext.setFill(Color.YELLOW);
         aContext.setStroke(Color.YELLOW);
         aContext.setLineWidth(3);
 
-        aContext.rect(theBoundsX, theBoundsY, theLayoutBounds.size.width, theLayoutBounds.size.height);
+        aContext.strokeRect(theBoundsX, theBoundsY, theLayoutBounds.size.width, theLayoutBounds.size.height);
     }
 
     @Override
