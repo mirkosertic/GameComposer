@@ -10,11 +10,13 @@ public class SystemTickCondition implements Condition {
 
     static final String TYPE_VALUE = "SystemTickCondition";
 
+    public static final String EVERY_TICKS_PROPERTY = "everyTicks";
+
     private final Property<Long> everyTicks;
 
     @UsedByReflection
     public SystemTickCondition() {
-        everyTicks = new Property<Long>(this, "everyTicks", 1l);
+        everyTicks = new Property<Long>(this, EVERY_TICKS_PROPERTY, 1l);
     }
 
     public Property<Long> everyTicksProperty() {
@@ -36,13 +38,13 @@ public class SystemTickCondition implements Condition {
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<String, Object>();
         theResult.put(TYPE_ATTRIBUTE, TYPE_VALUE);
-        theResult.put("everyTicks", Long.toString(everyTicks.get()));
+        theResult.put(EVERY_TICKS_PROPERTY, Long.toString(everyTicks.get()));
         return theResult;
     }
 
     public static Condition unmarshall(GameScene aGameScene, Map<String, Object> aSerializedData) {
         SystemTickCondition theResult = new SystemTickCondition();
-        theResult.everyTicks.setQuietly(Long.valueOf((String) aSerializedData.get("everyTicks")));
+        theResult.everyTicks.setQuietly(Long.valueOf((String) aSerializedData.get(EVERY_TICKS_PROPERTY)));
         return theResult;
     }
 }

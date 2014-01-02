@@ -9,6 +9,9 @@ import java.util.Map;
 public class SpawnGameObjectInstanceAction implements Action {
 
     public static final String TYPE_VALUE = "SpawnGameObjectInstanceAction";
+    public static final String GAME_OBJECT_PROPERTY = "gameObject";
+    public static final String REFERENCE_OBJECT_PROPERTY = "referenceObject";
+    public static final String OFFSET_PROPERTY = "offset";
 
     private final Property<GameObject> referenceObject;
     private final Property<GameObject> gameObject;
@@ -16,9 +19,9 @@ public class SpawnGameObjectInstanceAction implements Action {
 
     @UsedByReflection
     public SpawnGameObjectInstanceAction() {
-        gameObject = new Property<GameObject>(this, "gameObject", (GameObject) null);
-        referenceObject = new Property<GameObject>(this, "referenceObject", (GameObject) null);
-        offset = new Property<Position>(this, "offset", new Position(0, 0));
+        gameObject = new Property<GameObject>(this, GAME_OBJECT_PROPERTY, (GameObject) null);
+        referenceObject = new Property<GameObject>(this, REFERENCE_OBJECT_PROPERTY, (GameObject) null);
+        offset = new Property<Position>(this, OFFSET_PROPERTY, new Position(0, 0));
     }
 
     public Property<GameObject> gameObjectProperty() {
@@ -60,7 +63,7 @@ public class SpawnGameObjectInstanceAction implements Action {
         if (theReferenceObject != null) {
             theResult.put("referenceObjectUuid", theReferenceObject.uuidProperty().get());
         }
-        theResult.put("offset", offset.get().serialize());
+        theResult.put(OFFSET_PROPERTY, offset.get().serialize());
         return theResult;
     }
 
@@ -75,7 +78,7 @@ public class SpawnGameObjectInstanceAction implements Action {
             theResult.referenceObject.setQuietly(aGameScene.findGameObjectByID(theOReferemceObjectUUID));
         }
 
-        Map<String, Object> thePosition = (Map<String, Object>) aSerializedData.get("offset");
+        Map<String, Object> thePosition = (Map<String, Object>) aSerializedData.get(OFFSET_PROPERTY);
         if (thePosition != null) {
             theResult.offset.setQuietly(Position.deserialize(thePosition));
         }

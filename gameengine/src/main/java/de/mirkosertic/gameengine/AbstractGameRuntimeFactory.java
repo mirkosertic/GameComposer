@@ -6,6 +6,7 @@ import de.mirkosertic.gameengine.camera.CameraComponentTemplateUnmarshaller;
 import de.mirkosertic.gameengine.camera.CameraComponentUnmarshaller;
 import de.mirkosertic.gameengine.core.DeleteGameObjectInstanceActionUnmarshaller;
 import de.mirkosertic.gameengine.core.GameObjectInstanceAddedToSceneConditionUnmarshaller;
+import de.mirkosertic.gameengine.core.GameObjectInstanceLeftLayoutConditionUnmarshaller;
 import de.mirkosertic.gameengine.core.GameObjectInstanceRemovedFromSceneConditionUnmarshaller;
 import de.mirkosertic.gameengine.core.GameResourceLoader;
 import de.mirkosertic.gameengine.core.GameRuntime;
@@ -82,6 +83,7 @@ public abstract class AbstractGameRuntimeFactory {
         theRegistry.registerConditionUnmarshaller(new SystemTickConditionUnmarshaller());
         theRegistry.registerConditionUnmarshaller(new GameObjectInstanceAddedToSceneConditionUnmarshaller());
         theRegistry.registerConditionUnmarshaller(new GameObjectInstanceRemovedFromSceneConditionUnmarshaller());
+        theRegistry.registerConditionUnmarshaller(new GameObjectInstanceLeftLayoutConditionUnmarshaller());
 
         theRegistry.registerActionUnmarshaller(new PlaySoundActionUnmarshaller());
         theRegistry.registerActionUnmarshaller(new SetPropertyActionUnmarshaller());

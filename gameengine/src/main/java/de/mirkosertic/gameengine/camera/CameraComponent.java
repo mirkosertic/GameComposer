@@ -34,7 +34,7 @@ public class CameraComponent extends GameComponent implements Camera {
 
         GameEventManager theEventManager = aObjectInstance.getOwnerGameObject().getGameScene().getRuntime().getEventManager();
 
-        type = registerProperty(new Property<CameraType>(this, "type", aTemplate.typeProperty().get(), theEventManager));
+        type = registerProperty(new Property<CameraType>(this, TYPE_PROPERTY, aTemplate.typeProperty().get(), theEventManager));
     }
 
     void registerEvents(GameRuntime aGameRuntime) {

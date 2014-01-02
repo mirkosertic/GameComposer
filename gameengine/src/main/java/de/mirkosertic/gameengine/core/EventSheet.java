@@ -8,6 +8,8 @@ import java.util.*;
 
 public class EventSheet {
 
+    public static final String NAME_PROPERTY = "name";
+
     private final Property<String> nameProperty;
     private GameRule[] rules;
 
@@ -16,7 +18,7 @@ public class EventSheet {
     EventSheet(GameScene aGameScene) {
         GameEventManager theEventManager = aGameScene.getRuntime().getEventManager();
 
-        nameProperty = new Property<String>(this, "name", theEventManager);
+        nameProperty = new Property<String>(this, NAME_PROPERTY, theEventManager);
         rules = new GameRule[]{};
         gameScene = aGameScene;
     }
@@ -35,7 +37,7 @@ public class EventSheet {
 
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<String, Object>();
-        theResult.put("name", nameProperty.get());
+        theResult.put(NAME_PROPERTY, nameProperty.get());
         List<Map<String, Object>> theRuleList = new ArrayList<Map<String, Object>>();
         for (GameRule theRule : rules) {
             theRuleList.add(theRule.serialize());
@@ -47,7 +49,7 @@ public class EventSheet {
     public static EventSheet unmarshall(IORegistry aIORegistry, GameScene aGameScene, Map<String, Object> aSerializedData) {
         EventSheet theResult = new EventSheet(aGameScene);
 
-        String theName = (String) aSerializedData.get("name");
+        String theName = (String) aSerializedData.get(NAME_PROPERTY);
         if (theName != null) {
             theResult.nameProperty.setQuietly(theName);
         }

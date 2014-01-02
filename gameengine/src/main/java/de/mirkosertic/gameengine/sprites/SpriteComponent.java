@@ -25,7 +25,7 @@ public class SpriteComponent extends GameComponent implements Sprite {
 
         GameEventManager theEventManager = aObjectInstance.getOwnerGameObject().getGameScene().getRuntime().getEventManager();
 
-        resourceName = registerProperty(new Property<ResourceName>(this, "resourceName", aTemplate.resourceNameProperty().get(), theEventManager));
+        resourceName = registerProperty(new Property<ResourceName>(this, RESOURCE_NAME_PROPERTY, aTemplate.resourceNameProperty().get(), theEventManager));
     }
 
     @Override

@@ -15,6 +15,14 @@ import java.util.Map;
 
 public class GameObjectInstance extends PropertyAware {
 
+    public static final String UUID_PROPERTY = "uuid";
+    public static final String NAME_PROPERTY = "name";
+    public static final String POSITION_PROPERTY = "position";
+    public static final String VISIBLE_PROPERTY = "visible";
+    public static final String ROTATION_ANGLE_PROPERTY = "rotationAngle";
+    public static final String ABSOLUTE_POSITION_PROPERTY = "absolutePosition";
+    public static final String ABSOLUTE_POSITION_ANCHOR_PROPERTY = "absolutePositionAnchor";
+
     private final Map<Class<GameComponent>, GameComponent> components;
 
     private final GameObject ownerGameObject;
@@ -29,13 +37,13 @@ public class GameObjectInstance extends PropertyAware {
 
     GameObjectInstance(GameEventManager aEventManager, GameObject aOwnerGameObject) {
 
-        uuid = registerProperty(new Property<String>(this, "uuid", de.mirkosertic.gameengine.types.UUID.randomUID(), aEventManager));
-        name = registerProperty(new Property<String>(this, "name", aEventManager));
-        position = registerProperty(new Property<Position>(this, "position", new Position(), aEventManager));
-        visible = registerProperty(new Property<Boolean>(this, "visible", aOwnerGameObject.visibleProperty().get(), aEventManager));
-        rotationAngle = registerProperty(new Property<Angle>(this, "rotationAngle", new Angle(0), aEventManager));
-        absolutePosition = registerProperty(new Property<Boolean>(this, "absolutePosition", Boolean.FALSE, aEventManager));
-        absolutePositionAnchor = registerProperty(new Property<AbsolutePositionAnchor>(this, "absolutePositionAnchor", AbsolutePositionAnchor.TOP_LEFT, aEventManager));
+        uuid = registerProperty(new Property<String>(this, UUID_PROPERTY, de.mirkosertic.gameengine.types.UUID.randomUID(), aEventManager));
+        name = registerProperty(new Property<String>(this, NAME_PROPERTY, aEventManager));
+        position = registerProperty(new Property<Position>(this, POSITION_PROPERTY, new Position(), aEventManager));
+        visible = registerProperty(new Property<Boolean>(this, VISIBLE_PROPERTY, aOwnerGameObject.visibleProperty().get(), aEventManager));
+        rotationAngle = registerProperty(new Property<Angle>(this, ROTATION_ANGLE_PROPERTY, new Angle(0), aEventManager));
+        absolutePosition = registerProperty(new Property<Boolean>(this, ABSOLUTE_POSITION_PROPERTY, Boolean.FALSE, aEventManager));
+        absolutePositionAnchor = registerProperty(new Property<AbsolutePositionAnchor>(this, ABSOLUTE_POSITION_ANCHOR_PROPERTY, AbsolutePositionAnchor.TOP_LEFT, aEventManager));
 
         ownerGameObject = aOwnerGameObject;
         components = new HashMap<Class<GameComponent>, GameComponent>();
@@ -102,15 +110,15 @@ public class GameObjectInstance extends PropertyAware {
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<String, Object>();
         if (!uuidProperty().isNull()) {
-            theResult.put("uuid",  uuidProperty().get());
+            theResult.put(UUID_PROPERTY,  uuidProperty().get());
         }
         theResult.put("gameobjectuuid", ownerGameObject.uuidProperty().get());
 
-        theResult.put("position", position.get().serialize());
-        theResult.put("name", name.get());
-        theResult.put("visible", Boolean.toString(visible.get()));
-        theResult.put("absolutePosition", Boolean.toString(absolutePosition.get()));
-        theResult.put("absolutePositionAnchor", absolutePositionAnchor.get().name());
+        theResult.put(POSITION_PROPERTY, position.get().serialize());
+        theResult.put(NAME_PROPERTY, name.get());
+        theResult.put(VISIBLE_PROPERTY, Boolean.toString(visible.get()));
+        theResult.put(ABSOLUTE_POSITION_PROPERTY, Boolean.toString(absolutePosition.get()));
+        theResult.put(ABSOLUTE_POSITION_ANCHOR_PROPERTY, absolutePositionAnchor.get().name());
         theResult.put("rotationangle", rotationAngle.get().serialize());
 
         List<Map<String, Object>> theComponents = new ArrayList<Map<String, Object>>();
@@ -131,22 +139,22 @@ public class GameObjectInstance extends PropertyAware {
         }
 
         GameObjectInstance theResult = new GameObjectInstance(aGameRuntime.getEventManager(), theGameObject);
-        theResult.position.setQuietly(Position.deserialize((Map<String, Object>) theInstance.get("position")));
-        theResult.name.setQuietly((String) theInstance.get("name"));
+        theResult.position.setQuietly(Position.deserialize((Map<String, Object>) theInstance.get(POSITION_PROPERTY)));
+        theResult.name.setQuietly((String) theInstance.get(NAME_PROPERTY));
 
-        String theInstanceUUID = (String) theInstance.get("uuid");
+        String theInstanceUUID = (String) theInstance.get(UUID_PROPERTY);
         if (theInstanceUUID != null) {
             theResult.uuid.setQuietly(theInstanceUUID);
         }
-        String theVisible = (String) theInstance.get("visible");
+        String theVisible = (String) theInstance.get(VISIBLE_PROPERTY);
         if (theVisible != null) {
             theResult.visible.setQuietly(Boolean.parseBoolean(theVisible));
         }
-        String theAbsolutePositon = (String) theInstance.get("absolutePosition");
+        String theAbsolutePositon = (String) theInstance.get(ABSOLUTE_POSITION_PROPERTY);
         if (theAbsolutePositon != null) {
             theResult.absolutePosition.setQuietly(Boolean.parseBoolean(theAbsolutePositon));
         }
-        String theAnchor = (String) theInstance.get("absolutePositionAnchor");
+        String theAnchor = (String) theInstance.get(ABSOLUTE_POSITION_ANCHOR_PROPERTY);
         if (theAnchor != null) {
             theResult.absolutePositionAnchor.setQuietly(AbsolutePositionAnchor.valueOf(theAnchor));
         }

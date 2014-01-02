@@ -7,6 +7,10 @@ import de.mirkosertic.gameengine.types.TextExpression;
 
 public interface Text {
 
+    String FONT_PROPERTY = "font";
+    String COLOR_PROPERTY = "color";
+    String TEXT_EXPRESSION_PROPERTY = "textExpression";
+
     Property<Font> fontProperty();
 
     Property<TextExpression> textExpressionProperty();

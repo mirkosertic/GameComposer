@@ -10,11 +10,13 @@ public class RunSceneAction implements Action {
 
     public static final String TYPE_VALUE = "RunSceneAction";
 
+    public static final String GAME_SCENE_PROPERTY = "gameScene";
+
     private final Property<String> gameScene;
 
     @UsedByReflection
     public RunSceneAction() {
-        gameScene = new Property<String>(this, "gameScene", (String) null);
+        gameScene = new Property<String>(this, GAME_SCENE_PROPERTY, (String) null);
     }
 
     @Override
@@ -32,14 +34,14 @@ public class RunSceneAction implements Action {
         Map<String, Object> theResult = new HashMap<String, Object>();
         theResult.put(TYPE_ATTRIBUTE, TYPE_VALUE);
         if (gameScene.get() != null) {
-            theResult.put("gameScene", gameScene.get());
+            theResult.put(GAME_SCENE_PROPERTY, gameScene.get());
         }
         return theResult;
     }
 
     public static RunSceneAction unmarshall(Map<String, Object> aSerializedData) {
         RunSceneAction theResult = new RunSceneAction();
-        String theGameScene = (String) aSerializedData.get("gameScene");
+        String theGameScene = (String) aSerializedData.get(GAME_SCENE_PROPERTY);
         if (theGameScene != null) {
             theResult.gameScene.setQuietly(theGameScene);
         }

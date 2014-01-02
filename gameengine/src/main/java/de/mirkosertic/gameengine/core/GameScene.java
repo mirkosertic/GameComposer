@@ -14,6 +14,12 @@ import java.util.Map;
 
 public class GameScene {
 
+    public static final String NAME_PROPERTY = "name";
+    public static final String CAMERA_OBJECT_PROPERTY = "cameraObject";
+    public static final String DEFAULT_PLAYER_PROPERTY = "defaultPlayer";
+    public static final String COLOR_PROPERTY = "color";
+    public static final String LAYOUT_BOUNDS_PROPERTY = "layoutBounds";
+
     private final Property<String> name;
     private final Property<GameObject> cameraObject;
     private final Property<GameObject> defaultPlayer;
@@ -30,11 +36,11 @@ public class GameScene {
 
         GameEventManager theManager = aGameRuntime.getEventManager();
 
-        name = new Property<String>(this, "name", null, theManager);
-        cameraObject = new Property<GameObject>(this, "cameraObject", null, theManager);
-        defaultPlayer = new Property<GameObject>(this, "defaultPlayer", null, theManager);
-        backgroundColor = new Property<Color>(this, "color", new Color(0, 0, 0), theManager);
-        layoutBounds = new Property<Rectangle>(this, "layoutBounds", new Rectangle(), theManager);
+        name = new Property<String>(this, NAME_PROPERTY, null, theManager);
+        cameraObject = new Property<GameObject>(this, CAMERA_OBJECT_PROPERTY, null, theManager);
+        defaultPlayer = new Property<GameObject>(this, DEFAULT_PLAYER_PROPERTY, null, theManager);
+        backgroundColor = new Property<Color>(this, COLOR_PROPERTY, new Color(0, 0, 0), theManager);
+        layoutBounds = new Property<Rectangle>(this, LAYOUT_BOUNDS_PROPERTY, new Rectangle(), theManager);
         instances = new GameObjectInstance[0];
         objects = new GameObject[0];
         eventSheets = new EventSheet[0];
@@ -184,7 +190,7 @@ public class GameScene {
 
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<String, Object>();
-        theResult.put("name", name.get());
+        theResult.put(NAME_PROPERTY, name.get());
 
         List<Map<String, Object>> theObjects = new ArrayList<Map<String, Object>>();
         for (GameObject theObject : objects) {
@@ -213,13 +219,13 @@ public class GameScene {
         }
         theResult.put("eventsheets", theEventSheets);
 
-        theResult.put("layoutBounds", layoutBounds.get().serialize());
+        theResult.put(LAYOUT_BOUNDS_PROPERTY, layoutBounds.get().serialize());
         return theResult;
     }
 
     public static GameScene deserialize(GameRuntime aGameRuntime, Map<String, Object> aSerializedData) {
         GameScene theScene = new GameScene(aGameRuntime);
-        theScene.name.setQuietly((String) aSerializedData.get("name"));
+        theScene.name.setQuietly((String) aSerializedData.get(NAME_PROPERTY));
 
         List<Map<String, Object>> theObjects = (List<Map<String, Object>>) aSerializedData.get("objects");
         for (Map<String, Object> theObject : theObjects) {
@@ -254,7 +260,7 @@ public class GameScene {
         if (theBackgroundColor != null) {
             theScene.backgroundColor.setQuietly(Color.deserialize(theBackgroundColor));
         }
-        Map<String, Object> theLayoutBounds = (Map<String, Object>) aSerializedData.get("layoutBounds");
+        Map<String, Object> theLayoutBounds = (Map<String, Object>) aSerializedData.get(LAYOUT_BOUNDS_PROPERTY);
         if (theLayoutBounds != null) {
             theScene.layoutBounds.setQuietly(Rectangle.deserialize(theLayoutBounds));
         }

@@ -8,6 +8,7 @@ import de.mirkosertic.gameengine.core.Condition;
 import de.mirkosertic.gameengine.core.DeleteGameObjectInstanceAction;
 import de.mirkosertic.gameengine.core.EventSheet;
 import de.mirkosertic.gameengine.core.GameObjectInstanceAddedToSceneCondition;
+import de.mirkosertic.gameengine.core.GameObjectInstanceLeftLayoutCondition;
 import de.mirkosertic.gameengine.core.GameObjectInstanceRemovedFromSceneCondition;
 import de.mirkosertic.gameengine.core.GameRule;
 import de.mirkosertic.gameengine.core.RunSceneAction;
@@ -87,6 +88,7 @@ public class RuleEditorController implements Controller {
         knownEventTypes.put(GameObjectInstanceAddedToSceneCondition.class.getSimpleName(), GameObjectInstanceAddedToSceneCondition.class);
         knownEventTypes.put(GameObjectInstanceRemovedFromSceneCondition.class.getSimpleName(), GameObjectInstanceRemovedFromSceneCondition.class);
         knownEventTypes.put(SystemTickCondition.class.getSimpleName(), SystemTickCondition.class);
+        knownEventTypes.put(GameObjectInstanceLeftLayoutCondition.class.getSimpleName(), GameObjectInstanceLeftLayoutCondition.class);
 
         knownActions = new ArrayList<>();
         knownActions.add(PlaySoundAction.class);

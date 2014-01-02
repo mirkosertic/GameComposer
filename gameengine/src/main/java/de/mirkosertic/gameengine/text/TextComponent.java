@@ -30,13 +30,9 @@ public class TextComponent extends GameComponent implements Text {
         GameEventManager theEventManager = aObjectInstance.getOwnerGameObject().getGameScene().getRuntime().getEventManager();
 
         objectInstance = aObjectInstance;
-        font = registerProperty(new Property<Font>(this, "font", aTemplate.fontProperty().get(), theEventManager));
-        color = registerProperty(new Property<Color>(this, "color", aTemplate.colorProperty().get(), theEventManager));
-        textExpression = registerProperty(new Property<TextExpression>(this, "textExpression", aTemplate.textExpressionProperty().get(), theEventManager));
-    }
-
-    public GameObjectInstance getObjectInstance() {
-        return objectInstance;
+        font = registerProperty(new Property<Font>(this, FONT_PROPERTY, aTemplate.fontProperty().get(), theEventManager));
+        color = registerProperty(new Property<Color>(this, COLOR_PROPERTY, aTemplate.colorProperty().get(), theEventManager));
+        textExpression = registerProperty(new Property<TextExpression>(this, TEXT_EXPRESSION_PROPERTY, aTemplate.textExpressionProperty().get(), theEventManager));
     }
 
     public Property<Font> fontProperty() {
@@ -60,9 +56,9 @@ public class TextComponent extends GameComponent implements Text {
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<String, Object>();
         theResult.put(TYPE_ATTRIBUTE, TYPE);
-        theResult.put("font", font.get().serialize());
-        theResult.put("textExpression", textExpression.get().serialize());
-        theResult.put("color", color.get().serialize());
+        theResult.put(FONT_PROPERTY, font.get().serialize());
+        theResult.put(TEXT_EXPRESSION_PROPERTY, textExpression.get().serialize());
+        theResult.put(COLOR_PROPERTY, color.get().serialize());
         return theResult;
     }
 
@@ -73,9 +69,9 @@ public class TextComponent extends GameComponent implements Text {
 
     public static TextComponent deserialize(GameObjectInstance aObjectInstance, Map<String, Object> aSerializedData) {
         TextComponent theTemplate =  new TextComponent(aObjectInstance);
-        theTemplate.font.setQuietly(Font.deserialize((Map<String, Object>) aSerializedData.get("font")));
-        theTemplate.textExpression.setQuietly(TextExpression.deserialize((Map<String, Object>) aSerializedData.get("textExpression")));
-        theTemplate.color.setQuietly(Color.deserialize((Map<String, Object>) aSerializedData.get("color")));
+        theTemplate.font.setQuietly(Font.deserialize((Map<String, Object>) aSerializedData.get(FONT_PROPERTY)));
+        theTemplate.textExpression.setQuietly(TextExpression.deserialize((Map<String, Object>) aSerializedData.get(TEXT_EXPRESSION_PROPERTY)));
+        theTemplate.color.setQuietly(Color.deserialize((Map<String, Object>) aSerializedData.get(COLOR_PROPERTY)));
         return theTemplate;
     }
 }

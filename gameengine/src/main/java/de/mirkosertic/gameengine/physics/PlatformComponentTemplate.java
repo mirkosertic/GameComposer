@@ -23,11 +23,11 @@ public class PlatformComponentTemplate extends GameComponentTemplate<PlatformCom
 
     public PlatformComponentTemplate(GameEventManager aEventManager, GameObject aOwner) {
         owner = aOwner;
-        moveLeftKey = registerProperty(new Property<GameKeyCode>(this, "moveLeftKey", GameKeyCode.LEFT, aEventManager));
-        moveRightKey = registerProperty(new Property<GameKeyCode>(this, "moveRightKey", GameKeyCode.RIGHT, aEventManager));
-        jumpKey = registerProperty(new Property<GameKeyCode>(this, "jumpKey", GameKeyCode.UP, aEventManager));
-        leftRightImpulse = registerProperty(new Property<Float>(this, "leftRightImpulse", 4f, aEventManager));
-        jumpImpulse = registerProperty(new Property<Float>(this, "jumpImpulse", 2f, aEventManager));
+        moveLeftKey = registerProperty(new Property<GameKeyCode>(this, MOVE_LEFT_KEY_PROPERTY, GameKeyCode.LEFT, aEventManager));
+        moveRightKey = registerProperty(new Property<GameKeyCode>(this, MOVE_RIGHT_KEY_PROPERTY, GameKeyCode.RIGHT, aEventManager));
+        jumpKey = registerProperty(new Property<GameKeyCode>(this, JUMP_KEY_PROPERTY, GameKeyCode.UP, aEventManager));
+        leftRightImpulse = registerProperty(new Property<Float>(this, LEFT_RIGHT_IMPULSE_PROPERTY, 4f, aEventManager));
+        jumpImpulse = registerProperty(new Property<Float>(this, JUMP_IMPULSE_PROPERTY, 2f, aEventManager));
     }
 
     @Override
@@ -65,33 +65,33 @@ public class PlatformComponentTemplate extends GameComponentTemplate<PlatformCom
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<String, Object>();
         theResult.put(PlatformComponent.TYPE_ATTRIBUTE, PlatformComponent.TYPE);
-        theResult.put("moveLeftKey", moveLeftKey.get().name());
-        theResult.put("moveRightKey", moveRightKey.get().name());
-        theResult.put("jumpKey", jumpKey.get().name());
-        theResult.put("jumpImpulse", Float.toString(jumpImpulse.get()));
-        theResult.put("leftRightImpulse", Float.toString(leftRightImpulse.get()));
+        theResult.put(MOVE_LEFT_KEY_PROPERTY, moveLeftKey.get().name());
+        theResult.put(MOVE_RIGHT_KEY_PROPERTY, moveRightKey.get().name());
+        theResult.put(JUMP_KEY_PROPERTY, jumpKey.get().name());
+        theResult.put(JUMP_IMPULSE_PROPERTY, Float.toString(jumpImpulse.get()));
+        theResult.put(LEFT_RIGHT_IMPULSE_PROPERTY, Float.toString(leftRightImpulse.get()));
         return theResult;
     }
 
     public static PlatformComponentTemplate deserialize(GameEventManager aEventManager, GameObject aObject, Map<String, Object> aSerializedData) {
         PlatformComponentTemplate theResult =  new PlatformComponentTemplate(aEventManager, aObject);
-        String theLeftKey = (String) aSerializedData.get("moveLeftKey");
+        String theLeftKey = (String) aSerializedData.get(MOVE_LEFT_KEY_PROPERTY);
         if (theLeftKey != null) {
             theResult.moveLeftKey.setQuietly(GameKeyCode.valueOf(theLeftKey));
         }
-        String theRightKey = (String) aSerializedData.get("moveRightKey");
+        String theRightKey = (String) aSerializedData.get(MOVE_RIGHT_KEY_PROPERTY);
         if (theRightKey != null) {
             theResult.moveRightKey.setQuietly(GameKeyCode.valueOf(theRightKey));
         }
-        String theJumpKey = (String) aSerializedData.get("jumpKey");
+        String theJumpKey = (String) aSerializedData.get(JUMP_KEY_PROPERTY);
         if (theJumpKey != null) {
             theResult.jumpKey.setQuietly(GameKeyCode.valueOf(theJumpKey));
         }
-        String theJumpImpulse = (String) aSerializedData.get("jumpImpulse");
+        String theJumpImpulse = (String) aSerializedData.get(JUMP_IMPULSE_PROPERTY);
         if (theJumpImpulse != null) {
             theResult.jumpImpulse.setQuietly(Float.parseFloat(theJumpImpulse));
         }
-        String theLeftRightUmpulse = (String) aSerializedData.get("leftRightImpulse");
+        String theLeftRightUmpulse = (String) aSerializedData.get(LEFT_RIGHT_IMPULSE_PROPERTY);
         if (theLeftRightUmpulse != null) {
             theResult.leftRightImpulse.setQuietly(Float.parseFloat(theLeftRightUmpulse));
         }

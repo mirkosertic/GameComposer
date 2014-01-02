@@ -7,12 +7,14 @@ import de.mirkosertic.gamecomposer.ObjectSelectedEvent;
 import de.mirkosertic.gameengine.camera.CameraComponent;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.javafx.JavaFXBitmapResource;
 import de.mirkosertic.gameengine.javafx.JavaFXGameView;
 import de.mirkosertic.gameengine.physics.GamePhysicsManager;
 import de.mirkosertic.gameengine.physics.PhysicsDebugCanvas;
 import de.mirkosertic.gameengine.types.Font;
 import de.mirkosertic.gameengine.types.Position;
+import de.mirkosertic.gameengine.types.Rectangle;
 import de.mirkosertic.gameengine.types.Size;
 import de.mirkosertic.gameengine.types.TextExpression;
 import javafx.beans.property.BooleanProperty;
@@ -100,9 +102,7 @@ public class EditorJXGameView extends JavaFXGameView {
         int theGridsizeWidth = gridsizeWidthProperty().get();
         int theGridsizeHeight = gridsizeHeightProperty().get();
 
-        float theSnapX = aPosition.x - aPosition.x % theGridsizeWidth;
-        float theSnapY = aPosition.y - aPosition.y % theGridsizeHeight;
-        return new Position(theSnapX, theSnapY);
+        return aPosition.snapToGrid(theGridsizeWidth, theGridsizeHeight);
     }
 
     @Override
@@ -179,7 +179,22 @@ public class EditorJXGameView extends JavaFXGameView {
             });
         }
 
-        //TODO: draw layoutbounds here for debug reasons
+        GameScene theGameScene = getGameScene();
+        Rectangle theLayoutBounds = theGameScene.layoutBoundsProperty().get();
+
+        CameraComponent theCameraComponent = getCameraComponent();
+        GameObjectInstance theCamera = theCameraComponent.getObjectInstance();
+        Position theCurrentCameraPosition = theCamera.positionProperty().get();
+
+        // Draw layout bounds
+        double theBoundsX = theCurrentCameraPosition.x - theLayoutBounds.position.x;
+        double theBoundsY = theCurrentCameraPosition.y - theLayoutBounds.position.y;
+
+        aContext.setFill(Color.YELLOW);
+        aContext.setStroke(Color.YELLOW);
+        aContext.setLineWidth(3);
+
+        aContext.rect(theBoundsX, theBoundsY, theLayoutBounds.size.width, theLayoutBounds.size.height);
     }
 
     @Override

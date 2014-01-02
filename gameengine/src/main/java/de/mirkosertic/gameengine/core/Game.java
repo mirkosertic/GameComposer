@@ -7,14 +7,18 @@ import java.util.Map;
 
 public class Game {
 
+    public static final String NAME_PROPERTY = "name";
+    public static final String DEFAULT_SCENE_PROPERTY = "defaultScene";
+    public static final String ENABLE_WEB_GL_PROPERTY = "enableWebGL";
+
     private final Property<String> name;
     private final Property<String> defaultScene;
     private final Property<Boolean> enableWebGL;
 
     public Game() {
-        name = new Property<String>(this, "name", (String) null);
-        defaultScene = new Property<String>(this, "defaultScene", (String) null);
-        enableWebGL = new Property<Boolean>(this, "enableWebGL", Boolean.TRUE);
+        name = new Property<String>(this, NAME_PROPERTY, (String) null);
+        defaultScene = new Property<String>(this, DEFAULT_SCENE_PROPERTY, (String) null);
+        enableWebGL = new Property<Boolean>(this, ENABLE_WEB_GL_PROPERTY, Boolean.TRUE);
     }
 
     public Property<String> nameProperty() {
@@ -37,7 +41,7 @@ public class Game {
 
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<String, Object>();
-        theResult.put("name", name.get());
+        theResult.put(NAME_PROPERTY, name.get());
         theResult.put("defaultscene", defaultScene.get());
         theResult.put("enablewebgl", Boolean.toString(enableWebGL.get()));
         return theResult;
@@ -45,7 +49,7 @@ public class Game {
 
     public static Game deserialize(Map<String, Object> aSerializedData) {
         Game theResult = new Game();
-        theResult.name.setQuietly((String) aSerializedData.get("name"));
+        theResult.name.setQuietly((String) aSerializedData.get(NAME_PROPERTY));
         theResult.defaultScene.setQuietly((String) aSerializedData.get("defaultscene"));
 
         String theWebGl = (String) aSerializedData.get("enablewebgl");
