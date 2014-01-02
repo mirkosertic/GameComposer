@@ -5,7 +5,7 @@ import java.io.InputStream;
 
 import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.core.GameResourceLoader;
-import de.mirkosertic.gameengine.types.ResourceName;
+import de.mirkosertic.gameengine.type.ResourceName;
 
 public abstract class JavaFXAbstractGameResourceLoader implements GameResourceLoader {
 

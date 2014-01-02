@@ -1,10 +1,10 @@
 package de.mirkosertic.gameengine.input;
 
 import de.mirkosertic.gameengine.core.GestureDetector;
-import de.mirkosertic.gameengine.types.GameKeyCode;
+import de.mirkosertic.gameengine.type.GameKeyCode;
 import de.mirkosertic.gameengine.event.GameEventManager;
-import de.mirkosertic.gameengine.types.TouchIdentifier;
-import de.mirkosertic.gameengine.types.TouchPosition;
+import de.mirkosertic.gameengine.type.TouchIdentifier;
+import de.mirkosertic.gameengine.type.TouchPosition;
 
 import java.util.HashMap;
 import java.util.Map;

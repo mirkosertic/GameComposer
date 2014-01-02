@@ -3,8 +3,8 @@ package de.mirkosertic.gameengine.core;
 import de.mirkosertic.gameengine.event.GameEvent;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.event.PropertyChanged;
-import de.mirkosertic.gameengine.types.Position;
-import de.mirkosertic.gameengine.types.Rectangle;
+import de.mirkosertic.gameengine.type.Position;
+import de.mirkosertic.gameengine.type.Rectangle;
 
 import java.util.HashMap;
 import java.util.Map;

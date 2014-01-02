@@ -4,9 +4,9 @@ import de.mirkosertic.gameengine.core.GameComponent;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
-import de.mirkosertic.gameengine.types.Color;
-import de.mirkosertic.gameengine.types.Font;
-import de.mirkosertic.gameengine.types.TextExpression;
+import de.mirkosertic.gameengine.type.Color;
+import de.mirkosertic.gameengine.type.Font;
+import de.mirkosertic.gameengine.type.TextExpression;
 
 import java.util.HashMap;
 import java.util.Map;

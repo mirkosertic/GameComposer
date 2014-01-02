@@ -4,14 +4,14 @@ import de.mirkosertic.gameengine.camera.CameraComponent;
 import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.input.DefaultGestureDetector;
 import de.mirkosertic.gameengine.core.GestureDetector;
-import de.mirkosertic.gameengine.sprites.Sprite;
-import de.mirkosertic.gameengine.sprites.SpriteComponent;
+import de.mirkosertic.gameengine.sprite.Sprite;
+import de.mirkosertic.gameengine.sprite.SpriteComponent;
 import de.mirkosertic.gameengine.text.Text;
 import de.mirkosertic.gameengine.text.TextComponent;
-import de.mirkosertic.gameengine.types.Angle;
-import de.mirkosertic.gameengine.types.Position;
-import de.mirkosertic.gameengine.types.Size;
-import de.mirkosertic.gameengine.types.TextExpression;
+import de.mirkosertic.gameengine.type.Angle;
+import de.mirkosertic.gameengine.type.Position;
+import de.mirkosertic.gameengine.type.Size;
+import de.mirkosertic.gameengine.type.TextExpression;
 
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
@@ -39,7 +39,7 @@ public class JavaFXGameView extends Canvas implements GameView {
     private void renderScene() {
         GraphicsContext theContext = getGraphicsContext2D();
 
-        de.mirkosertic.gameengine.types.Color theBGColor = gameScene.backgroundColorProperty().get();
+        de.mirkosertic.gameengine.type.Color theBGColor = gameScene.backgroundColorProperty().get();
 
         Color theFXColor = Color.rgb(theBGColor.r, theBGColor.g, theBGColor.b);
         theContext.setFill(theFXColor);
@@ -96,7 +96,7 @@ public class JavaFXGameView extends Canvas implements GameView {
         afterRendering(theContext);
     }
 
-    protected Font toFont(de.mirkosertic.gameengine.types.Font aFont) {
+    protected Font toFont(de.mirkosertic.gameengine.type.Font aFont) {
         switch (aFont.name) {
             case ARIAL:
                 return new Font("Arial", aFont.size);
@@ -109,7 +109,7 @@ public class JavaFXGameView extends Canvas implements GameView {
     protected void afterRendering(GraphicsContext aContext) {
     }
 
-    protected void drawText(GraphicsContext aContext, GameObjectInstance aInstance, Position aPosition, de.mirkosertic.gameengine.types.Font aFont, de.mirkosertic.gameengine.types.Color aColor, TextExpression aExpression, Size aSize) {
+    protected void drawText(GraphicsContext aContext, GameObjectInstance aInstance, Position aPosition, de.mirkosertic.gameengine.type.Font aFont, de.mirkosertic.gameengine.type.Color aColor, TextExpression aExpression, Size aSize) {
         aContext.save();
         Color theTextColor = Color.rgb(aColor.r, aColor.g, aColor.b);
         aContext.setFill(theTextColor);

@@ -1,6 +1,6 @@
 package de.mirkosertic.gameengine.core;
 
-import de.mirkosertic.gameengine.types.ResourceName;
+import de.mirkosertic.gameengine.type.ResourceName;
 
 import java.io.IOException;
 

@@ -10,7 +10,7 @@ import java.util.Set;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.event.PropertyAware;
-import de.mirkosertic.gameengine.types.Size;
+import de.mirkosertic.gameengine.type.Size;
 
 public class GameObject extends PropertyAware {
 
@@ -29,7 +29,7 @@ public class GameObject extends PropertyAware {
     private final Map<Class<GameComponentTemplate>, GameComponentTemplate> componentTemplates;
 
     GameObject(GameScene aScene, String aName) {
-        this(aScene, aName, de.mirkosertic.gameengine.types.UUID.randomUID());
+        this(aScene, aName, de.mirkosertic.gameengine.type.UUID.randomUID());
     }
 
     GameObject(GameScene aScene, String aName, String aUUID) {

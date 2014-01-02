@@ -1,7 +1,7 @@
 package de.mirkosertic.gameengine.camera;
 
 import de.mirkosertic.gameengine.event.GameEvent;
-import de.mirkosertic.gameengine.types.Size;
+import de.mirkosertic.gameengine.type.Size;
 
 public class SetScreenResolution extends GameEvent {
 

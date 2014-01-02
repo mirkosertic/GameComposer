@@ -7,7 +7,7 @@ import de.mirkosertic.gameengine.core.Action;
 import de.mirkosertic.gameengine.core.ConditionResult;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.core.UsedByReflection;
-import de.mirkosertic.gameengine.types.ResourceName;
+import de.mirkosertic.gameengine.type.ResourceName;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
 

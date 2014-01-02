@@ -10,13 +10,13 @@ import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.javafx.JavaFXBitmapResource;
 import de.mirkosertic.gameengine.javafx.JavaFXGameView;
-import de.mirkosertic.gameengine.physics.GamePhysicsManager;
-import de.mirkosertic.gameengine.physics.PhysicsDebugCanvas;
-import de.mirkosertic.gameengine.types.Font;
-import de.mirkosertic.gameengine.types.Position;
-import de.mirkosertic.gameengine.types.Rectangle;
-import de.mirkosertic.gameengine.types.Size;
-import de.mirkosertic.gameengine.types.TextExpression;
+import de.mirkosertic.gameengine.physic.GamePhysicsManager;
+import de.mirkosertic.gameengine.physic.PhysicsDebugCanvas;
+import de.mirkosertic.gameengine.type.Font;
+import de.mirkosertic.gameengine.type.Position;
+import de.mirkosertic.gameengine.type.Rectangle;
+import de.mirkosertic.gameengine.type.Size;
+import de.mirkosertic.gameengine.type.TextExpression;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
@@ -198,7 +198,7 @@ public class EditorJXGameView extends JavaFXGameView {
     }
 
     @Override
-    protected void drawText(GraphicsContext aContext, GameObjectInstance aInstance, Position aPosition, Font aFont, de.mirkosertic.gameengine.types.Color aColor, TextExpression aExpression, Size aSize) {
+    protected void drawText(GraphicsContext aContext, GameObjectInstance aInstance, Position aPosition, Font aFont, de.mirkosertic.gameengine.type.Color aColor, TextExpression aExpression, Size aSize) {
         super.drawText(aContext, aInstance, aPosition, aFont, aColor, aExpression, aSize);
 
         javafx.scene.text.Font theFont = toFont(aFont);

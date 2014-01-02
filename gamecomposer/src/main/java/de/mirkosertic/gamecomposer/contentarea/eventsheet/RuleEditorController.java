@@ -16,8 +16,8 @@ import de.mirkosertic.gameengine.core.SetPropertyAction;
 import de.mirkosertic.gameengine.core.SpawnGameObjectInstanceAction;
 import de.mirkosertic.gameengine.core.SystemTickCondition;
 import de.mirkosertic.gameengine.input.KeyEventCondition;
-import de.mirkosertic.gameengine.physics.ObjectCollisionCondition;
-import de.mirkosertic.gameengine.processes.KillProcessesForInstanceAction;
+import de.mirkosertic.gameengine.physic.ObjectCollisionCondition;
+import de.mirkosertic.gameengine.process.KillProcessesForInstanceAction;
 import de.mirkosertic.gameengine.sound.PlaySoundAction;
 
 import javafx.event.ActionEvent;

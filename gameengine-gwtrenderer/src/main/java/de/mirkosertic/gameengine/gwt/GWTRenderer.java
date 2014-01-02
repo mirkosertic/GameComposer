@@ -29,7 +29,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import de.mirkosertic.gameengine.camera.CameraComponent;
 import de.mirkosertic.gameengine.camera.FollowCameraProcess;
 import de.mirkosertic.gameengine.core.Game;
-import de.mirkosertic.gameengine.types.GameKeyCode;
+import de.mirkosertic.gameengine.type.GameKeyCode;
 import de.mirkosertic.gameengine.core.GameLoop;
 import de.mirkosertic.gameengine.core.GameLoopFactory;
 import de.mirkosertic.gameengine.core.GameObject;
@@ -41,10 +41,10 @@ import de.mirkosertic.gameengine.core.RunScene;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.GameEventManager;
-import de.mirkosertic.gameengine.types.TouchIdentifier;
-import de.mirkosertic.gameengine.types.TouchPosition;
-import de.mirkosertic.gameengine.processes.StartProcess;
-import de.mirkosertic.gameengine.types.Size;
+import de.mirkosertic.gameengine.type.TouchIdentifier;
+import de.mirkosertic.gameengine.type.TouchPosition;
+import de.mirkosertic.gameengine.process.StartProcess;
+import de.mirkosertic.gameengine.type.Size;
 
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 

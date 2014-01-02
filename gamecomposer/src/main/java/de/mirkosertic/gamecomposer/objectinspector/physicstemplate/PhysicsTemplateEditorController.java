@@ -2,7 +2,7 @@ package de.mirkosertic.gamecomposer.objectinspector.physicstemplate;
 
 import de.mirkosertic.gamecomposer.PropertyBinder;
 import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorElementController;
-import de.mirkosertic.gameengine.physics.Physics;
+import de.mirkosertic.gameengine.physic.Physics;
 
 import javafx.fxml.FXML;
 import javafx.scene.Node;

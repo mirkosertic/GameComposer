@@ -7,10 +7,10 @@ import de.mirkosertic.gameengine.camera.Camera;
 import de.mirkosertic.gameengine.camera.CameraComponent;
 import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.camera.CameraComponentTemplate;
-import de.mirkosertic.gameengine.physics.*;
-import de.mirkosertic.gameengine.sprites.Sprite;
-import de.mirkosertic.gameengine.sprites.SpriteComponent;
-import de.mirkosertic.gameengine.sprites.SpriteComponentTemplate;
+import de.mirkosertic.gameengine.physic.*;
+import de.mirkosertic.gameengine.sprite.Sprite;
+import de.mirkosertic.gameengine.sprite.SpriteComponent;
+import de.mirkosertic.gameengine.sprite.SpriteComponentTemplate;
 
 import de.mirkosertic.gameengine.text.Text;
 import de.mirkosertic.gameengine.text.TextComponent;

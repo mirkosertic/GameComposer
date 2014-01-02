@@ -1,7 +1,7 @@
 package de.mirkosertic.gamecomposer.objectinspector.gameobjectinstance;
 
 import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorElementController;
-import de.mirkosertic.gameengine.types.AbsolutePositionAnchor;
+import de.mirkosertic.gameengine.type.AbsolutePositionAnchor;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -18,8 +18,8 @@ import javax.inject.Inject;
 import de.mirkosertic.gamecomposer.PropertyBinder;
 import de.mirkosertic.gamecomposer.ObjectSelectedEvent;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
-import de.mirkosertic.gameengine.types.Angle;
-import de.mirkosertic.gameengine.types.Position;
+import de.mirkosertic.gameengine.type.Angle;
+import de.mirkosertic.gameengine.type.Position;
 import javafx.util.StringConverter;
 
 public class GameObjectInstanceEditorController implements ObjectInspectorElementController {

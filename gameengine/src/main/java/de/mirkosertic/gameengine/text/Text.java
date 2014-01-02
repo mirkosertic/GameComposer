@@ -1,9 +1,9 @@
 package de.mirkosertic.gameengine.text;
 
 import de.mirkosertic.gameengine.event.Property;
-import de.mirkosertic.gameengine.types.Color;
-import de.mirkosertic.gameengine.types.Font;
-import de.mirkosertic.gameengine.types.TextExpression;
+import de.mirkosertic.gameengine.type.Color;
+import de.mirkosertic.gameengine.type.Font;
+import de.mirkosertic.gameengine.type.TextExpression;
 
 public interface Text {
 

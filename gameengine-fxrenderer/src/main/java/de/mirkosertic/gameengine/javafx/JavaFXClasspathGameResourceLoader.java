@@ -1,6 +1,6 @@
 package de.mirkosertic.gameengine.javafx;
 
-import de.mirkosertic.gameengine.types.ResourceName;
+import de.mirkosertic.gameengine.type.ResourceName;
 
 import java.io.IOException;
 import java.io.InputStream;

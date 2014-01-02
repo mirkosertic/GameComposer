@@ -3,7 +3,7 @@ package de.mirkosertic.gamecomposer.objectinspector.physicstemplate;
 import de.mirkosertic.gamecomposer.FXMLLoaderFactory;
 import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorFactory;
 import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorFactoryType;
-import de.mirkosertic.gameengine.physics.Physics;
+import de.mirkosertic.gameengine.physic.Physics;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 

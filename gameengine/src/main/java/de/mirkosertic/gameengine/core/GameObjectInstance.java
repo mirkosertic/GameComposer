@@ -3,10 +3,10 @@ package de.mirkosertic.gameengine.core;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.event.PropertyAware;
-import de.mirkosertic.gameengine.types.AbsolutePositionAnchor;
-import de.mirkosertic.gameengine.types.Angle;
-import de.mirkosertic.gameengine.types.Position;
-import de.mirkosertic.gameengine.types.Size;
+import de.mirkosertic.gameengine.type.AbsolutePositionAnchor;
+import de.mirkosertic.gameengine.type.Angle;
+import de.mirkosertic.gameengine.type.Position;
+import de.mirkosertic.gameengine.type.Size;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,7 +37,7 @@ public class GameObjectInstance extends PropertyAware {
 
     GameObjectInstance(GameEventManager aEventManager, GameObject aOwnerGameObject) {
 
-        uuid = registerProperty(new Property<String>(this, UUID_PROPERTY, de.mirkosertic.gameengine.types.UUID.randomUID(), aEventManager));
+        uuid = registerProperty(new Property<String>(this, UUID_PROPERTY, de.mirkosertic.gameengine.type.UUID.randomUID(), aEventManager));
         name = registerProperty(new Property<String>(this, NAME_PROPERTY, aEventManager));
         position = registerProperty(new Property<Position>(this, POSITION_PROPERTY, new Position(), aEventManager));
         visible = registerProperty(new Property<Boolean>(this, VISIBLE_PROPERTY, aOwnerGameObject.visibleProperty().get(), aEventManager));

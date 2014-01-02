@@ -2,9 +2,9 @@ package de.mirkosertic.gameengine.arcade;
 
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
-import de.mirkosertic.gameengine.physics.ApplyImpulseToGameObjectInstance;
-import de.mirkosertic.gameengine.processes.AbstractGameProcess;
-import de.mirkosertic.gameengine.types.Angle;
+import de.mirkosertic.gameengine.physic.ApplyImpulseToGameObjectInstance;
+import de.mirkosertic.gameengine.process.AbstractGameProcess;
+import de.mirkosertic.gameengine.type.Angle;
 
 public class ConstantMovementProcess extends AbstractGameProcess {
 

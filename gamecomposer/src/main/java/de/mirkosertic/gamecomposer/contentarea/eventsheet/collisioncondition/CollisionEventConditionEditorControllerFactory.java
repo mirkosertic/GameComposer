@@ -4,7 +4,7 @@ import de.mirkosertic.gamecomposer.FXMLLoaderFactory;
 import de.mirkosertic.gamecomposer.contentarea.eventsheet.ConditionControllerFactory;
 import de.mirkosertic.gamecomposer.contentarea.eventsheet.ConditionEditorType;
 import de.mirkosertic.gameengine.core.GameScene;
-import de.mirkosertic.gameengine.physics.ObjectCollisionCondition;
+import de.mirkosertic.gameengine.physic.ObjectCollisionCondition;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.BorderPane;
 

@@ -7,9 +7,9 @@ import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
-import de.mirkosertic.gameengine.types.AbsolutePositionAnchor;
-import de.mirkosertic.gameengine.types.Position;
-import de.mirkosertic.gameengine.types.Size;
+import de.mirkosertic.gameengine.type.AbsolutePositionAnchor;
+import de.mirkosertic.gameengine.type.Position;
+import de.mirkosertic.gameengine.type.Size;
 
 import java.util.ArrayList;
 import java.util.HashMap;

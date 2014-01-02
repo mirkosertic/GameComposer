@@ -1,7 +1,7 @@
 package de.mirkosertic.gameengine.sound;
 
 import de.mirkosertic.gameengine.event.GameEvent;
-import de.mirkosertic.gameengine.types.ResourceName;
+import de.mirkosertic.gameengine.type.ResourceName;
 
 class PlaySound extends GameEvent {
 

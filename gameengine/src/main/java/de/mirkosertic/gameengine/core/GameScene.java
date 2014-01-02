@@ -3,9 +3,9 @@ package de.mirkosertic.gameengine.core;
 import de.mirkosertic.gameengine.ArrayUtils;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
-import de.mirkosertic.gameengine.types.Color;
-import de.mirkosertic.gameengine.types.Position;
-import de.mirkosertic.gameengine.types.Rectangle;
+import de.mirkosertic.gameengine.type.Color;
+import de.mirkosertic.gameengine.type.Position;
+import de.mirkosertic.gameengine.type.Rectangle;
 
 import java.util.ArrayList;
 import java.util.HashMap;

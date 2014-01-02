@@ -2,8 +2,8 @@ package de.mirkosertic.gameengine.arcade;
 
 import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.event.Property;
-import de.mirkosertic.gameengine.processes.StartProcess;
-import de.mirkosertic.gameengine.types.Angle;
+import de.mirkosertic.gameengine.process.StartProcess;
+import de.mirkosertic.gameengine.type.Angle;
 
 import java.util.HashMap;
 import java.util.Map;

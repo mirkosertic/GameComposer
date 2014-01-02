@@ -1,7 +1,7 @@
 package de.mirkosertic.gamecomposer;
 
 import de.mirkosertic.gameengine.core.GameScene;
-import de.mirkosertic.gameengine.types.ResourceName;
+import de.mirkosertic.gameengine.type.ResourceName;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 

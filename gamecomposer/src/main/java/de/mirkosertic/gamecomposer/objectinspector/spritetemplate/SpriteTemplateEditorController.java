@@ -7,12 +7,12 @@ import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorElementControl
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameResourceLoader;
 import de.mirkosertic.gameengine.core.GameScene;
-import de.mirkosertic.gameengine.sprites.Sprite;
-import de.mirkosertic.gameengine.sprites.SpriteComponent;
-import de.mirkosertic.gameengine.types.ResourceName;
-import de.mirkosertic.gameengine.types.Size;
+import de.mirkosertic.gameengine.sprite.Sprite;
+import de.mirkosertic.gameengine.sprite.SpriteComponent;
+import de.mirkosertic.gameengine.type.ResourceName;
+import de.mirkosertic.gameengine.type.Size;
 import de.mirkosertic.gameengine.javafx.JavaFXBitmapResource;
-import de.mirkosertic.gameengine.sprites.SpriteComponentTemplate;
+import de.mirkosertic.gameengine.sprite.SpriteComponentTemplate;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

@@ -3,8 +3,8 @@ package de.mirkosertic.gameengine.core;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.mirkosertic.gameengine.types.GameKeyCode;
-import de.mirkosertic.gameengine.types.ResourceName;
+import de.mirkosertic.gameengine.type.GameKeyCode;
+import de.mirkosertic.gameengine.type.ResourceName;
 
 class ObjectValueOrReferenceEncoder {
 

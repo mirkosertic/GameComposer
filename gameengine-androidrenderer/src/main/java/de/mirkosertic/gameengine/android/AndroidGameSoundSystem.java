@@ -6,7 +6,7 @@ import android.media.SoundPool;
 
 import de.mirkosertic.gameengine.core.GameResourceCache;
 import de.mirkosertic.gameengine.sound.GameSoundSystem;
-import de.mirkosertic.gameengine.types.ResourceName;
+import de.mirkosertic.gameengine.type.ResourceName;
 
 import java.io.IOException;
 import java.util.HashMap;
