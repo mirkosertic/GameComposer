@@ -15,6 +15,6 @@ public class StaticComponentUnmarshaller implements GameComponentUnmarshaller<St
 
     @Override
     public StaticComponent deserialize(GameRuntime aRuntime, GameObjectInstance aObjectInstance, Map<String, Object> aSerializedData) {
-        return StaticComponent.deserialize(aObjectInstance, aSerializedData);
+        return StaticComponent.deserialize(aObjectInstance);
     }
 }

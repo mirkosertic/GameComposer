@@ -15,6 +15,6 @@ public class ConstantMovementActionUnmarshaller implements ActionUnmarshaller {
 
     @Override
     public Action unmarshall(Map<String, Object> aSerializedData, GameScene aGameScene) {
-        return ConstantMovementAction.unmarshall(aGameScene, aSerializedData);
+        return ConstantMovementAction.unmarshall(aSerializedData);
     }
 }

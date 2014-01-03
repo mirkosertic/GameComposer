@@ -37,7 +37,7 @@ public class StaticComponentTemplate extends GameComponentTemplate<StaticCompone
         return theResult;
     }
 
-    public static StaticComponentTemplate deserialize(GameObject aOwner, Map<String, Object> aSerializedData) {
+    public static StaticComponentTemplate deserialize(GameObject aOwner) {
         return new StaticComponentTemplate(aOwner);
     }
 }

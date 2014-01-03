@@ -11,6 +11,6 @@ public class DeleteGameObjectInstanceActionUnmarshaller implements ActionUnmarsh
 
     @Override
     public Action unmarshall(Map<String, Object> aSerializedData, GameScene aGameScene) {
-        return DeleteGameObjectInstanceAction.unmarshall(aSerializedData);
+        return DeleteGameObjectInstanceAction.unmarshall();
     }
 }

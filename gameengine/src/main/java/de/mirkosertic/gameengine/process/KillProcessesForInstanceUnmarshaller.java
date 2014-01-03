@@ -14,6 +14,6 @@ public class KillProcessesForInstanceUnmarshaller implements ActionUnmarshaller 
 
     @Override
     public KillProcessesForInstanceAction unmarshall(Map<String, Object> aSerializedData, GameScene aGameScene) {
-        return KillProcessesForInstanceAction.unmarshall(aSerializedData, aGameScene);
+        return KillProcessesForInstanceAction.unmarshall();
     }
 }

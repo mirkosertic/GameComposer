@@ -2,17 +2,16 @@ package de.mirkosertic.gameengine.physic;
 
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.event.GameEvent;
+import de.mirkosertic.gameengine.type.Force;
 
 public class ApplyImpulseToGameObjectInstance extends GameEvent {
 
     public final GameObjectInstance instance;
-    public final float impulseX;
-    public final float impulseY;
+    public final Force force;
 
-    public ApplyImpulseToGameObjectInstance(GameObjectInstance aInstance, float aImpulseX, float aImpulseY) {
+    public ApplyImpulseToGameObjectInstance(GameObjectInstance aInstance, Force aForce) {
         super("ApplyImpulseToGameObjectInstance");
         instance = aInstance;
-        impulseX = aImpulseX;
-        impulseY = aImpulseY;
+        force = aForce;
     }
 }

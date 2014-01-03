@@ -33,7 +33,7 @@ public class KillProcessesForInstanceAction implements Action {
         return theResult;
     }
 
-    public static KillProcessesForInstanceAction unmarshall(Map<String, Object> aSerializedData, GameScene aGameScene) {
+    public static KillProcessesForInstanceAction unmarshall() {
         return new KillProcessesForInstanceAction();
     }
 }

@@ -13,11 +13,11 @@ public class StaticComponent extends GameComponent implements Static {
     private final GameObjectInstance objectInstance;
 
     StaticComponent(GameObjectInstance aObjectInstance) {
-        objectInstance = aObjectInstance;
+        this(aObjectInstance, aObjectInstance.getOwnerGameObject().getComponentTemplate(StaticComponentTemplate.class));
     }
 
     StaticComponent(GameObjectInstance aObjectInstance, StaticComponentTemplate aTemplate) {
-        this(aObjectInstance);
+        objectInstance = aObjectInstance;
     }
 
     @Override
@@ -37,7 +37,7 @@ public class StaticComponent extends GameComponent implements Static {
         return objectInstance.getOwnerGameObject().getComponentTemplate(StaticComponentTemplate.class);
     }
 
-    public static StaticComponent deserialize(GameObjectInstance aObjectInstance, Map<String, Object> aSerializedData) {
+    public static StaticComponent deserialize(GameObjectInstance aObjectInstance) {
         return new StaticComponent(aObjectInstance);
     }
 }

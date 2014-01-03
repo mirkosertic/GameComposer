@@ -28,12 +28,12 @@ public class JBox2DGamePhysicsManagerFactory implements GamePhysicsManagerFactor
         });
         aEventManager.register(null, ApplyImpulseToGameObjectInstance.class, new GameEventListener<ApplyImpulseToGameObjectInstance>() {
             public void handleGameEvent(ApplyImpulseToGameObjectInstance aEvent) {
-                thePhysicsManager.applyImpulse(aEvent.instance, aEvent.impulseX, aEvent.impulseY);
+                thePhysicsManager.applyImpulse(aEvent.instance, aEvent.force);
             }
         });
         aEventManager.register(null, ApplyForceToGameObjectInstance.class, new GameEventListener<ApplyForceToGameObjectInstance>() {
             public void handleGameEvent(ApplyForceToGameObjectInstance aEvent) {
-                thePhysicsManager.applyForce(aEvent.instance, aEvent.forceX, aEvent.forceY);
+                thePhysicsManager.applyForce(aEvent.instance, aEvent.force);
             }
         });
         aEventManager.register(null, DisableDynamicPhysics.class, new GameEventListener<DisableDynamicPhysics>() {
@@ -57,7 +57,7 @@ public class JBox2DGamePhysicsManagerFactory implements GamePhysicsManagerFactor
         aEventManager.register(null, SystemTick.class, new GameEventListener<SystemTick>() {
             @Override
             public void handleGameEvent(SystemTick aEvent) {
-                thePhysicsManager.proceedGame(aEvent.gameTime, aEvent.elapsedTimeSinceLastLoop);
+                thePhysicsManager.proceedGame(aEvent.elapsedTimeSinceLastLoop);
             }
         });
         return thePhysicsManager;
