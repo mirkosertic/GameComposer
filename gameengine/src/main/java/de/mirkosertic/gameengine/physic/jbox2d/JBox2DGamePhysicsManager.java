@@ -5,6 +5,7 @@ import java.util.*;
 import de.mirkosertic.gameengine.event.GameEvent;
 import de.mirkosertic.gameengine.event.PropertyChanged;
 import de.mirkosertic.gameengine.physic.*;
+import de.mirkosertic.gameengine.type.Force;
 import org.jbox2d.callbacks.ContactImpulse;
 import org.jbox2d.callbacks.ContactListener;
 import org.jbox2d.collision.Manifold;
@@ -282,17 +283,17 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
         return null;
     }
 
-    void applyImpulse(GameObjectInstance aInstance, float aImpulseX, float aImpulseY) {
+    void applyImpulse(GameObjectInstance aInstance, Force aForce) {
         Body theBody = dynamicObjects.get(aInstance);
         if (theBody != null) {
-            theBody.applyLinearImpulse(new Vec2(aImpulseX, aImpulseY), theBody.getWorldCenter());
+            theBody.applyLinearImpulse(new Vec2(aForce.forceX, aForce.forceY), theBody.getWorldCenter());
         }
     }
 
-    void applyForce(GameObjectInstance aInstance, float aForceX, float aForceY) {
+    void applyForce(GameObjectInstance aInstance, Force aForce) {
         Body theBody = dynamicObjects.get(aInstance);
         if (theBody != null) {
-            theBody.applyForce(new Vec2(aForceX, aForceY), theBody.getWorldCenter());
+            theBody.applyForce(new Vec2(aForce.forceX, aForce.forceY), theBody.getWorldCenter());
         }
     }
 
@@ -319,7 +320,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
         }
     }
 
-    void proceedGame(long aGameTime, long aElapsedTimeSinceLastLoop) {
+    void proceedGame(long aElapsedTimeSinceLastLoop) {
 
         insimulation = true;
 

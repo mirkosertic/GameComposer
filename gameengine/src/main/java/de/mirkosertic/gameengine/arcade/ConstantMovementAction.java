@@ -49,7 +49,7 @@ public class ConstantMovementAction implements Action {
         return theResult;
     }
 
-    public static ConstantMovementAction unmarshall(GameScene aGameScene, Map<String, Object> aSerializedData) {
+    public static ConstantMovementAction unmarshall(Map<String, Object> aSerializedData) {
         ConstantMovementAction theResult = new ConstantMovementAction();
         Map<String, Object> theDirection = (Map<String, Object>) aSerializedData.get(PROPERTY_MOVEMENT_DIRECTION);
         if (theDirection != null) {

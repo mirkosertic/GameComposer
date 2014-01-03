@@ -11,6 +11,6 @@ public class SystemTickConditionUnmarshaller implements ConditionUnmarshaller {
 
     @Override
     public Condition unmarshall(GameScene aGameScene, Map<String, Object> aSerializedData) {
-        return SystemTickCondition.unmarshall(aGameScene, aSerializedData);
+        return SystemTickCondition.unmarshall(aSerializedData);
     }
 }

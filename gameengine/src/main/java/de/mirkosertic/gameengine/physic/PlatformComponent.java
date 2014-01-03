@@ -10,6 +10,7 @@ import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.input.KeyPressed;
 import de.mirkosertic.gameengine.input.KeyReleased;
 import de.mirkosertic.gameengine.type.CollisionPosition;
+import de.mirkosertic.gameengine.type.Force;
 import de.mirkosertic.gameengine.type.GameKeyCode;
 import de.mirkosertic.gameengine.type.Position;
 
@@ -72,7 +73,7 @@ public class PlatformComponent extends GameComponent implements Platform {
         });
         aGameRuntime.getEventManager().register(objectInstance, SystemTick.class, new GameEventListener<SystemTick>() {
             public void handleGameEvent(SystemTick aEvent) {
-                handleGameLoop(aEvent);
+                handleGameLoop();
             }
         });
 
@@ -106,16 +107,16 @@ public class PlatformComponent extends GameComponent implements Platform {
         this.jumping = jumping;
     }
 
-    void handleGameLoop(SystemTick aEvent) {
+    void handleGameLoop() {
         if (upKeyDown && !isJumping()) {
-            gameRuntime.getEventManager().fire(new ApplyImpulseToGameObjectInstance(objectInstance, 0, jumpImpulse.get()));
+            gameRuntime.getEventManager().fire(new ApplyImpulseToGameObjectInstance(objectInstance, new Force(0, jumpImpulse.get())));
             setJumping(true);
         }
         if (rightKeyDown) {
-            gameRuntime.getEventManager().fire(new ApplyForceToGameObjectInstance(objectInstance, leftRightImpulse.get(), 0f));
+            gameRuntime.getEventManager().fire(new ApplyForceToGameObjectInstance(objectInstance, new Force(leftRightImpulse.get(), 0f)));
         }
         if (leftKeyDown) {
-            gameRuntime.getEventManager().fire(new ApplyForceToGameObjectInstance(objectInstance, -leftRightImpulse.get(), 0));
+            gameRuntime.getEventManager().fire(new ApplyForceToGameObjectInstance(objectInstance, new Force(-leftRightImpulse.get(), 0)));
         }
     }
 
@@ -176,7 +177,7 @@ public class PlatformComponent extends GameComponent implements Platform {
         return objectInstance.getOwnerGameObject().getComponentTemplate(PlatformComponentTemplate.class);
     }
 
-    public static PlatformComponent deserialize(GameObjectInstance aObjectInstance, Map<String, Object> aSerializedData, GameRuntime aGameRuntime) {
+    public static PlatformComponent deserialize(GameObjectInstance aObjectInstance, GameRuntime aGameRuntime) {
         PlatformComponent theComponent = new PlatformComponent(aObjectInstance, aGameRuntime);
         theComponent.registerEvents(aGameRuntime);
         return theComponent;

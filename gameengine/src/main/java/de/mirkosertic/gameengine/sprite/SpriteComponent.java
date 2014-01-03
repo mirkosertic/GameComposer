@@ -49,7 +49,7 @@ public class SpriteComponent extends GameComponent implements Sprite {
         return objectInstance.getOwnerGameObject().getComponentTemplate(SpriteComponentTemplate.class);
     }
 
-    public static SpriteComponent deserialize(GameObjectInstance aObjectInstance, Map<String, Object> aSerializedData) {
+    public static SpriteComponent deserialize(GameObjectInstance aObjectInstance) {
         return new SpriteComponent(aObjectInstance);
     }
 }

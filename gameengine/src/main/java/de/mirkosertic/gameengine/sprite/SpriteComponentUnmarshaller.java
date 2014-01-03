@@ -15,6 +15,6 @@ public class SpriteComponentUnmarshaller implements GameComponentUnmarshaller<Sp
 
     @Override
     public SpriteComponent deserialize(GameRuntime aRuntime, GameObjectInstance aObjectInstance, Map<String, Object> aSerializedData) {
-        return SpriteComponent.deserialize(aObjectInstance, aSerializedData);
+        return SpriteComponent.deserialize(aObjectInstance);
     }
 }

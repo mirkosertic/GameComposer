@@ -28,6 +28,8 @@ import de.mirkosertic.gameengine.physic.PlatformComponentUnmarshaller;
 import de.mirkosertic.gameengine.physic.StaticComponentTemplateUnmarshaller;
 import de.mirkosertic.gameengine.physic.StaticComponentUnmarshaller;
 import de.mirkosertic.gameengine.physic.jbox2d.JBox2DGamePhysicsManagerFactory;
+import de.mirkosertic.gameengine.playerscore.PlayerScoreComponentTemplateUnmarshaller;
+import de.mirkosertic.gameengine.playerscore.PlayerScoreComponentUnmarshaller;
 import de.mirkosertic.gameengine.process.GameProcessManager;
 import de.mirkosertic.gameengine.process.GameProcessManagerFactory;
 import de.mirkosertic.gameengine.process.KillProcessesForInstanceUnmarshaller;
@@ -70,6 +72,7 @@ public abstract class AbstractGameRuntimeFactory {
         theRegistry.registerTemplateUnmarshaller(new StaticComponentTemplateUnmarshaller());
         theRegistry.registerTemplateUnmarshaller(new PlatformComponentTemplateUnmarshaller());
         theRegistry.registerTemplateUnmarshaller(new TextComponentTemplateUnmarshaller());
+        theRegistry.registerTemplateUnmarshaller(new PlayerScoreComponentTemplateUnmarshaller());
 
         theRegistry.registerComponentUnmarshaller(new PhysicsComponentUnmarshaller());
         theRegistry.registerComponentUnmarshaller(new CameraComponentUnmarshaller());
@@ -77,6 +80,7 @@ public abstract class AbstractGameRuntimeFactory {
         theRegistry.registerComponentUnmarshaller(new StaticComponentUnmarshaller());
         theRegistry.registerComponentUnmarshaller(new PlatformComponentUnmarshaller());
         theRegistry.registerComponentUnmarshaller(new TextComponentUnmarshaller());
+        theRegistry.registerComponentUnmarshaller(new PlayerScoreComponentUnmarshaller());
 
         theRegistry.registerConditionUnmarshaller(new KeyEventConditionUnmarshaller());
         theRegistry.registerConditionUnmarshaller(new ObjectCollisionConditionUnmarshaller());

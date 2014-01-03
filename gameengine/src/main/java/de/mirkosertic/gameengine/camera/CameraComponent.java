@@ -124,7 +124,7 @@ public class CameraComponent extends GameComponent implements Camera {
         return objectInstance.getOwnerGameObject().getComponentTemplate(CameraComponentTemplate.class);
     }
 
-    public static CameraComponent deserialize(GameObjectInstance aObjectInstance, Map<String, Object> aSerializedData) {
+    public static CameraComponent deserialize(GameObjectInstance aObjectInstance) {
         return new CameraComponent(aObjectInstance);
     }
 

@@ -71,7 +71,7 @@ public class KeyEventCondition implements Condition {
         return theResult;
     }
 
-    public static KeyEventCondition unmarshall(GameScene aGameScene, Map<String, Object> aSerializedData) {
+    public static KeyEventCondition unmarshall(Map<String, Object> aSerializedData) {
         KeyEventCondition theResult = new KeyEventCondition();
         theResult.keyCode.setQuietly(GameKeyCode.valueOf((String) aSerializedData.get(KEY_CODE_PROPERTY)));
         theResult.eventType.setQuietly(KeyEventType.valueOf((String) aSerializedData.get(EVENT_TYPE_PROPERTY)));

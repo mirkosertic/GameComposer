@@ -42,7 +42,7 @@ public class SystemTickCondition implements Condition {
         return theResult;
     }
 
-    public static Condition unmarshall(GameScene aGameScene, Map<String, Object> aSerializedData) {
+    public static Condition unmarshall(Map<String, Object> aSerializedData) {
         SystemTickCondition theResult = new SystemTickCondition();
         theResult.everyTicks.setQuietly(Long.valueOf((String) aSerializedData.get(EVERY_TICKS_PROPERTY)));
         return theResult;

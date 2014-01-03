@@ -5,6 +5,7 @@ import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.physic.ApplyImpulseToGameObjectInstance;
 import de.mirkosertic.gameengine.process.AbstractGameProcess;
 import de.mirkosertic.gameengine.type.Angle;
+import de.mirkosertic.gameengine.type.Force;
 
 public class ConstantMovementProcess extends AbstractGameProcess {
 
@@ -25,7 +26,7 @@ public class ConstantMovementProcess extends AbstractGameProcess {
         float theRadians = angle.toRadians();
         float theImpulseX = (float) (Math.cos(theRadians) * force / 1000 * aElapsedTimeSinceLastLoop);
         float theImpulseY = (float) (Math.sin(theRadians) * force / 1000 * aElapsedTimeSinceLastLoop);
-        gameRuntime.getEventManager().fire(new ApplyImpulseToGameObjectInstance(instance, theImpulseX, theImpulseY));
+        gameRuntime.getEventManager().fire(new ApplyImpulseToGameObjectInstance(instance, new Force(theImpulseX, theImpulseY)));
 
         return ProceedResult.CONTINUE_RUNNING;
     }

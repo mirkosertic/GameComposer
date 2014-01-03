@@ -15,7 +15,7 @@ public class CameraComponentUnmarshaller implements GameComponentUnmarshaller<Ca
 
     @Override
     public CameraComponent deserialize(GameRuntime aRuntime, GameObjectInstance aObjectInstance, Map<String, Object> aSerializedData) {
-        CameraComponent theResult = CameraComponent.deserialize(aObjectInstance, aSerializedData);
+        CameraComponent theResult = CameraComponent.deserialize(aObjectInstance);
         theResult.registerEvents(aRuntime);
         return theResult;
     }

@@ -15,6 +15,6 @@ public class KeyEventConditionUnmarshaller implements ConditionUnmarshaller {
 
     @Override
     public Condition unmarshall(GameScene aGameScene, Map<String, Object> aSerializedData) {
-        return KeyEventCondition.unmarshall(aGameScene, aSerializedData);
+        return KeyEventCondition.unmarshall(aSerializedData);
     }
 }
