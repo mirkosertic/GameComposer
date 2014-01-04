@@ -3,7 +3,7 @@ package de.mirkosertic.gameengine.core;
 import de.mirkosertic.gameengine.ArrayUtils;
 import de.mirkosertic.gameengine.event.GameEventManager;
 
-import java.util.*;
+import java.util.List;
 
 public class GameRuntime {
 
@@ -11,12 +11,14 @@ public class GameRuntime {
     private GameSystem[] systems;
     private final GameResourceCache gameResourceCache;
     private final IORegistry ioRegistry;
+    private final ExpressionParserFactory expressionParserFactory;
 
     public GameRuntime(GameEventManager aEventManager, GameResourceLoader aResourceLoader) {
         ioRegistry = new IORegistry();
         eventManager = aEventManager;
         systems = new GameSystem[0];
         gameResourceCache = new GameResourceCache(aResourceLoader);
+        expressionParserFactory = new ExpressionParserFactory();
     }
 
     public GameResourceCache getResourceCache() {
@@ -25,6 +27,10 @@ public class GameRuntime {
 
     public GameEventManager getEventManager() {
         return eventManager;
+    }
+
+    public ExpressionParserFactory getExpressionParserFactory() {
+        return expressionParserFactory;
     }
 
     public void addSystem(GameSystem aSystem) {

@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import android.view.SurfaceHolder;
 
 import de.mirkosertic.gameengine.camera.CameraComponent;
+import de.mirkosertic.gameengine.core.ExpressionParser;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.core.GameScene;
@@ -110,7 +111,8 @@ public class AndroidGameView implements GameView {
             }
             Text theTextComponent = theInstance.getComponent(TextComponent.class);
             if (theTextComponent != null) {
-                drawText(theCanvas, theInstance, thePosition, theTextComponent.fontProperty().get(), theTextComponent.colorProperty().get(), theTextComponent.textExpressionProperty().get(), theSize);
+                ExpressionParser theExpressionParser = aScene.get(theTextComponent.textExpressionProperty().get());
+                drawText(theCanvas, thePosition, theTextComponent.fontProperty().get(), theTextComponent.colorProperty().get(), theExpressionParser.evaluate(), theSize);
                 theSomethingRendered = true;
             }
 
@@ -124,12 +126,12 @@ public class AndroidGameView implements GameView {
         theHolder.unlockCanvasAndPost(theCanvas);
     }
 
-    private void drawText(Canvas aCanvas, GameObjectInstance aInstance, Position aPosition, Font aFont, Color aColor, TextExpression aTextExpression, Size aSize) {
+    private void drawText(Canvas aCanvas, Position aPosition, Font aFont, Color aColor, String aText, Size aSize) {
         aCanvas.save();
         Paint thePaint = toPaint(aColor);
         thePaint.setTextSize(aFont.size);
         thePaint.setTypeface(toTypeface(aFont));
-        aCanvas.drawText(aTextExpression.expression, aPosition.x, aPosition.y, thePaint);
+        aCanvas.drawText(aText, aPosition.x, aPosition.y, thePaint);
         aCanvas.restore();
     }
 

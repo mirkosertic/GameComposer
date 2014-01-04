@@ -8,6 +8,7 @@ import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.TextResource;
 
 import de.mirkosertic.gameengine.camera.CameraComponent;
+import de.mirkosertic.gameengine.core.ExpressionParser;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.core.GameScene;
@@ -296,7 +297,8 @@ public class GWTWebGLGameView extends AbstractWebGameView {
             }
             Text theTextComponent = theInstance.getComponent(TextComponent.class);
             if (theTextComponent != null) {
-                drawText(theContext, theInstance, thePosition, theTextComponent.fontProperty().get(), theTextComponent.colorProperty().get(), theTextComponent.textExpressionProperty().get(), theSize);
+                ExpressionParser theExpressionParser = aScene.get(theTextComponent.textExpressionProperty().get());
+                drawText(theContext, thePosition, theTextComponent.fontProperty().get(), theTextComponent.colorProperty().get(), theExpressionParser.evaluate(), theSize);
                 theSomethingRendered = true;
             }
 

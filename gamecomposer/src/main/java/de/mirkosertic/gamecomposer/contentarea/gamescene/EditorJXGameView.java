@@ -198,12 +198,12 @@ public class EditorJXGameView extends JavaFXGameView {
     }
 
     @Override
-    protected void drawText(GraphicsContext aContext, GameObjectInstance aInstance, Position aPosition, Font aFont, de.mirkosertic.gameengine.type.Color aColor, TextExpression aExpression, Size aSize) {
-        super.drawText(aContext, aInstance, aPosition, aFont, aColor, aExpression, aSize);
+    protected void drawText(GraphicsContext aContext, GameObjectInstance aInstance, Position aPosition, Font aFont, de.mirkosertic.gameengine.type.Color aColor, String aText, Size aSize) {
+        super.drawText(aContext, aInstance, aPosition, aFont, aColor, aText, aSize);
 
         javafx.scene.text.Font theFont = toFont(aFont);
         FontMetrics theMetrics = Toolkit.getToolkit().getFontLoader().getFontMetrics(theFont);
-        int theWidth = (int) theMetrics.computeStringWidth(aExpression.expression);
+        int theWidth = (int) theMetrics.computeStringWidth(aText);
         int theHeight = (int) theMetrics.getLineHeight();
 
         drawSelectionAndHighlighting(aContext, aInstance, aPosition, new Size(theWidth, theHeight));

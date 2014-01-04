@@ -80,7 +80,8 @@ public class JavaFXGameView extends Canvas implements GameView {
             }
             Text theTextComponent = theInstance.getComponent(TextComponent.class);
             if (theTextComponent != null) {
-                drawText(theContext, theInstance, thePosition, theTextComponent.fontProperty().get(), theTextComponent.colorProperty().get(), theTextComponent.textExpressionProperty().get(), theSize);
+                ExpressionParser theExpressionParser = gameScene.get(theTextComponent.textExpressionProperty().get());
+                drawText(theContext, theInstance, thePosition, theTextComponent.fontProperty().get(), theTextComponent.colorProperty().get(), theExpressionParser.evaluate(), theSize);
                 theSomethingRendered = true;
             }
 
@@ -109,13 +110,13 @@ public class JavaFXGameView extends Canvas implements GameView {
     protected void afterRendering(GraphicsContext aContext) {
     }
 
-    protected void drawText(GraphicsContext aContext, GameObjectInstance aInstance, Position aPosition, de.mirkosertic.gameengine.type.Font aFont, de.mirkosertic.gameengine.type.Color aColor, TextExpression aExpression, Size aSize) {
+    protected void drawText(GraphicsContext aContext, GameObjectInstance aInstance, Position aPosition, de.mirkosertic.gameengine.type.Font aFont, de.mirkosertic.gameengine.type.Color aColor, String aText, Size aSize) {
         aContext.save();
         Color theTextColor = Color.rgb(aColor.r, aColor.g, aColor.b);
         aContext.setFill(theTextColor);
         aContext.setStroke(theTextColor);
         aContext.setFont(toFont(aFont));
-        aContext.fillText(aExpression.expression, aPosition.x, aPosition.y + aFont.size);
+        aContext.fillText(aText, aPosition.x, aPosition.y + aFont.size);
         aContext.restore();
     }
 

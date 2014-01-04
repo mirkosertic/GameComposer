@@ -6,6 +6,7 @@ import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.type.Color;
 import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Rectangle;
+import de.mirkosertic.gameengine.type.TextExpression;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,6 +32,7 @@ public class GameScene {
     private EventSheet[] eventSheets;
 
     private final GameRuntime gameRuntime;
+    private final Map<TextExpression, ExpressionParser> knownParser;
 
     public GameScene(GameRuntime aGameRuntime) {
 
@@ -45,6 +47,18 @@ public class GameScene {
         objects = new GameObject[0];
         eventSheets = new EventSheet[0];
         gameRuntime = aGameRuntime;
+
+        knownParser = new HashMap<TextExpression, ExpressionParser>();
+    }
+
+    public ExpressionParser get(TextExpression aExpression) {
+        ExpressionParser theParser = knownParser.get(aExpression);
+        if (theParser == null) {
+            theParser = gameRuntime.getExpressionParserFactory().create(aExpression);
+            knownParser.put(aExpression, theParser);
+            //TODO: Register variables to expression
+        }
+        return theParser;
     }
 
     public GameRuntime getRuntime() {
