@@ -5,6 +5,7 @@ import de.mirkosertic.gameengine.arcade.ConstantMovementActionUnmarshaller;
 import de.mirkosertic.gameengine.camera.CameraComponentTemplateUnmarshaller;
 import de.mirkosertic.gameengine.camera.CameraComponentUnmarshaller;
 import de.mirkosertic.gameengine.core.DeleteGameObjectInstanceActionUnmarshaller;
+import de.mirkosertic.gameengine.core.ExpressionParserFactory;
 import de.mirkosertic.gameengine.core.GameObjectInstanceAddedToSceneConditionUnmarshaller;
 import de.mirkosertic.gameengine.core.GameObjectInstanceLeftLayoutConditionUnmarshaller;
 import de.mirkosertic.gameengine.core.GameObjectInstanceRemovedFromSceneConditionUnmarshaller;
@@ -17,6 +18,7 @@ import de.mirkosertic.gameengine.core.SetPropertyActionUnmarshaller;
 import de.mirkosertic.gameengine.core.SpawnGameObjectInstanceActionUnmarshaller;
 import de.mirkosertic.gameengine.core.SystemTickConditionUnmarshaller;
 import de.mirkosertic.gameengine.event.GameEventManager;
+import de.mirkosertic.gameengine.expression.ge.GeExpressionParserFactory;
 import de.mirkosertic.gameengine.input.KeyEventConditionUnmarshaller;
 import de.mirkosertic.gameengine.physic.GamePhysicsManager;
 import de.mirkosertic.gameengine.physic.GamePhysicsManagerFactory;
@@ -54,8 +56,11 @@ public abstract class AbstractGameRuntimeFactory {
         GamePhysicsManagerFactory thePhysicsManagerFactory = new JBox2DGamePhysicsManagerFactory();
         GamePhysicsManager thePhysicsManager = thePhysicsManagerFactory.create(theEventManager);
 
+        // Expression parser
+        ExpressionParserFactory theExpressionParserFactory = new GeExpressionParserFactory();
+
         // Runtime
-        GameRuntime theGameRuntime = new GameRuntime(theEventManager, aResourceLoader);
+        GameRuntime theGameRuntime = new GameRuntime(theEventManager, aResourceLoader, theExpressionParserFactory);
 
         // Sound
         GameSoundManager theSoundManager = GameSoundManagerFactory.create(theEventManager, aSoundSystemFactory.create(theGameRuntime));

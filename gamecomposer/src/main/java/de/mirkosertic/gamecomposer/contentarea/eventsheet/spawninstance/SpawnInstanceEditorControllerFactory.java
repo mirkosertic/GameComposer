@@ -3,6 +3,7 @@ package de.mirkosertic.gamecomposer.contentarea.eventsheet.spawninstance;
 import de.mirkosertic.gamecomposer.FXMLLoaderFactory;
 import de.mirkosertic.gamecomposer.contentarea.eventsheet.ActionControllerFactory;
 import de.mirkosertic.gamecomposer.contentarea.eventsheet.ActionEditorType;
+import de.mirkosertic.gameengine.core.GameRule;
 import de.mirkosertic.gameengine.core.SpawnGameObjectInstanceAction;
 import de.mirkosertic.gameengine.core.GameScene;
 import javafx.fxml.FXMLLoader;
@@ -19,7 +20,7 @@ public class SpawnInstanceEditorControllerFactory implements ActionControllerFac
     @Inject
     FXMLLoaderFactory fxmlLoaderFactory;
 
-    public SpawnIstanceEditorController createFor(GameScene aGameScene, SpawnGameObjectInstanceAction aAction) {
+    public SpawnIstanceEditorController createFor(GameScene aGameScene, GameRule aRule, SpawnGameObjectInstanceAction aAction) {
         try (InputStream fxml = SpawnIstanceEditorController.class.getResourceAsStream("SpawnInstanceEditor.fxml")) {
             FXMLLoader theLoader = fxmlLoaderFactory.createLoader();
             ResourceBundle theBundle = ResourceBundle.getBundle("de.mirkosertic.gamecomposer.contentarea.eventsheet.spawninstance.SpawnInstanceEditor");

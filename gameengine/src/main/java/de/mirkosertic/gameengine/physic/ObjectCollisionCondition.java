@@ -63,7 +63,7 @@ public class ObjectCollisionCondition implements Condition {
                         theSecondaryObject.uuidProperty().get().equals(theO2.uuidProperty().get())) {
                     // Collision
                     if (thePosition.detect(theCollision.instance1.positionProperty().get(), theCollision.instance2.positionProperty().get())) {
-                        return new ConditionResult(true, new GameObjectInstance[] {theCollision.instance1});
+                        return new ConditionResult(true, aEvent, new GameObjectInstance[] {theCollision.instance1});
                     }
                 }
 
@@ -71,7 +71,7 @@ public class ObjectCollisionCondition implements Condition {
                         thePrimaryObject.uuidProperty().get().equals(theO2.uuidProperty().get())) {
                     // Collision
                     if (thePosition.detect(theCollision.instance2.positionProperty().get(), theCollision.instance1.positionProperty().get())) {
-                        return new ConditionResult(true, new GameObjectInstance[] {((GameObjectCollision) aEvent).instance2});
+                        return new ConditionResult(true, aEvent, new GameObjectInstance[] {((GameObjectCollision) aEvent).instance2});
                     }
                 }
             }

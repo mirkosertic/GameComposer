@@ -29,7 +29,7 @@ public class GameObjectInstanceRemovedFromSceneCondition implements Condition {
             GameObjectInstanceRemovedFromScene theEvent = (GameObjectInstanceRemovedFromScene) aEvent;
             GameObjectInstance theInstance = theEvent.instance;
             if (theInstance.getOwnerGameObject() == gameObject.get()) {
-                return new ConditionResult(true, new GameObjectInstance[] {theInstance});
+                return new ConditionResult(true, aEvent, new GameObjectInstance[] {theInstance});
             }
         }
         return ConditionResult.NOT_FULFILLED;

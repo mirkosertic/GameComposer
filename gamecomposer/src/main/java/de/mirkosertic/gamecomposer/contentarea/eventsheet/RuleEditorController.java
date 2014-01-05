@@ -170,7 +170,7 @@ public class RuleEditorController implements Controller {
             actions.getChildren().add(theActionInfo);
 
             ActionControllerFactory theFactory = (ActionControllerFactory) instances.select(createActionEditorQualifier(theAction.getClass())).get();
-            Controller theController = theFactory.createFor(eventSheet.getGameScene(), theAction);
+            Controller theController = theFactory.createFor(eventSheet.getGameScene(), gameRule, theAction);
             actions.getChildren().add(theController.getView());
         }
     }

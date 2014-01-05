@@ -3,6 +3,7 @@ package de.mirkosertic.gamecomposer.contentarea.eventsheet.killprocessesforinsta
 import de.mirkosertic.gamecomposer.FXMLLoaderFactory;
 import de.mirkosertic.gamecomposer.contentarea.eventsheet.ActionControllerFactory;
 import de.mirkosertic.gamecomposer.contentarea.eventsheet.ActionEditorType;
+import de.mirkosertic.gameengine.core.GameRule;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.process.KillProcessesForInstanceAction;
 
@@ -20,8 +21,7 @@ public class KillProcessesForInstanceEditorControllerFactory implements ActionCo
     @Inject
     FXMLLoaderFactory fxmlLoaderFactory;
 
-    public KillProcessesForInstanceEditorController createFor(GameScene aGameScene, KillProcessesForInstanceAction aAction) {
-        try (InputStream fxml = KillProcessesForInstanceEditorController.class.getResourceAsStream("KillInstanceProcessEditor.fxml")) {
+    public KillProcessesForInstanceEditorController createFor(GameScene aGameScene, GameRule aRule, KillProcessesForInstanceAction aAction) {        try (InputStream fxml = KillProcessesForInstanceEditorController.class.getResourceAsStream("KillInstanceProcessEditor.fxml")) {
             FXMLLoader theLoader = fxmlLoaderFactory.createLoader();
             ResourceBundle theBundle = ResourceBundle.getBundle("de.mirkosertic.gamecomposer.contentarea.eventsheet.killinstanceprocesses.KillInstanceProcessEditor");
             theLoader.setResources(theBundle);

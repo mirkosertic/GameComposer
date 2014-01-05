@@ -46,7 +46,7 @@ public class KeyEventCondition implements Condition {
             if (aEvent instanceof KeyPressed) {
                 KeyPressed theKeyPressed = (KeyPressed) aEvent;
                 if (theKeyPressed.keyCode == keyCode.get()) {
-                    return new ConditionResult(true, aScene.getInstances());
+                    return new ConditionResult(true, aEvent, aScene.getInstances());
                 }
             }
             break;
@@ -54,7 +54,7 @@ public class KeyEventCondition implements Condition {
             if (aEvent instanceof KeyReleased) {
                 KeyReleased theKeyReleased = (KeyReleased) aEvent;
                 if (theKeyReleased.keyCode == keyCode.get()) {
-                    return new ConditionResult(true, aScene.getInstances());
+                    return new ConditionResult(true, aEvent, aScene.getInstances());
                 }
             }
             break;

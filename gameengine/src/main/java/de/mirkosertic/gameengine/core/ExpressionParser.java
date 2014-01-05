@@ -1,16 +1,19 @@
 package de.mirkosertic.gameengine.core;
 
-import de.mirkosertic.gameengine.type.TextExpression;
+import de.mirkosertic.gameengine.event.PropertyAware;
+import de.mirkosertic.gameengine.type.ValueProvider;
 
-public class ExpressionParser {
+public interface ExpressionParser {
 
-    private final TextExpression textExpression;
+    String SCENE_VARIABLE = "scene";
+    String PLAYER_VARIABLE = "player";
+    String CAMERA_VARIABLE = "camera";
+    String INSTANCE_VARIABLE = "instance";
+    String EVENT_PREFIX = "event.";
 
-    ExpressionParser(TextExpression aExpression) {
-        textExpression = aExpression;
-    }
+    String evaluateToString();
 
-    public String evaluate() {
-        return textExpression.expression;
-    }
+    void registerVariable(String aVariableName, PropertyAware aPropertyAware);
+
+    <T> void registerVariable(String aVariableName, ValueProvider<T> aValueProvider);
 }

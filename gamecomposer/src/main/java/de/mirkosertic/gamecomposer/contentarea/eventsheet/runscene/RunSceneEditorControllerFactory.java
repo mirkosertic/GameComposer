@@ -3,6 +3,7 @@ package de.mirkosertic.gamecomposer.contentarea.eventsheet.runscene;
 import de.mirkosertic.gamecomposer.FXMLLoaderFactory;
 import de.mirkosertic.gamecomposer.contentarea.eventsheet.ActionControllerFactory;
 import de.mirkosertic.gamecomposer.contentarea.eventsheet.ActionEditorType;
+import de.mirkosertic.gameengine.core.GameRule;
 import de.mirkosertic.gameengine.core.RunSceneAction;
 import de.mirkosertic.gameengine.core.GameScene;
 import javafx.fxml.FXMLLoader;
@@ -19,7 +20,7 @@ public class RunSceneEditorControllerFactory implements ActionControllerFactory<
     @Inject
     FXMLLoaderFactory fxmlLoaderFactory;
 
-    public RunSceneEditorController createFor(GameScene aGameScene, RunSceneAction aAction) {
+    public RunSceneEditorController createFor(GameScene aGameScene, GameRule aRule, RunSceneAction aAction) {
         try (InputStream fxml = RunSceneEditorController.class.getResourceAsStream("RunSceneEditor.fxml")) {
             FXMLLoader theLoader = fxmlLoaderFactory.createLoader();
             ResourceBundle theBundle = ResourceBundle.getBundle("de.mirkosertic.gamecomposer.contentarea.eventsheet.runscene.RunSceneEditor");

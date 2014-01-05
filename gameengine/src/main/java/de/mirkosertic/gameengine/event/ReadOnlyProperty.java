@@ -1,6 +1,8 @@
 package de.mirkosertic.gameengine.event;
 
-public class ReadOnlyProperty<T> {
+import de.mirkosertic.gameengine.type.ValueProvider;
+
+public class ReadOnlyProperty<T> implements ValueProvider {
 
     private final String name;
 

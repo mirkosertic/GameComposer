@@ -23,7 +23,6 @@ import de.mirkosertic.gameengine.type.Color;
 import de.mirkosertic.gameengine.type.Font;
 import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Size;
-import de.mirkosertic.gameengine.type.TextExpression;
 
 import java.io.IOException;
 
@@ -112,7 +111,7 @@ public class AndroidGameView implements GameView {
             Text theTextComponent = theInstance.getComponent(TextComponent.class);
             if (theTextComponent != null) {
                 ExpressionParser theExpressionParser = aScene.get(theTextComponent.textExpressionProperty().get());
-                drawText(theCanvas, thePosition, theTextComponent.fontProperty().get(), theTextComponent.colorProperty().get(), theExpressionParser.evaluate(), theSize);
+                drawText(theCanvas, thePosition, theTextComponent.fontProperty().get(), theTextComponent.colorProperty().get(), theExpressionParser.evaluateToString(), theSize);
                 theSomethingRendered = true;
             }
 

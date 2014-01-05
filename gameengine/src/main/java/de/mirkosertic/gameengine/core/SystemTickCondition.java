@@ -28,7 +28,7 @@ public class SystemTickCondition implements Condition {
         if (aEvent instanceof SystemTick) {
             SystemTick theTick = (SystemTick) aEvent;
             if (theTick.totalTicks % everyTicks.get() == 0) {
-                return new ConditionResult(true, aScene.getInstances());
+                return new ConditionResult(true, aEvent, aScene.getInstances());
             }
         }
         return ConditionResult.NOT_FULFILLED;
