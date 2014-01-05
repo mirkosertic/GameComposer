@@ -33,4 +33,9 @@ public class GeExpressionParser implements ExpressionParser {
     public String evaluateToString() {
         return textExpression.expression;
     }
+
+    @Override
+    public Object evaluateToObject() {
+        return null;
+    }
 }

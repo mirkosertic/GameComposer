@@ -10,6 +10,9 @@ public interface ExpressionParser {
     String CAMERA_VARIABLE = "camera";
     String INSTANCE_VARIABLE = "instance";
     String EVENT_PREFIX = "event.";
+    String OLD_VALUE_VARIABLE = "oldvalue";
+
+    Object evaluateToObject();
 
     String evaluateToString();
 
