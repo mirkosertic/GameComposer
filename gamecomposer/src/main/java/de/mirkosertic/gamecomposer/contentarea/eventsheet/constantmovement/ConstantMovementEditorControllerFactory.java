@@ -6,6 +6,7 @@ import de.mirkosertic.gamecomposer.contentarea.eventsheet.ActionEditorType;
 import de.mirkosertic.gamecomposer.contentarea.eventsheet.deleteinstance.DeleteInstanceEditorController;
 import de.mirkosertic.gameengine.arcade.ConstantMovementAction;
 import de.mirkosertic.gameengine.core.DeleteGameObjectInstanceAction;
+import de.mirkosertic.gameengine.core.GameRule;
 import de.mirkosertic.gameengine.core.GameScene;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.BorderPane;
@@ -22,7 +23,7 @@ public class ConstantMovementEditorControllerFactory implements ActionController
     FXMLLoaderFactory fxmlLoaderFactory;
 
     @Override
-    public ConstantMovementEditorController createFor(GameScene aGameScene, ConstantMovementAction aAction) {
+    public ConstantMovementEditorController createFor(GameScene aGameScene, GameRule aRule, ConstantMovementAction aAction) {
         try (InputStream fxml = ConstantMovementEditorController.class.getResourceAsStream("ConstantMovementEditor.fxml")) {
             FXMLLoader theLoader = fxmlLoaderFactory.createLoader();
             ResourceBundle theBundle = ResourceBundle.getBundle("de.mirkosertic.gamecomposer.contentarea.eventsheet.constantmovement.ConstantMovementEditor");

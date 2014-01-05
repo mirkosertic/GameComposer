@@ -38,7 +38,7 @@ public class GameObjectInstanceLeftLayoutCondition implements Condition {
                         Rectangle theLayoutBounds = aScene.layoutBoundsProperty().get();
                         Position theNewPosition = (Position) theChanged.property.get();
                         if (!theLayoutBounds.contains(theNewPosition)) {
-                            return new ConditionResult(true, new GameObjectInstance[] {theInstance});
+                            return new ConditionResult(true, aEvent, new GameObjectInstance[] {theInstance});
                         }
                     }
                 }

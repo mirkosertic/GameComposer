@@ -3,6 +3,7 @@ package de.mirkosertic.gameengine.core;
 import de.mirkosertic.gameengine.ArrayUtils;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
+import de.mirkosertic.gameengine.event.PropertyAware;
 import de.mirkosertic.gameengine.type.Color;
 import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Rectangle;
@@ -13,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GameScene {
+public class GameScene extends PropertyAware {
 
     public static final String NAME_PROPERTY = "name";
     public static final String CAMERA_OBJECT_PROPERTY = "cameraObject";
@@ -38,11 +39,11 @@ public class GameScene {
 
         GameEventManager theManager = aGameRuntime.getEventManager();
 
-        name = new Property<String>(this, NAME_PROPERTY, null, theManager);
-        cameraObject = new Property<GameObject>(this, CAMERA_OBJECT_PROPERTY, null, theManager);
-        defaultPlayer = new Property<GameObject>(this, DEFAULT_PLAYER_PROPERTY, null, theManager);
-        backgroundColor = new Property<Color>(this, COLOR_PROPERTY, new Color(0, 0, 0), theManager);
-        layoutBounds = new Property<Rectangle>(this, LAYOUT_BOUNDS_PROPERTY, new Rectangle(), theManager);
+        name = registerProperty(new Property<String>(this, NAME_PROPERTY, null, theManager));
+        cameraObject = registerProperty(new Property<GameObject>(this, CAMERA_OBJECT_PROPERTY, null, theManager));
+        defaultPlayer = registerProperty(new Property<GameObject>(this, DEFAULT_PLAYER_PROPERTY, null, theManager));
+        backgroundColor = registerProperty(new Property<Color>(this, COLOR_PROPERTY, new Color(0, 0, 0), theManager));
+        layoutBounds = registerProperty(new Property<Rectangle>(this, LAYOUT_BOUNDS_PROPERTY, new Rectangle(), theManager));
         instances = new GameObjectInstance[0];
         objects = new GameObject[0];
         eventSheets = new EventSheet[0];
@@ -55,8 +56,10 @@ public class GameScene {
         ExpressionParser theParser = knownParser.get(aExpression);
         if (theParser == null) {
             theParser = gameRuntime.getExpressionParserFactory().create(aExpression);
+            theParser.registerVariable(ExpressionParser.SCENE_VARIABLE, this);
+            theParser.registerVariable(ExpressionParser.PLAYER_VARIABLE, defaultPlayer);
+            theParser.registerVariable(ExpressionParser.CAMERA_VARIABLE, cameraObject);
             knownParser.put(aExpression, theParser);
-            //TODO: Register variables to expression
         }
         return theParser;
     }

@@ -11,7 +11,6 @@ import de.mirkosertic.gameengine.text.TextComponent;
 import de.mirkosertic.gameengine.type.Angle;
 import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Size;
-import de.mirkosertic.gameengine.type.TextExpression;
 
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
@@ -81,7 +80,7 @@ public class JavaFXGameView extends Canvas implements GameView {
             Text theTextComponent = theInstance.getComponent(TextComponent.class);
             if (theTextComponent != null) {
                 ExpressionParser theExpressionParser = gameScene.get(theTextComponent.textExpressionProperty().get());
-                drawText(theContext, theInstance, thePosition, theTextComponent.fontProperty().get(), theTextComponent.colorProperty().get(), theExpressionParser.evaluate(), theSize);
+                drawText(theContext, theInstance, thePosition, theTextComponent.fontProperty().get(), theTextComponent.colorProperty().get(), theExpressionParser.evaluateToString(), theSize);
                 theSomethingRendered = true;
             }
 

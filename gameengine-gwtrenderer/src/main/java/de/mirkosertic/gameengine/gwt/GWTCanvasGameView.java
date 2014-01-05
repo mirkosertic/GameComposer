@@ -83,7 +83,7 @@ public class GWTCanvasGameView extends AbstractWebGameView {
             Text theTextComponent = theInstance.getComponent(TextComponent.class);
             if (theTextComponent != null) {
                 ExpressionParser theExpressionParser = aScene.get(theTextComponent.textExpressionProperty().get());
-                drawText(theContext, thePosition, theTextComponent.fontProperty().get(), theTextComponent.colorProperty().get(), theExpressionParser.evaluate(), theSize);
+                drawText(theContext, thePosition, theTextComponent.fontProperty().get(), theTextComponent.colorProperty().get(), theExpressionParser.evaluateToString(), theSize);
                 theSomethingRendered = true;
             }
 

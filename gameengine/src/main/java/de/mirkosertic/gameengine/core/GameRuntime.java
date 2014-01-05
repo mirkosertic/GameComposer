@@ -13,12 +13,12 @@ public class GameRuntime {
     private final IORegistry ioRegistry;
     private final ExpressionParserFactory expressionParserFactory;
 
-    public GameRuntime(GameEventManager aEventManager, GameResourceLoader aResourceLoader) {
+    public GameRuntime(GameEventManager aEventManager, GameResourceLoader aResourceLoader, ExpressionParserFactory aExpressionParserFactory) {
         ioRegistry = new IORegistry();
         eventManager = aEventManager;
         systems = new GameSystem[0];
         gameResourceCache = new GameResourceCache(aResourceLoader);
-        expressionParserFactory = new ExpressionParserFactory();
+        expressionParserFactory = aExpressionParserFactory;
     }
 
     public GameResourceCache getResourceCache() {

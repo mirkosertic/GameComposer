@@ -8,6 +8,9 @@ import de.mirkosertic.gameengine.camera.CameraComponent;
 import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.camera.CameraComponentTemplate;
 import de.mirkosertic.gameengine.physic.*;
+import de.mirkosertic.gameengine.playerscore.PlayerScore;
+import de.mirkosertic.gameengine.playerscore.PlayerScoreComponent;
+import de.mirkosertic.gameengine.playerscore.PlayerScoreComponentTemplate;
 import de.mirkosertic.gameengine.sprite.Sprite;
 import de.mirkosertic.gameengine.sprite.SpriteComponent;
 import de.mirkosertic.gameengine.sprite.SpriteComponentTemplate;
@@ -168,6 +171,13 @@ public class ObjectInspectorController implements Controller {
                     currentController.add(theEditor);
                 }
 
+                PlayerScore theScoreTemplate = theGameObject.getComponentTemplate(PlayerScoreComponentTemplate.class);
+                if (theScoreTemplate != null) {
+                    ObjectInspectorElementController theEditor = (ObjectInspectorElementController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(PlayerScore.class)).get()).create(theScoreTemplate);
+                    TitledPane theChildPane = new TitledPane("PlayerScoreComponent", theEditor.getView());
+                    propertyPanels.getChildren().add(theChildPane);
+                    currentController.add(theEditor);
+                }
             }
             if (aObject instanceof GameObjectInstance) {
 
@@ -226,6 +236,13 @@ public class ObjectInspectorController implements Controller {
                     currentController.add(theEditor);
                 }
 
+                PlayerScore theScoreTemplate = theInstance.getComponent(PlayerScoreComponent.class);
+                if (theScoreTemplate != null) {
+                    ObjectInspectorElementController theEditor = (ObjectInspectorElementController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(PlayerScore.class)).get()).create(theScoreTemplate);
+                    TitledPane theChildPane = new TitledPane("PlayerScoreComponent", theEditor.getView());
+                    propertyPanels.getChildren().add(theChildPane);
+                    currentController.add(theEditor);
+                }
             }
         }
         view.getScene().getRoot().layout();
