@@ -52,10 +52,9 @@ public class SetPropertyAction implements Action {
                 }
 
                 ReadOnlyProperty theProperty = theInstance.getPropertyByName(thePropertyName);
-                Object thePropertyValue = theProperty.get();
+                theParser.registerVariable(ExpressionParser.OLD_VALUE_VARIABLE, theProperty);
 
-                Object theNewPropertyValue = null;
-
+                Object theNewPropertyValue = theParser.evaluateToObject();
 
                 theInstance.setPropertyByName(thePropertyName, theNewPropertyValue);
             }
