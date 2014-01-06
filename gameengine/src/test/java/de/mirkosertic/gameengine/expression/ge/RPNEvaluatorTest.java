@@ -19,6 +19,29 @@ public class RPNEvaluatorTest {
 
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testMissingOperator() {
+        evaluator.evaluate(parser.parse(scanner.scan("1 2")));
+    }
+
+    @Test
+    public void testTrue() {
+        Boolean theResult = (Boolean) evaluator.evaluate(parser.parse(scanner.scan("true")));
+        assertEquals(Boolean.TRUE, theResult);
+    }
+
+    @Test
+    public void testFalse() {
+        Boolean theResult = (Boolean) evaluator.evaluate(parser.parse(scanner.scan("false")));
+        assertEquals(Boolean.FALSE, theResult);
+    }
+
+    @Test
+    public void testPI() {
+        double theResult = (Double) evaluator.evaluate(parser.parse(scanner.scan("pi")));
+        assertEquals(Math.PI, theResult, 0);
+    }
+
     @Test
     public void testSimpleAdd() {
         int theResult = (Integer) evaluator.evaluate(parser.parse(scanner.scan("1+2")));
@@ -126,5 +149,17 @@ public class RPNEvaluatorTest {
     public void testMinFuction() {
         int theResult = (Integer) evaluator.evaluate(parser.parse(scanner.scan("2+min(2,5)")));
         assertEquals(4, theResult);
+    }
+
+    @Test
+    public void testStringWithWhiteSpace() {
+        String theResult = (String) evaluator.evaluate(parser.parse(scanner.scan("\"Hello world\"")));
+        assertEquals("Hello world", theResult);
+    }
+
+    @Test
+    public void testStringWithWhiteSpaceConcatenate() {
+        String theResult = (String) evaluator.evaluate(parser.parse(scanner.scan("\"Hello world\" | \" dude\"")));
+        assertEquals("Hello world dude", theResult);
     }
 }

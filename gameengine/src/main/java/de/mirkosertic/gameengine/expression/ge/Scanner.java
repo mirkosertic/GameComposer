@@ -51,7 +51,12 @@ class Scanner {
                         }
                         break;
                     case ' ':
-                        //Can be ignored
+                        if (theCurrentToken.length() > 0) {
+                            value(theTokens, theCurrentToken);
+                            theCurrentToken = new StringBuilder();
+                        }
+                        inNumeric = false;
+                        inSymbol = false;
                         break;
                     case '\\':
                         escapeNext = true;

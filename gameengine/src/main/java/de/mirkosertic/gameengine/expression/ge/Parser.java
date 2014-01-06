@@ -99,6 +99,12 @@ class Parser {
             theOutputQueue.add(theOutputStack.pop());
         }
 
+        if (theOutputQueue.size() > 1) {
+            if (!theOutputQueue.get(theOutputQueue.size() -1).type.isOperator()) {
+                throw new IllegalArgumentException("Missing operator");
+            }
+        }
+
         return theOutputQueue.toArray(new Token[theOutputQueue.size()]);
     }
 }

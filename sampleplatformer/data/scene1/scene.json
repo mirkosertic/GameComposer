@@ -100,7 +100,7 @@
         "size" : "32"
       },
       "textExpression" : {
-        "expression" : "First Level"
+        "expression" : "\"First Level\""
       },
       "type" : "TextComponent"
     } ],
@@ -1562,7 +1562,7 @@
         "size" : "32"
       },
       "textExpression" : {
-        "expression" : "First Level"
+        "expression" : "\"First Level\""
       },
       "type" : "TextComponent"
     } ],

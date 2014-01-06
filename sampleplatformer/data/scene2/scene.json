@@ -99,7 +99,7 @@
         "size" : "32"
       },
       "textExpression" : {
-        "expression" : "Duke rules!"
+        "expression" : "\"Duke rules!\""
       },
       "type" : "TextComponent"
     } ],
@@ -1561,7 +1561,7 @@
         "size" : "32"
       },
       "textExpression" : {
-        "expression" : "Duke rules!"
+        "expression" : "\"Duke rules!\""
       },
       "type" : "TextComponent"
     } ],
