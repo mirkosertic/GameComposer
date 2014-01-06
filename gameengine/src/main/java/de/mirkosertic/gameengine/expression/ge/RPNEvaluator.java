@@ -128,6 +128,6 @@ class RPNEvaluator {
         if (theResultStack.size() != 1) {
             throw new IllegalArgumentException("Invalid stack size : " + theResultStack);
         }
-        return theResultStack.pop();
+        return resolve(theResultStack.pop());
     }
 }
