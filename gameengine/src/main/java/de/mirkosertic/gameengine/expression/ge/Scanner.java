@@ -1,36 +1,40 @@
 package de.mirkosertic.gameengine.expression.ge;
 
-public class Scanner {
+import java.util.ArrayList;
+import java.util.List;
 
-    public enum TokenType {
-        VALUE, PLUS, MINUS, DIVIDE, MULTIPLY, OPENBRACKED, CLOSEBRACKED, COMMA;
+class Scanner {
+
+    public Scanner() {
     }
 
-    private final String expression;
-
-    public Scanner(String aExpression) {
-        expression = aExpression;
+    private void token(List<Token> aTokens, TokenType aTokenType) {
+        aTokens.add(new Token(aTokenType));
     }
 
-    public void token(TokenType aTokenType) {
-        System.out.println("Token " + aTokenType);
+    private void value(List<Token> aTokens, StringBuilder aValue) {
+        aTokens.add(new Token(TokenType.VALUE, aValue.toString()));
     }
 
-    public void token(TokenType aTokenType, StringBuilder aPrefix) {
-        System.out.println("Token " + aTokenType + " -> " + aPrefix);
+    private void symbol(List<Token> aTokens, StringBuilder aSymbol) {
+        aTokens.add(new Token(TokenType.FUNCTION, aSymbol.toString()));
     }
 
-    public void scan() {
+    public Token[] scan(String expression) {
+
+        List<Token> theTokens = new ArrayList<Token>();
+
         boolean escapeNext = false;
         boolean inString = false;
+        boolean inNumeric = false;
+        boolean inSymbol = false;
         StringBuilder theCurrentToken = new StringBuilder();
         for (int i = 0; i < expression.length(); i++) {
             char theCharacter = expression.charAt(i);
             if (escapeNext) {
                 theCurrentToken.append(theCharacter);
                 escapeNext = false;
-            } else
-            if (inString && !('"' == theCharacter)) {
+            } else if (inString && !('"' == theCharacter)) {
                 theCurrentToken.append(theCharacter);
             } else {
                 switch (expression.charAt(i)) {
@@ -40,8 +44,10 @@ public class Scanner {
                             theCurrentToken = new StringBuilder();
                         } else {
                             inString = false;
-                            token(TokenType.VALUE, theCurrentToken);
+                            value(theTokens, theCurrentToken);
                             theCurrentToken = new StringBuilder();
+                            inNumeric = false;
+                            inSymbol = false;
                         }
                         break;
                     case ' ':
@@ -52,73 +58,123 @@ public class Scanner {
                         break;
                     case '+':
                         if (theCurrentToken.length() > 0) {
-                            token(TokenType.VALUE, theCurrentToken);
+                            value(theTokens, theCurrentToken);
                             theCurrentToken = new StringBuilder();
-
-                            token(TokenType.PLUS);
-                        } else {
-                            theCurrentToken.append(theCharacter);
                         }
+                        token(theTokens, TokenType.ADD);
+                        inNumeric = false;
+                        inSymbol = false;
+                        break;
+                    case '|':
+                        if (theCurrentToken.length() > 0) {
+                            value(theTokens, theCurrentToken);
+                            theCurrentToken = new StringBuilder();
+                        }
+                        token(theTokens, TokenType.STRINGCONCATENATE);
+                        inNumeric = false;
+                        inSymbol = false;
                         break;
                     case '-':
                         if (theCurrentToken.length() > 0) {
-                            token(TokenType.VALUE, theCurrentToken);
+                            value(theTokens, theCurrentToken);
                             theCurrentToken = new StringBuilder();
-
-                            token(TokenType.MINUS);
-                        } else {
-                            theCurrentToken.append(theCharacter);
                         }
-
+                        token(theTokens, TokenType.SUBSTRACT);
+                        inNumeric = false;
+                        inSymbol = false;
                         break;
                     case '/':
                         if (theCurrentToken.length() > 0) {
-                            token(TokenType.VALUE, theCurrentToken);
+                            value(theTokens, theCurrentToken);
                             theCurrentToken = new StringBuilder();
                         }
-                        token(TokenType.DIVIDE);
+                        token(theTokens, TokenType.DIVIDE);
+                        inNumeric = false;
+                        inSymbol = false;
                         break;
                     case '*':
                         if (theCurrentToken.length() > 0) {
-                            token(TokenType.VALUE, theCurrentToken);
+                            value(theTokens, theCurrentToken);
                             theCurrentToken = new StringBuilder();
                         }
-                        token(TokenType.MULTIPLY);
+                        token(theTokens, TokenType.MULTIPLY);
+                        inNumeric = false;
+                        inSymbol = false;
+                        break;
+                    case '^':
+                        if (theCurrentToken.length() > 0) {
+                            value(theTokens, theCurrentToken);
+                            theCurrentToken = new StringBuilder();
+                        }
+                        token(theTokens, TokenType.EXP);
+                        inNumeric = false;
+                        inSymbol = false;
                         break;
                     case '(':
                         if (theCurrentToken.length() > 0) {
-                            token(TokenType.VALUE, theCurrentToken);
+                            if (inSymbol) {
+                                symbol(theTokens, theCurrentToken);
+                            } else {
+                                value(theTokens, theCurrentToken);
+                            }
                             theCurrentToken = new StringBuilder();
                         }
-                        token(TokenType.OPENBRACKED);
+                        token(theTokens, TokenType.LEFTPARENTHESIS);
+                        inNumeric = false;
+                        inSymbol = false;
                         break;
                     case ')':
                         if (theCurrentToken.length() > 0) {
-                            token(TokenType.VALUE, theCurrentToken);
+                            value(theTokens, theCurrentToken);
                             theCurrentToken = new StringBuilder();
                         }
-                        token(TokenType.CLOSEBRACKED);
+                        token(theTokens, TokenType.RIGHTPARENTHESIS);
+                        inNumeric = false;
+                        inSymbol = false;
                         break;
                     case ',':
                         if (theCurrentToken.length() > 0) {
-                            token(TokenType.VALUE, theCurrentToken);
+                            value(theTokens, theCurrentToken);
                             theCurrentToken = new StringBuilder();
                         }
-                        token(TokenType.COMMA);
+                        token(theTokens, TokenType.COMMA);
+                        inNumeric = false;
+                        inSymbol = false;
+                        break;
+                    case '0':
+                    case '1':
+                    case '2':
+                    case '3':
+                    case '4':
+                    case '5':
+                    case '6':
+                    case '7':
+                    case '8':
+                    case '9':
+                    case '.':
+                        if (inSymbol) {
+                            // A complex variable in dot notation
+                            theCurrentToken.append(theCharacter);
+                        } else {
+                            // Numerical symbols
+                            theCurrentToken.append(theCharacter);
+                            inNumeric = true;
+                        }
                         break;
                     default:
+                        if (inNumeric) {
+                            throw new IllegalArgumentException("Unexpected character at position " + i);
+                        }
+                        inSymbol = true;
                         theCurrentToken.append(theCharacter);
                         break;
                 }
             }
         }
         if (theCurrentToken.length() > 0) {
-            token(TokenType.VALUE, theCurrentToken);
+            value(theTokens, theCurrentToken);
         }
-    }
 
-    public static void main(String[] args) {
-        Scanner theScanner = new Scanner("-1+2*-(6*-7)");
-        theScanner.scan();
+        return theTokens.toArray(new Token[theTokens.size()]);
     }
 }
