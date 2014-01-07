@@ -16,7 +16,7 @@ public class RunSceneAction implements Action {
 
     @UsedByReflection
     public RunSceneAction() {
-        gameScene = new Property<String>(this, GAME_SCENE_PROPERTY, (String) null);
+        gameScene = new Property<String>(String.class, this, GAME_SCENE_PROPERTY, (String) null);
     }
 
     @Override

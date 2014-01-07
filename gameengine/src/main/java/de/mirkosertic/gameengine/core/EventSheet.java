@@ -18,7 +18,7 @@ public class EventSheet {
     EventSheet(GameScene aGameScene) {
         GameEventManager theEventManager = aGameScene.getRuntime().getEventManager();
 
-        nameProperty = new Property<String>(this, NAME_PROPERTY, theEventManager);
+        nameProperty = new Property<String>(String.class, this, NAME_PROPERTY, theEventManager);
         rules = new GameRule[]{};
         gameScene = aGameScene;
     }

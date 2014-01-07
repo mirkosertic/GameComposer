@@ -8,11 +8,17 @@ public class ReadOnlyProperty<T> implements ValueProvider {
 
     T value;
     private final Object owner;
+    final Class<T> type;
 
-    public ReadOnlyProperty(Object aOwner, String aName, T aDefaultValue) {
+    public ReadOnlyProperty(Class<T> aType, Object aOwner, String aName, T aDefaultValue) {
+        type = aType;
         owner = aOwner;
         name = aName;
         value = aDefaultValue;
+    }
+
+    public Class<T> getType() {
+        return type;
     }
 
     public Object getOwner() {

@@ -8,20 +8,20 @@ public class Property<T> extends ReadOnlyProperty<T> {
 
     private final Set<GameEventListener<PropertyChanged>> changeListener;
 
-    public Property(Object aOwner, String aName, T aDefaultValue, GameEventListener<PropertyChanged> aListener) {
-        super(aOwner, aName, aDefaultValue);
+    public Property(Class<T> aType, Object aOwner, String aName, T aDefaultValue, GameEventListener<PropertyChanged> aListener) {
+        super(aType, aOwner, aName, aDefaultValue);
         changeListener = new HashSet<GameEventListener<PropertyChanged>>();
         if (aListener != null) {
             changeListener.add(aListener);
         }
     }
 
-    public Property(Object aOwner, String aName, GameEventListener<PropertyChanged> aListener) {
-        this(aOwner, aName, null, aListener);
+    public Property(Class<T> aType, Object aOwner, String aName, GameEventListener<PropertyChanged> aListener) {
+        this(aType, aOwner, aName, null, aListener);
     }
 
-    public Property(Object aOwner, String aName, T aDefaultValue) {
-        this(aOwner, aName, aDefaultValue, null);
+    public Property(Class<T> aType, Object aOwner, String aName, T aDefaultValue) {
+        this(aType, aOwner, aName, aDefaultValue, null);
     }
 
     public void set(T aValue) {

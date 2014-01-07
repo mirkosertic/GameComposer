@@ -20,8 +20,8 @@ public class ConstantMovementAction implements Action {
 
     @UsedByReflection
     public ConstantMovementAction() {
-        movementDirection = new Property<Angle>(this, PROPERTY_MOVEMENT_DIRECTION, new Angle(0));
-        movementForce = new Property<Float>(this, PROPERTY_MOVEMENT_FORCE, 0f);
+        movementDirection = new Property<Angle>(Angle.class, this, PROPERTY_MOVEMENT_DIRECTION, new Angle(0));
+        movementForce = new Property<Float>(Float.class, this, PROPERTY_MOVEMENT_FORCE, 0f);
     }
 
     public Property<Angle> movementDirectionProperty() {

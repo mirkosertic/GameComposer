@@ -39,11 +39,11 @@ public class GameScene extends PropertyAware {
 
         GameEventManager theManager = aGameRuntime.getEventManager();
 
-        name = registerProperty(new Property<String>(this, NAME_PROPERTY, null, theManager));
-        cameraObject = registerProperty(new Property<GameObject>(this, CAMERA_OBJECT_PROPERTY, null, theManager));
-        defaultPlayer = registerProperty(new Property<GameObject>(this, DEFAULT_PLAYER_PROPERTY, null, theManager));
-        backgroundColor = registerProperty(new Property<Color>(this, COLOR_PROPERTY, new Color(0, 0, 0), theManager));
-        layoutBounds = registerProperty(new Property<Rectangle>(this, LAYOUT_BOUNDS_PROPERTY, new Rectangle(), theManager));
+        name = registerProperty(new Property<String>(String.class, this, NAME_PROPERTY, null, theManager));
+        cameraObject = registerProperty(new Property<GameObject>(GameObject.class, this, CAMERA_OBJECT_PROPERTY, null, theManager));
+        defaultPlayer = registerProperty(new Property<GameObject>(GameObject.class, this, DEFAULT_PLAYER_PROPERTY, null, theManager));
+        backgroundColor = registerProperty(new Property<Color>(Color.class, this, COLOR_PROPERTY, new Color(0, 0, 0), theManager));
+        layoutBounds = registerProperty(new Property<Rectangle>(Rectangle.class, this, LAYOUT_BOUNDS_PROPERTY, new Rectangle(), theManager));
         instances = new GameObjectInstance[0];
         objects = new GameObject[0];
         eventSheets = new EventSheet[0];

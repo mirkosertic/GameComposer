@@ -22,9 +22,9 @@ public class TextComponentTemplate extends GameComponentTemplate<TextComponent> 
     private final GameObject owner;
 
     public TextComponentTemplate(GameEventManager aEventManager, GameObject aOwner) {
-        font = registerProperty(new Property<Font>(this, FONT_PROPERTY, Font.DEFAULT_FONT, aEventManager));
-        textExpression = registerProperty(new Property<TextExpression>(this, TEXT_EXPRESSION_PROPERTY, new TextExpression(""), aEventManager));
-        color = registerProperty(new Property<Color>(this, COLOR_PROPERTY, Color.WHITE, aEventManager));
+        font = registerProperty(new Property<Font>(Font.class, this, FONT_PROPERTY, Font.DEFAULT_FONT, aEventManager));
+        textExpression = registerProperty(new Property<TextExpression>(TextExpression.class, this, TEXT_EXPRESSION_PROPERTY, new TextExpression(""), aEventManager));
+        color = registerProperty(new Property<Color>(Color.class, this, COLOR_PROPERTY, Color.WHITE, aEventManager));
         owner = aOwner;
     }
 

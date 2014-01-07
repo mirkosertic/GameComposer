@@ -32,9 +32,8 @@
       "name" : "Collect a star",
       "actions" : [ {
         "propertyName" : "visible",
-        "propertyValue" : {
-          "value" : "false",
-          "type" : "Boolean"
+        "value" : {
+          "expression" : "false"
         },
         "type" : "SetPropertyAction"
       }, {
@@ -70,9 +69,9 @@
     "gameobjectuuid" : "-279500599772276169",
     "name" : "Duke_1384374064987",
     "components" : [ {
-      "type" : "SpriteComponent"
-    }, {
       "type" : "PlatformComponent"
+    }, {
+      "type" : "SpriteComponent"
     } ],
     "uuid" : "8227887913504513730",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -118,10 +117,10 @@
     "gameobjectuuid" : "4343694719606608272",
     "name" : "Star_1384888985355",
     "components" : [ {
+      "type" : "SpriteComponent"
+    }, {
       "active" : "true",
       "type" : "PhysicsComponent"
-    }, {
-      "type" : "SpriteComponent"
     } ],
     "uuid" : "1168806397977091524",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -138,10 +137,10 @@
     "gameobjectuuid" : "4343694719606608272",
     "name" : "Star_1384888988875",
     "components" : [ {
+      "type" : "SpriteComponent"
+    }, {
       "active" : "true",
       "type" : "PhysicsComponent"
-    }, {
-      "type" : "SpriteComponent"
     } ],
     "uuid" : "39450811341575419",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -158,10 +157,10 @@
     "gameobjectuuid" : "4343694719606608272",
     "name" : "Star_1384888993618",
     "components" : [ {
+      "type" : "SpriteComponent"
+    }, {
       "active" : "true",
       "type" : "PhysicsComponent"
-    }, {
-      "type" : "SpriteComponent"
     } ],
     "uuid" : "940107331463765884",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -178,10 +177,10 @@
     "gameobjectuuid" : "4343694719606608272",
     "name" : "Star_1384888996543",
     "components" : [ {
+      "type" : "SpriteComponent"
+    }, {
       "active" : "true",
       "type" : "PhysicsComponent"
-    }, {
-      "type" : "SpriteComponent"
     } ],
     "uuid" : "3860926572867008005",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -198,10 +197,10 @@
     "gameobjectuuid" : "4343694719606608272",
     "name" : "Star_1384888999417",
     "components" : [ {
+      "type" : "SpriteComponent"
+    }, {
       "active" : "true",
       "type" : "PhysicsComponent"
-    }, {
-      "type" : "SpriteComponent"
     } ],
     "uuid" : "-8948331873596536217",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -218,10 +217,10 @@
     "gameobjectuuid" : "4343694719606608272",
     "name" : "Star_1384889002239",
     "components" : [ {
+      "type" : "SpriteComponent"
+    }, {
       "active" : "true",
       "type" : "PhysicsComponent"
-    }, {
-      "type" : "SpriteComponent"
     } ],
     "uuid" : "6402095516018938434",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -1330,10 +1329,10 @@
     "gameobjectuuid" : "427110152030095327",
     "name" : "bean_small_1384375980691",
     "components" : [ {
+      "type" : "SpriteComponent"
+    }, {
       "active" : "true",
       "type" : "PhysicsComponent"
-    }, {
-      "type" : "SpriteComponent"
     } ],
     "uuid" : "-6045248509559337206",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -1350,10 +1349,10 @@
     "gameobjectuuid" : "427110152030095327",
     "name" : "bean_small_1384414773959",
     "components" : [ {
+      "type" : "SpriteComponent"
+    }, {
       "active" : "true",
       "type" : "PhysicsComponent"
-    }, {
-      "type" : "SpriteComponent"
     } ],
     "uuid" : "-6549010255961436150",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -1370,10 +1369,10 @@
     "gameobjectuuid" : "427110152030095327",
     "name" : "bean_small_1384414777213",
     "components" : [ {
+      "type" : "SpriteComponent"
+    }, {
       "active" : "true",
       "type" : "PhysicsComponent"
-    }, {
-      "type" : "SpriteComponent"
     } ],
     "uuid" : "-5663747140516834865",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -1530,6 +1529,11 @@
       "jumpImpulse" : "2.0",
       "type" : "PlatformComponent"
     }, {
+      "resourcename" : {
+        "name" : "/assets/objects/duke_small.png"
+      },
+      "type" : "SpriteComponent"
+    }, {
       "gravityScale" : "1.0",
       "density" : "1.0",
       "fixedrotation" : "true",
@@ -1537,11 +1541,6 @@
       "active" : "true",
       "type" : "PhysicsComponent",
       "restitution" : "0.0"
-    }, {
-      "resourcename" : {
-        "name" : "/assets/objects/duke_small.png"
-      },
-      "type" : "SpriteComponent"
     } ],
     "name" : "Duke",
     "uuid" : "-279500599772276169",
@@ -1573,6 +1572,11 @@
     }
   }, {
     "templates" : [ {
+      "resourcename" : {
+        "name" : "/assets/objects/star.png"
+      },
+      "type" : "SpriteComponent"
+    }, {
       "gravityScale" : "0.0",
       "density" : "1.0",
       "fixedrotation" : "false",
@@ -1580,11 +1584,6 @@
       "active" : "true",
       "type" : "PhysicsComponent",
       "restitution" : "0.0"
-    }, {
-      "resourcename" : {
-        "name" : "/assets/objects/star.png"
-      },
-      "type" : "SpriteComponent"
     } ],
     "name" : "Star",
     "uuid" : "4343694719606608272",
@@ -1742,6 +1741,11 @@
     }
   }, {
     "templates" : [ {
+      "resourcename" : {
+        "name" : "/assets/objects/bean_small.png"
+      },
+      "type" : "SpriteComponent"
+    }, {
       "gravityScale" : "1.0",
       "density" : "1.0",
       "fixedrotation" : "false",
@@ -1749,11 +1753,6 @@
       "active" : "true",
       "type" : "PhysicsComponent",
       "restitution" : "0.0"
-    }, {
-      "resourcename" : {
-        "name" : "/assets/objects/bean_small.png"
-      },
-      "type" : "SpriteComponent"
     } ],
     "name" : "bean_small",
     "uuid" : "427110152030095327",

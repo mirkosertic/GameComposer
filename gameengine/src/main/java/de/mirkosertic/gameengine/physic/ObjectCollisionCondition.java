@@ -27,9 +27,9 @@ public class ObjectCollisionCondition implements Condition {
 
     @UsedByReflection
     public ObjectCollisionCondition() {
-        primaryObject = new Property<GameObject>(this, PRIMARY_OBJECT_PROPERTY, (GameObject) null);
-        secondaryObject = new Property<GameObject>(this, SECONDARY_OBJECT_PROPERTY, (GameObject) null);
-        position = new Property<CollisionPosition>(this, POSITION_PROPERTY, CollisionPosition.EVERYWHERE);
+        primaryObject = new Property<GameObject>(GameObject.class, this, PRIMARY_OBJECT_PROPERTY, (GameObject) null);
+        secondaryObject = new Property<GameObject>(GameObject.class, this, SECONDARY_OBJECT_PROPERTY, (GameObject) null);
+        position = new Property<CollisionPosition>(CollisionPosition.class, this, POSITION_PROPERTY, CollisionPosition.EVERYWHERE);
     }
 
     public Property<GameObject> primaryObjectProperty() {

@@ -16,8 +16,8 @@ public class GameRule {
 
     public GameRule() {
         actions = new Action[0];
-        name = new Property<String>(this, NAME_PROPERTY, (String) null);
-        condition = new Property<Condition>(this, CONDITION_PROPERTY, (Condition) null);
+        name = new Property<String>(String.class, this, NAME_PROPERTY, (String) null);
+        condition = new Property<Condition>(Condition.class, this, CONDITION_PROPERTY, (Condition) null);
     }
 
     public Property<String> nameProperty() {

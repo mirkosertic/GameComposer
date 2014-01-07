@@ -20,7 +20,7 @@ public class PlaySoundAction implements Action {
 
     @UsedByReflection
     public PlaySoundAction() {
-        resourceName = new Property<ResourceName>(this, RESOURCE_NAME_PROPERTY, (ResourceName) null);
+        resourceName = new Property<ResourceName>(ResourceName.class, this, RESOURCE_NAME_PROPERTY, (ResourceName) null);
     }
 
     @Override

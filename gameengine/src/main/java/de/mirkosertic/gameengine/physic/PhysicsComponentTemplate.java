@@ -24,12 +24,12 @@ public class PhysicsComponentTemplate extends GameComponentTemplate<PhysicsCompo
     public PhysicsComponentTemplate(GameEventManager aEventManager, GameObject aOwner) {
         owner = aOwner;
 
-        active = registerProperty(new Property<Boolean>(this, ACTIVE_PROPERTY, Boolean.TRUE, aEventManager));
-        fixedRotation = registerProperty(new Property<Boolean>(this, FIXED_ROTATION_PROPERTY, Boolean.FALSE, aEventManager));
-        density = registerProperty(new Property<Float>(this, DENSITY_PROPERTY, 1f, aEventManager));
-        friction = registerProperty(new Property<Float>(this, FRICTION_PROPERTY, 1.8f, aEventManager));
-        restitution = registerProperty(new Property<Float>(this, RESTITUTION_PROPERTY, 0f, aEventManager));
-        gravityScale = registerProperty(new Property<Float>(this, GRAVITY_SCALE_PROPERTY, 1f, aEventManager));
+        active = registerProperty(new Property<Boolean>(Boolean.class, this, ACTIVE_PROPERTY, Boolean.TRUE, aEventManager));
+        fixedRotation = registerProperty(new Property<Boolean>(Boolean.class, this, FIXED_ROTATION_PROPERTY, Boolean.FALSE, aEventManager));
+        density = registerProperty(new Property<Float>(Float.class, this, DENSITY_PROPERTY, 1f, aEventManager));
+        friction = registerProperty(new Property<Float>(Float.class, this, FRICTION_PROPERTY, 1.8f, aEventManager));
+        restitution = registerProperty(new Property<Float>(Float.class, this, RESTITUTION_PROPERTY, 0f, aEventManager));
+        gravityScale = registerProperty(new Property<Float>(Float.class, this, GRAVITY_SCALE_PROPERTY, 1f, aEventManager));
     }
 
     @Override

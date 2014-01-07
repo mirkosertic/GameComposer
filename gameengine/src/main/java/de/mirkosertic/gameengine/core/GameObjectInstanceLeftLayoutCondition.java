@@ -19,7 +19,7 @@ public class GameObjectInstanceLeftLayoutCondition implements Condition {
 
     @UsedByReflection
     public GameObjectInstanceLeftLayoutCondition() {
-        gameObject = new Property<GameObject>(this, GAME_OBJECT_PROPERTY, (GameObject) null);
+        gameObject = new Property<GameObject>(GameObject.class, this, GAME_OBJECT_PROPERTY, (GameObject) null);
     }
 
     public Property<GameObject> gameObjectProperty() {
