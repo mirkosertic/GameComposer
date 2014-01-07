@@ -10,22 +10,6 @@
 
 <BorderPane id="BorderPane" minHeight="-Infinity" minWidth="-Infinity" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="de.mirkosertic.gamecomposer.objectinspector.gameobjectinstance.GameObjectInstanceEditorController">
   <center>
-    <VBox>
-      <children>
-        <HBox />
-        <HBox alignment="CENTER_LEFT" />
-        <HBox alignment="CENTER_LEFT">
-          <padding>
-            <Insets bottom="10.0" />
-          </padding>
-        </HBox>
-      </children>
-    </VBox>
-  </center>
-  <padding>
-    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-  </padding>
-  <top>
     <GridPane hgap="5.0">
       <children>
         <Label text="Name:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
@@ -36,8 +20,7 @@
         <Label text="Y" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
         <TextField fx:id="yTextField" prefWidth="45.0" GridPane.columnIndex="4" GridPane.rowIndex="1" />
         <Label text="Rot." GridPane.columnIndex="0" GridPane.rowIndex="4" />
-        <TextField id="widthTextField" fx:id="rotationTextField" prefWidth="45.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-        <Label text="Degrees" GridPane.columnIndex="2" GridPane.columnSpan="2147483647" GridPane.rowIndex="4" />
+        <TextField id="widthTextField" fx:id="rotationTextField" prefWidth="45.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="4" />
         <Hyperlink fx:id="jumpToObject" text="Jump to object..." GridPane.columnIndex="0" GridPane.columnSpan="2147483647" GridPane.rowIndex="6" GridPane.rowSpan="1" />
         <CheckBox fx:id="visible" mnemonicParsing="false" text="Visible" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="5" />
         <CheckBox id="visible" fx:id="absolutePosition" mnemonicParsing="false" text="Absolute position" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="2" />
@@ -51,6 +34,7 @@
             </FXCollections>
           </items>
         </ComboBox>
+        <Label text="Degrees" GridPane.columnIndex="3" GridPane.columnSpan="2147483647" GridPane.rowIndex="4" />
       </children>
       <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
@@ -60,14 +44,17 @@
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
       </columnConstraints>
       <rowConstraints>
-        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints fillHeight="false" minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+        <RowConstraints fillHeight="false" minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+        <RowConstraints fillHeight="false" minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+        <RowConstraints fillHeight="false" minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+        <RowConstraints fillHeight="false" minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+        <RowConstraints fillHeight="false" minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+        <RowConstraints fillHeight="false" minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
       </rowConstraints>
     </GridPane>
-  </top>
+  </center>
+  <padding>
+    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+  </padding>
 </BorderPane>

@@ -7,6 +7,7 @@ import de.mirkosertic.gameengine.core.GameComponentTemplate;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.UsedByReflection;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
 
@@ -15,6 +16,7 @@ public class CameraComponentTemplate extends GameComponentTemplate<CameraCompone
     private final Property<CameraType> type;
     private final GameObject owner;
 
+    @UsedByReflection
     public CameraComponentTemplate(GameEventManager aEventManager, GameObject aOwner) {
         type = registerProperty(new Property<CameraType>(CameraType.class, this, TYPE_PROPERTY, CameraType.FOLLOWPLAYER, aEventManager));
         owner = aOwner;

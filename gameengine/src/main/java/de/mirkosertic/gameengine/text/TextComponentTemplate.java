@@ -4,6 +4,7 @@ import de.mirkosertic.gameengine.core.GameComponentTemplate;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.UsedByReflection;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.type.Color;
@@ -21,6 +22,7 @@ public class TextComponentTemplate extends GameComponentTemplate<TextComponent> 
 
     private final GameObject owner;
 
+    @UsedByReflection
     public TextComponentTemplate(GameEventManager aEventManager, GameObject aOwner) {
         font = registerProperty(new Property<Font>(Font.class, this, FONT_PROPERTY, Font.DEFAULT_FONT, aEventManager));
         textExpression = registerProperty(new Property<TextExpression>(TextExpression.class, this, TEXT_EXPRESSION_PROPERTY, new TextExpression(""), aEventManager));

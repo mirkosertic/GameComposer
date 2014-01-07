@@ -15,6 +15,6 @@ public class StaticComponentTemplateUnmarshaller implements GameComponentTemplat
 
     @Override
     public StaticComponentTemplate deserialize(GameEventManager aEventmanager, GameObject aOwner, Map<String, Object> aSerializedData) {
-        return StaticComponentTemplate.deserialize(aOwner);
+        return StaticComponentTemplate.deserialize(aEventmanager, aOwner);
     }
 }

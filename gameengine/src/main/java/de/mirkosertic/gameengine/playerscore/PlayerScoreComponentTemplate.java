@@ -4,6 +4,7 @@ import de.mirkosertic.gameengine.core.GameComponentTemplate;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.UsedByReflection;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.type.ScoreValue;
@@ -16,6 +17,7 @@ public class PlayerScoreComponentTemplate extends GameComponentTemplate<PlayerSc
     private final GameObject owner;
     private final Property<ScoreValue> scoreValue;
 
+    @UsedByReflection
     public PlayerScoreComponentTemplate(GameEventManager aEventManager, GameObject aOwner) {
         scoreValue = registerProperty(new Property<ScoreValue>(ScoreValue.class, this, SCORE_VALUE_PROPERTY, new ScoreValue(), aEventManager));
         owner = aOwner;
