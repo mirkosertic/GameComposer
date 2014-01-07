@@ -30,12 +30,12 @@ public class PhysicsComponent extends GameComponent implements Physics {
 
         GameEventManager theEventManager = aObjectInstance.getOwnerGameObject().getGameScene().getRuntime().getEventManager();
 
-        active = registerProperty(new Property<Boolean>(this, ACTIVE_PROPERTY, aTemplate.activeProperty().get(), theEventManager));
-        fixedRotation = registerProperty(new Property<Boolean>(this, FIXED_ROTATION_PROPERTY, aTemplate.fixedRotationProperty().get(), theEventManager));
-        density = registerProperty(new Property<Float>(this, DENSITY_PROPERTY, aTemplate.densityProperty().get(), theEventManager));
-        friction = registerProperty(new Property<Float>(this, FRICTION_PROPERTY, aTemplate.frictionProperty().get(), theEventManager));
-        restitution = registerProperty(new Property<Float>(this, RESTITUTION_PROPERTY, aTemplate.restitutionProperty().get(), theEventManager));
-        gravityScale = registerProperty(new Property<Float>(this, GRAVITY_SCALE_PROPERTY, aTemplate.gravityScaleProperty().get(), theEventManager));
+        active = registerProperty(new Property<Boolean>(Boolean.class, this, ACTIVE_PROPERTY, aTemplate.activeProperty().get(), theEventManager));
+        fixedRotation = registerProperty(new Property<Boolean>(Boolean.class, this, FIXED_ROTATION_PROPERTY, aTemplate.fixedRotationProperty().get(), theEventManager));
+        density = registerProperty(new Property<Float>(Float.class, this, DENSITY_PROPERTY, aTemplate.densityProperty().get(), theEventManager));
+        friction = registerProperty(new Property<Float>(Float.class, this, FRICTION_PROPERTY, aTemplate.frictionProperty().get(), theEventManager));
+        restitution = registerProperty(new Property<Float>(Float.class, this, RESTITUTION_PROPERTY, aTemplate.restitutionProperty().get(), theEventManager));
+        gravityScale = registerProperty(new Property<Float>(Float.class, this, GRAVITY_SCALE_PROPERTY, aTemplate.gravityScaleProperty().get(), theEventManager));
     }
 
     public Property<Boolean> activeProperty() {

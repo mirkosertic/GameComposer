@@ -25,7 +25,7 @@ public class PlayerScoreComponent extends GameComponent implements PlayerScore {
 
         GameEventManager theEventManager = aObjectInstance.getOwnerGameObject().getGameScene().getRuntime().getEventManager();
 
-        scoreValue = registerProperty(new Property<ScoreValue>(this, SCORE_VALUE_PROPERTY, aTemplate.scoreValueProperty().get(), theEventManager));
+        scoreValue = registerProperty(new Property<ScoreValue>(ScoreValue.class, this, SCORE_VALUE_PROPERTY, aTemplate.scoreValueProperty().get(), theEventManager));
     }
 
     @Override

@@ -39,11 +39,11 @@ public class PlatformComponent extends GameComponent implements Platform {
         PlatformComponentTemplate theTemplate = aObjectInstance.getOwnerGameObject().getComponentTemplate(PlatformComponentTemplate.class);
         GameEventManager theEventManager = aObjectInstance.getOwnerGameObject().getGameScene().getRuntime().getEventManager();
 
-        moveLeftKey = registerProperty(new Property<GameKeyCode>(this, MOVE_LEFT_KEY_PROPERTY, theTemplate.moveLeftKeyProperty().get(), theEventManager));
-        moveRightKey = registerProperty(new Property<GameKeyCode>(this, MOVE_RIGHT_KEY_PROPERTY, theTemplate.moveRightKeyProperty().get(), theEventManager));
-        jumpKey = registerProperty(new Property<GameKeyCode>(this, JUMP_KEY_PROPERTY, theTemplate.jumpKeyProperty().get(), theEventManager));
-        leftRightImpulse = registerProperty(new Property<Float>(this, LEFT_RIGHT_IMPULSE_PROPERTY, theTemplate.leftRightImpulseProperty().get(), theEventManager));
-        jumpImpulse = registerProperty(new Property<Float>(this, JUMP_IMPULSE_PROPERTY, theTemplate.jumpImpulseProperty().get(), theEventManager));
+        moveLeftKey = registerProperty(new Property<GameKeyCode>(GameKeyCode.class, this, MOVE_LEFT_KEY_PROPERTY, theTemplate.moveLeftKeyProperty().get(), theEventManager));
+        moveRightKey = registerProperty(new Property<GameKeyCode>(GameKeyCode.class, this, MOVE_RIGHT_KEY_PROPERTY, theTemplate.moveRightKeyProperty().get(), theEventManager));
+        jumpKey = registerProperty(new Property<GameKeyCode>(GameKeyCode.class, this, JUMP_KEY_PROPERTY, theTemplate.jumpKeyProperty().get(), theEventManager));
+        leftRightImpulse = registerProperty(new Property<Float>(Float.class, this, LEFT_RIGHT_IMPULSE_PROPERTY, theTemplate.leftRightImpulseProperty().get(), theEventManager));
+        jumpImpulse = registerProperty(new Property<Float>(Float.class, this, JUMP_IMPULSE_PROPERTY, theTemplate.jumpImpulseProperty().get(), theEventManager));
     }
 
     PlatformComponent(GameObjectInstance aObjectInstance, GameRuntime aGameRuntime, PlatformComponentTemplate aTemplate) {

@@ -20,8 +20,8 @@ public class SetPropertyAction implements Action {
 
     @UsedByReflection
     public SetPropertyAction() {
-        propertyName = new Property<String>(this, PROPERTY_NAME_PROPERTY, (String) null);
-        propertyValue = new Property<TextExpression>(this, PROPERTY_VALUE_PROPERTY, (TextExpression) null);
+        propertyName = new Property<String>(String.class, this, PROPERTY_NAME_PROPERTY, (String) null);
+        propertyValue = new Property<TextExpression>(TextExpression.class, this, PROPERTY_VALUE_PROPERTY, (TextExpression) null);
     }
 
     public Property<String> propertyNameProperty() {
@@ -66,16 +66,16 @@ public class SetPropertyAction implements Action {
         Map<String, Object> theResult = new HashMap<String, Object>();
         theResult.put(TYPE_ATTRIBUTE, TYPE_VALUE);
         theResult.put(PROPERTY_NAME_PROPERTY, propertyName.get());
-        theResult.put(PROPERTY_VALUE_PROPERTY, propertyValue.get());
+        theResult.put(PROPERTY_VALUE_PROPERTY, propertyValue.get().serialize());
         return theResult;
     }
 
     public static SetPropertyAction unmarshall(Map<String, Object> aSerializedData, GameScene aGameScene) {
         SetPropertyAction theResult = new SetPropertyAction();
         theResult.propertyName.setQuietly((String) aSerializedData.get(PROPERTY_NAME_PROPERTY));
-        String theValue = (String) aSerializedData.get(PROPERTY_VALUE_PROPERTY);
+        Map<String, Object> theValue = (Map<String, Object>) aSerializedData.get(PROPERTY_VALUE_PROPERTY);
         if (theValue != null) {
-            theResult.propertyName.setQuietly(theValue);
+            theResult.propertyValue.setQuietly(TextExpression.deserialize(theValue));
         }
         return theResult;
     }

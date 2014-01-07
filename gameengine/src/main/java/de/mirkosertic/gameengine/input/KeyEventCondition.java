@@ -27,8 +27,8 @@ public class KeyEventCondition implements Condition {
 
     @UsedByReflection
     public KeyEventCondition() {
-        keyCode = new Property<GameKeyCode>(this, KEY_CODE_PROPERTY, (GameKeyCode) null);
-        eventType = new Property<KeyEventType>(this, EVENT_TYPE_PROPERTY, KeyEventType.PRESSED);
+        keyCode = new Property<GameKeyCode>(GameKeyCode.class, this, KEY_CODE_PROPERTY, (GameKeyCode) null);
+        eventType = new Property<KeyEventType>(KeyEventType.class, this, EVENT_TYPE_PROPERTY, KeyEventType.PRESSED);
     }
 
     public Property<GameKeyCode> keyCodeProperty() {

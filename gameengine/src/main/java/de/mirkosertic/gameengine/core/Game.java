@@ -16,9 +16,9 @@ public class Game {
     private final Property<Boolean> enableWebGL;
 
     public Game() {
-        name = new Property<String>(this, NAME_PROPERTY, (String) null);
-        defaultScene = new Property<String>(this, DEFAULT_SCENE_PROPERTY, (String) null);
-        enableWebGL = new Property<Boolean>(this, ENABLE_WEB_GL_PROPERTY, Boolean.TRUE);
+        name = new Property<String>(String.class, this, NAME_PROPERTY, (String) null);
+        defaultScene = new Property<String>(String.class, this, DEFAULT_SCENE_PROPERTY, (String) null);
+        enableWebGL = new Property<Boolean>(Boolean.class, this, ENABLE_WEB_GL_PROPERTY, Boolean.TRUE);
     }
 
     public Property<String> nameProperty() {

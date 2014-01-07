@@ -37,10 +37,10 @@ public class GameObject extends PropertyAware {
         GameEventManager theManager = aScene.getRuntime().getEventManager();
 
         gameScene = aScene;
-        uuid = registerProperty(new Property<String>(this, UUID_PROPERTY, aUUID, theManager));
-        name = registerProperty(new Property<String>(this, NAME_PROPERTY, aName, theManager));
-        size = registerProperty(new Property<Size>(this, SIZE_PROPERTY, new Size(64, 64), theManager));
-        visible = registerProperty(new Property<Boolean>(this, VISIBLE_PROPERTY, Boolean.TRUE, theManager));
+        uuid = registerProperty(new Property<String>(String.class, this, UUID_PROPERTY, aUUID, theManager));
+        name = registerProperty(new Property<String>(String.class, this, NAME_PROPERTY, aName, theManager));
+        size = registerProperty(new Property<Size>(Size.class, this, SIZE_PROPERTY, new Size(64, 64), theManager));
+        visible = registerProperty(new Property<Boolean>(Boolean.class, this, VISIBLE_PROPERTY, Boolean.TRUE, theManager));
         componentTemplates = new HashMap<Class<GameComponentTemplate>, GameComponentTemplate>();
 
         name.setQuietly(aName);

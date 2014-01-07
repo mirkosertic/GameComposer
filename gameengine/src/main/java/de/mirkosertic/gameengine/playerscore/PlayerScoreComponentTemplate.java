@@ -17,7 +17,7 @@ public class PlayerScoreComponentTemplate extends GameComponentTemplate<PlayerSc
     private final Property<ScoreValue> scoreValue;
 
     public PlayerScoreComponentTemplate(GameEventManager aEventManager, GameObject aOwner) {
-        scoreValue = registerProperty(new Property<ScoreValue>(this, SCORE_VALUE_PROPERTY, new ScoreValue(), aEventManager));
+        scoreValue = registerProperty(new Property<ScoreValue>(ScoreValue.class, this, SCORE_VALUE_PROPERTY, new ScoreValue(), aEventManager));
         owner = aOwner;
     }
 

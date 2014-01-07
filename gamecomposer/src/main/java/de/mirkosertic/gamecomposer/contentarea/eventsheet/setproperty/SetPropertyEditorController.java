@@ -60,6 +60,10 @@ public class SetPropertyEditorController implements Controller {
             }
         });
 
+        TextExpression theExpression = action.propertyValueProperty().get();
+        if (theExpression != null) {
+            propertyValueTextField.setText(theExpression.expression);
+        }
         propertyValueTextField.setVisible(false);
         propertyValueTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override

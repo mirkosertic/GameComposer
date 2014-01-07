@@ -16,7 +16,7 @@ public class CameraComponentTemplate extends GameComponentTemplate<CameraCompone
     private final GameObject owner;
 
     public CameraComponentTemplate(GameEventManager aEventManager, GameObject aOwner) {
-        type = registerProperty(new Property<CameraType>(this, TYPE_PROPERTY, CameraType.FOLLOWPLAYER, aEventManager));
+        type = registerProperty(new Property<CameraType>(CameraType.class, this, TYPE_PROPERTY, CameraType.FOLLOWPLAYER, aEventManager));
         owner = aOwner;
     }
 

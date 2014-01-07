@@ -37,13 +37,13 @@ public class GameObjectInstance extends PropertyAware {
 
     GameObjectInstance(GameEventManager aEventManager, GameObject aOwnerGameObject) {
 
-        uuid = registerProperty(new Property<String>(this, UUID_PROPERTY, de.mirkosertic.gameengine.type.UUID.randomUID(), aEventManager));
-        name = registerProperty(new Property<String>(this, NAME_PROPERTY, aEventManager));
-        position = registerProperty(new Property<Position>(this, POSITION_PROPERTY, new Position(), aEventManager));
-        visible = registerProperty(new Property<Boolean>(this, VISIBLE_PROPERTY, aOwnerGameObject.visibleProperty().get(), aEventManager));
-        rotationAngle = registerProperty(new Property<Angle>(this, ROTATION_ANGLE_PROPERTY, new Angle(0), aEventManager));
-        absolutePosition = registerProperty(new Property<Boolean>(this, ABSOLUTE_POSITION_PROPERTY, Boolean.FALSE, aEventManager));
-        absolutePositionAnchor = registerProperty(new Property<AbsolutePositionAnchor>(this, ABSOLUTE_POSITION_ANCHOR_PROPERTY, AbsolutePositionAnchor.TOP_LEFT, aEventManager));
+        uuid = registerProperty(new Property<String>(String.class, this, UUID_PROPERTY, de.mirkosertic.gameengine.type.UUID.randomUID(), aEventManager));
+        name = registerProperty(new Property<String>(String.class, this, NAME_PROPERTY, aEventManager));
+        position = registerProperty(new Property<Position>(Position.class, this, POSITION_PROPERTY, new Position(), aEventManager));
+        visible = registerProperty(new Property<Boolean>(Boolean.class, this, VISIBLE_PROPERTY, aOwnerGameObject.visibleProperty().get(), aEventManager));
+        rotationAngle = registerProperty(new Property<Angle>(Angle.class, this, ROTATION_ANGLE_PROPERTY, new Angle(0), aEventManager));
+        absolutePosition = registerProperty(new Property<Boolean>(Boolean.class, this, ABSOLUTE_POSITION_PROPERTY, Boolean.FALSE, aEventManager));
+        absolutePositionAnchor = registerProperty(new Property<AbsolutePositionAnchor>(AbsolutePositionAnchor.class, this, ABSOLUTE_POSITION_ANCHOR_PROPERTY, AbsolutePositionAnchor.TOP_LEFT, aEventManager));
 
         ownerGameObject = aOwnerGameObject;
         components = new HashMap<Class<GameComponent>, GameComponent>();
@@ -110,7 +110,7 @@ public class GameObjectInstance extends PropertyAware {
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<String, Object>();
         if (!uuidProperty().isNull()) {
-            theResult.put(UUID_PROPERTY,  uuidProperty().get());
+            theResult.put(UUID_PROPERTY, uuidProperty().get());
         }
         theResult.put("gameobjectuuid", ownerGameObject.uuidProperty().get());
 

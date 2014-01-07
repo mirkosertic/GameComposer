@@ -30,9 +30,9 @@ public class TextComponent extends GameComponent implements Text {
         GameEventManager theEventManager = aObjectInstance.getOwnerGameObject().getGameScene().getRuntime().getEventManager();
 
         objectInstance = aObjectInstance;
-        font = registerProperty(new Property<Font>(this, FONT_PROPERTY, aTemplate.fontProperty().get(), theEventManager));
-        color = registerProperty(new Property<Color>(this, COLOR_PROPERTY, aTemplate.colorProperty().get(), theEventManager));
-        textExpression = registerProperty(new Property<TextExpression>(this, TEXT_EXPRESSION_PROPERTY, aTemplate.textExpressionProperty().get(), theEventManager));
+        font = registerProperty(new Property<Font>(Font.class, this, FONT_PROPERTY, aTemplate.fontProperty().get(), theEventManager));
+        color = registerProperty(new Property<Color>(Color.class, this, COLOR_PROPERTY, aTemplate.colorProperty().get(), theEventManager));
+        textExpression = registerProperty(new Property<TextExpression>(TextExpression.class, this, TEXT_EXPRESSION_PROPERTY, aTemplate.textExpressionProperty().get(), theEventManager));
     }
 
     public Property<Font> fontProperty() {
