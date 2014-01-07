@@ -42,6 +42,8 @@ public class GWTCanvasGameView extends AbstractWebGameView {
 
         Context2d theContext = canvas.getContext2d();
 
+        SavedState theSavedState = saveState(theContext);
+
         Color theBGColor = aScene.backgroundColorProperty().get();
 
         CssColor theCssBackground = CssColor.make(theBGColor.r, theBGColor.g, theBGColor.b);
@@ -57,8 +59,6 @@ public class GWTCanvasGameView extends AbstractWebGameView {
 
             float theHalfWidth = theSize.width / 2;
             float theHalfHeight = theSize.height / 2;
-
-            theContext.save();
 
             Angle theAngle = theInstance.rotationAngleProperty().get();
             int theAngleInDegrees = theAngle.angleInDegrees;
@@ -94,7 +94,7 @@ public class GWTCanvasGameView extends AbstractWebGameView {
                 theContext.strokeRect(-theHalfWidth, -theHalfHeight, theSize.width, theSize.height);
             }
 
-            theContext.restore();
+            restoreState(theContext, theSavedState);
         }
         counter++;
         theContext.setFillStyle(CssColor.make(255, 255, 255));

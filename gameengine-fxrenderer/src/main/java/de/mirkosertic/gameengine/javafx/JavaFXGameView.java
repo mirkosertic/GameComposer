@@ -16,12 +16,22 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
+import javafx.scene.transform.Affine;
 import javafx.scene.transform.Rotate;
 
 import java.io.IOException;
 
 public class JavaFXGameView extends Canvas implements GameView {
+
+    protected static class SavedState {
+        public Paint fill;
+        public Paint stroke;
+        public Affine transform;
+        public Font font;
+        public double lineWidth;
+    }
 
     private AnimationTimer animationTimer;
     private GameScene gameScene;
@@ -35,8 +45,28 @@ public class JavaFXGameView extends Canvas implements GameView {
         gestureDetector = new DefaultGestureDetector(aRuntime.getEventManager());
     }
 
+    protected SavedState saveState(GraphicsContext aContext) {
+        SavedState theResult = new SavedState();
+        theResult.fill = aContext.getFill();
+        theResult.stroke = aContext.getStroke();
+        theResult.transform = aContext.getTransform();
+        theResult.font = aContext.getFont();
+        theResult.lineWidth = aContext.getLineWidth();
+        return theResult;
+    }
+
+    protected void restoreState(GraphicsContext aContext, SavedState aState) {
+        aContext.setFill(aState.fill);
+        aContext.setStroke(aState.stroke);
+        aContext.setTransform(aState.transform);
+        aContext.setFont(aState.font);
+        aContext.setLineWidth(aState.lineWidth);
+    }
+
     private void renderScene() {
         GraphicsContext theContext = getGraphicsContext2D();
+
+        SavedState theSavedState = saveState(theContext);
 
         de.mirkosertic.gameengine.type.Color theBGColor = gameScene.backgroundColorProperty().get();
 
@@ -50,8 +80,6 @@ public class JavaFXGameView extends Canvas implements GameView {
             Position thePosition = cameraComponent.transformToScreenPosition(theInstance);
 
             Size theSize = theInstance.getOwnerGameObject().sizeProperty().get();
-
-            theContext.save();
 
             float theHalfWidth = theSize.width / 2;
             float theHalfHeight = theSize.height / 2;
@@ -91,7 +119,7 @@ public class JavaFXGameView extends Canvas implements GameView {
                 theContext.strokeRect(thePosition.x, thePosition.y, theSize.width, theSize.height);
             }
 
-            theContext.restore();
+            restoreState(theContext, theSavedState);
         }
         afterRendering(theContext);
     }
@@ -110,13 +138,11 @@ public class JavaFXGameView extends Canvas implements GameView {
     }
 
     protected void drawText(GraphicsContext aContext, GameObjectInstance aInstance, Position aPosition, de.mirkosertic.gameengine.type.Font aFont, de.mirkosertic.gameengine.type.Color aColor, String aText, Size aSize) {
-        aContext.save();
         Color theTextColor = Color.rgb(aColor.r, aColor.g, aColor.b);
         aContext.setFill(theTextColor);
         aContext.setStroke(theTextColor);
         aContext.setFont(toFont(aFont));
         aContext.fillText(aText, aPosition.x, aPosition.y + aFont.size);
-        aContext.restore();
     }
 
     protected void drawGameObjectInstance(GraphicsContext aContext, GameObjectInstance aInstance, Position aPosition,
