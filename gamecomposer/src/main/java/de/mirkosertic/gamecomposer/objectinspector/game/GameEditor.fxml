@@ -8,51 +8,37 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane id="BorderPane" maxHeight="-1.0" maxWidth="-1.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="-1.0" prefWidth="-1.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="de.mirkosertic.gamecomposer.objectinspector.game.GameEditorController">
+<BorderPane id="BorderPane" maxHeight="-1.0" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="-1.0" prefWidth="-1.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="de.mirkosertic.gamecomposer.objectinspector.game.GameEditorController">
   <center>
-    <VBox prefHeight="-1.0" prefWidth="-1.0" spacing="0.0">
+    <GridPane hgap="5.0" maxWidth="1.7976931348623157E308">
       <children>
-        <HBox prefHeight="-1.0" prefWidth="-1.0" spacing="0.0">
-          <children>
-            <Label prefWidth="70.0" text="Name" />
-            <TextField fx:id="nameTextField" prefWidth="-1.0" HBox.hgrow="ALWAYS" />
-          </children>
-        </HBox>
-        <VBox prefHeight="-1.0" prefWidth="-1.0">
-          <children>
-            <Label maxWidth="-1.0" prefWidth="-1.0" text="Default scene" VBox.vgrow="ALWAYS" />
-            <ComboBox fx:id="defaultSceneComboBox" maxWidth="1.7976931348623157E308" VBox.vgrow="NEVER">
-              <items>
-                <FXCollections fx:factory="observableArrayList">
-                  <String fx:value="Item 1" />
-                  <String fx:value="Item 2" />
-                  <String fx:value="Item 3" />
-                </FXCollections>
-              </items>
-            </ComboBox>
-          </children>
-          <padding>
-            <Insets top="10.0" />
-          </padding>
-        </VBox>
-        <HBox maxWidth="1.7976931348623157E308" prefHeight="-1.0" prefWidth="-1.0">
-          <children>
-            <CheckBox fx:id="webGLSupport" mnemonicParsing="false" text="Use WebGL if available" />
-          </children>
-          <VBox.margin>
-            <Insets top="10.0" />
-          </VBox.margin>
-        </HBox>
-        <HBox prefHeight="54.0" prefWidth="-1.0">
-          <children>
-            <Hyperlink id="newScene" onAction="#onNewScene" prefWidth="-1.0" text="Create new scene..." />
-          </children>
-          <padding>
-            <Insets top="20.0" />
-          </padding>
-        </HBox>
+        <Label prefWidth="70.0" text="Name:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+        <TextField fx:id="nameTextField" maxWidth="1.7976931348623157E308" prefWidth="-1.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+        <Label maxWidth="-1.0" prefWidth="-1.0" text="Default scene:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+        <ComboBox fx:id="defaultSceneComboBox" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="1">
+          <items>
+            <FXCollections fx:factory="observableArrayList">
+              <String fx:value="Item 1" />
+              <String fx:value="Item 2" />
+              <String fx:value="Item 3" />
+            </FXCollections>
+          </items>
+        </ComboBox>
+        <CheckBox fx:id="webGLSupport" mnemonicParsing="false" text="Use WebGL if available" GridPane.columnIndex="0" GridPane.columnSpan="2147483647" GridPane.rowIndex="2" />
+        <Hyperlink id="newScene" onAction="#onNewScene" prefWidth="-1.0" text="Create new scene..." GridPane.columnIndex="0" GridPane.columnSpan="2147483647" GridPane.rowIndex="4" />
       </children>
-    </VBox>
+      <columnConstraints>
+        <ColumnConstraints fillWidth="false" hgrow="NEVER" maxWidth="-Infinity" minWidth="10.0" prefWidth="-1.0" />
+        <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="-1.0" />
+      </columnConstraints>
+      <rowConstraints>
+        <RowConstraints fillHeight="false" minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+        <RowConstraints fillHeight="false" minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+        <RowConstraints fillHeight="false" minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+        <RowConstraints fillHeight="false" minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+        <RowConstraints fillHeight="false" minHeight="10.0" prefHeight="-1.0" vgrow="NEVER" />
+      </rowConstraints>
+    </GridPane>
   </center>
   <padding>
     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

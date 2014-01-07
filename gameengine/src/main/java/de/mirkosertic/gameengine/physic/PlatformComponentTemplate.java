@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.mirkosertic.gameengine.core.GameComponentTemplate;
+import de.mirkosertic.gameengine.core.UsedByReflection;
 import de.mirkosertic.gameengine.type.GameKeyCode;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
@@ -21,6 +22,7 @@ public class PlatformComponentTemplate extends GameComponentTemplate<PlatformCom
     private final Property<Float> leftRightImpulse;
     private final Property<Float> jumpImpulse;
 
+    @UsedByReflection
     public PlatformComponentTemplate(GameEventManager aEventManager, GameObject aOwner) {
         owner = aOwner;
         moveLeftKey = registerProperty(new Property<GameKeyCode>(GameKeyCode.class, this, MOVE_LEFT_KEY_PROPERTY, GameKeyCode.LEFT, aEventManager));

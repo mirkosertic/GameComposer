@@ -7,6 +7,7 @@ import de.mirkosertic.gameengine.core.GameComponentTemplate;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.UsedByReflection;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
 
@@ -21,6 +22,7 @@ public class PhysicsComponentTemplate extends GameComponentTemplate<PhysicsCompo
     private final Property<Float> restitution;
     private final Property<Float> gravityScale;
 
+    @UsedByReflection
     public PhysicsComponentTemplate(GameEventManager aEventManager, GameObject aOwner) {
         owner = aOwner;
 

@@ -13,9 +13,9 @@
     <VBox prefHeight="-1.0" prefWidth="-1.0" spacing="0.0">
       <children>
         <Label text="Asset name:" />
-        <TextField fx:id="assetName" disable="true" editable="false" prefWidth="200.0" />
-        <ImageView fx:id="spritePreview" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="NEVER" />
-        <Hyperlink fx:id="selectSpriteImage" text="Select sprite image..." />
+        <TextField fx:id="assetName" disable="true" editable="false" maxWidth="1.7976931348623157E308" prefWidth="-1.0" />
+        <ImageView fx:id="spritePreview" fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS" />
+        <Hyperlink fx:id="selectSpriteImage" maxWidth="1.7976931348623157E308" text="Select sprite image..." />
       </children>
     </VBox>
   </center>

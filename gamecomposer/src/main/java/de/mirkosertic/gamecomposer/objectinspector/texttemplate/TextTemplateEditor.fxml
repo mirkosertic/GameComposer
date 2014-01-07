@@ -9,11 +9,11 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane id="BorderPane" maxHeight="-1.0" maxWidth="-1.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="-1.0" prefWidth="-1.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="de.mirkosertic.gamecomposer.objectinspector.texttemplate.TextTemplateEditorController">
+<BorderPane id="BorderPane" maxHeight="-1.0" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="-1.0" prefWidth="-1.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="de.mirkosertic.gamecomposer.objectinspector.texttemplate.TextTemplateEditorController">
   <center>
-    <GridPane hgap="5.0" vgap="5.0">
+    <GridPane hgap="5.0" maxWidth="1.7976931348623157E308" vgap="5.0">
       <children>
-        <Label text="Font" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+        <Label text="Font:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
         <ComboBox fx:id="fontCombobox" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="0">
           <items>
             <FXCollections fx:factory="observableArrayList">
@@ -23,22 +23,22 @@
             </FXCollections>
           </items>
         </ComboBox>
-        <Label text="Font size" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+        <Label text="Font size:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
         <TextField fx:id="fontSize" maxWidth="1.7976931348623157E308" prefWidth="-1.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-        <Label text="Color" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+        <Label text="Color:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
         <ColorPicker fx:id="textColor" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-        <Label text="Text" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+        <Label text="Text:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
         <TextField fx:id="textExpression" maxWidth="1.7976931348623157E308" prefWidth="-1.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
       </children>
       <columnConstraints>
-        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="-1.0" />
+        <ColumnConstraints hgrow="NEVER" maxWidth="-Infinity" minWidth="-1.0" prefWidth="-1.0" />
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="-1.0" />
       </columnConstraints>
       <rowConstraints>
-        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints fillHeight="false" minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+        <RowConstraints fillHeight="false" minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+        <RowConstraints fillHeight="false" minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+        <RowConstraints fillHeight="false" minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
       </rowConstraints>
     </GridPane>
   </center>

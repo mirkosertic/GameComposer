@@ -8,9 +8,9 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane id="BorderPane" maxHeight="-1.0" maxWidth="-1.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="-1.0" prefWidth="-1.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="de.mirkosertic.gamecomposer.objectinspector.gamescene.GameSceneEditorController">
+<BorderPane id="BorderPane" maxHeight="-1.0" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="-1.0" prefWidth="-1.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="de.mirkosertic.gamecomposer.objectinspector.gamescene.GameSceneEditorController">
   <center>
-    <GridPane>
+    <GridPane hgap="5.0" maxWidth="1.7976931348623157E308">
       <children>
         <Label maxWidth="-1.0" prefWidth="-1.0" text="Default camera:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
         <Label maxWidth="-1.0" prefWidth="-1.0" text="Default player:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
@@ -26,13 +26,13 @@
         <Label prefWidth="70.0" text="Name:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
         <Label maxWidth="-1.0" prefWidth="70.0" text="Background:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
         <ColorPicker fx:id="backgroundColorPicker" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="3" />
-        <Label text="Layout bounds:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
-        <Label prefWidth="13.9998779296875" text="X" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+        <Label text="Layout bounds" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+        <Label prefWidth="12.0001220703125" text="X:" GridPane.columnIndex="1" GridPane.rowIndex="4" />
         <TextField fx:id="layoutBoundsX" maxWidth="-Infinity" prefWidth="50.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
         <TextField fx:id="nameTextField" maxWidth="1.7976931348623157E308" prefWidth="-1.0" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="2" />
-        <Label text="Y" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+        <Label text="Y:" GridPane.columnIndex="3" GridPane.rowIndex="4" />
         <TextField fx:id="layoutBoundsY" maxWidth="-Infinity" prefWidth="50.0" GridPane.columnIndex="4" GridPane.rowIndex="4" />
-        <Label prefWidth="-1.0" text="H" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+        <Label prefWidth="-1.0" text="H:" GridPane.columnIndex="3" GridPane.rowIndex="5" />
         <ComboBox id="defaultSceneComboBox" fx:id="defaultCamera" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="0">
           <items>
             <FXCollections fx:factory="observableArrayList">
@@ -42,24 +42,24 @@
             </FXCollections>
           </items>
         </ComboBox>
-        <Label text="W" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+        <Label text="W:" GridPane.columnIndex="1" GridPane.rowIndex="5" />
         <TextField fx:id="layoutBoundsWidth" maxWidth="-Infinity" prefWidth="50.0" GridPane.columnIndex="2" GridPane.rowIndex="5" />
         <TextField fx:id="layoutBoundsHeight" maxWidth="-Infinity" prefWidth="50.0" GridPane.columnIndex="4" GridPane.rowIndex="5" />
       </children>
       <columnConstraints>
-        <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" />
+        <ColumnConstraints fillWidth="false" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" />
+        <ColumnConstraints hgrow="NEVER" minWidth="-1.0" />
+        <ColumnConstraints hgrow="ALWAYS" maxWidth="-Infinity" minWidth="10.0" />
         <ColumnConstraints hgrow="NEVER" minWidth="10.0" />
-        <ColumnConstraints hgrow="NEVER" maxWidth="-Infinity" minWidth="10.0" />
-        <ColumnConstraints hgrow="NEVER" minWidth="10.0" />
-        <ColumnConstraints hgrow="NEVER" maxWidth="-Infinity" minWidth="10.0" />
+        <ColumnConstraints hgrow="ALWAYS" maxWidth="-Infinity" minWidth="10.0" />
       </columnConstraints>
       <rowConstraints>
-        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints fillHeight="false" minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+        <RowConstraints fillHeight="false" minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+        <RowConstraints fillHeight="false" minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+        <RowConstraints fillHeight="false" minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+        <RowConstraints fillHeight="false" minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+        <RowConstraints fillHeight="false" minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
       </rowConstraints>
     </GridPane>
   </center>

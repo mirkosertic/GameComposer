@@ -7,6 +7,7 @@ import de.mirkosertic.gameengine.core.GameComponentTemplate;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.UsedByReflection;
 import de.mirkosertic.gameengine.type.ResourceName;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
@@ -16,6 +17,7 @@ public class SpriteComponentTemplate extends GameComponentTemplate<SpriteCompone
     private final Property<ResourceName> resourceName;
     private final GameObject owner;
 
+    @UsedByReflection
     public SpriteComponentTemplate(GameEventManager aEventManager, GameObject aOwner) {
         resourceName = registerProperty(new Property<ResourceName>(ResourceName.class, this, RESOURCE_NAME_PROPERTY, aEventManager));
         owner = aOwner;

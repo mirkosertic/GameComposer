@@ -7,12 +7,15 @@ import de.mirkosertic.gameengine.core.GameComponentTemplate;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.UsedByReflection;
+import de.mirkosertic.gameengine.event.GameEventManager;
 
 public class StaticComponentTemplate extends GameComponentTemplate<StaticComponent> implements Static {
 
     private final GameObject owner;
 
-    public StaticComponentTemplate(GameObject aOwner) {
+    @UsedByReflection
+    public StaticComponentTemplate(GameEventManager aEventManager, GameObject aOwner) {
         owner = aOwner;
     }
 
@@ -37,7 +40,7 @@ public class StaticComponentTemplate extends GameComponentTemplate<StaticCompone
         return theResult;
     }
 
-    public static StaticComponentTemplate deserialize(GameObject aOwner) {
-        return new StaticComponentTemplate(aOwner);
+    public static StaticComponentTemplate deserialize(GameEventManager aEventManager, GameObject aOwner) {
+        return new StaticComponentTemplate(aEventManager, aOwner);
     }
 }
