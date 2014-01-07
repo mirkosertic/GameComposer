@@ -16,7 +16,7 @@
         <module>gameengine-gwtrenderer</module>
         <module>gameengine-androidrenderer</module>
         <module>gamecomposer</module>
-        <module>sampleplatformer</module>
+        <module>examples</module>
     </modules>
 
     <dependencyManagement>
