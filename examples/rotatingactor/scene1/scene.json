@@ -1,0 +1,115 @@
+{
+  "layoutBounds" : {
+    "position" : {
+      "y" : "0.0",
+      "x" : "0.0"
+    },
+    "size" : {
+      "height" : "2147483647",
+      "width" : "2147483647"
+    }
+  },
+  "eventsheets" : [ ],
+  "defaultplayerobjectid" : "4889509885749884898",
+  "cameraobjectid" : "2900940626662702649",
+  "name" : "Example scene",
+  "instances" : [ {
+    "position" : {
+      "y" : "260.0",
+      "x" : "394.0"
+    },
+    "visible" : "true",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
+    "absolutePosition" : "false",
+    "gameobjectuuid" : "4889509885749884898",
+    "name" : "Plane_1389121280313",
+    "components" : [ {
+      "type" : "SpriteComponent"
+    } ],
+    "uuid" : "1660796615987687512",
+    "absolutePositionAnchor" : "TOP_LEFT"
+  }, {
+    "position" : {
+      "y" : "157.0",
+      "x" : "212.0"
+    },
+    "visible" : "true",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
+    "absolutePosition" : "false",
+    "gameobjectuuid" : "-9051172752501502813",
+    "name" : "Text_1389121317924",
+    "components" : [ {
+      "color" : {
+        "g" : "255",
+        "b" : "255",
+        "r" : "255"
+      },
+      "font" : {
+        "name" : "ARIAL",
+        "size" : "32"
+      },
+      "textExpression" : {
+        "expression" : "\"Use the cursor keys to fly around\""
+      },
+      "type" : "TextComponent"
+    } ],
+    "uuid" : "-3176239154114437638",
+    "absolutePositionAnchor" : "TOP_LEFT"
+  } ],
+  "backgroundcolor" : {
+    "g" : "0",
+    "b" : "0",
+    "r" : "0"
+  },
+  "objects" : [ {
+    "templates" : [ {
+      "cameratype" : "CENTERONSCENE",
+      "type" : "CameraComponent"
+    } ],
+    "name" : "Camera",
+    "uuid" : "2900940626662702649",
+    "size" : {
+      "height" : "64",
+      "width" : "64"
+    }
+  }, {
+    "templates" : [ {
+      "resourcename" : {
+        "name" : "/assets/plane.png"
+      },
+      "type" : "SpriteComponent"
+    } ],
+    "name" : "Plane",
+    "uuid" : "4889509885749884898",
+    "size" : {
+      "height" : "64",
+      "width" : "64"
+    }
+  }, {
+    "templates" : [ {
+      "color" : {
+        "g" : "255",
+        "b" : "255",
+        "r" : "255"
+      },
+      "font" : {
+        "name" : "ARIAL",
+        "size" : "32"
+      },
+      "textExpression" : {
+        "expression" : "\"Use the cursor keys to fly around\""
+      },
+      "type" : "TextComponent"
+    } ],
+    "name" : "Text",
+    "uuid" : "-9051172752501502813",
+    "size" : {
+      "height" : "64",
+      "width" : "64"
+    }
+  } ]
+}

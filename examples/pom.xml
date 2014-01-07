@@ -8,8 +8,8 @@
         <artifactId>gamecreator</artifactId>
         <version>0.2-SNAPSHOT</version>
     </parent>
-    <artifactId>sampleplatformer</artifactId>
-    <name>GameComposer Example Game</name>
+    <artifactId>examples</artifactId>
+    <name>GameComposer Example Games</name>
     <packaging>pom</packaging>
     <dependencies>
         <dependency>
