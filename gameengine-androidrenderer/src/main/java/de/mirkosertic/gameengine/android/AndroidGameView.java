@@ -28,6 +28,9 @@ import java.io.IOException;
 
 public class AndroidGameView implements GameView {
 
+    protected static class SavedState {
+    }
+
     private final AndroidCanvas canvas;
     private final CameraComponent cameraComponent;
     private final GameRuntime gameRuntime;
@@ -126,12 +129,10 @@ public class AndroidGameView implements GameView {
     }
 
     private void drawText(Canvas aCanvas, Position aPosition, Font aFont, Color aColor, String aText, Size aSize) {
-        aCanvas.save();
         Paint thePaint = toPaint(aColor);
         thePaint.setTextSize(aFont.size);
         thePaint.setTypeface(toTypeface(aFont));
         aCanvas.drawText(aText, aPosition.x, aPosition.y, thePaint);
-        aCanvas.restore();
     }
 
     private void drawGameObjectInstance(Canvas aCanvas, GameObjectInstance aInstance, Position aPosition, Size aSize, AndroidBitmapResource aBitmap) {

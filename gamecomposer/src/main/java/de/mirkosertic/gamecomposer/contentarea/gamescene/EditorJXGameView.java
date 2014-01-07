@@ -16,7 +16,6 @@ import de.mirkosertic.gameengine.type.Font;
 import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Rectangle;
 import de.mirkosertic.gameengine.type.Size;
-import de.mirkosertic.gameengine.type.TextExpression;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
@@ -217,7 +216,8 @@ public class EditorJXGameView extends JavaFXGameView {
     }
 
     void drawSelectionAndHighlighting(GraphicsContext aContext, GameObjectInstance aInstance, Position aPosition, Size aSize) {
-        aContext.save();
+
+        SavedState theSavedState = saveState(aContext);
 
         if (aInstance == selectedObject || aInstance.getOwnerGameObject() == selectedObject) {
             aContext.setFill(Color.WHITE);
@@ -280,6 +280,6 @@ public class EditorJXGameView extends JavaFXGameView {
             }
         }
 
-        aContext.restore();
+        restoreState(aContext, theSavedState);
     }
 }
