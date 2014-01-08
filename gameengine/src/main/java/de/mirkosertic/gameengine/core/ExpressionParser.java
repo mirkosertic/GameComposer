@@ -1,6 +1,5 @@
 package de.mirkosertic.gameengine.core;
 
-import de.mirkosertic.gameengine.event.PropertyAware;
 import de.mirkosertic.gameengine.type.ValueProvider;
 
 public interface ExpressionParser {
@@ -9,14 +8,14 @@ public interface ExpressionParser {
     String PLAYER_VARIABLE = "player";
     String CAMERA_VARIABLE = "camera";
     String INSTANCE_VARIABLE = "instance";
-    String EVENT_PREFIX = "event.";
+    String EVENT_VARIABLE = "event";
     String OLD_VALUE_VARIABLE = "oldvalue";
 
     Object evaluateToObject();
 
     String evaluateToString();
 
-    void registerVariable(String aVariableName, PropertyAware aPropertyAware);
+    <T> void registerVariable(String aVariableName, ValueProvider<T> aVariableValueProvider);
 
-    <T> void registerVariable(String aVariableName, ValueProvider<T> aValueProvider);
+    <T> void registerVariable(String aVariableName, T aVariable);
 }

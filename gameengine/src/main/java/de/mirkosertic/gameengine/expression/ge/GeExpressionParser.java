@@ -1,7 +1,6 @@
 package de.mirkosertic.gameengine.expression.ge;
 
 import de.mirkosertic.gameengine.core.ExpressionParser;
-import de.mirkosertic.gameengine.event.PropertyAware;
 import de.mirkosertic.gameengine.type.DefaultValueProvider;
 import de.mirkosertic.gameengine.type.ValueProvider;
 
@@ -21,13 +20,13 @@ public class GeExpressionParser implements ExpressionParser, VariableResolver {
     }
 
     @Override
-    public void registerVariable(String aVariableName, PropertyAware aPropertyAware) {
-        registerVariable(aVariableName, new DefaultValueProvider(aPropertyAware));
+    public <T> void registerVariable(String aVariableName, ValueProvider<T> aVariableValueProvider) {
+        variables.put(aVariableName, aVariableValueProvider);
     }
 
     @Override
-    public <T> void registerVariable(String aVariableName, ValueProvider<T> aValueProvider) {
-        variables.put(aVariableName, aValueProvider);
+    public <T> void registerVariable(String aVariableName, T aValue) {
+        variables.put(aVariableName, new DefaultValueProvider(aValue));
     }
 
     @Override
@@ -44,6 +43,7 @@ public class GeExpressionParser implements ExpressionParser, VariableResolver {
 
     @Override
     public Object resolveVariable(String aVariableName) {
+        // TODO: implement . notation here
         ValueProvider theValueProvider = variables.get(aVariableName);
         if (theValueProvider != null) {
             return theValueProvider.get();

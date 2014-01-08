@@ -1,7 +1,7 @@
 package de.mirkosertic.gamecomposer.contentarea.eventsheet.constantmovement;
 
-import de.mirkosertic.gamecomposer.Controller;
 import de.mirkosertic.gamecomposer.PropertyBinder;
+import de.mirkosertic.gamecomposer.contentarea.eventsheet.ActionController;
 import de.mirkosertic.gameengine.arcade.ConstantMovementAction;
 import de.mirkosertic.gameengine.type.Angle;
 import javafx.fxml.FXML;
@@ -9,7 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 
-public class ConstantMovementEditorController implements Controller {
+public class ConstantMovementEditorController implements ActionController {
 
     @FXML
     TextField movementDirection;

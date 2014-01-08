@@ -28,7 +28,7 @@ public class SetPropertyEditorControllerFactory implements ActionControllerFacto
             BorderPane theRoot = (BorderPane) theLoader.load(fxml);
 
             SetPropertyEditorController theController = theLoader.getController();
-            return theController.initialize(theRoot, aGameScene, aAction);
+            return theController.initialize(theRoot, aGameScene, aRule, aAction);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

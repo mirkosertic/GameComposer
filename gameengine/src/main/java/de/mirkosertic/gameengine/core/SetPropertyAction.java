@@ -1,9 +1,7 @@
 package de.mirkosertic.gameengine.core;
 
-import de.mirkosertic.gameengine.event.GameEvent;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.event.ReadOnlyProperty;
-import de.mirkosertic.gameengine.type.DefaultValueProvider;
 import de.mirkosertic.gameengine.type.TextExpression;
 
 import java.util.HashMap;
@@ -38,18 +36,12 @@ public class SetPropertyAction implements Action {
 
             String thePropertyName = propertyName.get();
 
-            GameEvent theEvent = aConditionResult.getEvent();
-
             ExpressionParser theParser = aScene.get(propertyValue.get());
+            theParser.registerVariable(ExpressionParser.EVENT_VARIABLE, aConditionResult.getEvent());
 
             for (GameObjectInstance theInstance : aConditionResult.getAffectedInstances()) {
 
                 theParser.registerVariable(ExpressionParser.INSTANCE_VARIABLE, theInstance);
-
-                Map<String, Object> theValues = theEvent.getMemberValues();
-                for (Map.Entry<String, Object> theEntry : theValues.entrySet()) {
-                    theParser.registerVariable(ExpressionParser.EVENT_PREFIX + theEntry.getKey(), new DefaultValueProvider<Object>(theEntry.getValue()));
-                }
 
                 ReadOnlyProperty theProperty = theInstance.getPropertyByName(thePropertyName);
                 theParser.registerVariable(ExpressionParser.OLD_VALUE_VARIABLE, theProperty);

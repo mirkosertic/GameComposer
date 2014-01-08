@@ -19,6 +19,23 @@ public class Angle {
         return (float) Math.toRadians(angleInDegrees);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Angle angle = (Angle) o;
+
+        if (angleInDegrees != angle.angleInDegrees) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return angleInDegrees;
+    }
+
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<String, Object>();
         theResult.put("angleindegrees", Integer.toString(angleInDegrees));
