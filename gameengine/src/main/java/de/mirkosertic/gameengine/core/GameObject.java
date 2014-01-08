@@ -18,6 +18,7 @@ public class GameObject extends PropertyAware {
     public static final String NAME_PROPERTY = "name";
     public static final String SIZE_PROPERTY = "size";
     public static final String VISIBLE_PROPERTY = "visible";
+    public static final String[] EDITABLE_PROPERTIES = {SIZE_PROPERTY, VISIBLE_PROPERTY};
 
     private final GameScene gameScene;
 

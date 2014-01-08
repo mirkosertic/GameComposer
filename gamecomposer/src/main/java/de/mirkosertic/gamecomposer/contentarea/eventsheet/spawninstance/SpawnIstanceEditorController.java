@@ -1,13 +1,12 @@
 package de.mirkosertic.gamecomposer.contentarea.eventsheet.spawninstance;
 
-import de.mirkosertic.gamecomposer.Controller;
 import de.mirkosertic.gamecomposer.PersistenceManager;
 import de.mirkosertic.gamecomposer.PropertyBinder;
 import de.mirkosertic.gamecomposer.StringConverterFactory;
-import de.mirkosertic.gameengine.core.SpawnGameObjectInstanceAction;
-
+import de.mirkosertic.gamecomposer.contentarea.eventsheet.ActionController;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.SpawnGameObjectInstanceAction;
 import de.mirkosertic.gameengine.type.Position;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -20,7 +19,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class SpawnIstanceEditorController implements Controller {
+public class SpawnIstanceEditorController implements ActionController {
 
     @Inject
     StringConverterFactory stringConverterFactory;

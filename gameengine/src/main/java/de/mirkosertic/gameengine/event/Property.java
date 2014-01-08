@@ -25,6 +25,7 @@ public class Property<T> extends ReadOnlyProperty<T> {
     }
 
     public void set(T aValue) {
+        //TODO: maybe we can implement type checking here?
         T theOldValue = value;
         value = aValue;
         Set<GameEventListener> theKnownListener = new HashSet<GameEventListener>(changeListener);

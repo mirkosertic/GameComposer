@@ -1,32 +1,33 @@
 package de.mirkosertic.gamecomposer.contentarea.eventsheet.setproperty;
 
-import de.mirkosertic.gamecomposer.Controller;
+import de.mirkosertic.gamecomposer.contentarea.eventsheet.ActionController;
+import de.mirkosertic.gameengine.ArrayUtils;
+import de.mirkosertic.gameengine.camera.Camera;
+import de.mirkosertic.gameengine.core.GameObject;
+import de.mirkosertic.gameengine.core.GameRule;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.core.SetPropertyAction;
+import de.mirkosertic.gameengine.physic.Physics;
+import de.mirkosertic.gameengine.physic.Platform;
+import de.mirkosertic.gameengine.physic.Static;
+import de.mirkosertic.gameengine.playerscore.PlayerScore;
+import de.mirkosertic.gameengine.sprite.Sprite;
+import de.mirkosertic.gameengine.text.Text;
 import de.mirkosertic.gameengine.type.TextExpression;
-
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
-import javafx.util.StringConverter;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-public class SetPropertyEditorController implements Controller {
-
-    class SupportedProperty {
-        final String name;
-        final Class type;
-
-        SupportedProperty(String aName, Class aType) {
-            name = aName;
-            type = aType;
-        }
-    }
+public class SetPropertyEditorController implements ActionController {
 
     @FXML
     ComboBox propertyName;
@@ -38,27 +39,28 @@ public class SetPropertyEditorController implements Controller {
     private SetPropertyAction action;
     private Node view;
 
-    SetPropertyEditorController initialize(Node aView, GameScene aGameScene, SetPropertyAction aAction) {
+    SetPropertyEditorController initialize(Node aView, GameScene aGameScene, GameRule aRule, SetPropertyAction aAction) {
         gameScene = aGameScene;
         view = aView;
         action = aAction;
 
-        List<SupportedProperty> theSupportedProperties = new ArrayList<>();
-        theSupportedProperties.add(new SupportedProperty("visible", Boolean.class));
+        // Gather the known properties
+        Set<String> theAvailableProperties = new HashSet<>();
+        theAvailableProperties.addAll(ArrayUtils.asList(GameObject.EDITABLE_PROPERTIES));
+        theAvailableProperties.addAll(ArrayUtils.asList(Camera.EDITABLE_PROPERTIES));
+        theAvailableProperties.addAll(ArrayUtils.asList(Physics.EDITABLE_PROPERTIES));
+        theAvailableProperties.addAll(ArrayUtils.asList(Platform.EDITABLE_PROPERTIES));
+        theAvailableProperties.addAll(ArrayUtils.asList(Static.EDITABLE_PROPERTIES));
+        theAvailableProperties.addAll(ArrayUtils.asList(PlayerScore.EDITABLE_PROPERTIES));
+        theAvailableProperties.addAll(ArrayUtils.asList(Sprite.EDITABLE_PROPERTIES));
+        theAvailableProperties.addAll(ArrayUtils.asList(Text.EDITABLE_PROPERTIES));
+
+        // Sort them by name
+        List<String> theSupportedProperties = new ArrayList<>();
+        theSupportedProperties.addAll(theAvailableProperties);
+        Collections.sort(theSupportedProperties);
 
         propertyName.getItems().clear();
-        propertyName.setConverter(new StringConverter<SupportedProperty>() {
-            @Override
-            public String toString(SupportedProperty aValue) {
-                return aValue.name;
-            }
-
-            @Override
-            public SupportedProperty fromString(String aValue) {
-                // Nonsense here
-                return null;
-            }
-        });
 
         TextExpression theExpression = action.propertyValueProperty().get();
         if (theExpression != null) {
@@ -77,8 +79,8 @@ public class SetPropertyEditorController implements Controller {
             propertyName.getSelectionModel().select(0);
         } else {
             for (int i = 0; i < theSupportedProperties.size(); i++) {
-                SupportedProperty theProp = theSupportedProperties.get(i);
-                if (theProp.name.equals(action.propertyNameProperty().get())) {
+                String theProp = theSupportedProperties.get(i);
+                if (theProp.equals(action.propertyNameProperty().get())) {
                     propertyName.getSelectionModel().select(i);
                 }
             }
@@ -89,8 +91,8 @@ public class SetPropertyEditorController implements Controller {
 
     @FXML
     public void onSelectProperty() {
-        SupportedProperty theSelectedProperty = (SupportedProperty) propertyName.getSelectionModel().getSelectedItem();
-        action.propertyNameProperty().set(theSelectedProperty.name);
+        String theSelectedProperty = (String) propertyName.getSelectionModel().getSelectedItem();
+        action.propertyNameProperty().set(theSelectedProperty);
 
         propertyValueTextField.setVisible(true);
     }

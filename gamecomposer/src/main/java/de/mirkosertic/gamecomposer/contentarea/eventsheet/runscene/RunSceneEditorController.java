@@ -1,9 +1,9 @@
 package de.mirkosertic.gamecomposer.contentarea.eventsheet.runscene;
 
-import de.mirkosertic.gamecomposer.Controller;
 import de.mirkosertic.gamecomposer.PersistenceManager;
-import de.mirkosertic.gameengine.core.RunSceneAction;
+import de.mirkosertic.gamecomposer.contentarea.eventsheet.ActionController;
 import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.RunSceneAction;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -13,7 +13,7 @@ import javafx.util.StringConverter;
 
 import javax.inject.Inject;
 
-public class RunSceneEditorController implements Controller {
+public class RunSceneEditorController implements ActionController {
 
     @FXML
     ComboBox scenes;
