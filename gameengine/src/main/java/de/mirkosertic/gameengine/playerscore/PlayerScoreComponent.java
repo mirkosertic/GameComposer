@@ -4,12 +4,13 @@ import de.mirkosertic.gameengine.core.GameComponent;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
+import de.mirkosertic.gameengine.type.Reflectable;
 import de.mirkosertic.gameengine.type.ScoreValue;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class PlayerScoreComponent extends GameComponent implements PlayerScore {
+public class PlayerScoreComponent extends GameComponent implements PlayerScore, Reflectable<PlayerScoreClassInformation> {
 
     static final String TYPE = "PlayerScoreComponent";
 
@@ -25,7 +26,12 @@ public class PlayerScoreComponent extends GameComponent implements PlayerScore {
 
         GameEventManager theEventManager = aObjectInstance.getOwnerGameObject().getGameScene().getRuntime().getEventManager();
 
-        scoreValue = registerProperty(new Property<ScoreValue>(ScoreValue.class, this, SCORE_VALUE_PROPERTY, aTemplate.scoreValueProperty().get(), theEventManager));
+        scoreValue = new Property<ScoreValue>(ScoreValue.class, this, SCORE_VALUE_PROPERTY, aTemplate.scoreValueProperty().get(), theEventManager);
+    }
+
+    @Override
+    public PlayerScoreClassInformation getClassInformation() {
+        return PlayerScoreClassInformation.INSTANCE;
     }
 
     @Override

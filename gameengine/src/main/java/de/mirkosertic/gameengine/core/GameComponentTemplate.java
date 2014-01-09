@@ -1,10 +1,8 @@
 package de.mirkosertic.gameengine.core;
 
-import de.mirkosertic.gameengine.event.PropertyAware;
-
 import java.util.Map;
 
-public abstract class GameComponentTemplate<T extends GameComponent> extends PropertyAware {
+public abstract class GameComponentTemplate<T extends GameComponent> {
 
     public abstract T create(GameObjectInstance aInstance, GameRuntime aGameRuntime);
 

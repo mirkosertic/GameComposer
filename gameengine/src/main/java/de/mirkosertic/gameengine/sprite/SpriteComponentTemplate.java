@@ -1,26 +1,32 @@
 package de.mirkosertic.gameengine.sprite;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import de.mirkosertic.gameengine.core.GameComponentTemplate;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.core.UsedByReflection;
-import de.mirkosertic.gameengine.type.ResourceName;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
+import de.mirkosertic.gameengine.type.Reflectable;
+import de.mirkosertic.gameengine.type.ResourceName;
 
-public class SpriteComponentTemplate extends GameComponentTemplate<SpriteComponent> implements Sprite {
+import java.util.HashMap;
+import java.util.Map;
+
+public class SpriteComponentTemplate extends GameComponentTemplate<SpriteComponent> implements Sprite, Reflectable<SpriteClassInformation> {
 
     private final Property<ResourceName> resourceName;
     private final GameObject owner;
 
     @UsedByReflection
     public SpriteComponentTemplate(GameEventManager aEventManager, GameObject aOwner) {
-        resourceName = registerProperty(new Property<ResourceName>(ResourceName.class, this, RESOURCE_NAME_PROPERTY, aEventManager));
+        resourceName = new Property<ResourceName>(ResourceName.class, this, RESOURCE_NAME_PROPERTY, aEventManager);
         owner = aOwner;
+    }
+
+    @Override
+    public SpriteClassInformation getClassInformation() {
+        return SpriteClassInformation.INSTANCE;
     }
 
     @Override

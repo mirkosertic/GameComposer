@@ -1,18 +1,19 @@
 package de.mirkosertic.gameengine.physic;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import de.mirkosertic.gameengine.core.GameComponentTemplate;
-import de.mirkosertic.gameengine.core.UsedByReflection;
-import de.mirkosertic.gameengine.type.GameKeyCode;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.UsedByReflection;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
+import de.mirkosertic.gameengine.type.GameKeyCode;
+import de.mirkosertic.gameengine.type.Reflectable;
 
-public class PlatformComponentTemplate extends GameComponentTemplate<PlatformComponent> implements Platform {
+import java.util.HashMap;
+import java.util.Map;
+
+public class PlatformComponentTemplate extends GameComponentTemplate<PlatformComponent> implements Platform, Reflectable<PlatformClassInformation> {
 
     private final GameObject owner;
 
@@ -25,11 +26,16 @@ public class PlatformComponentTemplate extends GameComponentTemplate<PlatformCom
     @UsedByReflection
     public PlatformComponentTemplate(GameEventManager aEventManager, GameObject aOwner) {
         owner = aOwner;
-        moveLeftKey = registerProperty(new Property<GameKeyCode>(GameKeyCode.class, this, MOVE_LEFT_KEY_PROPERTY, GameKeyCode.LEFT, aEventManager));
-        moveRightKey = registerProperty(new Property<GameKeyCode>(GameKeyCode.class, this, MOVE_RIGHT_KEY_PROPERTY, GameKeyCode.RIGHT, aEventManager));
-        jumpKey = registerProperty(new Property<GameKeyCode>(GameKeyCode.class, this, JUMP_KEY_PROPERTY, GameKeyCode.UP, aEventManager));
-        leftRightImpulse = registerProperty(new Property<Float>(Float.class, this, LEFT_RIGHT_IMPULSE_PROPERTY, 4f, aEventManager));
-        jumpImpulse = registerProperty(new Property<Float>(Float.class, this, JUMP_IMPULSE_PROPERTY, 2f, aEventManager));
+        moveLeftKey = new Property<GameKeyCode>(GameKeyCode.class, this, MOVE_LEFT_KEY_PROPERTY, GameKeyCode.LEFT, aEventManager);
+        moveRightKey = new Property<GameKeyCode>(GameKeyCode.class, this, MOVE_RIGHT_KEY_PROPERTY, GameKeyCode.RIGHT, aEventManager);
+        jumpKey = new Property<GameKeyCode>(GameKeyCode.class, this, JUMP_KEY_PROPERTY, GameKeyCode.UP, aEventManager);
+        leftRightImpulse = new Property<Float>(Float.class, this, LEFT_RIGHT_IMPULSE_PROPERTY, 4f, aEventManager);
+        jumpImpulse = new Property<Float>(Float.class, this, JUMP_IMPULSE_PROPERTY, 2f, aEventManager);
+    }
+
+    @Override
+    public PlatformClassInformation getClassInformation() {
+        return PlatformClassInformation.INSTANCE;
     }
 
     @Override

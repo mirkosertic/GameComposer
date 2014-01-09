@@ -9,6 +9,7 @@ import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.type.AbsolutePositionAnchor;
 import de.mirkosertic.gameengine.type.Position;
+import de.mirkosertic.gameengine.type.Reflectable;
 import de.mirkosertic.gameengine.type.Size;
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CameraComponent extends GameComponent implements Camera {
+public class CameraComponent extends GameComponent implements Camera, Reflectable<CameraClassInformation> {
 
     static final String TYPE = "CameraComponent";
 
@@ -34,7 +35,7 @@ public class CameraComponent extends GameComponent implements Camera {
 
         GameEventManager theEventManager = aObjectInstance.getOwnerGameObject().getGameScene().getRuntime().getEventManager();
 
-        type = registerProperty(new Property<CameraType>(CameraType.class, this, TYPE_PROPERTY, aTemplate.typeProperty().get(), theEventManager));
+        type = new Property<CameraType>(CameraType.class, this, TYPE_PROPERTY, aTemplate.typeProperty().get(), theEventManager);
     }
 
     void registerEvents(GameRuntime aGameRuntime) {
@@ -44,6 +45,11 @@ public class CameraComponent extends GameComponent implements Camera {
                         setScreenSize(new Size(aEvent.screenSize.width, aEvent.screenSize.height));
                     }
                 });
+    }
+
+    @Override
+    public CameraClassInformation getClassInformation() {
+        return CameraClassInformation.INSTANCE;
     }
 
     public GameObjectInstance getObjectInstance() {

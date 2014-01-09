@@ -10,16 +10,22 @@ import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.core.UsedByReflection;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
+import de.mirkosertic.gameengine.type.Reflectable;
 
-public class CameraComponentTemplate extends GameComponentTemplate<CameraComponent> implements Camera {
+public class CameraComponentTemplate extends GameComponentTemplate<CameraComponent> implements Camera, Reflectable<CameraClassInformation> {
 
     private final Property<CameraType> type;
     private final GameObject owner;
 
     @UsedByReflection
     public CameraComponentTemplate(GameEventManager aEventManager, GameObject aOwner) {
-        type = registerProperty(new Property<CameraType>(CameraType.class, this, TYPE_PROPERTY, CameraType.FOLLOWPLAYER, aEventManager));
+        type = new Property<CameraType>(CameraType.class, this, TYPE_PROPERTY, CameraType.FOLLOWPLAYER, aEventManager);
         owner = aOwner;
+    }
+
+    @Override
+    public CameraClassInformation getClassInformation() {
+        return CameraClassInformation.INSTANCE;
     }
 
     @Override

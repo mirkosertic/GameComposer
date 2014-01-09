@@ -1,9 +1,9 @@
 package de.mirkosertic.gameengine.physic;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.core.GameComponent;
+import de.mirkosertic.gameengine.core.GameObjectInstance;
+import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.SystemTick;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
@@ -13,8 +13,12 @@ import de.mirkosertic.gameengine.type.CollisionPosition;
 import de.mirkosertic.gameengine.type.Force;
 import de.mirkosertic.gameengine.type.GameKeyCode;
 import de.mirkosertic.gameengine.type.Position;
+import de.mirkosertic.gameengine.type.Reflectable;
 
-public class PlatformComponent extends GameComponent implements Platform {
+import java.util.HashMap;
+import java.util.Map;
+
+public class PlatformComponent extends GameComponent implements Platform, Reflectable<PlatformClassInformation> {
 
     static final String TYPE = "PlatformComponent";
 
@@ -39,15 +43,20 @@ public class PlatformComponent extends GameComponent implements Platform {
         PlatformComponentTemplate theTemplate = aObjectInstance.getOwnerGameObject().getComponentTemplate(PlatformComponentTemplate.class);
         GameEventManager theEventManager = aObjectInstance.getOwnerGameObject().getGameScene().getRuntime().getEventManager();
 
-        moveLeftKey = registerProperty(new Property<GameKeyCode>(GameKeyCode.class, this, MOVE_LEFT_KEY_PROPERTY, theTemplate.moveLeftKeyProperty().get(), theEventManager));
-        moveRightKey = registerProperty(new Property<GameKeyCode>(GameKeyCode.class, this, MOVE_RIGHT_KEY_PROPERTY, theTemplate.moveRightKeyProperty().get(), theEventManager));
-        jumpKey = registerProperty(new Property<GameKeyCode>(GameKeyCode.class, this, JUMP_KEY_PROPERTY, theTemplate.jumpKeyProperty().get(), theEventManager));
-        leftRightImpulse = registerProperty(new Property<Float>(Float.class, this, LEFT_RIGHT_IMPULSE_PROPERTY, theTemplate.leftRightImpulseProperty().get(), theEventManager));
-        jumpImpulse = registerProperty(new Property<Float>(Float.class, this, JUMP_IMPULSE_PROPERTY, theTemplate.jumpImpulseProperty().get(), theEventManager));
+        moveLeftKey = new Property<GameKeyCode>(GameKeyCode.class, this, MOVE_LEFT_KEY_PROPERTY, theTemplate.moveLeftKeyProperty().get(), theEventManager);
+        moveRightKey = new Property<GameKeyCode>(GameKeyCode.class, this, MOVE_RIGHT_KEY_PROPERTY, theTemplate.moveRightKeyProperty().get(), theEventManager);
+        jumpKey = new Property<GameKeyCode>(GameKeyCode.class, this, JUMP_KEY_PROPERTY, theTemplate.jumpKeyProperty().get(), theEventManager);
+        leftRightImpulse = new Property<Float>(Float.class, this, LEFT_RIGHT_IMPULSE_PROPERTY, theTemplate.leftRightImpulseProperty().get(), theEventManager);
+        jumpImpulse = new Property<Float>(Float.class, this, JUMP_IMPULSE_PROPERTY, theTemplate.jumpImpulseProperty().get(), theEventManager);
     }
 
     PlatformComponent(GameObjectInstance aObjectInstance, GameRuntime aGameRuntime, PlatformComponentTemplate aTemplate) {
         this(aObjectInstance, aGameRuntime);
+    }
+
+    @Override
+    public PlatformClassInformation getClassInformation() {
+        return PlatformClassInformation.INSTANCE;
     }
 
     @Override

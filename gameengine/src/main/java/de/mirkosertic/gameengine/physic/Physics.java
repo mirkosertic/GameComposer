@@ -10,7 +10,6 @@ public interface Physics {
     String FRICTION_PROPERTY = "friction";
     String RESTITUTION_PROPERTY = "restitution";
     String GRAVITY_SCALE_PROPERTY = "gravityScale";
-    String[] EDITABLE_PROPERTIES = {ACTIVE_PROPERTY, FIXED_ROTATION_PROPERTY, DENSITY_PROPERTY, FRICTION_PROPERTY, RESTITUTION_PROPERTY, GRAVITY_SCALE_PROPERTY};
 
     Property<Boolean> activeProperty();
 

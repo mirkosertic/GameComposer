@@ -10,7 +10,6 @@ public interface Platform {
     String JUMP_KEY_PROPERTY = "jumpKey";
     String LEFT_RIGHT_IMPULSE_PROPERTY = "leftRightImpulse";
     String JUMP_IMPULSE_PROPERTY = "jumpImpulse";
-    String[] EDITABLE_PROPERTIES = {MOVE_LEFT_KEY_PROPERTY, MOVE_RIGHT_KEY_PROPERTY, JUMP_KEY_PROPERTY, LEFT_RIGHT_IMPULSE_PROPERTY, JUMP_IMPULSE_PROPERTY};
 
     Property<GameKeyCode> moveLeftKeyProperty();
 

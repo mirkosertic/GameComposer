@@ -10,8 +10,9 @@ import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.core.UsedByReflection;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
+import de.mirkosertic.gameengine.type.Reflectable;
 
-public class PhysicsComponentTemplate extends GameComponentTemplate<PhysicsComponent> implements Physics {
+public class PhysicsComponentTemplate extends GameComponentTemplate<PhysicsComponent> implements Physics, Reflectable<PhysicsClassInformation> {
 
     private final GameObject owner;
 
@@ -26,12 +27,17 @@ public class PhysicsComponentTemplate extends GameComponentTemplate<PhysicsCompo
     public PhysicsComponentTemplate(GameEventManager aEventManager, GameObject aOwner) {
         owner = aOwner;
 
-        active = registerProperty(new Property<Boolean>(Boolean.class, this, ACTIVE_PROPERTY, Boolean.TRUE, aEventManager));
-        fixedRotation = registerProperty(new Property<Boolean>(Boolean.class, this, FIXED_ROTATION_PROPERTY, Boolean.FALSE, aEventManager));
-        density = registerProperty(new Property<Float>(Float.class, this, DENSITY_PROPERTY, 1f, aEventManager));
-        friction = registerProperty(new Property<Float>(Float.class, this, FRICTION_PROPERTY, 1.8f, aEventManager));
-        restitution = registerProperty(new Property<Float>(Float.class, this, RESTITUTION_PROPERTY, 0f, aEventManager));
-        gravityScale = registerProperty(new Property<Float>(Float.class, this, GRAVITY_SCALE_PROPERTY, 1f, aEventManager));
+        active = new Property<Boolean>(Boolean.class, this, ACTIVE_PROPERTY, Boolean.TRUE, aEventManager);
+        fixedRotation = new Property<Boolean>(Boolean.class, this, FIXED_ROTATION_PROPERTY, Boolean.FALSE, aEventManager);
+        density = new Property<Float>(Float.class, this, DENSITY_PROPERTY, 1f, aEventManager);
+        friction = new Property<Float>(Float.class, this, FRICTION_PROPERTY, 1.8f, aEventManager);
+        restitution = new Property<Float>(Float.class, this, RESTITUTION_PROPERTY, 0f, aEventManager);
+        gravityScale = new Property<Float>(Float.class, this, GRAVITY_SCALE_PROPERTY, 1f, aEventManager);
+    }
+
+    @Override
+    public PhysicsClassInformation getClassInformation() {
+        return PhysicsClassInformation.INSTANCE;
     }
 
     @Override
