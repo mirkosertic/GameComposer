@@ -5,8 +5,9 @@ import java.util.Map;
 
 import de.mirkosertic.gameengine.core.GameComponent;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
+import de.mirkosertic.gameengine.type.Reflectable;
 
-public class StaticComponent extends GameComponent implements Static {
+public class StaticComponent extends GameComponent implements Static, Reflectable<StaticClassInformation> {
     
     static final String TYPE = "StaticComponent";
 
@@ -18,6 +19,11 @@ public class StaticComponent extends GameComponent implements Static {
 
     StaticComponent(GameObjectInstance aObjectInstance, StaticComponentTemplate aTemplate) {
         objectInstance = aObjectInstance;
+    }
+
+    @Override
+    public StaticClassInformation getClassInformation() {
+        return StaticClassInformation.INSTANCE;
     }
 
     @Override

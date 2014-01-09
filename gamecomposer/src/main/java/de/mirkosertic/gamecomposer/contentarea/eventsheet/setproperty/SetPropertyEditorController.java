@@ -1,18 +1,9 @@
 package de.mirkosertic.gamecomposer.contentarea.eventsheet.setproperty;
 
 import de.mirkosertic.gamecomposer.contentarea.eventsheet.ActionController;
-import de.mirkosertic.gameengine.ArrayUtils;
-import de.mirkosertic.gameengine.camera.Camera;
-import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameRule;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.core.SetPropertyAction;
-import de.mirkosertic.gameengine.physic.Physics;
-import de.mirkosertic.gameengine.physic.Platform;
-import de.mirkosertic.gameengine.physic.Static;
-import de.mirkosertic.gameengine.playerscore.PlayerScore;
-import de.mirkosertic.gameengine.sprite.Sprite;
-import de.mirkosertic.gameengine.text.Text;
 import de.mirkosertic.gameengine.type.TextExpression;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -46,14 +37,15 @@ public class SetPropertyEditorController implements ActionController {
 
         // Gather the known properties
         Set<String> theAvailableProperties = new HashSet<>();
-        theAvailableProperties.addAll(ArrayUtils.asList(GameObject.EDITABLE_PROPERTIES));
+        //TODO:
+        /*theAvailableProperties.addAll(ArrayUtils.asList(GameObject.EDITABLE_PROPERTIES));
         theAvailableProperties.addAll(ArrayUtils.asList(Camera.EDITABLE_PROPERTIES));
         theAvailableProperties.addAll(ArrayUtils.asList(Physics.EDITABLE_PROPERTIES));
         theAvailableProperties.addAll(ArrayUtils.asList(Platform.EDITABLE_PROPERTIES));
         theAvailableProperties.addAll(ArrayUtils.asList(Static.EDITABLE_PROPERTIES));
         theAvailableProperties.addAll(ArrayUtils.asList(PlayerScore.EDITABLE_PROPERTIES));
         theAvailableProperties.addAll(ArrayUtils.asList(Sprite.EDITABLE_PROPERTIES));
-        theAvailableProperties.addAll(ArrayUtils.asList(Text.EDITABLE_PROPERTIES));
+        theAvailableProperties.addAll(ArrayUtils.asList(Text.EDITABLE_PROPERTIES));*/
 
         // Sort them by name
         List<String> theSupportedProperties = new ArrayList<>();

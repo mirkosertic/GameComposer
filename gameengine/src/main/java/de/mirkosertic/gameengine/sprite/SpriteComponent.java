@@ -1,15 +1,16 @@
 package de.mirkosertic.gameengine.sprite;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import de.mirkosertic.gameengine.core.GameComponent;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
+import de.mirkosertic.gameengine.type.Reflectable;
 import de.mirkosertic.gameengine.type.ResourceName;
 
-public class SpriteComponent extends GameComponent implements Sprite {
+import java.util.HashMap;
+import java.util.Map;
+
+public class SpriteComponent extends GameComponent implements Sprite, Reflectable<SpriteClassInformation> {
 
     static final String TYPE = "SpriteComponent";
 
@@ -25,7 +26,12 @@ public class SpriteComponent extends GameComponent implements Sprite {
 
         GameEventManager theEventManager = aObjectInstance.getOwnerGameObject().getGameScene().getRuntime().getEventManager();
 
-        resourceName = registerProperty(new Property<ResourceName>(ResourceName.class, this, RESOURCE_NAME_PROPERTY, aTemplate.resourceNameProperty().get(), theEventManager));
+        resourceName = new Property<ResourceName>(ResourceName.class, this, RESOURCE_NAME_PROPERTY, aTemplate.resourceNameProperty().get(), theEventManager);
+    }
+
+    @Override
+    public SpriteClassInformation getClassInformation() {
+        return SpriteClassInformation.INSTANCE;
     }
 
     @Override

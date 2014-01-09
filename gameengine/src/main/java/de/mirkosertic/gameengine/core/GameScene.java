@@ -3,10 +3,10 @@ package de.mirkosertic.gameengine.core;
 import de.mirkosertic.gameengine.ArrayUtils;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
-import de.mirkosertic.gameengine.event.PropertyAware;
 import de.mirkosertic.gameengine.type.Color;
 import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Rectangle;
+import de.mirkosertic.gameengine.type.Reflectable;
 import de.mirkosertic.gameengine.type.TextExpression;
 
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GameScene extends PropertyAware {
+public class GameScene implements Reflectable<GameSceneClassInformation> {
 
     public static final String NAME_PROPERTY = "name";
     public static final String CAMERA_OBJECT_PROPERTY = "cameraObject";
@@ -22,11 +22,11 @@ public class GameScene extends PropertyAware {
     public static final String COLOR_PROPERTY = "color";
     public static final String LAYOUT_BOUNDS_PROPERTY = "layoutBounds";
 
-    private final Property<String> name;
-    private final Property<GameObject> cameraObject;
-    private final Property<GameObject> defaultPlayer;
-    private final Property<Color> backgroundColor;
-    private final Property<Rectangle> layoutBounds;
+    final Property<String> name;
+    final Property<GameObject> cameraObject;
+    final Property<GameObject> defaultPlayer;
+    final Property<Color> backgroundColor;
+    final Property<Rectangle> layoutBounds;
 
     private GameObject[] objects;
     private GameObjectInstance[] instances;
@@ -39,17 +39,22 @@ public class GameScene extends PropertyAware {
 
         GameEventManager theManager = aGameRuntime.getEventManager();
 
-        name = registerProperty(new Property<String>(String.class, this, NAME_PROPERTY, null, theManager));
-        cameraObject = registerProperty(new Property<GameObject>(GameObject.class, this, CAMERA_OBJECT_PROPERTY, null, theManager));
-        defaultPlayer = registerProperty(new Property<GameObject>(GameObject.class, this, DEFAULT_PLAYER_PROPERTY, null, theManager));
-        backgroundColor = registerProperty(new Property<Color>(Color.class, this, COLOR_PROPERTY, new Color(0, 0, 0), theManager));
-        layoutBounds = registerProperty(new Property<Rectangle>(Rectangle.class, this, LAYOUT_BOUNDS_PROPERTY, new Rectangle(), theManager));
+        name = new Property<String>(String.class, this, NAME_PROPERTY, null, theManager);
+        cameraObject = new Property<GameObject>(GameObject.class, this, CAMERA_OBJECT_PROPERTY, null, theManager);
+        defaultPlayer = new Property<GameObject>(GameObject.class, this, DEFAULT_PLAYER_PROPERTY, null, theManager);
+        backgroundColor = new Property<Color>(Color.class, this, COLOR_PROPERTY, new Color(0, 0, 0), theManager);
+        layoutBounds = new Property<Rectangle>(Rectangle.class, this, LAYOUT_BOUNDS_PROPERTY, new Rectangle(), theManager);
         instances = new GameObjectInstance[0];
         objects = new GameObject[0];
         eventSheets = new EventSheet[0];
         gameRuntime = aGameRuntime;
 
         knownParser = new HashMap<TextExpression, ExpressionParser>();
+    }
+
+    @Override
+    public GameSceneClassInformation getClassInformation() {
+        return GameSceneClassInformation.INSTANCE;
     }
 
     public ExpressionParser get(TextExpression aExpression) {

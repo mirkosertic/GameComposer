@@ -6,12 +6,13 @@ import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.type.Color;
 import de.mirkosertic.gameengine.type.Font;
+import de.mirkosertic.gameengine.type.Reflectable;
 import de.mirkosertic.gameengine.type.TextExpression;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class TextComponent extends GameComponent implements Text {
+public class TextComponent extends GameComponent implements Text, Reflectable<TextClassInformation> {
 
     static final String TYPE = "TextComponent";
 
@@ -30,9 +31,14 @@ public class TextComponent extends GameComponent implements Text {
         GameEventManager theEventManager = aObjectInstance.getOwnerGameObject().getGameScene().getRuntime().getEventManager();
 
         objectInstance = aObjectInstance;
-        font = registerProperty(new Property<Font>(Font.class, this, FONT_PROPERTY, aTemplate.fontProperty().get(), theEventManager));
-        color = registerProperty(new Property<Color>(Color.class, this, COLOR_PROPERTY, aTemplate.colorProperty().get(), theEventManager));
-        textExpression = registerProperty(new Property<TextExpression>(TextExpression.class, this, TEXT_EXPRESSION_PROPERTY, aTemplate.textExpressionProperty().get(), theEventManager));
+        font = new Property<Font>(Font.class, this, FONT_PROPERTY, aTemplate.fontProperty().get(), theEventManager);
+        color = new Property<Color>(Color.class, this, COLOR_PROPERTY, aTemplate.colorProperty().get(), theEventManager);
+        textExpression = new Property<TextExpression>(TextExpression.class, this, TEXT_EXPRESSION_PROPERTY, aTemplate.textExpressionProperty().get(), theEventManager);
+    }
+
+    @Override
+    public TextClassInformation getClassInformation() {
+        return TextClassInformation.INSTANCE;
     }
 
     public Property<Font> fontProperty() {

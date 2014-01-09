@@ -1,7 +1,8 @@
 package de.mirkosertic.gameengine.core;
 
 import de.mirkosertic.gameengine.event.Property;
-import de.mirkosertic.gameengine.event.ReadOnlyProperty;
+import de.mirkosertic.gameengine.type.ClassInformation;
+import de.mirkosertic.gameengine.type.Field;
 import de.mirkosertic.gameengine.type.TextExpression;
 
 import java.util.HashMap;
@@ -43,12 +44,15 @@ public class SetPropertyAction implements Action {
 
                 theParser.registerVariable(ExpressionParser.INSTANCE_VARIABLE, theInstance);
 
-                ReadOnlyProperty theProperty = theInstance.getPropertyByName(thePropertyName);
-                theParser.registerVariable(ExpressionParser.OLD_VALUE_VARIABLE, theProperty);
+                ClassInformation theClassInformation = theInstance.getClassInformation();
+                Field theField = theClassInformation.getFieldByName(thePropertyName);
+                if (theField != null) {
+                    Property theProperty = (Property) theField.getValue(theInstance);
+                    theParser.registerVariable(ExpressionParser.OLD_VALUE_VARIABLE, theProperty);
 
-                Object theNewPropertyValue = theParser.evaluateToObject();
-
-                theInstance.setPropertyByName(thePropertyName, theNewPropertyValue);
+                    Object theNewPropertyValue = theParser.evaluateToObject();
+                    theProperty.set(theNewPropertyValue);
+                }
             }
         }
     }

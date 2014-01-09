@@ -2,10 +2,10 @@ package de.mirkosertic.gameengine.core;
 
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
-import de.mirkosertic.gameengine.event.PropertyAware;
 import de.mirkosertic.gameengine.type.AbsolutePositionAnchor;
 import de.mirkosertic.gameengine.type.Angle;
 import de.mirkosertic.gameengine.type.Position;
+import de.mirkosertic.gameengine.type.Reflectable;
 import de.mirkosertic.gameengine.type.Size;
 
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GameObjectInstance extends PropertyAware {
+public class GameObjectInstance implements Reflectable<GameObjectInstanceClassInformation> {
 
     public static final String UUID_PROPERTY = "uuid";
     public static final String NAME_PROPERTY = "name";
@@ -27,26 +27,31 @@ public class GameObjectInstance extends PropertyAware {
 
     private final GameObject ownerGameObject;
 
-    private final Property<String> uuid;
-    private final Property<String> name;
-    private final Property<Position> position;
-    private final Property<Angle> rotationAngle;
-    private final Property<Boolean> visible;
-    private final Property<Boolean> absolutePosition;
-    private final Property<AbsolutePositionAnchor> absolutePositionAnchor;
+    final Property<String> uuid;
+    final Property<String> name;
+    final Property<Position> position;
+    final Property<Angle> rotationAngle;
+    final Property<Boolean> visible;
+    final Property<Boolean> absolutePosition;
+    final Property<AbsolutePositionAnchor> absolutePositionAnchor;
 
     GameObjectInstance(GameEventManager aEventManager, GameObject aOwnerGameObject) {
 
-        uuid = registerProperty(new Property<String>(String.class, this, UUID_PROPERTY, de.mirkosertic.gameengine.type.UUID.randomUID(), aEventManager));
-        name = registerProperty(new Property<String>(String.class, this, NAME_PROPERTY, aEventManager));
-        position = registerProperty(new Property<Position>(Position.class, this, POSITION_PROPERTY, new Position(), aEventManager));
-        visible = registerProperty(new Property<Boolean>(Boolean.class, this, VISIBLE_PROPERTY, aOwnerGameObject.visibleProperty().get(), aEventManager));
-        rotationAngle = registerProperty(new Property<Angle>(Angle.class, this, ROTATION_ANGLE_PROPERTY, new Angle(0), aEventManager));
-        absolutePosition = registerProperty(new Property<Boolean>(Boolean.class, this, ABSOLUTE_POSITION_PROPERTY, Boolean.FALSE, aEventManager));
-        absolutePositionAnchor = registerProperty(new Property<AbsolutePositionAnchor>(AbsolutePositionAnchor.class, this, ABSOLUTE_POSITION_ANCHOR_PROPERTY, AbsolutePositionAnchor.TOP_LEFT, aEventManager));
+        uuid = new Property<String>(String.class, this, UUID_PROPERTY, de.mirkosertic.gameengine.type.UUID.randomUID(), aEventManager);
+        name = new Property<String>(String.class, this, NAME_PROPERTY, aEventManager);
+        position = new Property<Position>(Position.class, this, POSITION_PROPERTY, new Position(), aEventManager);
+        visible = new Property<Boolean>(Boolean.class, this, VISIBLE_PROPERTY, aOwnerGameObject.visibleProperty().get(), aEventManager);
+        rotationAngle = new Property<Angle>(Angle.class, this, ROTATION_ANGLE_PROPERTY, new Angle(0), aEventManager);
+        absolutePosition = new Property<Boolean>(Boolean.class, this, ABSOLUTE_POSITION_PROPERTY, Boolean.FALSE, aEventManager);
+        absolutePositionAnchor = new Property<AbsolutePositionAnchor>(AbsolutePositionAnchor.class, this, ABSOLUTE_POSITION_ANCHOR_PROPERTY, AbsolutePositionAnchor.TOP_LEFT, aEventManager);
 
         ownerGameObject = aOwnerGameObject;
         components = new HashMap<Class<GameComponent>, GameComponent>();
+    }
+
+    @Override
+    public GameObjectInstanceClassInformation getClassInformation() {
+        return GameObjectInstanceClassInformation.INSTANCE;
     }
 
     public boolean contains(Position aPosition) {
@@ -95,16 +100,6 @@ public class GameObjectInstance extends PropertyAware {
 
     public <T extends GameComponent> T getComponent(Class<T> aComponentClass) {
         return (T) components.get(aComponentClass);
-    }
-
-    @Override
-    public boolean setPropertyByName(String aPropertyName, Object aPropertyValue) {
-        for (GameComponent theComponent : components.values()) {
-            if (theComponent.setPropertyByName(aPropertyName, aPropertyValue)) {
-                return true;
-            }
-        }
-        return super.setPropertyByName(aPropertyName, aPropertyValue);
     }
 
     public Map<String, Object> serialize() {

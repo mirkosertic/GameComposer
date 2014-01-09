@@ -1,5 +1,10 @@
 package de.mirkosertic.gameengine.core;
 
+import de.mirkosertic.gameengine.event.GameEventManager;
+import de.mirkosertic.gameengine.event.Property;
+import de.mirkosertic.gameengine.type.Reflectable;
+import de.mirkosertic.gameengine.type.Size;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -7,25 +12,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import de.mirkosertic.gameengine.event.GameEventManager;
-import de.mirkosertic.gameengine.event.Property;
-import de.mirkosertic.gameengine.event.PropertyAware;
-import de.mirkosertic.gameengine.type.Size;
-
-public class GameObject extends PropertyAware {
+public class GameObject implements Reflectable<GameObjectClassInformation> {
 
     public static final String UUID_PROPERTY = "uuid";
     public static final String NAME_PROPERTY = "name";
     public static final String SIZE_PROPERTY = "size";
     public static final String VISIBLE_PROPERTY = "visible";
-    public static final String[] EDITABLE_PROPERTIES = {SIZE_PROPERTY, VISIBLE_PROPERTY};
 
     private final GameScene gameScene;
 
-    private final Property<String> uuid;
-    private final Property<String> name;
-    private final Property<Size> size;
-    private final Property<Boolean> visible;
+    final Property<String> uuid;
+    final Property<String> name;
+    final Property<Size> size;
+    final Property<Boolean> visible;
 
     private final Map<Class<GameComponentTemplate>, GameComponentTemplate> componentTemplates;
 
@@ -38,10 +37,10 @@ public class GameObject extends PropertyAware {
         GameEventManager theManager = aScene.getRuntime().getEventManager();
 
         gameScene = aScene;
-        uuid = registerProperty(new Property<String>(String.class, this, UUID_PROPERTY, aUUID, theManager));
-        name = registerProperty(new Property<String>(String.class, this, NAME_PROPERTY, aName, theManager));
-        size = registerProperty(new Property<Size>(Size.class, this, SIZE_PROPERTY, new Size(64, 64), theManager));
-        visible = registerProperty(new Property<Boolean>(Boolean.class, this, VISIBLE_PROPERTY, Boolean.TRUE, theManager));
+        uuid = new Property<String>(String.class, this, UUID_PROPERTY, aUUID, theManager);
+        name = new Property<String>(String.class, this, NAME_PROPERTY, aName, theManager);
+        size = new Property<Size>(Size.class, this, SIZE_PROPERTY, new Size(64, 64), theManager);
+        visible = new Property<Boolean>(Boolean.class, this, VISIBLE_PROPERTY, Boolean.TRUE, theManager);
         componentTemplates = new HashMap<Class<GameComponentTemplate>, GameComponentTemplate>();
 
         name.setQuietly(aName);
@@ -84,16 +83,6 @@ public class GameObject extends PropertyAware {
         return uuid != null ? uuid.hashCode() : 0;
     }
 
-    @Override
-    public boolean setPropertyByName(String aPropertyName, Object aPropertyValue) {
-        for (GameComponentTemplate theTemplate : componentTemplates.values()) {
-            if (theTemplate.setPropertyByName(aPropertyName, aPropertyValue)) {
-                return true;
-            }
-        }
-        return super.setPropertyByName(aPropertyName, aPropertyValue);
-    }
-
     public void add(GameComponentTemplate aComponentTemplate) {
         componentTemplates.put((Class<GameComponentTemplate>) aComponentTemplate.getClass(), aComponentTemplate);
         gameScene.getRuntime().getEventManager().fire(new GameObjectConfigurationChanged(this));
@@ -101,6 +90,11 @@ public class GameObject extends PropertyAware {
 
     public <T extends GameComponentTemplate> T getComponentTemplate(Class<T> aComponentClass) {
         return (T) componentTemplates.get(aComponentClass);
+    }
+
+    @Override
+    public GameObjectClassInformation getClassInformation() {
+        return GameObjectClassInformation.INSTANCE;
     }
 
     public Set<GameComponentTemplate> getComponentTemplates() {
