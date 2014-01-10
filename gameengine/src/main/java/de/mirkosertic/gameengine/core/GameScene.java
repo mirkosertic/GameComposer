@@ -164,7 +164,7 @@ public class GameScene implements Reflectable<GameSceneClassInformation> {
     public GameObjectInstance createFrom(GameObject aGameObject) {
         GameObjectInstance theInstance = new GameObjectInstance(gameRuntime.getEventManager(), aGameObject);
         theInstance.nameProperty().setQuietly(aGameObject.nameProperty().get() + "_" + System.currentTimeMillis());
-        for (GameComponentTemplate theFactory : aGameObject.getComponentTemplates()) {
+        for (BehaviorTemplate theFactory : aGameObject.getComponentTemplates()) {
             theInstance.addComponent(theFactory.create(theInstance, gameRuntime));
         }
         return theInstance;

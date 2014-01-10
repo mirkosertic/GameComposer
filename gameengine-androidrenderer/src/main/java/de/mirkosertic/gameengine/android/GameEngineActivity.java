@@ -7,7 +7,7 @@ import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 
-import de.mirkosertic.gameengine.camera.CameraComponent;
+import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.FollowCameraProcess;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
 import de.mirkosertic.gameengine.core.Game;
@@ -171,7 +171,7 @@ public class GameEngineActivity extends Activity {
 
         GameObject theCameraObject = aGameScene.cameraObjectProperty().get();
         GameObjectInstance theCameraObjectInstance = aGameScene.createFrom(theCameraObject);
-        CameraComponent theCameraComponent = theCameraObjectInstance.getComponent(CameraComponent.class);
+        CameraBehavior theCameraComponent = theCameraObjectInstance.getComponent(CameraBehavior.class);
 
         GameObjectInstance thePlayerInstance = null;
         for (GameObjectInstance theInstance : aGameScene.getInstances()) {

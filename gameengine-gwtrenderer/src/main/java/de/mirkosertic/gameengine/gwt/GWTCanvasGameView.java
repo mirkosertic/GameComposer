@@ -4,14 +4,14 @@ import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.canvas.dom.client.CssColor;
 
-import de.mirkosertic.gameengine.camera.CameraComponent;
+import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.input.DefaultGestureDetector;
 import de.mirkosertic.gameengine.core.GestureDetector;
 import de.mirkosertic.gameengine.sprite.Sprite;
-import de.mirkosertic.gameengine.sprite.SpriteComponent;
+import de.mirkosertic.gameengine.sprite.SpriteBehavior;
 import de.mirkosertic.gameengine.text.Text;
-import de.mirkosertic.gameengine.text.TextComponent;
+import de.mirkosertic.gameengine.text.TextBehavior;
 import de.mirkosertic.gameengine.type.*;
 
 import java.io.IOException;
@@ -20,11 +20,11 @@ public class GWTCanvasGameView extends AbstractWebGameView {
 
     private final GameRuntime gameRuntime;
     private final Canvas canvas;
-    private final CameraComponent cameraComponent;
+    private final CameraBehavior cameraComponent;
     private final GestureDetector gestureDetector;
     private int counter;
 
-    public GWTCanvasGameView(GameRuntime aGameRuntime, Canvas aCanvas, CameraComponent aCameraComponent) {
+    public GWTCanvasGameView(GameRuntime aGameRuntime, Canvas aCanvas, CameraBehavior aCameraComponent) {
         gameRuntime = aGameRuntime;
         canvas = aCanvas;
         cameraComponent = aCameraComponent;
@@ -69,7 +69,7 @@ public class GWTCanvasGameView extends AbstractWebGameView {
 
             boolean theSomethingRendered = false;
 
-            Sprite theSpriteComponent = theInstance.getComponent(SpriteComponent.class);
+            Sprite theSpriteComponent = theInstance.getComponent(SpriteBehavior.class);
             if (theSpriteComponent != null) {
                 try {
                     GWTBitmapResource theBitmap = gameRuntime.getResourceCache().getResourceFor(theSpriteComponent.resourceNameProperty().get());
@@ -80,7 +80,7 @@ public class GWTCanvasGameView extends AbstractWebGameView {
                     throw new RuntimeException(e);
                 }
             }
-            Text theTextComponent = theInstance.getComponent(TextComponent.class);
+            Text theTextComponent = theInstance.getComponent(TextBehavior.class);
             if (theTextComponent != null) {
                 ExpressionParser theExpressionParser = aScene.get(theTextComponent.textExpressionProperty().get());
                 drawText(theContext, thePosition, theTextComponent.fontProperty().get(), theTextComponent.colorProperty().get(), theExpressionParser.evaluateToString(), theSize);

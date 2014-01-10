@@ -2,8 +2,8 @@ package de.mirkosertic.gameengine.type;
 
 public abstract class Field<V,T> {
 
-    protected final String name;
-    protected final Class type;
+    private final String name;
+    private final Class type;
 
     public Field(String aName, Class<?> aType) {
         name = aName;

@@ -3,7 +3,7 @@ package de.mirkosertic.gameengine.type;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Color {
+public class Color implements Reflectable<ColorClassInformation> {
 
     public static final Color WHITE = new Color(255, 255, 255);
     public static final Color BLACK = new Color(0, 0, 0);
@@ -16,6 +16,11 @@ public class Color {
         r = aR;
         g = aG;
         b = aB;
+    }
+
+    @Override
+    public ColorClassInformation getClassInformation() {
+        return ColorClassInformation.INSTANCE;
     }
 
     public Map<String, String> serialize() {

@@ -23,7 +23,7 @@ public class GameObjectInstance implements Reflectable<GameObjectInstanceClassIn
     public static final String ABSOLUTE_POSITION_PROPERTY = "absolutePosition";
     public static final String ABSOLUTE_POSITION_ANCHOR_PROPERTY = "absolutePositionAnchor";
 
-    private final Map<Class<GameComponent>, GameComponent> components;
+    private final Map<Class<Behavior>, Behavior> components;
 
     private final GameObject ownerGameObject;
 
@@ -46,7 +46,7 @@ public class GameObjectInstance implements Reflectable<GameObjectInstanceClassIn
         absolutePositionAnchor = new Property<AbsolutePositionAnchor>(AbsolutePositionAnchor.class, this, ABSOLUTE_POSITION_ANCHOR_PROPERTY, AbsolutePositionAnchor.TOP_LEFT, aEventManager);
 
         ownerGameObject = aOwnerGameObject;
-        components = new HashMap<Class<GameComponent>, GameComponent>();
+        components = new HashMap<Class<Behavior>, Behavior>();
     }
 
     @Override
@@ -94,11 +94,11 @@ public class GameObjectInstance implements Reflectable<GameObjectInstanceClassIn
         return ownerGameObject;
     }
 
-    void addComponent(GameComponent aComponent) {
-        components.put((Class<GameComponent>) aComponent.getClass(), aComponent);
+    void addComponent(Behavior aComponent) {
+        components.put((Class<Behavior>) aComponent.getClass(), aComponent);
     }
 
-    public <T extends GameComponent> T getComponent(Class<T> aComponentClass) {
+    public <T extends Behavior> T getComponent(Class<T> aComponentClass) {
         return (T) components.get(aComponentClass);
     }
 
@@ -117,7 +117,7 @@ public class GameObjectInstance implements Reflectable<GameObjectInstanceClassIn
         theResult.put("rotationangle", rotationAngle.get().serialize());
 
         List<Map<String, Object>> theComponents = new ArrayList<Map<String, Object>>();
-        for (GameComponent theComponent : components.values()) {
+        for (Behavior theComponent : components.values()) {
             theComponents.add(theComponent.serialize());
         }
         theResult.put("components", theComponents);
@@ -159,9 +159,9 @@ public class GameObjectInstance implements Reflectable<GameObjectInstanceClassIn
         }
         List<Map<String, Object>> theComponents = (List<Map<String, Object>>) theInstance.get("components");
         for (Map<String, Object> theStructure : theComponents) {
-            String theType = (String) theStructure.get(GameComponent.TYPE_ATTRIBUTE);
+            String theType = (String) theStructure.get(Behavior.TYPE_ATTRIBUTE);
 
-            GameComponentUnmarshaller theUnmarshaller = aGameRuntime.getIORegistry().getComponentUnmarshallerFor(theType);
+            BehaviorUnmarshaller theUnmarshaller = aGameRuntime.getIORegistry().getBehaviorUnmarshallerFor(theType);
             theResult.addComponent(theUnmarshaller.deserialize(aGameRuntime, theResult, theStructure));
         }
 

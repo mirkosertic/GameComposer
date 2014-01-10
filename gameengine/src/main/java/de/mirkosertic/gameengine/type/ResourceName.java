@@ -3,12 +3,17 @@ package de.mirkosertic.gameengine.type;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ResourceName {
+public class ResourceName implements ValueProvider<String> {
 
     public final String name;
 
     public ResourceName(String aName) {
         name = aName;
+    }
+
+    @Override
+    public String get() {
+        return name;
     }
 
     @Override

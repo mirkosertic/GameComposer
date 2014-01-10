@@ -3,12 +3,17 @@ package de.mirkosertic.gameengine.type;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TextExpression {
+public class TextExpression implements ValueProvider<String> {
 
     public final String expression;
 
     public TextExpression(String aExpression) {
         expression = aExpression;
+    }
+
+    @Override
+    public String get() {
+        return expression;
     }
 
     @Override

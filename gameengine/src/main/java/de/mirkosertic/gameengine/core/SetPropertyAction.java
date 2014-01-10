@@ -1,8 +1,7 @@
 package de.mirkosertic.gameengine.core;
 
 import de.mirkosertic.gameengine.event.Property;
-import de.mirkosertic.gameengine.type.ClassInformation;
-import de.mirkosertic.gameengine.type.Field;
+import de.mirkosertic.gameengine.expression.PropertyDiscoverer;
 import de.mirkosertic.gameengine.type.TextExpression;
 
 import java.util.HashMap;
@@ -44,15 +43,14 @@ public class SetPropertyAction implements Action {
 
                 theParser.registerVariable(ExpressionParser.INSTANCE_VARIABLE, theInstance);
 
-                ClassInformation theClassInformation = theInstance.getClassInformation();
-                Field theField = theClassInformation.getFieldByName(thePropertyName);
-                if (theField != null) {
-                    Property theProperty = (Property) theField.getValue(theInstance);
-                    theParser.registerVariable(ExpressionParser.OLD_VALUE_VARIABLE, theProperty);
+                PropertyDiscoverer theDiscoverer = new PropertyDiscoverer();
+                Object theOldValue = theDiscoverer.resolveVariable(theInstance, thePropertyName);
 
-                    Object theNewPropertyValue = theParser.evaluateToObject();
-                    theProperty.set(theNewPropertyValue);
-                }
+                theParser.registerVariable(ExpressionParser.OLD_VALUE_VARIABLE, theOldValue);
+
+                Object theNewPropertyValue = theParser.evaluateToObject();
+
+                theDiscoverer.setVariable(theInstance, thePropertyName, theNewPropertyValue);
             }
         }
     }

@@ -26,7 +26,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 
-import de.mirkosertic.gameengine.camera.CameraComponent;
+import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.FollowCameraProcess;
 import de.mirkosertic.gameengine.core.Game;
 import de.mirkosertic.gameengine.type.GameKeyCode;
@@ -259,7 +259,7 @@ public class GWTRenderer implements EntryPoint {
         // Detect and create a camera
         GameObject theCameraObject = aGameScene.cameraObjectProperty().get();
         GameObjectInstance theCameraObjectInstance = aGameScene.createFrom(theCameraObject);
-        CameraComponent theCameraComponent = theCameraObjectInstance.getComponent(CameraComponent.class);
+        CameraBehavior theCameraComponent = theCameraObjectInstance.getComponent(CameraBehavior.class);
 
         GameObjectInstance thePlayerInstance = null;
         for (GameObjectInstance theInstance : aGameScene.getInstances()) {

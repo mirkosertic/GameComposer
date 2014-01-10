@@ -1,13 +1,13 @@
 package de.mirkosertic.gameengine.javafx;
 
-import de.mirkosertic.gameengine.camera.CameraComponent;
+import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.input.DefaultGestureDetector;
 import de.mirkosertic.gameengine.core.GestureDetector;
 import de.mirkosertic.gameengine.sprite.Sprite;
-import de.mirkosertic.gameengine.sprite.SpriteComponent;
+import de.mirkosertic.gameengine.sprite.SpriteBehavior;
 import de.mirkosertic.gameengine.text.Text;
-import de.mirkosertic.gameengine.text.TextComponent;
+import de.mirkosertic.gameengine.text.TextBehavior;
 import de.mirkosertic.gameengine.type.Angle;
 import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Size;
@@ -36,10 +36,10 @@ public class JavaFXGameView extends Canvas implements GameView {
     private AnimationTimer animationTimer;
     private GameScene gameScene;
     private final GameRuntime gameRuntime;
-    private final CameraComponent cameraComponent;
+    private final CameraBehavior cameraComponent;
     private final GestureDetector gestureDetector;
 
-    protected JavaFXGameView(GameRuntime aRuntime, CameraComponent aCameraComponent) {
+    protected JavaFXGameView(GameRuntime aRuntime, CameraBehavior aCameraComponent) {
         cameraComponent = aCameraComponent;
         gameRuntime = aRuntime;
         gestureDetector = new DefaultGestureDetector(aRuntime.getEventManager());
@@ -93,7 +93,7 @@ public class JavaFXGameView extends Canvas implements GameView {
 
             boolean theSomethingRendered = false;
 
-            Sprite theTemplateComponent = theInstance.getComponent(SpriteComponent.class);
+            Sprite theTemplateComponent = theInstance.getComponent(SpriteBehavior.class);
             if (theTemplateComponent != null && !theTemplateComponent.resourceNameProperty().isNull()) {
                 try {
                     JavaFXBitmapResource theBitmap = gameRuntime.getResourceCache().getResourceFor(
@@ -105,7 +105,7 @@ public class JavaFXGameView extends Canvas implements GameView {
                     throw new RuntimeException(e);
                 }
             }
-            Text theTextComponent = theInstance.getComponent(TextComponent.class);
+            Text theTextComponent = theInstance.getComponent(TextBehavior.class);
             if (theTextComponent != null) {
                 ExpressionParser theExpressionParser = gameScene.get(theTextComponent.textExpressionProperty().get());
                 drawText(theContext, theInstance, thePosition, theTextComponent.fontProperty().get(), theTextComponent.colorProperty().get(), theExpressionParser.evaluateToString(), theSize);
@@ -183,7 +183,7 @@ public class JavaFXGameView extends Canvas implements GameView {
         return gameScene;
     }
 
-    protected CameraComponent getCameraComponent() {
+    protected CameraBehavior getCameraComponent() {
         return cameraComponent;
     }
 }

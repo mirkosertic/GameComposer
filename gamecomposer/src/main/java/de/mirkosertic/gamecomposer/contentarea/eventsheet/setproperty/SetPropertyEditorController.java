@@ -4,6 +4,7 @@ import de.mirkosertic.gamecomposer.contentarea.eventsheet.ActionController;
 import de.mirkosertic.gameengine.core.GameRule;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.core.SetPropertyAction;
+import de.mirkosertic.gameengine.expression.PropertyDiscoverer;
 import de.mirkosertic.gameengine.type.TextExpression;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -12,6 +13,7 @@ import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
+import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -36,21 +38,8 @@ public class SetPropertyEditorController implements ActionController {
         action = aAction;
 
         // Gather the known properties
-        Set<String> theAvailableProperties = new HashSet<>();
-        //TODO:
-        /*theAvailableProperties.addAll(ArrayUtils.asList(GameObject.EDITABLE_PROPERTIES));
-        theAvailableProperties.addAll(ArrayUtils.asList(Camera.EDITABLE_PROPERTIES));
-        theAvailableProperties.addAll(ArrayUtils.asList(Physics.EDITABLE_PROPERTIES));
-        theAvailableProperties.addAll(ArrayUtils.asList(Platform.EDITABLE_PROPERTIES));
-        theAvailableProperties.addAll(ArrayUtils.asList(Static.EDITABLE_PROPERTIES));
-        theAvailableProperties.addAll(ArrayUtils.asList(PlayerScore.EDITABLE_PROPERTIES));
-        theAvailableProperties.addAll(ArrayUtils.asList(Sprite.EDITABLE_PROPERTIES));
-        theAvailableProperties.addAll(ArrayUtils.asList(Text.EDITABLE_PROPERTIES));*/
-
-        // Sort them by name
-        List<String> theSupportedProperties = new ArrayList<>();
-        theSupportedProperties.addAll(theAvailableProperties);
-        Collections.sort(theSupportedProperties);
+        PropertyDiscoverer theDiscoverer = new PropertyDiscoverer();
+        List<String> theSupportedProperties = theDiscoverer.gatherAllPossibleProperties();
 
         propertyName.getItems().clear();
 

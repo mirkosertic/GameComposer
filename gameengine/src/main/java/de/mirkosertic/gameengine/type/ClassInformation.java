@@ -11,8 +11,8 @@ public abstract class ClassInformation {
         fields = new HashMap<String, Field>();
     }
 
-    protected Field register(Field aField) {
-        return fields.put(aField.getName(), aField);
+    protected void register(Field aField) {
+        fields.put(aField.getName(), aField);
     }
 
     public Field[] getFields() {

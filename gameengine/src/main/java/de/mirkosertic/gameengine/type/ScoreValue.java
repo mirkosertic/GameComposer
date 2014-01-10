@@ -3,7 +3,7 @@ package de.mirkosertic.gameengine.type;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ScoreValue {
+public class ScoreValue implements ValueProvider<Long> {
 
     public final long score;
 
@@ -13,6 +13,11 @@ public class ScoreValue {
 
     public ScoreValue(long aScore) {
         score = aScore;
+    }
+
+    @Override
+    public Long get() {
+        return score;
     }
 
     @Override
