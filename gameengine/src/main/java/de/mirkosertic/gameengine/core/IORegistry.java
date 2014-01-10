@@ -5,24 +5,24 @@ import java.util.Map;
 
 public class IORegistry {
 
-    private final Map<String, GameComponentTemplateUnmarshaller> registeredTemplateUnmarshaller;
-    private final Map<String, GameComponentUnmarshaller> registeredComponentUnmarshaller;
+    private final Map<String, BehaviorTemplateUnmarshaller> registeredBehaviorTemplateUnmarshaller;
+    private final Map<String, BehaviorUnmarshaller> registeredBehaviorUnmarshaller;
     private final Map<String, ConditionUnmarshaller> registeredConditionUnmarshaller;
     private final Map<String, ActionUnmarshaller> registeredActionUnmarshaller;
 
     IORegistry() {
-        registeredTemplateUnmarshaller = new HashMap<String, GameComponentTemplateUnmarshaller>();
-        registeredComponentUnmarshaller = new HashMap<String, GameComponentUnmarshaller>();
+        registeredBehaviorTemplateUnmarshaller = new HashMap<String, BehaviorTemplateUnmarshaller>();
+        registeredBehaviorUnmarshaller = new HashMap<String, BehaviorUnmarshaller>();
         registeredConditionUnmarshaller = new HashMap<String, ConditionUnmarshaller>();
         registeredActionUnmarshaller = new HashMap<String, ActionUnmarshaller>();
     }
 
-    public void registerTemplateUnmarshaller(GameComponentTemplateUnmarshaller aUnmarshaller) {
-        registeredTemplateUnmarshaller.put(aUnmarshaller.getTypeKey(), aUnmarshaller);
+    public void registerBehaviorTemplateUnmarshaller(BehaviorTemplateUnmarshaller aUnmarshaller) {
+        registeredBehaviorTemplateUnmarshaller.put(aUnmarshaller.getTypeKey(), aUnmarshaller);
     }
 
-    public void registerComponentUnmarshaller(GameComponentUnmarshaller aUnmarshaller) {
-        registeredComponentUnmarshaller.put(aUnmarshaller.getTypeKey(), aUnmarshaller);
+    public void registerBehaviorUnmarshaller(BehaviorUnmarshaller aUnmarshaller) {
+        registeredBehaviorUnmarshaller.put(aUnmarshaller.getTypeKey(), aUnmarshaller);
     }
 
     public void registerConditionUnmarshaller(ConditionUnmarshaller aUnmarshaller) {
@@ -33,12 +33,12 @@ public class IORegistry {
         registeredActionUnmarshaller.put(aUnmarshaller.getTypeKey(), aUnmarshaller);
     }
 
-    public GameComponentTemplateUnmarshaller getTemplateUnmarshallerFor(String aTypeKey) {
-        return registeredTemplateUnmarshaller.get(aTypeKey);
+    public BehaviorTemplateUnmarshaller getBehaviorTemplateUnmarshallerFor(String aTypeKey) {
+        return registeredBehaviorTemplateUnmarshaller.get(aTypeKey);
     }
 
-    public GameComponentUnmarshaller getComponentUnmarshallerFor(String aTypeKey) {
-        return registeredComponentUnmarshaller.get(aTypeKey);
+    public BehaviorUnmarshaller getBehaviorUnmarshallerFor(String aTypeKey) {
+        return registeredBehaviorUnmarshaller.get(aTypeKey);
     }
 
     public ConditionUnmarshaller getConditionUnmarshallerFor(String aTypeKey) {

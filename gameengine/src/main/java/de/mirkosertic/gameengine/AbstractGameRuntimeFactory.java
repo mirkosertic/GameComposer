@@ -2,8 +2,8 @@ package de.mirkosertic.gameengine;
 
 import de.mirkosertic.gameengine.action.ActionManagerFactory;
 import de.mirkosertic.gameengine.arcade.ConstantMovementActionUnmarshaller;
-import de.mirkosertic.gameengine.camera.CameraComponentTemplateUnmarshaller;
-import de.mirkosertic.gameengine.camera.CameraComponentUnmarshaller;
+import de.mirkosertic.gameengine.camera.CameraBehaviorTemplateUnmarshaller;
+import de.mirkosertic.gameengine.camera.CameraBehaviorUnmarshaller;
 import de.mirkosertic.gameengine.core.DeleteGameObjectInstanceActionUnmarshaller;
 import de.mirkosertic.gameengine.core.ExpressionParserFactory;
 import de.mirkosertic.gameengine.core.GameObjectInstanceAddedToSceneConditionUnmarshaller;
@@ -18,20 +18,20 @@ import de.mirkosertic.gameengine.core.SetPropertyActionUnmarshaller;
 import de.mirkosertic.gameengine.core.SpawnGameObjectInstanceActionUnmarshaller;
 import de.mirkosertic.gameengine.core.SystemTickConditionUnmarshaller;
 import de.mirkosertic.gameengine.event.GameEventManager;
-import de.mirkosertic.gameengine.expression.ge.GeExpressionParserFactory;
+import de.mirkosertic.gameengine.expression.GeExpressionParserFactory;
 import de.mirkosertic.gameengine.input.KeyEventConditionUnmarshaller;
 import de.mirkosertic.gameengine.physic.GamePhysicsManager;
 import de.mirkosertic.gameengine.physic.GamePhysicsManagerFactory;
 import de.mirkosertic.gameengine.physic.ObjectCollisionConditionUnmarshaller;
-import de.mirkosertic.gameengine.physic.PhysicsComponentTemplateUnmarshaller;
-import de.mirkosertic.gameengine.physic.PhysicsComponentUnmarshaller;
-import de.mirkosertic.gameengine.physic.PlatformComponentTemplateUnmarshaller;
-import de.mirkosertic.gameengine.physic.PlatformComponentUnmarshaller;
-import de.mirkosertic.gameengine.physic.StaticComponentTemplateUnmarshaller;
-import de.mirkosertic.gameengine.physic.StaticComponentUnmarshaller;
+import de.mirkosertic.gameengine.physic.PhysicsBehaviorTemplateUnmarshaller;
+import de.mirkosertic.gameengine.physic.PhysicsBehaviorUnmarshaller;
+import de.mirkosertic.gameengine.physic.PlatformBehaviorTemplateUnmarshaller;
+import de.mirkosertic.gameengine.physic.PlatformBehaviorUnmarshaller;
+import de.mirkosertic.gameengine.physic.StaticBehaviorTemplateUnmarshaller;
+import de.mirkosertic.gameengine.physic.StaticBehaviorUnmarshaller;
 import de.mirkosertic.gameengine.physic.jbox2d.JBox2DGamePhysicsManagerFactory;
-import de.mirkosertic.gameengine.playerscore.PlayerScoreComponentTemplateUnmarshaller;
-import de.mirkosertic.gameengine.playerscore.PlayerScoreComponentUnmarshaller;
+import de.mirkosertic.gameengine.playerscore.PlayerScoreBehaviorTemplateUnmarshaller;
+import de.mirkosertic.gameengine.playerscore.PlayerScoreBehaviorUnmarshaller;
 import de.mirkosertic.gameengine.process.GameProcessManager;
 import de.mirkosertic.gameengine.process.GameProcessManagerFactory;
 import de.mirkosertic.gameengine.process.KillProcessesForInstanceUnmarshaller;
@@ -39,10 +39,10 @@ import de.mirkosertic.gameengine.sound.GameSoundManager;
 import de.mirkosertic.gameengine.sound.GameSoundManagerFactory;
 import de.mirkosertic.gameengine.sound.GameSoundSystemFactory;
 import de.mirkosertic.gameengine.sound.PlaySoundActionUnmarshaller;
-import de.mirkosertic.gameengine.sprite.SpriteComponentTemplateUnmarshaller;
-import de.mirkosertic.gameengine.sprite.SpriteComponentUnmarshaller;
-import de.mirkosertic.gameengine.text.TextComponentTemplateUnmarshaller;
-import de.mirkosertic.gameengine.text.TextComponentUnmarshaller;
+import de.mirkosertic.gameengine.sprite.SpriteBehaviorTemplateUnmarshaller;
+import de.mirkosertic.gameengine.sprite.SpriteBehaviorUnmarshaller;
+import de.mirkosertic.gameengine.text.TextBehaviorTemplateUnmarshaller;
+import de.mirkosertic.gameengine.text.TextBehaviorUnmarshaller;
 
 public abstract class AbstractGameRuntimeFactory {
 
@@ -71,21 +71,21 @@ public abstract class AbstractGameRuntimeFactory {
 
         IORegistry theRegistry = theGameRuntime.getIORegistry();
 
-        theRegistry.registerTemplateUnmarshaller(new PhysicsComponentTemplateUnmarshaller());
-        theRegistry.registerTemplateUnmarshaller(new CameraComponentTemplateUnmarshaller());
-        theRegistry.registerTemplateUnmarshaller(new SpriteComponentTemplateUnmarshaller());
-        theRegistry.registerTemplateUnmarshaller(new StaticComponentTemplateUnmarshaller());
-        theRegistry.registerTemplateUnmarshaller(new PlatformComponentTemplateUnmarshaller());
-        theRegistry.registerTemplateUnmarshaller(new TextComponentTemplateUnmarshaller());
-        theRegistry.registerTemplateUnmarshaller(new PlayerScoreComponentTemplateUnmarshaller());
+        theRegistry.registerBehaviorTemplateUnmarshaller(new PhysicsBehaviorTemplateUnmarshaller());
+        theRegistry.registerBehaviorTemplateUnmarshaller(new CameraBehaviorTemplateUnmarshaller());
+        theRegistry.registerBehaviorTemplateUnmarshaller(new SpriteBehaviorTemplateUnmarshaller());
+        theRegistry.registerBehaviorTemplateUnmarshaller(new StaticBehaviorTemplateUnmarshaller());
+        theRegistry.registerBehaviorTemplateUnmarshaller(new PlatformBehaviorTemplateUnmarshaller());
+        theRegistry.registerBehaviorTemplateUnmarshaller(new TextBehaviorTemplateUnmarshaller());
+        theRegistry.registerBehaviorTemplateUnmarshaller(new PlayerScoreBehaviorTemplateUnmarshaller());
 
-        theRegistry.registerComponentUnmarshaller(new PhysicsComponentUnmarshaller());
-        theRegistry.registerComponentUnmarshaller(new CameraComponentUnmarshaller());
-        theRegistry.registerComponentUnmarshaller(new SpriteComponentUnmarshaller());
-        theRegistry.registerComponentUnmarshaller(new StaticComponentUnmarshaller());
-        theRegistry.registerComponentUnmarshaller(new PlatformComponentUnmarshaller());
-        theRegistry.registerComponentUnmarshaller(new TextComponentUnmarshaller());
-        theRegistry.registerComponentUnmarshaller(new PlayerScoreComponentUnmarshaller());
+        theRegistry.registerBehaviorUnmarshaller(new PhysicsBehaviorUnmarshaller());
+        theRegistry.registerBehaviorUnmarshaller(new CameraBehaviorUnmarshaller());
+        theRegistry.registerBehaviorUnmarshaller(new SpriteBehaviorUnmarshaller());
+        theRegistry.registerBehaviorUnmarshaller(new StaticBehaviorUnmarshaller());
+        theRegistry.registerBehaviorUnmarshaller(new PlatformBehaviorUnmarshaller());
+        theRegistry.registerBehaviorUnmarshaller(new TextBehaviorUnmarshaller());
+        theRegistry.registerBehaviorUnmarshaller(new PlayerScoreBehaviorUnmarshaller());
 
         theRegistry.registerConditionUnmarshaller(new KeyEventConditionUnmarshaller());
         theRegistry.registerConditionUnmarshaller(new ObjectCollisionConditionUnmarshaller());

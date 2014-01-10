@@ -9,8 +9,6 @@ import de.mirkosertic.gameengine.type.Position;
 
 public class GameObjectInstanceClassInformation extends ClassInformation {
 
-    public final static GameObjectInstanceClassInformation INSTANCE = new GameObjectInstanceClassInformation();
-
     public final static Field<GameObjectInstance, Property<String>> UUID = new Field<GameObjectInstance, Property<String>>("uuid", String.class) {        @Override
         public Property<String> getValue(GameObjectInstance aObject) {
             return aObject.uuid;
@@ -58,6 +56,8 @@ public class GameObjectInstanceClassInformation extends ClassInformation {
             return aObject.absolutePositionAnchor;
         }
     };
+
+    public final static GameObjectInstanceClassInformation INSTANCE = new GameObjectInstanceClassInformation();
 
     private GameObjectInstanceClassInformation() {
         register(UUID);

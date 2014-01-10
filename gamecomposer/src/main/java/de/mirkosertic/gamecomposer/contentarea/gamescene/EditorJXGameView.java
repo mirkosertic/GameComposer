@@ -4,7 +4,7 @@ import com.sun.javafx.tk.FontMetrics;
 import com.sun.javafx.tk.Toolkit;
 
 import de.mirkosertic.gamecomposer.ObjectSelectedEvent;
-import de.mirkosertic.gameengine.camera.CameraComponent;
+import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.core.GameScene;
@@ -37,7 +37,7 @@ public class EditorJXGameView extends JavaFXGameView {
     private final IntegerProperty gridsizeWidth;
     private final IntegerProperty gridsizeHeight;
 
-    public EditorJXGameView(GameRuntime aGameRuntime, CameraComponent aCameraComponent, GamePhysicsManager aPhysicsManager) {
+    public EditorJXGameView(GameRuntime aGameRuntime, CameraBehavior aCameraComponent, GamePhysicsManager aPhysicsManager) {
         super(aGameRuntime, aCameraComponent);
 
         snapToGrid = new SimpleBooleanProperty(true);
@@ -111,7 +111,7 @@ public class EditorJXGameView extends JavaFXGameView {
 
         if (snapToGridProperty().get()) {
 
-            CameraComponent theCameraComponent = getCameraComponent();
+            CameraBehavior theCameraComponent = getCameraComponent();
             int theGridsizeWidth = gridsizeWidthProperty().get();
             int theGridsizeHeight = gridsizeHeightProperty().get();
 
@@ -147,7 +147,7 @@ public class EditorJXGameView extends JavaFXGameView {
                 @Override
                 public void drawLine(Position p1, Position p2, boolean awake) {
 
-                    CameraComponent theCameraComponent = getCameraComponent();
+                    CameraBehavior theCameraComponent = getCameraComponent();
 
                     Position theScreenP1 = theCameraComponent.transformToScreenPosition(p1);
                     Position theScreenP2 = theCameraComponent.transformToScreenPosition(p2);
@@ -167,7 +167,7 @@ public class EditorJXGameView extends JavaFXGameView {
                 @Override
                 public void drawPosition(Position aPosition) {
 
-                    CameraComponent theCameraComponent = getCameraComponent();
+                    CameraBehavior theCameraComponent = getCameraComponent();
 
                     Position theScreenP1 = theCameraComponent.transformToScreenPosition(aPosition);
 
@@ -182,7 +182,7 @@ public class EditorJXGameView extends JavaFXGameView {
         GameScene theGameScene = getGameScene();
         Rectangle theLayoutBounds = theGameScene.layoutBoundsProperty().get();
 
-        CameraComponent theCameraComponent = getCameraComponent();
+        CameraBehavior theCameraComponent = getCameraComponent();
         GameObjectInstance theCamera = theCameraComponent.getObjectInstance();
         Position theCurrentCameraPosition = theCamera.positionProperty().get();
 

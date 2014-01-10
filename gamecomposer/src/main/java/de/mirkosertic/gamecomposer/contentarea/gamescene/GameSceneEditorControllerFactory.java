@@ -4,7 +4,7 @@ import de.mirkosertic.gamecomposer.FXMLLoaderFactory;
 import de.mirkosertic.gamecomposer.ObjectSelectedEvent;
 import de.mirkosertic.gamecomposer.contentarea.ContentAreaFactory;
 import de.mirkosertic.gamecomposer.contentarea.ContentAreaFactoryType;
-import de.mirkosertic.gameengine.camera.CameraComponent;
+import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
 import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.event.GameEventManager;
@@ -43,7 +43,7 @@ public class GameSceneEditorControllerFactory implements ContentAreaFactory<Game
 
         // Detect and create a camera
         GameObjectInstance theCameraObject = aScene.createFrom(theDefaultCamera);
-        CameraComponent theCameraComponent = theCameraObject.getComponent(CameraComponent.class);
+        CameraBehavior theCameraComponent = theCameraObject.getComponent(CameraBehavior.class);
         if (theCameraComponent == null) {
             throw new IllegalArgumentException("No camera component in camera object");
         }
@@ -60,7 +60,7 @@ public class GameSceneEditorControllerFactory implements ContentAreaFactory<Game
         GameLoopFactory theGameLoopFactory = new GameLoopFactory();
         GameLoop theMainLoop = theGameLoopFactory.create(aScene, theGameView, theRuntime);
 
-        final CameraComponent theFinalCameraComponent = theCameraComponent;
+        final CameraBehavior theFinalCameraComponent = theCameraComponent;
 
         // Set defaults, this will be overridden
         theEventManager.fire(new SetScreenResolution(new Size(200, 200)));

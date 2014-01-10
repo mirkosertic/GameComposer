@@ -9,8 +9,6 @@ import de.mirkosertic.gameengine.type.TextExpression;
 
 public class TextClassInformation extends ClassInformation {
 
-    public static final TextClassInformation INSTANCE = new TextClassInformation();
-
     public final static Field<Text, Property<Font>> FONT = new Field<Text, Property<Font>>("font", Property.class) {
         @Override
         public Property<Font> getValue(Text aObject) {
@@ -31,6 +29,8 @@ public class TextClassInformation extends ClassInformation {
             return aObject.textExpressionProperty();
         }
     };
+
+    public static final TextClassInformation INSTANCE = new TextClassInformation();
 
     private TextClassInformation() {
         register(FONT);

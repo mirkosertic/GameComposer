@@ -8,11 +8,11 @@ import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameResourceLoader;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.sprite.Sprite;
-import de.mirkosertic.gameengine.sprite.SpriteComponent;
+import de.mirkosertic.gameengine.sprite.SpriteBehavior;
+import de.mirkosertic.gameengine.sprite.SpriteBehaviorTemplate;
 import de.mirkosertic.gameengine.type.ResourceName;
 import de.mirkosertic.gameengine.type.Size;
 import de.mirkosertic.gameengine.javafx.JavaFXBitmapResource;
-import de.mirkosertic.gameengine.sprite.SpriteComponentTemplate;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -55,11 +55,11 @@ public class SpriteTemplateEditorController implements ObjectInspectorElementCon
     }
 
     GameObject getGameObjectOwner() {
-        if (object instanceof SpriteComponent) {
-            return ((SpriteComponent) object).getTemplate().getOwner();
+        if (object instanceof SpriteBehavior) {
+            return ((SpriteBehavior) object).getTemplate().getOwner();
         }
-        if (object instanceof SpriteComponentTemplate) {
-            return ((SpriteComponentTemplate) object).getOwner();
+        if (object instanceof SpriteBehaviorTemplate) {
+            return ((SpriteBehaviorTemplate) object).getOwner();
         }
         throw new IllegalArgumentException("Unknown type : "+object);
     }

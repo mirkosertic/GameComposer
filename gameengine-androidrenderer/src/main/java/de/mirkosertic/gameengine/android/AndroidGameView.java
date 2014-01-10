@@ -6,7 +6,7 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.view.SurfaceHolder;
 
-import de.mirkosertic.gameengine.camera.CameraComponent;
+import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.core.ExpressionParser;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
@@ -15,9 +15,9 @@ import de.mirkosertic.gameengine.core.GameView;
 import de.mirkosertic.gameengine.core.GestureDetector;
 import de.mirkosertic.gameengine.input.DefaultGestureDetector;
 import de.mirkosertic.gameengine.sprite.Sprite;
-import de.mirkosertic.gameengine.sprite.SpriteComponent;
+import de.mirkosertic.gameengine.sprite.SpriteBehavior;
 import de.mirkosertic.gameengine.text.Text;
-import de.mirkosertic.gameengine.text.TextComponent;
+import de.mirkosertic.gameengine.text.TextBehavior;
 import de.mirkosertic.gameengine.type.Angle;
 import de.mirkosertic.gameengine.type.Color;
 import de.mirkosertic.gameengine.type.Font;
@@ -32,7 +32,7 @@ public class AndroidGameView implements GameView {
     }
 
     private final AndroidCanvas canvas;
-    private final CameraComponent cameraComponent;
+    private final CameraBehavior cameraComponent;
     private final GameRuntime gameRuntime;
     private final Typeface arialTypeface;
     private final Typeface verdanaTypeface;
@@ -41,7 +41,7 @@ public class AndroidGameView implements GameView {
     private final Paint emptyPaint;
     private final Paint whitePaint;
 
-    AndroidGameView(AndroidCanvas aCanvas, CameraComponent aCameraComponent, GameRuntime aRuntime) {
+    AndroidGameView(AndroidCanvas aCanvas, CameraBehavior aCameraComponent, GameRuntime aRuntime) {
         canvas = aCanvas;
         cameraComponent = aCameraComponent;
         gameRuntime = aRuntime;
@@ -99,7 +99,7 @@ public class AndroidGameView implements GameView {
 
             boolean theSomethingRendered = false;
 
-            Sprite theTemplateComponent = theInstance.getComponent(SpriteComponent.class);
+            Sprite theTemplateComponent = theInstance.getComponent(SpriteBehavior.class);
             if (theTemplateComponent != null && !theTemplateComponent.resourceNameProperty().isNull()) {
                 try {
                     AndroidBitmapResource theBitmap = gameRuntime.getResourceCache().getResourceFor(
@@ -111,7 +111,7 @@ public class AndroidGameView implements GameView {
                     throw new RuntimeException(e);
                 }
             }
-            Text theTextComponent = theInstance.getComponent(TextComponent.class);
+            Text theTextComponent = theInstance.getComponent(TextBehavior.class);
             if (theTextComponent != null) {
                 ExpressionParser theExpressionParser = aScene.get(theTextComponent.textExpressionProperty().get());
                 drawText(theCanvas, thePosition, theTextComponent.fontProperty().get(), theTextComponent.colorProperty().get(), theExpressionParser.evaluateToString(), theSize);

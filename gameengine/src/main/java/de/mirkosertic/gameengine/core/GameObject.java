@@ -26,9 +26,9 @@ public class GameObject implements Reflectable<GameObjectClassInformation> {
     final Property<Size> size;
     final Property<Boolean> visible;
 
-    private final Map<Class<GameComponentTemplate>, GameComponentTemplate> componentTemplates;
+    private final Map<Class<BehaviorTemplate>, BehaviorTemplate> componentTemplates;
 
-    GameObject(GameScene aScene, String aName) {
+    public GameObject(GameScene aScene, String aName) {
         this(aScene, aName, de.mirkosertic.gameengine.type.UUID.randomUID());
     }
 
@@ -41,7 +41,7 @@ public class GameObject implements Reflectable<GameObjectClassInformation> {
         name = new Property<String>(String.class, this, NAME_PROPERTY, aName, theManager);
         size = new Property<Size>(Size.class, this, SIZE_PROPERTY, new Size(64, 64), theManager);
         visible = new Property<Boolean>(Boolean.class, this, VISIBLE_PROPERTY, Boolean.TRUE, theManager);
-        componentTemplates = new HashMap<Class<GameComponentTemplate>, GameComponentTemplate>();
+        componentTemplates = new HashMap<Class<BehaviorTemplate>, BehaviorTemplate>();
 
         name.setQuietly(aName);
         uuid.setQuietly(aUUID);
@@ -83,12 +83,12 @@ public class GameObject implements Reflectable<GameObjectClassInformation> {
         return uuid != null ? uuid.hashCode() : 0;
     }
 
-    public void add(GameComponentTemplate aComponentTemplate) {
-        componentTemplates.put((Class<GameComponentTemplate>) aComponentTemplate.getClass(), aComponentTemplate);
+    public void add(BehaviorTemplate aComponentTemplate) {
+        componentTemplates.put((Class<BehaviorTemplate>) aComponentTemplate.getClass(), aComponentTemplate);
         gameScene.getRuntime().getEventManager().fire(new GameObjectConfigurationChanged(this));
     }
 
-    public <T extends GameComponentTemplate> T getComponentTemplate(Class<T> aComponentClass) {
+    public <T extends BehaviorTemplate> T getComponentTemplate(Class<T> aComponentClass) {
         return (T) componentTemplates.get(aComponentClass);
     }
 
@@ -97,8 +97,8 @@ public class GameObject implements Reflectable<GameObjectClassInformation> {
         return GameObjectClassInformation.INSTANCE;
     }
 
-    public Set<GameComponentTemplate> getComponentTemplates() {
-        HashSet<GameComponentTemplate> theResult = new HashSet<GameComponentTemplate>();
+    public Set<BehaviorTemplate> getComponentTemplates() {
+        HashSet<BehaviorTemplate> theResult = new HashSet<BehaviorTemplate>();
         theResult.addAll(componentTemplates.values());
         return theResult;
     }
@@ -109,7 +109,7 @@ public class GameObject implements Reflectable<GameObjectClassInformation> {
         theResult.put(UUID_PROPERTY, uuid.get());
         theResult.put(SIZE_PROPERTY, size.get().serialize());
         List<Map<String, Object>> theTemplates = new ArrayList<Map<String, Object>>();
-        for (GameComponentTemplate theTemplate : componentTemplates.values()) {
+        for (BehaviorTemplate theTemplate : componentTemplates.values()) {
            theTemplates.add(theTemplate.serialize());
         }
         theResult.put("templates", theTemplates);
@@ -128,8 +128,8 @@ public class GameObject implements Reflectable<GameObjectClassInformation> {
 
         List<Map<String, Object>> theTemplates = (List<Map<String, Object>>) theSerializedData.get("templates");
         for (Map<String, Object> theTemplate : theTemplates) {
-            String theTypeKey = (String) theTemplate.get(GameComponent.TYPE_ATTRIBUTE);
-            theObject.add(aGameRuntime.getIORegistry().getTemplateUnmarshallerFor(theTypeKey).deserialize(aGameRuntime.getEventManager(), theObject, theTemplate));
+            String theTypeKey = (String) theTemplate.get(Behavior.TYPE_ATTRIBUTE);
+            theObject.add(aGameRuntime.getIORegistry().getBehaviorTemplateUnmarshallerFor(theTypeKey).deserialize(aGameRuntime.getEventManager(), theObject, theTemplate));
         }
 
         return theObject;

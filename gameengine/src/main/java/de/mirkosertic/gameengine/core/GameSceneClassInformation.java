@@ -8,8 +8,6 @@ import de.mirkosertic.gameengine.type.Rectangle;
 
 public class GameSceneClassInformation extends ClassInformation {
 
-    public static final GameSceneClassInformation INSTANCE = new GameSceneClassInformation();
-
     public final static Field<GameScene, Property<String>> NAME = new Field<GameScene, Property<String>>("name", Property.class) {
         @Override
         public Property<String> getValue(GameScene aObject) {
@@ -44,6 +42,8 @@ public class GameSceneClassInformation extends ClassInformation {
             return aObject.layoutBounds;
         }
     };
+
+    public static final GameSceneClassInformation INSTANCE = new GameSceneClassInformation();
 
     private GameSceneClassInformation() {
         register(NAME);

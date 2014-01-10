@@ -26,7 +26,7 @@
     "gameobjectuuid" : "4889509885749884898",
     "name" : "Plane_1389121280313",
     "components" : [ {
-      "type" : "SpriteComponent"
+      "type" : "Sprite"
     } ],
     "uuid" : "1660796615987687512",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -55,7 +55,7 @@
       "textExpression" : {
         "expression" : "\"Use the cursor keys to fly around\""
       },
-      "type" : "TextComponent"
+      "type" : "Text"
     } ],
     "uuid" : "-3176239154114437638",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -68,7 +68,7 @@
   "objects" : [ {
     "templates" : [ {
       "cameratype" : "CENTERONSCENE",
-      "type" : "CameraComponent"
+      "type" : "Camera"
     } ],
     "name" : "Camera",
     "uuid" : "2900940626662702649",
@@ -81,7 +81,7 @@
       "resourcename" : {
         "name" : "/assets/plane.png"
       },
-      "type" : "SpriteComponent"
+      "type" : "Sprite"
     } ],
     "name" : "Plane",
     "uuid" : "4889509885749884898",
@@ -103,7 +103,7 @@
       "textExpression" : {
         "expression" : "\"Use the cursor keys to fly around\""
       },
-      "type" : "TextComponent"
+      "type" : "Text"
     } ],
     "name" : "Text",
     "uuid" : "-9051172752501502813",

@@ -3,7 +3,7 @@ package de.mirkosertic.gameengine.type;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Position {
+public class Position implements Reflectable<PositionClassInformation> {
 
     public final float x;
     public final float y;
@@ -20,6 +20,11 @@ public class Position {
     public Position(double aX, double aY) {
         x = (float) aX;
         y = (float) aY;
+    }
+
+    @Override
+    public PositionClassInformation getClassInformation() {
+        return PositionClassInformation.INSTANCE;
     }
 
     public Position add(Position aOffset) {

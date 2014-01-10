@@ -4,8 +4,8 @@ import de.mirkosertic.gamecomposer.Controller;
 import de.mirkosertic.gamecomposer.GameSceneCreatedEvent;
 import de.mirkosertic.gamecomposer.ObjectSelectedEvent;
 import de.mirkosertic.gameengine.camera.Camera;
-import de.mirkosertic.gameengine.camera.CameraComponent;
-import de.mirkosertic.gameengine.camera.CameraComponentTemplate;
+import de.mirkosertic.gameengine.camera.CameraBehavior;
+import de.mirkosertic.gameengine.camera.CameraBehaviorTemplate;
 import de.mirkosertic.gameengine.core.EventSheet;
 import de.mirkosertic.gameengine.core.Game;
 import de.mirkosertic.gameengine.core.GameObject;
@@ -13,23 +13,23 @@ import de.mirkosertic.gameengine.core.GameObjectConfigurationChanged;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.physic.Physics;
-import de.mirkosertic.gameengine.physic.PhysicsComponent;
-import de.mirkosertic.gameengine.physic.PhysicsComponentTemplate;
+import de.mirkosertic.gameengine.physic.PhysicsBehavior;
+import de.mirkosertic.gameengine.physic.PhysicsBehaviorTemplate;
 import de.mirkosertic.gameengine.physic.Platform;
-import de.mirkosertic.gameengine.physic.PlatformComponent;
-import de.mirkosertic.gameengine.physic.PlatformComponentTemplate;
+import de.mirkosertic.gameengine.physic.PlatformBehavior;
+import de.mirkosertic.gameengine.physic.PlatformBehaviorTemplate;
 import de.mirkosertic.gameengine.physic.Static;
-import de.mirkosertic.gameengine.physic.StaticComponent;
-import de.mirkosertic.gameengine.physic.StaticComponentTemplate;
+import de.mirkosertic.gameengine.physic.StaticBehavior;
+import de.mirkosertic.gameengine.physic.StaticBehaviorTemplate;
 import de.mirkosertic.gameengine.playerscore.PlayerScore;
-import de.mirkosertic.gameengine.playerscore.PlayerScoreComponent;
-import de.mirkosertic.gameengine.playerscore.PlayerScoreComponentTemplate;
+import de.mirkosertic.gameengine.playerscore.PlayerScoreBehavior;
+import de.mirkosertic.gameengine.playerscore.PlayerScoreBehaviorTemplate;
 import de.mirkosertic.gameengine.sprite.Sprite;
-import de.mirkosertic.gameengine.sprite.SpriteComponent;
-import de.mirkosertic.gameengine.sprite.SpriteComponentTemplate;
+import de.mirkosertic.gameengine.sprite.SpriteBehavior;
+import de.mirkosertic.gameengine.sprite.SpriteBehaviorTemplate;
 import de.mirkosertic.gameengine.text.Text;
-import de.mirkosertic.gameengine.text.TextComponent;
-import de.mirkosertic.gameengine.text.TextComponentTemplate;
+import de.mirkosertic.gameengine.text.TextBehavior;
+import de.mirkosertic.gameengine.text.TextBehaviorTemplate;
 
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -136,58 +136,58 @@ public class ObjectInspectorController implements Controller {
                 propertyPanels.getPanes().add(thePane);
                 currentController.add(theController);
 
-                Static theStaticComponentTemplate = theGameObject.getComponentTemplate(StaticComponentTemplate.class);
+                Static theStaticComponentTemplate = theGameObject.getComponentTemplate(StaticBehaviorTemplate.class);
                 if (theStaticComponentTemplate != null) {
                     ObjectInspectorElementController theEditor = (ObjectInspectorElementController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(Static.class)).get()).create(theStaticComponentTemplate);
-                    TitledPane theChildPane = new TitledPane("StaticComponent", theEditor.getView());
+                    TitledPane theChildPane = new TitledPane("Static", theEditor.getView());
                     propertyPanels.getPanes().add(theChildPane);
                     currentController.add(theEditor);
                 }
 
-                Camera theCameraComponentTemplate = theGameObject.getComponentTemplate(CameraComponentTemplate.class);
+                Camera theCameraComponentTemplate = theGameObject.getComponentTemplate(CameraBehaviorTemplate.class);
                 if (theCameraComponentTemplate != null) {
                     ObjectInspectorElementController theEditor = (ObjectInspectorElementController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(Camera.class)).get()).create(theCameraComponentTemplate);
-                    TitledPane theChildPane = new TitledPane("CameraComponent", theEditor.getView());
+                    TitledPane theChildPane = new TitledPane("Camera", theEditor.getView());
                     propertyPanels.getPanes().add(theChildPane);
                     currentController.add(theEditor);
                 }
 
-                Platform thePlatformComponentTemplate = theGameObject.getComponentTemplate(PlatformComponentTemplate.class);
+                Platform thePlatformComponentTemplate = theGameObject.getComponentTemplate(PlatformBehaviorTemplate.class);
                 if (thePlatformComponentTemplate != null) {
                     ObjectInspectorElementController theEditor = (ObjectInspectorElementController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(Platform.class)).get()).create(thePlatformComponentTemplate);
-                    TitledPane theChildPane = new TitledPane("PlatformComponent", theEditor.getView());
+                    TitledPane theChildPane = new TitledPane("Platform", theEditor.getView());
                     propertyPanels.getPanes().add(theChildPane);
                     currentController.add(theEditor);
                 }
 
-                Physics thePhysicsComponentTemplate = theGameObject.getComponentTemplate(PhysicsComponentTemplate.class);
+                Physics thePhysicsComponentTemplate = theGameObject.getComponentTemplate(PhysicsBehaviorTemplate.class);
                 if (thePhysicsComponentTemplate != null) {
                     ObjectInspectorElementController theEditor = (ObjectInspectorElementController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(Physics.class)).get()).create(thePhysicsComponentTemplate);
-                    TitledPane theChildPane = new TitledPane("PhysicsComponent", theEditor.getView());
+                    TitledPane theChildPane = new TitledPane("Physics", theEditor.getView());
                     propertyPanels.getPanes().add(theChildPane);
                     currentController.add(theEditor);
                 }
 
-                Sprite theSpriteComponentTemplate = theGameObject.getComponentTemplate(SpriteComponentTemplate.class);
+                Sprite theSpriteComponentTemplate = theGameObject.getComponentTemplate(SpriteBehaviorTemplate.class);
                 if (theSpriteComponentTemplate != null) {
                     ObjectInspectorElementController theEditor = (ObjectInspectorElementController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(Sprite.class)).get()).create(theSpriteComponentTemplate);
-                    TitledPane theChildPane = new TitledPane("SpriteComponent", theEditor.getView());
+                    TitledPane theChildPane = new TitledPane("Sprite", theEditor.getView());
                     propertyPanels.getPanes().add(theChildPane);
                     currentController.add(theEditor);
                 }
 
-                Text theTextComponentTemplate = theGameObject.getComponentTemplate(TextComponentTemplate.class);
+                Text theTextComponentTemplate = theGameObject.getComponentTemplate(TextBehaviorTemplate.class);
                 if (theTextComponentTemplate != null) {
                     ObjectInspectorElementController theEditor = (ObjectInspectorElementController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(Text.class)).get()).create(theTextComponentTemplate);
-                    TitledPane theChildPane = new TitledPane("TextComponent", theEditor.getView());
+                    TitledPane theChildPane = new TitledPane("Text", theEditor.getView());
                     propertyPanels.getPanes().add(theChildPane);
                     currentController.add(theEditor);
                 }
 
-                PlayerScore theScoreTemplate = theGameObject.getComponentTemplate(PlayerScoreComponentTemplate.class);
+                PlayerScore theScoreTemplate = theGameObject.getComponentTemplate(PlayerScoreBehaviorTemplate.class);
                 if (theScoreTemplate != null) {
                     ObjectInspectorElementController theEditor = (ObjectInspectorElementController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(PlayerScore.class)).get()).create(theScoreTemplate);
-                    TitledPane theChildPane = new TitledPane("PlayerScoreComponent", theEditor.getView());
+                    TitledPane theChildPane = new TitledPane("PlayerScore", theEditor.getView());
                     propertyPanels.getPanes().add(theChildPane);
                     currentController.add(theEditor);
                 }
@@ -201,47 +201,47 @@ public class ObjectInspectorController implements Controller {
                 propertyPanels.getPanes().add(thePane);
                 currentController.add(theController);
 
-                Camera theCameraComponent = theInstance.getComponent(CameraComponent.class);
+                Camera theCameraComponent = theInstance.getComponent(CameraBehavior.class);
                 if (theCameraComponent != null) {
                     ObjectInspectorElementController theEditor = (ObjectInspectorElementController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(Camera.class)).get()).create(theCameraComponent);
-                    TitledPane theChildPane = new TitledPane("CameraComponent", theEditor.getView());
+                    TitledPane theChildPane = new TitledPane("Camera", theEditor.getView());
                     propertyPanels.getPanes().add(theChildPane);
                     currentController.add(theEditor);
                 }
 
-                PhysicsComponent thePhysicsComponent = theInstance.getComponent(PhysicsComponent.class);
+                PhysicsBehavior thePhysicsComponent = theInstance.getComponent(PhysicsBehavior.class);
                 if (thePhysicsComponent != null) {
                     ObjectInspectorElementController theEditor = (ObjectInspectorElementController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(Physics.class)).get()).create(thePhysicsComponent);
-                    TitledPane theChildPane = new TitledPane("PhysicsComponent", theEditor.getView());
+                    TitledPane theChildPane = new TitledPane("Physics", theEditor.getView());
                     propertyPanels.getPanes().add(theChildPane);
                     currentController.add(theEditor);
                 }
 
-                Platform thePlatformComponent = theInstance.getComponent(PlatformComponent.class);
+                Platform thePlatformComponent = theInstance.getComponent(PlatformBehavior.class);
                 if (thePlatformComponent != null) {
                     ObjectInspectorElementController theEditor = (ObjectInspectorElementController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(Platform.class)).get()).create(thePlatformComponent);
-                    TitledPane theChildPane = new TitledPane("PlatformComponent", theEditor.getView());
+                    TitledPane theChildPane = new TitledPane("Platform", theEditor.getView());
                     propertyPanels.getPanes().add(theChildPane);
                     currentController.add(theEditor);
                 }
 
-                Static theStaticComponent = theInstance.getComponent(StaticComponent.class);
+                Static theStaticComponent = theInstance.getComponent(StaticBehavior.class);
                 if (theStaticComponent != null) {
                     ObjectInspectorElementController theEditor = (ObjectInspectorElementController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(Static.class)).get()).create(theStaticComponent);
-                    TitledPane theChildPane = new TitledPane("StaticComponent", theEditor.getView());
+                    TitledPane theChildPane = new TitledPane("Static", theEditor.getView());
                     propertyPanels.getPanes().add(theChildPane);
                     currentController.add(theEditor);
                 }
 
-                Sprite theSpriteComponent = theInstance.getComponent(SpriteComponent.class);
+                Sprite theSpriteComponent = theInstance.getComponent(SpriteBehavior.class);
                 if (theSpriteComponent != null) {
                     ObjectInspectorElementController theEditor = (ObjectInspectorElementController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(Sprite.class)).get()).create(theSpriteComponent);
-                    TitledPane theChildPane = new TitledPane("SpriteComponent", theEditor.getView());
+                    TitledPane theChildPane = new TitledPane("Sprite", theEditor.getView());
                     propertyPanels.getPanes().add(theChildPane);
                     currentController.add(theEditor);
                 }
 
-                Text theTextComponent = theInstance.getComponent(TextComponent.class);
+                Text theTextComponent = theInstance.getComponent(TextBehavior.class);
                 if (theTextComponent != null) {
                     ObjectInspectorElementController theEditor = (ObjectInspectorElementController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(Text.class)).get()).create(theTextComponent);
                     TitledPane theChildPane = new TitledPane("TextComponent", theEditor.getView());
@@ -249,7 +249,7 @@ public class ObjectInspectorController implements Controller {
                     currentController.add(theEditor);
                 }
 
-                PlayerScore theScoreTemplate = theInstance.getComponent(PlayerScoreComponent.class);
+                PlayerScore theScoreTemplate = theInstance.getComponent(PlayerScoreBehavior.class);
                 if (theScoreTemplate != null) {
                     ObjectInspectorElementController theEditor = (ObjectInspectorElementController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(PlayerScore.class)).get()).create(theScoreTemplate);
                     TitledPane theChildPane = new TitledPane("PlayerScoreComponent", theEditor.getView());

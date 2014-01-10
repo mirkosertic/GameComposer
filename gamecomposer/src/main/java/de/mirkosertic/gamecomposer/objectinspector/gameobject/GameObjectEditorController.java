@@ -4,9 +4,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorElementController;
+import de.mirkosertic.gameengine.camera.CameraBehaviorTemplate;
+import de.mirkosertic.gameengine.core.BehaviorTemplate;
 import de.mirkosertic.gameengine.event.GameEventManager;
 
-import de.mirkosertic.gameengine.text.TextComponentTemplate;
+import de.mirkosertic.gameengine.physic.PhysicsBehaviorTemplate;
+import de.mirkosertic.gameengine.physic.PlatformBehaviorTemplate;
+import de.mirkosertic.gameengine.physic.StaticBehaviorTemplate;
+import de.mirkosertic.gameengine.sprite.SpriteBehaviorTemplate;
+import de.mirkosertic.gameengine.text.TextBehaviorTemplate;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -18,13 +24,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
 import de.mirkosertic.gamecomposer.PropertyBinder;
-import de.mirkosertic.gameengine.camera.CameraComponentTemplate;
-import de.mirkosertic.gameengine.core.GameComponentTemplate;
 import de.mirkosertic.gameengine.core.GameObject;
-import de.mirkosertic.gameengine.physic.PhysicsComponentTemplate;
-import de.mirkosertic.gameengine.physic.PlatformComponentTemplate;
-import de.mirkosertic.gameengine.physic.StaticComponentTemplate;
-import de.mirkosertic.gameengine.sprite.SpriteComponentTemplate;
 import de.mirkosertic.gameengine.type.Size;
 
 public class GameObjectEditorController implements ObjectInspectorElementController {
@@ -99,17 +99,17 @@ public class GameObjectEditorController implements ObjectInspectorElementControl
 
         componentAddHyperlinks.getChildren().clear();
 
-        Map<Class<? extends GameComponentTemplate>, String> theKnownTemplates = new HashMap<>();
-        theKnownTemplates.put(CameraComponentTemplate.class, "CameraComponent");
-        theKnownTemplates.put(StaticComponentTemplate.class, "StaticComponent");
-        theKnownTemplates.put(SpriteComponentTemplate.class, "SpriteComponent");
-        theKnownTemplates.put(PhysicsComponentTemplate.class, "PhysicsComponent");
-        theKnownTemplates.put(PlatformComponentTemplate.class, "PlatformComponent");
-        theKnownTemplates.put(TextComponentTemplate.class, "TextComponent");
-        for (Map.Entry<Class<? extends GameComponentTemplate>, String> theEntry : theKnownTemplates.entrySet()) {
+        Map<Class<? extends BehaviorTemplate>, String> theKnownTemplates = new HashMap<>();
+        theKnownTemplates.put(CameraBehaviorTemplate.class, "CameraComponent");
+        theKnownTemplates.put(StaticBehaviorTemplate.class, "StaticComponent");
+        theKnownTemplates.put(SpriteBehaviorTemplate.class, "SpriteComponent");
+        theKnownTemplates.put(PhysicsBehaviorTemplate.class, "PhysicsComponent");
+        theKnownTemplates.put(PlatformBehaviorTemplate.class, "PlatformComponent");
+        theKnownTemplates.put(TextBehaviorTemplate.class, "TextComponent");
+        for (Map.Entry<Class<? extends BehaviorTemplate>, String> theEntry : theKnownTemplates.entrySet()) {
             if (gameObject.getComponentTemplate(theEntry.getKey()) == null) {
 
-                final Class<? extends GameComponentTemplate> theFinalClass = theEntry.getKey();
+                final Class<? extends BehaviorTemplate> theFinalClass = theEntry.getKey();
                 Hyperlink theHyperlink = new Hyperlink();
                 theHyperlink.setText("Add " + theEntry.getValue());
                 theHyperlink.setOnAction(new EventHandler<ActionEvent>() {
@@ -124,10 +124,10 @@ public class GameObjectEditorController implements ObjectInspectorElementControl
     }
 
 
-    private void addComponent(Class<? extends GameComponentTemplate> aClass) {
+    private void addComponent(Class<? extends BehaviorTemplate> aClass) {
         try {
             GameEventManager theEventManager = gameObject.getGameScene().getRuntime().getEventManager();
-            GameComponentTemplate theTemplate = aClass.getConstructor(GameEventManager.class, GameObject.class).newInstance(theEventManager, gameObject);
+            BehaviorTemplate theTemplate = aClass.getConstructor(GameEventManager.class, GameObject.class).newInstance(theEventManager, gameObject);
             gameObject.add(theTemplate);
 
             initializeCreateComponentHyperlinks();

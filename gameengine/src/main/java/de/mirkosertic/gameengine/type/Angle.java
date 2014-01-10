@@ -3,12 +3,17 @@ package de.mirkosertic.gameengine.type;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Angle {
+public class Angle implements ValueProvider<Integer> {
 
     public final int angleInDegrees;
 
     public Angle(int aAngleInDegrees) {
         angleInDegrees = aAngleInDegrees;
+    }
+
+    @Override
+    public Integer get() {
+        return angleInDegrees;
     }
 
     public Angle invert() {

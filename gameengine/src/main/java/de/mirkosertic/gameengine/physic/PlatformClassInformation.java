@@ -7,8 +7,6 @@ import de.mirkosertic.gameengine.type.GameKeyCode;
 
 public class PlatformClassInformation extends ClassInformation {
 
-    public static final PlatformClassInformation INSTANCE = new PlatformClassInformation();
-
     public final static Field<Platform, Property<GameKeyCode>> MOVE_LEFT = new Field<Platform, Property<GameKeyCode>>("moveLeft", Property.class) {
         @Override
         public Property<GameKeyCode> getValue(Platform aObject) {
@@ -43,6 +41,8 @@ public class PlatformClassInformation extends ClassInformation {
             return aObject.jumpImpulseProperty();
         }
     };
+
+    public static final PlatformClassInformation INSTANCE = new PlatformClassInformation();
 
     private PlatformClassInformation() {
         register(MOVE_LEFT);

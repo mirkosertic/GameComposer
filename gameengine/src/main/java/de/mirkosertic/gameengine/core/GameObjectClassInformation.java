@@ -7,8 +7,6 @@ import de.mirkosertic.gameengine.type.Size;
 
 public class GameObjectClassInformation extends ClassInformation {
 
-    public final static GameObjectClassInformation INSTANCE = new GameObjectClassInformation();
-
     public final static Field<GameObject, Property<String>> UUID = new Field<GameObject, Property<String>>("uuid", String.class) {
         @Override
         public Property<String> getValue(GameObject aObject) {
@@ -30,6 +28,7 @@ public class GameObjectClassInformation extends ClassInformation {
         }
     };
 
+    public final static GameObjectClassInformation INSTANCE = new GameObjectClassInformation();
 
     private GameObjectClassInformation() {
         register(NAME);

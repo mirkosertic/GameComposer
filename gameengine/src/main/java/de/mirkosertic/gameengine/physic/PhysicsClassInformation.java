@@ -6,8 +6,6 @@ import de.mirkosertic.gameengine.type.Field;
 
 public class PhysicsClassInformation extends ClassInformation {
 
-    public static final PhysicsClassInformation INSTANCE = new PhysicsClassInformation();
-
     public final static Field<Physics, Property<Boolean>> ACTIVE = new Field<Physics, Property<Boolean>>("active", Property.class) {
         @Override
         public Property<Boolean> getValue(Physics aObject) {
@@ -49,6 +47,8 @@ public class PhysicsClassInformation extends ClassInformation {
             return aObject.gravityScaleProperty();
         }
     };
+
+    public static final PhysicsClassInformation INSTANCE = new PhysicsClassInformation();
 
     private PhysicsClassInformation() {
         register(ACTIVE);

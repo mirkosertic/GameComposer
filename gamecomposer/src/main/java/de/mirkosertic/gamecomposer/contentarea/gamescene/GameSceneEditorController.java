@@ -6,7 +6,7 @@ import de.mirkosertic.gamecomposer.ObjectSelectedEvent;
 import de.mirkosertic.gamecomposer.ShutdownEvent;
 import de.mirkosertic.gamecomposer.contentarea.ContentController;
 
-import de.mirkosertic.gameengine.camera.CameraComponent;
+import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.type.GameKeyCode;
 import de.mirkosertic.gameengine.core.GameLoop;
 import de.mirkosertic.gameengine.core.GameObject;
@@ -58,7 +58,7 @@ public class GameSceneEditorController implements ContentController<GameScene> {
     private Node view;
     private EditorJXGameView gameView;
     private GameLoop gameLoop;
-    private CameraComponent cameraComponent;
+    private CameraBehavior cameraComponent;
 
     private Event<ObjectSelectedEvent> objectSelectedEventEvent;
 
@@ -67,7 +67,7 @@ public class GameSceneEditorController implements ContentController<GameScene> {
     private Position draggingMouseWorldPosition;
     private GameRuntime gameRuntime;
 
-    GameSceneEditorController initialize(GameRuntime aGameRuntime, GameScene aScene, Node aView, EditorJXGameView aGameView, GameLoop aGameLoop, CameraComponent aCameraComponent, Event<ObjectSelectedEvent> aSelectedEvent) {
+    GameSceneEditorController initialize(GameRuntime aGameRuntime, GameScene aScene, Node aView, EditorJXGameView aGameView, GameLoop aGameLoop, CameraBehavior aCameraComponent, Event<ObjectSelectedEvent> aSelectedEvent) {
 
         gameRuntime = aGameRuntime;
 
