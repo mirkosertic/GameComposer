@@ -11,5 +11,6 @@ class GameRuntimeFactory extends AbstractGameRuntimeFactory {
     @Override
     public void loadingFinished(GameScene aLoadesScene) {
         // We do not need an action manager here, so this method is overwritten
+        super.loadingFinished(aLoadesScene);
     }
 }
