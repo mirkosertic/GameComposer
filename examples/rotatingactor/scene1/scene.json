@@ -9,7 +9,38 @@
       "width" : "2147483647"
     }
   },
-  "eventsheets" : [ ],
+  "eventsheets" : [ {
+    "name" : "Events",
+    "rules" : [ {
+      "condition" : {
+        "keyCode" : "LEFT",
+        "eventType" : "PRESSED",
+        "type" : "KeyEventCondition"
+      },
+      "name" : "Rotate left",
+      "actions" : [ {
+        "propertyName" : "rotationAngle",
+        "value" : {
+          "expression" : "instance.rotationAngle - 4"
+        },
+        "type" : "SetPropertyAction"
+      } ]
+    }, {
+      "condition" : {
+        "keyCode" : "RIGHT",
+        "eventType" : "PRESSED",
+        "type" : "KeyEventCondition"
+      },
+      "name" : "Rorate right",
+      "actions" : [ {
+        "propertyName" : "rotationAngle",
+        "value" : {
+          "expression" : "instance.rotationAngle + 4"
+        },
+        "type" : "SetPropertyAction"
+      } ]
+    } ]
+  } ],
   "defaultplayerobjectid" : "4889509885749884898",
   "cameraobjectid" : "2900940626662702649",
   "name" : "Example scene",
@@ -20,7 +51,7 @@
     },
     "visible" : "true",
     "rotationangle" : {
-      "angleindegrees" : "0"
+      "angleindegrees" : "-28"
     },
     "absolutePosition" : "false",
     "gameobjectuuid" : "4889509885749884898",
@@ -37,7 +68,7 @@
     },
     "visible" : "true",
     "rotationangle" : {
-      "angleindegrees" : "0"
+      "angleindegrees" : "-28"
     },
     "absolutePosition" : "false",
     "gameobjectuuid" : "-9051172752501502813",

@@ -28,9 +28,13 @@ import de.mirkosertic.gameengine.sprite.SpriteClassInformation;
 import de.mirkosertic.gameengine.text.TextBehavior;
 import de.mirkosertic.gameengine.text.TextBehaviorTemplate;
 import de.mirkosertic.gameengine.text.TextClassInformation;
+import de.mirkosertic.gameengine.type.Angle;
 import de.mirkosertic.gameengine.type.ClassInformation;
 import de.mirkosertic.gameengine.type.Field;
 import de.mirkosertic.gameengine.type.Reflectable;
+import de.mirkosertic.gameengine.type.ResourceName;
+import de.mirkosertic.gameengine.type.ScoreValue;
+import de.mirkosertic.gameengine.type.TextExpression;
 import de.mirkosertic.gameengine.type.ValueProvider;
 
 import java.util.ArrayList;
@@ -45,6 +49,7 @@ public class PropertyDiscoverer {
 
     private final Map<String, Class<? extends BehaviorTemplate>> gameObjectTemplates;
     private final Map<String, Class<? extends Behavior>> gameObjectInstanceComponents;
+    private final Map<Class, AutomaticResultConverter> typeConverters;
 
     public PropertyDiscoverer() {
         gameObjectTemplates = new HashMap<String, Class<? extends BehaviorTemplate>>();
@@ -63,6 +68,16 @@ public class PropertyDiscoverer {
         gameObjectInstanceComponents.put("camera", CameraBehavior.class);
         gameObjectInstanceComponents.put("text", TextBehavior.class);
         gameObjectInstanceComponents.put("static", StaticBehavior.class);
+        typeConverters = new HashMap<Class, AutomaticResultConverter>();
+        typeConverters.put(Angle.class, new ToAngleResultConverter());
+        typeConverters.put(ResourceName.class, new ToResourceNameConverter());
+        typeConverters.put(TextExpression.class, new ToTextExpressionConverter());
+        typeConverters.put(ScoreValue.class, new ToScoreValueResultConverter());
+        typeConverters.put(String.class, new ToStringExpressionConverter());
+        typeConverters.put(Integer.class, new ToIntegerConverter());
+        typeConverters.put(Long.class, new ToLongConverter());
+        typeConverters.put(Float.class, new ToFloatConverter());
+        typeConverters.put(Boolean.class, new ToBooleanConverter());
     }
 
     private Object resolveProperty(Object aObject, String aPropertyName) {
@@ -120,9 +135,8 @@ public class PropertyDiscoverer {
         }
 
         Object theValue = resolveProperty(aObject, aVariableName);
-
-        if (theValue instanceof ValueProvider) {
-            return ((ValueProvider) theValue).get();
+        while (theValue instanceof ValueProvider) {
+            theValue = ((ValueProvider) theValue).get();
         }
         return theValue;
     }
@@ -168,7 +182,13 @@ public class PropertyDiscoverer {
         } else {
             Object theValue = resolveProperty(aInstance, aPropertyName);
             if (theValue instanceof Property) {
-                ((Property) theValue).set(aValue);
+                Property theProperty = (Property) theValue;
+                AutomaticResultConverter theConverter = typeConverters.get(theProperty.getType());
+                if (theConverter != null) {
+                    theProperty.set(theConverter.convert(aValue));
+                } else {
+                    theProperty.set(aValue);
+                }
             } else {
                 throw new IllegalArgumentException("Cannot set property "+aPropertyName+" on "+theValue+" to "+aValue);
             }
