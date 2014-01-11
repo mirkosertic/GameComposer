@@ -29,6 +29,12 @@ public class GeExpressionParserTest {
     }
 
     @Test
+    public void testPureString() {
+        GeExpressionParser theParser = parse("\"hallo\"");
+        Assert.assertEquals("hallo", theParser.evaluateToString());
+    }
+
+    @Test
     public void testNoting() {
         GeExpressionParser theParser = parse("hallo.x");
         Assert.assertNull(theParser.evaluateToObject());
