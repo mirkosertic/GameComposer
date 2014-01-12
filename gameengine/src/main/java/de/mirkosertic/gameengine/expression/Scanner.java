@@ -16,6 +16,10 @@ class Scanner {
         aTokens.add(new Token(TokenType.VALUE, aValue.toString()));
     }
 
+    private void string(List<Token> aTokens, StringBuilder aValue) {
+        aTokens.add(new Token(TokenType.STRING, aValue.toString()));
+    }
+
     private void symbol(List<Token> aTokens, StringBuilder aSymbol) {
         aTokens.add(new Token(TokenType.FUNCTION, aSymbol.toString()));
     }
@@ -44,7 +48,7 @@ class Scanner {
                             theCurrentToken = new StringBuilder();
                         } else {
                             inString = false;
-                            value(theTokens, theCurrentToken);
+                            string(theTokens, theCurrentToken);
                             theCurrentToken = new StringBuilder();
                             inNumeric = false;
                             inSymbol = false;

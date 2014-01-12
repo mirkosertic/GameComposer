@@ -16,6 +16,8 @@ class RPNEvaluator {
         if (aValue instanceof Token) {
             Token theToken = (Token) aValue;
             switch (theToken.type) {
+                case STRING:
+                    return theToken.value;
                 case VALUE:
                     if ("true".equalsIgnoreCase(theToken.value)) {
                         return Boolean.TRUE;
@@ -27,9 +29,6 @@ class RPNEvaluator {
                         return Math.PI;
                     }
                     String theValue = theToken.value;
-                    if (theValue.startsWith("\"")) {
-                        return theValue;
-                    }
                     if (theValue.startsWith("-")) {
                         return theValue;
                     }
@@ -92,7 +91,7 @@ class RPNEvaluator {
         Stack<Object> theResultStack = new Stack<Object>();
         for (int i = 0; i < aRPNTokens.length; i++) {
             Token theToken = aRPNTokens[i];
-            if (theToken.type == TokenType.VALUE) {
+            if (theToken.type == TokenType.VALUE || theToken.type == TokenType.STRING) {
                 theResultStack.push(theToken);
             }
             if (theToken.type == TokenType.FUNCTION) {

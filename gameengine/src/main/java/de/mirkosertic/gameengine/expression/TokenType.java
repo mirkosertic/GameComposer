@@ -129,6 +129,22 @@ public enum TokenType {
             throw new IllegalArgumentException("Unknown precedence for " + this);
         }
     },
+    STRING {
+        @Override
+        public boolean isLeftAssociative() {
+            throw new IllegalArgumentException("Unknown associativity for " + this);
+        }
+
+        @Override
+        public boolean isOperator() {
+            return false;
+        }
+
+        @Override
+        public int getPrecedence() {
+            throw new IllegalArgumentException("Unknown precedence for " + this);
+        }
+    },
     LEFTPARENTHESIS {
         @Override
         public boolean isLeftAssociative() {
