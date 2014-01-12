@@ -25,7 +25,7 @@ class Parser {
             Token theToken = aTokens[i];
 
             // If the token is a number, then add it to the output queue.
-            if (theToken.type == TokenType.VALUE) {
+            if (theToken.type == TokenType.VALUE || theToken.type == TokenType.STRING) {
                 theOutputQueue.add(theToken);
                 continue;
             }

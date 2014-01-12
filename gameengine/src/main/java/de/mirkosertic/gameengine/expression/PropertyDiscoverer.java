@@ -167,6 +167,14 @@ public class PropertyDiscoverer {
         return theResult;
     }
 
+    public <T> T convert(Object aValue, Class<T> aType) {
+        AutomaticResultConverter theConverter = typeConverters.get(aType);
+        if (theConverter != null) {
+            return (T) theConverter.convert(aValue);
+        }
+        return (T) aValue;
+    }
+
     public void setVariable(Object aInstance, String aPropertyName, Object aValue) {
         int p = aPropertyName.indexOf('.');
         if (p>0) {
@@ -183,12 +191,7 @@ public class PropertyDiscoverer {
             Object theValue = resolveProperty(aInstance, aPropertyName);
             if (theValue instanceof Property) {
                 Property theProperty = (Property) theValue;
-                AutomaticResultConverter theConverter = typeConverters.get(theProperty.getType());
-                if (theConverter != null) {
-                    theProperty.set(theConverter.convert(aValue));
-                } else {
-                    theProperty.set(aValue);
-                }
+                theProperty.set(convert(aValue, theProperty.getType()));
             } else {
                 throw new IllegalArgumentException("Cannot set property "+aPropertyName+" on "+theValue+" to "+aValue);
             }
