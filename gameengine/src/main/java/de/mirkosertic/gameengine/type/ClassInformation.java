@@ -25,10 +25,6 @@ public abstract class ClassInformation {
         return fields.values().toArray(new Field[fields.size()]);
     }
 
-    public Method[] getMethods() {
-        return methods.values().toArray(new Method[fields.size()]);
-    }
-
     public Field getFieldByName(String aFieldName) {
         return fields.get(aFieldName);
     }

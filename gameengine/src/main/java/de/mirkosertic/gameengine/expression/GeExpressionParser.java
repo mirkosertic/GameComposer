@@ -2,6 +2,7 @@ package de.mirkosertic.gameengine.expression;
 
 import de.mirkosertic.gameengine.core.ExpressionParser;
 import de.mirkosertic.gameengine.type.DefaultValueProvider;
+import de.mirkosertic.gameengine.type.Reflectable;
 import de.mirkosertic.gameengine.type.ValueProvider;
 
 import java.util.HashMap;
@@ -11,10 +12,10 @@ public class GeExpressionParser implements ExpressionParser, VariableResolver {
 
     private final Map<String, ValueProvider> variables;
     private final Token[] rpnTokens;
-    private final FunctionRegistry functionRegistry;
+    private final Reflectable functionRegistry;
     private final PropertyDiscoverer propertyDiscoverer;
 
-    GeExpressionParser(Token[] aRPNTokens, FunctionRegistry aFunctionRegistry) {
+    GeExpressionParser(Token[] aRPNTokens, Reflectable aFunctionRegistry) {
         rpnTokens = aRPNTokens;
         variables = new HashMap<String, ValueProvider>();
         functionRegistry = aFunctionRegistry;
@@ -42,7 +43,7 @@ public class GeExpressionParser implements ExpressionParser, VariableResolver {
 
     @Override
     public Object evaluateToObject() {
-        RPNEvaluator theEvaluator = new RPNEvaluator(this, functionRegistry);
+        RPNEvaluator theEvaluator = new RPNEvaluator(propertyDiscoverer, this, functionRegistry);
         return theEvaluator.evaluate(rpnTokens);
     }
 

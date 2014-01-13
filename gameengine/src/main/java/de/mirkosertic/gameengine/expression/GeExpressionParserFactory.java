@@ -2,16 +2,17 @@ package de.mirkosertic.gameengine.expression;
 
 import de.mirkosertic.gameengine.core.ExpressionParser;
 import de.mirkosertic.gameengine.core.ExpressionParserFactory;
+import de.mirkosertic.gameengine.type.Reflectable;
 import de.mirkosertic.gameengine.type.TextExpression;
 
 public class GeExpressionParserFactory implements ExpressionParserFactory {
 
     private final Scanner scanner;
     private final Parser parser;
-    private final FunctionRegistry functionRegistry;
+    private final Reflectable functionRegistry;
 
     public GeExpressionParserFactory() {
-        functionRegistry = new DefaultFunctionRegistry();
+        functionRegistry = new BuiltInFunctions();
         scanner = new Scanner();
         parser = new Parser();
     }

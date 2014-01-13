@@ -1,11 +1,5 @@
 package de.mirkosertic.gameengine.expression;
 
-import de.mirkosertic.gameengine.expression.DefaultFunctionRegistry;
-import de.mirkosertic.gameengine.expression.DefaultVariableResolver;
-import de.mirkosertic.gameengine.expression.Parser;
-import de.mirkosertic.gameengine.expression.RPNEvaluator;
-import de.mirkosertic.gameengine.expression.Scanner;
-import de.mirkosertic.gameengine.expression.VariableResolver;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -21,7 +15,7 @@ public class RPNEvaluatorTest {
     public void setup() {
         scanner = new Scanner();
         parser = new Parser();
-        evaluator = new RPNEvaluator(new DefaultVariableResolver(), new DefaultFunctionRegistry());
+        evaluator = new RPNEvaluator(new PropertyDiscoverer(), new DefaultVariableResolver(), new BuiltInFunctions());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -116,7 +110,7 @@ public class RPNEvaluatorTest {
 
     @Test
     public void testSimpleAddWithVariable() {
-        evaluator = new RPNEvaluator(new VariableResolver() {
+        evaluator = new RPNEvaluator(new PropertyDiscoverer(), new VariableResolver() {
             @Override
             public Object resolveVariable(String aVariableName) {
                 if ("X".equals(aVariableName)) {
@@ -124,14 +118,14 @@ public class RPNEvaluatorTest {
                 }
                 return null;
             }
-        }, new DefaultFunctionRegistry());
+        }, new BuiltInFunctions());
         int theResult = (Integer) evaluator.evaluate(parser.parse(scanner.scan("X+2")));
         assertEquals(10, theResult);
     }
 
     @Test
     public void testSimpleAddWithCoplexVariable() {
-        evaluator = new RPNEvaluator(new VariableResolver() {
+        evaluator = new RPNEvaluator(new PropertyDiscoverer(), new VariableResolver() {
             @Override
             public Object resolveVariable(String aVariableName) {
                 if ("X.A".equals(aVariableName)) {
@@ -139,7 +133,7 @@ public class RPNEvaluatorTest {
                 }
                 return null;
             }
-        }, new DefaultFunctionRegistry());
+        }, new BuiltInFunctions());
         int theResult = (Integer) evaluator.evaluate(parser.parse(scanner.scan("X.A+2")));
         assertEquals(10, theResult);
     }
