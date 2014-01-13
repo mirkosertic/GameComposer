@@ -15,6 +15,10 @@ public class GameSoundManager implements GameSystem {
         eventManager = aEventManager;
     }
 
+    @Override
+    public void proceedGame(long aTotalTicks, long aGameTime, long aElapsedTime) {
+    }
+
     void onPlaySoundEvent(ResourceName aResourceName) {
         eventManager.fire(new StartProcess(new PlaySoundProcess(soundSystem, aResourceName)));
     }

@@ -45,8 +45,10 @@ public class GameProcessManager implements GameSystem {
         killProcessesForInstance(aInstance);
     }
 
-    void proceedGame(long aGameTime, long aElapsedTimeSinceLastLoop) {
-        processesAmountOfTime += aElapsedTimeSinceLastLoop;
+    @Override
+    public void proceedGame(long aTotalTicks, long aGameTime, long aElapsedTime) {
+
+        processesAmountOfTime += aElapsedTime;
         // We limit the physics system to 60 frames / second, or we are getting strange results
         if (processesAmountOfTime > 8) {
 

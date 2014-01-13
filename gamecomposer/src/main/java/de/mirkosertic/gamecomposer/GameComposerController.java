@@ -102,7 +102,9 @@ public class GameComposerController {
             if (theDirectory.isFile()) {
                 theDirectory = theDirectory.getParentFile();
             }
-            theFileChooser.setInitialDirectory(theDirectory);
+            if (theDirectory.exists()) {
+                theFileChooser.setInitialDirectory(theDirectory);
+            }
         }
 
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Game files (game.json)","game.json");

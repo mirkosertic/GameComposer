@@ -1,4 +1,8 @@
-package de.mirkosertic.gameengine.core;
+package de.mirkosertic.gameengine.action;
+
+import de.mirkosertic.gameengine.core.Condition;
+import de.mirkosertic.gameengine.core.ConditionUnmarshaller;
+import de.mirkosertic.gameengine.core.GameScene;
 
 import java.util.Map;
 

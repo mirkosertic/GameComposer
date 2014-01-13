@@ -1,11 +1,6 @@
 package de.mirkosertic.gameengine.action;
 
-import de.mirkosertic.gameengine.core.Action;
-import de.mirkosertic.gameengine.core.ConditionResult;
-import de.mirkosertic.gameengine.core.EventSheet;
-import de.mirkosertic.gameengine.core.GameRule;
-import de.mirkosertic.gameengine.core.GameScene;
-import de.mirkosertic.gameengine.core.GameSystem;
+import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.event.GameEvent;
 import de.mirkosertic.gameengine.process.InvokeActionProcess;
 import de.mirkosertic.gameengine.process.StartProcess;
@@ -16,6 +11,11 @@ public class ActionManager implements GameSystem {
 
     ActionManager(GameScene aScene) {
         scene = aScene;
+    }
+
+    @Override
+    public void proceedGame(long aTotalTicks, long aGameTime, long aElapsedTime) {
+        scene.getRuntime().getEventManager().fire(new SystemTick(aTotalTicks, aGameTime, aElapsedTime));
     }
 
     void onEvent(GameEvent aEvent) {

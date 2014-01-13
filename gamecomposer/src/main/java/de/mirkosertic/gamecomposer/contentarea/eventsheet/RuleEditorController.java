@@ -14,7 +14,7 @@ import de.mirkosertic.gameengine.core.GameRule;
 import de.mirkosertic.gameengine.core.RunSceneAction;
 import de.mirkosertic.gameengine.core.SetPropertyAction;
 import de.mirkosertic.gameengine.core.SpawnGameObjectInstanceAction;
-import de.mirkosertic.gameengine.core.SystemTickCondition;
+import de.mirkosertic.gameengine.action.SystemTickCondition;
 import de.mirkosertic.gameengine.input.KeyEventCondition;
 import de.mirkosertic.gameengine.physic.ObjectCollisionCondition;
 import de.mirkosertic.gameengine.process.KillProcessesForInstanceAction;

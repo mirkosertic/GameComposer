@@ -320,11 +320,12 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
         }
     }
 
-    void proceedGame(long aElapsedTimeSinceLastLoop) {
+    @Override
+    public void proceedGame(long aTotalTicks, long aGameTime, long aElapsedTime) {
 
         insimulation = true;
 
-        physicsAmountOfTime += aElapsedTimeSinceLastLoop;
+        physicsAmountOfTime += aElapsedTime;
 
         // We limit the physics system to 30 frames / second, or we are getting strange results
         if (physicsAmountOfTime >= 32) {
