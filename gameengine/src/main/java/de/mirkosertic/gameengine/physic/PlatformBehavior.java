@@ -3,7 +3,7 @@ package de.mirkosertic.gameengine.physic;
 import de.mirkosertic.gameengine.core.Behavior;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
-import de.mirkosertic.gameengine.core.SystemTick;
+import de.mirkosertic.gameengine.action.SystemTick;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;

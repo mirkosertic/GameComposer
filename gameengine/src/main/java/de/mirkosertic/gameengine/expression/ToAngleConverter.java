@@ -2,7 +2,7 @@ package de.mirkosertic.gameengine.expression;
 
 import de.mirkosertic.gameengine.type.Angle;
 
-class ToAngleResultConverter implements AutomaticResultConverter<Object, Angle> {
+class ToAngleConverter implements AutomaticResultConverter<Object, Angle> {
 
     @Override
     public Angle convert(Object aValue) {

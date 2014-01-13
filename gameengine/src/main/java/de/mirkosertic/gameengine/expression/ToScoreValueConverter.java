@@ -2,7 +2,7 @@ package de.mirkosertic.gameengine.expression;
 
 import de.mirkosertic.gameengine.type.ScoreValue;
 
-class ToScoreValueResultConverter implements AutomaticResultConverter<Object, ScoreValue> {
+class ToScoreValueConverter implements AutomaticResultConverter<Object, ScoreValue> {
 
     @Override
     public ScoreValue convert(Object aValue) {

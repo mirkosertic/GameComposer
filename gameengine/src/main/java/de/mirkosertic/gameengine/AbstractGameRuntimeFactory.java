@@ -16,7 +16,7 @@ import de.mirkosertic.gameengine.core.IORegistry;
 import de.mirkosertic.gameengine.core.RunSceneActionUnmarshaller;
 import de.mirkosertic.gameengine.core.SetPropertyActionUnmarshaller;
 import de.mirkosertic.gameengine.core.SpawnGameObjectInstanceActionUnmarshaller;
-import de.mirkosertic.gameengine.core.SystemTickConditionUnmarshaller;
+import de.mirkosertic.gameengine.action.SystemTickConditionUnmarshaller;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.expression.GeExpressionParserFactory;
 import de.mirkosertic.gameengine.input.KeyEventConditionUnmarshaller;

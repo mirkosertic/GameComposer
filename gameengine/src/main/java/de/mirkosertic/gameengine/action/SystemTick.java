@@ -1,4 +1,4 @@
-package de.mirkosertic.gameengine.core;
+package de.mirkosertic.gameengine.action;
 
 import de.mirkosertic.gameengine.event.GameEvent;
 
@@ -8,7 +8,7 @@ public class SystemTick extends GameEvent {
     public final long gameTime;
     public final long elapsedTimeSinceLastLoop;
 
-    public SystemTick(long aTotalTicks, long aGameTime, long aElapsedTimeSinceLastLoop) {
+    SystemTick(long aTotalTicks, long aGameTime, long aElapsedTimeSinceLastLoop) {
         super("SystemTick");
         totalTicks = aTotalTicks;
         gameTime = aGameTime;

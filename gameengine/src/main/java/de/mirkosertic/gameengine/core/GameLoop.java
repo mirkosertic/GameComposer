@@ -38,9 +38,10 @@ public class GameLoop implements Runnable {
         long theElapsedTime = theCurrentTime - lastInvocation;
         if (theElapsedTime > 0) {
 
-            // The game systems like physics or process can react on this event
-            // and do something useful...
-            runtime.getEventManager().fire(new SystemTick(totalTicks, theGameTime, theElapsedTime));
+            // The game systems like physics or process need a chance to do something useful.
+            for (GameSystem theSystem : runtime.getSystems()) {
+                theSystem.proceedGame(totalTicks, theGameTime, theElapsedTime);
+            }
 
             // Trigger rerendering of game view
             humanGameView.renderGame(theGameTime, theElapsedTime, scene);

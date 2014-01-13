@@ -1,7 +1,6 @@
 package de.mirkosertic.gameengine.process;
 
 import de.mirkosertic.gameengine.core.GameObjectInstanceRemovedFromScene;
-import de.mirkosertic.gameengine.core.SystemTick;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.GameEventManager;
 
@@ -27,12 +26,6 @@ public class GameProcessManagerFactory {
         aEventManager.register(null, GameObjectInstanceRemovedFromScene.class, new GameEventListener<GameObjectInstanceRemovedFromScene>() {
             public void handleGameEvent(GameObjectInstanceRemovedFromScene aEvent) {
                 theManager.instanceRemovedFromScene(aEvent.instance);
-            }
-        });
-        aEventManager.register(null, SystemTick.class, new GameEventListener<SystemTick>() {
-            @Override
-            public void handleGameEvent(SystemTick aEvent) {
-                theManager.proceedGame(aEvent.gameTime, aEvent.elapsedTimeSinceLastLoop);
             }
         });
         return theManager;

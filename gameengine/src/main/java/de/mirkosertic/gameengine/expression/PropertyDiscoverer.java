@@ -69,10 +69,10 @@ public class PropertyDiscoverer {
         gameObjectInstanceComponents.put("text", TextBehavior.class);
         gameObjectInstanceComponents.put("static", StaticBehavior.class);
         typeConverters = new HashMap<Class, AutomaticResultConverter>();
-        typeConverters.put(Angle.class, new ToAngleResultConverter());
+        typeConverters.put(Angle.class, new ToAngleConverter());
         typeConverters.put(ResourceName.class, new ToResourceNameConverter());
         typeConverters.put(TextExpression.class, new ToTextExpressionConverter());
-        typeConverters.put(ScoreValue.class, new ToScoreValueResultConverter());
+        typeConverters.put(ScoreValue.class, new ToScoreValueConverter());
         typeConverters.put(String.class, new ToStringExpressionConverter());
         typeConverters.put(Integer.class, new ToIntegerConverter());
         typeConverters.put(Long.class, new ToLongConverter());
