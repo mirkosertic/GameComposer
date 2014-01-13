@@ -18,7 +18,7 @@ public class GeExpressionParserTest {
     }
 
     private GeExpressionParser parse(String aExpression) {
-        return new GeExpressionParser(parser.parse(scanner.scan(aExpression)), new DefaultFunctionRegistry());
+        return new GeExpressionParser(parser.parse(scanner.scan(aExpression)), new BuiltInFunctions());
     }
 
     @Test

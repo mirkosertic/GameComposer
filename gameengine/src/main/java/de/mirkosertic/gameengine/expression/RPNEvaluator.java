@@ -1,13 +1,18 @@
 package de.mirkosertic.gameengine.expression;
 
+import de.mirkosertic.gameengine.type.Method;
+import de.mirkosertic.gameengine.type.Reflectable;
+
 import java.util.Stack;
 
 class RPNEvaluator {
 
-    private final FunctionRegistry functionRegistry;
+    private final PropertyDiscoverer propertyDiscoverer;
     private final VariableResolver variableResolver;
+    private final Reflectable functionRegistry;
 
-    public RPNEvaluator(VariableResolver aVariableResolver, FunctionRegistry aFunctionRegistry) {
+    public RPNEvaluator(PropertyDiscoverer aPropertyDiscoverer, VariableResolver aVariableResolver, Reflectable aFunctionRegistry) {
+        propertyDiscoverer = aPropertyDiscoverer;
         variableResolver = aVariableResolver;
         functionRegistry = aFunctionRegistry;
     }
@@ -45,8 +50,8 @@ class RPNEvaluator {
     }
 
     private Object add(Object aObject1, Object aObject2) {
-        Number theNumber1 = ArgumentType.NUMBER.convert(aObject1);
-        Number theNumber2 = ArgumentType.NUMBER.convert(aObject2);
+        Number theNumber1 = propertyDiscoverer.convert(aObject1, Number.class);
+        Number theNumber2 = propertyDiscoverer.convert(aObject2, Number.class);
         if (theNumber1 instanceof Integer) {
             return theNumber1.intValue() + theNumber2.intValue();
         }
@@ -61,8 +66,8 @@ class RPNEvaluator {
     }
 
     private Object substract(Object aObject1, Object aObject2) {
-        Number theNumber1 = ArgumentType.NUMBER.convert(aObject1);
-        Number theNumber2 = ArgumentType.NUMBER.convert(aObject2);
+        Number theNumber1 = propertyDiscoverer.convert(aObject1, Number.class);
+        Number theNumber2 = propertyDiscoverer.convert(aObject2, Number.class);
         if (theNumber1 instanceof Integer) {
             return theNumber1.intValue() - theNumber2.intValue();
         }
@@ -70,8 +75,8 @@ class RPNEvaluator {
     }
 
     private Object divide(Object aObject1, Object aObject2) {
-        Number theNumber1 = ArgumentType.NUMBER.convert(aObject1);
-        Number theNumber2 = ArgumentType.NUMBER.convert(aObject2);
+        Number theNumber1 = propertyDiscoverer.convert(aObject1, Number.class);
+        Number theNumber2 = propertyDiscoverer.convert(aObject2, Number.class);
         if (theNumber1 instanceof Integer) {
             return theNumber1.intValue() / theNumber2.intValue();
         }
@@ -79,8 +84,8 @@ class RPNEvaluator {
     }
 
     private Object multiply(Object aObject1, Object aObject2) {
-        Number theNumber1 = ArgumentType.NUMBER.convert(aObject1);
-        Number theNumber2 = ArgumentType.NUMBER.convert(aObject2);
+        Number theNumber1 = propertyDiscoverer.convert(aObject1, Number.class);
+        Number theNumber2 = propertyDiscoverer.convert(aObject2, Number.class);
         if (theNumber1 instanceof Integer) {
             return theNumber1.intValue() * theNumber2.intValue();
         }
@@ -95,17 +100,17 @@ class RPNEvaluator {
                 theResultStack.push(theToken);
             }
             if (theToken.type == TokenType.FUNCTION) {
-                Function theFunction = functionRegistry.resolveFunctionByName(theToken.value);
-                if (theFunction == null) {
+                Method theMethod = functionRegistry.getClassInformation().getMethodByName(theToken.value);
+                if (theMethod == null) {
                     throw new IllegalArgumentException("Unknown function : " + theToken.value);
                 }
-                ArgumentType[] theArgumentTypes = theFunction.getArgumentTypes();
+                Class[] theArgumentTypes = theMethod.getArgument();
 
-                Object[] theArguments = new Object[theFunction.getNumberOfArguments()];
-                for (int theArgumentIndex = theFunction.getNumberOfArguments() - 1; theArgumentIndex >= 0; theArgumentIndex--) {
-                    theArguments[theArgumentIndex] = theArgumentTypes[theArgumentIndex].convert(resolve(theResultStack.pop()));
+                Object[] theArguments = new Object[theArgumentTypes.length];
+                for (int theArgumentIndex = theArgumentTypes.length - 1; theArgumentIndex >= 0; theArgumentIndex--) {
+                    theArguments[theArgumentIndex] = propertyDiscoverer.convert((resolve(theResultStack.pop())), theArgumentTypes[theArgumentIndex]);
                 }
-                theResultStack.push(theFunction.evaluate(theArguments));
+                theResultStack.push(theMethod.invoke(functionRegistry, theArguments));
             }
             if (theToken.type == TokenType.ADD) {
                 Object theValue2 = resolve(theResultStack.pop());

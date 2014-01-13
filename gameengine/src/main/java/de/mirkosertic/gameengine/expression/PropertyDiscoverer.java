@@ -78,6 +78,7 @@ public class PropertyDiscoverer {
         typeConverters.put(Long.class, new ToLongConverter());
         typeConverters.put(Float.class, new ToFloatConverter());
         typeConverters.put(Boolean.class, new ToBooleanConverter());
+        typeConverters.put(Number.class, new ToNumberConverter());
     }
 
     private Object resolveProperty(Object aObject, String aPropertyName) {

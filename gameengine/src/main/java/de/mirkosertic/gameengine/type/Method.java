@@ -12,8 +12,16 @@ public abstract class Method<T> {
         arguments = aArguments;
     }
 
+    public Class getReturnType() {
+        return returnType;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public Class[] getArgument() {
+        return arguments;
     }
 
     public abstract Object invoke(T aTarget, Object[] aArguments);
