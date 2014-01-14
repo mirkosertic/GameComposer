@@ -3,12 +3,17 @@ package de.mirkosertic.gameengine.type;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Speed {
+public class Speed implements ValueProvider<Long> {
 
     public final long speed;
 
     public Speed(long aSpeed) {
         speed = aSpeed;
+    }
+
+    @Override
+    public Long get() {
+        return speed;
     }
 
     public Map<String, Object> serialize() {
