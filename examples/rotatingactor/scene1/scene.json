@@ -51,7 +51,7 @@
     },
     "visible" : "true",
     "rotationangle" : {
-      "angleindegrees" : "-28"
+      "angleindegrees" : "0"
     },
     "absolutePosition" : "false",
     "gameobjectuuid" : "4889509885749884898",
@@ -68,7 +68,7 @@
     },
     "visible" : "true",
     "rotationangle" : {
-      "angleindegrees" : "-28"
+      "angleindegrees" : "0"
     },
     "absolutePosition" : "false",
     "gameobjectuuid" : "-9051172752501502813",
@@ -100,6 +100,11 @@
     "templates" : [ {
       "cameratype" : "CENTERONSCENE",
       "type" : "Camera"
+    }, {
+      "type" : "ConstantMovement",
+      "angle" : {
+        "speed" : "0"
+      }
     } ],
     "name" : "Camera",
     "uuid" : "2900940626662702649",

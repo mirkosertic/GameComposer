@@ -7,10 +7,8 @@ import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
-import de.mirkosertic.gameengine.input.KeyPressed;
-import de.mirkosertic.gameengine.input.KeyReleased;
-import de.mirkosertic.gameengine.physic.GameObjectCollision;
 import de.mirkosertic.gameengine.type.Angle;
+import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Reflectable;
 import de.mirkosertic.gameengine.type.Speed;
 
@@ -48,6 +46,8 @@ public class ConstantMovementBehavior implements Behavior, ConstantMovement, Ref
     }
 
     private void handleGameLoop(SystemTick aTick) {
+        Position theCurrentPosition = objectInstance.positionProperty().get();
+        objectInstance.positionProperty().set(theCurrentPosition.translate(angle.get(), speed.get().speed / 1000d * aTick.elapsedTimeSinceLastLoop));
     }
 
 

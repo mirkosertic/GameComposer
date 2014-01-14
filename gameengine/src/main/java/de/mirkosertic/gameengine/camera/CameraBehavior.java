@@ -135,7 +135,7 @@ public class CameraBehavior implements Behavior, Camera, Reflectable<CameraClass
         return new CameraBehavior(aObjectInstance);
     }
 
-    public void centerOn(GameObjectInstance aGameObjectInstance) {
+    private void centerOn(GameObjectInstance aGameObjectInstance) {
         Position theObjectPosition = aGameObjectInstance.positionProperty().get();
         Size theObjectSize = aGameObjectInstance.getOwnerGameObject().sizeProperty().get();
 

@@ -57,4 +57,11 @@ public class Position implements Reflectable<PositionClassInformation> {
         float theY = Float.valueOf((String) aSerializedStructure.get("y"));
         return new Position(theX, theY);
     }
+
+    public Position translate(Angle aAngle, double aDistance) {
+        float theRadians = aAngle.toRadians();
+        double theMX = Math.cos(theRadians) * aDistance;
+        double theMY = Math.sin(theRadians) * aDistance;
+        return new Position(x + theMX, y + theMY);
+    }
 }
