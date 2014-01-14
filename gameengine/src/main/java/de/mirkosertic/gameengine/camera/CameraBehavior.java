@@ -7,6 +7,7 @@ import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
+import de.mirkosertic.gameengine.process.StartProcess;
 import de.mirkosertic.gameengine.type.AbsolutePositionAnchor;
 import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Reflectable;
@@ -143,5 +144,16 @@ public class CameraBehavior implements Behavior, Camera, Reflectable<CameraClass
 
         objectInstance.positionProperty().set(
                 new Position(theCenterX - screenSize.width / 2, theCenterY - screenSize.height / 2));
+    }
+
+    public void initializeFor(GameScene aGameScene, GameObjectInstance aPlayerInstance) {
+        switch (getTemplate().typeProperty().get()) {
+            case FOLLOWPLAYER:
+                centerOn(aPlayerInstance);
+                aGameScene.getRuntime().getEventManager().fire(new StartProcess(new FollowCameraProcess(objectInstance, aPlayerInstance)));
+                break;
+            case CENTERONSCENE:
+                break;
+        }
     }
 }

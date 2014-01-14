@@ -6,22 +6,11 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
-
 import de.mirkosertic.gameengine.camera.CameraBehavior;
-import de.mirkosertic.gameengine.camera.FollowCameraProcess;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
-import de.mirkosertic.gameengine.core.Game;
-import de.mirkosertic.gameengine.core.GameLoop;
-import de.mirkosertic.gameengine.core.GameLoopFactory;
-import de.mirkosertic.gameengine.core.GameObject;
-import de.mirkosertic.gameengine.core.GameObjectInstance;
-import de.mirkosertic.gameengine.core.GameRuntime;
-import de.mirkosertic.gameengine.core.GameScene;
-import de.mirkosertic.gameengine.core.GestureDetector;
-import de.mirkosertic.gameengine.core.RunScene;
+import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.GameEventManager;
-import de.mirkosertic.gameengine.process.StartProcess;
 import de.mirkosertic.gameengine.type.Size;
 import de.mirkosertic.gameengine.type.TouchIdentifier;
 import de.mirkosertic.gameengine.type.TouchPosition;
@@ -197,14 +186,7 @@ public class GameEngineActivity extends Activity {
 
         runningGameLoop = theLoop;
 
-        switch (theCameraComponent.getTemplate().typeProperty().get()) {
-            case FOLLOWPLAYER:
-                theCameraComponent.centerOn(thePlayerInstance);
-                theEventManager.fire(new StartProcess(new FollowCameraProcess(theCameraObjectInstance, thePlayerInstance)));
-                break;
-            case CENTERONSCENE:
-                break;
-        }
+        theCameraComponent.initializeFor(aGameScene, thePlayerInstance);
     }
 
     @Override
