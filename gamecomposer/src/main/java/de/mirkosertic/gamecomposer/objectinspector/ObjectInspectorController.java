@@ -3,24 +3,14 @@ package de.mirkosertic.gamecomposer.objectinspector;
 import de.mirkosertic.gamecomposer.Controller;
 import de.mirkosertic.gamecomposer.GameSceneCreatedEvent;
 import de.mirkosertic.gamecomposer.ObjectSelectedEvent;
+import de.mirkosertic.gameengine.arcade.ConstantMovement;
+import de.mirkosertic.gameengine.arcade.ConstantMovementBehavior;
+import de.mirkosertic.gameengine.arcade.ConstantMovementBehaviorTemplate;
 import de.mirkosertic.gameengine.camera.Camera;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.CameraBehaviorTemplate;
-import de.mirkosertic.gameengine.core.EventSheet;
-import de.mirkosertic.gameengine.core.Game;
-import de.mirkosertic.gameengine.core.GameObject;
-import de.mirkosertic.gameengine.core.GameObjectConfigurationChanged;
-import de.mirkosertic.gameengine.core.GameObjectInstance;
-import de.mirkosertic.gameengine.core.GameScene;
-import de.mirkosertic.gameengine.physic.Physics;
-import de.mirkosertic.gameengine.physic.PhysicsBehavior;
-import de.mirkosertic.gameengine.physic.PhysicsBehaviorTemplate;
-import de.mirkosertic.gameengine.physic.Platform;
-import de.mirkosertic.gameengine.physic.PlatformBehavior;
-import de.mirkosertic.gameengine.physic.PlatformBehaviorTemplate;
-import de.mirkosertic.gameengine.physic.Static;
-import de.mirkosertic.gameengine.physic.StaticBehavior;
-import de.mirkosertic.gameengine.physic.StaticBehaviorTemplate;
+import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.physic.*;
 import de.mirkosertic.gameengine.playerscore.PlayerScore;
 import de.mirkosertic.gameengine.playerscore.PlayerScoreBehavior;
 import de.mirkosertic.gameengine.playerscore.PlayerScoreBehaviorTemplate;
@@ -30,7 +20,6 @@ import de.mirkosertic.gameengine.sprite.SpriteBehaviorTemplate;
 import de.mirkosertic.gameengine.text.Text;
 import de.mirkosertic.gameengine.text.TextBehavior;
 import de.mirkosertic.gameengine.text.TextBehaviorTemplate;
-
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Accordion;
@@ -191,6 +180,15 @@ public class ObjectInspectorController implements Controller {
                     propertyPanels.getPanes().add(theChildPane);
                     currentController.add(theEditor);
                 }
+
+                ConstantMovement theConstantMovementTemplate = theGameObject.getComponentTemplate(ConstantMovementBehaviorTemplate.class);
+                if (theConstantMovementTemplate != null) {
+                    ObjectInspectorElementController theEditor = (ObjectInspectorElementController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(ConstantMovement.class)).get()).create(theConstantMovementTemplate);
+                    TitledPane theChildPane = new TitledPane("ConstantMovement", theEditor.getView());
+                    propertyPanels.getPanes().add(theChildPane);
+                    currentController.add(theEditor);
+                }
+
             }
             if (aObject instanceof GameObjectInstance) {
 
@@ -253,6 +251,14 @@ public class ObjectInspectorController implements Controller {
                 if (theScoreTemplate != null) {
                     ObjectInspectorElementController theEditor = (ObjectInspectorElementController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(PlayerScore.class)).get()).create(theScoreTemplate);
                     TitledPane theChildPane = new TitledPane("PlayerScoreComponent", theEditor.getView());
+                    propertyPanels.getPanes().add(theChildPane);
+                    currentController.add(theEditor);
+                }
+
+                ConstantMovement theConstantMovement = theInstance.getComponent(ConstantMovementBehavior.class);
+                if (theConstantMovement != null) {
+                    ObjectInspectorElementController theEditor = (ObjectInspectorElementController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(ConstantMovement.class)).get()).create(theConstantMovement);
+                    TitledPane theChildPane = new TitledPane("ConstantMovement", theEditor.getView());
                     propertyPanels.getPanes().add(theChildPane);
                     currentController.add(theEditor);
                 }

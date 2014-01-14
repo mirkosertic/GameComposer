@@ -1,5 +1,7 @@
 package de.mirkosertic.gameengine.expression;
 
+import de.mirkosertic.gameengine.arcade.ConstantMovementBehavior;
+import de.mirkosertic.gameengine.arcade.ConstantMovementBehaviorTemplate;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.CameraBehaviorTemplate;
 import de.mirkosertic.gameengine.camera.CameraClassInformation;
@@ -28,14 +30,7 @@ import de.mirkosertic.gameengine.sprite.SpriteClassInformation;
 import de.mirkosertic.gameengine.text.TextBehavior;
 import de.mirkosertic.gameengine.text.TextBehaviorTemplate;
 import de.mirkosertic.gameengine.text.TextClassInformation;
-import de.mirkosertic.gameengine.type.Angle;
-import de.mirkosertic.gameengine.type.ClassInformation;
-import de.mirkosertic.gameengine.type.Field;
-import de.mirkosertic.gameengine.type.Reflectable;
-import de.mirkosertic.gameengine.type.ResourceName;
-import de.mirkosertic.gameengine.type.ScoreValue;
-import de.mirkosertic.gameengine.type.TextExpression;
-import de.mirkosertic.gameengine.type.ValueProvider;
+import de.mirkosertic.gameengine.type.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -60,6 +55,7 @@ public class PropertyDiscoverer {
         gameObjectTemplates.put("camera", CameraBehaviorTemplate.class);
         gameObjectTemplates.put("text", TextBehaviorTemplate.class);
         gameObjectTemplates.put("static", StaticBehaviorTemplate.class);
+        gameObjectTemplates.put("constantmovement", ConstantMovementBehaviorTemplate.class);
         gameObjectInstanceComponents = new HashMap<String, Class<? extends Behavior>>();
         gameObjectInstanceComponents.put("playerScore", PlayerScoreBehavior.class);
         gameObjectInstanceComponents.put("sprite", SpriteBehavior.class);
@@ -68,6 +64,7 @@ public class PropertyDiscoverer {
         gameObjectInstanceComponents.put("camera", CameraBehavior.class);
         gameObjectInstanceComponents.put("text", TextBehavior.class);
         gameObjectInstanceComponents.put("static", StaticBehavior.class);
+        gameObjectInstanceComponents.put("constantmovement", ConstantMovementBehavior.class);
         typeConverters = new HashMap<Class, AutomaticResultConverter>();
         typeConverters.put(Angle.class, new ToAngleConverter());
         typeConverters.put(ResourceName.class, new ToResourceNameConverter());
@@ -79,6 +76,7 @@ public class PropertyDiscoverer {
         typeConverters.put(Float.class, new ToFloatConverter());
         typeConverters.put(Boolean.class, new ToBooleanConverter());
         typeConverters.put(Number.class, new ToNumberConverter());
+        typeConverters.put(Speed.class, new ToSpeedConverter());
     }
 
     private Object resolveProperty(Object aObject, String aPropertyName) {

@@ -1,18 +1,18 @@
 package de.mirkosertic.gamecomposer.objectinspector.gameobject;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import de.mirkosertic.gamecomposer.PropertyBinder;
 import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorElementController;
+import de.mirkosertic.gameengine.arcade.ConstantMovementBehaviorTemplate;
 import de.mirkosertic.gameengine.camera.CameraBehaviorTemplate;
 import de.mirkosertic.gameengine.core.BehaviorTemplate;
+import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.event.GameEventManager;
-
 import de.mirkosertic.gameengine.physic.PhysicsBehaviorTemplate;
 import de.mirkosertic.gameengine.physic.PlatformBehaviorTemplate;
 import de.mirkosertic.gameengine.physic.StaticBehaviorTemplate;
 import de.mirkosertic.gameengine.sprite.SpriteBehaviorTemplate;
 import de.mirkosertic.gameengine.text.TextBehaviorTemplate;
+import de.mirkosertic.gameengine.type.Size;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -23,9 +23,8 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
-import de.mirkosertic.gamecomposer.PropertyBinder;
-import de.mirkosertic.gameengine.core.GameObject;
-import de.mirkosertic.gameengine.type.Size;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GameObjectEditorController implements ObjectInspectorElementController {
 
@@ -100,12 +99,13 @@ public class GameObjectEditorController implements ObjectInspectorElementControl
         componentAddHyperlinks.getChildren().clear();
 
         Map<Class<? extends BehaviorTemplate>, String> theKnownTemplates = new HashMap<>();
-        theKnownTemplates.put(CameraBehaviorTemplate.class, "CameraComponent");
-        theKnownTemplates.put(StaticBehaviorTemplate.class, "StaticComponent");
-        theKnownTemplates.put(SpriteBehaviorTemplate.class, "SpriteComponent");
-        theKnownTemplates.put(PhysicsBehaviorTemplate.class, "PhysicsComponent");
-        theKnownTemplates.put(PlatformBehaviorTemplate.class, "PlatformComponent");
-        theKnownTemplates.put(TextBehaviorTemplate.class, "TextComponent");
+        theKnownTemplates.put(CameraBehaviorTemplate.class, "CameraBehavior");
+        theKnownTemplates.put(StaticBehaviorTemplate.class, "StaticBehavior");
+        theKnownTemplates.put(SpriteBehaviorTemplate.class, "SpriteBehavior");
+        theKnownTemplates.put(PhysicsBehaviorTemplate.class, "PhysicsBehavior");
+        theKnownTemplates.put(PlatformBehaviorTemplate.class, "Platformbehavior");
+        theKnownTemplates.put(TextBehaviorTemplate.class, "TextBehavior");
+        theKnownTemplates.put(ConstantMovementBehaviorTemplate.class, "ConstantMovementBehavior");
         for (Map.Entry<Class<? extends BehaviorTemplate>, String> theEntry : theKnownTemplates.entrySet()) {
             if (gameObject.getComponentTemplate(theEntry.getKey()) == null) {
 
