@@ -27,7 +27,6 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 
 import de.mirkosertic.gameengine.camera.CameraBehavior;
-import de.mirkosertic.gameengine.camera.FollowCameraProcess;
 import de.mirkosertic.gameengine.core.Game;
 import de.mirkosertic.gameengine.type.GameKeyCode;
 import de.mirkosertic.gameengine.core.GameLoop;
@@ -43,7 +42,6 @@ import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.type.TouchIdentifier;
 import de.mirkosertic.gameengine.type.TouchPosition;
-import de.mirkosertic.gameengine.process.StartProcess;
 import de.mirkosertic.gameengine.type.Size;
 
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
@@ -310,15 +308,7 @@ public class GWTRenderer implements EntryPoint {
             }
         });
 
-        switch (theCameraComponent.getTemplate().typeProperty().get()) {
-            case FOLLOWPLAYER:
-                theCameraComponent.centerOn(thePlayerInstance);
-                theEventManager.fire(new StartProcess(new FollowCameraProcess(theCameraObjectInstance, thePlayerInstance)));
-                break;
-            case CENTERONSCENE:
-                break;
-        }
-
+        theCameraComponent.initializeFor(aGameScene, thePlayerInstance);
         canvas.setFocus(true);
 
         loadedScene = aGameScene;

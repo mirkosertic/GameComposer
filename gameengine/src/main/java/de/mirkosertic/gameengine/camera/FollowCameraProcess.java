@@ -10,7 +10,7 @@ public class FollowCameraProcess extends AbstractGameProcess {
     private final GameObjectInstance cameraObject;
     private final GameObjectInstance playerObject;
 
-    public FollowCameraProcess(GameObjectInstance aCameraObject, GameObjectInstance aPlayerInstance) {
+    FollowCameraProcess(GameObjectInstance aCameraObject, GameObjectInstance aPlayerInstance) {
         cameraObject = aCameraObject;
         playerObject = aPlayerInstance;
     }
