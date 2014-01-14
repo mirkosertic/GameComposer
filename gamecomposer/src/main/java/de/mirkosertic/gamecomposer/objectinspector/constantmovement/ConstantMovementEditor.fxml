@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane id="BorderPane" maxHeight="-1.0" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="-1.0" prefWidth="-1.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="de.mirkosertic.gamecomposer.objectinspector.constantmovement.ConstantMovementEditorController">
+  <center>
+    <GridPane hgap="5.0" maxWidth="1.7976931348623157E308">
+      <children>
+        <Label prefWidth="70.0" text="Angle:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+        <TextField id="nameTextField" fx:id="angleTextField" maxWidth="1.7976931348623157E308" prefWidth="-1.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+        <Label maxWidth="-1.0" prefWidth="-1.0" text="Speed:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+        <TextField fx:id="speedTextField" maxWidth="1.7976931348623157E308" prefWidth="-1.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      </children>
+      <columnConstraints>
+        <ColumnConstraints fillWidth="false" hgrow="NEVER" maxWidth="-Infinity" minWidth="10.0" prefWidth="-1.0" />
+        <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="-1.0" />
+      </columnConstraints>
+      <rowConstraints>
+        <RowConstraints fillHeight="false" minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+        <RowConstraints fillHeight="false" minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+      </rowConstraints>
+    </GridPane>
+  </center>
+  <padding>
+    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+  </padding>
+</BorderPane>

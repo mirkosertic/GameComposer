@@ -81,7 +81,6 @@ public class PlatformBehavior implements Behavior, Platform, Reflectable<Platfor
                 handleGameLoop();
             }
         });
-
     }
 
     public Property<GameKeyCode> moveLeftKeyProperty() {

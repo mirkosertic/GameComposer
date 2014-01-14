@@ -1,8 +1,8 @@
 package de.mirkosertic.gamecomposer;
 
-import de.mirkosertic.gameengine.type.GameKeyCode;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.type.Font;
+import de.mirkosertic.gameengine.type.GameKeyCode;
 import javafx.util.StringConverter;
 
 import javax.inject.Singleton;

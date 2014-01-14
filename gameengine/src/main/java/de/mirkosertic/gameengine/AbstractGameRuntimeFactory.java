@@ -1,34 +1,16 @@
 package de.mirkosertic.gameengine;
 
 import de.mirkosertic.gameengine.action.ActionManagerFactory;
-import de.mirkosertic.gameengine.arcade.ConstantMovementActionUnmarshaller;
+import de.mirkosertic.gameengine.action.SystemTickConditionUnmarshaller;
+import de.mirkosertic.gameengine.arcade.ConstantMovementBehaviorTemplateUnmarshaller;
+import de.mirkosertic.gameengine.arcade.ConstantMovementBehaviorUnmarshaller;
 import de.mirkosertic.gameengine.camera.CameraBehaviorTemplateUnmarshaller;
 import de.mirkosertic.gameengine.camera.CameraBehaviorUnmarshaller;
-import de.mirkosertic.gameengine.core.DeleteGameObjectInstanceActionUnmarshaller;
-import de.mirkosertic.gameengine.core.ExpressionParserFactory;
-import de.mirkosertic.gameengine.core.GameObjectInstanceAddedToSceneConditionUnmarshaller;
-import de.mirkosertic.gameengine.core.GameObjectInstanceLeftLayoutConditionUnmarshaller;
-import de.mirkosertic.gameengine.core.GameObjectInstanceRemovedFromSceneConditionUnmarshaller;
-import de.mirkosertic.gameengine.core.GameResourceLoader;
-import de.mirkosertic.gameengine.core.GameRuntime;
-import de.mirkosertic.gameengine.core.GameScene;
-import de.mirkosertic.gameengine.core.IORegistry;
-import de.mirkosertic.gameengine.core.RunSceneActionUnmarshaller;
-import de.mirkosertic.gameengine.core.SetPropertyActionUnmarshaller;
-import de.mirkosertic.gameengine.core.SpawnGameObjectInstanceActionUnmarshaller;
-import de.mirkosertic.gameengine.action.SystemTickConditionUnmarshaller;
+import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.expression.GeExpressionParserFactory;
 import de.mirkosertic.gameengine.input.KeyEventConditionUnmarshaller;
-import de.mirkosertic.gameengine.physic.GamePhysicsManager;
-import de.mirkosertic.gameengine.physic.GamePhysicsManagerFactory;
-import de.mirkosertic.gameengine.physic.ObjectCollisionConditionUnmarshaller;
-import de.mirkosertic.gameengine.physic.PhysicsBehaviorTemplateUnmarshaller;
-import de.mirkosertic.gameengine.physic.PhysicsBehaviorUnmarshaller;
-import de.mirkosertic.gameengine.physic.PlatformBehaviorTemplateUnmarshaller;
-import de.mirkosertic.gameengine.physic.PlatformBehaviorUnmarshaller;
-import de.mirkosertic.gameengine.physic.StaticBehaviorTemplateUnmarshaller;
-import de.mirkosertic.gameengine.physic.StaticBehaviorUnmarshaller;
+import de.mirkosertic.gameengine.physic.*;
 import de.mirkosertic.gameengine.physic.jbox2d.JBox2DGamePhysicsManagerFactory;
 import de.mirkosertic.gameengine.playerscore.PlayerScoreBehaviorTemplateUnmarshaller;
 import de.mirkosertic.gameengine.playerscore.PlayerScoreBehaviorUnmarshaller;
@@ -78,6 +60,7 @@ public abstract class AbstractGameRuntimeFactory {
         theRegistry.registerBehaviorTemplateUnmarshaller(new PlatformBehaviorTemplateUnmarshaller());
         theRegistry.registerBehaviorTemplateUnmarshaller(new TextBehaviorTemplateUnmarshaller());
         theRegistry.registerBehaviorTemplateUnmarshaller(new PlayerScoreBehaviorTemplateUnmarshaller());
+        theRegistry.registerBehaviorTemplateUnmarshaller(new ConstantMovementBehaviorTemplateUnmarshaller());
 
         theRegistry.registerBehaviorUnmarshaller(new PhysicsBehaviorUnmarshaller());
         theRegistry.registerBehaviorUnmarshaller(new CameraBehaviorUnmarshaller());
@@ -86,6 +69,7 @@ public abstract class AbstractGameRuntimeFactory {
         theRegistry.registerBehaviorUnmarshaller(new PlatformBehaviorUnmarshaller());
         theRegistry.registerBehaviorUnmarshaller(new TextBehaviorUnmarshaller());
         theRegistry.registerBehaviorUnmarshaller(new PlayerScoreBehaviorUnmarshaller());
+        theRegistry.registerBehaviorUnmarshaller(new ConstantMovementBehaviorUnmarshaller());
 
         theRegistry.registerConditionUnmarshaller(new KeyEventConditionUnmarshaller());
         theRegistry.registerConditionUnmarshaller(new ObjectCollisionConditionUnmarshaller());
@@ -99,7 +83,6 @@ public abstract class AbstractGameRuntimeFactory {
         theRegistry.registerActionUnmarshaller(new RunSceneActionUnmarshaller());
         theRegistry.registerActionUnmarshaller(new SpawnGameObjectInstanceActionUnmarshaller());
         theRegistry.registerActionUnmarshaller(new DeleteGameObjectInstanceActionUnmarshaller());
-        theRegistry.registerActionUnmarshaller(new ConstantMovementActionUnmarshaller());
         theRegistry.registerActionUnmarshaller(new KillProcessesForInstanceUnmarshaller());
 
         return theGameRuntime;
