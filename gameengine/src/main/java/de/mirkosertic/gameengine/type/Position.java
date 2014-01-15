@@ -60,8 +60,8 @@ public class Position implements Reflectable<PositionClassInformation> {
 
     public Position translate(Angle aAngle, double aDistance) {
         float theRadians = aAngle.toRadians();
-        double theMX = Math.cos(theRadians) * aDistance;
-        double theMY = Math.sin(theRadians) * aDistance;
-        return new Position(x + theMX, y + theMY);
+        double theMX = Math.sin(theRadians) * aDistance;
+        double theMY = Math.cos(theRadians) * aDistance;
+        return new Position(x + theMX, y - theMY);
     }
 }

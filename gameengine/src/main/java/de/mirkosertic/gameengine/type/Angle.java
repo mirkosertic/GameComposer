@@ -16,6 +16,10 @@ public class Angle implements ValueProvider<Integer> {
         return angleInDegrees;
     }
 
+    public Angle add(int aDiff) {
+        return new Angle(angleInDegrees + aDiff % 360);
+    }
+
     public Angle invert() {
         return new Angle(-angleInDegrees);
     }

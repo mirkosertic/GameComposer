@@ -41,11 +41,12 @@ public class KeyEventCondition implements Condition {
 
     @Override
     public ConditionResult appliesTo(GameScene aScene, GameEvent aEvent) {
+        GameKeyCode theKeyCode = keyCode.get();
         switch (eventType.get()) {
         case PRESSED:
             if (aEvent instanceof KeyPressed) {
                 KeyPressed theKeyPressed = (KeyPressed) aEvent;
-                if (theKeyPressed.keyCode == keyCode.get()) {
+                if (theKeyPressed.keyCode == theKeyCode || theKeyCode == GameKeyCode.ANY) {
                     return new ConditionResult(true, aEvent, aScene.getInstances());
                 }
             }
@@ -53,7 +54,7 @@ public class KeyEventCondition implements Condition {
         case RELEASED:
             if (aEvent instanceof KeyReleased) {
                 KeyReleased theKeyReleased = (KeyReleased) aEvent;
-                if (theKeyReleased.keyCode == keyCode.get()) {
+                if (theKeyReleased.keyCode == theKeyCode || theKeyCode == GameKeyCode.ANY) {
                     return new ConditionResult(true, aEvent, aScene.getInstances());
                 }
             }

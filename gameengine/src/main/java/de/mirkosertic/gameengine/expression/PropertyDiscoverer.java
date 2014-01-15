@@ -2,6 +2,7 @@ package de.mirkosertic.gameengine.expression;
 
 import de.mirkosertic.gameengine.arcade.ConstantMovementBehavior;
 import de.mirkosertic.gameengine.arcade.ConstantMovementBehaviorTemplate;
+import de.mirkosertic.gameengine.arcade.ConstantMovementClassInformation;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.CameraBehaviorTemplate;
 import de.mirkosertic.gameengine.camera.CameraClassInformation;
@@ -55,7 +56,7 @@ public class PropertyDiscoverer {
         gameObjectTemplates.put("camera", CameraBehaviorTemplate.class);
         gameObjectTemplates.put("text", TextBehaviorTemplate.class);
         gameObjectTemplates.put("static", StaticBehaviorTemplate.class);
-        gameObjectTemplates.put("constantmovement", ConstantMovementBehaviorTemplate.class);
+        gameObjectTemplates.put("constantMovement", ConstantMovementBehaviorTemplate.class);
         gameObjectInstanceComponents = new HashMap<String, Class<? extends Behavior>>();
         gameObjectInstanceComponents.put("playerScore", PlayerScoreBehavior.class);
         gameObjectInstanceComponents.put("sprite", SpriteBehavior.class);
@@ -64,7 +65,7 @@ public class PropertyDiscoverer {
         gameObjectInstanceComponents.put("camera", CameraBehavior.class);
         gameObjectInstanceComponents.put("text", TextBehavior.class);
         gameObjectInstanceComponents.put("static", StaticBehavior.class);
-        gameObjectInstanceComponents.put("constantmovement", ConstantMovementBehavior.class);
+        gameObjectInstanceComponents.put("constantMovement", ConstantMovementBehavior.class);
         typeConverters = new HashMap<Class, AutomaticResultConverter>();
         typeConverters.put(Angle.class, new ToAngleConverter());
         typeConverters.put(ResourceName.class, new ToResourceNameConverter());
@@ -161,6 +162,7 @@ public class PropertyDiscoverer {
         addProperties(CameraClassInformation.INSTANCE, "camera", theProperties);
         addProperties(TextClassInformation.INSTANCE, "text", theProperties);
         addProperties(StaticClassInformation.INSTANCE, "static", theProperties);
+        addProperties(ConstantMovementClassInformation.INSTANCE, "constantMovement", theProperties);
         List<String> theResult = new ArrayList<String>(theProperties);
         Collections.sort(theResult);
         return theResult;

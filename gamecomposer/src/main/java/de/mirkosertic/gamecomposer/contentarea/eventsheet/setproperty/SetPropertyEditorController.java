@@ -1,6 +1,8 @@
 package de.mirkosertic.gamecomposer.contentarea.eventsheet.setproperty;
 
+import de.mirkosertic.gamecomposer.StringConverterFactory;
 import de.mirkosertic.gamecomposer.contentarea.eventsheet.ActionController;
+import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameRule;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.core.SetPropertyAction;
@@ -8,19 +10,26 @@ import de.mirkosertic.gameengine.expression.PropertyDiscoverer;
 import de.mirkosertic.gameengine.type.TextExpression;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
-import java.beans.PropertyDescriptor;
-import java.util.ArrayList;
+import javax.inject.Inject;
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
 
 public class SetPropertyEditorController implements ActionController {
+
+    @Inject
+    StringConverterFactory stringConverterFactory;
+
+    @FXML
+    ComboBox gameObject;
 
     @FXML
     ComboBox propertyName;
@@ -67,7 +76,32 @@ public class SetPropertyEditorController implements ActionController {
             }
         }
 
+        List<GameObject> theSortedGameObjects = Arrays.asList(aGameScene.getObjects());
+        Collections.sort(theSortedGameObjects, new Comparator<GameObject>() {
+            @Override
+            public int compare(GameObject o1, GameObject o2) {
+                return o1.nameProperty().get().compareTo(o2.nameProperty().get());
+            }
+        });
+
+
+        gameObject.getItems().clear();
+        gameObject.getItems().addAll(theSortedGameObjects);
+        gameObject.setConverter(stringConverterFactory.createGameObjectStringConverter());
+        gameObject.getSelectionModel().select(action.gameObjectProperty().get());
+
+        gameObject.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                onObjectTypeSelected();
+            }
+        });
+
         return this;
+    }
+
+    private void onObjectTypeSelected() {
+        action.gameObjectProperty().set((GameObject) gameObject.getSelectionModel().getSelectedItem());
     }
 
     @FXML
