@@ -19,11 +19,12 @@
       },
       "name" : "Rotate left",
       "actions" : [ {
-        "propertyName" : "rotationAngle",
+        "propertyName" : "constantMovement.rotationSpeed",
         "value" : {
-          "expression" : "instance.rotationAngle - 4"
+          "expression" : "instance.constantMovement.rotationSpeed - 8"
         },
-        "type" : "SetPropertyAction"
+        "type" : "SetPropertyAction",
+        "gameObject" : "4889509885749884898"
       } ]
     }, {
       "condition" : {
@@ -33,11 +34,57 @@
       },
       "name" : "Rorate right",
       "actions" : [ {
-        "propertyName" : "rotationAngle",
+        "propertyName" : "constantMovement.rotationSpeed",
         "value" : {
-          "expression" : "instance.rotationAngle + 4"
+          "expression" : "instance.constantMovement.rotationSpeed + 8"
         },
-        "type" : "SetPropertyAction"
+        "type" : "SetPropertyAction",
+        "gameObject" : "4889509885749884898"
+      } ]
+    }, {
+      "condition" : {
+        "keyCode" : "ANY",
+        "eventType" : "RELEASED",
+        "type" : "KeyEventCondition"
+      },
+      "name" : "Stop rotation if key released",
+      "actions" : [ {
+        "propertyName" : "constantMovement.rotationSpeed",
+        "value" : {
+          "expression" : "0"
+        },
+        "type" : "SetPropertyAction",
+        "gameObject" : "4889509885749884898"
+      } ]
+    }, {
+      "condition" : {
+        "keyCode" : "UP",
+        "eventType" : "PRESSED",
+        "type" : "KeyEventCondition"
+      },
+      "name" : "Fly",
+      "actions" : [ {
+        "propertyName" : "constantMovement.speed",
+        "value" : {
+          "expression" : "instance.constantMovement.speed + 32"
+        },
+        "type" : "SetPropertyAction",
+        "gameObject" : "4889509885749884898"
+      } ]
+    }, {
+      "condition" : {
+        "keyCode" : "UP",
+        "eventType" : "RELEASED",
+        "type" : "KeyEventCondition"
+      },
+      "name" : "Stop flying",
+      "actions" : [ {
+        "propertyName" : "constantMovement.speed",
+        "value" : {
+          "expression" : "0"
+        },
+        "type" : "SetPropertyAction",
+        "gameObject" : "4889509885749884898"
       } ]
     } ]
   } ],
@@ -46,8 +93,8 @@
   "name" : "Example scene",
   "instances" : [ {
     "position" : {
-      "y" : "260.0",
-      "x" : "394.0"
+      "y" : "235.0",
+      "x" : "372.0"
     },
     "visible" : "true",
     "rotationangle" : {
@@ -55,11 +102,19 @@
     },
     "absolutePosition" : "false",
     "gameobjectuuid" : "4889509885749884898",
-    "name" : "Plane_1389121280313",
+    "name" : "Plane_1389814942746",
     "components" : [ {
+      "speed" : {
+        "speed" : "0"
+      },
+      "type" : "ConstantMovement",
+      "angle" : {
+        "angleindegrees" : "0"
+      }
+    }, {
       "type" : "Sprite"
     } ],
-    "uuid" : "1660796615987687512",
+    "uuid" : "6660086781392999401",
     "absolutePositionAnchor" : "TOP_LEFT"
   }, {
     "position" : {
@@ -98,13 +153,16 @@
   },
   "objects" : [ {
     "templates" : [ {
-      "cameratype" : "CENTERONSCENE",
-      "type" : "Camera"
-    }, {
+      "speed" : {
+        "speed" : "0"
+      },
       "type" : "ConstantMovement",
       "angle" : {
-        "speed" : "0"
+        "angleindegrees" : "0"
       }
+    }, {
+      "cameratype" : "CENTERONSCENE",
+      "type" : "Camera"
     } ],
     "name" : "Camera",
     "uuid" : "2900940626662702649",
@@ -118,6 +176,14 @@
         "name" : "/assets/plane.png"
       },
       "type" : "Sprite"
+    }, {
+      "speed" : {
+        "speed" : "0"
+      },
+      "type" : "ConstantMovement",
+      "angle" : {
+        "angleindegrees" : "0"
+      }
     } ],
     "name" : "Plane",
     "uuid" : "4889509885749884898",

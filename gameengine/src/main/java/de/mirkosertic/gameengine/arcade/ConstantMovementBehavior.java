@@ -7,7 +7,6 @@ import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
-import de.mirkosertic.gameengine.type.Angle;
 import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Reflectable;
 import de.mirkosertic.gameengine.type.Speed;
@@ -21,8 +20,8 @@ public class ConstantMovementBehavior implements Behavior, ConstantMovement, Ref
 
     private final GameObjectInstance objectInstance;
 
-    private final Property<Angle> angle;
     private final Property<Speed> speed;
+    private final Property<Speed> rotationSpeed;
 
     ConstantMovementBehavior(GameObjectInstance aObjectInstance) {
         this(aObjectInstance, aObjectInstance.getOwnerGameObject().getComponentTemplate(ConstantMovementBehaviorTemplate.class));
@@ -33,8 +32,8 @@ public class ConstantMovementBehavior implements Behavior, ConstantMovement, Ref
 
         GameEventManager theEventManager = aObjectInstance.getOwnerGameObject().getGameScene().getRuntime().getEventManager();
 
-        angle = new Property<Angle>(Angle.class, this, ANGLE_PROPERTY, aTemplate.angleProperty().get(), theEventManager);
         speed = new Property<Speed>(Speed.class, this, SPEED_PROPERTY, aTemplate.speedProperty().get(), theEventManager);
+        rotationSpeed = new Property<Speed>(Speed.class, this, ROTATIONSPEED_PROPERTY, aTemplate.rotationSpeedProperty().get(), theEventManager);
     }
 
     public void registerEvents(GameRuntime aGameRuntime) {
@@ -46,8 +45,14 @@ public class ConstantMovementBehavior implements Behavior, ConstantMovement, Ref
     }
 
     private void handleGameLoop(SystemTick aTick) {
+
         Position theCurrentPosition = objectInstance.positionProperty().get();
-        objectInstance.positionProperty().set(theCurrentPosition.translate(angle.get(), speed.get().speed / 1000d * aTick.elapsedTimeSinceLastLoop));
+        objectInstance.positionProperty().set(theCurrentPosition.translate(objectInstance.rotationAngleProperty().get(), speed.get().speed / 1000d * aTick.elapsedTimeSinceLastLoop));
+
+        int theAngleDif = (int) (rotationSpeed.get().speed / 1000d * aTick.elapsedTimeSinceLastLoop);
+        if (theAngleDif != 0) {
+            objectInstance.rotationAngleProperty().set(objectInstance.rotationAngleProperty().get().add(theAngleDif));
+        }
     }
 
 
@@ -62,13 +67,13 @@ public class ConstantMovementBehavior implements Behavior, ConstantMovement, Ref
     }
 
     @Override
-    public Property<Angle> angleProperty() {
-        return angle;
+    public Property<Speed> speedProperty() {
+        return speed;
     }
 
     @Override
-    public Property<Speed> speedProperty() {
-        return speed;
+    public Property<Speed> rotationSpeedProperty() {
+        return rotationSpeed;
     }
 
     @Override
@@ -80,15 +85,18 @@ public class ConstantMovementBehavior implements Behavior, ConstantMovement, Ref
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<String, Object>();
         theResult.put(TYPE_ATTRIBUTE, TYPE);
-        theResult.put(ANGLE_PROPERTY, angle.get().serialize());
         theResult.put(SPEED_PROPERTY, speed.get().serialize());
+        theResult.put(ROTATIONSPEED_PROPERTY, rotationSpeed.get().serialize());
         return theResult;
     }
 
     public static ConstantMovementBehavior deserialize(GameRuntime aRuntime, GameObjectInstance aObjectInstance, Map<String, Object> aSerializedData) {
         ConstantMovementBehavior theResult = new ConstantMovementBehavior(aObjectInstance);
-        theResult.angle.setQuietly(Angle.deserialize((Map<String, Object>) aSerializedData.get(ANGLE_PROPERTY)));
         theResult.speed.setQuietly(Speed.deserialize((Map<String, Object>) aSerializedData.get(SPEED_PROPERTY)));
+        Map<String, Object> theRotationSpeed = (Map<String, Object>) aSerializedData.get(ROTATIONSPEED_PROPERTY);
+        if (theRotationSpeed != null) {
+            theResult.rotationSpeed.setQuietly(Speed.deserialize(theRotationSpeed));
+        }
         theResult.registerEvents(aRuntime);
         return theResult;
     }
