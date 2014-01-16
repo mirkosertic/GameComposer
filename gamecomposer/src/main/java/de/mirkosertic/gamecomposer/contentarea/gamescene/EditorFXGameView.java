@@ -26,7 +26,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
-public class EditorJXGameView extends JavaFXGameView {
+public class EditorFXGameView extends JavaFXGameView {
 
     private Object selectedObject;
     private Position currentMousePosition;
@@ -37,7 +37,7 @@ public class EditorJXGameView extends JavaFXGameView {
     private final IntegerProperty gridsizeWidth;
     private final IntegerProperty gridsizeHeight;
 
-    public EditorJXGameView(GameRuntime aGameRuntime, CameraBehavior aCameraComponent, GamePhysicsManager aPhysicsManager) {
+    public EditorFXGameView(GameRuntime aGameRuntime, CameraBehavior aCameraComponent, GamePhysicsManager aPhysicsManager) {
         super(aGameRuntime, aCameraComponent);
 
         snapToGrid = new SimpleBooleanProperty(true);

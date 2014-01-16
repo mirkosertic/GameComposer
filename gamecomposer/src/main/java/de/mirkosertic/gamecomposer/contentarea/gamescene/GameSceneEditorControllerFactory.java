@@ -55,7 +55,7 @@ public class GameSceneEditorControllerFactory implements ContentAreaFactory<Game
             }
         }
 
-        EditorJXGameView theGameView = new EditorJXGameView(theRuntime, theCameraComponent, thePhysicsManager);
+        EditorFXGameView theGameView = new EditorFXGameView(theRuntime, theCameraComponent, thePhysicsManager);
 
         GameLoopFactory theGameLoopFactory = new GameLoopFactory();
         GameLoop theMainLoop = theGameLoopFactory.create(aScene, theGameView, theRuntime);

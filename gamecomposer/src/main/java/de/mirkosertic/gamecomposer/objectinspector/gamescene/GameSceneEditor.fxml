@@ -28,10 +28,10 @@
         <ColorPicker fx:id="backgroundColorPicker" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="3" />
         <Label text="Layout bounds" GridPane.columnIndex="0" GridPane.rowIndex="4" />
         <Label prefWidth="12.0001220703125" text="X:" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-        <TextField fx:id="layoutBoundsX" maxWidth="-Infinity" prefWidth="50.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+        <TextField fx:id="layoutBoundsX" maxWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
         <TextField fx:id="nameTextField" maxWidth="1.7976931348623157E308" prefWidth="-1.0" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="2" />
         <Label text="Y:" GridPane.columnIndex="3" GridPane.rowIndex="4" />
-        <TextField fx:id="layoutBoundsY" maxWidth="-Infinity" prefWidth="50.0" GridPane.columnIndex="4" GridPane.rowIndex="4" />
+        <TextField fx:id="layoutBoundsY" maxWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="4" GridPane.rowIndex="4" />
         <Label prefWidth="-1.0" text="H:" GridPane.columnIndex="3" GridPane.rowIndex="5" />
         <ComboBox id="defaultSceneComboBox" fx:id="defaultCamera" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="0">
           <items>
@@ -43,15 +43,15 @@
           </items>
         </ComboBox>
         <Label text="W:" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-        <TextField fx:id="layoutBoundsWidth" maxWidth="-Infinity" prefWidth="50.0" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-        <TextField fx:id="layoutBoundsHeight" maxWidth="-Infinity" prefWidth="50.0" GridPane.columnIndex="4" GridPane.rowIndex="5" />
+        <TextField fx:id="layoutBoundsWidth" maxWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+        <TextField fx:id="layoutBoundsHeight" maxWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="4" GridPane.rowIndex="5" />
       </children>
       <columnConstraints>
         <ColumnConstraints fillWidth="false" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" />
         <ColumnConstraints hgrow="NEVER" minWidth="-1.0" />
-        <ColumnConstraints hgrow="ALWAYS" maxWidth="-Infinity" minWidth="10.0" />
+        <ColumnConstraints hgrow="ALWAYS" maxWidth="-1.0" minWidth="10.0" prefWidth="40.0" />
         <ColumnConstraints hgrow="NEVER" minWidth="10.0" />
-        <ColumnConstraints hgrow="ALWAYS" maxWidth="-Infinity" minWidth="10.0" />
+        <ColumnConstraints hgrow="ALWAYS" maxWidth="-1.0" minWidth="10.0" prefWidth="40.0" />
       </columnConstraints>
       <rowConstraints>
         <RowConstraints fillHeight="false" minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />

@@ -2,18 +2,23 @@ package de.mirkosertic.gamecomposer;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import javax.enterprise.event.Event;
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.io.File;
 import java.util.prefs.Preferences;
 
+@Singleton
 public class GameComposerController {
 
     private static final String GAME_DIRECTORY_PREF_KEY = "GameDirectory";
@@ -40,6 +45,12 @@ public class GameComposerController {
 
     @FXML
     Menu exportMenu;
+
+    @FXML
+    Label statusBar;
+
+    @Inject
+    Event<StatusEvent> statusEvent;
 
     private Preferences directoryPreferences;
     private Stage stage;
@@ -74,6 +85,7 @@ public class GameComposerController {
 
     @FXML
     public void onNew() {
+
         DirectoryChooser theDirectoryChooser = new DirectoryChooser();
         theDirectoryChooser.setTitle("Choose target directory");
         File theProjectDirectory = theDirectoryChooser.showDialog(stage);
@@ -82,6 +94,8 @@ public class GameComposerController {
 
             directoryPreferences.put(GAME_DIRECTORY_PREF_KEY, theProjectDirectory.toString());
             exportMenu.setDisable(false);
+
+            statusEvent.fire(new StatusEvent("New game created", StatusEvent.Severity.INFO));
         }
     }
 
@@ -107,7 +121,7 @@ public class GameComposerController {
             }
         }
 
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Game files (game.json)","game.json");
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Game files (game.json)", "game.json");
         theFileChooser.getExtensionFilters().add(extFilter);
 
         File theSelectedFile = theFileChooser.showOpenDialog(null);
@@ -116,6 +130,8 @@ public class GameComposerController {
 
             directoryPreferences.put(GAME_DIRECTORY_PREF_KEY, theSelectedFile.getParentFile().toString());
             exportMenu.setDisable(false);
+
+            statusEvent.fire(new StatusEvent("Game loaded", StatusEvent.Severity.INFO));
         }
     }
 
@@ -152,6 +168,28 @@ public class GameComposerController {
             eventGateway.fire(new ExportGameAndroidEvent(theTargetDirectory));
 
             directoryPreferences.put(GAME_EXPORTDIRECTORY_ANDROID_PREF_KEY, theTargetDirectory.toString());
+        }
+    }
+
+    public void handleStatus(final @Observes StatusEvent aStatusEvent) {
+        Runnable theRunnable = new Runnable() {
+            @Override
+            public void run() {
+                switch (aStatusEvent.getSeverity()) {
+                    case ERROR:
+                        statusBar.setTextFill(Color.RED);
+                        break;
+                    case INFO:
+                        statusBar.setTextFill(Color.BLACK);
+                        break;
+                }
+                statusBar.setText(aStatusEvent.getMessage());
+            }
+        };
+        if (Platform.isFxApplicationThread()) {
+            theRunnable.run();
+        } else {
+            Platform.runLater(theRunnable);
         }
     }
 }

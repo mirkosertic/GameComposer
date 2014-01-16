@@ -14,6 +14,11 @@
   <top>
     <HBox maxWidth="1.7976931348623157E308" prefHeight="-1.0" prefWidth="-1.0">
       <children>
+        <Button mnemonicParsing="false" onAction="#onPreview" text="Test &amp; Preview!" textAlignment="LEFT">
+          <HBox.margin>
+            <Insets left="5.0" right="50.0" />
+          </HBox.margin>
+        </Button>
         <CheckBox fx:id="snapToGrid" maxHeight="1.7976931348623157E308" mnemonicParsing="false" text="Snap to grid">
           <HBox.margin>
             <Insets left="10.0" right="20.0" />

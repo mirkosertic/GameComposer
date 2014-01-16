@@ -9,7 +9,14 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
 
-<BorderPane id="BorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="636.0" prefWidth="1081.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="de.mirkosertic.gamecomposer.GameComposerController">
+<BorderPane id="BorderPane" disable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="636.0" prefWidth="1081.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="de.mirkosertic.gamecomposer.GameComposerController">
+  <bottom>
+    <Label fx:id="statusBar" maxWidth="1.7976931348623157E308" style="-fx-background-color: rgb(200,200,200);" text="" BorderPane.alignment="CENTER_LEFT">
+      <BorderPane.margin>
+        <Insets />
+      </BorderPane.margin>
+    </Label>
+  </bottom>
   <center>
     <HBox fx:id="childViews" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="-1.0" prefWidth="-1.0" />
   </center>

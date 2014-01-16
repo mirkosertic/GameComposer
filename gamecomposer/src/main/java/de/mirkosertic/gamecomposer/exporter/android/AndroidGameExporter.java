@@ -3,12 +3,14 @@ package de.mirkosertic.gamecomposer.exporter.android;
 import de.mirkosertic.gamecomposer.ExportGameAndroidEvent;
 import de.mirkosertic.gamecomposer.PersistenceManager;
 
+import de.mirkosertic.gamecomposer.StatusEvent;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.commons.lang3.SystemUtils;
 
+import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -24,6 +26,9 @@ public class AndroidGameExporter {
     @Inject
     PersistenceManager persistenceManager;
 
+    @Inject
+    Event<StatusEvent> statusEvent;
+
     public void onExport(@Observes ExportGameAndroidEvent aEvent) throws IOException {
 
         // Create a new temp directory
@@ -31,6 +36,8 @@ public class AndroidGameExporter {
 
         File theAssetsDirectory = new File(theTempDirectory, "assets");
         theAssetsDirectory.mkdirs();
+
+        statusEvent.fire(new StatusEvent("Copying game assets to " + theAssetsDirectory, StatusEvent.Severity.INFO));
 
         // And copy the game to the assets directory
         persistenceManager.copyGameTo(theAssetsDirectory);
@@ -44,6 +51,9 @@ public class AndroidGameExporter {
                 if (!theEntry.getName().startsWith("META-INF/")) {
                     File theTargetFile = new File(theTempDirectory, theEntry.getName().replace('/', File.separatorChar));
                     theTargetFile.getParentFile().mkdirs();
+
+                    statusEvent.fire(new StatusEvent("Copying " + theEntry.getName(), StatusEvent.Severity.INFO));
+
                     try (FileOutputStream theFos = new FileOutputStream(theTargetFile)) {
                         IOUtils.copy(theZipStream, theFos);
                     }
@@ -64,6 +74,9 @@ public class AndroidGameExporter {
                         theZipStream.putNextEntry(theEntry);
                         theZipStream.closeEntry();
                     } else {
+
+                        statusEvent.fire(new StatusEvent("Zipping " + theRelativeName, StatusEvent.Severity.INFO));
+
                         ZipEntry theEntry = new ZipEntry(theRelativeName);
                         theEntry.setTime(theFile.lastModified());
                         theZipStream.putNextEntry(theEntry);
@@ -75,6 +88,8 @@ public class AndroidGameExporter {
                 }
             }
         }
+
+        statusEvent.fire(new StatusEvent("Deleting temp directory", StatusEvent.Severity.INFO));
 
         FileUtils.deleteDirectory(theTempDirectory);
 
@@ -115,12 +130,15 @@ public class AndroidGameExporter {
                 });
                 try {
                     int theResult = theProcess.waitFor();
-                    System.out.println("Got " + theResult);
+
+                    statusEvent.fire(new StatusEvent("Finished signing of APK with Android Debug Key, Result = " + theResult, StatusEvent.Severity.ERROR));
+
                 } catch (InterruptedException e) {
+                    statusEvent.fire(new StatusEvent("Cannot execute ZipSigner : " + e.getMessage(), StatusEvent.Severity.ERROR));
                     throw new IOException(e);
                 }
             } else {
-                System.out.println("Does not exist " + theZipSigner);
+                statusEvent.fire(new StatusEvent("Cannot execute ZipSigner", StatusEvent.Severity.ERROR));
             }
 
         }

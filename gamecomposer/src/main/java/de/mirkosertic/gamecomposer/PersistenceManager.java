@@ -37,6 +37,12 @@ public class PersistenceManager {
     @Inject
     GameRuntimeFactory gameRuntimeFactory;
 
+    @Inject
+    PreviewGameRuntimeFactory previewGameRuntimeFactory;
+
+    @Inject
+    Event<StatusEvent> statusEvent;
+
     private Game game;
     private Map<String, GameScene> gameScenes;
     private File currentGameDirectory;
@@ -81,6 +87,8 @@ public class PersistenceManager {
 
         theRuntime.getEventManager().register(null, GameEvent.class, new EventCDIForwarder());
 
+        statusEvent.fire(new StatusEvent("New scene created at " + theSceneDirectory, StatusEvent.Severity.INFO));
+
         eventGateway.fire(new GameSceneCreatedEvent(theNewGameScene));
     }
 
@@ -94,6 +102,8 @@ public class PersistenceManager {
             File theSceneFile = new File(new File(currentGameDirectory, theSceneEntry.getKey()), "scene.json");
             theWriter.writeValue(theSceneFile, theSceneEntry.getValue().serialize());
         }
+
+        statusEvent.fire(new StatusEvent("Game saved", StatusEvent.Severity.INFO));
     }
 
     public void onLoadGame(@Observes LoadGameEvent aEvent) throws IOException {
@@ -136,6 +146,8 @@ public class PersistenceManager {
         for (Map.Entry<String, GameScene> theEntry : gameScenes.entrySet()) {
             theEntry.getValue().getRuntime().getEventManager().register(null, GameEvent.class, new EventCDIForwarder());
         }
+
+        statusEvent.fire(new StatusEvent("Game loaded", StatusEvent.Severity.INFO));
     }
 
     public GameResourceLoader createResourceLoaderFor(GameScene aScene) {
@@ -178,7 +190,12 @@ public class PersistenceManager {
                 File theSceneDirectory = new File(currentGameDirectory, theEntry.getKey());
                 try {
                     FileUtils.deleteDirectory(theSceneDirectory);
+
+                    statusEvent.fire(new StatusEvent("Scene deleted", StatusEvent.Severity.INFO));
                 } catch (IOException e) {
+
+                    statusEvent.fire(new StatusEvent("Cannot delete scene : " + e.getMessage(), StatusEvent.Severity.ERROR));
+
                     throw new RuntimeException(e);
                 }
 
@@ -190,5 +207,24 @@ public class PersistenceManager {
 
     public Set<String> getScenes() {
         return Collections.unmodifiableSet(gameScenes.keySet());
+    }
+
+    public GameScene cloneSceneForPreview(GameScene aGameScene) {
+        for (Map.Entry<String, GameScene> theEntry : gameScenes.entrySet()) {
+            if (theEntry.getValue() == aGameScene) {
+                File theSceneDirectory = new File(currentGameDirectory, theEntry.getKey());
+
+                GameResourceLoader theResourceLoader = new JavaFXFileGameResourceLoader(theSceneDirectory);
+
+                Map<String, Object> theSerializedData = aGameScene.serialize();
+
+                GameScene theLoadedScene = GameScene.deserialize(previewGameRuntimeFactory.create(theResourceLoader, new JavaSoundAPISoundSystemFactory()), theSerializedData);
+
+                previewGameRuntimeFactory.loadingFinished(theLoadedScene);
+
+                return theLoadedScene;
+            }
+        }
+        throw new IllegalArgumentException("Unknown scene : "+aGameScene);
     }
 }
