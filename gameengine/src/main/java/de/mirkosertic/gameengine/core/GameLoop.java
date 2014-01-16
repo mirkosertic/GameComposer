@@ -1,5 +1,7 @@
 package de.mirkosertic.gameengine.core;
 
+import de.mirkosertic.gameengine.event.SystemException;
+
 public class GameLoop implements Runnable {
 
     private boolean shutdownSignal;
@@ -38,16 +40,20 @@ public class GameLoop implements Runnable {
         long theElapsedTime = theCurrentTime - lastInvocation;
         if (theElapsedTime > 0) {
 
-            // The game systems like physics or process need a chance to do something useful.
-            for (GameSystem theSystem : runtime.getSystems()) {
-                theSystem.proceedGame(totalTicks, theGameTime, theElapsedTime);
+            try {
+                // The game systems like physics or process need a chance to do something useful.
+                for (GameSystem theSystem : runtime.getSystems()) {
+                    theSystem.proceedGame(totalTicks, theGameTime, theElapsedTime);
+                }
+
+                // Trigger rerendering of game view
+                humanGameView.renderGame(theGameTime, theElapsedTime, scene);
+
+                lastInvocation = theCurrentTime;
+                totalTicks++;
+            } catch (Exception e) {
+                runtime.getEventManager().fire(new SystemException(e));
             }
-
-            // Trigger rerendering of game view
-            humanGameView.renderGame(theGameTime, theElapsedTime, scene);
-
-            lastInvocation = theCurrentTime;
-            totalTicks++;
         }
     }
 
