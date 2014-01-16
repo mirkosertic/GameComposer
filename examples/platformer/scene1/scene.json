@@ -35,7 +35,8 @@
         "value" : {
           "expression" : "false"
         },
-        "type" : "SetPropertyAction"
+        "type" : "SetPropertyAction",
+        "gameObject" : "4343694719606608272"
       }, {
         "type" : "PlaySoundAction",
         "resourceName" : "/assets/audio/pickup_gem_1.wav"
@@ -70,9 +71,9 @@
     "gameobjectuuid" : "-279500599772276169",
     "name" : "Duke_1384374064987",
     "components" : [ {
-      "type" : "Platform"
-    }, {
       "type" : "Sprite"
+    }, {
+      "type" : "Platform"
     } ],
     "uuid" : "8227887913504513730",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -118,10 +119,10 @@
     "gameobjectuuid" : "4343694719606608272",
     "name" : "Star_1384888985355",
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "active" : "true",
       "type" : "Physics"
+    }, {
+      "type" : "Sprite"
     } ],
     "uuid" : "1168806397977091524",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -138,10 +139,10 @@
     "gameobjectuuid" : "4343694719606608272",
     "name" : "Star_1384888988875",
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "active" : "true",
       "type" : "Physics"
+    }, {
+      "type" : "Sprite"
     } ],
     "uuid" : "39450811341575419",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -158,10 +159,10 @@
     "gameobjectuuid" : "4343694719606608272",
     "name" : "Star_1384888993618",
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "active" : "true",
       "type" : "Physics"
+    }, {
+      "type" : "Sprite"
     } ],
     "uuid" : "940107331463765884",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -178,10 +179,10 @@
     "gameobjectuuid" : "4343694719606608272",
     "name" : "Star_1384888996543",
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "active" : "true",
       "type" : "Physics"
+    }, {
+      "type" : "Sprite"
     } ],
     "uuid" : "3860926572867008005",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -198,10 +199,10 @@
     "gameobjectuuid" : "4343694719606608272",
     "name" : "Star_1384888999417",
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "active" : "true",
       "type" : "Physics"
+    }, {
+      "type" : "Sprite"
     } ],
     "uuid" : "-8948331873596536217",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -218,10 +219,10 @@
     "gameobjectuuid" : "4343694719606608272",
     "name" : "Star_1384889002239",
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "active" : "true",
       "type" : "Physics"
+    }, {
+      "type" : "Sprite"
     } ],
     "uuid" : "6402095516018938434",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -238,9 +239,9 @@
     "gameobjectuuid" : "-6077101624070649173",
     "name" : "Walkway_botom_left_1384373866404",
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "uuid" : "-9130541298977119470",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -257,9 +258,9 @@
     "gameobjectuuid" : "-6077101624070649173",
     "name" : "Walkway_botom_left_1384373869515",
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "uuid" : "2084723174261956618",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -276,9 +277,9 @@
     "gameobjectuuid" : "-7220657972923747107",
     "name" : "Walkway_bottom_middle_1384373937322",
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "uuid" : "-5924046217461532233",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -295,9 +296,9 @@
     "gameobjectuuid" : "-7220657972923747107",
     "name" : "Walkway_bottom_middle_1384373940351",
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "uuid" : "7276908389860950553",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -314,9 +315,9 @@
     "gameobjectuuid" : "-7220657972923747107",
     "name" : "Walkway_bottom_middle_1384373942839",
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "uuid" : "-2414861174645972307",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -333,9 +334,9 @@
     "gameobjectuuid" : "-7220657972923747107",
     "name" : "Walkway_bottom_middle_1384373945327",
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "uuid" : "9148903409216005804",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -352,9 +353,9 @@
     "gameobjectuuid" : "-7220657972923747107",
     "name" : "Walkway_bottom_middle_1384373947993",
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "uuid" : "6644550441668090506",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -371,9 +372,9 @@
     "gameobjectuuid" : "-7220657972923747107",
     "name" : "Walkway_bottom_middle_1384373950229",
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "uuid" : "-6276929232068228153",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -390,9 +391,9 @@
     "gameobjectuuid" : "-7220657972923747107",
     "name" : "Walkway_bottom_middle_1384373952212",
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "uuid" : "-3182057660233158510",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -409,9 +410,9 @@
     "gameobjectuuid" : "-7220657972923747107",
     "name" : "Walkway_bottom_middle_1384373954506",
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "uuid" : "-2863549189502005721",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -428,9 +429,9 @@
     "gameobjectuuid" : "647197498473429375",
     "name" : "Walkway_bottom_right_1384373903304",
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "uuid" : "8124995567563228431",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -447,9 +448,9 @@
     "gameobjectuuid" : "647197498473429375",
     "name" : "Walkway_bottom_right_1384373905720",
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "uuid" : "955418005072267144",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -466,9 +467,9 @@
     "gameobjectuuid" : "-2648947804278990847",
     "name" : "Walkway_left_middle_1384373702860",
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "uuid" : "4899214085185082707",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -485,9 +486,9 @@
     "gameobjectuuid" : "-2648947804278990847",
     "name" : "Walkway_left_middle_1384373742444",
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "uuid" : "2459193256519610896",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -504,9 +505,9 @@
     "gameobjectuuid" : "-2648947804278990847",
     "name" : "Walkway_left_middle_1384373786249",
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "uuid" : "1412930764447231900",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -523,9 +524,9 @@
     "gameobjectuuid" : "-2648947804278990847",
     "name" : "Walkway_left_middle_1384373788796",
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "uuid" : "-5337211145287793294",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -542,9 +543,9 @@
     "gameobjectuuid" : "-2648947804278990847",
     "name" : "Walkway_left_middle_1384373794008",
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "uuid" : "-1337944454046873726",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -561,9 +562,9 @@
     "gameobjectuuid" : "-2648947804278990847",
     "name" : "Walkway_left_middle_1384373796399",
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "uuid" : "4897812486001926900",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -580,9 +581,9 @@
     "gameobjectuuid" : "6595711303285831883",
     "name" : "Walkway_left_top_1384373708219",
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "uuid" : "-4623081538804671596",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -599,9 +600,9 @@
     "gameobjectuuid" : "6595711303285831883",
     "name" : "Walkway_left_top_1384373747571",
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "uuid" : "7618606351438302177",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -618,9 +619,9 @@
     "gameobjectuuid" : "2738111980994969784",
     "name" : "Walkway_middle_top_1_1384373723738",
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "uuid" : "1830815569162173433",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -637,9 +638,9 @@
     "gameobjectuuid" : "2738111980994969784",
     "name" : "Walkway_middle_top_1_1384373730420",
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "uuid" : "-6084733247009304075",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -656,9 +657,9 @@
     "gameobjectuuid" : "2738111980994969784",
     "name" : "Walkway_middle_top_1_1384373756271",
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "uuid" : "1907134997320601018",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -675,9 +676,9 @@
     "gameobjectuuid" : "2738111980994969784",
     "name" : "Walkway_middle_top_1_1384373766125",
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "uuid" : "-5682141513202019649",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -694,9 +695,9 @@
     "gameobjectuuid" : "7991002059236720051",
     "name" : "Walkway_middle_top_2_1384373718708",
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "uuid" : "3416998575014759515",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -713,9 +714,9 @@
     "gameobjectuuid" : "7991002059236720051",
     "name" : "Walkway_middle_top_2_1384373727382",
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "uuid" : "-7034660220744349773",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -732,9 +733,9 @@
     "gameobjectuuid" : "7991002059236720051",
     "name" : "Walkway_middle_top_2_1384373752335",
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "uuid" : "-3798169070298949750",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -751,9 +752,9 @@
     "gameobjectuuid" : "7991002059236720051",
     "name" : "Walkway_middle_top_2_1384373760777",
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "uuid" : "-2726851823993427772",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -770,9 +771,9 @@
     "gameobjectuuid" : "-4597433157293241913",
     "name" : "Walkway_right_middle_1384373738825",
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "uuid" : "2640340260337280351",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -789,9 +790,9 @@
     "gameobjectuuid" : "-4597433157293241913",
     "name" : "Walkway_right_middle_1384373775354",
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "uuid" : "-1829636652991652958",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -808,9 +809,9 @@
     "gameobjectuuid" : "-4597433157293241913",
     "name" : "Walkway_right_middle_1384373778182",
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "uuid" : "-2968653554644457718",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -827,9 +828,9 @@
     "gameobjectuuid" : "-4597433157293241913",
     "name" : "Walkway_right_middle_1384373780605",
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "uuid" : "-3114540901084116106",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -846,9 +847,9 @@
     "gameobjectuuid" : "-4597433157293241913",
     "name" : "Walkway_right_middle_1384373814800",
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "uuid" : "-6438995082162911799",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -865,9 +866,9 @@
     "gameobjectuuid" : "-4597433157293241913",
     "name" : "Walkway_right_middle_1384373817523",
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "uuid" : "9021703004368768177",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -884,9 +885,9 @@
     "gameobjectuuid" : "7431117854133416743",
     "name" : "Walkway_right_top_1384373733619",
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "uuid" : "-1212330343408472744",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -903,9 +904,9 @@
     "gameobjectuuid" : "7431117854133416743",
     "name" : "Walkway_right_top_1384373769677",
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "uuid" : "-1706163825880803156",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -1330,10 +1331,10 @@
     "gameobjectuuid" : "427110152030095327",
     "name" : "bean_small_1384375980691",
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "active" : "true",
       "type" : "Physics"
+    }, {
+      "type" : "Sprite"
     } ],
     "uuid" : "-6045248509559337206",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -1350,10 +1351,10 @@
     "gameobjectuuid" : "427110152030095327",
     "name" : "bean_small_1384414773959",
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "active" : "true",
       "type" : "Physics"
+    }, {
+      "type" : "Sprite"
     } ],
     "uuid" : "-6549010255961436150",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -1370,10 +1371,10 @@
     "gameobjectuuid" : "427110152030095327",
     "name" : "bean_small_1384414777213",
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "active" : "true",
       "type" : "Physics"
+    }, {
+      "type" : "Sprite"
     } ],
     "uuid" : "-5663747140516834865",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -1390,9 +1391,9 @@
     "gameobjectuuid" : "-3769331226440908538",
     "name" : "finish_sign_1384374697378",
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "uuid" : "-1353019716393943362",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -1594,12 +1595,12 @@
     }
   }, {
     "templates" : [ {
-      "type" : "Static"
-    }, {
       "resourcename" : {
         "name" : "/assets/tiles/wall1_4.png"
       },
       "type" : "Sprite"
+    }, {
+      "type" : "Static"
     } ],
     "name" : "Walkway_botom_left",
     "uuid" : "-6077101624070649173",
@@ -1609,12 +1610,12 @@
     }
   }, {
     "templates" : [ {
-      "type" : "Static"
-    }, {
       "resourcename" : {
         "name" : "/assets/tiles/wall2_3.png"
       },
       "type" : "Sprite"
+    }, {
+      "type" : "Static"
     } ],
     "name" : "Walkway_bottom_middle",
     "uuid" : "-7220657972923747107",
@@ -1624,12 +1625,12 @@
     }
   }, {
     "templates" : [ {
-      "type" : "Static"
-    }, {
       "resourcename" : {
         "name" : "/assets/tiles/wall1_3.png"
       },
       "type" : "Sprite"
+    }, {
+      "type" : "Static"
     } ],
     "name" : "Walkway_bottom_right",
     "uuid" : "647197498473429375",
@@ -1639,12 +1640,12 @@
     }
   }, {
     "templates" : [ {
-      "type" : "Static"
-    }, {
       "resourcename" : {
         "name" : "/assets/tiles/wall3_2.png"
       },
       "type" : "Sprite"
+    }, {
+      "type" : "Static"
     } ],
     "name" : "Walkway_left_middle",
     "uuid" : "-2648947804278990847",
@@ -1654,12 +1655,12 @@
     }
   }, {
     "templates" : [ {
-      "type" : "Static"
-    }, {
       "resourcename" : {
         "name" : "/assets/tiles/wall1_2.png"
       },
       "type" : "Sprite"
+    }, {
+      "type" : "Static"
     } ],
     "name" : "Walkway_left_top",
     "uuid" : "6595711303285831883",
@@ -1669,12 +1670,12 @@
     }
   }, {
     "templates" : [ {
-      "type" : "Static"
-    }, {
       "resourcename" : {
         "name" : "/assets/tiles/wall2_1.png"
       },
       "type" : "Sprite"
+    }, {
+      "type" : "Static"
     } ],
     "name" : "Walkway_middle_top_1",
     "uuid" : "2738111980994969784",
@@ -1684,12 +1685,12 @@
     }
   }, {
     "templates" : [ {
-      "type" : "Static"
-    }, {
       "resourcename" : {
         "name" : "/assets/tiles/wall2_2.png"
       },
       "type" : "Sprite"
+    }, {
+      "type" : "Static"
     } ],
     "name" : "Walkway_middle_top_2",
     "uuid" : "7991002059236720051",
@@ -1699,12 +1700,12 @@
     }
   }, {
     "templates" : [ {
-      "type" : "Static"
-    }, {
       "resourcename" : {
         "name" : "/assets/tiles/wall3_1.png"
       },
       "type" : "Sprite"
+    }, {
+      "type" : "Static"
     } ],
     "name" : "Walkway_right_middle",
     "uuid" : "-4597433157293241913",
@@ -1714,12 +1715,12 @@
     }
   }, {
     "templates" : [ {
-      "type" : "Static"
-    }, {
       "resourcename" : {
         "name" : "/assets/tiles/wall1_1.png"
       },
       "type" : "Sprite"
+    }, {
+      "type" : "Static"
     } ],
     "name" : "Walkway_right_top",
     "uuid" : "7431117854133416743",
@@ -1763,12 +1764,12 @@
     }
   }, {
     "templates" : [ {
-      "type" : "Static"
-    }, {
       "resourcename" : {
         "name" : "/assets/objects/finish.png"
       },
       "type" : "Sprite"
+    }, {
+      "type" : "Static"
     } ],
     "name" : "finish_sign",
     "uuid" : "-3769331226440908538",

@@ -1,40 +1,36 @@
 package de.mirkosertic.gamecomposer.contentarea.gamescene;
 
-import de.mirkosertic.gamecomposer.FlushResourceCacheEvent;
-import de.mirkosertic.gamecomposer.GameObjectClipboardContent;
-import de.mirkosertic.gamecomposer.ObjectSelectedEvent;
-import de.mirkosertic.gamecomposer.ShutdownEvent;
+import de.mirkosertic.gamecomposer.*;
 import de.mirkosertic.gamecomposer.contentarea.ContentController;
-
 import de.mirkosertic.gameengine.camera.CameraBehavior;
-import de.mirkosertic.gameengine.type.GameKeyCode;
-import de.mirkosertic.gameengine.core.GameLoop;
-import de.mirkosertic.gameengine.core.GameObject;
-import de.mirkosertic.gameengine.core.GameObjectInstance;
-import de.mirkosertic.gameengine.core.GameRuntime;
-import de.mirkosertic.gameengine.core.GameScene;
-import de.mirkosertic.gameengine.core.GameShutdown;
+import de.mirkosertic.gameengine.camera.SetScreenResolution;
+import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.PropertyChanged;
+import de.mirkosertic.gameengine.javafx.JavaFXGameView;
 import de.mirkosertic.gameengine.physic.DisableDynamicPhysics;
 import de.mirkosertic.gameengine.physic.EnableDynamicPhysics;
+import de.mirkosertic.gameengine.type.GameKeyCode;
 import de.mirkosertic.gameengine.type.Position;
-
+import de.mirkosertic.gameengine.type.Size;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
+import javafx.scene.input.*;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.stage.WindowEvent;
 
 import javax.enterprise.event.Event;
+import javax.inject.Inject;
 import java.util.List;
 
 public class GameSceneEditorController implements ContentController<GameScene> {
@@ -54,9 +50,12 @@ public class GameSceneEditorController implements ContentController<GameScene> {
     @FXML
     TextField gridsizeHeight;
 
+    @Inject
+    private PersistenceManager persistenceManager;
+
     private GameScene gameScene;
     private Node view;
-    private EditorJXGameView gameView;
+    private EditorFXGameView gameView;
     private GameLoop gameLoop;
     private CameraBehavior cameraComponent;
 
@@ -67,7 +66,7 @@ public class GameSceneEditorController implements ContentController<GameScene> {
     private Position draggingMouseWorldPosition;
     private GameRuntime gameRuntime;
 
-    GameSceneEditorController initialize(GameRuntime aGameRuntime, GameScene aScene, Node aView, EditorJXGameView aGameView, GameLoop aGameLoop, CameraBehavior aCameraComponent, Event<ObjectSelectedEvent> aSelectedEvent) {
+    GameSceneEditorController initialize(GameRuntime aGameRuntime, GameScene aScene, Node aView, EditorFXGameView aGameView, GameLoop aGameLoop, CameraBehavior aCameraComponent, Event<ObjectSelectedEvent> aSelectedEvent) {
 
         gameRuntime = aGameRuntime;
 
@@ -321,5 +320,89 @@ public class GameSceneEditorController implements ContentController<GameScene> {
     @Override
     public void onFlushResourceCache(FlushResourceCacheEvent aEvent) {
         gameRuntime.getResourceCache().flush();
+    }
+
+    @FXML
+    public void onPreview() {
+        GameScene thePreviewScene = persistenceManager.cloneSceneForPreview(gameScene);
+
+        GameRuntime theRuntime = thePreviewScene.getRuntime();
+        final GameEventManager theEventManager = theRuntime.getEventManager();
+
+        GameObject theDefaultCamera = thePreviewScene.cameraObjectProperty().get();
+        if (theDefaultCamera == null) {
+            throw new IllegalArgumentException("No camera set");
+        }
+
+        // Detect and create a camera
+        GameObjectInstance theCameraObject = thePreviewScene.createFrom(theDefaultCamera);
+        final CameraBehavior theCameraComponent = theCameraObject.getComponent(CameraBehavior.class);
+        if (theCameraComponent == null) {
+            throw new IllegalArgumentException("No camera component in camera object");
+        }
+
+        final JavaFXGameView thePreviewGameView = new JavaFXGameView(theRuntime, theCameraComponent);
+
+        GameLoopFactory theGameLoopFactory = new GameLoopFactory();
+        GameLoop theMainLoop = theGameLoopFactory.create(thePreviewScene, thePreviewGameView, theRuntime);
+
+        // Set defaults, this will be overridden
+        theEventManager.fire(new SetScreenResolution(new Size(200, 200)));
+
+        BorderPane theBorderPane = new BorderPane();
+        theBorderPane.setCenter(thePreviewGameView);
+        theBorderPane.setMinWidth(BorderPane.USE_PREF_SIZE);
+        theBorderPane.setMinHeight(BorderPane.USE_PREF_SIZE);
+        theBorderPane.setPrefWidth(800);
+        theBorderPane.setPrefHeight(600);
+
+        theBorderPane.widthProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
+                theEventManager.fire(new SetScreenResolution(new Size((int) ((double) number2), theCameraComponent.getScreenSize().height)));
+            }
+        });
+        theBorderPane.heightProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
+                theEventManager.fire(new SetScreenResolution(new Size(theCameraComponent.getScreenSize().width, (int) ((double) number2))));
+            }
+        });
+        thePreviewGameView.widthProperty().bind(theBorderPane.widthProperty());
+        thePreviewGameView.heightProperty().bind(theBorderPane.heightProperty());
+
+        Stage theStage = new Stage();
+        theStage.setTitle("Game Preview");
+
+        Scene theScene = new Scene(theBorderPane);
+        theStage.initStyle(StageStyle.UTILITY);
+        theStage.setScene(theScene);
+        theStage.initModality(Modality.APPLICATION_MODAL);
+        theStage.initOwner(view.getScene().getWindow());
+
+        theStage.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent aKeyEvent) {
+                thePreviewGameView.getGestureDetector().keyPressed(GameKeyCode.valueOf(aKeyEvent.getCode().name()));
+            }
+        });
+        theStage.addEventHandler(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent aKeyEvent) {
+                thePreviewGameView.getGestureDetector().keyReleased(GameKeyCode.valueOf(aKeyEvent.getCode().name()));
+            }
+        });
+
+        theStage.show();
+        theStage.requestFocus();
+
+        thePreviewGameView.startTimer(theMainLoop);
+
+        theStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent windowEvent) {
+                thePreviewGameView.stopTimer();
+            }
+        });
     }
 }

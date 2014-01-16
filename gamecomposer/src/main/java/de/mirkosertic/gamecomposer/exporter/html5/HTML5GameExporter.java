@@ -2,9 +2,10 @@ package de.mirkosertic.gamecomposer.exporter.html5;
 
 import de.mirkosertic.gamecomposer.ExportGameHTML5Event;
 import de.mirkosertic.gamecomposer.PersistenceManager;
+import de.mirkosertic.gamecomposer.StatusEvent;
 import org.apache.commons.io.IOUtils;
 
-import javax.enterprise.event.Observes;
+import javax.enterprise.event.*;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.awt.*;
@@ -20,6 +21,9 @@ public class HTML5GameExporter {
 
     @Inject
     PersistenceManager persistenceManager;
+
+    @Inject
+    javax.enterprise.event.Event<StatusEvent> statusEvent;
 
     private boolean isValidEntry(ZipEntry aEntry) {
         if (aEntry.getName().endsWith("/")) {
@@ -46,6 +50,7 @@ public class HTML5GameExporter {
         ZipEntry theEntry;
         while ((theEntry = theZipStream.getNextEntry()) != null) {
             if (isValidEntry(theEntry)) {
+                statusEvent.fire(new StatusEvent("Exporting " + theEntry.getName(), StatusEvent.Severity.INFO));
                 File theTargetFile = new File(aEvent.getGameDirectory(), theEntry.getName().replace('/', File.separatorChar));
                 theTargetFile.getParentFile().mkdirs();
                 try (FileOutputStream theFos = new FileOutputStream(theTargetFile)) {
@@ -53,8 +58,11 @@ public class HTML5GameExporter {
                 }
             }
 
+            statusEvent.fire(new StatusEvent("Copying game assets to " + aEvent.getGameDirectory(), StatusEvent.Severity.INFO));
             persistenceManager.copyGameTo(aEvent.getGameDirectory());
         }
+
+        statusEvent.fire(new StatusEvent("Export finished", StatusEvent.Severity.INFO));
 
         File theGameIndexFile = new File(aEvent.getGameDirectory(), "index.html");
         Desktop.getDesktop().browse(theGameIndexFile.toURI());
