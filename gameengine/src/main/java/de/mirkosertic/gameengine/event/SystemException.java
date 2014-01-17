@@ -8,4 +8,9 @@ public class SystemException extends GameEvent {
         super("SystemException");
         exception = aException;
     }
+
+    @Override
+    public String toString() {
+        return exception.getMessage();
+    }
 }

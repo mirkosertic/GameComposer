@@ -5,8 +5,7 @@ import de.mirkosertic.gamecomposer.contentarea.ContentController;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
 import de.mirkosertic.gameengine.core.*;
-import de.mirkosertic.gameengine.event.GameEventManager;
-import de.mirkosertic.gameengine.event.PropertyChanged;
+import de.mirkosertic.gameengine.event.*;
 import de.mirkosertic.gameengine.javafx.JavaFXGameView;
 import de.mirkosertic.gameengine.physic.DisableDynamicPhysics;
 import de.mirkosertic.gameengine.physic.EnableDynamicPhysics;
@@ -20,6 +19,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
 import javafx.scene.input.*;
@@ -349,8 +349,25 @@ public class GameSceneEditorController implements ContentController<GameScene> {
         // Set defaults, this will be overridden
         theEventManager.fire(new SetScreenResolution(new Size(200, 200)));
 
+        final ListView<SystemException> theLoggerView = new ListView<>();
+        theLoggerView.getItems().clear();
+        theLoggerView.setMinHeight(50);
+        theLoggerView.setPrefHeight(50);
+        theLoggerView.setFocusTraversable(false);
+        theEventManager.register(null, SystemException.class, new GameEventListener<SystemException>() {
+            @Override
+            public void handleGameEvent(SystemException aEvent) {
+                List<SystemException> theExceptions = theLoggerView.getItems();
+                theExceptions.add(0, aEvent);
+                while(theExceptions.size() > 20) {
+                    theExceptions.remove(19);
+                }
+            }
+        });
+
         BorderPane theBorderPane = new BorderPane();
         theBorderPane.setCenter(thePreviewGameView);
+        theBorderPane.setBottom(theLoggerView);
         theBorderPane.setMinWidth(BorderPane.USE_PREF_SIZE);
         theBorderPane.setMinHeight(BorderPane.USE_PREF_SIZE);
         theBorderPane.setPrefWidth(800);
@@ -393,10 +410,10 @@ public class GameSceneEditorController implements ContentController<GameScene> {
             }
         });
 
+        thePreviewGameView.startTimer(theMainLoop);
+
         theStage.show();
         theStage.requestFocus();
-
-        thePreviewGameView.startTimer(theMainLoop);
 
         theStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
