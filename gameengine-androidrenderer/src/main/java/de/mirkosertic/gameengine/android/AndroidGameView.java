@@ -28,9 +28,6 @@ import java.io.IOException;
 
 public class AndroidGameView implements GameView {
 
-    protected static class SavedState {
-    }
-
     private final AndroidCanvas canvas;
     private final CameraBehavior cameraComponent;
     private final GameRuntime gameRuntime;

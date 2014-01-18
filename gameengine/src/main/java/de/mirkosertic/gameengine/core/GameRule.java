@@ -60,7 +60,7 @@ public class GameRule {
         return theResult;
     }
 
-    public static GameRule unmarshall(IORegistry aIORegistry, EventSheet aEventSheet, Map<String, Object> aSerializedData) {
+    public static GameRule deserialize(IORegistry aIORegistry, EventSheet aEventSheet, Map<String, Object> aSerializedData) {
         GameRule theResult =  new GameRule();
 
         String theName = (String) aSerializedData.get(NAME_PROPERTY);

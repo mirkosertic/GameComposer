@@ -99,7 +99,6 @@ public class GWTCanvasGameView extends AbstractWebGameView {
         counter++;
         theContext.setFillStyle(CssColor.make(255, 255, 255));
         theContext.setStrokeStyle(CssColor.make(255, 255, 255));
-        theContext.fillText("Frame " + counter, 50, 50);
     }
 
     void drawGameObjectInstance(Context2d aContext, GameObjectInstance aInstance, Position aPosition, Size aSize, GWTBitmapResource aBitmapResource) {
