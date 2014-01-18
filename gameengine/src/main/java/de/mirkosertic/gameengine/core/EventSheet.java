@@ -58,7 +58,7 @@ public class EventSheet {
         List<GameRule> theRuleList = new ArrayList<GameRule>();
         if (theRules != null) {
             for (Map<String, Object> theRuleData : theRules) {
-                theRuleList.add(GameRule.unmarshall(aIORegistry, theResult, theRuleData));
+                theRuleList.add(GameRule.deserialize(aIORegistry, theResult, theRuleData));
             }
         }
         theResult.rules = theRuleList.toArray(new GameRule[theRuleList.size()]);
