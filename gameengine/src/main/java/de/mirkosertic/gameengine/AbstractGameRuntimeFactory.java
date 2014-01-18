@@ -25,8 +25,11 @@ import de.mirkosertic.gameengine.sprite.SpriteBehaviorTemplateUnmarshaller;
 import de.mirkosertic.gameengine.sprite.SpriteBehaviorUnmarshaller;
 import de.mirkosertic.gameengine.text.TextBehaviorTemplateUnmarshaller;
 import de.mirkosertic.gameengine.text.TextBehaviorUnmarshaller;
+import de.mirkosertic.gameengine.type.Reflectable;
 
 public abstract class AbstractGameRuntimeFactory {
+
+    protected abstract Reflectable createBuildInFunctions();
 
     public GameRuntime create(GameResourceLoader aResourceLoader, GameSoundSystemFactory aSoundSystemFactory) {
 
@@ -39,7 +42,7 @@ public abstract class AbstractGameRuntimeFactory {
         GamePhysicsManager thePhysicsManager = thePhysicsManagerFactory.create(theEventManager);
 
         // Expression parser
-        ExpressionParserFactory theExpressionParserFactory = new GeExpressionParserFactory();
+        ExpressionParserFactory theExpressionParserFactory = new GeExpressionParserFactory(createBuildInFunctions());
 
         // Runtime
         GameRuntime theGameRuntime = new GameRuntime(theEventManager, aResourceLoader, theExpressionParserFactory);

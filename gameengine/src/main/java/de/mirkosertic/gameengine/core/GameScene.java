@@ -3,11 +3,7 @@ package de.mirkosertic.gameengine.core;
 import de.mirkosertic.gameengine.ArrayUtils;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
-import de.mirkosertic.gameengine.type.Color;
-import de.mirkosertic.gameengine.type.Position;
-import de.mirkosertic.gameengine.type.Rectangle;
-import de.mirkosertic.gameengine.type.Reflectable;
-import de.mirkosertic.gameengine.type.TextExpression;
+import de.mirkosertic.gameengine.type.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -287,5 +283,24 @@ public class GameScene implements Reflectable<GameSceneClassInformation> {
             theScene.layoutBounds.setQuietly(Rectangle.deserialize(theLayoutBounds));
         }
         return theScene;
+    }
+
+    public Position computCenter() {
+        if (instances.length == 0) {
+            return new Position(0, 0);
+        }
+        int theMinX = Integer.MAX_VALUE;
+        int theMinY = Integer.MAX_VALUE;
+        int theMaxX = Integer.MIN_VALUE;
+        int theMaxY = Integer.MIN_VALUE;
+        for (GameObjectInstance theInstance : instances) {
+            Position thePosition = theInstance.position.get();
+            Size theSize = theInstance.getOwnerGameObject().sizeProperty().get();
+            theMinX = Math.min(theMinX, (int) thePosition.x);
+            theMinY = Math.min(theMinY, (int) thePosition.y);
+            theMaxX = Math.max(theMaxX, (int) thePosition.x + theSize.width);
+            theMaxY = Math.max(theMaxY, (int) thePosition.y + theSize.height);
+        }
+        return new Position(theMinX + (theMaxX - theMinX) / 2, theMinY + (theMaxY - theMinY) / 2);
     }
 }

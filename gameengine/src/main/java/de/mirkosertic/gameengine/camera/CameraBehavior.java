@@ -142,8 +142,12 @@ public class CameraBehavior implements Behavior, Camera, Reflectable<CameraClass
         float theCenterX = theObjectPosition.x + theObjectSize.width / 2;
         float theCenterY = theObjectPosition.y + theObjectSize.height / 2;
 
+        centerOn(new Position(theCenterX, theCenterY));
+    }
+
+    private void centerOn(Position aPosition) {
         objectInstance.positionProperty().set(
-                new Position(theCenterX - screenSize.width / 2, theCenterY - screenSize.height / 2));
+                new Position(aPosition.x - screenSize.width / 2, aPosition.y - screenSize.height / 2));
     }
 
     public void initializeFor(GameScene aGameScene, GameObjectInstance aPlayerInstance) {
@@ -153,6 +157,8 @@ public class CameraBehavior implements Behavior, Camera, Reflectable<CameraClass
                 aGameScene.getRuntime().getEventManager().fire(new StartProcess(new FollowCameraProcess(objectInstance, aPlayerInstance)));
                 break;
             case CENTERONSCENE:
+                Position thePosition = aGameScene.computCenter();
+                centerOn(thePosition);
                 break;
         }
     }
