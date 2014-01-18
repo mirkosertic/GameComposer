@@ -341,6 +341,13 @@ public class GameSceneEditorController implements ContentController<GameScene> {
             throw new IllegalArgumentException("No camera component in camera object");
         }
 
+        GameObjectInstance thePlayerInstance = null;
+        for (GameObjectInstance theInstance : thePreviewScene.getInstances()) {
+            if (theInstance.getOwnerGameObject() == thePreviewScene.defaultPlayerProperty().get()) {
+                thePlayerInstance = theInstance;
+            }
+        }
+
         final JavaFXGameView thePreviewGameView = new JavaFXGameView(theRuntime, theCameraComponent);
 
         GameLoopFactory theGameLoopFactory = new GameLoopFactory();
@@ -359,7 +366,7 @@ public class GameSceneEditorController implements ContentController<GameScene> {
             public void handleGameEvent(SystemException aEvent) {
                 List<SystemException> theExceptions = theLoggerView.getItems();
                 theExceptions.add(0, aEvent);
-                while(theExceptions.size() > 20) {
+                while (theExceptions.size() > 20) {
                     theExceptions.remove(19);
                 }
             }
@@ -394,7 +401,7 @@ public class GameSceneEditorController implements ContentController<GameScene> {
         Scene theScene = new Scene(theBorderPane);
         theStage.initStyle(StageStyle.UTILITY);
         theStage.setScene(theScene);
-        theStage.initModality(Modality.APPLICATION_MODAL);
+        //theStage.initModality(Modality.APPLICATION_MODAL);
         theStage.initOwner(view.getScene().getWindow());
 
         theStage.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
@@ -412,14 +419,15 @@ public class GameSceneEditorController implements ContentController<GameScene> {
 
         thePreviewGameView.startTimer(theMainLoop);
 
-        theStage.show();
-        theStage.requestFocus();
-
         theStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent windowEvent) {
                 thePreviewGameView.stopTimer();
             }
         });
+        theStage.show();
+        theStage.requestFocus();
+
+        theCameraComponent.initializeFor(thePreviewScene, thePlayerInstance);
     }
 }

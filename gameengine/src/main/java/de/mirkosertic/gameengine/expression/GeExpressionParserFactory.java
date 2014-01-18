@@ -11,8 +11,8 @@ public class GeExpressionParserFactory implements ExpressionParserFactory {
     private final Parser parser;
     private final Reflectable functionRegistry;
 
-    public GeExpressionParserFactory() {
-        functionRegistry = new BuiltInFunctions();
+    public GeExpressionParserFactory(Reflectable aBulldInFunctions) {
+        functionRegistry = aBulldInFunctions;
         scanner = new Scanner();
         parser = new Parser();
     }

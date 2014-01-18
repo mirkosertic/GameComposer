@@ -15,7 +15,7 @@ public class RPNEvaluatorTest {
     public void setup() {
         scanner = new Scanner();
         parser = new Parser();
-        evaluator = new RPNEvaluator(new PropertyDiscoverer(), new DefaultVariableResolver(), new BuiltInFunctions());
+        evaluator = new RPNEvaluator(new PropertyDiscoverer(), new DefaultVariableResolver(), new TestBuildInFunctions());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -118,7 +118,7 @@ public class RPNEvaluatorTest {
                 }
                 return null;
             }
-        }, new BuiltInFunctions());
+        }, new TestBuildInFunctions());
         int theResult = (Integer) evaluator.evaluate(parser.parse(scanner.scan("X+2")));
         assertEquals(10, theResult);
     }
@@ -133,7 +133,7 @@ public class RPNEvaluatorTest {
                 }
                 return null;
             }
-        }, new BuiltInFunctions());
+        }, new TestBuildInFunctions());
         int theResult = (Integer) evaluator.evaluate(parser.parse(scanner.scan("X.A+2")));
         assertEquals(10, theResult);
     }

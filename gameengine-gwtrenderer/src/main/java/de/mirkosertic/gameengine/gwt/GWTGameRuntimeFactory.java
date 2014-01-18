@@ -7,8 +7,14 @@ import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.SystemException;
 import de.mirkosertic.gameengine.sound.GameSoundSystemFactory;
+import de.mirkosertic.gameengine.type.Reflectable;
 
 class GWTGameRuntimeFactory extends AbstractGameRuntimeFactory {
+
+    @Override
+    protected Reflectable createBuildInFunctions() {
+        return new GWTBuiltInFunctions();
+    }
 
     @Override
     public GameRuntime create(GameResourceLoader aResourceLoader, GameSoundSystemFactory aSoundSystemFactory) {

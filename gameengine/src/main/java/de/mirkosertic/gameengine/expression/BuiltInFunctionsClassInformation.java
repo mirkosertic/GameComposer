@@ -19,10 +19,26 @@ public class BuiltInFunctionsClassInformation extends ClassInformation {
         }
     };
 
+    public static final Method<BuiltInFunctions> SYSTIME_METHOD = new Method<BuiltInFunctions>("systime",Number.class,new Class[] {}) {
+        @Override
+        public Object invoke(BuiltInFunctions aTarget, Object[] aArguments) {
+            return aTarget.systime();
+        }
+    };
+
+    public static final Method<BuiltInFunctions> FORMATTIME_METHOD = new Method<BuiltInFunctions>("formattime",String.class,new Class[] {Number.class, String.class}) {
+        @Override
+        public Object invoke(BuiltInFunctions aTarget, Object[] aArguments) {
+            return aTarget.formatTime((Number) aArguments[0], (String) aArguments[1]);
+        }
+    };
+
     public static final BuiltInFunctionsClassInformation INSTANCE = new BuiltInFunctionsClassInformation();
 
     private BuiltInFunctionsClassInformation() {
         register(MAX_METHOD);
         register(MIN_METHOD);
+        register(SYSTIME_METHOD);
+        register(FORMATTIME_METHOD);
     }
 }
