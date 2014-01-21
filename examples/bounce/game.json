@@ -1,0 +1,5 @@
+{
+  "name" : "Bounce game",
+  "enablewebgl" : "true",
+  "defaultscene" : "scene1"
+}

@@ -1,0 +1,43 @@
+{
+  "layoutBounds" : {
+    "position" : {
+      "y" : "0.0",
+      "x" : "0.0"
+    },
+    "size" : {
+      "height" : "2147483647",
+      "width" : "2147483647"
+    }
+  },
+  "eventsheets" : [ ],
+  "cameraobjectid" : "3034500734775421290",
+  "name" : "Simple scene",
+  "instances" : [ ],
+  "backgroundcolor" : {
+    "g" : "0",
+    "b" : "0",
+    "r" : "0"
+  },
+  "objects" : [ {
+    "templates" : [ {
+      "type" : "Static"
+    } ],
+    "name" : "Player",
+    "uuid" : "2955937955858173841",
+    "size" : {
+      "height" : "64",
+      "width" : "64"
+    }
+  }, {
+    "templates" : [ {
+      "cameratype" : "FOLLOWPLAYER",
+      "type" : "Camera"
+    } ],
+    "name" : "Camera",
+    "uuid" : "3034500734775421290",
+    "size" : {
+      "height" : "64",
+      "width" : "64"
+    }
+  } ]
+}
