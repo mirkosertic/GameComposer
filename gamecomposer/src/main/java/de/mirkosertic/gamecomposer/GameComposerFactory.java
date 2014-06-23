@@ -1,11 +1,9 @@
 package de.mirkosertic.gamecomposer;
 
-import insidefx.undecorator.Undecorator;
+import insidefx.undecorator.UndecoratorScene;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.layout.Region;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -29,13 +27,10 @@ public class GameComposerFactory {
             root.getStylesheets().add("/JMetroLightTheme.css");
             ((GameComposerController)theLoader.getController()).initialize(aStage);
 
-            Undecorator theUndecorator = new Undecorator(aStage, root);
-            theUndecorator.getStylesheets().add("/skin/undecorator.css");
+            UndecoratorScene theUndecoratorScene = new UndecoratorScene(aStage, root);
 
-            Scene theScene = new Scene(theUndecorator);
-            theScene.setFill(Color.TRANSPARENT);
             aStage.initStyle(StageStyle.TRANSPARENT);
-            aStage.setScene(theScene);
+            aStage.setScene(theUndecoratorScene);
             aStage.show();
         }
     }
