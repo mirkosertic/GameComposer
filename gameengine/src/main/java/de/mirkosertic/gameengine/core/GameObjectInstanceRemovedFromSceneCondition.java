@@ -16,7 +16,7 @@ public class GameObjectInstanceRemovedFromSceneCondition implements Condition {
 
     @UsedByReflection
     public GameObjectInstanceRemovedFromSceneCondition() {
-        gameObject = new Property<GameObject>(GameObject.class, this, GAME_OBJECT_PROPERTY, (GameObject) null);
+        gameObject = new Property<>(GameObject.class, this, GAME_OBJECT_PROPERTY, (GameObject) null);
     }
 
     public Property<GameObject> gameObjectProperty() {
@@ -37,7 +37,7 @@ public class GameObjectInstanceRemovedFromSceneCondition implements Condition {
 
     @Override
     public Map<String, Object> serialize() {
-        Map<String, Object> theResult = new HashMap<String, Object>();
+        Map<String, Object> theResult = new HashMap<>();
         theResult.put(TYPE_ATTRIBUTE, TYPE_VALUE);
         GameObject theObject = gameObject.get();
         if (theObject != null) {

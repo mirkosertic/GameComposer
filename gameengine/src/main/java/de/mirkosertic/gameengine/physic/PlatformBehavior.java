@@ -43,11 +43,11 @@ public class PlatformBehavior implements Behavior, Platform, Reflectable<Platfor
         PlatformBehaviorTemplate theTemplate = aObjectInstance.getOwnerGameObject().getComponentTemplate(PlatformBehaviorTemplate.class);
         GameEventManager theEventManager = aObjectInstance.getOwnerGameObject().getGameScene().getRuntime().getEventManager();
 
-        moveLeftKey = new Property<GameKeyCode>(GameKeyCode.class, this, MOVE_LEFT_KEY_PROPERTY, theTemplate.moveLeftKeyProperty().get(), theEventManager);
-        moveRightKey = new Property<GameKeyCode>(GameKeyCode.class, this, MOVE_RIGHT_KEY_PROPERTY, theTemplate.moveRightKeyProperty().get(), theEventManager);
-        jumpKey = new Property<GameKeyCode>(GameKeyCode.class, this, JUMP_KEY_PROPERTY, theTemplate.jumpKeyProperty().get(), theEventManager);
-        leftRightImpulse = new Property<Float>(Float.class, this, LEFT_RIGHT_IMPULSE_PROPERTY, theTemplate.leftRightImpulseProperty().get(), theEventManager);
-        jumpImpulse = new Property<Float>(Float.class, this, JUMP_IMPULSE_PROPERTY, theTemplate.jumpImpulseProperty().get(), theEventManager);
+        moveLeftKey = new Property<>(GameKeyCode.class, this, MOVE_LEFT_KEY_PROPERTY, theTemplate.moveLeftKeyProperty().get(), theEventManager);
+        moveRightKey = new Property<>(GameKeyCode.class, this, MOVE_RIGHT_KEY_PROPERTY, theTemplate.moveRightKeyProperty().get(), theEventManager);
+        jumpKey = new Property<>(GameKeyCode.class, this, JUMP_KEY_PROPERTY, theTemplate.jumpKeyProperty().get(), theEventManager);
+        leftRightImpulse = new Property<>(Float.class, this, LEFT_RIGHT_IMPULSE_PROPERTY, theTemplate.leftRightImpulseProperty().get(), theEventManager);
+        jumpImpulse = new Property<>(Float.class, this, JUMP_IMPULSE_PROPERTY, theTemplate.jumpImpulseProperty().get(), theEventManager);
     }
 
     @Override
@@ -171,7 +171,7 @@ public class PlatformBehavior implements Behavior, Platform, Reflectable<Platfor
 
     @Override
     public Map<String, Object> serialize() {
-        Map<String, Object> theResult = new HashMap<String, Object>();
+        Map<String, Object> theResult = new HashMap<>();
         theResult.put(TYPE_ATTRIBUTE, TYPE);
         return theResult;
     }

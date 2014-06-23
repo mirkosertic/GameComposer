@@ -36,7 +36,7 @@ public class CameraBehavior implements Behavior, Camera, Reflectable<CameraClass
 
         GameEventManager theEventManager = aObjectInstance.getOwnerGameObject().getGameScene().getRuntime().getEventManager();
 
-        type = new Property<CameraType>(CameraType.class, this, TYPE_PROPERTY, aTemplate.typeProperty().get(), theEventManager);
+        type = new Property<>(CameraType.class, this, TYPE_PROPERTY, aTemplate.typeProperty().get(), theEventManager);
     }
 
     void registerEvents(GameRuntime aGameRuntime) {
@@ -71,7 +71,7 @@ public class CameraBehavior implements Behavior, Camera, Reflectable<CameraClass
 
     public List<GameObjectInstance> getObjectsToDrawInRightOrder(GameScene aScene) {
         // TODO: Implement Z-Ordering here
-        List<GameObjectInstance> theResult = new ArrayList<GameObjectInstance>();
+        List<GameObjectInstance> theResult = new ArrayList<>();
 
         Size theScreenSize = getScreenSize();
         if (theScreenSize != null) {
@@ -121,7 +121,7 @@ public class CameraBehavior implements Behavior, Camera, Reflectable<CameraClass
 
     @Override
     public Map<String, Object> serialize() {
-        Map<String, Object> theResult = new HashMap<String, Object>();
+        Map<String, Object> theResult = new HashMap<>();
         theResult.put(TYPE_ATTRIBUTE, TYPE);
         return theResult;
     }

@@ -37,16 +37,16 @@ public class GameObjectInstance implements Reflectable<GameObjectInstanceClassIn
 
     GameObjectInstance(GameEventManager aEventManager, GameObject aOwnerGameObject) {
 
-        uuid = new Property<String>(String.class, this, UUID_PROPERTY, de.mirkosertic.gameengine.type.UUID.randomUID(), aEventManager);
-        name = new Property<String>(String.class, this, NAME_PROPERTY, aEventManager);
-        position = new Property<Position>(Position.class, this, POSITION_PROPERTY, new Position(), aEventManager);
-        visible = new Property<Boolean>(Boolean.class, this, VISIBLE_PROPERTY, aOwnerGameObject.visibleProperty().get(), aEventManager);
-        rotationAngle = new Property<Angle>(Angle.class, this, ROTATION_ANGLE_PROPERTY, new Angle(0), aEventManager);
-        absolutePosition = new Property<Boolean>(Boolean.class, this, ABSOLUTE_POSITION_PROPERTY, Boolean.FALSE, aEventManager);
-        absolutePositionAnchor = new Property<AbsolutePositionAnchor>(AbsolutePositionAnchor.class, this, ABSOLUTE_POSITION_ANCHOR_PROPERTY, AbsolutePositionAnchor.TOP_LEFT, aEventManager);
+        uuid = new Property<>(String.class, this, UUID_PROPERTY, de.mirkosertic.gameengine.type.UUID.randomUID(), aEventManager);
+        name = new Property<>(String.class, this, NAME_PROPERTY, aEventManager);
+        position = new Property<>(Position.class, this, POSITION_PROPERTY, new Position(), aEventManager);
+        visible = new Property<>(Boolean.class, this, VISIBLE_PROPERTY, aOwnerGameObject.visibleProperty().get(), aEventManager);
+        rotationAngle = new Property<>(Angle.class, this, ROTATION_ANGLE_PROPERTY, new Angle(0), aEventManager);
+        absolutePosition = new Property<>(Boolean.class, this, ABSOLUTE_POSITION_PROPERTY, Boolean.FALSE, aEventManager);
+        absolutePositionAnchor = new Property<>(AbsolutePositionAnchor.class, this, ABSOLUTE_POSITION_ANCHOR_PROPERTY, AbsolutePositionAnchor.TOP_LEFT, aEventManager);
 
         ownerGameObject = aOwnerGameObject;
-        components = new HashMap<Class<Behavior>, Behavior>();
+        components = new HashMap<>();
     }
 
     @Override
@@ -103,7 +103,7 @@ public class GameObjectInstance implements Reflectable<GameObjectInstanceClassIn
     }
 
     public Map<String, Object> serialize() {
-        Map<String, Object> theResult = new HashMap<String, Object>();
+        Map<String, Object> theResult = new HashMap<>();
         if (!uuidProperty().isNull()) {
             theResult.put(UUID_PROPERTY, uuidProperty().get());
         }
@@ -116,7 +116,7 @@ public class GameObjectInstance implements Reflectable<GameObjectInstanceClassIn
         theResult.put(ABSOLUTE_POSITION_ANCHOR_PROPERTY, absolutePositionAnchor.get().name());
         theResult.put("rotationangle", rotationAngle.get().serialize());
 
-        List<Map<String, Object>> theComponents = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> theComponents = new ArrayList<>();
         for (Behavior theComponent : components.values()) {
             theComponents.add(theComponent.serialize());
         }

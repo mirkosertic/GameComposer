@@ -46,7 +46,7 @@ public class Angle implements ValueProvider<Integer> {
     }
 
     public Map<String, Object> serialize() {
-        Map<String, Object> theResult = new HashMap<String, Object>();
+        Map<String, Object> theResult = new HashMap<>();
         theResult.put("angleindegrees", Integer.toString(angleInDegrees));
         return theResult;
     }

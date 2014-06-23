@@ -159,7 +159,7 @@ public class GWTWebGLGameView extends AbstractWebGameView {
             textureMap = aRenderingContext.getUniformLocation(program, "uMap");
 
             // The texture cache with resource name and other studd
-            loadedTextures = new HashMap<String, WebGLTexture>();
+            loadedTextures = new HashMap<>();
         }
 
         public void render(Position aPosition, Size aSize, Angle aRotation, GWTBitmapResource aResource) {

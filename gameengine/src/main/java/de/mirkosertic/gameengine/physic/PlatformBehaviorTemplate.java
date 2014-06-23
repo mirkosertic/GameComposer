@@ -26,11 +26,11 @@ public class PlatformBehaviorTemplate implements BehaviorTemplate<PlatformBehavi
     @UsedByReflection
     public PlatformBehaviorTemplate(GameEventManager aEventManager, GameObject aOwner) {
         owner = aOwner;
-        moveLeftKey = new Property<GameKeyCode>(GameKeyCode.class, this, MOVE_LEFT_KEY_PROPERTY, GameKeyCode.LEFT, aEventManager);
-        moveRightKey = new Property<GameKeyCode>(GameKeyCode.class, this, MOVE_RIGHT_KEY_PROPERTY, GameKeyCode.RIGHT, aEventManager);
-        jumpKey = new Property<GameKeyCode>(GameKeyCode.class, this, JUMP_KEY_PROPERTY, GameKeyCode.UP, aEventManager);
-        leftRightImpulse = new Property<Float>(Float.class, this, LEFT_RIGHT_IMPULSE_PROPERTY, 4f, aEventManager);
-        jumpImpulse = new Property<Float>(Float.class, this, JUMP_IMPULSE_PROPERTY, 2f, aEventManager);
+        moveLeftKey = new Property<>(GameKeyCode.class, this, MOVE_LEFT_KEY_PROPERTY, GameKeyCode.LEFT, aEventManager);
+        moveRightKey = new Property<>(GameKeyCode.class, this, MOVE_RIGHT_KEY_PROPERTY, GameKeyCode.RIGHT, aEventManager);
+        jumpKey = new Property<>(GameKeyCode.class, this, JUMP_KEY_PROPERTY, GameKeyCode.UP, aEventManager);
+        leftRightImpulse = new Property<>(Float.class, this, LEFT_RIGHT_IMPULSE_PROPERTY, 4f, aEventManager);
+        jumpImpulse = new Property<>(Float.class, this, JUMP_IMPULSE_PROPERTY, 2f, aEventManager);
     }
 
     @Override
@@ -71,7 +71,7 @@ public class PlatformBehaviorTemplate implements BehaviorTemplate<PlatformBehavi
 
     @Override
     public Map<String, Object> serialize() {
-        Map<String, Object> theResult = new HashMap<String, Object>();
+        Map<String, Object> theResult = new HashMap<>();
         theResult.put(PlatformBehavior.TYPE_ATTRIBUTE, PlatformBehavior.TYPE);
         theResult.put(MOVE_LEFT_KEY_PROPERTY, moveLeftKey.get().name());
         theResult.put(MOVE_RIGHT_KEY_PROPERTY, moveRightKey.get().name());

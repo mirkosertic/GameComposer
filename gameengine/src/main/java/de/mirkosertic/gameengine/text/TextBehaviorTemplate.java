@@ -25,9 +25,9 @@ public class TextBehaviorTemplate implements BehaviorTemplate<TextBehavior>, Tex
 
     @UsedByReflection
     public TextBehaviorTemplate(GameEventManager aEventManager, GameObject aOwner) {
-        font = new Property<Font>(Font.class, this, FONT_PROPERTY, Font.DEFAULT_FONT, aEventManager);
-        textExpression = new Property<TextExpression>(TextExpression.class, this, TEXT_EXPRESSION_PROPERTY, new TextExpression(""), aEventManager);
-        color = new Property<Color>(Color.class, this, COLOR_PROPERTY, Color.WHITE, aEventManager);
+        font = new Property<>(Font.class, this, FONT_PROPERTY, Font.DEFAULT_FONT, aEventManager);
+        textExpression = new Property<>(TextExpression.class, this, TEXT_EXPRESSION_PROPERTY, new TextExpression(""), aEventManager);
+        color = new Property<>(Color.class, this, COLOR_PROPERTY, Color.WHITE, aEventManager);
         owner = aOwner;
     }
 
@@ -64,7 +64,7 @@ public class TextBehaviorTemplate implements BehaviorTemplate<TextBehavior>, Tex
 
     @Override
     public Map<String, Object> serialize() {
-        Map<String, Object> theResult = new HashMap<String, Object>();
+        Map<String, Object> theResult = new HashMap<>();
         theResult.put(TextBehavior.TYPE_ATTRIBUTE, TextBehavior.TYPE);
         theResult.put(FONT_PROPERTY, font.get().serialize());
         theResult.put(TEXT_EXPRESSION_PROPERTY, textExpression.get().serialize());

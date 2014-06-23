@@ -22,7 +22,7 @@ public class DefaultGestureDetector implements GestureDetector {
 
     public DefaultGestureDetector(GameEventManager aEventManager) {
         eventManager = aEventManager;
-        currentTouchPositions = new HashMap<TouchIdentifier, TouchPosition>();
+        currentTouchPositions = new HashMap<>();
     }
 
     public void keyPressed(GameKeyCode aKeyCode) {

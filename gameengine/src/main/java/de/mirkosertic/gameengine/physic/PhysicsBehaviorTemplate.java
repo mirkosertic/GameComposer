@@ -27,12 +27,12 @@ public class PhysicsBehaviorTemplate implements BehaviorTemplate<PhysicsBehavior
     public PhysicsBehaviorTemplate(GameEventManager aEventManager, GameObject aOwner) {
         owner = aOwner;
 
-        active = new Property<Boolean>(Boolean.class, this, ACTIVE_PROPERTY, Boolean.TRUE, aEventManager);
-        fixedRotation = new Property<Boolean>(Boolean.class, this, FIXED_ROTATION_PROPERTY, Boolean.FALSE, aEventManager);
-        density = new Property<Float>(Float.class, this, DENSITY_PROPERTY, 1f, aEventManager);
-        friction = new Property<Float>(Float.class, this, FRICTION_PROPERTY, 1.8f, aEventManager);
-        restitution = new Property<Float>(Float.class, this, RESTITUTION_PROPERTY, 0f, aEventManager);
-        gravityScale = new Property<Float>(Float.class, this, GRAVITY_SCALE_PROPERTY, 1f, aEventManager);
+        active = new Property<>(Boolean.class, this, ACTIVE_PROPERTY, Boolean.TRUE, aEventManager);
+        fixedRotation = new Property<>(Boolean.class, this, FIXED_ROTATION_PROPERTY, Boolean.FALSE, aEventManager);
+        density = new Property<>(Float.class, this, DENSITY_PROPERTY, 1f, aEventManager);
+        friction = new Property<>(Float.class, this, FRICTION_PROPERTY, 1.8f, aEventManager);
+        restitution = new Property<>(Float.class, this, RESTITUTION_PROPERTY, 0f, aEventManager);
+        gravityScale = new Property<>(Float.class, this, GRAVITY_SCALE_PROPERTY, 1f, aEventManager);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class PhysicsBehaviorTemplate implements BehaviorTemplate<PhysicsBehavior
 
     @Override
     public Map<String, Object> serialize() {
-        Map<String, Object> theResult = new HashMap<String, Object>();
+        Map<String, Object> theResult = new HashMap<>();
         theResult.put(PhysicsBehavior.TYPE_ATTRIBUTE, PhysicsBehavior.TYPE);
         theResult.put(ACTIVE_PROPERTY, Boolean.toString(active.get()));
         theResult.put("fixedrotation", Boolean.toString(fixedRotation.get()));

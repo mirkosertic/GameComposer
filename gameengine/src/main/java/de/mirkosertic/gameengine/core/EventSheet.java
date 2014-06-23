@@ -18,7 +18,7 @@ public class EventSheet {
     EventSheet(GameScene aGameScene) {
         GameEventManager theEventManager = aGameScene.getRuntime().getEventManager();
 
-        nameProperty = new Property<String>(String.class, this, NAME_PROPERTY, theEventManager);
+        nameProperty = new Property<>(String.class, this, NAME_PROPERTY, theEventManager);
         rules = new GameRule[]{};
         gameScene = aGameScene;
     }
@@ -36,9 +36,9 @@ public class EventSheet {
     }
 
     public Map<String, Object> serialize() {
-        Map<String, Object> theResult = new HashMap<String, Object>();
+        Map<String, Object> theResult = new HashMap<>();
         theResult.put(NAME_PROPERTY, nameProperty.get());
-        List<Map<String, Object>> theRuleList = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> theRuleList = new ArrayList<>();
         for (GameRule theRule : rules) {
             theRuleList.add(theRule.serialize());
         }
@@ -55,7 +55,7 @@ public class EventSheet {
         }
 
         List<Map<String, Object>> theRules = (List<Map<String, Object>>) aSerializedData.get("rules");
-        List<GameRule> theRuleList = new ArrayList<GameRule>();
+        List<GameRule> theRuleList = new ArrayList<>();
         if (theRules != null) {
             for (Map<String, Object> theRuleData : theRules) {
                 theRuleList.add(GameRule.deserialize(aIORegistry, theResult, theRuleData));

@@ -47,6 +47,12 @@ class StructureTreeCell extends TreeCell {
     @Override
     protected void updateItem(Object aValue, boolean aEmpty) {
         super.updateItem(aValue, aEmpty);
+
+        if (aEmpty) {
+            setText(null);
+            return;
+        }
+
         if (aValue instanceof TreeObjectTypes) {
             switch((TreeObjectTypes) aValue) {
                 case INSTANCES: {

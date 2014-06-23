@@ -26,7 +26,7 @@ class Scanner {
 
     public Token[] scan(String expression) {
 
-        List<Token> theTokens = new ArrayList<Token>();
+        List<Token> theTokens = new ArrayList<>();
 
         boolean escapeNext = false;
         boolean inString = false;

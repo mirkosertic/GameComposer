@@ -17,8 +17,8 @@ public class ConstantMovementBehaviorTemplate implements BehaviorTemplate<Consta
 
     @UsedByReflection
     public ConstantMovementBehaviorTemplate(GameEventManager aEventManager, GameObject aOwner) {
-        speed = new Property<Speed>(Speed.class, this, SPEED_PROPERTY, new Speed(0), aEventManager);
-        rotationSpeed = new Property<Speed>(Speed.class, this, ROTATIONSPEED_PROPERTY, new Speed(0), aEventManager);
+        speed = new Property<>(Speed.class, this, SPEED_PROPERTY, new Speed(0), aEventManager);
+        rotationSpeed = new Property<>(Speed.class, this, ROTATIONSPEED_PROPERTY, new Speed(0), aEventManager);
         owner = aOwner;
     }
 
@@ -56,7 +56,7 @@ public class ConstantMovementBehaviorTemplate implements BehaviorTemplate<Consta
 
     @Override
     public Map<String, Object> serialize() {
-        Map<String, Object> theResult = new HashMap<String, Object>();
+        Map<String, Object> theResult = new HashMap<>();
         theResult.put(ConstantMovementBehavior.TYPE_ATTRIBUTE, ConstantMovementBehavior.TYPE);
         theResult.put(SPEED_PROPERTY, speed.get().serialize());
         theResult.put(ROTATIONSPEED_PROPERTY, rotationSpeed.get().serialize());

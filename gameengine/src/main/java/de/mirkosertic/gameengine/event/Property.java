@@ -10,7 +10,7 @@ public class Property<T> extends ReadOnlyProperty<T> {
 
     public Property(Class<T> aType, Object aOwner, String aName, T aDefaultValue, GameEventListener<PropertyChanged> aListener) {
         super(aType, aOwner, aName, aDefaultValue);
-        changeListener = new HashSet<GameEventListener<PropertyChanged>>();
+        changeListener = new HashSet<>();
         if (aListener != null) {
             changeListener.add(aListener);
         }

@@ -32,8 +32,8 @@ public class ConstantMovementBehavior implements Behavior, ConstantMovement, Ref
 
         GameEventManager theEventManager = aObjectInstance.getOwnerGameObject().getGameScene().getRuntime().getEventManager();
 
-        speed = new Property<Speed>(Speed.class, this, SPEED_PROPERTY, aTemplate.speedProperty().get(), theEventManager);
-        rotationSpeed = new Property<Speed>(Speed.class, this, ROTATIONSPEED_PROPERTY, aTemplate.rotationSpeedProperty().get(), theEventManager);
+        speed = new Property<>(Speed.class, this, SPEED_PROPERTY, aTemplate.speedProperty().get(), theEventManager);
+        rotationSpeed = new Property<>(Speed.class, this, ROTATIONSPEED_PROPERTY, aTemplate.rotationSpeedProperty().get(), theEventManager);
     }
 
     public void registerEvents(GameRuntime aGameRuntime) {
@@ -83,7 +83,7 @@ public class ConstantMovementBehavior implements Behavior, ConstantMovement, Ref
 
     @Override
     public Map<String, Object> serialize() {
-        Map<String, Object> theResult = new HashMap<String, Object>();
+        Map<String, Object> theResult = new HashMap<>();
         theResult.put(TYPE_ATTRIBUTE, TYPE);
         theResult.put(SPEED_PROPERTY, speed.get().serialize());
         theResult.put(ROTATIONSPEED_PROPERTY, rotationSpeed.get().serialize());

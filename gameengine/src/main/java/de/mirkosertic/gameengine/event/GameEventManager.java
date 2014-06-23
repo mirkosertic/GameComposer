@@ -11,7 +11,7 @@ public class GameEventManager implements GameEventListener {
     private final Map<Class<GameEvent>, GameEventListener[]> registeredListeners;
 
     public GameEventManager() {
-        registeredListeners = new HashMap<Class<GameEvent>, GameEventListener[]>();
+        registeredListeners = new HashMap<>();
     }
 
     public void register(Object aOwningInstance, Class aEvent, GameEventListener aEventListener) {

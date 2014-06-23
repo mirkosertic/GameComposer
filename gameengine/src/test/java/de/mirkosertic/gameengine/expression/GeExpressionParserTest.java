@@ -56,7 +56,7 @@ public class GeExpressionParserTest {
     public void testReflectable() {
         GeExpressionParser theParser = parse("s.width");
         theParser.registerVariable("s", new Size(80, 90));
-        Assert.assertEquals(Integer.valueOf(80), theParser.evaluateToObject());
+        Assert.assertEquals(80, theParser.evaluateToObject());
     }
 
 }

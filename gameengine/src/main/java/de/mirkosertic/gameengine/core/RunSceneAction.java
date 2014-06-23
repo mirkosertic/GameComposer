@@ -16,7 +16,7 @@ public class RunSceneAction implements Action {
 
     @UsedByReflection
     public RunSceneAction() {
-        gameScene = new Property<String>(String.class, this, GAME_SCENE_PROPERTY, (String) null);
+        gameScene = new Property<>(String.class, this, GAME_SCENE_PROPERTY, (String) null);
     }
 
     @Override
@@ -31,7 +31,7 @@ public class RunSceneAction implements Action {
 
     @Override
     public Map<String, Object> serialize() {
-        Map<String, Object> theResult = new HashMap<String, Object>();
+        Map<String, Object> theResult = new HashMap<>();
         theResult.put(TYPE_ATTRIBUTE, TYPE_VALUE);
         if (gameScene.get() != null) {
             theResult.put(GAME_SCENE_PROPERTY, gameScene.get());

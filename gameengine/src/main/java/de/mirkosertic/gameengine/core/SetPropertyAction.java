@@ -20,9 +20,9 @@ public class SetPropertyAction implements Action {
 
     @UsedByReflection
     public SetPropertyAction() {
-        propertyName = new Property<String>(String.class, this, PROPERTY_NAME_PROPERTY, (String) null);
-        gameObject = new Property<GameObject>(GameObject.class, this, PROPERTY_GAMEOBJECT_PROPERTY, (GameObject) null);
-        propertyValue = new Property<TextExpression>(TextExpression.class, this, PROPERTY_VALUE_PROPERTY, (TextExpression) null);
+        propertyName = new Property<>(String.class, this, PROPERTY_NAME_PROPERTY, (String) null);
+        gameObject = new Property<>(GameObject.class, this, PROPERTY_GAMEOBJECT_PROPERTY, (GameObject) null);
+        propertyValue = new Property<>(TextExpression.class, this, PROPERTY_VALUE_PROPERTY, (TextExpression) null);
     }
 
     public Property<String> propertyNameProperty() {
@@ -66,7 +66,7 @@ public class SetPropertyAction implements Action {
 
     @Override
     public Map<String, Object> serialize() {
-        Map<String, Object> theResult = new HashMap<String, Object>();
+        Map<String, Object> theResult = new HashMap<>();
         theResult.put(TYPE_ATTRIBUTE, TYPE_VALUE);
         theResult.put(PROPERTY_NAME_PROPERTY, propertyName.get());
         theResult.put(PROPERTY_VALUE_PROPERTY, propertyValue.get().serialize());

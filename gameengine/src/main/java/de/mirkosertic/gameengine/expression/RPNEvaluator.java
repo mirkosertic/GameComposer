@@ -93,7 +93,7 @@ class RPNEvaluator {
     }
 
     public Object evaluate(Token[] aRPNTokens) {
-        Stack<Object> theResultStack = new Stack<Object>();
+        Stack<Object> theResultStack = new Stack<>();
         for (int i = 0; i < aRPNTokens.length; i++) {
             Token theToken = aRPNTokens[i];
             if (theToken.type == TokenType.VALUE || theToken.type == TokenType.STRING) {

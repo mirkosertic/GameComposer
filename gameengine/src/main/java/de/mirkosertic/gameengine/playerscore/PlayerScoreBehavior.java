@@ -26,7 +26,7 @@ public class PlayerScoreBehavior implements Behavior, PlayerScore, Reflectable<P
 
         GameEventManager theEventManager = aObjectInstance.getOwnerGameObject().getGameScene().getRuntime().getEventManager();
 
-        scoreValue = new Property<ScoreValue>(ScoreValue.class, this, SCORE_VALUE_PROPERTY, aTemplate.scoreValueProperty().get(), theEventManager);
+        scoreValue = new Property<>(ScoreValue.class, this, SCORE_VALUE_PROPERTY, aTemplate.scoreValueProperty().get(), theEventManager);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class PlayerScoreBehavior implements Behavior, PlayerScore, Reflectable<P
 
     @Override
     public Map<String, Object> serialize() {
-        Map<String, Object> theResult = new HashMap<String, Object>();
+        Map<String, Object> theResult = new HashMap<>();
         theResult.put(SCORE_VALUE_PROPERTY, scoreValue.get().serialize());
         return theResult;
     }

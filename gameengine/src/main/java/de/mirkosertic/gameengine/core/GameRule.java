@@ -16,8 +16,8 @@ public class GameRule {
 
     public GameRule() {
         actions = new Action[0];
-        name = new Property<String>(String.class, this, NAME_PROPERTY, (String) null);
-        condition = new Property<Condition>(Condition.class, this, CONDITION_PROPERTY, (Condition) null);
+        name = new Property<>(String.class, this, NAME_PROPERTY, (String) null);
+        condition = new Property<>(Condition.class, this, CONDITION_PROPERTY, (Condition) null);
     }
 
     public Property<String> nameProperty() {
@@ -45,14 +45,14 @@ public class GameRule {
     }
 
     public Map<String, Object> serialize() {
-        Map<String, Object> theResult = new HashMap<String, Object>();
+        Map<String, Object> theResult = new HashMap<>();
         if (!name.isNull()) {
             theResult.put(NAME_PROPERTY, name.get());
         }
         if (!condition.isNull()) {
             theResult.put(CONDITION_PROPERTY, condition.get().serialize());
         }
-        List<Map<String, Object>> theActionList = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> theActionList = new ArrayList<>();
         for (Action theAction : actions) {
             theActionList.add(theAction.serialize());
         }
@@ -75,7 +75,7 @@ public class GameRule {
             theResult.condition.setQuietly(theCondition);
         }
         List<Map<String, Object>> theActions = (List<Map<String, Object>>) aSerializedData.get("actions");
-        List<Action> theActionList = new ArrayList<Action>();
+        List<Action> theActionList = new ArrayList<>();
         if (theActions != null) {
             for (Map<String, Object> theActionData : theActions) {
                 String theActionTypeKey = (String) theActionData.get(Action.TYPE_ATTRIBUTE);

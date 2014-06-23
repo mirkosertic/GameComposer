@@ -16,9 +16,9 @@ public class Game {
     private final Property<Boolean> enableWebGL;
 
     public Game() {
-        name = new Property<String>(String.class, this, NAME_PROPERTY, (String) null);
-        defaultScene = new Property<String>(String.class, this, DEFAULT_SCENE_PROPERTY, (String) null);
-        enableWebGL = new Property<Boolean>(Boolean.class, this, ENABLE_WEB_GL_PROPERTY, Boolean.TRUE);
+        name = new Property<>(String.class, this, NAME_PROPERTY, (String) null);
+        defaultScene = new Property<>(String.class, this, DEFAULT_SCENE_PROPERTY, (String) null);
+        enableWebGL = new Property<>(Boolean.class, this, ENABLE_WEB_GL_PROPERTY, Boolean.TRUE);
     }
 
     public Property<String> nameProperty() {
@@ -40,7 +40,7 @@ public class Game {
     }
 
     public Map<String, Object> serialize() {
-        Map<String, Object> theResult = new HashMap<String, Object>();
+        Map<String, Object> theResult = new HashMap<>();
         theResult.put(NAME_PROPERTY, name.get());
         theResult.put("defaultscene", defaultScene.get());
         theResult.put("enablewebgl", Boolean.toString(enableWebGL.get()));

@@ -34,7 +34,7 @@ public class TextExpression implements ValueProvider<String> {
     }
 
     public Map<String, Object> serialize() {
-        Map<String, Object> theResult = new HashMap<String, Object>();
+        Map<String, Object> theResult = new HashMap<>();
         theResult.put("expression", expression);
         return theResult;
     }

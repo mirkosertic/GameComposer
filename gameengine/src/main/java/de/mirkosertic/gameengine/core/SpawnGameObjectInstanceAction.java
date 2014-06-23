@@ -19,9 +19,9 @@ public class SpawnGameObjectInstanceAction implements Action {
 
     @UsedByReflection
     public SpawnGameObjectInstanceAction() {
-        gameObject = new Property<GameObject>(GameObject.class, this, GAME_OBJECT_PROPERTY, (GameObject) null);
-        referenceObject = new Property<GameObject>(GameObject.class, this, REFERENCE_OBJECT_PROPERTY, (GameObject) null);
-        offset = new Property<Position>(Position.class, this, OFFSET_PROPERTY, new Position(0, 0));
+        gameObject = new Property<>(GameObject.class, this, GAME_OBJECT_PROPERTY, (GameObject) null);
+        referenceObject = new Property<>(GameObject.class, this, REFERENCE_OBJECT_PROPERTY, (GameObject) null);
+        offset = new Property<>(Position.class, this, OFFSET_PROPERTY, new Position(0, 0));
     }
 
     public Property<GameObject> gameObjectProperty() {
@@ -53,7 +53,7 @@ public class SpawnGameObjectInstanceAction implements Action {
 
     @Override
     public Map<String, Object> serialize() {
-        Map<String, Object> theResult = new HashMap<String, Object>();
+        Map<String, Object> theResult = new HashMap<>();
         theResult.put(TYPE_ATTRIBUTE, TYPE_VALUE);
         GameObject theObject = gameObject.get();
         if (theObject != null) {

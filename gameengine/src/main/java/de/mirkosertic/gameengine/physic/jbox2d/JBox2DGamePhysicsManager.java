@@ -82,7 +82,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
             if (!insimulation) {
                 GameObject theChangedObject = (GameObject) aEvent.getOwner();
 
-                Set<GameObjectInstance> theChangedInstances = new HashSet<GameObjectInstance>();
+                Set<GameObjectInstance> theChangedInstances = new HashSet<>();
                 for (GameObjectInstance theObjectInstance : dynamicObjects.keySet()) {
                     if (theObjectInstance.getOwnerGameObject() == theChangedObject) {
                         theChangedInstances.add(theObjectInstance);
@@ -121,9 +121,9 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
     private final List<GameEvent> queuedEventsOfLastLoop;
 
     JBox2DGamePhysicsManager(GameEventManager aEventManager) {
-        queuedEventsOfLastLoop = new ArrayList<GameEvent>();
+        queuedEventsOfLastLoop = new ArrayList<>();
         eventManager = aEventManager;
-        alreadyRegisteredSizeListener = new HashSet<GameObject>();
+        alreadyRegisteredSizeListener = new HashSet<>();
         positionChangeListener = new PositionChangeListener();
         sizeChangeListener = new SizeChangeListener();
         fixedAngleListener = new FixedAngleListener();
@@ -149,8 +149,8 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
             public void postSolve(Contact aContact, ContactImpulse aImpulse) {
             }
         });
-        dynamicObjects = new HashMap<GameObjectInstance, Body>();
-        staticObjects = new HashMap<GameObjectInstance, Body>();
+        dynamicObjects = new HashMap<>();
+        staticObjects = new HashMap<>();
         physicsAmountOfTime = 0;
     }
 
