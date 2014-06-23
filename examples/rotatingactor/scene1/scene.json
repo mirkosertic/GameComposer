@@ -73,7 +73,7 @@
       } ]
     }, {
       "condition" : {
-        "keyCode" : "UP",
+        "keyCode" : "ANY",
         "eventType" : "RELEASED",
         "type" : "KeyEventCondition"
       },
@@ -104,15 +104,15 @@
     "gameobjectuuid" : "4889509885749884898",
     "name" : "Plane_1389814942746",
     "components" : [ {
+      "type" : "Sprite"
+    }, {
       "speed" : {
         "speed" : "0"
       },
-      "type" : "ConstantMovement",
-      "angle" : {
-        "angleindegrees" : "0"
-      }
-    }, {
-      "type" : "Sprite"
+      "rotationSpeed" : {
+        "speed" : "0"
+      },
+      "type" : "ConstantMovement"
     } ],
     "uuid" : "6660086781392999401",
     "absolutePositionAnchor" : "TOP_LEFT"
@@ -153,16 +153,16 @@
   },
   "objects" : [ {
     "templates" : [ {
+      "cameratype" : "CENTERONSCENE",
+      "type" : "Camera"
+    }, {
       "speed" : {
         "speed" : "0"
       },
-      "type" : "ConstantMovement",
-      "angle" : {
-        "angleindegrees" : "0"
-      }
-    }, {
-      "cameratype" : "CENTERONSCENE",
-      "type" : "Camera"
+      "rotationSpeed" : {
+        "speed" : "0"
+      },
+      "type" : "ConstantMovement"
     } ],
     "name" : "Camera",
     "uuid" : "2900940626662702649",
@@ -180,10 +180,10 @@
       "speed" : {
         "speed" : "0"
       },
-      "type" : "ConstantMovement",
-      "angle" : {
-        "angleindegrees" : "0"
-      }
+      "rotationSpeed" : {
+        "speed" : "0"
+      },
+      "type" : "ConstantMovement"
     } ],
     "name" : "Plane",
     "uuid" : "4889509885749884898",

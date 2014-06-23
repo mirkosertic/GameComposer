@@ -96,7 +96,6 @@
         <dependency>
             <groupId>de.mirkosertic</groupId>
             <artifactId>gameengine-fxrenderer</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jboss.weld.se</groupId>

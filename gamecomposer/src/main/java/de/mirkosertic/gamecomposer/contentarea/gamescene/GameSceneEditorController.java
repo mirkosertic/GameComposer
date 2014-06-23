@@ -399,9 +399,8 @@ public class GameSceneEditorController implements ContentController<GameScene> {
         theStage.setTitle("Game Preview");
 
         Scene theScene = new Scene(theBorderPane);
-        theStage.initStyle(StageStyle.UTILITY);
+        //theStage.initStyle(StageStyle.UTILITY);
         theStage.setScene(theScene);
-        //theStage.initModality(Modality.APPLICATION_MODAL);
         theStage.initOwner(view.getScene().getWindow());
 
         theStage.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
@@ -417,8 +416,6 @@ public class GameSceneEditorController implements ContentController<GameScene> {
             }
         });
 
-        thePreviewGameView.startTimer(theMainLoop);
-
         theStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent windowEvent) {
@@ -429,5 +426,7 @@ public class GameSceneEditorController implements ContentController<GameScene> {
         theStage.requestFocus();
 
         theCameraComponent.initializeFor(thePreviewScene, thePlayerInstance);
+
+        thePreviewGameView.startTimer(theMainLoop);
     }
 }
