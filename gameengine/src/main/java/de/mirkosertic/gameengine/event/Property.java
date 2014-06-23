@@ -28,6 +28,7 @@ public class Property<T> extends ReadOnlyProperty<T> {
         //TODO: maybe we can implement type checking here?
         T theOldValue = value;
         value = aValue;
+
         Set<GameEventListener> theKnownListener = new HashSet<GameEventListener>(changeListener);
         for (GameEventListener<PropertyChanged> theListener : theKnownListener) {
             theListener.handleGameEvent(new PropertyChanged(this, theOldValue));
