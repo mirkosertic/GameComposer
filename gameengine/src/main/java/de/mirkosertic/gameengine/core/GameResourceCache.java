@@ -12,7 +12,7 @@ public class GameResourceCache {
     private final GameResourceLoader resourceLoader;
 
     public GameResourceCache(GameResourceLoader aResourceLoader) {
-        cachedResources = new HashMap<String, GameResource>();
+        cachedResources = new HashMap<>();
         resourceLoader = aResourceLoader;
     }
 

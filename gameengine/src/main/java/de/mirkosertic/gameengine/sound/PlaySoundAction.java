@@ -20,7 +20,7 @@ public class PlaySoundAction implements Action {
 
     @UsedByReflection
     public PlaySoundAction() {
-        resourceName = new Property<ResourceName>(ResourceName.class, this, RESOURCE_NAME_PROPERTY, (ResourceName) null);
+        resourceName = new Property<>(ResourceName.class, this, RESOURCE_NAME_PROPERTY, (ResourceName) null);
     }
 
     @Override
@@ -35,7 +35,7 @@ public class PlaySoundAction implements Action {
 
     @Override
     public Map<String, Object> serialize() {
-        Map<String, Object> theResult = new HashMap<String, Object>();
+        Map<String, Object> theResult = new HashMap<>();
         theResult.put(TYPE_ATTRIBUTE, TYPE_VALUE);
         if (resourceName.get() != null) {
             theResult.put(RESOURCE_NAME_PROPERTY, resourceName.get().name);

@@ -10,7 +10,7 @@ public abstract class BuiltInFunctions implements Reflectable {
     }
 
     public Number systime() {
-        return Long.valueOf(System.currentTimeMillis());
+        return System.currentTimeMillis();
     }
 
     public abstract String formatTime(Number aTimeInMilis, String aPattern);

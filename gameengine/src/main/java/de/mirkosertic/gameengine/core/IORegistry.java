@@ -11,10 +11,10 @@ public class IORegistry {
     private final Map<String, ActionUnmarshaller> registeredActionUnmarshaller;
 
     IORegistry() {
-        registeredBehaviorTemplateUnmarshaller = new HashMap<String, BehaviorTemplateUnmarshaller>();
-        registeredBehaviorUnmarshaller = new HashMap<String, BehaviorUnmarshaller>();
-        registeredConditionUnmarshaller = new HashMap<String, ConditionUnmarshaller>();
-        registeredActionUnmarshaller = new HashMap<String, ActionUnmarshaller>();
+        registeredBehaviorTemplateUnmarshaller = new HashMap<>();
+        registeredBehaviorUnmarshaller = new HashMap<>();
+        registeredConditionUnmarshaller = new HashMap<>();
+        registeredActionUnmarshaller = new HashMap<>();
     }
 
     public void registerBehaviorTemplateUnmarshaller(BehaviorTemplateUnmarshaller aUnmarshaller) {

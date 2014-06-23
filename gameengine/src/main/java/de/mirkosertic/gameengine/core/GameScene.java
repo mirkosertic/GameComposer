@@ -35,17 +35,17 @@ public class GameScene implements Reflectable<GameSceneClassInformation> {
 
         GameEventManager theManager = aGameRuntime.getEventManager();
 
-        name = new Property<String>(String.class, this, NAME_PROPERTY, null, theManager);
-        cameraObject = new Property<GameObject>(GameObject.class, this, CAMERA_OBJECT_PROPERTY, null, theManager);
-        defaultPlayer = new Property<GameObject>(GameObject.class, this, DEFAULT_PLAYER_PROPERTY, null, theManager);
-        backgroundColor = new Property<Color>(Color.class, this, COLOR_PROPERTY, new Color(0, 0, 0), theManager);
-        layoutBounds = new Property<Rectangle>(Rectangle.class, this, LAYOUT_BOUNDS_PROPERTY, new Rectangle(), theManager);
+        name = new Property<>(String.class, this, NAME_PROPERTY, null, theManager);
+        cameraObject = new Property<>(GameObject.class, this, CAMERA_OBJECT_PROPERTY, null, theManager);
+        defaultPlayer = new Property<>(GameObject.class, this, DEFAULT_PLAYER_PROPERTY, null, theManager);
+        backgroundColor = new Property<>(Color.class, this, COLOR_PROPERTY, new Color(0, 0, 0), theManager);
+        layoutBounds = new Property<>(Rectangle.class, this, LAYOUT_BOUNDS_PROPERTY, new Rectangle(), theManager);
         instances = new GameObjectInstance[0];
         objects = new GameObject[0];
         eventSheets = new EventSheet[0];
         gameRuntime = aGameRuntime;
 
-        knownParser = new HashMap<TextExpression, ExpressionParser>();
+        knownParser = new HashMap<>();
     }
 
     @Override
@@ -124,7 +124,7 @@ public class GameScene implements Reflectable<GameSceneClassInformation> {
     }
 
     public List<GameObjectInstance> findAllAt(Position aScreenPosition, Position aWorldPosition) {
-        List<GameObjectInstance> theResult = new ArrayList<GameObjectInstance>();
+        List<GameObjectInstance> theResult = new ArrayList<>();
         for (GameObjectInstance theInstance : instances) {
             if (theInstance.absolutePositionProperty().get()) {
                 if (theInstance.contains(aScreenPosition)) {
@@ -207,10 +207,10 @@ public class GameScene implements Reflectable<GameSceneClassInformation> {
     }
 
     public Map<String, Object> serialize() {
-        Map<String, Object> theResult = new HashMap<String, Object>();
+        Map<String, Object> theResult = new HashMap<>();
         theResult.put(NAME_PROPERTY, name.get());
 
-        List<Map<String, Object>> theObjects = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> theObjects = new ArrayList<>();
         for (GameObject theObject : objects) {
             theObjects.add(theObject.serialize());
         }
@@ -225,13 +225,13 @@ public class GameScene implements Reflectable<GameSceneClassInformation> {
             theResult.put("defaultplayerobjectid", defaultPlayer.get().uuidProperty().get());
         }
 
-        List<Map<String, Object>> theInstances = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> theInstances = new ArrayList<>();
         for (GameObjectInstance theInstance : instances) {
             theInstances.add(theInstance.serialize());
         }
         theResult.put("instances", theInstances);
 
-        List<Map<String, Object>> theEventSheets = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> theEventSheets = new ArrayList<>();
         for (EventSheet theSheet : eventSheets) {
             theEventSheets.add(theSheet.serialize());
         }
@@ -257,7 +257,7 @@ public class GameScene implements Reflectable<GameSceneClassInformation> {
             }
         }
 
-        List<EventSheet> theEventSheetList = new ArrayList<EventSheet>();
+        List<EventSheet> theEventSheetList = new ArrayList<>();
         List<Map<String, Object>> theEventSheets = (List<Map<String, Object>>) aSerializedData.get("eventsheets");
         if (theEventSheets != null) {
             for (Map<String, Object> theSheet : theEventSheets) {

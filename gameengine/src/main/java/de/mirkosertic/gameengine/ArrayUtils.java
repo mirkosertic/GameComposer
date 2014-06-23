@@ -7,6 +7,6 @@ import java.util.List;
 public class ArrayUtils {
 
     public static <T> List<T> asList(T[] aArray) {
-        return new ArrayList<T>(Arrays.asList(aArray));
+        return new ArrayList<>(Arrays.asList(aArray));
     }
 }

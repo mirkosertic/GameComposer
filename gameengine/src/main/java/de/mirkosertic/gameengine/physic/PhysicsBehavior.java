@@ -31,12 +31,12 @@ public class PhysicsBehavior implements Behavior, Physics, Reflectable<PhysicsCl
 
         GameEventManager theEventManager = aObjectInstance.getOwnerGameObject().getGameScene().getRuntime().getEventManager();
 
-        active = new Property<Boolean>(Boolean.class, this, ACTIVE_PROPERTY, aTemplate.activeProperty().get(), theEventManager);
-        fixedRotation = new Property<Boolean>(Boolean.class, this, FIXED_ROTATION_PROPERTY, aTemplate.fixedRotationProperty().get(), theEventManager);
-        density = new Property<Float>(Float.class, this, DENSITY_PROPERTY, aTemplate.densityProperty().get(), theEventManager);
-        friction = new Property<Float>(Float.class, this, FRICTION_PROPERTY, aTemplate.frictionProperty().get(), theEventManager);
-        restitution = new Property<Float>(Float.class, this, RESTITUTION_PROPERTY, aTemplate.restitutionProperty().get(), theEventManager);
-        gravityScale = new Property<Float>(Float.class, this, GRAVITY_SCALE_PROPERTY, aTemplate.gravityScaleProperty().get(), theEventManager);
+        active = new Property<>(Boolean.class, this, ACTIVE_PROPERTY, aTemplate.activeProperty().get(), theEventManager);
+        fixedRotation = new Property<>(Boolean.class, this, FIXED_ROTATION_PROPERTY, aTemplate.fixedRotationProperty().get(), theEventManager);
+        density = new Property<>(Float.class, this, DENSITY_PROPERTY, aTemplate.densityProperty().get(), theEventManager);
+        friction = new Property<>(Float.class, this, FRICTION_PROPERTY, aTemplate.frictionProperty().get(), theEventManager);
+        restitution = new Property<>(Float.class, this, RESTITUTION_PROPERTY, aTemplate.restitutionProperty().get(), theEventManager);
+        gravityScale = new Property<>(Float.class, this, GRAVITY_SCALE_PROPERTY, aTemplate.gravityScaleProperty().get(), theEventManager);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class PhysicsBehavior implements Behavior, Physics, Reflectable<PhysicsCl
 
     @Override
     public Map<String, Object> serialize() {
-        Map<String, Object> theStructure = new HashMap<String, Object>();
+        Map<String, Object> theStructure = new HashMap<>();
         theStructure.put(TYPE_ATTRIBUTE, TYPE);
         theStructure.put(ACTIVE_PROPERTY, Boolean.toString(active.get()));
         return theStructure;

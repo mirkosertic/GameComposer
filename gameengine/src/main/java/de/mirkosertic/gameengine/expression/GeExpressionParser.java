@@ -17,7 +17,7 @@ public class GeExpressionParser implements ExpressionParser, VariableResolver {
 
     GeExpressionParser(Token[] aRPNTokens, Reflectable aFunctionRegistry) {
         rpnTokens = aRPNTokens;
-        variables = new HashMap<String, ValueProvider>();
+        variables = new HashMap<>();
         functionRegistry = aFunctionRegistry;
         propertyDiscoverer = new PropertyDiscoverer();
     }

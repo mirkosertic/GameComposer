@@ -17,7 +17,7 @@ public class GameProcessManager implements GameSystem {
 
     GameProcessManager() {
         runningProcesses = new GameProcess[0];
-        killedProcesses = new HashSet<GameProcess>();
+        killedProcesses = new HashSet<>();
         processesAmountOfTime = 0;
     }
 
@@ -52,7 +52,7 @@ public class GameProcessManager implements GameSystem {
         // We limit the physics system to 60 frames / second, or we are getting strange results
         if (processesAmountOfTime > 8) {
 
-            List<GameProcess> theNewChildProcesses = new ArrayList<GameProcess>();
+            List<GameProcess> theNewChildProcesses = new ArrayList<>();
 
             for (GameProcess theProcess : runningProcesses) {
                 GameProcess.ProceedResult theResult = theProcess.proceedGame(aGameTime, processesAmountOfTime);

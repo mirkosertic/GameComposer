@@ -37,11 +37,11 @@ public class GameObject implements Reflectable<GameObjectClassInformation> {
         GameEventManager theManager = aScene.getRuntime().getEventManager();
 
         gameScene = aScene;
-        uuid = new Property<String>(String.class, this, UUID_PROPERTY, aUUID, theManager);
-        name = new Property<String>(String.class, this, NAME_PROPERTY, aName, theManager);
-        size = new Property<Size>(Size.class, this, SIZE_PROPERTY, new Size(64, 64), theManager);
-        visible = new Property<Boolean>(Boolean.class, this, VISIBLE_PROPERTY, Boolean.TRUE, theManager);
-        componentTemplates = new HashMap<Class<BehaviorTemplate>, BehaviorTemplate>();
+        uuid = new Property<>(String.class, this, UUID_PROPERTY, aUUID, theManager);
+        name = new Property<>(String.class, this, NAME_PROPERTY, aName, theManager);
+        size = new Property<>(Size.class, this, SIZE_PROPERTY, new Size(64, 64), theManager);
+        visible = new Property<>(Boolean.class, this, VISIBLE_PROPERTY, Boolean.TRUE, theManager);
+        componentTemplates = new HashMap<>();
 
         name.setQuietly(aName);
         uuid.setQuietly(aUUID);
@@ -98,17 +98,17 @@ public class GameObject implements Reflectable<GameObjectClassInformation> {
     }
 
     public Set<BehaviorTemplate> getComponentTemplates() {
-        HashSet<BehaviorTemplate> theResult = new HashSet<BehaviorTemplate>();
+        HashSet<BehaviorTemplate> theResult = new HashSet<>();
         theResult.addAll(componentTemplates.values());
         return theResult;
     }
 
     public Map<String, Object> serialize() {
-        Map<String, Object> theResult = new HashMap<String, Object>();
+        Map<String, Object> theResult = new HashMap<>();
         theResult.put(NAME_PROPERTY, name.get());
         theResult.put(UUID_PROPERTY, uuid.get());
         theResult.put(SIZE_PROPERTY, size.get().serialize());
-        List<Map<String, Object>> theTemplates = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> theTemplates = new ArrayList<>();
         for (BehaviorTemplate theTemplate : componentTemplates.values()) {
            theTemplates.add(theTemplate.serialize());
         }

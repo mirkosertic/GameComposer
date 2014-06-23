@@ -9,8 +9,8 @@ public abstract class ClassInformation {
     private final Map<String, Method> methods;
 
     protected ClassInformation() {
-        fields = new HashMap<String, Field>();
-        methods = new HashMap<String, Method>();
+        fields = new HashMap<>();
+        methods = new HashMap<>();
     }
 
     protected void register(Field aField) {

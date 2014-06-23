@@ -19,7 +19,7 @@ public class CameraBehaviorTemplate implements BehaviorTemplate<CameraBehavior>,
 
     @UsedByReflection
     public CameraBehaviorTemplate(GameEventManager aEventManager, GameObject aOwner) {
-        type = new Property<CameraType>(CameraType.class, this, TYPE_PROPERTY, CameraType.FOLLOWPLAYER, aEventManager);
+        type = new Property<>(CameraType.class, this, TYPE_PROPERTY, CameraType.FOLLOWPLAYER, aEventManager);
         owner = aOwner;
     }
 
@@ -50,7 +50,7 @@ public class CameraBehaviorTemplate implements BehaviorTemplate<CameraBehavior>,
 
     @Override
     public Map<String, Object> serialize() {
-        Map<String, Object> theResult = new HashMap<String, Object>();
+        Map<String, Object> theResult = new HashMap<>();
         theResult.put(CameraBehavior.TYPE_ATTRIBUTE, CameraBehavior.TYPE);
         theResult.put("cameratype", type.get().name());
         return theResult;

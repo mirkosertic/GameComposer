@@ -15,13 +15,13 @@ class JSONUtils {
     }
 
     public static Map<String, Object> toMap(JSONValue aValue) {
-        HashMap<String, Object> theResult = new HashMap<String, Object>();
+        HashMap<String, Object> theResult = new HashMap<>();
         JSONObject theObject = aValue.isObject();
         for (String theKey : theObject.keySet()) {
             JSONValue theValue = theObject.get(theKey);
             JSONArray theJSonArray = theValue.isArray();
             if (theJSonArray != null) {
-                List<Object> theSingle = new ArrayList<Object>();
+                List<Object> theSingle = new ArrayList<>();
                 for (int i = 0; i < theJSonArray.size(); i++) {
                     JSONValue theSingleValue = theJSonArray.get(i);
                     JSONObject theSingleObject = theSingleValue.isObject();

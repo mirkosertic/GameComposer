@@ -18,8 +18,8 @@ class Parser {
     }
 
     public Token[] parse(Token[] aTokens) {
-        List<Token> theOutputQueue = new ArrayList<Token>();
-        Stack<Token> theOutputStack = new Stack<Token>();
+        List<Token> theOutputQueue = new ArrayList<>();
+        Stack<Token> theOutputStack = new Stack<>();
 
         for (int i = 0; i < aTokens.length; i++) {
             Token theToken = aTokens[i];

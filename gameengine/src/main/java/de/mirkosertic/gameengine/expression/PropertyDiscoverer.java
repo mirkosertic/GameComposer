@@ -48,7 +48,7 @@ public class PropertyDiscoverer {
     private final Map<Class, AutomaticResultConverter> typeConverters;
 
     public PropertyDiscoverer() {
-        gameObjectTemplates = new HashMap<String, Class<? extends BehaviorTemplate>>();
+        gameObjectTemplates = new HashMap<>();
         gameObjectTemplates.put("playerScore", PlayerScoreBehaviorTemplate.class);
         gameObjectTemplates.put("sprite", SpriteBehaviorTemplate.class);
         gameObjectTemplates.put("physics", PhysicsBehaviorTemplate.class);
@@ -57,7 +57,7 @@ public class PropertyDiscoverer {
         gameObjectTemplates.put("text", TextBehaviorTemplate.class);
         gameObjectTemplates.put("static", StaticBehaviorTemplate.class);
         gameObjectTemplates.put("constantMovement", ConstantMovementBehaviorTemplate.class);
-        gameObjectInstanceComponents = new HashMap<String, Class<? extends Behavior>>();
+        gameObjectInstanceComponents = new HashMap<>();
         gameObjectInstanceComponents.put("playerScore", PlayerScoreBehavior.class);
         gameObjectInstanceComponents.put("sprite", SpriteBehavior.class);
         gameObjectInstanceComponents.put("physics", PhysicsBehavior.class);
@@ -66,7 +66,7 @@ public class PropertyDiscoverer {
         gameObjectInstanceComponents.put("text", TextBehavior.class);
         gameObjectInstanceComponents.put("static", StaticBehavior.class);
         gameObjectInstanceComponents.put("constantMovement", ConstantMovementBehavior.class);
-        typeConverters = new HashMap<Class, AutomaticResultConverter>();
+        typeConverters = new HashMap<>();
         typeConverters.put(Angle.class, new ToAngleConverter());
         typeConverters.put(ResourceName.class, new ToResourceNameConverter());
         typeConverters.put(TextExpression.class, new ToTextExpressionConverter());
@@ -152,7 +152,7 @@ public class PropertyDiscoverer {
     }
 
     public List<String> gatherAllPossibleProperties() {
-        Set<String> theProperties = new HashSet<String>();
+        Set<String> theProperties = new HashSet<>();
         addProperties(GameObjectClassInformation.INSTANCE, null, theProperties);
         addProperties(GameObjectInstanceClassInformation.INSTANCE, null, theProperties);
         addProperties(PlayerScoreClassInformation.INSTANCE, "playerScore", theProperties);
@@ -163,7 +163,7 @@ public class PropertyDiscoverer {
         addProperties(TextClassInformation.INSTANCE, "text", theProperties);
         addProperties(StaticClassInformation.INSTANCE, "static", theProperties);
         addProperties(ConstantMovementClassInformation.INSTANCE, "constantMovement", theProperties);
-        List<String> theResult = new ArrayList<String>(theProperties);
+        List<String> theResult = new ArrayList<>(theProperties);
         Collections.sort(theResult);
         return theResult;
     }

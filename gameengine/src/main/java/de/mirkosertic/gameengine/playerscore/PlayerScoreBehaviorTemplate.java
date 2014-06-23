@@ -20,7 +20,7 @@ public class PlayerScoreBehaviorTemplate implements BehaviorTemplate<PlayerScore
 
     @UsedByReflection
     public PlayerScoreBehaviorTemplate(GameEventManager aEventManager, GameObject aOwner) {
-        scoreValue = new Property<ScoreValue>(ScoreValue.class, this, SCORE_VALUE_PROPERTY, new ScoreValue(), aEventManager);
+        scoreValue = new Property<>(ScoreValue.class, this, SCORE_VALUE_PROPERTY, new ScoreValue(), aEventManager);
         owner = aOwner;
     }
 
@@ -50,7 +50,7 @@ public class PlayerScoreBehaviorTemplate implements BehaviorTemplate<PlayerScore
 
     @Override
     public Map<String, Object> serialize() {
-        Map<String, Object> theResult = new HashMap<String, Object>();
+        Map<String, Object> theResult = new HashMap<>();
         theResult.put(PlayerScoreBehavior.TYPE_ATTRIBUTE, PlayerScoreBehavior.TYPE);
         theResult.put(SCORE_VALUE_PROPERTY, scoreValue.get().serialize());
         return theResult;

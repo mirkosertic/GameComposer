@@ -24,7 +24,7 @@ public class Color implements Reflectable<ColorClassInformation> {
     }
 
     public Map<String, String> serialize() {
-        Map<String, String> theResult = new HashMap<String, String>();
+        Map<String, String> theResult = new HashMap<>();
         theResult.put("r", Integer.toString(r));
         theResult.put("g", Integer.toString(g));
         theResult.put("b", Integer.toString(b));

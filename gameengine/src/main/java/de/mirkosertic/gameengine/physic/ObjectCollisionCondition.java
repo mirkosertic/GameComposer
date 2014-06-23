@@ -27,9 +27,9 @@ public class ObjectCollisionCondition implements Condition {
 
     @UsedByReflection
     public ObjectCollisionCondition() {
-        primaryObject = new Property<GameObject>(GameObject.class, this, PRIMARY_OBJECT_PROPERTY, (GameObject) null);
-        secondaryObject = new Property<GameObject>(GameObject.class, this, SECONDARY_OBJECT_PROPERTY, (GameObject) null);
-        position = new Property<CollisionPosition>(CollisionPosition.class, this, POSITION_PROPERTY, CollisionPosition.EVERYWHERE);
+        primaryObject = new Property<>(GameObject.class, this, PRIMARY_OBJECT_PROPERTY, (GameObject) null);
+        secondaryObject = new Property<>(GameObject.class, this, SECONDARY_OBJECT_PROPERTY, (GameObject) null);
+        position = new Property<>(CollisionPosition.class, this, POSITION_PROPERTY, CollisionPosition.EVERYWHERE);
     }
 
     public Property<GameObject> primaryObjectProperty() {
@@ -81,7 +81,7 @@ public class ObjectCollisionCondition implements Condition {
 
     @Override
     public Map<String, Object> serialize() {
-        Map<String, Object> theResult = new HashMap<String, Object>();
+        Map<String, Object> theResult = new HashMap<>();
         theResult.put(TYPE_ATTRIBUTE, TYPE_VALUE);
         if (!primaryObject.isNull()) {
             theResult.put("primaryObjectUuid", primaryObject.get().uuidProperty().get());

@@ -46,7 +46,7 @@ public class Position implements Reflectable<PositionClassInformation> {
     }
 
     public Map<String, Object> serialize() {
-        Map<String, Object> theResult = new HashMap<String, Object>();
+        Map<String, Object> theResult = new HashMap<>();
         theResult.put("x", Float.toString(x));
         theResult.put("y", Float.toString(y));
         return theResult;

@@ -31,9 +31,9 @@ public class TextBehavior implements Behavior, Text, Reflectable<TextClassInform
         GameEventManager theEventManager = aObjectInstance.getOwnerGameObject().getGameScene().getRuntime().getEventManager();
 
         objectInstance = aObjectInstance;
-        font = new Property<Font>(Font.class, this, FONT_PROPERTY, aTemplate.fontProperty().get(), theEventManager);
-        color = new Property<Color>(Color.class, this, COLOR_PROPERTY, aTemplate.colorProperty().get(), theEventManager);
-        textExpression = new Property<TextExpression>(TextExpression.class, this, TEXT_EXPRESSION_PROPERTY, aTemplate.textExpressionProperty().get(), theEventManager);
+        font = new Property<>(Font.class, this, FONT_PROPERTY, aTemplate.fontProperty().get(), theEventManager);
+        color = new Property<>(Color.class, this, COLOR_PROPERTY, aTemplate.colorProperty().get(), theEventManager);
+        textExpression = new Property<>(TextExpression.class, this, TEXT_EXPRESSION_PROPERTY, aTemplate.textExpressionProperty().get(), theEventManager);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class TextBehavior implements Behavior, Text, Reflectable<TextClassInform
 
     @Override
     public Map<String, Object> serialize() {
-        Map<String, Object> theResult = new HashMap<String, Object>();
+        Map<String, Object> theResult = new HashMap<>();
         theResult.put(TYPE_ATTRIBUTE, TYPE);
         theResult.put(FONT_PROPERTY, font.get().serialize());
         theResult.put(TEXT_EXPRESSION_PROPERTY, textExpression.get().serialize());

@@ -20,7 +20,7 @@ public class SystemTickCondition implements Condition {
 
     @UsedByReflection
     public SystemTickCondition() {
-        everyTicks = new Property<Long>(Long.class, this, EVERY_TICKS_PROPERTY, 1l);
+        everyTicks = new Property<>(Long.class, this, EVERY_TICKS_PROPERTY, 1l);
     }
 
     public Property<Long> everyTicksProperty() {
@@ -40,7 +40,7 @@ public class SystemTickCondition implements Condition {
 
     @Override
     public Map<String, Object> serialize() {
-        Map<String, Object> theResult = new HashMap<String, Object>();
+        Map<String, Object> theResult = new HashMap<>();
         theResult.put(TYPE_ATTRIBUTE, TYPE_VALUE);
         theResult.put(EVERY_TICKS_PROPERTY, Long.toString(everyTicks.get()));
         return theResult;

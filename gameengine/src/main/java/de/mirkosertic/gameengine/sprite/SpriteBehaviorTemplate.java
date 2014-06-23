@@ -20,7 +20,7 @@ public class SpriteBehaviorTemplate implements BehaviorTemplate<SpriteBehavior>,
 
     @UsedByReflection
     public SpriteBehaviorTemplate(GameEventManager aEventManager, GameObject aOwner) {
-        resourceName = new Property<ResourceName>(ResourceName.class, this, RESOURCE_NAME_PROPERTY, aEventManager);
+        resourceName = new Property<>(ResourceName.class, this, RESOURCE_NAME_PROPERTY, aEventManager);
         owner = aOwner;
     }
 
@@ -49,7 +49,7 @@ public class SpriteBehaviorTemplate implements BehaviorTemplate<SpriteBehavior>,
 
     @Override
     public Map<String, Object> serialize() {
-        Map<String, Object> theResult = new HashMap<String, Object>();
+        Map<String, Object> theResult = new HashMap<>();
         theResult.put(SpriteBehavior.TYPE_ATTRIBUTE, SpriteBehavior.TYPE);
         if (resourceName.get() != null) {
             theResult.put("resourcename", resourceName.get().serialize());

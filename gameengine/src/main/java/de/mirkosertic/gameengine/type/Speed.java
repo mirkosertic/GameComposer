@@ -17,7 +17,7 @@ public class Speed implements ValueProvider<Long> {
     }
 
     public Map<String, Object> serialize() {
-        Map<String, Object> theResult = new HashMap<String, Object>();
+        Map<String, Object> theResult = new HashMap<>();
         theResult.put("speed", Long.toString(speed));
         return theResult;
     }

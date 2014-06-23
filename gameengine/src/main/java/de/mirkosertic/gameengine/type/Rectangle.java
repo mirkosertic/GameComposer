@@ -33,7 +33,7 @@ public class Rectangle {
     }
 
     public Map<String, Object> serialize() {
-        Map<String, Object> theResult = new HashMap<String, Object>();
+        Map<String, Object> theResult = new HashMap<>();
         theResult.put("position", position.serialize());
         theResult.put("size", size.serialize());
         return theResult;
