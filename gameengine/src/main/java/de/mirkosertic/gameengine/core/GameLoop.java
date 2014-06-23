@@ -35,6 +35,11 @@ public class GameLoop implements Runnable {
     }
 
     public void singleRun() {
+        if  (lastInvocation == 0) {
+            // Initial state, we skip this to prevent computation errors
+            lastInvocation = System.currentTimeMillis();
+            return;
+        }
         long theCurrentTime = System.currentTimeMillis();
         long theGameTime = theCurrentTime - startTime;
         long theElapsedTime = theCurrentTime - lastInvocation;

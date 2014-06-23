@@ -1,5 +1,5 @@
 {
-  "name" : "Bounce game",
   "enablewebgl" : "true",
+  "name" : "Bounce game",
   "defaultscene" : "scene1"
 }

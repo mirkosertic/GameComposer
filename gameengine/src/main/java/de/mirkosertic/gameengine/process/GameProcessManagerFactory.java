@@ -18,11 +18,6 @@ public class GameProcessManagerFactory {
                 theManager.killProcessesForInstance(aEvent.instance);
             }
         });
-        aEventManager.register(null, StartProcess.class, new GameEventListener<StartProcess>() {
-            public void handleGameEvent(StartProcess aEvent) {
-                theManager.start(aEvent.process);
-            }
-        });
         aEventManager.register(null, GameObjectInstanceRemovedFromScene.class, new GameEventListener<GameObjectInstanceRemovedFromScene>() {
             public void handleGameEvent(GameObjectInstanceRemovedFromScene aEvent) {
                 theManager.instanceRemovedFromScene(aEvent.instance);
