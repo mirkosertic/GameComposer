@@ -11,6 +11,29 @@
     <artifactId>gameengine-gwtrenderer</artifactId>
     <name>GameComposer GWT HTML5 Canvas / WebGL Renderer</name>
     <packaging>war</packaging>
+    <repositories>
+        <repository>
+            <id>google-maven-snapshot-repository</id>
+            <name>Google Maven Snapshot Repository</name>
+            <url>https://oss.sonatype.org/content/repositories/google-snapshots/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>google-maven-snapshot-repository</id>
+            <name>Google Maven Snapshot Repository</name>
+            <url>https://oss.sonatype.org/content/repositories/google-snapshots/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+    <properties>
+        <gwt.version>2.7.0-SNAPSHOT</gwt.version>
+    </properties>
     <build>
         <plugins>
             <plugin>
@@ -36,6 +59,23 @@
                     <!--<style>DETAILED</style>
                     <disableCastChecking>true</disableCastChecking>-->
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.google.gwt</groupId>
+                        <artifactId>gwt-user</artifactId>
+                        <version>${gwt.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.google.gwt</groupId>
+                        <artifactId>gwt-dev</artifactId>
+                        <version>${gwt.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.google.gwt</groupId>
+                        <artifactId>gwt-codeserver</artifactId>
+                        <version>${gwt.version}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -60,13 +100,13 @@
         <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-user</artifactId>
-            <version>2.6.1</version>
+            <version>${gwt.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-servlet</artifactId>
-            <version>2.6.1</version>
+            <version>${gwt.version}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
