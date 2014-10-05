@@ -69,7 +69,7 @@ public class GameSceneEditorControllerFactory implements ContentAreaFactory<Game
             FXMLLoader theLoader = fxmlLoaderFactory.createLoader();
             ResourceBundle theBundle = ResourceBundle.getBundle("de.mirkosertic.gamecomposer.contentarea.gamescene.GameSceneEditor");
             theLoader.setResources(theBundle);
-            BorderPane root = (BorderPane) theLoader.load(fxml);
+            BorderPane root = theLoader.load(fxml);
 
             GameSceneEditorController theController = theLoader.getController();
             theController.centerBorderPane.widthProperty().addListener(new ChangeListener<Number>() {

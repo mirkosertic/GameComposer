@@ -24,7 +24,7 @@ public class SpriteTemplateEditorControllerFactory implements ObjectInspectorFac
             FXMLLoader theLoader = fxmlLoaderFactory.createLoader();
             ResourceBundle theBundle = ResourceBundle.getBundle("de.mirkosertic.gamecomposer.objectinspector.spritetemplate.SpriteTemplateEditor");
             theLoader.setResources(theBundle);
-            Parent root = (Parent) theLoader.load(fxml);
+            Parent root = theLoader.load(fxml);
             return ((SpriteTemplateEditorController)theLoader.getController()).initialize(root, aObject);
         } catch (IOException e) {
             throw new RuntimeException(e);

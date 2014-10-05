@@ -25,7 +25,7 @@ public class GameObjectInstanceLeftLayoutEditorControllerFactory implements Cond
             FXMLLoader theLoader = fxmlLoaderFactory.createLoader();
             ResourceBundle theBundle = ResourceBundle.getBundle("de.mirkosertic.gamecomposer.contentarea.eventsheet.instanceleftlayoutcondition.GameObjectInstanceLeftLayoutEditor");
             theLoader.setResources(theBundle);
-            BorderPane theRoot = (BorderPane) theLoader.load(fxml);
+            BorderPane theRoot = theLoader.load(fxml);
 
             GameObjectInstanceLeftLayoutEditorController theController = theLoader.getController();
             return theController.initialize(theRoot, aGameScene, aCondition);

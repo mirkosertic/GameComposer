@@ -26,7 +26,7 @@ public class MessageBox {
             FXMLLoader theLoader = fxmlLoaderFactory.createLoader();
             ResourceBundle theBundle = ResourceBundle.getBundle("de.mirkosertic.gamecomposer.MessageBox");
             theLoader.setResources(theBundle);
-            Parent root = (Parent) theLoader.load(fxml);
+            Parent root = theLoader.load(fxml);
             MessageBoxController theController = theLoader.getController();
 
             Stage theModalStage = new Stage();

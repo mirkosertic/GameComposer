@@ -24,7 +24,7 @@ public class StaticTemplateEditorControllerFactory implements ObjectInspectorFac
             FXMLLoader theLoader = fxmlLoaderFactory.createLoader();
             ResourceBundle theBundle = ResourceBundle.getBundle("de.mirkosertic.gamecomposer.objectinspector.statictemplate.StaticTemplateEditor");
             theLoader.setResources(theBundle);
-            Parent root = (Parent) theLoader.load(fxml);
+            Parent root = theLoader.load(fxml);
             return ((StaticTemplateEditorController)theLoader.getController()).initialize(root, aObject);
         } catch (IOException e) {
             throw new RuntimeException(e);

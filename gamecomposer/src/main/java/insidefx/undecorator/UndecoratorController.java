@@ -1,9 +1,7 @@
 package insidefx.undecorator;
 
-import java.util.logging.Level;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Rectangle2D;
@@ -15,32 +13,35 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 
+import java.util.logging.Level;
+
 /**
  *
  * @author in-sideFX
  */
-public class UndecoratorController {
+class UndecoratorController {
 
-    static final int DOCK_NONE = 0x0;
-    static final int DOCK_LEFT = 0x1;
-    static final int DOCK_RIGHT = 0x2;
-    static final int DOCK_TOP = 0x4;
-    int lastDocked = DOCK_NONE;
+    private static final int DOCK_NONE = 0x0;
+    private static final int DOCK_LEFT = 0x1;
+    private static final int DOCK_RIGHT = 0x2;
+    private static final int DOCK_TOP = 0x4;
+    private int lastDocked = DOCK_NONE;
     private static double initX = -1;
     private static double initY = -1;
     private static double newX;
     private static double newY;
     private static int RESIZE_PADDING;
     private static int SHADOW_WIDTH;
-    Undecorator undecorator;
-    BoundingBox savedBounds, savedFullScreenBounds;
-    boolean maximized = false;
-    static boolean isMacOS = false;
-    static final int MAXIMIZE_BORDER = 20;  // Allow double click to maximize on top of the Scene
+    private final Undecorator undecorator;
+    private BoundingBox savedBounds;
+    private BoundingBox savedFullScreenBounds;
+    private boolean maximized = false;
+    private static boolean isMacOS = false;
+    private static final int MAXIMIZE_BORDER = 20;  // Allow double click to maximize on top of the Scene
 
     {
         String os = System.getProperty("os.name").toLowerCase();
-        if (os.indexOf("mac") != -1) {
+        if (os.contains("mac")) {
             isMacOS = true;
         }
     }
@@ -53,7 +54,7 @@ public class UndecoratorController {
     /*
      * Actions
      */
-    protected void maximizeOrRestore() {
+    void maximizeOrRestore() {
 
 
         Stage stage = undecorator.getStage();
@@ -90,7 +91,7 @@ public class UndecoratorController {
         savedFullScreenBounds = new BoundingBox(stage.getX(), stage.getY(), stage.getWidth(), stage.getHeight());
     }
 
-    public void restoreSavedBounds(Stage stage, boolean fullscreen) {
+    void restoreSavedBounds(Stage stage, boolean fullscreen) {
 
         stage.setX(savedBounds.getMinX());
         stage.setY(savedBounds.getMinY());
@@ -108,19 +109,14 @@ public class UndecoratorController {
         savedFullScreenBounds = null;
     }
 
-    protected void setFullScreen(boolean value) {
+    void setFullScreen(boolean value) {
         Stage stage = undecorator.getStage();
         stage.setFullScreen(value);
     }
 
     public void close() {
         final Stage stage = undecorator.getStage();
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
-            }
-        });
+        Platform.runLater(() -> stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST)));
 
     }
 
@@ -128,12 +124,7 @@ public class UndecoratorController {
 
         if (!Platform.isFxApplicationThread()) // Ensure on correct thread else hangs X under Unbuntu
         {
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    _minimize();
-                }
-            });
+            Platform.runLater(this::_minimize);
         } else {
             _minimize();
         }
@@ -156,144 +147,131 @@ public class UndecoratorController {
 
         RESIZE_PADDING = PADDING;
         SHADOW_WIDTH = SHADOW;
-        node.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            // Maximize on double click
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                if (undecorator.getStageStyle() != StageStyle.UTILITY && !stage.isFullScreen() && mouseEvent.getClickCount() > 1) {
-                    if (mouseEvent.getSceneY() - SHADOW_WIDTH < MAXIMIZE_BORDER) {
-                        undecorator.maximizeProperty().set(!undecorator.maximizeProperty().get());
-                        mouseEvent.consume();
-                    }
-                }
-            }
-        });
-
-        node.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                if (mouseEvent.isPrimaryButtonDown()) {
-                    initX = mouseEvent.getScreenX();
-                    initY = mouseEvent.getScreenY();
+        node.setOnMouseClicked(mouseEvent -> {
+            if (undecorator.getStageStyle() != StageStyle.UTILITY && !stage.isFullScreen() && mouseEvent.getClickCount() > 1) {
+                if (mouseEvent.getSceneY() - SHADOW_WIDTH < MAXIMIZE_BORDER) {
+                    undecorator.maximizeProperty().set(!undecorator.maximizeProperty().get());
                     mouseEvent.consume();
                 }
             }
         });
-        node.setOnMouseDragged(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                if (!mouseEvent.isPrimaryButtonDown() || (initX == -1 && initY == -1)) {
-                    return;
-                }
-                if (stage.isFullScreen()) {
-                    return;
-                }
-                /*
-                 * Long press generates drag event!
-                 */
-                if (mouseEvent.isStillSincePress()) {
-                    return;
-                }
-                if (maximized) {
-                    // Remove maximized state
-                    undecorator.maximizeProperty.set(false);
-                    return;
-                } // Docked then moved, so restore state
-                else if (savedBounds != null) {
-                    undecorator.setShadow(true);
-                }
 
-
-                newX = mouseEvent.getScreenX();
-                newY = mouseEvent.getScreenY();
-                double deltax = newX - initX;
-                double deltay = newY - initY;
-
-                Cursor cursor = node.getCursor();
-                if (Cursor.E_RESIZE.equals(cursor)) {
-                    setStageWidth(stage, stage.getWidth() + deltax);
-                    mouseEvent.consume();
-                } else if (Cursor.NE_RESIZE.equals(cursor)) {
-                    if (setStageHeight(stage, stage.getHeight() - deltay)) {
-                        setStageY(stage, stage.getY() + deltay);
-                    }
-                    setStageWidth(stage, stage.getWidth() + deltax);
-                    mouseEvent.consume();
-                } else if (Cursor.SE_RESIZE.equals(cursor)) {
-                    setStageWidth(stage, stage.getWidth() + deltax);
-                    setStageHeight(stage, stage.getHeight() + deltay);
-                    mouseEvent.consume();
-                } else if (Cursor.S_RESIZE.equals(cursor)) {
-                    setStageHeight(stage, stage.getHeight() + deltay);
-                    mouseEvent.consume();
-                } else if (Cursor.W_RESIZE.equals(cursor)) {
-                    if (setStageWidth(stage, stage.getWidth() - deltax)) {
-                        stage.setX(stage.getX() + deltax);
-                    }
-                    mouseEvent.consume();
-                } else if (Cursor.SW_RESIZE.equals(cursor)) {
-                    if (setStageWidth(stage, stage.getWidth() - deltax)) {
-                        stage.setX(stage.getX() + deltax);
-                    }
-                    setStageHeight(stage, stage.getHeight() + deltay);
-                    mouseEvent.consume();
-                } else if (Cursor.NW_RESIZE.equals(cursor)) {
-                    if (setStageWidth(stage, stage.getWidth() - deltax)) {
-                        stage.setX(stage.getX() + deltax);
-                    }
-                    if (setStageHeight(stage, stage.getHeight() - deltay)) {
-                        setStageY(stage, stage.getY() + deltay);
-                    }
-                    mouseEvent.consume();
-                } else if (Cursor.N_RESIZE.equals(cursor)) {
-                    if (setStageHeight(stage, stage.getHeight() - deltay)) {
-                        setStageY(stage, stage.getY() + deltay);
-                    }
-                    mouseEvent.consume();
-                }
-
+        node.setOnMousePressed(mouseEvent -> {
+            if (mouseEvent.isPrimaryButtonDown()) {
+                initX = mouseEvent.getScreenX();
+                initY = mouseEvent.getScreenY();
+                mouseEvent.consume();
             }
         });
-        node.setOnMouseMoved(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                if (maximized) {
-                    setCursor(node, Cursor.DEFAULT);
-                    return; // maximized mode does not support resize
-                }
-                if (stage.isFullScreen()) {
-                    return;
-                }
-                if (!stage.isResizable()) {
-                    return;
-                }
-                double x = mouseEvent.getX();
-                double y = mouseEvent.getY();
-                Bounds boundsInParent = node.getBoundsInParent();
-                if (isRightEdge(x, y, boundsInParent)) {
-                    if (y < RESIZE_PADDING + SHADOW_WIDTH) {
-                        setCursor(node, Cursor.NE_RESIZE);
-                    } else if (y > boundsInParent.getHeight() - (double) (RESIZE_PADDING + SHADOW_WIDTH)) {
-                        setCursor(node, Cursor.SE_RESIZE);
-                    } else {
-                        setCursor(node, Cursor.E_RESIZE);
-                    }
+        node.setOnMouseDragged(mouseEvent -> {
+            if (!mouseEvent.isPrimaryButtonDown() || (initX == -1 && initY == -1)) {
+                return;
+            }
+            if (stage.isFullScreen()) {
+                return;
+            }
+            /*
+             * Long press generates drag event!
+             */
+            if (mouseEvent.isStillSincePress()) {
+                return;
+            }
+            if (maximized) {
+                // Remove maximized state
+                undecorator.maximizeProperty.set(false);
+                return;
+            } // Docked then moved, so restore state
+            else if (savedBounds != null) {
+                undecorator.setShadow(true);
+            }
 
-                } else if (isLeftEdge(x, y, boundsInParent)) {
-                    if (y < RESIZE_PADDING + SHADOW_WIDTH) {
-                        setCursor(node, Cursor.NW_RESIZE);
-                    } else if (y > boundsInParent.getHeight() - (double) (RESIZE_PADDING + SHADOW_WIDTH)) {
-                        setCursor(node, Cursor.SW_RESIZE);
-                    } else {
-                        setCursor(node, Cursor.W_RESIZE);
-                    }
-                } else if (isTopEdge(x, y, boundsInParent)) {
-                    setCursor(node, Cursor.N_RESIZE);
-                } else if (isBottomEdge(x, y, boundsInParent)) {
-                    setCursor(node, Cursor.S_RESIZE);
+
+            newX = mouseEvent.getScreenX();
+            newY = mouseEvent.getScreenY();
+            double deltax = newX - initX;
+            double deltay = newY - initY;
+
+            Cursor cursor = node.getCursor();
+            if (Cursor.E_RESIZE.equals(cursor)) {
+                setStageWidth(stage, stage.getWidth() + deltax);
+                mouseEvent.consume();
+            } else if (Cursor.NE_RESIZE.equals(cursor)) {
+                if (setStageHeight(stage, stage.getHeight() - deltay)) {
+                    setStageY(stage, stage.getY() + deltay);
+                }
+                setStageWidth(stage, stage.getWidth() + deltax);
+                mouseEvent.consume();
+            } else if (Cursor.SE_RESIZE.equals(cursor)) {
+                setStageWidth(stage, stage.getWidth() + deltax);
+                setStageHeight(stage, stage.getHeight() + deltay);
+                mouseEvent.consume();
+            } else if (Cursor.S_RESIZE.equals(cursor)) {
+                setStageHeight(stage, stage.getHeight() + deltay);
+                mouseEvent.consume();
+            } else if (Cursor.W_RESIZE.equals(cursor)) {
+                if (setStageWidth(stage, stage.getWidth() - deltax)) {
+                    stage.setX(stage.getX() + deltax);
+                }
+                mouseEvent.consume();
+            } else if (Cursor.SW_RESIZE.equals(cursor)) {
+                if (setStageWidth(stage, stage.getWidth() - deltax)) {
+                    stage.setX(stage.getX() + deltax);
+                }
+                setStageHeight(stage, stage.getHeight() + deltay);
+                mouseEvent.consume();
+            } else if (Cursor.NW_RESIZE.equals(cursor)) {
+                if (setStageWidth(stage, stage.getWidth() - deltax)) {
+                    stage.setX(stage.getX() + deltax);
+                }
+                if (setStageHeight(stage, stage.getHeight() - deltay)) {
+                    setStageY(stage, stage.getY() + deltay);
+                }
+                mouseEvent.consume();
+            } else if (Cursor.N_RESIZE.equals(cursor)) {
+                if (setStageHeight(stage, stage.getHeight() - deltay)) {
+                    setStageY(stage, stage.getY() + deltay);
+                }
+                mouseEvent.consume();
+            }
+
+        });
+        node.setOnMouseMoved(mouseEvent -> {
+            if (maximized) {
+                setCursor(node, Cursor.DEFAULT);
+                return; // maximized mode does not support resize
+            }
+            if (stage.isFullScreen()) {
+                return;
+            }
+            if (!stage.isResizable()) {
+                return;
+            }
+            double x = mouseEvent.getX();
+            double y = mouseEvent.getY();
+            Bounds boundsInParent = node.getBoundsInParent();
+            if (isRightEdge(x, y, boundsInParent)) {
+                if (y < RESIZE_PADDING + SHADOW_WIDTH) {
+                    setCursor(node, Cursor.NE_RESIZE);
+                } else if (y > boundsInParent.getHeight() - (double) (RESIZE_PADDING + SHADOW_WIDTH)) {
+                    setCursor(node, Cursor.SE_RESIZE);
                 } else {
-                    setCursor(node, Cursor.DEFAULT);
+                    setCursor(node, Cursor.E_RESIZE);
                 }
+
+            } else if (isLeftEdge(x, y, boundsInParent)) {
+                if (y < RESIZE_PADDING + SHADOW_WIDTH) {
+                    setCursor(node, Cursor.NW_RESIZE);
+                } else if (y > boundsInParent.getHeight() - (double) (RESIZE_PADDING + SHADOW_WIDTH)) {
+                    setCursor(node, Cursor.SW_RESIZE);
+                } else {
+                    setCursor(node, Cursor.W_RESIZE);
+                }
+            } else if (isTopEdge(x, y, boundsInParent)) {
+                setCursor(node, Cursor.N_RESIZE);
+            } else if (isBottomEdge(x, y, boundsInParent)) {
+                setCursor(node, Cursor.S_RESIZE);
+            } else {
+                setCursor(node, Cursor.DEFAULT);
             }
         });
     }
@@ -346,92 +324,76 @@ public class UndecoratorController {
      */
     public void setAsStageDraggable(final Stage stage, final Node node) {
 
-        node.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            // Maximize on double click
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                if (undecorator.getStageStyle() != StageStyle.UTILITY && !stage.isFullScreen() && mouseEvent.getClickCount() > 1) {
-                    if (mouseEvent.getSceneY() - SHADOW_WIDTH < MAXIMIZE_BORDER) {
-                        undecorator.maximizeProperty().set(!undecorator.maximizeProperty().get());
-                        mouseEvent.consume();
-                    }
-                }
-            }
-        });
-        node.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                if (mouseEvent.isPrimaryButtonDown()) {
-                    initX = mouseEvent.getScreenX();
-                    initY = mouseEvent.getScreenY();
+        node.setOnMouseClicked(mouseEvent -> {
+            if (undecorator.getStageStyle() != StageStyle.UTILITY && !stage.isFullScreen() && mouseEvent.getClickCount() > 1) {
+                if (mouseEvent.getSceneY() - SHADOW_WIDTH < MAXIMIZE_BORDER) {
+                    undecorator.maximizeProperty().set(!undecorator.maximizeProperty().get());
                     mouseEvent.consume();
-                } else {
-                    initX = -1;
-                    initY = -1;
                 }
             }
         });
-        node.setOnMouseDragged(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                if (!mouseEvent.isPrimaryButtonDown() || initX == -1) {
-                    return;
-                }
-                if (stage.isFullScreen()) {
-                    return;
-                }
-                /*
-                 * Long press generates drag event!
-                 */
-                if (mouseEvent.isStillSincePress()) {
-                    return;
-                }
-                if (maximized) {
-                    // Remove Maximized state
-                    undecorator.maximizeProperty.set(false);
-                    // Center 
-                    stage.setX(mouseEvent.getScreenX() - stage.getWidth() / 2);
-                    stage.setY(mouseEvent.getScreenY() - SHADOW_WIDTH);
-                } // Docked then moved, so restore state
-                else if (savedBounds != null) {
-                    restoreSavedBounds(stage, false);
-                    undecorator.setShadow(true);
-                    // Center
-                    stage.setX(mouseEvent.getScreenX() - stage.getWidth() / 2);
-                    stage.setY(mouseEvent.getScreenY() - SHADOW_WIDTH);
-                }
-                double newX = mouseEvent.getScreenX();
-                double newY = mouseEvent.getScreenY();
-                double deltax = newX - initX;
-                double deltay = newY - initY;
-                initX = newX;
-                initY = newY;
-                setCursor(node, Cursor.HAND);
-                stage.setX(stage.getX() + deltax);
-                setStageY(stage, stage.getY() + deltay);
-
-                testDock(stage, mouseEvent);
+        node.setOnMousePressed(mouseEvent -> {
+            if (mouseEvent.isPrimaryButtonDown()) {
+                initX = mouseEvent.getScreenX();
+                initY = mouseEvent.getScreenY();
                 mouseEvent.consume();
+            } else {
+                initX = -1;
+                initY = -1;
             }
         });
-        node.setOnMouseReleased(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent t) {
-                if (stage.isResizable()) {
-                    undecorator.setDockFeedbackInvisible();
-                    setCursor(node, Cursor.DEFAULT);
-                    initX = -1;
-                    initY = -1;
-                    dockActions(stage, t);
-                }
+        node.setOnMouseDragged(mouseEvent -> {
+            if (!mouseEvent.isPrimaryButtonDown() || initX == -1) {
+                return;
+            }
+            if (stage.isFullScreen()) {
+                return;
+            }
+            /*
+             * Long press generates drag event!
+             */
+            if (mouseEvent.isStillSincePress()) {
+                return;
+            }
+            if (maximized) {
+                // Remove Maximized state
+                undecorator.maximizeProperty.set(false);
+                // Center
+                stage.setX(mouseEvent.getScreenX() - stage.getWidth() / 2);
+                stage.setY(mouseEvent.getScreenY() - SHADOW_WIDTH);
+            } // Docked then moved, so restore state
+            else if (savedBounds != null) {
+                restoreSavedBounds(stage, false);
+                undecorator.setShadow(true);
+                // Center
+                stage.setX(mouseEvent.getScreenX() - stage.getWidth() / 2);
+                stage.setY(mouseEvent.getScreenY() - SHADOW_WIDTH);
+            }
+            double newX1 = mouseEvent.getScreenX();
+            double newY1 = mouseEvent.getScreenY();
+            double deltax = newX1 - initX;
+            double deltay = newY1 - initY;
+            initX = newX1;
+            initY = newY1;
+            setCursor(node, Cursor.HAND);
+            stage.setX(stage.getX() + deltax);
+            setStageY(stage, stage.getY() + deltay);
+
+            testDock(stage, mouseEvent);
+            mouseEvent.consume();
+        });
+        node.setOnMouseReleased(t -> {
+            if (stage.isResizable()) {
+                undecorator.setDockFeedbackInvisible();
+                setCursor(node, Cursor.DEFAULT);
+                initX = -1;
+                initY = -1;
+                dockActions(stage, t);
             }
         });
 
-        node.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                //setCursor(node, Cursor.DEFAULT);
-            }
+        node.setOnMouseExited(mouseEvent -> {
+            //setCursor(node, Cursor.DEFAULT);
         });
 
     }
@@ -544,20 +506,8 @@ public class UndecoratorController {
 
             stage.setX(visualBounds.getMinX());
             stage.setY(visualBounds.getMinY());
-            // Respect Stage Max size
-            double width = visualBounds.getWidth() / 2;
-            if (stage.getMaxWidth() < width) {
-                width = stage.getMaxWidth();
-            }
-
-            stage.setWidth(width);
-
-            double height = visualBounds.getHeight();
-            if (stage.getMaxHeight() < height) {
-                height = stage.getMaxHeight();
-            }
-
-            stage.setHeight(height);
+            stage.setWidth(visualBounds.getWidth() / 2);
+            stage.setHeight(visualBounds.getHeight());
             undecorator.setShadow(false);
         } // Dock Right (visualBounds = [minX = 1440.0, minY=300.0, maxX=3360.0, maxY=1500.0, width=1920.0, height=1200.0])
         else if (mouseEvent.getScreenX() >= visualBounds.getMaxX() - 1) { // MaxX returns the width? Not width -1 ?!
@@ -565,20 +515,8 @@ public class UndecoratorController {
 
             stage.setX(visualBounds.getWidth() / 2 + visualBounds.getMinX());
             stage.setY(visualBounds.getMinY());
-            // Respect Stage Max size
-            double width = visualBounds.getWidth() / 2;
-            if (stage.getMaxWidth() < width) {
-                width = stage.getMaxWidth();
-            }
-
-            stage.setWidth(width);
-
-            double height = visualBounds.getHeight();
-            if (stage.getMaxHeight() < height) {
-                height = stage.getMaxHeight();
-            }
-
-            stage.setHeight(height);
+            stage.setWidth(visualBounds.getWidth() / 2);
+            stage.setHeight(visualBounds.getHeight());
             undecorator.setShadow(false);
         } else if (mouseEvent.getScreenY() <= visualBounds.getMinY()) { // Mac menu bar
             undecorator.maximizeProperty.set(true);
@@ -586,35 +524,35 @@ public class UndecoratorController {
 
     }
 
-    public boolean isRightEdge(double x, double y, Bounds boundsInParent) {
+    boolean isRightEdge(double x, double y, Bounds boundsInParent) {
         if (x < boundsInParent.getWidth() && x > boundsInParent.getWidth() - RESIZE_PADDING - SHADOW_WIDTH) {
             return true;
         }
         return false;
     }
 
-    public boolean isTopEdge(double x, double y, Bounds boundsInParent) {
+    boolean isTopEdge(double x, double y, Bounds boundsInParent) {
         if (y >= 0 && y < RESIZE_PADDING + SHADOW_WIDTH) {
             return true;
         }
         return false;
     }
 
-    public boolean isBottomEdge(double x, double y, Bounds boundsInParent) {
+    boolean isBottomEdge(double x, double y, Bounds boundsInParent) {
         if (y < boundsInParent.getHeight() && y > boundsInParent.getHeight() - RESIZE_PADDING - SHADOW_WIDTH) {
             return true;
         }
         return false;
     }
 
-    public boolean isLeftEdge(double x, double y, Bounds boundsInParent) {
+    boolean isLeftEdge(double x, double y, Bounds boundsInParent) {
         if (x >= 0 && x < RESIZE_PADDING + SHADOW_WIDTH) {
             return true;
         }
         return false;
     }
 
-    public void setCursor(Node n, Cursor c) {
+    void setCursor(Node n, Cursor c) {
         n.setCursor(c);
     }
 }

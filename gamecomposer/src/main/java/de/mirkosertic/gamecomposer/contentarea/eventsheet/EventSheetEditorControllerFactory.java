@@ -26,7 +26,7 @@ public class EventSheetEditorControllerFactory implements ContentAreaFactory<Eve
             FXMLLoader theLoader = fxmlLoaderFactory.createLoader();
             ResourceBundle theBundle = ResourceBundle.getBundle("de.mirkosertic.gamecomposer.contentarea.eventsheet.EventSheetEditor");
             theLoader.setResources(theBundle);
-            BorderPane root = (BorderPane) theLoader.load(fxml);
+            BorderPane root = theLoader.load(fxml);
 
             EventSheetEditorController theController = theLoader.getController();
 

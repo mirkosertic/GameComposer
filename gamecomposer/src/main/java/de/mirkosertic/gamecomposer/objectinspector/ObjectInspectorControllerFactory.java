@@ -23,7 +23,7 @@ public class ObjectInspectorControllerFactory {
             FXMLLoader theLoader = fxmlLoaderFactory.createLoader();
             ResourceBundle theBundle = ResourceBundle.getBundle("de.mirkosertic.gamecomposer.objectinspector.ObjectInspector");
             theLoader.setResources(theBundle);
-            Parent root = (Parent) theLoader.load(fxml);
+            Parent root = theLoader.load(fxml);
             return ((ObjectInspectorController)theLoader.getController()).initialize(root);
         }
     }

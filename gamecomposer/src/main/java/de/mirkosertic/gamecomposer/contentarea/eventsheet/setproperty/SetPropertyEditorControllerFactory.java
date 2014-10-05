@@ -25,7 +25,7 @@ public class SetPropertyEditorControllerFactory implements ActionControllerFacto
             FXMLLoader theLoader = fxmlLoaderFactory.createLoader();
             ResourceBundle theBundle = ResourceBundle.getBundle("de.mirkosertic.gamecomposer.contentarea.eventsheet.setproperty.SetPropertyEditor");
             theLoader.setResources(theBundle);
-            BorderPane theRoot = (BorderPane) theLoader.load(fxml);
+            BorderPane theRoot = theLoader.load(fxml);
 
             SetPropertyEditorController theController = theLoader.getController();
             return theController.initialize(theRoot, aGameScene, aRule, aAction);
