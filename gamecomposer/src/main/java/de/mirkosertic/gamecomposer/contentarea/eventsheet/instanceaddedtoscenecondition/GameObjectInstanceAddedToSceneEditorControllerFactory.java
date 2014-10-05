@@ -25,7 +25,7 @@ public class GameObjectInstanceAddedToSceneEditorControllerFactory implements Co
             FXMLLoader theLoader = fxmlLoaderFactory.createLoader();
             ResourceBundle theBundle = ResourceBundle.getBundle("de.mirkosertic.gamecomposer.contentarea.eventsheet.instanceaddedtoscenecondition.GameObjectInstanceAddedToSceneEditor");
             theLoader.setResources(theBundle);
-            BorderPane theRoot = (BorderPane) theLoader.load(fxml);
+            BorderPane theRoot = theLoader.load(fxml);
 
             GameObjectInstanceAddedToSceneEditorController theController = theLoader.getController();
             return theController.initialize(theRoot, aGameScene, aCondition);

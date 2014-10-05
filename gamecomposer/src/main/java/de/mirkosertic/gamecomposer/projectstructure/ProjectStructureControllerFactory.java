@@ -23,7 +23,7 @@ public class ProjectStructureControllerFactory {
             FXMLLoader theLoader = fxmlLoaderFactory.createLoader();
             ResourceBundle theBundle = ResourceBundle.getBundle("de.mirkosertic.gamecomposer.projectstructure.ProjectStructure");
             theLoader.setResources(theBundle);
-            Parent root = (Parent) theLoader.load(fxml);
+            Parent root = theLoader.load(fxml);
             return ((ProjectStructureController)theLoader.getController()).initialize(root);
         }
     }

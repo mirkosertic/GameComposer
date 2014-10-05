@@ -25,7 +25,7 @@ public class KillProcessesForInstanceEditorControllerFactory implements ActionCo
             FXMLLoader theLoader = fxmlLoaderFactory.createLoader();
             ResourceBundle theBundle = ResourceBundle.getBundle("de.mirkosertic.gamecomposer.contentarea.eventsheet.killinstanceprocesses.KillInstanceProcessEditor");
             theLoader.setResources(theBundle);
-            BorderPane theRoot = (BorderPane) theLoader.load(fxml);
+            BorderPane theRoot = theLoader.load(fxml);
 
             KillProcessesForInstanceEditorController theController = theLoader.getController();
             return theController.initialize(theRoot, aGameScene, aAction);

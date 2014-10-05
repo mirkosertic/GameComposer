@@ -23,7 +23,7 @@ public class GameObjectEditorControllerFactory implements ObjectInspectorFactory
             FXMLLoader theLoader = fxmlLoaderFactory.createLoader();
             ResourceBundle theBundle = ResourceBundle.getBundle("de.mirkosertic.gamecomposer.objectinspector.gameobject.GameObjectEditor");
             theLoader.setResources(theBundle);
-            Parent root = (Parent) theLoader.load(fxml);
+            Parent root = theLoader.load(fxml);
             return ((GameObjectEditorController)theLoader.getController()).initialize(root, aObject);
         } catch (IOException e) {
             throw new RuntimeException(e);

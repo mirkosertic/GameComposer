@@ -21,7 +21,7 @@ public class RuleEditorControllerFactory {
             FXMLLoader theLoader = fxmlLoaderFactory.createLoader();
             ResourceBundle theBundle = ResourceBundle.getBundle("de.mirkosertic.gamecomposer.contentarea.eventsheet.RuleEditor");
             theLoader.setResources(theBundle);
-            BorderPane root = (BorderPane) theLoader.load(fxml);
+            BorderPane root = theLoader.load(fxml);
 
             RuleEditorController theController = theLoader.getController();
 

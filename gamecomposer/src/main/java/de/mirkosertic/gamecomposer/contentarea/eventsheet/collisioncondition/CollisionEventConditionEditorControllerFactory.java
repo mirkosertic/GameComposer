@@ -24,7 +24,7 @@ public class CollisionEventConditionEditorControllerFactory implements Condition
             FXMLLoader theLoader = fxmlLoaderFactory.createLoader();
             ResourceBundle theBundle = ResourceBundle.getBundle("de.mirkosertic.gamecomposer.contentarea.eventsheet.collisioncondition.CollisionEventConditionEditor");
             theLoader.setResources(theBundle);
-            BorderPane theRoot = (BorderPane) theLoader.load(fxml);
+            BorderPane theRoot = theLoader.load(fxml);
 
             CollisionEventConditionEditorController theController = theLoader.getController();
             return theController.initialize(theRoot, aGameScene, aCondition);

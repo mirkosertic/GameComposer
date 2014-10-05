@@ -25,7 +25,7 @@ public class SpawnInstanceEditorControllerFactory implements ActionControllerFac
             FXMLLoader theLoader = fxmlLoaderFactory.createLoader();
             ResourceBundle theBundle = ResourceBundle.getBundle("de.mirkosertic.gamecomposer.contentarea.eventsheet.spawninstance.SpawnInstanceEditor");
             theLoader.setResources(theBundle);
-            BorderPane theRoot = (BorderPane) theLoader.load(fxml);
+            BorderPane theRoot = theLoader.load(fxml);
 
             SpawnIstanceEditorController theController = theLoader.getController();
             return theController.initialize(aGameScene, theRoot, aAction);

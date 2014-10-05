@@ -25,7 +25,7 @@ public class ConstantMovementEditorFactory implements ObjectInspectorFactory<Con
             FXMLLoader theLoader = fxmlLoaderFactory.createLoader();
             ResourceBundle theBundle = ResourceBundle.getBundle("de.mirkosertic.gamecomposer.objectinspector.constantmovement.ConstantMovementEditor");
             theLoader.setResources(theBundle);
-            Parent root = (Parent) theLoader.load(fxml);
+            Parent root = theLoader.load(fxml);
             return ((ConstantMovementEditorController)theLoader.getController()).initialize(root, aObject);
         } catch (IOException e) {
             throw new RuntimeException(e);

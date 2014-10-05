@@ -42,6 +42,15 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <verbose>true</verbose>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
                     <execution>
@@ -73,20 +82,26 @@
             <plugin>
                 <groupId>com.zenjava</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
-                <version>2.0</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
                         <goals>
                             <goal>jar</goal>
                             <goal>native</goal>
-                            <goal>web</goal>
                         </goals>
                     </execution>
                 </executions>
                 <configuration>
                     <mainClass>de.mirkosertic.gamecomposer.GameComposerApplication</mainClass>
                     <vendor>Mirko Sertic</vendor>
+                    <vendor>Mirko Sertic</vendor>
+                    <needMenu>true</needMenu>
+                    <needShortcut>true</needShortcut>
+                    <nativeReleaseVersion>${project.version}</nativeReleaseVersion>
+                    <jvmArgs>
+                        <jvmArg>-Xmx1024m</jvmArg>
+                    </jvmArgs>
+                    <verbose>true</verbose>
                 </configuration>
             </plugin>
         </plugins>
@@ -121,10 +136,6 @@
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.4</version>
-        </dependency>
-        <dependency>
-            <groupId>com.oracle</groupId>
-            <artifactId>javafx</artifactId>
         </dependency>
         <dependency>
             <groupId>de.mirkosertic</groupId>

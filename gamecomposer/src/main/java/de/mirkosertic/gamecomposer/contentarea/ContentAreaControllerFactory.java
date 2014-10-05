@@ -23,7 +23,7 @@ public class ContentAreaControllerFactory {
             FXMLLoader theLoader = fxmlLoaderFactory.createLoader();
             ResourceBundle theBundle = ResourceBundle.getBundle("de.mirkosertic.gamecomposer.contentarea.ContentArea");
             theLoader.setResources(theBundle);
-            Parent root = (Parent) theLoader.load(fxml);
+            Parent root = theLoader.load(fxml);
             return ((ContentAreaController)theLoader.getController()).initialize(root);
         }
     }

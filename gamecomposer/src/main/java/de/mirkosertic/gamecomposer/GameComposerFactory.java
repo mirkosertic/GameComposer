@@ -4,6 +4,7 @@ import insidefx.undecorator.UndecoratorScene;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.Region;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -23,13 +24,18 @@ public class GameComposerFactory {
             FXMLLoader theLoader = fxmlLoaderFactory.createLoader();
             ResourceBundle theBundle = ResourceBundle.getBundle("de.mirkosertic.gamecomposer.GameComposer");
             theLoader.setResources(theBundle);
-            Region root = (Region) theLoader.load(fxml);
+            Region root = theLoader.load(fxml);
             root.getStylesheets().add("/JMetroLightTheme.css");
             ((GameComposerController)theLoader.getController()).initialize(aStage);
 
             UndecoratorScene theUndecoratorScene = new UndecoratorScene(aStage, root);
 
+            // Hacky, but works
+            theUndecoratorScene.getUndecorator().setStyle("-fx-background-color: rgba(0, 0, 0, 0);");
+
             aStage.initStyle(StageStyle.TRANSPARENT);
+            theUndecoratorScene.setFill(Color.TRANSPARENT);
+
             aStage.setScene(theUndecoratorScene);
             aStage.show();
         }
