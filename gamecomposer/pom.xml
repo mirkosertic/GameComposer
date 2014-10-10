@@ -95,7 +95,6 @@
                     <identifier>FXGameComposer</identifier>
                     <mainClass>de.mirkosertic.gamecomposer.GameComposerApplication</mainClass>
                     <vendor>Mirko Sertic</vendor>
-                    <vendor>Mirko Sertic</vendor>
                     <needMenu>true</needMenu>
                     <needShortcut>true</needShortcut>
                     <nativeReleaseVersion>${project.version}</nativeReleaseVersion>
