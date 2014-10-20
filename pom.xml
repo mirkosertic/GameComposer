@@ -69,6 +69,11 @@
                     <artifactId>maven-source-plugin</artifactId>
                     <version>2.2.1</version>
                 </plugin>
+                <plugin>
+                    <groupId>org.gaul</groupId>
+                    <artifactId>modernizer-maven-plugin</artifactId>
+                    <version>1.1.0</version>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
