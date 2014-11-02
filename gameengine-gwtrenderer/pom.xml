@@ -32,8 +32,8 @@
         </pluginRepository>
     </pluginRepositories>
     <properties>
-        <gwt.version>2.7.0-SNAPSHOT</gwt.version>
-        <xgwt.version>2.6.1</xgwt.version>
+        <xgwt.version>2.7.0-SNAPSHOT</xgwt.version>
+        <gwt.version>2.6.1</gwt.version>
     </properties>
     <build>
         <plugins>
