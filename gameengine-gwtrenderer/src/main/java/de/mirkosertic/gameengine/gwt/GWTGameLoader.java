@@ -1,15 +1,10 @@
 package de.mirkosertic.gameengine.gwt;
 
 import com.google.gwt.http.client.*;
-import com.google.gwt.json.client.JSONArray;
-import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONValue;
 import de.mirkosertic.gameengine.core.Game;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 class GWTGameLoader {

@@ -62,7 +62,6 @@ public class GWTRenderer implements EntryPoint {
     private GWTGameSceneLoader sceneLoader;
     private Game game;
     private GameLoop runningGameLoop;
-    private GameScene loadedScene;
     private GameLoopFactory gameLoopFactory;
 
     @Override
@@ -310,9 +309,7 @@ public class GWTRenderer implements EntryPoint {
 
         theCameraComponent.initializeFor(aGameScene, thePlayerInstance);
         canvas.setFocus(true);
-
-        loadedScene = aGameScene;
-    }
+   }
 
     void resizeCanvas(int aWidth, int aHeight) {
         canvas.setWidth(aWidth + "px");
