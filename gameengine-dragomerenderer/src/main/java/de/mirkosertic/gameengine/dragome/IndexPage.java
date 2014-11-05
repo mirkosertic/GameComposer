@@ -6,11 +6,14 @@ import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.input.DefaultGestureDetector;
+import de.mirkosertic.gameengine.type.GameKeyCode;
 import de.mirkosertic.gameengine.type.Size;
 
 import com.dragome.annotations.PageAlias;
 import com.dragome.debugging.execution.DragomeVisualActivity;
-import com.dragome.html.dom.Timer;
+import org.w3c.dom.events.Event;
+import org.w3c.dom.events.EventListener;
+import org.w3c.dom.events.KeyboardEvent;
 
 @PageAlias(alias= "index")
 public class IndexPage extends DragomeVisualActivity {
@@ -19,9 +22,11 @@ public class IndexPage extends DragomeVisualActivity {
     private GameLoopFactory gameLoopFactory;
     private DragomeRuntimeFactory runtimeFactory;
     private DragomeGameSceneLoader sceneLoader;
-    private Timer timer = new Timer();
+    private Window window;
 
     public void build() {
+
+        window = new Window();
 
         gameLoopFactory = new GameLoopFactory();
         runtimeFactory = new DragomeRuntimeFactory();
@@ -54,18 +59,42 @@ public class IndexPage extends DragomeVisualActivity {
         });
         DragomeLogger.info("Loading game...");
         theLoader.loadFromServer();
+
+        EventListener theGlobalEventListener = new EventListener() {
+            @Override
+            public void handleEvent(Event aEvent) {
+                if (aEvent instanceof KeyboardEvent) {
+                    handleSingleKeyboardEvent((KeyboardEvent) aEvent);
+                }
+            }
+        };
+
+        window.addEventListener(theGlobalEventListener, "keydown", "keypress", "keyup");
+    }
+
+    private void handleSingleKeyboardEvent(KeyboardEvent aKeyboardEvent) {
+        if (runningGameLoop != null) {
+            GameKeyCode theKeyCode = DragomeKeyCodeTranslator.translate(aKeyboardEvent.getKeyIdentifier());
+            if ("keyup".equals(aKeyboardEvent.getType())) {
+                runningGameLoop.getHumanGameView().getGestureDetector().keyReleased(theKeyCode);
+            }
+            if ("keydown".equals(aKeyboardEvent.getType())) {
+                runningGameLoop.getHumanGameView().getGestureDetector().keyPressed(theKeyCode);
+            }
+        }
+        DragomeLogger.info("KeyEvent " + aKeyboardEvent.getType()+" "+ aKeyboardEvent.getKeyIdentifier());
     }
 
     private void runSingleStep() {
         if (runningGameLoop != null) {
             runningGameLoop.singleRun();
+            window.requestAnimationFrame(new Runnable() {
+                @Override
+                public void run() {
+                    runSingleStep();
+                }
+            });
         }
-        timer.setInterval(new Runnable() {
-            @Override
-            public void run() {
-                runSingleStep();
-            }
-        }, 20);
     }
 
     private void playScene(GameScene aGameScene) {
@@ -101,14 +130,12 @@ public class IndexPage extends DragomeVisualActivity {
             }
         });
 
-        Window theWindow = new Window();
-
         GestureDetector theGestureDetector = new DefaultGestureDetector(theEventManager);
 
         DragomeGameView theGameView = new DragomeGameView(theRuntime, theCameraComponent, theGestureDetector);
 
-        theGameView.setSize(new Size(theWindow.getClientWidth(), theWindow.getClientHeight()));
-        theEventManager.fire(new SetScreenResolution(new Size(theWindow.getClientWidth(), theWindow.getClientHeight())));
+        theGameView.setSize(new Size(window.getClientWidth(), window.getClientHeight()));
+        theEventManager.fire(new SetScreenResolution(new Size(window.getClientWidth(), window.getClientHeight())));
 
         runningGameLoop = gameLoopFactory.create(aGameScene, theGameView, theRuntime);
 
