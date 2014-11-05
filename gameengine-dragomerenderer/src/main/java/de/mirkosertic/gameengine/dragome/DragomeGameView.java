@@ -14,11 +14,11 @@ import java.util.Map;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 
 import com.dragome.services.ServiceLocator;
+import org.w3c.dom.NodeList;
 
-public class DragomeGameView implements GameView {
+class DragomeGameView implements GameView {
 
     private Size currentScreenSize;
 
@@ -26,7 +26,7 @@ public class DragomeGameView implements GameView {
     private final GestureDetector gestureDetector;
     private final GameRuntime gameRuntime;
 
-    private Map<GameObjectInstance, Element> instanceCache;
+    private final Map<String, Element> instanceCache;
 
     public DragomeGameView(GameRuntime aGameRuntime, CameraBehavior aCameraComponent, GestureDetector aGestureDetector) {
         cameraComponent = aCameraComponent;
@@ -41,7 +41,7 @@ public class DragomeGameView implements GameView {
         Document theDocument = ServiceLocator.getInstance().getDomHandler().getDocument();
         Element theCanvas = ServiceLocator.getInstance().getDomHandler().getElementBySelector("#canvas");
 
-        DragomeLogger.info("Rendering scene");
+        //DragomeLogger.info("Rendering scene");
 
         Color theBGColor = aScene.backgroundColorProperty().get();
         theCanvas.setAttribute("style","width: "+currentScreenSize.width+"px; height: "+currentScreenSize.height+"px; background-color: rgb("+theBGColor.r+","+theBGColor.g+","+theBGColor.b+"); ");
@@ -58,19 +58,21 @@ public class DragomeGameView implements GameView {
             Angle theAngle = theInstance.rotationAngleProperty().get();
             int theAngleInDegrees = theAngle.angleInDegrees;
 
-            Element theInstanceElement = instanceCache.get(theInstance);
+            String theInstanceName = theInstance.nameProperty().get();
+            Element theInstanceElement = instanceCache.get(theInstanceName);
             if (theInstanceElement == null) {
                 theInstanceElement = theDocument.createElement("div");
-                instanceCache.put(theInstance, theInstanceElement);
+                theInstanceElement.setAttribute("name", theInstanceName);
+                instanceCache.put(theInstanceName, theInstanceElement);
                 theCanvas.appendChild(theInstanceElement);
             }
 
             // Cleanup the node
-            Node theChildNode = theInstanceElement.getFirstChild();
-            while(theChildNode != null) {
-                theInstanceElement.removeChild(theChildNode);
-                theChildNode = theInstanceElement.getFirstChild();
+            NodeList theChildren = theInstanceElement.getChildNodes();
+            for (int i=0;i<theChildren.getLength();i++) {
+                theInstanceElement.removeChild(theChildren.item(i));
             }
+            theInstanceElement.setNodeValue("");
 
             boolean theSomethingRendered = false;
             Sprite theSpriteComponent = theInstance.getComponent(SpriteBehavior.class);
@@ -115,7 +117,7 @@ public class DragomeGameView implements GameView {
             }
         }
 
-        DragomeLogger.info("Rendering scene done");
+        //DragomeLogger.info("Rendering scene done");
     }
 
     @Override
