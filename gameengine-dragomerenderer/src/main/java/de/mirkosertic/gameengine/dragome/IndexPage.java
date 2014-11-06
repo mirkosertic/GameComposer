@@ -22,6 +22,7 @@ public class IndexPage extends DragomeVisualActivity {
     private GameLoopFactory gameLoopFactory;
     private DragomeRuntimeFactory runtimeFactory;
     private DragomeGameSceneLoader sceneLoader;
+    private DragomeGameView gameView;
     private Window window;
 
     public void build() {
@@ -85,13 +86,13 @@ public class IndexPage extends DragomeVisualActivity {
         DragomeLogger.info("KeyEvent " + aKeyboardEvent.getType()+" "+ aKeyboardEvent.getKeyIdentifier());
     }
 
-    private void runSingleStep() {
-        if (runningGameLoop != null) {
-            runningGameLoop.singleRun();
+    private void runSingleStep(final GameLoop aGameLoop) {
+        if (!aGameLoop.isShutdown()) {
+            aGameLoop.singleRun();
             window.requestAnimationFrame(new Runnable() {
                 @Override
                 public void run() {
-                    runSingleStep();
+                    runSingleStep(aGameLoop);
                 }
             });
         }
@@ -132,16 +133,20 @@ public class IndexPage extends DragomeVisualActivity {
 
         GestureDetector theGestureDetector = new DefaultGestureDetector(theEventManager);
 
-        DragomeGameView theGameView = new DragomeGameView(theRuntime, theCameraComponent, theGestureDetector);
+        if (gameView == null) {
+            gameView = new DragomeGameView(theRuntime, theCameraComponent, theGestureDetector);
+        } else {
+            gameView.prepareNewScene(theRuntime, theCameraComponent, theGestureDetector);
+        }
 
-        theGameView.setSize(new Size(window.getClientWidth(), window.getClientHeight()));
+        gameView.setSize(new Size(window.getClientWidth(), window.getClientHeight()));
         theEventManager.fire(new SetScreenResolution(new Size(window.getClientWidth(), window.getClientHeight())));
 
-        runningGameLoop = gameLoopFactory.create(aGameScene, theGameView, theRuntime);
+        runningGameLoop = gameLoopFactory.create(aGameScene, gameView, theRuntime);
 
         theCameraComponent.initializeFor(aGameScene, thePlayerInstance);
 
-        runSingleStep();
+        runSingleStep(runningGameLoop);
 
         DragomeLogger.info("Scene initialized");
     }
