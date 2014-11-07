@@ -18,6 +18,7 @@ import org.w3c.dom.events.KeyboardEvent;
 @PageAlias(alias= "index")
 public class IndexPage extends DragomeVisualActivity {
 
+    private GameRuntime runningRuntime;
     private GameLoop runningGameLoop;
     private GameLoopFactory gameLoopFactory;
     private DragomeRuntimeFactory runtimeFactory;
@@ -69,6 +70,17 @@ public class IndexPage extends DragomeVisualActivity {
                 }
             }
         };
+
+        window.onResize(new Runnable() {
+            @Override
+            public void run() {
+                if (runningGameLoop != null) {
+                    Size theSize = new Size(window.getClientWidth(), window.getClientHeight());
+                    runningRuntime.getEventManager().fire(new SetScreenResolution(theSize));
+                    gameView.setSize(theSize);
+                }
+            }
+        });
 
         window.addEventListener(theGlobalEventListener, "keydown", "keypress", "keyup");
     }
@@ -149,5 +161,7 @@ public class IndexPage extends DragomeVisualActivity {
         runSingleStep(runningGameLoop);
 
         DragomeLogger.info("Scene initialized");
+
+        runningRuntime = theRuntime;
     }
 }

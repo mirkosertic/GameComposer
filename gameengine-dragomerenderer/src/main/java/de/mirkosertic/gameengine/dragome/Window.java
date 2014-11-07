@@ -28,4 +28,9 @@ public final class Window {
         Element theElement = ServiceLocator.getInstance().getDomHandler().getElementBySelector("body");
         EventDispatcherImpl.setEventListener(theElement, aEventListener, aEvent);
     }
+
+    public void onResize(Runnable aRunnable) {
+        ScriptHelper.put("ra", aRunnable, this);
+        ScriptHelper.evalNoResult("window.addEventListener('resize', function() {ra.$run$void();})", this);
+    }
 }

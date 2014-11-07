@@ -18,6 +18,9 @@ public class DragomeGameResourceLoader implements GameResourceLoader {
     @Override
     public GameResource load(ResourceName aResourceName) throws IOException {
         String theResourceName = sceneId + aResourceName.name;
+        if (aResourceName.name.endsWith(".wav")) {
+            return new DragomeGameResource(theResourceName, GameResourceType.SOUND);
+        }
         return new DragomeGameResource(theResourceName, GameResourceType.BITMAP);
     }
 
