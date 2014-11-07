@@ -13,6 +13,7 @@ public class DragomeSound {
     public void play() {
         DragomeLogger.info("Playing " + audioObject);
         ScriptHelper.put("s", audioObject, this);
+        ScriptHelper.evalNoResult("s.load()", this);
         ScriptHelper.evalNoResult("s.play()", this);
     }
 

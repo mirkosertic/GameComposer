@@ -44,6 +44,12 @@
                 <version>${project.version}</version>
                 <type>apk</type>
             </dependency>
+            <dependency>
+                <groupId>de.mirkosertic</groupId>
+                <artifactId>gameengine-dragomerenderer</artifactId>
+                <version>${project.version}</version>
+                <type>war</type>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
