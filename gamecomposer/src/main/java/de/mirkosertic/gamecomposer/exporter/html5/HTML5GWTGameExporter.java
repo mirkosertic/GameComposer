@@ -1,6 +1,6 @@
 package de.mirkosertic.gamecomposer.exporter.html5;
 
-import de.mirkosertic.gamecomposer.ExportGameHTML5Event;
+import de.mirkosertic.gamecomposer.ExportGameHTML5GWTEvent;
 import de.mirkosertic.gamecomposer.PersistenceManager;
 import de.mirkosertic.gamecomposer.StatusEvent;
 import org.apache.commons.io.IOUtils;
@@ -17,7 +17,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 @Singleton
-public class HTML5GameExporter {
+public class HTML5GWTGameExporter {
 
     @Inject
     PersistenceManager persistenceManager;
@@ -44,8 +44,8 @@ public class HTML5GameExporter {
         return true;
     }
 
-    public void onExport(@Observes ExportGameHTML5Event aEvent) throws IOException {
-        InputStream theStream = HTML5GameExporter.class.getResourceAsStream("/gameengine-gwtrenderer.war");
+    public void onExport(@Observes ExportGameHTML5GWTEvent aEvent) throws IOException {
+        InputStream theStream = HTML5GWTGameExporter.class.getResourceAsStream("/gameengine-gwtrenderer.war");
         ZipInputStream theZipStream = new ZipInputStream(theStream);
         ZipEntry theEntry;
         while ((theEntry = theZipStream.getNextEntry()) != null) {

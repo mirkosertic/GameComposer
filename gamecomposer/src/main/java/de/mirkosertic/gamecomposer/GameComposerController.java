@@ -136,7 +136,7 @@ public class GameComposerController {
     }
 
     @FXML
-    public void onSaveAndExportHTML5() {
+    public void onSaveAndExportHTML5GWT() {
         DirectoryChooser theDirectoryChooser = new DirectoryChooser();
         theDirectoryChooser.setTitle("Choose target directory");
 
@@ -147,7 +147,25 @@ public class GameComposerController {
 
         File theTargetDirectory = theDirectoryChooser.showDialog(stage);
         if (theTargetDirectory != null) {
-            eventGateway.fire(new ExportGameHTML5Event(theTargetDirectory));
+            eventGateway.fire(new ExportGameHTML5GWTEvent(theTargetDirectory));
+
+            directoryPreferences.put(GAME_EXPORTDIRECTORY_HTML_PREF_KEY, theTargetDirectory.toString());
+        }
+    }
+
+    @FXML
+    public void onSaveAndExportHTML5Dragome() {
+        DirectoryChooser theDirectoryChooser = new DirectoryChooser();
+        theDirectoryChooser.setTitle("Choose target directory");
+
+        String theLastExportDir = directoryPreferences.get(GAME_EXPORTDIRECTORY_HTML_PREF_KEY, null);
+        if (theLastExportDir != null) {
+            theDirectoryChooser.setInitialDirectory(new File(theLastExportDir));
+        }
+
+        File theTargetDirectory = theDirectoryChooser.showDialog(stage);
+        if (theTargetDirectory != null) {
+            eventGateway.fire(new ExportGameHTML5DragomeEvent(theTargetDirectory));
 
             directoryPreferences.put(GAME_EXPORTDIRECTORY_HTML_PREF_KEY, theTargetDirectory.toString());
         }
