@@ -95,5 +95,4 @@
     <filter-name>DragomeWro4jFilter</filter-name>
     <url-pattern>/dragome/*</url-pattern>
   </filter-mapping>
-
 </web-app>

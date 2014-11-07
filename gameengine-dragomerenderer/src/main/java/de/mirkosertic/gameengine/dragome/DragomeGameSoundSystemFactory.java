@@ -8,6 +8,6 @@ public class DragomeGameSoundSystemFactory implements GameSoundSystemFactory {
 
     @Override
     public GameSoundSystem create(GameRuntime aGameRuntime) {
-        return new DragomeGameSoundSystem(aGameRuntime);
+        return new DragomeGameSoundSystem(aGameRuntime.getResourceCache());
     }
 }
