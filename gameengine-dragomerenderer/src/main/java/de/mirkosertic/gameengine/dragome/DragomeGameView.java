@@ -18,8 +18,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.dragome.services.ServiceLocator;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 class DragomeGameView implements GameView {
 
@@ -28,6 +26,8 @@ class DragomeGameView implements GameView {
     private CameraBehavior cameraComponent;
     private GestureDetector gestureDetector;
     private GameRuntime gameRuntime;
+
+    private long lastRenderingDuration;
 
     private final Map<String, Element> instanceCache;
 
@@ -51,6 +51,8 @@ class DragomeGameView implements GameView {
 
     @Override
     public void renderGame(long aGameTime, long aElapsedTimeSinceLastLoop, GameScene aScene) {
+
+        long theStart = System.currentTimeMillis();
 
         Document theDocument = ServiceLocator.getInstance().getDomHandler().getDocument();
         Element theCanvas = ServiceLocator.getInstance().getDomHandler().getElementBySelector("#canvas");
@@ -81,34 +83,26 @@ class DragomeGameView implements GameView {
                 theInstanceElement.setAttribute("name", theInstanceName);
                 instanceCache.put(theInstanceName, theInstanceElement);
                 theCanvas.appendChild(theInstanceElement);
-            } else {
-                NodeList theChildren = theInstanceElement.getChildNodes();
-                for (int i=0;i<theChildren.getLength();i++) {
-                    theInstanceElement.removeChild(theChildren.item(i));
-                }
             }
+            theInstanceElement.setTextContent("");
 
             boolean theSomethingRendered = false;
             Sprite theSpriteComponent = theInstance.getComponent(SpriteBehavior.class);
             if (theSpriteComponent != null) {
-                theInstanceElement.setAttribute("style",
-                        "position: absolute; top: " + ((int) thePosition.y) + "px; left: " + ((int) thePosition.x) + "px; width: "
-                                + theSize.width + "px; height: " + theSize.height + "px;" + theRotateStyle);
 
                 ResourceName theSpriteResource = theSpriteComponent.resourceNameProperty().get();
+
                 try {
                     DragomeGameResource theGameResource = gameRuntime.getResourceCache()
                             .getResourceFor(theSpriteResource);
 
-                    Element theImg = theDocument.createElement("img");
-                    theImg.setAttribute("src", theGameResource.getName());
-                    theImg.setAttribute("width", "" + theSize.width);
-                    theImg.setAttribute("height", "" + theSize.height);
-                    theInstanceElement.appendChild(theImg);
+                    theInstanceElement.setAttribute("style",
+                            "position: absolute; top: " + ((int) thePosition.y) + "px; left: " + ((int) thePosition.x) + "px; width: "
+                                    + theSize.width + "px; height: " + theSize.height + "px;" + theRotateStyle+" background: url('" + theGameResource.getName()+"'); background-size: 100% 100%;");
 
                     theSomethingRendered = true;
                 } catch (IOException e) {
-                    DragomeLogger.error("Fehler beim laden von "+theSpriteResource.name+" : " + e);
+                    DragomeLogger.error("Error while loading game resource "+theSpriteResource.name+" : " + e);
                 }
             }
             Text theTextComponent = theInstance.getComponent(TextBehavior.class);
@@ -132,7 +126,7 @@ class DragomeGameView implements GameView {
         }
 
         // Remove no longer visible instances
-        Set<String> theKeysToRemove = new HashSet<>();
+        Set<String> theKeysToRemove = new HashSet<String>();
         for (Map.Entry<String, Element> theEntry : instanceCache.entrySet()) {
             if (!theRenderedInstances.contains(theEntry.getKey())) {
                 theEntry.getValue().getParentNode().removeChild(theEntry.getValue());
@@ -142,6 +136,8 @@ class DragomeGameView implements GameView {
         for (String theKey : theKeysToRemove) {
             instanceCache.remove(theKey);
         }
+
+        lastRenderingDuration = (lastRenderingDuration + System.currentTimeMillis() - theStart) / 2;
     }
 
     @Override
