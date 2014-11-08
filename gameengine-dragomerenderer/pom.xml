@@ -65,7 +65,7 @@
                 <configuration>
                     <destinationDirectory>${project.build.directory}/${project.build.finalName}</destinationDirectory>
                     <forceRebuild>true</forceRebuild>
-                    <removeCache>true</removeCache>
+                    <removeCache>false</removeCache>
                 </configuration>
                 <dependencies>
                     <dependency>
