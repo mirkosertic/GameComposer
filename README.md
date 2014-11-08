@@ -55,4 +55,4 @@ GameEngine-DragomeRenderer
 --------------
 
 This is the game presentation logic using the Dragome Java-to-JavaScript Transpiler Framework. It will render the game view
-using plain HTML5 DOM elements without any Canvas support.
+using plain HTML5 DOM Sprite elements with CSS without any Canvas support.
