@@ -23,10 +23,8 @@ public class DragomeGameSoundSystem implements GameSoundSystem<DragomeSound> {
             if (theResource != null && theResource.getType() == GameResourceType.SOUND) {
                 DragomeGameResource theGameResource = (DragomeGameResource) theResource;
                 ScriptHelper.put("sn", theGameResource.getName(), this);
-                Object theResult = ScriptHelper.eval("new Audio(sn)", this);
-                DragomeSound theAudio = ((DragomeSound) theResult);
-                theAudio.play();
-                return theAudio;
+                ScriptHelper.evalNoResult("new Audio(sn).play()", this);
+                return new DragomeSound();
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -36,6 +34,5 @@ public class DragomeGameSoundSystem implements GameSoundSystem<DragomeSound> {
 
     @Override
     public void stop(DragomeSound aSoundObject) {
-        aSoundObject.stop();
     }
 }
