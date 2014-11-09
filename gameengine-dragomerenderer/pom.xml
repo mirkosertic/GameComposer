@@ -75,6 +75,40 @@
                     </dependency>
                 </dependencies>
             </plugin>
+
+            <plugin>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>9.1.3.v20140225</version>
+                <configuration>
+                    <webApp>
+                        <defaultsDescriptor>${basedir}/src/main/resources/webdefault.xml</defaultsDescriptor>
+                        <contextPath>/artifact</contextPath>
+                    </webApp>
+                    <classesDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/classes</classesDirectory>
+                    <webAppSourceDirectory>${project.build.directory}/${project.build.finalName}</webAppSourceDirectory>
+                    <connectors>
+                        <connector implementation="org.eclipse.jetty.server.ServerConnector">
+                            <port>8080</port>
+                            <maxIdleTime>7000000</maxIdleTime>
+                        </connector>
+                    </connectors>
+                </configuration>
+
+                <dependencies>
+                    <dependency>
+                        <groupId>org.ow2.asm</groupId>
+                        <artifactId>asm</artifactId>
+                        <version>5.0.2</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.ow2.asm</groupId>
+                        <artifactId>asm-commons</artifactId>
+                        <version>5.0.2</version>
+                    </dependency>
+                </dependencies>
+
+            </plugin>
         </plugins>
     </build>
 </project>
