@@ -92,32 +92,27 @@ public class JavaFXGameView extends Canvas implements GameView {
                 theContext.setTransform(r.getMxx(), r.getMyx(), r.getMxy(), r.getMyy(), r.getTx(), r.getTy());
             }
 
-            boolean theSomethingRendered = false;
-
             Sprite theTemplateComponent = theInstance.getComponent(SpriteBehavior.class);
             if (theTemplateComponent != null && !theTemplateComponent.resourceNameProperty().isNull()) {
                 try {
                     JavaFXBitmapResource theBitmap = gameRuntime.getResourceCache().getResourceFor(
                             theTemplateComponent.resourceNameProperty().get());
                     drawGameObjectInstance(theContext, theInstance, thePosition, theSize, theBitmap);
-
-                    theSomethingRendered = true;
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-            }
-            Text theTextComponent = theInstance.getComponent(TextBehavior.class);
-            if (theTextComponent != null) {
-                ExpressionParser theExpressionParser = gameScene.get(theTextComponent.textExpressionProperty().get());
-                drawText(theContext, theInstance, thePosition, theTextComponent.fontProperty().get(), theTextComponent.colorProperty().get(), theExpressionParser.evaluateToString(), theSize);
-                theSomethingRendered = true;
-            }
-
-            if (!theSomethingRendered) {
-                theContext.setFill(Color.WHITE);
-                theContext.setStroke(Color.WHITE);
-                theContext.setLineWidth(1);
-                theContext.strokeRect(thePosition.x, thePosition.y, theSize.width, theSize.height);
+            } else {
+                Text theTextComponent = theInstance.getComponent(TextBehavior.class);
+                if (theTextComponent != null) {
+                    ExpressionParser theExpressionParser = gameScene.get(theTextComponent.textExpressionProperty().get());
+                    drawText(theContext, theInstance, thePosition, theTextComponent.fontProperty().get(),
+                            theTextComponent.colorProperty().get(), theExpressionParser.evaluateToString(), theSize);
+                } else {
+                    theContext.setFill(Color.WHITE);
+                    theContext.setStroke(Color.WHITE);
+                    theContext.setLineWidth(1);
+                    theContext.strokeRect(thePosition.x, thePosition.y, theSize.width, theSize.height);
+                }
             }
 
             restoreState(theContext, theSavedState);
