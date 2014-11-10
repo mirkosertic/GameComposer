@@ -1,5 +1,6 @@
 package de.mirkosertic.gameengine.dragome;
 
+import com.dragome.model.DefaultVisualActivity;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
 import de.mirkosertic.gameengine.core.*;
@@ -10,13 +11,12 @@ import de.mirkosertic.gameengine.type.GameKeyCode;
 import de.mirkosertic.gameengine.type.Size;
 
 import com.dragome.annotations.PageAlias;
-import com.dragome.debugging.execution.DragomeVisualActivity;
 import org.w3c.dom.events.Event;
 import org.w3c.dom.events.EventListener;
 import org.w3c.dom.events.KeyboardEvent;
 
 @PageAlias(alias= "index")
-public class IndexPage extends DragomeVisualActivity {
+public class IndexPage extends DefaultVisualActivity {
 
     private GameRuntime runningRuntime;
     private GameLoop runningGameLoop;
