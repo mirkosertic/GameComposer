@@ -11,6 +11,7 @@ import de.mirkosertic.gameengine.type.*;
 import java.io.IOException;
 import java.util.*;
 
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -27,12 +28,14 @@ class DragomeGameView implements GameView {
     private long lastRenderingDuration;
 
     private final Map<String, Element> instanceCache;
+    private final Map<String, Attr> styleCache;
 
     public DragomeGameView(GameRuntime aGameRuntime, CameraBehavior aCameraComponent, GestureDetector aGestureDetector) {
         cameraComponent = aCameraComponent;
         gestureDetector = aGestureDetector;
         gameRuntime = aGameRuntime;
         instanceCache = new HashMap<>();
+        styleCache = new HashMap<>();
     }
 
     public void prepareNewScene(GameRuntime aGameRuntime, CameraBehavior aCameraComponent, GestureDetector aGestureDetector) {
@@ -75,11 +78,17 @@ class DragomeGameView implements GameView {
 
             String theInstanceName = theInstance.nameProperty().get();
             Element theInstanceElement = instanceCache.get(theInstanceName);
+            Attr theStyleNode;
             if (theInstanceElement == null) {
                 theInstanceElement = theDocument.createElement("div");
                 theInstanceElement.setAttribute("name", theInstanceName);
                 instanceCache.put(theInstanceName, theInstanceElement);
                 theCanvas.appendChild(theInstanceElement);
+
+                theStyleNode = theInstanceElement.getAttributeNode("style");
+                styleCache.put(theInstanceName, theStyleNode);
+            } else {
+                theStyleNode = styleCache.get(theInstanceName);
             }
             theInstanceElement.setTextContent("");
 
@@ -92,8 +101,7 @@ class DragomeGameView implements GameView {
                     DragomeGameResource theGameResource = gameRuntime.getResourceCache()
                             .getResourceFor(theSpriteResource);
 
-                    theInstanceElement.setAttribute("style",
-                            "position: absolute; top: " + ((int) thePosition.y) + "px; left: " + ((int) thePosition.x) + "px; width: "
+                    theStyleNode.setValue("position: absolute; top: " + ((int) thePosition.y) + "px; left: " + ((int) thePosition.x) + "px; width: "
                                     + theSize.width + "px; height: " + theSize.height + "px;" + theRotateStyle+" background: url('" + theGameResource.getName()+"'); background-size: 100% 100%;");
 
                 } catch (IOException e) {
@@ -105,15 +113,13 @@ class DragomeGameView implements GameView {
                     Color theFontColor = theTextComponent.colorProperty().get();
                     Font theFont = theTextComponent.fontProperty().get();
                     ExpressionParser theExpressionParser = aScene.get(theTextComponent.textExpressionProperty().get());
-                    theInstanceElement.setAttribute("style",
-                            "position: absolute; top: " + ((int) thePosition.y) + "px; left: " + ((int) thePosition.x)
+                    theStyleNode.setValue("position: absolute; top: " + ((int) thePosition.y) + "px; left: " + ((int) thePosition.x)
                                     + "px; color: rgb(" + theFontColor.r + "," + theFontColor.g + "," + theFontColor.b
                                     + "); font-size: " + theFont.size + "px;" + theRotateStyle);
 
                     theInstanceElement.setTextContent(theExpressionParser.evaluateToString());
                 } else {
-                    theInstanceElement.setAttribute("style",
-                            "position: absolute; top: " + ((int) thePosition.y) + "px; left: " + ((int) thePosition.x)
+                    theStyleNode.setValue("position: absolute; top: " + ((int) thePosition.y) + "px; left: " + ((int) thePosition.x)
                                     + "px; width: "
                                     + theSize.width + "px; height: " + theSize.height + "px; border: 1px solid white;"
                                     + theRotateStyle);
@@ -125,6 +131,7 @@ class DragomeGameView implements GameView {
         for (String theInvisibleKey : theInvisibleInstances) {
             Element theInvisibleElement = instanceCache.remove(theInvisibleKey);
             theInvisibleElement.getParentNode().removeChild(theInvisibleElement);
+            styleCache.remove(theInvisibleKey);
         }
 
         lastRenderingDuration = (lastRenderingDuration + System.currentTimeMillis() - theStart) / 2;
