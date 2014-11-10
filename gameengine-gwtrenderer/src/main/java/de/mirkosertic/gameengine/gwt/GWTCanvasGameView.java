@@ -67,31 +67,26 @@ public class GWTCanvasGameView extends AbstractWebGameView {
                 theContext.rotate(theAngle.toRadians());
             }
 
-            boolean theSomethingRendered = false;
-
             Sprite theSpriteComponent = theInstance.getComponent(SpriteBehavior.class);
             if (theSpriteComponent != null) {
                 try {
                     GWTBitmapResource theBitmap = gameRuntime.getResourceCache().getResourceFor(theSpriteComponent.resourceNameProperty().get());
                     drawGameObjectInstance(theContext, theInstance, new Position(-theHalfWidth, -theHalfHeight), theSize, theBitmap);
-
-                    theSomethingRendered = true;
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-            }
-            Text theTextComponent = theInstance.getComponent(TextBehavior.class);
-            if (theTextComponent != null) {
-                ExpressionParser theExpressionParser = aScene.get(theTextComponent.textExpressionProperty().get());
-                drawText(theContext, thePosition, theTextComponent.fontProperty().get(), theTextComponent.colorProperty().get(), theExpressionParser.evaluateToString(), theSize);
-                theSomethingRendered = true;
-            }
-
-            if (!theSomethingRendered) {
-                theContext.setFillStyle(CssColor.make(255, 255, 255));
-                theContext.setStrokeStyle(CssColor.make(255, 255, 255));
-                theContext.setLineWidth(1);
-                theContext.strokeRect(-theHalfWidth, -theHalfHeight, theSize.width, theSize.height);
+            } else {
+                Text theTextComponent = theInstance.getComponent(TextBehavior.class);
+                if (theTextComponent != null) {
+                    ExpressionParser theExpressionParser = aScene.get(theTextComponent.textExpressionProperty().get());
+                    drawText(theContext, thePosition, theTextComponent.fontProperty().get(),
+                            theTextComponent.colorProperty().get(), theExpressionParser.evaluateToString(), theSize);
+                } else {
+                    theContext.setFillStyle(CssColor.make(255, 255, 255));
+                    theContext.setStrokeStyle(CssColor.make(255, 255, 255));
+                    theContext.setLineWidth(1);
+                    theContext.strokeRect(-theHalfWidth, -theHalfHeight, theSize.width, theSize.height);
+                }
             }
 
             restoreState(theContext, theSavedState);

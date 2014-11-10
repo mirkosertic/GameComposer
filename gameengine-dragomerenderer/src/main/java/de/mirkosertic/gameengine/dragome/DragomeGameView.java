@@ -9,10 +9,7 @@ import de.mirkosertic.gameengine.text.TextBehavior;
 import de.mirkosertic.gameengine.type.*;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -60,11 +57,11 @@ class DragomeGameView implements GameView {
         Color theBGColor = aScene.backgroundColorProperty().get();
         theCanvas.setAttribute("style","width: "+currentScreenSize.width+"px; height: "+currentScreenSize.height+"px; background-color: rgb("+theBGColor.r+","+theBGColor.g+","+theBGColor.b+"); ");
 
-        Set<String> theRenderedInstances = new HashSet<>();
+        Set<String> theInvisibleInstances = new HashSet<>(instanceCache.keySet());
 
         for (GameObjectInstance theInstance : cameraComponent.getObjectsToDrawInRightOrder(aScene)) {
 
-            theRenderedInstances.add(theInstance.nameProperty().get());
+            theInvisibleInstances.remove(theInstance.nameProperty().get());
 
             Position thePosition = cameraComponent.transformToScreenPosition(theInstance);
 
@@ -86,7 +83,6 @@ class DragomeGameView implements GameView {
             }
             theInstanceElement.setTextContent("");
 
-            boolean theSomethingRendered = false;
             Sprite theSpriteComponent = theInstance.getComponent(SpriteBehavior.class);
             if (theSpriteComponent != null) {
 
@@ -100,41 +96,35 @@ class DragomeGameView implements GameView {
                             "position: absolute; top: " + ((int) thePosition.y) + "px; left: " + ((int) thePosition.x) + "px; width: "
                                     + theSize.width + "px; height: " + theSize.height + "px;" + theRotateStyle+" background: url('" + theGameResource.getName()+"'); background-size: 100% 100%;");
 
-                    theSomethingRendered = true;
                 } catch (IOException e) {
                     DragomeLogger.error("Error while loading game resource "+theSpriteResource.name+" : " + e);
                 }
-            }
-            Text theTextComponent = theInstance.getComponent(TextBehavior.class);
-            if (theTextComponent != null) {
-                Color theFontColor = theTextComponent.colorProperty().get();
-                Font theFont = theTextComponent.fontProperty().get();
-                ExpressionParser theExpressionParser = aScene.get(theTextComponent.textExpressionProperty().get());
-                theInstanceElement.setAttribute("style",
-                        "position: absolute; top: " + ((int) thePosition.y) + "px; left: " + ((int) thePosition.x) + "px; color: rgb("+theFontColor.r+","+theFontColor.g+","+theFontColor.b+"); font-size: "+theFont.size+"px;"+theRotateStyle);
+            } else {
+                Text theTextComponent = theInstance.getComponent(TextBehavior.class);
+                if (theTextComponent != null) {
+                    Color theFontColor = theTextComponent.colorProperty().get();
+                    Font theFont = theTextComponent.fontProperty().get();
+                    ExpressionParser theExpressionParser = aScene.get(theTextComponent.textExpressionProperty().get());
+                    theInstanceElement.setAttribute("style",
+                            "position: absolute; top: " + ((int) thePosition.y) + "px; left: " + ((int) thePosition.x)
+                                    + "px; color: rgb(" + theFontColor.r + "," + theFontColor.g + "," + theFontColor.b
+                                    + "); font-size: " + theFont.size + "px;" + theRotateStyle);
 
-                theInstanceElement.setTextContent(theExpressionParser.evaluateToString());
-
-                theSomethingRendered = true;
-            }
-
-            if (!theSomethingRendered) {
-                theInstanceElement.setAttribute("style",
-                        "position: absolute; top: " + ((int) thePosition.y) + "px; left: " + ((int) thePosition.x) + "px; width: "
-                                + theSize.width + "px; height: " + theSize.height + "px; border: 1px solid white;" + theRotateStyle);
+                    theInstanceElement.setTextContent(theExpressionParser.evaluateToString());
+                } else {
+                    theInstanceElement.setAttribute("style",
+                            "position: absolute; top: " + ((int) thePosition.y) + "px; left: " + ((int) thePosition.x)
+                                    + "px; width: "
+                                    + theSize.width + "px; height: " + theSize.height + "px; border: 1px solid white;"
+                                    + theRotateStyle);
+                }
             }
         }
 
         // Remove no longer visible instances
-        Set<String> theKeysToRemove = new HashSet<String>();
-        for (Map.Entry<String, Element> theEntry : instanceCache.entrySet()) {
-            if (!theRenderedInstances.contains(theEntry.getKey())) {
-                theEntry.getValue().getParentNode().removeChild(theEntry.getValue());
-                theKeysToRemove.add(theEntry.getKey());
-            }
-        }
-        for (String theKey : theKeysToRemove) {
-            instanceCache.remove(theKey);
+        for (String theInvisibleKey : theInvisibleInstances) {
+            Element theInvisibleElement = instanceCache.remove(theInvisibleKey);
+            theInvisibleElement.getParentNode().removeChild(theInvisibleElement);
         }
 
         lastRenderingDuration = (lastRenderingDuration + System.currentTimeMillis() - theStart) / 2;

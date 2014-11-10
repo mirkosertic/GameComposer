@@ -94,29 +94,25 @@ public class AndroidGameView implements GameView {
                 theCanvas.rotate(theAngleInDegrees, thePosition.x + theHalfWidth, thePosition.y + theHalfHeight);
             }
 
-            boolean theSomethingRendered = false;
-
             Sprite theTemplateComponent = theInstance.getComponent(SpriteBehavior.class);
             if (theTemplateComponent != null && !theTemplateComponent.resourceNameProperty().isNull()) {
                 try {
                     AndroidBitmapResource theBitmap = gameRuntime.getResourceCache().getResourceFor(
                             theTemplateComponent.resourceNameProperty().get());
                     drawGameObjectInstance(theCanvas, theInstance, thePosition, theSize, theBitmap);
-
-                    theSomethingRendered = true;
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-            }
-            Text theTextComponent = theInstance.getComponent(TextBehavior.class);
-            if (theTextComponent != null) {
-                ExpressionParser theExpressionParser = aScene.get(theTextComponent.textExpressionProperty().get());
-                drawText(theCanvas, thePosition, theTextComponent.fontProperty().get(), theTextComponent.colorProperty().get(), theExpressionParser.evaluateToString(), theSize);
-                theSomethingRendered = true;
-            }
-
-            if (!theSomethingRendered) {
-                theCanvas.drawRect(thePosition.x, thePosition.y, thePosition.x + theSize.width, thePosition.y + theSize.height, whitePaint);
+            } else {
+                Text theTextComponent = theInstance.getComponent(TextBehavior.class);
+                if (theTextComponent != null) {
+                    ExpressionParser theExpressionParser = aScene.get(theTextComponent.textExpressionProperty().get());
+                    drawText(theCanvas, thePosition, theTextComponent.fontProperty().get(), theTextComponent.colorProperty().get(), theExpressionParser.evaluateToString(), theSize);
+                } else {
+                    theCanvas
+                            .drawRect(thePosition.x, thePosition.y, thePosition.x + theSize.width, thePosition.y + theSize.height,
+                                    whitePaint);
+                }
             }
 
             theCanvas.restore();
