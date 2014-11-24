@@ -11,29 +11,8 @@
     <artifactId>gameengine-gwtrenderer</artifactId>
     <name>GameComposer GWT HTML5 Canvas / WebGL Renderer</name>
     <packaging>war</packaging>
-    <repositories>
-        <repository>
-            <id>google-maven-snapshot-repository</id>
-            <name>Google Maven Snapshot Repository</name>
-            <url>https://oss.sonatype.org/content/repositories/google-snapshots/</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <id>google-maven-snapshot-repository</id>
-            <name>Google Maven Snapshot Repository</name>
-            <url>https://oss.sonatype.org/content/repositories/google-snapshots/</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
     <properties>
-        <xgwt.version>2.7.0-SNAPSHOT</xgwt.version>
-        <gwt.version>2.6.1</gwt.version>
+        <gwt.version>2.7.0</gwt.version>
     </properties>
     <build>
         <plugins>
@@ -107,6 +86,12 @@
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-servlet</artifactId>
             <version>${gwt.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.ow2.asm</groupId>
+            <artifactId>asm</artifactId>
+            <version>5.0.3</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
