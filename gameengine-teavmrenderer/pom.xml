@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>de.mirkosertic</groupId>
+        <artifactId>gamecreator</artifactId>
+        <version>0.2-SNAPSHOT</version>
+    </parent>
+    <artifactId>gameengine-teavmrenderer</artifactId>
+    <name>GameComposer TeaVM Renderer</name>
+    <packaging>war</packaging>
+
+    <properties>
+        <teavm.version>0.2.1</teavm.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>de.mirkosertic</groupId>
+            <artifactId>gameengine</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.teavm</groupId>
+            <artifactId>teavm-classlib</artifactId>
+            <version>${teavm.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- JavaScriptObjects (JSO) - a JavaScript binding for TeaVM -->
+        <dependency>
+            <groupId>org.teavm</groupId>
+            <artifactId>teavm-jso</artifactId>
+            <version>${teavm.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Different browser APIs for TeaVM in terms of JSO -->
+        <dependency>
+            <groupId>org.teavm</groupId>
+            <artifactId>teavm-dom</artifactId>
+            <version>${teavm.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <webResources>
+                        <resource>
+                            <directory>${project.build.directory}/generated/js</directory>
+                        </resource>
+                    </webResources>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.teavm</groupId>
+                <artifactId>teavm-maven-plugin</artifactId>
+                <version>${teavm.version}</version>
+                <executions>
+                    <execution>
+                        <id>web-client</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>build-javascript</goal>
+                        </goals>
+                        <configuration>
+                            <targetDirectory>${project.build.directory}/generated/js/teavm</targetDirectory>
+                            <mainClass>de.mirkosertic.gameengine.teavm.TeaVMRenderer</mainClass>
+                            <!-- How to attach runtime.js. Possible values are: SEPARATE, MERGED and NONE -->
+                            <runtime>SEPARATE</runtime>
+                            <!-- Whether TeaVM should produce minified JavaScript. Can reduce JavaScript file size more than
+                                 two times -->
+                            <minifying>true</minifying>
+                            <!-- Whether TeaVM should produce debug information for its built-in debugger -->
+                            <debugInformationGenerated>true</debugInformationGenerated>
+                            <!-- Whether TeaVM should produce source maps file -->
+                            <sourceMapsGenerated>true</sourceMapsGenerated>
+                            <!-- Whether TeaVM should also put source files into output directory,
+                                 for compatibility with source maps -->
+                            <sourceFilesCopied>true</sourceFilesCopied>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

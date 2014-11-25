@@ -16,6 +16,7 @@
         <module>gameengine-gwtrenderer</module>
         <module>gameengine-dragomerenderer</module>
         <module>gameengine-androidrenderer</module>
+        <module>gameengine-teavmrenderer</module>
         <module>gamecomposer</module>
         <module>examples</module>
     </modules>
