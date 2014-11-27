@@ -20,7 +20,8 @@ public final class Window {
     }
 
     public void requestAnimationFrame(Runnable aRunnable) {
-        ScriptHelper.put("ra", aRunnable, this);
+	Runnable runnableForDebugging= DragomeBuildInFunctions.wrapRunnableForDebugging(aRunnable);
+	ScriptHelper.put("ra", runnableForDebugging, this);
         ScriptHelper.evalNoResult("requestAnimationFrame(function(time) {ra.$run$void();})", this);
     }
 
@@ -30,7 +31,8 @@ public final class Window {
     }
 
     public void onResize(Runnable aRunnable) {
-        ScriptHelper.put("ra", aRunnable, this);
+	Runnable runnableForDebugging= DragomeBuildInFunctions.wrapRunnableForDebugging(aRunnable);
+	ScriptHelper.put("ra", runnableForDebugging, this);	
         ScriptHelper.evalNoResult("window.addEventListener('resize', function() {ra.$run$void();})", this);
     }
 }
