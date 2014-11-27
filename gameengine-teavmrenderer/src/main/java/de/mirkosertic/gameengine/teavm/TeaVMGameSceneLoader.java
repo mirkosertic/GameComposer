@@ -2,15 +2,14 @@ package de.mirkosertic.gameengine.teavm;
 
 import de.mirkosertic.gameengine.AbstractGameRuntimeFactory;
 import de.mirkosertic.gameengine.core.GameScene;
-import org.json.simple.JSONValue;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import de.mirkosertic.gameengine.teavm.json.JSONAPI;
+import de.mirkosertic.gameengine.teavm.json.JSONAPIProvider;
+import de.mirkosertic.gameengine.teavm.json.JSONMap;
+
 import org.teavm.dom.ajax.ReadyStateChangeHandler;
 import org.teavm.dom.ajax.XMLHttpRequest;
 import org.teavm.dom.browser.Window;
-import org.teavm.dom.html.HTMLElement;
-import org.teavm.dom.html.HTMLDocument;
-import org.teavm.dom.html.HTMLElement;
+import org.teavm.jso.JS;
 
 import java.util.Map;
 
@@ -49,37 +48,8 @@ public class TeaVMGameSceneLoader {
     }
 
     private GameScene parse(String aResponse, TeaVMGameResourceLoader aResourceLoader) {
-        //JSONAPI theAPI = ((JSONAPIProvider) JS.getGlobal()).getJSONAPI();
-        //Map<String, Object> theResult = new JSONMap(theAPI.parse(aResponse));
-
-        HTMLDocument document = window.getDocument();
-
-        try {
-            HTMLElement div = document.createElement("div");
-            div.appendChild(document.createTextNode(aResponse));
-            document.getBody().appendChild(div);
-
-            Object theObjectResult = JSONValue.parseWithException(aResponse);
-
-            div = document.createElement("div");
-            div.appendChild(document.createTextNode("Loaded " + aResponse));
-            document.getBody().appendChild(div);
-
-            Map<String, Object> theResult = (Map<String, Object>) theObjectResult;
-
-
-            div = document.createElement("div");
-            div.appendChild(document.createTextNode("Loaded " + theResult));
-            document.getBody().appendChild(div);
-
-
-            return GameScene.deserialize(runtimeFactory.create(aResourceLoader, new TeaVMGameSoundSystemFactory()), theResult);
-        } catch (ParseException e) {
-            HTMLElement div = document.createElement("div");
-            div.appendChild(document.createTextNode("EX " + e.getPosition()));
-            document.getBody().appendChild(div);
-
-            throw new RuntimeException(e);
-        }
+        JSONAPI theAPI = ((JSONAPIProvider) JS.getGlobal()).getJSONAPI();
+        Map<String, Object> theResult = new JSONMap(theAPI.parse(aResponse));
+        return GameScene.deserialize(runtimeFactory.create(aResourceLoader, new TeaVMGameSoundSystemFactory()), theResult);
     }
 }

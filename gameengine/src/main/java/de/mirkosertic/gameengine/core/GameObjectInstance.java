@@ -23,7 +23,7 @@ public class GameObjectInstance implements Reflectable<GameObjectInstanceClassIn
     public static final String ABSOLUTE_POSITION_PROPERTY = "absolutePosition";
     public static final String ABSOLUTE_POSITION_ANCHOR_PROPERTY = "absolutePositionAnchor";
 
-    private final Map<String, Behavior> components;
+    private final Map<Class<? extends Behavior>, Behavior> components;
 
     private final GameObject ownerGameObject;
 
@@ -95,11 +95,11 @@ public class GameObjectInstance implements Reflectable<GameObjectInstanceClassIn
     }
 
     void addComponent(Behavior aComponent) {
-        components.put(aComponent.getClass().getSimpleName(), aComponent);
+        components.put(aComponent.getClass(), aComponent);
     }
 
     public <T extends Behavior> T getComponent(Class<T> aComponentClass) {
-        return (T) components.get(aComponentClass.getSimpleName());
+        return (T) components.get(aComponentClass);
     }
 
     public Map<String, Object> serialize() {
