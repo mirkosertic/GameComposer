@@ -1,6 +1,9 @@
 package de.mirkosertic.gameengine.teavm;
 
 import de.mirkosertic.gameengine.core.Game;
+import de.mirkosertic.gameengine.teavm.json.JSONAPI;
+import de.mirkosertic.gameengine.teavm.json.JSONAPIProvider;
+import de.mirkosertic.gameengine.teavm.json.JSONMap;
 
 import org.teavm.dom.ajax.ReadyStateChangeHandler;
 import org.teavm.dom.ajax.XMLHttpRequest;

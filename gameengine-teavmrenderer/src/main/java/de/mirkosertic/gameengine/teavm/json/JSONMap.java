@@ -1,10 +1,12 @@
-package de.mirkosertic.gameengine.teavm;
+package de.mirkosertic.gameengine.teavm.json;
 
 import org.teavm.jso.JS;
-import org.teavm.jso.JSIndexer;
+import org.teavm.jso.JSArray;
 import org.teavm.jso.JSObject;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
@@ -12,11 +14,6 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public class JSONMap implements Map<String, Object> {
-
-    private interface JSODelegate extends JSObject {
-        @JSIndexer
-        JSObject get(String aIndex);
-    }
 
     private final JSODelegate root;
 
@@ -44,24 +41,37 @@ public class JSONMap implements Map<String, Object> {
         return false;
     }
 
-    @Override
-    public Object get(Object aKey) {
-        JSObject theResult = root.get((String) aKey);
-        switch(JS.getType(theResult)) {
-            case BOOLEAN:
-                return JS.unwrapBoolean(theResult);
-            case FUNCTION:
-                throw new IllegalArgumentException();
-            case NUMBER:
-                return JS.unwrapInt(theResult);
-            case OBJECT:
-                return new JSONMap(theResult);
-            case STRING:
-                return JS.unwrapString(theResult);
-            case UNDEFINED:
-                return null;
+    private Object unwrap(JSODelegate aDelegate) {
+        switch(JS.getType(aDelegate)) {
+        case BOOLEAN:
+            return JS.unwrapBoolean(aDelegate);
+        case FUNCTION:
+            throw new IllegalArgumentException();
+        case NUMBER:
+            return JS.unwrapInt(aDelegate);
+        case OBJECT: {
+            if (aDelegate.getConstructor() == ((JSOConstructors) JS.getGlobal()).getArray()) {
+                // We are dealing with an Array
+                JSArray theArray = (JSArray) aDelegate;
+                List<Object> theResult = new ArrayList<>();
+                for (int i=0;i<theArray.getLength();i++) {
+                    theResult.add(unwrap((JSODelegate) theArray.get(i)));
+                }
+                return theResult;
+            }
+            return new JSONMap(aDelegate);
+        }
+        case STRING:
+            return JS.unwrapString(aDelegate);
+        case UNDEFINED:
+            return null;
         }
         throw new IllegalStateException();
+    }
+
+    @Override
+    public Object get(Object aKey) {
+        return unwrap((JSODelegate) root.get((String) aKey));
     }
 
     @Override

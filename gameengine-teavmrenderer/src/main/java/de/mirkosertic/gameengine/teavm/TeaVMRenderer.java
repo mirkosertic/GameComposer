@@ -3,6 +3,7 @@ package de.mirkosertic.gameengine.teavm;
 import de.mirkosertic.gameengine.core.Game;
 import de.mirkosertic.gameengine.core.GameLoopFactory;
 import de.mirkosertic.gameengine.core.GameScene;
+
 import org.teavm.dom.browser.Window;
 import org.teavm.dom.html.HTMLDocument;
 import org.teavm.dom.html.HTMLElement;
@@ -10,8 +11,8 @@ import org.teavm.jso.JS;
 
 public class TeaVMRenderer {
 
-    private static Window window = (Window) JS.getGlobal();
-    private static HTMLDocument document = window.getDocument();
+    private static final Window window = (Window) JS.getGlobal();
+    private static final HTMLDocument document = window.getDocument();
 
     public static void main(String[] args) {
         TeaVMRenderer theRenderer = new TeaVMRenderer();
@@ -44,6 +45,10 @@ public class TeaVMRenderer {
     }
 
     private void gameLoaded(Game aGame) {
+        loadScene(aGame.defaultSceneProperty().get());
+    }
+
+    private void loadScene(final String aSceneName) {
         new TeaVMGameSceneLoader(new TeaVMGameSceneLoader.GameSceneLoadedListener() {
             @Override
             public void onGameSceneLoaded(GameScene aScene) {
@@ -56,6 +61,6 @@ public class TeaVMRenderer {
             public void onGameSceneLoadedError(Throwable aThrowable) {
 
             }
-        }, new TeaVMGameRuntimeFactory(), window).loadFromServer(aGame.defaultSceneProperty().get(), new TeaVMGameResourceLoader());
+        }, new TeaVMGameRuntimeFactory(), window).loadFromServer(aSceneName, new TeaVMGameResourceLoader());
     }
 }

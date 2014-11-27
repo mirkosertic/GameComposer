@@ -1,4 +1,4 @@
-package de.mirkosertic.gameengine.teavm;
+package de.mirkosertic.gameengine.teavm.json;
 
 import org.teavm.jso.JSObject;
 
