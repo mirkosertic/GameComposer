@@ -3,8 +3,6 @@ package de.mirkosertic.gameengine.expression;
 import de.mirkosertic.gameengine.type.Method;
 import de.mirkosertic.gameengine.type.Reflectable;
 
-import java.util.Stack;
-
 class RPNEvaluator {
 
     private final PropertyDiscoverer propertyDiscoverer;
@@ -93,7 +91,7 @@ class RPNEvaluator {
     }
 
     public Object evaluate(Token[] aRPNTokens) {
-        Stack<Object> theResultStack = new Stack<>();
+        SimpleStack<Object> theResultStack = new SimpleStack<>();
         for (int i = 0; i < aRPNTokens.length; i++) {
             Token theToken = aRPNTokens[i];
             if (theToken.type == TokenType.VALUE || theToken.type == TokenType.STRING) {

@@ -2,7 +2,6 @@ package de.mirkosertic.gameengine.expression;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 /**
  * Implementation of Shunting-yard algorithm.
@@ -19,7 +18,7 @@ class Parser {
 
     public Token[] parse(Token[] aTokens) {
         List<Token> theOutputQueue = new ArrayList<>();
-        Stack<Token> theOutputStack = new Stack<>();
+        SimpleStack<Token> theOutputStack = new SimpleStack<>();
 
         for (int i = 0; i < aTokens.length; i++) {
             Token theToken = aTokens[i];
