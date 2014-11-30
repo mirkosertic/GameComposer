@@ -1,6 +1,5 @@
 package de.mirkosertic.gameengine.dragome;
 
-import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.core.GameResourceCache;
 import de.mirkosertic.gameengine.core.GameResourceType;
 import de.mirkosertic.gameengine.sound.GameSoundSystem;
@@ -19,10 +18,9 @@ public class DragomeGameSoundSystem implements GameSoundSystem<DragomeSound> {
     @Override
     public DragomeSound play(ResourceName aResourceName) {
         try {
-            GameResource theResource = resourceCache.getResourceFor(aResourceName);
+            DragomeGameResource theResource = resourceCache.getResourceFor(aResourceName);
             if (theResource != null && theResource.getType() == GameResourceType.SOUND) {
-                DragomeGameResource theGameResource = (DragomeGameResource) theResource;
-                ScriptHelper.put("sn", theGameResource.getName(), this);
+                ScriptHelper.put("sn", theResource.getName(), this);
                 ScriptHelper.evalNoResult("new Audio(sn).play()", this);
                 return new DragomeSound();
             }
