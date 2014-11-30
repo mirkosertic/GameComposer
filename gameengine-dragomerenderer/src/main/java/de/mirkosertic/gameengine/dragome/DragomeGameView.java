@@ -47,6 +47,7 @@ class DragomeGameView implements GameView {
         gameRuntime = aGameRuntime;
 
         instanceCache.clear();
+        styleCache.clear();
     }
 
     @Override

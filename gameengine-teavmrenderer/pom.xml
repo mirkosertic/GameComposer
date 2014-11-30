@@ -99,7 +99,7 @@
                             <sourceMapsGenerated>true</sourceMapsGenerated>
                             <!-- Whether TeaVM should also put source files into output directory,
                                  for compatibility with source maps -->
-                            <sourceFilesCopied>true</sourceFilesCopied>
+                            <sourceFilesCopied>false</sourceFilesCopied>
                         </configuration>
                     </execution>
                 </executions>

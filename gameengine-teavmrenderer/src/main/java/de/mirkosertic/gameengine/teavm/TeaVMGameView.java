@@ -7,7 +7,9 @@ import de.mirkosertic.gameengine.sprite.SpriteBehavior;
 import de.mirkosertic.gameengine.text.Text;
 import de.mirkosertic.gameengine.text.TextBehavior;
 import de.mirkosertic.gameengine.type.*;
-import org.teavm.dom.core.Attr;
+
+import org.teavm.dom.core.Node;
+import org.teavm.dom.core.NodeList;
 import org.teavm.dom.html.HTMLDocument;
 import org.teavm.dom.html.HTMLElement;
 
@@ -17,7 +19,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class TeaVMGameView implements GameView {
+class TeaVMGameView implements GameView {
 
     private Size currentScreenSize;
 
@@ -28,7 +30,6 @@ public class TeaVMGameView implements GameView {
     private long lastRenderingDuration;
 
     private final Map<String, HTMLElement> instanceCache;
-    private final Map<String, Attr> styleCache;
     private final HTMLDocument document;
     private final HTMLElement canvas;
 
@@ -37,7 +38,6 @@ public class TeaVMGameView implements GameView {
         gestureDetector = aGestureDetector;
         gameRuntime = aGameRuntime;
         instanceCache = new HashMap<>();
-        styleCache = new HashMap<>();
         document = aHTMLDocument;
         canvas = aCanvasElement;
     }
@@ -79,19 +79,19 @@ public class TeaVMGameView implements GameView {
 
             String theInstanceName = theInstance.nameProperty().get();
             HTMLElement theInstanceElement = instanceCache.get(theInstanceName);
-            Attr theStyleNode;
             if (theInstanceElement == null) {
                 theInstanceElement = document.createElement("div");
                 theInstanceElement.setAttribute("name", theInstanceName);
                 instanceCache.put(theInstanceName, theInstanceElement);
                 canvas.appendChild(theInstanceElement);
-
-                theStyleNode = theInstanceElement.getAttributeNode("style");
-                styleCache.put(theInstanceName, theStyleNode);
             } else {
-                theStyleNode = styleCache.get(theInstanceName);
+                // Remove all children from the current node, clear it up
+                NodeList theChildren = theInstanceElement.getChildNodes();
+                for (int i=0;i<theChildren.getLength();i++) {
+                    Node theChild = theChildren.item(i);
+                    theChild.getParentNode().removeChild(theChild);
+                }
             }
-            theInstanceElement.setNodeValue("");
 
             Sprite theSpriteComponent = theInstance.getComponent(SpriteBehavior.class);
             if (theSpriteComponent != null) {
@@ -102,10 +102,11 @@ public class TeaVMGameView implements GameView {
                     TeaVMGameResource theGameResource = gameRuntime.getResourceCache()
                             .getResourceFor(theSpriteResource);
 
-                    theStyleNode.setValue("position: absolute; top: " + ((int) thePosition.y) + "px; left: " + ((int) thePosition.x) + "px; width: "
-                            + theSize.width + "px; height: " + theSize.height + "px;" + theRotateStyle+" background: url('" + theGameResource.getName()+"'); background-size: 100% 100%;");
+                    theInstanceElement.setAttribute("style", "position: absolute; top: " + ((int) thePosition.y) + "px; left: " + ((int) thePosition.x) + "px; width: "
+                            + theSize.width + "px; height: " + theSize.height + "px;" + theRotateStyle + " background: url('" + theGameResource.getName() + "'); background-size: 100% 100%;");
 
                 } catch (IOException e) {
+                    TeaVMLogger.error("Error while rendering sprite " + theSpriteResource.name);
                 }
             } else {
                 Text theTextComponent = theInstance.getComponent(TextBehavior.class);
@@ -113,13 +114,13 @@ public class TeaVMGameView implements GameView {
                     Color theFontColor = theTextComponent.colorProperty().get();
                     Font theFont = theTextComponent.fontProperty().get();
                     ExpressionParser theExpressionParser = aScene.get(theTextComponent.textExpressionProperty().get());
-                    theStyleNode.setValue("position: absolute; top: " + ((int) thePosition.y) + "px; left: " + ((int) thePosition.x)
+                    theInstanceElement.setAttribute("style", "position: absolute; top: " + ((int) thePosition.y) + "px; left: " + ((int) thePosition.x)
                             + "px; color: rgb(" + theFontColor.r + "," + theFontColor.g + "," + theFontColor.b
                             + "); font-size: " + theFont.size + "px;" + theRotateStyle);
 
-                    theInstanceElement.setNodeValue(theExpressionParser.evaluateToString());
+                    theInstanceElement.appendChild(document.createTextNode(theExpressionParser.evaluateToString()));
                 } else {
-                    theStyleNode.setValue("position: absolute; top: " + ((int) thePosition.y) + "px; left: " + ((int) thePosition.x)
+                    theInstanceElement.setAttribute("style", "position: absolute; top: " + ((int) thePosition.y) + "px; left: " + ((int) thePosition.x)
                             + "px; width: "
                             + theSize.width + "px; height: " + theSize.height + "px; border: 1px solid white;"
                             + theRotateStyle);
@@ -131,7 +132,6 @@ public class TeaVMGameView implements GameView {
         for (String theInvisibleKey : theInvisibleInstances) {
             HTMLElement theInvisibleElement = instanceCache.remove(theInvisibleKey);
             theInvisibleElement.getParentNode().removeChild(theInvisibleElement);
-            styleCache.remove(theInvisibleKey);
         }
 
         lastRenderingDuration = (lastRenderingDuration + System.currentTimeMillis() - theStart) / 2;

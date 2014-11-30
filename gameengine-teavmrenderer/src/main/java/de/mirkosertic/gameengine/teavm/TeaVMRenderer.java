@@ -7,10 +7,13 @@ import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.input.DefaultGestureDetector;
+import de.mirkosertic.gameengine.type.GameKeyCode;
 import de.mirkosertic.gameengine.type.Size;
 import org.teavm.dom.browser.TimerHandler;
+import org.teavm.dom.events.Event;
+import org.teavm.dom.events.EventListener;
+import org.teavm.dom.events.EventTarget;
 import org.teavm.dom.html.HTMLDocument;
-import org.teavm.dom.html.HTMLElement;
 import org.teavm.jso.JS;
 
 public class TeaVMRenderer {
@@ -33,7 +36,10 @@ public class TeaVMRenderer {
     private TeaVMRenderer() {
     }
 
-    public void boot() {
+    void boot() {
+
+        TeaVMLogger.info("Booting game runtime");
+
         gameLoopFactory = new GameLoopFactory();
         runtimeFactory = new TeaVMGameRuntimeFactory();
 
@@ -45,6 +51,7 @@ public class TeaVMRenderer {
 
             @Override
             public void onGameSceneLoadedError(Throwable aError) {
+                TeaVMLogger.error("Failed to load scene : " + aError.getMessage());
             }
         }, runtimeFactory, window);
 
@@ -52,49 +59,75 @@ public class TeaVMRenderer {
             @Override
             public void onGameLoaded(Game aGame) {
                 String theSceneId = aGame.defaultSceneProperty().get();
+                TeaVMLogger.info("Loading scene " + theSceneId);
                 sceneLoader.loadFromServer(theSceneId, new TeaVMGameResourceLoader(theSceneId));
             }
 
             @Override
-            public void onGameLoadedError(Throwable aThrowable) {
-                HTMLElement div = document.createElement("div");
-                div.appendChild(document.createTextNode("Error " + aThrowable.getMessage()));
-                document.getBody().appendChild(div);
+            public void onGameLoadedError(Throwable aError) {
+                TeaVMLogger.error("Failed to load scene : " + aError);
             }
         }, window).loadFromServer();
 
-/*        EventListener theGlobalEventListener = new EventListener() {
+        EventTarget documentEventTarget = (EventTarget)document;
+        documentEventTarget.addEventListener("keydown", new EventListener() {
             @Override
             public void handleEvent(Event aEvent) {
-                if (aEvent instanceof KeyboardEvent) {
-                    handleSingleKeyboardEvent((KeyboardEvent) aEvent);
-                }
+                keyPressed((TeaVMKeyEvent) aEvent);
             }
-        };*/
+        }, false);
+        documentEventTarget.addEventListener("keyup", new EventListener() {
+            @Override
+            public void handleEvent(Event aEvent) {
+                keyReleased((TeaVMKeyEvent) aEvent);
+            }
+        }, false);
 
 /*        window.onResize(new Runnable() {
             @Override
             public void run() {
                 if (runningGameLoop != null) {
-                    Size theSize = new Size(window.getClientWidth(), window.getClientHeight());
+                    Size theSize = new Size(window.getInnerWidth(), window.getInnerHeoght());
                     runningRuntime.getEventManager().fire(new SetScreenResolution(theSize));
                     gameView.setSize(theSize);
                 }
             }
-        });
+        });*/
+    }
 
-        window.addEventListener(theGlobalEventListener, "keydown", "keypress", "keyup");*/
+    private void keyPressed(TeaVMKeyEvent aEvent) {
+        if (runningGameLoop != null) {
+            int theCode = JS.isUndefined(aEvent.getWhich()) ? JS.unwrapInt(aEvent.getWhich()) : aEvent.getKeyCode();
+            GameKeyCode theKeyCode = TeaVMKeyCodeTranslator.translate(theCode);
+            runningGameLoop.getHumanGameView().getGestureDetector().keyPressed(theKeyCode);
+            TeaVMLogger.info("KeyEvent keyPressed " + theCode);
+        }
+    }
+
+    private void keyReleased(TeaVMKeyEvent aEvent) {
+        if (runningGameLoop != null) {
+            int theCode = JS.isUndefined(aEvent.getWhich()) ? JS.unwrapInt(aEvent.getWhich()) : aEvent.getKeyCode();
+            GameKeyCode theKeyCode = TeaVMKeyCodeTranslator.translate(theCode);
+            runningGameLoop.getHumanGameView().getGestureDetector().keyReleased(theKeyCode);
+            TeaVMLogger.info("KeyEvent keyReleased " + theCode);
+        }
     }
 
     private void runSingleStep(final GameLoop aGameLoop) {
         if (!aGameLoop.isShutdown()) {
             aGameLoop.singleRun();
-            window.setTimeout(new TimerHandler() {
+            window.requestAnimationFrame(new TeaVMWindow.RenderFrameHandler() {
+                @Override
+                public void renderFrame(int aTimeDelta) {
+                    runSingleStep(aGameLoop);
+                }
+            });
+/*            window.setTimeout(new TimerHandler() {
                 @Override
                 public void onTimer() {
                     runSingleStep(aGameLoop);
                 }
-            }, 20);
+            }, 16);*/
         }
     }
 
@@ -138,8 +171,10 @@ public class TeaVMRenderer {
             gameView.prepareNewScene(theRuntime, theCameraComponent, theGestureDetector);
         }
 
-        gameView.setSize(new Size(window.getClientWidth(), window.getClientHeight()));
-        theEventManager.fire(new SetScreenResolution(new Size(window.getClientWidth(), window.getClientHeight())));
+        Size theSize = new Size(window.getInnerWidth(), window.getInnerHeight());
+        TeaVMLogger.info("Size is " + theSize.width + " " + theSize.height);
+        gameView.setSize(theSize);
+        theEventManager.fire(new SetScreenResolution(theSize));
 
         runningGameLoop = gameLoopFactory.create(aGameScene, gameView, theRuntime);
 
