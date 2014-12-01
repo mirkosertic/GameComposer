@@ -1,20 +1,26 @@
 package de.mirkosertic.gameengine.gwt;
 
-import com.google.gwt.canvas.client.Canvas;
-import com.google.gwt.canvas.dom.client.Context2d;
-import com.google.gwt.canvas.dom.client.CssColor;
-
 import de.mirkosertic.gameengine.camera.CameraBehavior;
-import de.mirkosertic.gameengine.core.*;
-import de.mirkosertic.gameengine.input.DefaultGestureDetector;
+import de.mirkosertic.gameengine.core.ExpressionParser;
+import de.mirkosertic.gameengine.core.GameObjectInstance;
+import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.core.GestureDetector;
+import de.mirkosertic.gameengine.core.RuntimeStatistics;
+import de.mirkosertic.gameengine.input.DefaultGestureDetector;
 import de.mirkosertic.gameengine.sprite.Sprite;
 import de.mirkosertic.gameengine.sprite.SpriteBehavior;
 import de.mirkosertic.gameengine.text.Text;
 import de.mirkosertic.gameengine.text.TextBehavior;
-import de.mirkosertic.gameengine.type.*;
+import de.mirkosertic.gameengine.type.Angle;
+import de.mirkosertic.gameengine.type.Color;
+import de.mirkosertic.gameengine.type.Position;
+import de.mirkosertic.gameengine.type.Size;
 
 import java.io.IOException;
+import com.google.gwt.canvas.client.Canvas;
+import com.google.gwt.canvas.dom.client.Context2d;
+import com.google.gwt.canvas.dom.client.CssColor;
 
 public class GWTCanvasGameView extends AbstractWebGameView {
 
@@ -37,7 +43,7 @@ public class GWTCanvasGameView extends AbstractWebGameView {
     }
 
     @Override
-    public void renderGame(long aGameTime, long aElapsedTimeSinceLastLoop, GameScene aScene) {
+    public void renderGame(long aGameTime, long aElapsedTimeSinceLastLoop, GameScene aScene, RuntimeStatistics aStatistics) {
         Size theCurrentSize = getSize();
 
         Context2d theContext = canvas.getContext2d();

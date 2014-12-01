@@ -13,6 +13,7 @@ import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.core.GameView;
 import de.mirkosertic.gameengine.core.GestureDetector;
+import de.mirkosertic.gameengine.core.RuntimeStatistics;
 import de.mirkosertic.gameengine.input.DefaultGestureDetector;
 import de.mirkosertic.gameengine.sprite.Sprite;
 import de.mirkosertic.gameengine.sprite.SpriteBehavior;
@@ -60,7 +61,7 @@ public class AndroidGameView implements GameView {
     }
 
     @Override
-    public void renderGame(long aGameTime, long aElapsedTimeSinceLastLoop, GameScene aScene) {
+    public void renderGame(long aGameTime, long aElapsedTimeSinceLastLoop, GameScene aScene, RuntimeStatistics aStatistics) {
 
         SurfaceHolder theHolder = canvas.getHolder();
         if (theHolder.isCreating()) {

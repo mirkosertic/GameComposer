@@ -1,23 +1,34 @@
 package de.mirkosertic.gameengine.teavm;
 
 import de.mirkosertic.gameengine.camera.CameraBehavior;
-import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.core.ExpressionParser;
+import de.mirkosertic.gameengine.core.GameObjectInstance;
+import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.GameView;
+import de.mirkosertic.gameengine.core.GestureDetector;
+import de.mirkosertic.gameengine.core.RuntimeStatistics;
 import de.mirkosertic.gameengine.sprite.Sprite;
 import de.mirkosertic.gameengine.sprite.SpriteBehavior;
 import de.mirkosertic.gameengine.text.Text;
 import de.mirkosertic.gameengine.text.TextBehavior;
-import de.mirkosertic.gameengine.type.*;
-
-import org.teavm.dom.core.Node;
-import org.teavm.dom.core.NodeList;
-import org.teavm.dom.html.HTMLDocument;
-import org.teavm.dom.html.HTMLElement;
+import de.mirkosertic.gameengine.type.Angle;
+import de.mirkosertic.gameengine.type.Color;
+import de.mirkosertic.gameengine.type.Font;
+import de.mirkosertic.gameengine.type.Position;
+import de.mirkosertic.gameengine.type.ResourceName;
+import de.mirkosertic.gameengine.type.Size;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import org.teavm.dom.core.Node;
+import org.teavm.dom.core.NodeList;
+import org.teavm.dom.html.HTMLDocument;
+import org.teavm.dom.html.HTMLElement;
 
 class TeaVMGameView implements GameView {
 
@@ -26,8 +37,6 @@ class TeaVMGameView implements GameView {
     private CameraBehavior cameraComponent;
     private GestureDetector gestureDetector;
     private GameRuntime gameRuntime;
-
-    private long lastRenderingDuration;
 
     private final Map<String, HTMLElement> instanceCache;
     private final HTMLDocument document;
@@ -54,9 +63,7 @@ class TeaVMGameView implements GameView {
     }
 
     @Override
-    public void renderGame(long aGameTime, long aElapsedTimeSinceLastLoop, GameScene aScene) {
-
-        long theStart = System.currentTimeMillis();
+    public void renderGame(long aGameTime, long aElapsedTimeSinceLastLoop, GameScene aScene, RuntimeStatistics aStatistics) {
 
         Color theBGColor = aScene.backgroundColorProperty().get();
         canvas.setAttribute("style", "width: " + currentScreenSize.width + "px; height: " + currentScreenSize.height + "px; background-color: rgb(" + theBGColor.r + "," + theBGColor.g + "," + theBGColor.b + "); ");
@@ -118,7 +125,7 @@ class TeaVMGameView implements GameView {
                             + "px; color: rgb(" + theFontColor.r + "," + theFontColor.g + "," + theFontColor.b
                             + "); font-size: " + theFont.size + "px;" + theRotateStyle);
 
-                    theInstanceElement.appendChild(document.createTextNode(theExpressionParser.evaluateToString()));
+                    theInstanceElement.appendChild(document.createTextNode(theExpressionParser.evaluateToString()+" "+aStatistics.getAverageTimePerLoopCycle()));
                 } else {
                     theInstanceElement.setAttribute("style", "position: absolute; top: " + ((int) thePosition.y) + "px; left: " + ((int) thePosition.x)
                             + "px; width: "
@@ -133,8 +140,6 @@ class TeaVMGameView implements GameView {
             HTMLElement theInvisibleElement = instanceCache.remove(theInvisibleKey);
             theInvisibleElement.getParentNode().removeChild(theInvisibleElement);
         }
-
-        lastRenderingDuration = (lastRenderingDuration + System.currentTimeMillis() - theStart) / 2;
     }
 
     @Override
