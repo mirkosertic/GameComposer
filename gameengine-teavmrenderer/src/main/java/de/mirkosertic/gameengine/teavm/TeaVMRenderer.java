@@ -2,14 +2,21 @@ package de.mirkosertic.gameengine.teavm;
 
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
-import de.mirkosertic.gameengine.core.*;
-
+import de.mirkosertic.gameengine.core.Game;
+import de.mirkosertic.gameengine.core.GameLoop;
+import de.mirkosertic.gameengine.core.GameLoopFactory;
+import de.mirkosertic.gameengine.core.GameObject;
+import de.mirkosertic.gameengine.core.GameObjectInstance;
+import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.GestureDetector;
+import de.mirkosertic.gameengine.core.RunScene;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.input.DefaultGestureDetector;
 import de.mirkosertic.gameengine.type.GameKeyCode;
 import de.mirkosertic.gameengine.type.Size;
-import org.teavm.dom.browser.TimerHandler;
+
 import org.teavm.dom.events.Event;
 import org.teavm.dom.events.EventListener;
 import org.teavm.dom.events.EventTarget;
@@ -83,11 +90,11 @@ public class TeaVMRenderer {
             }
         }, false);
 
-/*        window.onResize(new Runnable() {
+        /*window.onResize(new Runnable() {
             @Override
             public void run() {
                 if (runningGameLoop != null) {
-                    Size theSize = new Size(window.getInnerWidth(), window.getInnerHeoght());
+                    Size theSize = new Size(window.getInnerWidth(), window.getInnerHeight());
                     runningRuntime.getEventManager().fire(new SetScreenResolution(theSize));
                     gameView.setSize(theSize);
                 }
@@ -122,12 +129,6 @@ public class TeaVMRenderer {
                     runSingleStep(aGameLoop);
                 }
             });
-/*            window.setTimeout(new TimerHandler() {
-                @Override
-                public void onTimer() {
-                    runSingleStep(aGameLoop);
-                }
-            }, 16);*/
         }
     }
 

@@ -1,10 +1,16 @@
 package de.mirkosertic.gameengine.javafx;
 
 import de.mirkosertic.gameengine.camera.CameraBehavior;
-import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.core.ExpressionParser;
+import de.mirkosertic.gameengine.core.GameLoop;
+import de.mirkosertic.gameengine.core.GameObjectInstance;
+import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.GameView;
+import de.mirkosertic.gameengine.core.GestureDetector;
+import de.mirkosertic.gameengine.core.RuntimeStatistics;
 import de.mirkosertic.gameengine.event.SystemException;
 import de.mirkosertic.gameengine.input.DefaultGestureDetector;
-import de.mirkosertic.gameengine.core.GestureDetector;
 import de.mirkosertic.gameengine.sprite.Sprite;
 import de.mirkosertic.gameengine.sprite.SpriteBehavior;
 import de.mirkosertic.gameengine.text.Text;
@@ -175,7 +181,7 @@ public class JavaFXGameView extends Canvas implements GameView {
         return gestureDetector;
     }
 
-    public void renderGame(long aGameTime, long aElapsedTimeSinceLastLoop, GameScene aScene) {
+    public void renderGame(long aGameTime, long aElapsedTimeSinceLastLoop, GameScene aScene, RuntimeStatistics aStatistics) {
         // Do just nothing here, as the real rendering is done by the animation timer
     }
 

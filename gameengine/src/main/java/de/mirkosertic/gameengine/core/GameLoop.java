@@ -8,16 +8,16 @@ public class GameLoop implements Runnable {
     private final GameView humanGameView;
     private final GameScene scene;
     private final GameRuntime runtime;
-    private final long startTime;
     private long lastInvocation;
-    private long totalTicks;
+
+    private RuntimeStatistics statistics;
 
     GameLoop(GameScene aScene, GameView aHumanGameView, GameRuntime aRuntime) {
         humanGameView = aHumanGameView;
         shutdownSignal = false;
         runtime = aRuntime;
         scene = aScene;
-        startTime = System.currentTimeMillis();
+        statistics = new RuntimeStatistics();
     }
 
     public GameView getHumanGameView() {
@@ -41,23 +41,28 @@ public class GameLoop implements Runnable {
             return;
         }
         long theCurrentTime = System.currentTimeMillis();
-        long theGameTime = theCurrentTime - startTime;
+        long theGameTime = theCurrentTime - statistics.getStartTime();
         long theElapsedTime = theCurrentTime - lastInvocation;
         if (theElapsedTime > 0) {
 
             try {
+                long theNumberOfTicks = statistics.incrementTicks();
+
+                statistics.beginGameLoop();
+
                 // The game systems like physics or process need a chance to do something useful.
                 for (GameSystem theSystem : runtime.getSystems()) {
-                    theSystem.proceedGame(totalTicks, theGameTime, theElapsedTime);
+                    theSystem.proceedGame(theNumberOfTicks, theGameTime, theElapsedTime);
                 }
 
                 // Trigger rerendering of game view
-                humanGameView.renderGame(theGameTime, theElapsedTime, scene);
+                humanGameView.renderGame(theGameTime, theElapsedTime, scene, statistics);
 
                 lastInvocation = theCurrentTime;
-                totalTicks++;
             } catch (Exception e) {
                 runtime.getEventManager().fire(new SystemException(e));
+            } finally {
+                statistics.endGameLoop();
             }
         }
     }

@@ -1,20 +1,32 @@
 package de.mirkosertic.gameengine.dragome;
 
 import de.mirkosertic.gameengine.camera.CameraBehavior;
-import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.core.ExpressionParser;
+import de.mirkosertic.gameengine.core.GameObjectInstance;
+import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.GameView;
+import de.mirkosertic.gameengine.core.GestureDetector;
+import de.mirkosertic.gameengine.core.RuntimeStatistics;
 import de.mirkosertic.gameengine.sprite.Sprite;
 import de.mirkosertic.gameengine.sprite.SpriteBehavior;
 import de.mirkosertic.gameengine.text.Text;
 import de.mirkosertic.gameengine.text.TextBehavior;
-import de.mirkosertic.gameengine.type.*;
+import de.mirkosertic.gameengine.type.Angle;
+import de.mirkosertic.gameengine.type.Color;
+import de.mirkosertic.gameengine.type.Font;
+import de.mirkosertic.gameengine.type.Position;
+import de.mirkosertic.gameengine.type.ResourceName;
+import de.mirkosertic.gameengine.type.Size;
 
 import java.io.IOException;
-import java.util.*;
-
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
 import com.dragome.services.ServiceLocator;
 
 class DragomeGameView implements GameView {
@@ -24,8 +36,6 @@ class DragomeGameView implements GameView {
     private CameraBehavior cameraComponent;
     private GestureDetector gestureDetector;
     private GameRuntime gameRuntime;
-
-    private long lastRenderingDuration;
 
     private final Map<String, Element> instanceCache;
     private final Map<String, Attr> styleCache;
@@ -51,9 +61,7 @@ class DragomeGameView implements GameView {
     }
 
     @Override
-    public void renderGame(long aGameTime, long aElapsedTimeSinceLastLoop, GameScene aScene) {
-
-        long theStart = System.currentTimeMillis();
+    public void renderGame(long aGameTime, long aElapsedTimeSinceLastLoop, GameScene aScene, RuntimeStatistics aStatistics) {
 
         Document theDocument = ServiceLocator.getInstance().getDomHandler().getDocument();
         Element theCanvas = ServiceLocator.getInstance().getDomHandler().getElementBySelector("#canvas");
@@ -118,7 +126,7 @@ class DragomeGameView implements GameView {
                                     + "px; color: rgb(" + theFontColor.r + "," + theFontColor.g + "," + theFontColor.b
                                     + "); font-size: " + theFont.size + "px;" + theRotateStyle);
 
-                    theInstanceElement.setTextContent(theExpressionParser.evaluateToString());
+                    theInstanceElement.setTextContent(theExpressionParser.evaluateToString()+" "+aStatistics.getAverageTimePerLoopCycle());
                 } else {
                     theStyleNode.setValue("position: absolute; top: " + ((int) thePosition.y) + "px; left: " + ((int) thePosition.x)
                                     + "px; width: "
@@ -134,8 +142,6 @@ class DragomeGameView implements GameView {
             theInvisibleElement.getParentNode().removeChild(theInvisibleElement);
             styleCache.remove(theInvisibleKey);
         }
-
-        lastRenderingDuration = (lastRenderingDuration + System.currentTimeMillis() - theStart) / 2;
     }
 
     @Override

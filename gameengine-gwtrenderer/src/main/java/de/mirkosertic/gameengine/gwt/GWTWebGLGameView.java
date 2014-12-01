@@ -1,18 +1,12 @@
 package de.mirkosertic.gameengine.gwt;
 
-import com.google.gwt.canvas.client.Canvas;
-import com.google.gwt.canvas.dom.client.Context2d;
-import com.google.gwt.canvas.dom.client.CssColor;
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.resources.client.ClientBundle;
-import com.google.gwt.resources.client.TextResource;
-
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.core.ExpressionParser;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.core.GestureDetector;
+import de.mirkosertic.gameengine.core.RuntimeStatistics;
 import de.mirkosertic.gameengine.input.DefaultGestureDetector;
 import de.mirkosertic.gameengine.sprite.Sprite;
 import de.mirkosertic.gameengine.sprite.SpriteBehavior;
@@ -23,15 +17,42 @@ import de.mirkosertic.gameengine.type.Color;
 import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Size;
 
-import thothbot.parallax.core.client.gl2.*;
+import thothbot.parallax.core.client.gl2.WebGLBuffer;
+import thothbot.parallax.core.client.gl2.WebGLConstants;
+import thothbot.parallax.core.client.gl2.WebGLProgram;
+import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
+import thothbot.parallax.core.client.gl2.WebGLShader;
+import thothbot.parallax.core.client.gl2.WebGLTexture;
+import thothbot.parallax.core.client.gl2.WebGLUniformLocation;
 import thothbot.parallax.core.client.gl2.arrays.Float32Array;
 import thothbot.parallax.core.client.gl2.arrays.Uint16Array;
-import thothbot.parallax.core.client.gl2.enums.*;
+import thothbot.parallax.core.client.gl2.enums.BeginMode;
+import thothbot.parallax.core.client.gl2.enums.BlendingFactorDest;
+import thothbot.parallax.core.client.gl2.enums.BlendingFactorSrc;
+import thothbot.parallax.core.client.gl2.enums.BufferTarget;
+import thothbot.parallax.core.client.gl2.enums.BufferUsage;
+import thothbot.parallax.core.client.gl2.enums.DataType;
+import thothbot.parallax.core.client.gl2.enums.DrawElementsType;
+import thothbot.parallax.core.client.gl2.enums.EnableCap;
+import thothbot.parallax.core.client.gl2.enums.PixelFormat;
+import thothbot.parallax.core.client.gl2.enums.PixelStoreParameter;
+import thothbot.parallax.core.client.gl2.enums.PixelType;
+import thothbot.parallax.core.client.gl2.enums.ProgramParameter;
+import thothbot.parallax.core.client.gl2.enums.TextureParameterName;
+import thothbot.parallax.core.client.gl2.enums.TextureTarget;
+import thothbot.parallax.core.client.gl2.enums.TextureUnit;
 import thothbot.parallax.core.shared.math.Matrix4;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.google.gwt.canvas.client.Canvas;
+import com.google.gwt.canvas.dom.client.Context2d;
+import com.google.gwt.canvas.dom.client.CssColor;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.resources.client.ClientBundle;
+import com.google.gwt.resources.client.TextResource;
 
 public class GWTWebGLGameView extends AbstractWebGameView {
 
@@ -250,7 +271,7 @@ public class GWTWebGLGameView extends AbstractWebGameView {
     }
 
     @Override
-    public void renderGame(long aGameTime, long aElapsedTimeSinceLastLoop, GameScene aScene) {
+    public void renderGame(long aGameTime, long aElapsedTimeSinceLastLoop, GameScene aScene, RuntimeStatistics aStatistics) {
         Size theCurrentSize = getSize();
 
         Context2d theContext = canvas.getContext2d();
