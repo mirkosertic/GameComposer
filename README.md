@@ -45,6 +45,8 @@ GameEngine-GWTRenderer
 This is the game presentation logic using GWT and HTML5(JavaScript) by implementing a GameView. This also includes a SoundSystem implementation based on HTML5 Media API.
 Currently the HTML5 renderer tries to use WebGL. If WebGL is not available, it will fallback to the HTML5 Canvas API.
 
+[Example platform game](http://mirkosertic.github.io/GameComposer/games/dukeplatform/index.html)
+
 GameEngine-AndroidRenderer
 --------------
 
@@ -57,8 +59,12 @@ GameEngine-DragomeRenderer
 This is the game presentation logic using the Dragome Java-to-JavaScript Transpiler Framework. It will render the game view
 using plain HTML5 DOM Sprite elements with CSS without any Canvas support.
 
+[Example platform game](http://mirkosertic.github.io/GameComposer/games/dukeplatform_dragome/index.html)
+
 GameEngine-TeaVMRenderer
 --------------
 
 This is the game presentation logic using the TeaVM Java-to-JavaScript Transpiler Framework. It will render the game view
 using plain HTML5 DOM Sprite elements with CSS without any Canvas support.
+
+[Example platform game](http://mirkosertic.github.io/GameComposer/games/dukeplatform_teavm/index.html)
