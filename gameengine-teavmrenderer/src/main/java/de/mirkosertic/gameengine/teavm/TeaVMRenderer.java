@@ -20,7 +20,9 @@ import de.mirkosertic.gameengine.type.Size;
 import org.teavm.dom.events.Event;
 import org.teavm.dom.events.EventListener;
 import org.teavm.dom.events.EventTarget;
+import org.teavm.dom.html.HTMLCanvasElement;
 import org.teavm.dom.html.HTMLDocument;
+import org.teavm.dom.html.HTMLElement;
 import org.teavm.jso.JS;
 
 public class TeaVMRenderer {
@@ -39,6 +41,8 @@ public class TeaVMRenderer {
     private TeaVMGameRuntimeFactory runtimeFactory;
     private TeaVMGameSceneLoader sceneLoader;
     private TeaVMGameView gameView;
+    private HTMLCanvasElement canvasElement;
+    private HTMLElement resourceCache;
 
     private TeaVMRenderer() {
     }
@@ -46,6 +50,9 @@ public class TeaVMRenderer {
     void boot() {
 
         TeaVMLogger.info("Booting game runtime");
+
+        canvasElement = (HTMLCanvasElement) document.getElementById("html5canvas");
+        resourceCache = document.getElementById("resourcecache");
 
         gameLoopFactory = new GameLoopFactory();
         runtimeFactory = new TeaVMGameRuntimeFactory();
@@ -67,7 +74,7 @@ public class TeaVMRenderer {
             public void onGameLoaded(Game aGame) {
                 String theSceneId = aGame.defaultSceneProperty().get();
                 TeaVMLogger.info("Loading scene " + theSceneId);
-                sceneLoader.loadFromServer(theSceneId, new TeaVMGameResourceLoader(theSceneId));
+                sceneLoader.loadFromServer(theSceneId, new TeaVMGameResourceLoader(theSceneId, document, resourceCache));
             }
 
             @Override
@@ -159,7 +166,7 @@ public class TeaVMRenderer {
             @Override
             public void handleGameEvent(RunScene aEvent) {
                 String theSceneId = aEvent.sceneId;
-                sceneLoader.loadFromServer(theSceneId, new TeaVMGameResourceLoader(theSceneId));
+                sceneLoader.loadFromServer(theSceneId, new TeaVMGameResourceLoader(theSceneId, document, resourceCache));
             }
         });
 
@@ -167,7 +174,7 @@ public class TeaVMRenderer {
 
         if (gameView == null) {
             gameView = new TeaVMGameView(theRuntime, theCameraComponent, theGestureDetector, document,
-                    document.getElementById("canvas"));
+                    document.getElementById("canvas"), canvasElement);
         } else {
             gameView.prepareNewScene(theRuntime, theCameraComponent, theGestureDetector);
         }
