@@ -65,6 +65,6 @@ GameEngine-TeaVMRenderer
 --------------
 
 This is the game presentation logic using the TeaVM Java-to-JavaScript Transpiler Framework. It will render the game view
-using plain HTML5 DOM Sprite elements with CSS without any Canvas support.
+using the HTML5 Canvas API.
 
 [Example platform game](http://mirkosertic.github.io/GameComposer/games/dukeplatform_teavm/index.html)
