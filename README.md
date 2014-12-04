@@ -57,7 +57,7 @@ GameEngine-DragomeRenderer
 --------------
 
 This is the game presentation logic using the Dragome Java-to-JavaScript Transpiler Framework. It will render the game view
-using plain HTML5 DOM Sprite elements with CSS without any Canvas support.
+using the HTML5 Canvas API.
 
 [Example platform game](http://mirkosertic.github.io/GameComposer/games/dukeplatform_dragome/index.html)
 
