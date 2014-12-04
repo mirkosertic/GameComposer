@@ -1,6 +1,7 @@
 package de.mirkosertic.gameengine.dragome;
 
 import com.dragome.model.DefaultVisualActivity;
+import com.dragome.services.ServiceLocator;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
 import de.mirkosertic.gameengine.core.*;
@@ -145,8 +146,10 @@ public class IndexPage extends DefaultVisualActivity {
 
         GestureDetector theGestureDetector = new DefaultGestureDetector(theEventManager);
 
+        DragomeCanvas theCanvas = new DragomeCanvas(ServiceLocator.getInstance().getDomHandler().getElementBySelector("#html5canvas"));
+
         if (gameView == null) {
-            gameView = new DragomeGameView(theRuntime, theCameraComponent, theGestureDetector);
+            gameView = new DragomeGameView(theRuntime, theCameraComponent, theGestureDetector, theCanvas);
         } else {
             gameView.prepareNewScene(theRuntime, theCameraComponent, theGestureDetector);
         }

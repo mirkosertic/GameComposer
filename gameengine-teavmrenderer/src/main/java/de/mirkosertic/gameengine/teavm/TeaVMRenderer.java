@@ -173,8 +173,7 @@ public class TeaVMRenderer {
         GestureDetector theGestureDetector = new DefaultGestureDetector(theEventManager);
 
         if (gameView == null) {
-            gameView = new TeaVMGameView(theRuntime, theCameraComponent, theGestureDetector, document,
-                    document.getElementById("canvas"), canvasElement);
+            gameView = new TeaVMGameView(theRuntime, theCameraComponent, theGestureDetector, canvasElement);
         } else {
             gameView.prepareNewScene(theRuntime, theCameraComponent, theGestureDetector);
         }

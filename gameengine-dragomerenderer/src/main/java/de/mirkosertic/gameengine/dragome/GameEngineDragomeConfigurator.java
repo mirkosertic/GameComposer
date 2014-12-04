@@ -2,7 +2,6 @@ package de.mirkosertic.gameengine.dragome;
 
 import com.dragome.commons.ChainedInstrumentationDragomeConfigurator;
 import com.dragome.commons.DragomeConfiguratorImplementor;
-import com.dragome.commons.InstrumentationDragomeConfigurator;
 
 @DragomeConfiguratorImplementor
 public class GameEngineDragomeConfigurator extends ChainedInstrumentationDragomeConfigurator {

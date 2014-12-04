@@ -10,6 +10,20 @@
             padding: 0;
             overflow: hidden;
         }
+
+        .mainCanvas {
+            border: 0;
+            padding: 0;
+            z-index: 99;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+        }
+
+        .resourcecache img {
+            display: none;
+        }
+
     </style>
     <script language="JavaScript">
         (function() {
@@ -39,7 +53,9 @@
 <body>
     <div id="canvas">
     </div>
+    <canvas id="html5canvas" class="mainCanvas"/>
     <div id="logger" style="position: absolute; top: 50px; left: 50px; z-index: 10000; color:white;">
     </div>
+    <div id="resourcecache"></div>
 </body>
 </html>
