@@ -24,7 +24,6 @@ import java.util.Map;
 
 import org.teavm.dom.canvas.CanvasRenderingContext2D;
 import org.teavm.dom.html.HTMLCanvasElement;
-import org.teavm.dom.html.HTMLDocument;
 import org.teavm.dom.html.HTMLElement;
 
 class TeaVMGameView implements GameView {
@@ -36,18 +35,14 @@ class TeaVMGameView implements GameView {
     private GameRuntime gameRuntime;
 
     private final Map<String, HTMLElement> instanceCache;
-    private final HTMLDocument document;
-    private final HTMLElement canvas;
     private final HTMLCanvasElement html5Canvas;
 
-    public TeaVMGameView(GameRuntime aGameRuntime, CameraBehavior aCameraComponent, GestureDetector aGestureDetector, HTMLDocument aHTMLDocument, HTMLElement aCanvasElement, HTMLCanvasElement aHTML5CanvasElement) {
+    public TeaVMGameView(GameRuntime aGameRuntime, CameraBehavior aCameraComponent, GestureDetector aGestureDetector, HTMLCanvasElement aHTML5CanvasElement) {
         cameraComponent = aCameraComponent;
         gestureDetector = aGestureDetector;
         gameRuntime = aGameRuntime;
         html5Canvas = aHTML5CanvasElement;
         instanceCache = new HashMap<>();
-        document = aHTMLDocument;
-        canvas = aCanvasElement;
     }
 
     public void prepareNewScene(GameRuntime aGameRuntime, CameraBehavior aCameraComponent, GestureDetector aGestureDetector) {
@@ -65,7 +60,6 @@ class TeaVMGameView implements GameView {
     public void renderGame(long aGameTime, long aElapsedTimeSinceLastLoop, GameScene aScene, RuntimeStatistics aStatistics) {
 
         Color theBGColor = aScene.backgroundColorProperty().get();
-        canvas.setAttribute("style", "width: " + currentScreenSize.width + "px; height: " + currentScreenSize.height + "px; background-color: rgb(" + theBGColor.r + "," + theBGColor.g + "," + theBGColor.b + "); ");
 
         CanvasRenderingContext2D theContext = (CanvasRenderingContext2D) html5Canvas.getContext("2d");
 
