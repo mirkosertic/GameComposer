@@ -16,9 +16,9 @@ import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.input.DefaultGestureDetector;
 import de.mirkosertic.gameengine.type.GameKeyCode;
 import de.mirkosertic.gameengine.type.Size;
-
 import de.mirkosertic.gameengine.type.TouchIdentifier;
 import de.mirkosertic.gameengine.type.TouchPosition;
+
 import org.teavm.dom.events.Event;
 import org.teavm.dom.events.EventListener;
 import org.teavm.dom.events.EventTarget;
@@ -26,6 +26,7 @@ import org.teavm.dom.html.HTMLCanvasElement;
 import org.teavm.dom.html.HTMLDocument;
 import org.teavm.dom.html.HTMLElement;
 import org.teavm.jso.JS;
+import org.teavm.jso.JSArrayReader;
 
 public class TeaVMRenderer {
 
@@ -153,7 +154,7 @@ public class TeaVMRenderer {
         }
     }
 
-    private TouchPosition[] toArray(TeaVMTouchArray aTouches) {
+    private TouchPosition[] toArray(JSArrayReader<TeaVMTouch> aTouches) {
         TouchPosition[] thePositions = new TouchPosition[aTouches.getLength()];
         for (int i=0;i<aTouches.getLength();i++) {
             TeaVMTouch theTouch = aTouches.get(i);
