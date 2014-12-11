@@ -17,6 +17,8 @@ import de.mirkosertic.gameengine.input.DefaultGestureDetector;
 import de.mirkosertic.gameengine.type.GameKeyCode;
 import de.mirkosertic.gameengine.type.Size;
 
+import de.mirkosertic.gameengine.type.TouchIdentifier;
+import de.mirkosertic.gameengine.type.TouchPosition;
 import org.teavm.dom.events.Event;
 import org.teavm.dom.events.EventListener;
 import org.teavm.dom.events.EventTarget;
@@ -96,17 +98,41 @@ public class TeaVMRenderer {
                 keyReleased((TeaVMKeyEvent) aEvent);
             }
         }, false);
-
-        /*window.onResize(new Runnable() {
+        canvasElement.addEventListener("touchstart", new EventListener() {
             @Override
-            public void run() {
+            public void handleEvent(Event aEvent) {
+                touchStarted((TeaVMTouchEvent) aEvent);
+            }
+        }, false);
+        canvasElement.addEventListener("touchend", new EventListener() {
+            @Override
+            public void handleEvent(Event aEvent) {
+                touchEnded((TeaVMTouchEvent) aEvent);
+            }
+        }, false);
+        canvasElement.addEventListener("touchcancel", new EventListener() {
+            @Override
+            public void handleEvent(Event aEvent) {
+                touchCanceled((TeaVMTouchEvent) aEvent);
+            }
+        }, false);
+        canvasElement.addEventListener("touchmove", new EventListener() {
+            @Override
+            public void handleEvent(Event aEvent) {
+                touchMoved((TeaVMTouchEvent) aEvent);
+            }
+        }, false);
+
+        ((EventTarget) window).addEventListener("resize", new EventListener() {
+            @Override
+            public void handleEvent(Event evt) {
                 if (runningGameLoop != null) {
                     Size theSize = new Size(window.getInnerWidth(), window.getInnerHeight());
                     runningRuntime.getEventManager().fire(new SetScreenResolution(theSize));
                     gameView.setSize(theSize);
                 }
             }
-        });*/
+        }, true);
     }
 
     private void keyPressed(TeaVMKeyEvent aEvent) {
@@ -124,6 +150,43 @@ public class TeaVMRenderer {
             GameKeyCode theKeyCode = TeaVMKeyCodeTranslator.translate(theCode);
             runningGameLoop.getHumanGameView().getGestureDetector().keyReleased(theKeyCode);
             TeaVMLogger.info("KeyEvent keyReleased " + theCode);
+        }
+    }
+
+    private TouchPosition[] toArray(TeaVMTouchArray aTouches) {
+        TouchPosition[] thePositions = new TouchPosition[aTouches.getLength()];
+        for (int i=0;i<aTouches.getLength();i++) {
+            TeaVMTouch theTouch = aTouches.get(i);
+            thePositions[i] = new TouchPosition(new TouchIdentifier(theTouch.getIdentifier()), theTouch.getScreenX(), theTouch.getScreenY());
+        }
+        return thePositions;
+    }
+
+    private void touchStarted(TeaVMTouchEvent aEvent) {
+        if (runningGameLoop != null) {
+            GestureDetector theDetector = runningGameLoop.getHumanGameView().getGestureDetector();
+            theDetector.touchStarted(toArray(aEvent.getTouches()));
+        }
+    }
+
+    private void touchEnded(TeaVMTouchEvent aEvent) {
+        if (runningGameLoop != null) {
+            GestureDetector theDetector = runningGameLoop.getHumanGameView().getGestureDetector();
+            theDetector.touchEnded(toArray(aEvent.getTouches()));
+        }
+    }
+
+    private void touchMoved(TeaVMTouchEvent aEvent) {
+        if (runningGameLoop != null) {
+            GestureDetector theDetector = runningGameLoop.getHumanGameView().getGestureDetector();
+            theDetector.touchMoved(toArray(aEvent.getTouches()));
+        }
+    }
+
+    private void touchCanceled(TeaVMTouchEvent aEvent) {
+        if (runningGameLoop != null) {
+            GestureDetector theDetector = runningGameLoop.getHumanGameView().getGestureDetector();
+            theDetector.touchCanceled(toArray(aEvent.getTouches()));
         }
     }
 
