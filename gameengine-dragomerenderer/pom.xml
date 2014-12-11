@@ -66,6 +66,9 @@
                     <destinationDirectory>${project.build.directory}/${project.build.finalName}</destinationDirectory>
                     <forceRebuild>true</forceRebuild>
                     <removeCache>false</removeCache>
+                    <targetClassName>de.mirkosertic.gameengine.dragome.IndexPage</targetClassName>
+                    <compress>true</compress>
+                    <processSingle>true</processSingle>
                 </configuration>
                 <dependencies>
                     <dependency>
