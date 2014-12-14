@@ -5,7 +5,10 @@ import de.mirkosertic.gamecomposer.contentarea.ContentController;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
 import de.mirkosertic.gameengine.core.*;
-import de.mirkosertic.gameengine.event.*;
+import de.mirkosertic.gameengine.event.GameEventListener;
+import de.mirkosertic.gameengine.event.GameEventManager;
+import de.mirkosertic.gameengine.event.PropertyChanged;
+import de.mirkosertic.gameengine.event.SystemException;
 import de.mirkosertic.gameengine.javafx.JavaFXGameView;
 import de.mirkosertic.gameengine.physic.DisableDynamicPhysics;
 import de.mirkosertic.gameengine.physic.EnableDynamicPhysics;
@@ -24,9 +27,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
 import javafx.scene.input.*;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 
 import javax.enterprise.event.Event;
@@ -336,10 +337,10 @@ public class GameSceneEditorController implements ContentController<GameScene> {
 
         // Detect and create a camera
         GameObjectInstance theCameraObject = thePreviewScene.createFrom(theDefaultCamera);
-        final CameraBehavior theCameraComponent = theCameraObject.getComponent(CameraBehavior.class);
+        final CameraBehavior theCameraComponent = theCameraObject.getBehavior(CameraBehavior.class);
         if (theCameraComponent == null) {
             throw new IllegalArgumentException("No camera component in camera object");
-        }
+        }theResult.add(new PropertyEditorItem<>(editorContext, CATEGORY_NAME, aObject.nameProperty(), "Name", "The name of the game", Optional.of(StringPropertyEditor.class)));
 
         GameObjectInstance thePlayerInstance = null;
         for (GameObjectInstance theInstance : thePreviewScene.getInstances()) {

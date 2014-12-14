@@ -16,7 +16,6 @@ import javafx.scene.control.TextField;
 import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class SpawnIstanceEditorController implements ActionController {
@@ -52,12 +51,7 @@ public class SpawnIstanceEditorController implements ActionController {
         referenceGameObject.setConverter(stringConverterFactory.createGameObjectStringConverter());
 
         List<GameObject> theSortedGameObjects = Arrays.asList(aGameScene.getObjects());
-        Collections.sort(theSortedGameObjects, new Comparator<GameObject>() {
-            @Override
-            public int compare(GameObject o1, GameObject o2) {
-                return o1.nameProperty().get().compareTo(o2.nameProperty().get());
-            }
-        });
+        Collections.sort(theSortedGameObjects, (o1, o2) -> o1.nameProperty().get().compareTo(o2.nameProperty().get()));
 
         gameObject.getItems().addAll(theSortedGameObjects);
         referenceGameObject.getItems().addAll(theSortedGameObjects);

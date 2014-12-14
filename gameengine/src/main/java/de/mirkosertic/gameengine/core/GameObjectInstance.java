@@ -23,7 +23,7 @@ public class GameObjectInstance implements Reflectable<GameObjectInstanceClassIn
     public static final String ABSOLUTE_POSITION_PROPERTY = "absolutePosition";
     public static final String ABSOLUTE_POSITION_ANCHOR_PROPERTY = "absolutePositionAnchor";
 
-    private final Map<Class<? extends Behavior>, Behavior> components;
+    private final Map<Class<? extends Behavior>, Behavior> behaviors;
 
     private final GameObject ownerGameObject;
 
@@ -46,7 +46,7 @@ public class GameObjectInstance implements Reflectable<GameObjectInstanceClassIn
         absolutePositionAnchor = new Property<>(AbsolutePositionAnchor.class, this, ABSOLUTE_POSITION_ANCHOR_PROPERTY, AbsolutePositionAnchor.TOP_LEFT, aEventManager);
 
         ownerGameObject = aOwnerGameObject;
-        components = new HashMap<>();
+        behaviors = new HashMap<>();
     }
 
     @Override
@@ -94,12 +94,12 @@ public class GameObjectInstance implements Reflectable<GameObjectInstanceClassIn
         return ownerGameObject;
     }
 
-    void addComponent(Behavior aComponent) {
-        components.put(aComponent.getClass(), aComponent);
+    void addBehavior(Behavior aBehavior) {
+        behaviors.put(aBehavior.getClass(), aBehavior);
     }
 
-    public <T extends Behavior> T getComponent(Class<T> aComponentClass) {
-        return (T) components.get(aComponentClass);
+    public <T extends Behavior> T getBehavior(Class<T> aComponentClass) {
+        return (T) behaviors.get(aComponentClass);
     }
 
     public Map<String, Object> serialize() {
@@ -117,7 +117,7 @@ public class GameObjectInstance implements Reflectable<GameObjectInstanceClassIn
         theResult.put("rotationangle", rotationAngle.get().serialize());
 
         List<Map<String, Object>> theComponents = new ArrayList<>();
-        for (Behavior theComponent : components.values()) {
+        for (Behavior theComponent : behaviors.values()) {
             theComponents.add(theComponent.serialize());
         }
         theResult.put("components", theComponents);
@@ -162,7 +162,7 @@ public class GameObjectInstance implements Reflectable<GameObjectInstanceClassIn
             String theType = (String) theStructure.get(Behavior.TYPE_ATTRIBUTE);
 
             BehaviorUnmarshaller theUnmarshaller = aGameRuntime.getIORegistry().getBehaviorUnmarshallerFor(theType);
-            theResult.addComponent(theUnmarshaller.deserialize(aGameRuntime, theResult, theStructure));
+            theResult.addBehavior(theUnmarshaller.deserialize(aGameRuntime, theResult, theStructure));
         }
 
         return theResult;

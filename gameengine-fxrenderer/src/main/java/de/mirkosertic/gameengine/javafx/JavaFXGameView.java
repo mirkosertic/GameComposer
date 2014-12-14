@@ -98,7 +98,7 @@ public class JavaFXGameView extends Canvas implements GameView {
                 theContext.setTransform(r.getMxx(), r.getMyx(), r.getMxy(), r.getMyy(), r.getTx(), r.getTy());
             }
 
-            Sprite theTemplateComponent = theInstance.getComponent(SpriteBehavior.class);
+            Sprite theTemplateComponent = theInstance.getBehavior(SpriteBehavior.class);
             if (theTemplateComponent != null && !theTemplateComponent.resourceNameProperty().isNull()) {
                 try {
                     JavaFXBitmapResource theBitmap = gameRuntime.getResourceCache().getResourceFor(
@@ -108,7 +108,7 @@ public class JavaFXGameView extends Canvas implements GameView {
                     throw new RuntimeException(e);
                 }
             } else {
-                Text theTextComponent = theInstance.getComponent(TextBehavior.class);
+                Text theTextComponent = theInstance.getBehavior(TextBehavior.class);
                 if (theTextComponent != null) {
                     ExpressionParser theExpressionParser = gameScene.get(theTextComponent.textExpressionProperty().get());
                     drawText(theContext, theInstance, thePosition, theTextComponent.fontProperty().get(),

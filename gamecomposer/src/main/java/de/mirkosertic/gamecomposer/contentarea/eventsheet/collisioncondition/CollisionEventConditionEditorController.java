@@ -7,8 +7,6 @@ import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.physic.ObjectCollisionCondition;
 import de.mirkosertic.gameengine.type.CollisionPosition;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
@@ -16,7 +14,6 @@ import javafx.scene.control.ComboBox;
 import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class CollisionEventConditionEditorController implements Controller {
@@ -43,12 +40,7 @@ public class CollisionEventConditionEditorController implements Controller {
         condition = aCondition;
 
         List<GameObject> theSortedGameObjects = Arrays.asList(aGameScene.getObjects());
-        Collections.sort(theSortedGameObjects, new Comparator<GameObject>() {
-            @Override
-            public int compare(GameObject o1, GameObject o2) {
-                return o1.nameProperty().get().compareTo(o2.nameProperty().get());
-            }
-        });
+        Collections.sort(theSortedGameObjects, (o1, o2) -> o1.nameProperty().get().compareTo(o2.nameProperty().get()));
 
 
         primaryObject.getItems().clear();
@@ -66,24 +58,9 @@ public class CollisionEventConditionEditorController implements Controller {
         position.setConverter(stringConverterFactory.createEnumStringConverter());
         position.getSelectionModel().select(aCondition.positionProperty().get());
 
-        primaryObject.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                onPrimarySelected();
-            }
-        });
-        secondaryObject.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                onSecondarySelected();
-            }
-        });
-        position.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                onPositionSelected();
-            }
-        });
+        primaryObject.setOnAction(actionEvent -> onPrimarySelected());
+        secondaryObject.setOnAction(actionEvent -> onSecondarySelected());
+        position.setOnAction(actionEvent -> onPositionSelected());
 
         return this;
     }

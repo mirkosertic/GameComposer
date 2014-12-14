@@ -5,8 +5,6 @@ import de.mirkosertic.gamecomposer.StringConverterFactory;
 import de.mirkosertic.gameengine.type.GameKeyCode;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.input.KeyEventCondition;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
@@ -56,18 +54,8 @@ public class KeyEventConditionEditorController implements Controller {
         if (!condition.keyCodeProperty().isNull()) {
             keyCode.getSelectionModel().select(condition.keyCodeProperty().get());
         }
-        eventType.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                onEventTypeSelected();
-            }
-        });
-        keyCode.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                onKeyCodeSelected();
-            }
-        });
+        eventType.setOnAction(actionEvent -> onEventTypeSelected());
+        keyCode.setOnAction(actionEvent -> onKeyCodeSelected());
 
         return this;
     }

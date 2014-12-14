@@ -85,7 +85,7 @@ public class PropertyDiscoverer {
             GameObject theObject = (GameObject) aObject;
             Class<? extends BehaviorTemplate> theTemplateClass = gameObjectTemplates.get(aPropertyName);
             if (theTemplateClass != null) {
-                BehaviorTemplate theTemplate = theObject.getComponentTemplate(theTemplateClass);
+                BehaviorTemplate theTemplate = theObject.getBehaviorTemplate(theTemplateClass);
                 if (theTemplate != null) {
                     return theTemplate;
                 }
@@ -95,7 +95,7 @@ public class PropertyDiscoverer {
             GameObjectInstance theObject = (GameObjectInstance) aObject;
             Class<? extends Behavior> theTemplateClass = gameObjectInstanceComponents.get(aPropertyName);
             if (theTemplateClass != null) {
-                Behavior theComponent = theObject.getComponent(theTemplateClass);
+                Behavior theComponent = theObject.getBehavior(theTemplateClass);
                 if (theComponent != null) {
                     return theComponent;
                 }

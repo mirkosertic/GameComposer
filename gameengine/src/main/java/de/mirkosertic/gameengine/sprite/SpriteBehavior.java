@@ -18,7 +18,7 @@ public class SpriteBehavior implements Behavior, Sprite, Reflectable<SpriteClass
     private final Property<ResourceName> resourceName;
 
     private SpriteBehavior(GameObjectInstance aObjectInstance) {
-        this(aObjectInstance, aObjectInstance.getOwnerGameObject().getComponentTemplate(SpriteBehaviorTemplate.class));
+        this(aObjectInstance, aObjectInstance.getOwnerGameObject().getBehaviorTemplate(SpriteBehaviorTemplate.class));
     }
 
     SpriteBehavior(GameObjectInstance aObjectInstance, SpriteBehaviorTemplate aTemplate) {
@@ -52,7 +52,7 @@ public class SpriteBehavior implements Behavior, Sprite, Reflectable<SpriteClass
 
     @Override
     public SpriteBehaviorTemplate getTemplate() {
-        return objectInstance.getOwnerGameObject().getComponentTemplate(SpriteBehaviorTemplate.class);
+        return objectInstance.getOwnerGameObject().getBehaviorTemplate(SpriteBehaviorTemplate.class);
     }
 
     public static SpriteBehavior deserialize(GameObjectInstance aObjectInstance) {

@@ -25,7 +25,6 @@ import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.GameEventManager;
-import de.mirkosertic.gameengine.physic.GameObjectCollision;
 import de.mirkosertic.gameengine.type.Angle;
 import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Size;
@@ -184,7 +183,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
         theBodyDef.position = computePosition(aInstance);
         theBodyDef.gravityScale = 1;
 
-        PhysicsBehaviorTemplate theTemplate = aInstance.getOwnerGameObject().getComponentTemplate(PhysicsBehaviorTemplate.class);
+        PhysicsBehaviorTemplate theTemplate = aInstance.getOwnerGameObject().getBehaviorTemplate(PhysicsBehaviorTemplate.class);
         if (theTemplate != null) {
             theBodyDef.setActive(theTemplate.activeProperty().get());
             theBodyDef.setFixedRotation(theTemplate.fixedRotationProperty().get());
@@ -201,7 +200,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
         theFixture.friction = 1.8f;
         theFixture.restitution = 0;
 
-        PhysicsBehaviorTemplate theTemplate = aInstance.getOwnerGameObject().getComponentTemplate(PhysicsBehaviorTemplate.class);
+        PhysicsBehaviorTemplate theTemplate = aInstance.getOwnerGameObject().getBehaviorTemplate(PhysicsBehaviorTemplate.class);
         if (theTemplate != null) {
             theFixture.density = theTemplate.densityProperty().get();
             theFixture.friction = theTemplate.frictionProperty().get();
@@ -218,7 +217,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
             aInstance.visibleProperty().addChangeListener(visibleListener);
             if (alreadyRegisteredSizeListener.add(aInstance.getOwnerGameObject())) {
                 aInstance.getOwnerGameObject().sizeProperty().addChangeListener(sizeChangeListener);
-                PhysicsBehaviorTemplate theTemplate = aInstance.getOwnerGameObject().getComponentTemplate(PhysicsBehaviorTemplate.class);
+                PhysicsBehaviorTemplate theTemplate = aInstance.getOwnerGameObject().getBehaviorTemplate(PhysicsBehaviorTemplate.class);
                 if (theTemplate != null) {
                     theTemplate.fixedRotationProperty().addChangeListener(fixedAngleListener);
                 }
@@ -227,7 +226,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
             Size theInstanceSize = aInstance.getOwnerGameObject().sizeProperty().get();
 
             // Check if is a static component
-            StaticBehavior theStaticComponent = aInstance.getComponent(StaticBehavior.class);
+            StaticBehavior theStaticComponent = aInstance.getBehavior(StaticBehavior.class);
             if (theStaticComponent != null) {
                 // The component is static hence not moveable, we add it as a ground to the physics simulation
                 PolygonShape theStaticShape = new PolygonShape();
@@ -245,7 +244,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
             }
 
             // Now the player, hence the platform component
-            PlatformBehavior thePlatformComponent = aInstance.getComponent(PlatformBehavior.class);
+            PlatformBehavior thePlatformComponent = aInstance.getBehavior(PlatformBehavior.class);
             if (thePlatformComponent != null) {
                 PolygonShape thePlatformShape = new PolygonShape();
                 thePlatformShape.setAsBox(SIZE_FACTOR * theInstanceSize.width / 2, SIZE_FACTOR * theInstanceSize.height
@@ -262,7 +261,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
             }
 
             // Additional physics
-            PhysicsBehavior thePhysicscomponent = aInstance.getComponent(PhysicsBehavior.class);
+            PhysicsBehavior thePhysicscomponent = aInstance.getBehavior(PhysicsBehavior.class);
             if (thePhysicscomponent != null) {
 
                 PolygonShape thePhysicsShape = new PolygonShape();

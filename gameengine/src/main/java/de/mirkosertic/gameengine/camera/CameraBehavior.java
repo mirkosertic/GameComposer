@@ -28,7 +28,7 @@ public class CameraBehavior implements Behavior, Camera, Reflectable<CameraClass
     private Size screenSize;
 
     CameraBehavior(GameObjectInstance aObjectInstance) {
-        this(aObjectInstance, aObjectInstance.getOwnerGameObject().getComponentTemplate(CameraBehaviorTemplate.class));
+        this(aObjectInstance, aObjectInstance.getOwnerGameObject().getBehaviorTemplate(CameraBehaviorTemplate.class));
     }
 
     CameraBehavior(GameObjectInstance aObjectInstance, CameraBehaviorTemplate aTemplate) {
@@ -128,7 +128,7 @@ public class CameraBehavior implements Behavior, Camera, Reflectable<CameraClass
 
     @Override
     public CameraBehaviorTemplate getTemplate() {
-        return objectInstance.getOwnerGameObject().getComponentTemplate(CameraBehaviorTemplate.class);
+        return objectInstance.getOwnerGameObject().getBehaviorTemplate(CameraBehaviorTemplate.class);
     }
 
     public static CameraBehavior deserialize(GameObjectInstance aObjectInstance) {

@@ -4,9 +4,6 @@ import de.mirkosertic.gamecomposer.*;
 import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.event.PropertyChanged;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
@@ -85,25 +82,17 @@ public class ProjectStructureController implements Controller {
                 aEventSheet.getGameScene().removeEventSheet(aEventSheet);
             }
         }));
-        projectStructureTreeView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
-            @Override
-            public void changed(ObservableValue observableValue, Object aOldValue, Object aNewValue) {
-                Object theNewValue = null;
-                if (aNewValue instanceof TreeItem) {
-                    theNewValue = ((TreeItem) aNewValue).getValue();
-                }
-                if (!(theNewValue instanceof TreeObjectTypes)) {
-                    eventGateway.fire(new ObjectSelectedEvent(theNewValue));
-                }
+        projectStructureTreeView.getSelectionModel().selectedItemProperty().addListener((observableValue, aOldValue, aNewValue) -> {
+            Object theNewValue = null;
+            if (aNewValue instanceof TreeItem) {
+                theNewValue = ((TreeItem) aNewValue).getValue();
+            }
+            if (!(theNewValue instanceof TreeObjectTypes)) {
+                eventGateway.fire(new ObjectSelectedEvent(theNewValue));
             }
         });
         view = aView;
-        projectStructureTreeView.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent aEvent) {
-                onMouseClicked(aEvent);
-            }
-        });
+        projectStructureTreeView.setOnMouseClicked(aEvent -> onMouseClicked(aEvent));
         return this;
     }
 
@@ -215,12 +204,7 @@ public class ProjectStructureController implements Controller {
             theObjectsTreeItem.setExpanded(true);
 
             List<GameObject> theSortedGameObjects = Arrays.asList(theLoadedScene.getObjects());
-            Collections.sort(theSortedGameObjects, new Comparator<GameObject>() {
-                @Override
-                public int compare(GameObject o1, GameObject o2) {
-                    return o1.nameProperty().get().compareTo(o2.nameProperty().get());
-                }
-            });
+            Collections.sort(theSortedGameObjects, (o1, o2) -> o1.nameProperty().get().compareTo(o2.nameProperty().get()));
 
             for (GameObject theGameObject : theSortedGameObjects) {
                 TreeItem theObjectTreeItem = new TreeItem();
@@ -249,12 +233,7 @@ public class ProjectStructureController implements Controller {
             theInstancesTreeItem.setExpanded(true);
 
             List<GameObjectInstance> theSortedInstances = Arrays.asList(theLoadedScene.getInstances());
-            Collections.sort(theSortedInstances, new Comparator<GameObjectInstance>() {
-                @Override
-                public int compare(GameObjectInstance o1, GameObjectInstance o2) {
-                    return o1.nameProperty().get().compareTo(o2.nameProperty().get());
-                }
-            });
+            Collections.sort(theSortedInstances, (o1, o2) -> o1.nameProperty().get().compareTo(o2.nameProperty().get()));
 
             for (GameObjectInstance theGameObjectInstance : theSortedInstances) {
                 TreeItem theObjectInstanceTreeItem = new TreeItem();

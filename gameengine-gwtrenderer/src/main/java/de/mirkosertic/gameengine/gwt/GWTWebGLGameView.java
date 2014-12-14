@@ -303,7 +303,7 @@ public class GWTWebGLGameView extends AbstractWebGameView {
 
             Size theSize = theInstance.getOwnerGameObject().sizeProperty().get();
 
-            Sprite theSpriteComponent = theInstance.getComponent(SpriteBehavior.class);
+            Sprite theSpriteComponent = theInstance.getBehavior(SpriteBehavior.class);
             if (theSpriteComponent != null) {
                 try {
                     GWTBitmapResource theBitmap = gameRuntime.getResourceCache().getResourceFor(theSpriteComponent.resourceNameProperty().get());
@@ -313,7 +313,7 @@ public class GWTWebGLGameView extends AbstractWebGameView {
                     throw new RuntimeException(e);
                 }
             } else {
-                Text theTextComponent = theInstance.getComponent(TextBehavior.class);
+                Text theTextComponent = theInstance.getBehavior(TextBehavior.class);
                 if (theTextComponent != null) {
                     ExpressionParser theExpressionParser = aScene.get(theTextComponent.textExpressionProperty().get());
                     drawText(theContext, thePosition, theTextComponent.fontProperty().get(),

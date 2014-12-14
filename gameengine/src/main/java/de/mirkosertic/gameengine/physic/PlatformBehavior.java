@@ -40,7 +40,7 @@ public class PlatformBehavior implements Behavior, Platform, Reflectable<Platfor
         gameRuntime = aGameRuntime;
         objectInstance = aObjectInstance;
 
-        PlatformBehaviorTemplate theTemplate = aObjectInstance.getOwnerGameObject().getComponentTemplate(PlatformBehaviorTemplate.class);
+        PlatformBehaviorTemplate theTemplate = aObjectInstance.getOwnerGameObject().getBehaviorTemplate(PlatformBehaviorTemplate.class);
         GameEventManager theEventManager = aObjectInstance.getOwnerGameObject().getGameScene().getRuntime().getEventManager();
 
         moveLeftKey = new Property<>(GameKeyCode.class, this, MOVE_LEFT_KEY_PROPERTY, theTemplate.moveLeftKeyProperty().get(), theEventManager);
@@ -178,7 +178,7 @@ public class PlatformBehavior implements Behavior, Platform, Reflectable<Platfor
 
     @Override
     public PlatformBehaviorTemplate getTemplate() {
-        return objectInstance.getOwnerGameObject().getComponentTemplate(PlatformBehaviorTemplate.class);
+        return objectInstance.getOwnerGameObject().getBehaviorTemplate(PlatformBehaviorTemplate.class);
     }
 
     public static PlatformBehavior deserialize(GameObjectInstance aObjectInstance, GameRuntime aGameRuntime) {

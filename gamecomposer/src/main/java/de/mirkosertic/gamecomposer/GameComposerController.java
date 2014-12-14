@@ -4,8 +4,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -41,7 +40,7 @@ public class GameComposerController {
     Event<Object> eventGateway;
 
     @FXML
-    HBox childViews;
+    BorderPane borderPane;
 
     @FXML
     Menu exportMenu;
@@ -62,13 +61,9 @@ public class GameComposerController {
         directoryPreferences = Preferences.userNodeForPackage(GameComposerController.class);
         exportMenu.setDisable(true);
 
-        childViews.getChildren().add(objectInspector.getView());
-        childViews.getChildren().add(contentArea.getView());
-        childViews.getChildren().add(projectStructure.getView());
-
-        HBox.setHgrow(objectInspector.getView(), Priority.SOMETIMES);
-        HBox.setHgrow(contentArea.getView(), Priority.ALWAYS);
-        HBox.setHgrow(projectStructure.getView(), Priority.SOMETIMES);
+        borderPane.setLeft(objectInspector.getView());
+        borderPane.setCenter(contentArea.getView());
+        borderPane.setRight(projectStructure.getView());
 
         eventGateway.fire(new ApplicationStartedEvent());
     }
@@ -190,19 +185,16 @@ public class GameComposerController {
     }
 
     public void handleStatus(final @Observes StatusEvent aStatusEvent) {
-        Runnable theRunnable = new Runnable() {
-            @Override
-            public void run() {
-                switch (aStatusEvent.getSeverity()) {
-                    case ERROR:
-                        statusBar.setTextFill(Color.RED);
-                        break;
-                    case INFO:
-                        statusBar.setTextFill(Color.BLACK);
-                        break;
-                }
-                statusBar.setText(aStatusEvent.getMessage());
+        Runnable theRunnable = () -> {
+            switch (aStatusEvent.getSeverity()) {
+                case ERROR:
+                    statusBar.setTextFill(Color.RED);
+                    break;
+                case INFO:
+                    statusBar.setTextFill(Color.BLACK);
+                    break;
             }
+            statusBar.setText(aStatusEvent.getMessage());
         };
         if (Platform.isFxApplicationThread()) {
             theRunnable.run();

@@ -2,7 +2,6 @@ package de.mirkosertic.gameengine.core;
 
 import de.mirkosertic.gameengine.event.GameEvent;
 
-import java.util.List;
 import java.util.Map;
 
 public interface Condition {

@@ -160,7 +160,7 @@ public class GameEngineActivity extends Activity {
 
         GameObject theCameraObject = aGameScene.cameraObjectProperty().get();
         GameObjectInstance theCameraObjectInstance = aGameScene.createFrom(theCameraObject);
-        CameraBehavior theCameraComponent = theCameraObjectInstance.getComponent(CameraBehavior.class);
+        CameraBehavior theCameraComponent = theCameraObjectInstance.getBehavior(CameraBehavior.class);
 
         GameObjectInstance thePlayerInstance = null;
         for (GameObjectInstance theInstance : aGameScene.getInstances()) {

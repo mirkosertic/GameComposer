@@ -21,7 +21,6 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.event.EventHandler;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -47,24 +46,9 @@ public class EditorFXGameView extends JavaFXGameView {
 
         physicsManager = aPhysicsManager;
 
-        setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent aEvent) {
-                onMouseEntered(aEvent);
-            }
-        });
-        setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent aEvent) {
-                onMouseExited(aEvent);
-            }
-        });
-        setOnMouseMoved(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent aEvent) {
-                onMouseMoved(aEvent);
-            }
-        });
+        setOnMouseEntered(aEvent -> onMouseEntered(aEvent));
+        setOnMouseExited(aEvent -> onMouseExited(aEvent));
+        setOnMouseMoved(aEvent -> onMouseMoved(aEvent));
     }
 
     public BooleanProperty snapToGridProperty() {
