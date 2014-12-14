@@ -1,10 +1,7 @@
 package de.mirkosertic.gamecomposer.projectstructure;
 
 import de.mirkosertic.gamecomposer.GameObjectClipboardContent;
-import de.mirkosertic.gamecomposer.PropertyBinder;
 import de.mirkosertic.gameengine.core.*;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.*;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
@@ -19,12 +16,7 @@ class StructureTreeCell extends TreeCell {
     public StructureTreeCell(ContextMenuListener aContextMenuListener, TreeView aTreeView) {
         treeView = aTreeView;
         contextMenuListener = aContextMenuListener;
-        setOnDragDetected(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent aEvent) {
-                onDragDetected(aEvent);
-            }
-        });
+        setOnDragDetected(aEvent -> onDragDetected(aEvent));
     }
 
     private void onDragDetected(MouseEvent aEvent) {
@@ -65,12 +57,9 @@ class StructureTreeCell extends TreeCell {
 
                     ContextMenu theContextMenu = new ContextMenu();
                     MenuItem theCreateObject = new MenuItem("New GameObject");
-                    theCreateObject.setOnAction(new EventHandler<ActionEvent>() {
-                        @Override
-                        public void handle(ActionEvent actionEvent) {
-                            GameScene theScene = (GameScene) getTreeItem().getParent().getValue();
-                            contextMenuListener.onCreateNewGameObject(theScene);
-                        }
+                    theCreateObject.setOnAction(actionEvent -> {
+                        GameScene theScene = (GameScene) getTreeItem().getParent().getValue();
+                        contextMenuListener.onCreateNewGameObject(theScene);
                     });
                     theContextMenu.getItems().add(theCreateObject);
 
@@ -82,12 +71,9 @@ class StructureTreeCell extends TreeCell {
 
                     ContextMenu theContextMenu = new ContextMenu();
                     MenuItem theCreateObject = new MenuItem("New EventSheet");
-                    theCreateObject.setOnAction(new EventHandler<ActionEvent>() {
-                        @Override
-                        public void handle(ActionEvent actionEvent) {
-                            GameScene theScene = (GameScene) getTreeItem().getParent().getValue();
-                            contextMenuListener.onNewEventSheet(theScene);
-                        }
+                    theCreateObject.setOnAction(actionEvent -> {
+                        GameScene theScene = (GameScene) getTreeItem().getParent().getValue();
+                        contextMenuListener.onNewEventSheet(theScene);
                     });
                     theContextMenu.getItems().add(theCreateObject);
 
@@ -100,12 +86,7 @@ class StructureTreeCell extends TreeCell {
             setText(((Game) aValue).nameProperty().get());
             ContextMenu theContextMenu = new ContextMenu();
             MenuItem theDeleteItem = new MenuItem("Create new GameScene");
-            theDeleteItem.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent actionEvent) {
-                    contextMenuListener.onCreateNewGameScene();
-                }
-            });
+            theDeleteItem.setOnAction(actionEvent -> contextMenuListener.onCreateNewGameScene());
             theContextMenu.getItems().add(theDeleteItem);
             setContextMenu(theContextMenu);
         }
@@ -114,12 +95,7 @@ class StructureTreeCell extends TreeCell {
             setText(theGameScene.nameProperty().get());
             ContextMenu theContextMenu = new ContextMenu();
             MenuItem theDeleteItem = new MenuItem("Delete");
-            theDeleteItem.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent actionEvent) {
-                    contextMenuListener.onDeleteGameScene(theGameScene);
-                }
-            });
+            theDeleteItem.setOnAction(actionEvent -> contextMenuListener.onDeleteGameScene(theGameScene));
             theContextMenu.getItems().add(theDeleteItem);
             setContextMenu(theContextMenu);
         }
@@ -128,12 +104,7 @@ class StructureTreeCell extends TreeCell {
             setText(theGameObject.nameProperty().get());
             ContextMenu theContextMenu = new ContextMenu();
             MenuItem theDeleteItem = new MenuItem("Delete");
-            theDeleteItem.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent actionEvent) {
-                    contextMenuListener.onDeleteGameObject(theGameObject);
-                }
-            });
+            theDeleteItem.setOnAction(actionEvent -> contextMenuListener.onDeleteGameObject(theGameObject));
             theContextMenu.getItems().add(theDeleteItem);
             setContextMenu(theContextMenu);
         }
@@ -142,12 +113,7 @@ class StructureTreeCell extends TreeCell {
             setText(theEventSheet.nameProperty().get());
             ContextMenu theContextMenu = new ContextMenu();
             MenuItem theDeleteItem = new MenuItem("Delete");
-            theDeleteItem.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent actionEvent) {
-                    contextMenuListener.onDeleteEventSheet(theEventSheet);
-                }
-            });
+            theDeleteItem.setOnAction(actionEvent -> contextMenuListener.onDeleteEventSheet(theEventSheet));
             theContextMenu.getItems().add(theDeleteItem);
             setContextMenu(theContextMenu);
         }
@@ -156,12 +122,7 @@ class StructureTreeCell extends TreeCell {
             setText(theGameObjectInstance.nameProperty().get());
             ContextMenu theContextMenu = new ContextMenu();
             MenuItem theDeleteItem = new MenuItem("Delete");
-            theDeleteItem.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent actionEvent) {
-                    contextMenuListener.onDeleteGameObjectInstance(theGameObjectInstance);
-                }
-            });
+            theDeleteItem.setOnAction(actionEvent -> contextMenuListener.onDeleteGameObjectInstance(theGameObjectInstance));
             theContextMenu.getItems().add(theDeleteItem);
             setContextMenu(theContextMenu);
         }

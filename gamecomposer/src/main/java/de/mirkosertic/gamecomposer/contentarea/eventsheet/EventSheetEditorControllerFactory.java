@@ -4,7 +4,6 @@ import de.mirkosertic.gamecomposer.FXMLLoaderFactory;
 import de.mirkosertic.gamecomposer.contentarea.ContentAreaFactory;
 import de.mirkosertic.gamecomposer.contentarea.ContentAreaFactoryType;
 import de.mirkosertic.gameengine.core.EventSheet;
-import de.mirkosertic.gameengine.core.GameScene;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.BorderPane;

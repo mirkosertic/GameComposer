@@ -24,7 +24,7 @@ public class ConstantMovementBehavior implements Behavior, ConstantMovement, Ref
     private final Property<Speed> rotationSpeed;
 
     ConstantMovementBehavior(GameObjectInstance aObjectInstance) {
-        this(aObjectInstance, aObjectInstance.getOwnerGameObject().getComponentTemplate(ConstantMovementBehaviorTemplate.class));
+        this(aObjectInstance, aObjectInstance.getOwnerGameObject().getBehaviorTemplate(ConstantMovementBehaviorTemplate.class));
     }
 
     ConstantMovementBehavior(GameObjectInstance aObjectInstance, ConstantMovementBehaviorTemplate aTemplate) {
@@ -63,7 +63,7 @@ public class ConstantMovementBehavior implements Behavior, ConstantMovement, Ref
 
     @Override
     public ConstantMovementBehaviorTemplate getTemplate() {
-        return objectInstance.getOwnerGameObject().getComponentTemplate(ConstantMovementBehaviorTemplate.class);
+        return objectInstance.getOwnerGameObject().getBehaviorTemplate(ConstantMovementBehaviorTemplate.class);
     }
 
     @Override

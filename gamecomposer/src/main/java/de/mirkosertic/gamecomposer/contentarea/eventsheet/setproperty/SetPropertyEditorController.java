@@ -8,10 +8,6 @@ import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.core.SetPropertyAction;
 import de.mirkosertic.gameengine.expression.PropertyDiscoverer;
 import de.mirkosertic.gameengine.type.TextExpression;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
@@ -20,7 +16,6 @@ import javafx.scene.control.TextField;
 import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class SetPropertyEditorController implements ActionController {
@@ -57,12 +52,7 @@ public class SetPropertyEditorController implements ActionController {
             propertyValueTextField.setText(theExpression.expression);
         }
         propertyValueTextField.setVisible(false);
-        propertyValueTextField.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String s, String s2) {
-                onTextfieldChange();
-            }
-        });
+        propertyValueTextField.textProperty().addListener((observableValue, s, s2) -> onTextfieldChange());
 
         propertyName.getItems().addAll(theSupportedProperties);
         if (action.propertyNameProperty().isNull()) {
@@ -77,12 +67,7 @@ public class SetPropertyEditorController implements ActionController {
         }
 
         List<GameObject> theSortedGameObjects = Arrays.asList(aGameScene.getObjects());
-        Collections.sort(theSortedGameObjects, new Comparator<GameObject>() {
-            @Override
-            public int compare(GameObject o1, GameObject o2) {
-                return o1.nameProperty().get().compareTo(o2.nameProperty().get());
-            }
-        });
+        Collections.sort(theSortedGameObjects, (o1, o2) -> o1.nameProperty().get().compareTo(o2.nameProperty().get()));
 
 
         gameObject.getItems().clear();
@@ -90,12 +75,7 @@ public class SetPropertyEditorController implements ActionController {
         gameObject.setConverter(stringConverterFactory.createGameObjectStringConverter());
         gameObject.getSelectionModel().select(action.gameObjectProperty().get());
 
-        gameObject.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                onObjectTypeSelected();
-            }
-        });
+        gameObject.setOnAction(actionEvent -> onObjectTypeSelected());
 
         return this;
     }

@@ -5,13 +5,10 @@ import de.mirkosertic.gameengine.core.EventSheet;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.event.PropertyChanged;
 
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 
 import javax.enterprise.event.Observes;
@@ -45,28 +42,22 @@ public class ContentAreaController implements Controller {
 
     ContentAreaController initialize(Node aView) {
         view = aView;
-        editorTabPane.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent aKeyEvent) {
-                Tab theSelectedTab = editorTabPane.getSelectionModel().getSelectedItem();
-                if (theSelectedTab != null) {
-                    for (Map.Entry<ContentController, Tab> theTab : activeTabs.entrySet()) {
-                        if (theTab.getValue() == theSelectedTab) {
-                            theTab.getKey().processKeyPressedEvent(aKeyEvent);
-                        }
+        editorTabPane.setOnKeyPressed(aKeyEvent -> {
+            Tab theSelectedTab = editorTabPane.getSelectionModel().getSelectedItem();
+            if (theSelectedTab != null) {
+                for (Map.Entry<ContentController, Tab> theTab : activeTabs.entrySet()) {
+                    if (theTab.getValue() == theSelectedTab) {
+                        theTab.getKey().processKeyPressedEvent(aKeyEvent);
                     }
                 }
             }
         });
-        editorTabPane.setOnKeyReleased(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent aKeyEvent) {
-                Tab theSelectedTab = editorTabPane.getSelectionModel().getSelectedItem();
-                if (theSelectedTab != null) {
-                    for (Map.Entry<ContentController, Tab> theTab : activeTabs.entrySet()) {
-                        if (theTab.getValue() == theSelectedTab) {
-                            theTab.getKey().processKeyReleasedEvent(aKeyEvent);
-                        }
+        editorTabPane.setOnKeyReleased(aKeyEvent -> {
+            Tab theSelectedTab = editorTabPane.getSelectionModel().getSelectedItem();
+            if (theSelectedTab != null) {
+                for (Map.Entry<ContentController, Tab> theTab : activeTabs.entrySet()) {
+                    if (theTab.getValue() == theSelectedTab) {
+                        theTab.getKey().processKeyReleasedEvent(aKeyEvent);
                     }
                 }
             }
@@ -99,12 +90,7 @@ public class ContentAreaController implements Controller {
         welcomeBorderPane.setVisible(false);
         editorTabPane.getTabs().add(aTab);
         aTab.setClosable(true);
-        aTab.setOnClosed(new EventHandler<Event>() {
-            @Override
-            public void handle(Event aEvent) {
-                onTabClose(aTab);
-            }
-        });
+        aTab.setOnClosed(aEvent -> onTabClose(aTab));
         editorTabPane.getSelectionModel().select(aTab);
     }
 

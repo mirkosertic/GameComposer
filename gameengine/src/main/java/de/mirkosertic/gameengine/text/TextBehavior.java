@@ -23,7 +23,7 @@ public class TextBehavior implements Behavior, Text, Reflectable<TextClassInform
     private final Property<TextExpression> textExpression;
 
     TextBehavior(GameObjectInstance aObjectInstance) {
-        this(aObjectInstance, aObjectInstance.getOwnerGameObject().getComponentTemplate(TextBehaviorTemplate.class));
+        this(aObjectInstance, aObjectInstance.getOwnerGameObject().getBehaviorTemplate(TextBehaviorTemplate.class));
     }
 
     TextBehavior(GameObjectInstance aObjectInstance, TextBehaviorTemplate aTemplate) {
@@ -70,7 +70,7 @@ public class TextBehavior implements Behavior, Text, Reflectable<TextClassInform
 
     @Override
     public TextBehaviorTemplate getTemplate() {
-        return objectInstance.getOwnerGameObject().getComponentTemplate(TextBehaviorTemplate.class);
+        return objectInstance.getOwnerGameObject().getBehaviorTemplate(TextBehaviorTemplate.class);
     }
 
     public static TextBehavior deserialize(GameObjectInstance aObjectInstance, Map<String, Object> aSerializedData) {

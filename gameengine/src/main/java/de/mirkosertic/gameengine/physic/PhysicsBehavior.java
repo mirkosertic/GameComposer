@@ -23,7 +23,7 @@ public class PhysicsBehavior implements Behavior, Physics, Reflectable<PhysicsCl
     private final Property<Float> gravityScale;
 
     PhysicsBehavior(GameObjectInstance aObjectInstance) {
-        this(aObjectInstance, aObjectInstance.getOwnerGameObject().getComponentTemplate(PhysicsBehaviorTemplate.class));
+        this(aObjectInstance, aObjectInstance.getOwnerGameObject().getBehaviorTemplate(PhysicsBehaviorTemplate.class));
     }
 
     PhysicsBehavior(GameObjectInstance aObjectInstance, PhysicsBehaviorTemplate aTemplate) {
@@ -83,7 +83,7 @@ public class PhysicsBehavior implements Behavior, Physics, Reflectable<PhysicsCl
 
     @Override
     public PhysicsBehaviorTemplate getTemplate() {
-        return objectInstance.getOwnerGameObject().getComponentTemplate(PhysicsBehaviorTemplate.class);
+        return objectInstance.getOwnerGameObject().getBehaviorTemplate(PhysicsBehaviorTemplate.class);
     }
 
     public static PhysicsBehavior deserialize(GameObjectInstance aObjectInstance, Map<String, Object> aSerializedData) {

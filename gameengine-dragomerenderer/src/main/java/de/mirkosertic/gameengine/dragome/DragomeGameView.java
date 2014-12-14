@@ -71,7 +71,7 @@ class DragomeGameView implements GameView {
                 theContext.rotate(theAngle.toRadians());
             }
 
-            Sprite theSpriteComponent = theInstance.getComponent(SpriteBehavior.class);
+            Sprite theSpriteComponent = theInstance.getBehavior(SpriteBehavior.class);
             if (theSpriteComponent != null) {
 
                 ResourceName theSpriteResource = theSpriteComponent.resourceNameProperty().get();
@@ -86,7 +86,7 @@ class DragomeGameView implements GameView {
                     DragomeLogger.error("Error while loading game resource "+theSpriteResource.name+" : " + e);
                 }
             } else {
-                Text theTextComponent = theInstance.getComponent(TextBehavior.class);
+                Text theTextComponent = theInstance.getBehavior(TextBehavior.class);
                 if (theTextComponent != null) {
                     ExpressionParser theExpressionParser = aScene.get(theTextComponent.textExpressionProperty().get());
 

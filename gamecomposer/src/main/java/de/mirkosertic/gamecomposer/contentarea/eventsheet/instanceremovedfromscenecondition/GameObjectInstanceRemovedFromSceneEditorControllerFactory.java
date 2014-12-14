@@ -3,7 +3,6 @@ package de.mirkosertic.gamecomposer.contentarea.eventsheet.instanceremovedfromsc
 import de.mirkosertic.gamecomposer.FXMLLoaderFactory;
 import de.mirkosertic.gamecomposer.contentarea.eventsheet.ConditionControllerFactory;
 import de.mirkosertic.gamecomposer.contentarea.eventsheet.ConditionEditorType;
-import de.mirkosertic.gameengine.core.GameObjectInstanceAddedToSceneCondition;
 import de.mirkosertic.gameengine.core.GameObjectInstanceRemovedFromSceneCondition;
 import de.mirkosertic.gameengine.core.GameScene;
 import javafx.fxml.FXMLLoader;

@@ -8,8 +8,6 @@ import de.mirkosertic.gameengine.input.KeyEventCondition;
 import de.mirkosertic.gameengine.physic.ObjectCollisionCondition;
 import de.mirkosertic.gameengine.process.KillProcessesForInstanceAction;
 import de.mirkosertic.gameengine.sound.PlaySoundAction;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Side;
 import javafx.scene.Node;
@@ -87,12 +85,7 @@ public class RuleEditorController implements Controller {
 
         PropertyBinder.bind(aGameRule.nameProperty(), ruleName.textProperty());
 
-        conditionType.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                setConditionType();
-            }
-        });
+        conditionType.setOnAction(actionEvent -> setConditionType());
         return this;
     }
 
@@ -137,12 +130,9 @@ public class RuleEditorController implements Controller {
             VBox theActionInfo = new VBox();
             final Action theFinalAction = theAction;
             Hyperlink theRemoveActionLink = new Hyperlink("Remove");
-            theRemoveActionLink.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent actionEvent) {
-                    gameRule.removeAction(theFinalAction);
-                    updateActions();
-                }
+            theRemoveActionLink.setOnAction(actionEvent -> {
+                gameRule.removeAction(theFinalAction);
+                updateActions();
             });
             theActionInfo.getChildren().add(new Label(theAction.getClass().getSimpleName()));
             theActionInfo.getChildren().add(theRemoveActionLink);
@@ -213,16 +203,13 @@ public class RuleEditorController implements Controller {
         for (Class<? extends Action> theActionClass : knownActions) {
             final Class<? extends Action> theFinalAction = theActionClass;
             MenuItem theItem = new MenuItem(theActionClass.getSimpleName());
-            theItem.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent actionEvent) {
-                    try {
-                        Action theNewAction = theFinalAction.newInstance();
-                        gameRule.addAction(theNewAction);
-                        updateActions();
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
+            theItem.setOnAction(actionEvent -> {
+                try {
+                    Action theNewAction = theFinalAction.newInstance();
+                    gameRule.addAction(theNewAction);
+                    updateActions();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
             });
             theContextMenu.getItems().add(theItem);

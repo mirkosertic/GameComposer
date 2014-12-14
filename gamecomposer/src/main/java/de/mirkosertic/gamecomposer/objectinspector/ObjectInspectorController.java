@@ -1,5 +1,6 @@
 package de.mirkosertic.gamecomposer.objectinspector;
 
+import com.sun.javafx.collections.ObservableListWrapper;
 import de.mirkosertic.gamecomposer.Controller;
 import de.mirkosertic.gamecomposer.GameSceneCreatedEvent;
 import de.mirkosertic.gamecomposer.ObjectSelectedEvent;
@@ -20,10 +21,11 @@ import de.mirkosertic.gameengine.sprite.SpriteBehaviorTemplate;
 import de.mirkosertic.gameengine.text.Text;
 import de.mirkosertic.gameengine.text.TextBehavior;
 import de.mirkosertic.gameengine.text.TextBehaviorTemplate;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Accordion;
-import javafx.scene.control.TitledPane;
+import javafx.scene.layout.BorderPane;
+import org.controlsfx.control.PropertySheet;
 
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Any;
@@ -32,13 +34,27 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @Singleton
 public class ObjectInspectorController implements Controller {
 
+    public static class Test {
+
+        String name;
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+    }
+
     @FXML
-    Accordion propertyPanels;
+    BorderPane content;
 
     @Inject
     @Any
@@ -46,12 +62,41 @@ public class ObjectInspectorController implements Controller {
 
     private Node view;
     private Object currentSelection;
-    private List<ObjectInspectorElementController> currentController;
+
+    private PropertySheet propertySheet;
+    private ObservableList<PropertySheet.Item> items;
+
+    private Map<Class<? extends BehaviorTemplate>, Class> behaviorTemplateToIdentifier;
+    private Map<Class<? extends Behavior>, Class> behaviorToIdentifier;
 
     ObjectInspectorController initialize(Node aView) {
-        currentController = new ArrayList<>();
-        propertyPanels.getPanes().clear();
+
+        behaviorToIdentifier = new HashMap<>();
+        behaviorToIdentifier.put(StaticBehavior.class, Static.class);
+        behaviorToIdentifier.put(CameraBehavior.class, Camera.class);
+        behaviorToIdentifier.put(PlatformBehavior.class, Platform.class);
+        behaviorToIdentifier.put(PhysicsBehavior.class, Physics.class);
+        behaviorToIdentifier.put(SpriteBehavior.class, Sprite.class);
+        behaviorToIdentifier.put(TextBehavior.class, Text.class);
+        behaviorToIdentifier.put(PlayerScoreBehavior.class, PlayerScore.class);
+        behaviorToIdentifier.put(ConstantMovementBehavior.class, ConstantMovement.class);
+        behaviorTemplateToIdentifier = new HashMap<>();
+        behaviorTemplateToIdentifier.put(StaticBehaviorTemplate.class, Static.class);
+        behaviorTemplateToIdentifier.put(CameraBehaviorTemplate.class, Camera.class);
+        behaviorTemplateToIdentifier.put(PlatformBehaviorTemplate.class, Platform.class);
+        behaviorTemplateToIdentifier.put(PhysicsBehaviorTemplate.class, Physics.class);
+        behaviorTemplateToIdentifier.put(SpriteBehaviorTemplate.class, Sprite.class);
+        behaviorTemplateToIdentifier.put(TextBehaviorTemplate.class, Text.class);
+        behaviorTemplateToIdentifier.put(PlayerScoreBehaviorTemplate.class, PlayerScore.class);
+        behaviorTemplateToIdentifier.put(ConstantMovementBehaviorTemplate.class, ConstantMovement.class);
+
+
+        items = new ObservableListWrapper<>(new ArrayList<>());
         view = aView;
+        propertySheet = new PropertySheet(items);
+        propertySheet.setMode(PropertySheet.Mode.CATEGORY);
+        propertySheet.setModeSwitcherVisible(false);
+        content.setCenter(propertySheet);
         currentSelection = null;
         return this;
     }
@@ -74,8 +119,8 @@ public class ObjectInspectorController implements Controller {
         selectObject(aEvent.object);
     }
 
-    private ObjectInspectorFactoryType createQualifier(final Class aClass) {
-        return new ObjectInspectorFactoryType() {
+    private ObjectInspectorElementConfiguratorType createQualifier(final Class aClass) {
+        return new ObjectInspectorElementConfiguratorType() {
             @Override
             public Class clazz() {
                 return aClass;
@@ -83,7 +128,7 @@ public class ObjectInspectorController implements Controller {
 
             @Override
             public Class<? extends Annotation> annotationType() {
-                return ObjectInspectorFactoryType.class;
+                return ObjectInspectorElementConfiguratorType.class;
             }
         };
     }
@@ -92,175 +137,41 @@ public class ObjectInspectorController implements Controller {
         if (currentSelection != aObject) {
             currentSelection = aObject;
 
-            for (ObjectInspectorElementController theChild : currentController) {
-                theChild.cleanup();
-            }
-            propertyPanels.getPanes().clear();
-            currentController.clear();
+            items.clear();
 
-            if (aObject instanceof Game) {
-                ObjectInspectorElementController theController = (ObjectInspectorElementController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(Game.class)).get()).create(aObject);
-                TitledPane thePane = new TitledPane("Properties", theController.getView());
-                propertyPanels.getPanes().add(thePane);
-                currentController.add(theController);
-            }
-            if (aObject instanceof GameScene) {
-                ObjectInspectorElementController theController = (ObjectInspectorElementController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(GameScene.class)).get()).create(aObject);
-                TitledPane thePane = new TitledPane("Properties", theController.getView());
-                propertyPanels.getPanes().add(thePane);
-                currentController.add(theController);
-            }
-            if (aObject instanceof EventSheet) {
-                ObjectInspectorElementController theController = (ObjectInspectorElementController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(EventSheet.class)).get()).create(aObject);
-                TitledPane thePane = new TitledPane("Properties", theController.getView());
-                propertyPanels.getPanes().add(thePane);
-                currentController.add(theController);
-            }
-            if (aObject instanceof GameObject) {
+            if (aObject != null) {
 
-                GameObject theGameObject = (GameObject) aObject;
-
-                ObjectInspectorElementController theController = (ObjectInspectorElementController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(GameObject.class)).get()).create(aObject);
-                TitledPane thePane = new TitledPane("Properties", theController.getView());
-                propertyPanels.getPanes().add(thePane);
-                currentController.add(theController);
-
-                Static theStaticComponentTemplate = theGameObject.getComponentTemplate(StaticBehaviorTemplate.class);
-                if (theStaticComponentTemplate != null) {
-                    ObjectInspectorElementController theEditor = (ObjectInspectorElementController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(Static.class)).get()).create(theStaticComponentTemplate);
-                    TitledPane theChildPane = new TitledPane("Static", theEditor.getView());
-                    propertyPanels.getPanes().add(theChildPane);
-                    currentController.add(theEditor);
+                Instance<?> theConfiguratorInstance = singleObjectFactory.select(createQualifier(aObject.getClass()));
+                if (!theConfiguratorInstance.isUnsatisfied()) {
+                    items.addAll(((ObjectInspectorElementConfigurator) theConfiguratorInstance.get()).getItemsFor(aObject));
                 }
+                if (aObject instanceof GameObject) {
 
-                Camera theCameraComponentTemplate = theGameObject.getComponentTemplate(CameraBehaviorTemplate.class);
-                if (theCameraComponentTemplate != null) {
-                    ObjectInspectorElementController theEditor = (ObjectInspectorElementController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(Camera.class)).get()).create(theCameraComponentTemplate);
-                    TitledPane theChildPane = new TitledPane("Camera", theEditor.getView());
-                    propertyPanels.getPanes().add(theChildPane);
-                    currentController.add(theEditor);
+                    GameObject theGameObject = (GameObject) aObject;
+
+                    for (Map.Entry<Class<? extends BehaviorTemplate>, Class> theEntry : behaviorTemplateToIdentifier.entrySet()) {
+                        BehaviorTemplate theTemplate = theGameObject.getBehaviorTemplate(theEntry.getKey());
+                        if (theTemplate != null) {
+                            Instance<?> theTemplateConfiguratorInstance = singleObjectFactory.select(createQualifier(theEntry.getValue()));
+                            if (!theTemplateConfiguratorInstance.isUnsatisfied()) {
+                                items.addAll(((ObjectInspectorElementConfigurator) theTemplateConfiguratorInstance.get()).getItemsFor(theTemplate));
+                            }
+                        }
+                    }
                 }
+                if (aObject instanceof GameObjectInstance) {
 
-                Platform thePlatformComponentTemplate = theGameObject.getComponentTemplate(PlatformBehaviorTemplate.class);
-                if (thePlatformComponentTemplate != null) {
-                    ObjectInspectorElementController theEditor = (ObjectInspectorElementController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(Platform.class)).get()).create(thePlatformComponentTemplate);
-                    TitledPane theChildPane = new TitledPane("Platform", theEditor.getView());
-                    propertyPanels.getPanes().add(theChildPane);
-                    currentController.add(theEditor);
-                }
+                    GameObjectInstance theInstance = (GameObjectInstance) aObject;
 
-                Physics thePhysicsComponentTemplate = theGameObject.getComponentTemplate(PhysicsBehaviorTemplate.class);
-                if (thePhysicsComponentTemplate != null) {
-                    ObjectInspectorElementController theEditor = (ObjectInspectorElementController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(Physics.class)).get()).create(thePhysicsComponentTemplate);
-                    TitledPane theChildPane = new TitledPane("Physics", theEditor.getView());
-                    propertyPanels.getPanes().add(theChildPane);
-                    currentController.add(theEditor);
-                }
-
-                Sprite theSpriteComponentTemplate = theGameObject.getComponentTemplate(SpriteBehaviorTemplate.class);
-                if (theSpriteComponentTemplate != null) {
-                    ObjectInspectorElementController theEditor = (ObjectInspectorElementController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(Sprite.class)).get()).create(theSpriteComponentTemplate);
-                    TitledPane theChildPane = new TitledPane("Sprite", theEditor.getView());
-                    propertyPanels.getPanes().add(theChildPane);
-                    currentController.add(theEditor);
-                }
-
-                Text theTextComponentTemplate = theGameObject.getComponentTemplate(TextBehaviorTemplate.class);
-                if (theTextComponentTemplate != null) {
-                    ObjectInspectorElementController theEditor = (ObjectInspectorElementController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(Text.class)).get()).create(theTextComponentTemplate);
-                    TitledPane theChildPane = new TitledPane("Text", theEditor.getView());
-                    propertyPanels.getPanes().add(theChildPane);
-                    currentController.add(theEditor);
-                }
-
-                PlayerScore theScoreTemplate = theGameObject.getComponentTemplate(PlayerScoreBehaviorTemplate.class);
-                if (theScoreTemplate != null) {
-                    ObjectInspectorElementController theEditor = (ObjectInspectorElementController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(PlayerScore.class)).get()).create(theScoreTemplate);
-                    TitledPane theChildPane = new TitledPane("PlayerScore", theEditor.getView());
-                    propertyPanels.getPanes().add(theChildPane);
-                    currentController.add(theEditor);
-                }
-
-                ConstantMovement theConstantMovementTemplate = theGameObject.getComponentTemplate(ConstantMovementBehaviorTemplate.class);
-                if (theConstantMovementTemplate != null) {
-                    ObjectInspectorElementController theEditor = (ObjectInspectorElementController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(ConstantMovement.class)).get()).create(theConstantMovementTemplate);
-                    TitledPane theChildPane = new TitledPane("ConstantMovement", theEditor.getView());
-                    propertyPanels.getPanes().add(theChildPane);
-                    currentController.add(theEditor);
-                }
-
-            }
-            if (aObject instanceof GameObjectInstance) {
-
-                GameObjectInstance theInstance = (GameObjectInstance) aObject;
-
-                ObjectInspectorElementController theController = (ObjectInspectorElementController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(GameObjectInstance.class)).get()).create(theInstance);
-                TitledPane thePane = new TitledPane("Properties", theController.getView());
-                propertyPanels.getPanes().add(thePane);
-                currentController.add(theController);
-
-                Camera theCameraComponent = theInstance.getComponent(CameraBehavior.class);
-                if (theCameraComponent != null) {
-                    ObjectInspectorElementController theEditor = (ObjectInspectorElementController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(Camera.class)).get()).create(theCameraComponent);
-                    TitledPane theChildPane = new TitledPane("Camera", theEditor.getView());
-                    propertyPanels.getPanes().add(theChildPane);
-                    currentController.add(theEditor);
-                }
-
-                PhysicsBehavior thePhysicsComponent = theInstance.getComponent(PhysicsBehavior.class);
-                if (thePhysicsComponent != null) {
-                    ObjectInspectorElementController theEditor = (ObjectInspectorElementController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(Physics.class)).get()).create(thePhysicsComponent);
-                    TitledPane theChildPane = new TitledPane("Physics", theEditor.getView());
-                    propertyPanels.getPanes().add(theChildPane);
-                    currentController.add(theEditor);
-                }
-
-                Platform thePlatformComponent = theInstance.getComponent(PlatformBehavior.class);
-                if (thePlatformComponent != null) {
-                    ObjectInspectorElementController theEditor = (ObjectInspectorElementController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(Platform.class)).get()).create(thePlatformComponent);
-                    TitledPane theChildPane = new TitledPane("Platform", theEditor.getView());
-                    propertyPanels.getPanes().add(theChildPane);
-                    currentController.add(theEditor);
-                }
-
-                Static theStaticComponent = theInstance.getComponent(StaticBehavior.class);
-                if (theStaticComponent != null) {
-                    ObjectInspectorElementController theEditor = (ObjectInspectorElementController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(Static.class)).get()).create(theStaticComponent);
-                    TitledPane theChildPane = new TitledPane("Static", theEditor.getView());
-                    propertyPanels.getPanes().add(theChildPane);
-                    currentController.add(theEditor);
-                }
-
-                Sprite theSpriteComponent = theInstance.getComponent(SpriteBehavior.class);
-                if (theSpriteComponent != null) {
-                    ObjectInspectorElementController theEditor = (ObjectInspectorElementController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(Sprite.class)).get()).create(theSpriteComponent);
-                    TitledPane theChildPane = new TitledPane("Sprite", theEditor.getView());
-                    propertyPanels.getPanes().add(theChildPane);
-                    currentController.add(theEditor);
-                }
-
-                Text theTextComponent = theInstance.getComponent(TextBehavior.class);
-                if (theTextComponent != null) {
-                    ObjectInspectorElementController theEditor = (ObjectInspectorElementController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(Text.class)).get()).create(theTextComponent);
-                    TitledPane theChildPane = new TitledPane("TextComponent", theEditor.getView());
-                    propertyPanels.getPanes().add(theChildPane);
-                    currentController.add(theEditor);
-                }
-
-                PlayerScore theScoreTemplate = theInstance.getComponent(PlayerScoreBehavior.class);
-                if (theScoreTemplate != null) {
-                    ObjectInspectorElementController theEditor = (ObjectInspectorElementController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(PlayerScore.class)).get()).create(theScoreTemplate);
-                    TitledPane theChildPane = new TitledPane("PlayerScoreComponent", theEditor.getView());
-                    propertyPanels.getPanes().add(theChildPane);
-                    currentController.add(theEditor);
-                }
-
-                ConstantMovement theConstantMovement = theInstance.getComponent(ConstantMovementBehavior.class);
-                if (theConstantMovement != null) {
-                    ObjectInspectorElementController theEditor = (ObjectInspectorElementController) ((ObjectInspectorFactory) singleObjectFactory.select(createQualifier(ConstantMovement.class)).get()).create(theConstantMovement);
-                    TitledPane theChildPane = new TitledPane("ConstantMovement", theEditor.getView());
-                    propertyPanels.getPanes().add(theChildPane);
-                    currentController.add(theEditor);
+                    for (Map.Entry<Class<? extends Behavior>, Class> theEntry : behaviorToIdentifier.entrySet()) {
+                        Behavior theTemplate = theInstance.getBehavior(theEntry.getKey());
+                        if (theTemplate != null) {
+                            Instance<?> theTemplateConfiguratorInstance = singleObjectFactory.select(createQualifier(theEntry.getValue()));
+                            if (!theTemplateConfiguratorInstance.isUnsatisfied()) {
+                                items.addAll(((ObjectInspectorElementConfigurator) theTemplateConfiguratorInstance.get()).getItemsFor(theTemplate));
+                            }
+                        }
+                    }
                 }
             }
         }

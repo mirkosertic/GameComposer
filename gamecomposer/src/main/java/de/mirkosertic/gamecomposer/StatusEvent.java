@@ -2,7 +2,7 @@ package de.mirkosertic.gamecomposer;
 
 public class StatusEvent {
 
-    public static enum Severity {INFO, ERROR};
+    public static enum Severity {INFO, ERROR}
 
     private final String message;
     private final Severity severity;

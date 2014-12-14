@@ -95,7 +95,7 @@ public class AndroidGameView implements GameView {
                 theCanvas.rotate(theAngleInDegrees, thePosition.x + theHalfWidth, thePosition.y + theHalfHeight);
             }
 
-            Sprite theTemplateComponent = theInstance.getComponent(SpriteBehavior.class);
+            Sprite theTemplateComponent = theInstance.getBehavior(SpriteBehavior.class);
             if (theTemplateComponent != null && !theTemplateComponent.resourceNameProperty().isNull()) {
                 try {
                     AndroidBitmapResource theBitmap = gameRuntime.getResourceCache().getResourceFor(
@@ -105,7 +105,7 @@ public class AndroidGameView implements GameView {
                     throw new RuntimeException(e);
                 }
             } else {
-                Text theTextComponent = theInstance.getComponent(TextBehavior.class);
+                Text theTextComponent = theInstance.getBehavior(TextBehavior.class);
                 if (theTextComponent != null) {
                     ExpressionParser theExpressionParser = aScene.get(theTextComponent.textExpressionProperty().get());
                     drawText(theCanvas, thePosition, theTextComponent.fontProperty().get(), theTextComponent.colorProperty().get(), theExpressionParser.evaluateToString(), theSize);

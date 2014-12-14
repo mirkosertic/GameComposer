@@ -4,8 +4,6 @@ import de.mirkosertic.gamecomposer.PersistenceManager;
 import de.mirkosertic.gamecomposer.contentarea.eventsheet.ActionController;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.core.RunSceneAction;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
@@ -46,12 +44,7 @@ public class RunSceneEditorController implements ActionController {
         if (!aAction.gameSceneProperty().isNull()) {
             scenes.getSelectionModel().select(aAction.gameSceneProperty().get());
         }
-        scenes.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                action.gameSceneProperty().set((String) scenes.getSelectionModel().getSelectedItem());
-            }
-        });
+        scenes.setOnAction(actionEvent -> action.gameSceneProperty().set((String) scenes.getSelectionModel().getSelectedItem()));
         return this;
     }
 

@@ -10,8 +10,6 @@ import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.physic.GamePhysicsManager;
 import de.mirkosertic.gameengine.type.Size;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.BorderPane;
 
@@ -43,7 +41,7 @@ public class GameSceneEditorControllerFactory implements ContentAreaFactory<Game
 
         // Detect and create a camera
         GameObjectInstance theCameraObject = aScene.createFrom(theDefaultCamera);
-        CameraBehavior theCameraComponent = theCameraObject.getComponent(CameraBehavior.class);
+        CameraBehavior theCameraComponent = theCameraObject.getBehavior(CameraBehavior.class);
         if (theCameraComponent == null) {
             throw new IllegalArgumentException("No camera component in camera object");
         }
@@ -72,18 +70,8 @@ public class GameSceneEditorControllerFactory implements ContentAreaFactory<Game
             BorderPane root = theLoader.load(fxml);
 
             GameSceneEditorController theController = theLoader.getController();
-            theController.centerBorderPane.widthProperty().addListener(new ChangeListener<Number>() {
-                @Override
-                public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
-                    theEventManager.fire(new SetScreenResolution(new Size((int) ((double) number2), theFinalCameraComponent.getScreenSize().height)));
-                }
-            });
-            theController.centerBorderPane.heightProperty().addListener(new ChangeListener<Number>() {
-                @Override
-                public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
-                    theEventManager.fire(new SetScreenResolution(new Size(theFinalCameraComponent.getScreenSize().width, (int) ((double) number2))));
-                }
-            });
+            theController.centerBorderPane.widthProperty().addListener((observableValue, number, number2) -> theEventManager.fire(new SetScreenResolution(new Size((int) ((double) number2), theFinalCameraComponent.getScreenSize().height))));
+            theController.centerBorderPane.heightProperty().addListener((observableValue, number, number2) -> theEventManager.fire(new SetScreenResolution(new Size(theFinalCameraComponent.getScreenSize().width, (int) ((double) number2)))));
             theGameView.widthProperty().bind(theController.centerBorderPane.widthProperty());
             theGameView.heightProperty().bind(theController.centerBorderPane.heightProperty());
 

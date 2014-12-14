@@ -83,13 +83,13 @@ public class GameObject implements Reflectable<GameObjectClassInformation> {
         return uuid != null ? uuid.hashCode() : 0;
     }
 
-    public void add(BehaviorTemplate aComponentTemplate) {
-        componentTemplates.put((Class<BehaviorTemplate>) aComponentTemplate.getClass(), aComponentTemplate);
+    public void add(BehaviorTemplate aBehaviorTemplate) {
+        componentTemplates.put((Class<BehaviorTemplate>) aBehaviorTemplate.getClass(), aBehaviorTemplate);
         gameScene.getRuntime().getEventManager().fire(new GameObjectConfigurationChanged(this));
     }
 
-    public <T extends BehaviorTemplate> T getComponentTemplate(Class<T> aComponentClass) {
-        return (T) componentTemplates.get(aComponentClass);
+    public <T extends BehaviorTemplate> T getBehaviorTemplate(Class<T> aBehaviorClass) {
+        return (T) componentTemplates.get(aBehaviorClass);
     }
 
     @Override

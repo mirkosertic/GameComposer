@@ -85,7 +85,7 @@ class TeaVMGameView implements GameView {
             }
 
 
-            Sprite theSpriteComponent = theInstance.getComponent(SpriteBehavior.class);
+            Sprite theSpriteComponent = theInstance.getBehavior(SpriteBehavior.class);
             if (theSpriteComponent != null) {
 
                 ResourceName theSpriteResource = theSpriteComponent.resourceNameProperty().get();
@@ -100,7 +100,7 @@ class TeaVMGameView implements GameView {
                     TeaVMLogger.error("Error while rendering sprite " + theSpriteResource.name);
                 }
             } else {
-                Text theTextComponent = theInstance.getComponent(TextBehavior.class);
+                Text theTextComponent = theInstance.getBehavior(TextBehavior.class);
                 if (theTextComponent != null) {
                     ExpressionParser theExpressionParser = aScene.get(theTextComponent.textExpressionProperty().get());
 
