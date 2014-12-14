@@ -340,7 +340,7 @@ public class GameSceneEditorController implements ContentController<GameScene> {
         final CameraBehavior theCameraComponent = theCameraObject.getBehavior(CameraBehavior.class);
         if (theCameraComponent == null) {
             throw new IllegalArgumentException("No camera component in camera object");
-        }theResult.add(new PropertyEditorItem<>(editorContext, CATEGORY_NAME, aObject.nameProperty(), "Name", "The name of the game", Optional.of(StringPropertyEditor.class)));
+        }
 
         GameObjectInstance thePlayerInstance = null;
         for (GameObjectInstance theInstance : thePreviewScene.getInstances()) {
