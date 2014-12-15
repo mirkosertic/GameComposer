@@ -13,19 +13,17 @@ public class PropertyEditorItem<T> implements PropertySheet.Item {
     private final String name;
     private final String description;
     private final Optional<Class<? extends PropertyEditor<?>>> propertyEditor;
-    private final EditorContext editorContext;
 
-    public PropertyEditorItem(EditorContext aEditorContext, String aCategory, Property<T> aProperty, String aName, String aDescription, Optional<Class<? extends PropertyEditor<?>>> aPropertyEditor) {
+    public PropertyEditorItem(String aCategory, Property<T> aProperty, String aName, String aDescription, Optional<Class<? extends PropertyEditor<?>>> aPropertyEditor) {
         property = aProperty;
         category = aCategory;
         name = aName;
         description = aDescription;
         propertyEditor = aPropertyEditor;
-        editorContext = aEditorContext;
     }
 
-    public PropertyEditorItem(EditorContext aEditorContext, String aCategory, Property<T> aProperty, String aName, String aDescription) {
-        this(aEditorContext, aCategory, aProperty, aName, aDescription, Optional.empty());
+    public PropertyEditorItem(String aCategory, Property<T> aProperty, String aName, String aDescription) {
+        this(aCategory, aProperty, aName, aDescription, Optional.empty());
     }
 
     @Override
@@ -61,10 +59,6 @@ public class PropertyEditorItem<T> implements PropertySheet.Item {
     @Override
     public Optional<Class<? extends PropertyEditor<?>>> getPropertyEditorClass() {
         return propertyEditor;
-    }
-
-    public EditorContext getEditorContext() {
-        return editorContext;
     }
 
     public Object getOwner() {
