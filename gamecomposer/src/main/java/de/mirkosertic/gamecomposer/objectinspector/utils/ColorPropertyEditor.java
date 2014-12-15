@@ -1,4 +1,4 @@
-package de.mirkosertic.gamecomposer.objectinspector.gamescene;
+package de.mirkosertic.gamecomposer.objectinspector.utils;
 
 import de.mirkosertic.gamecomposer.objectinspector.PropertyEditorItem;
 import de.mirkosertic.gameengine.type.Color;
