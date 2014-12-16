@@ -73,6 +73,11 @@ public class TextBehavior implements Behavior, Text, Reflectable<TextClassInform
         return objectInstance.getOwnerGameObject().getBehaviorTemplate(TextBehaviorTemplate.class);
     }
 
+    @Override
+    public void delete() {
+        objectInstance.getOwnerGameObject().getGameScene().removeBehaviorFrom(objectInstance.getOwnerGameObject(), this);
+    }
+
     public static TextBehavior deserialize(GameObjectInstance aObjectInstance, Map<String, Object> aSerializedData) {
         TextBehavior theTemplate =  new TextBehavior(aObjectInstance);
         theTemplate.font.setQuietly(Font.deserialize((Map<String, Object>) aSerializedData.get(FONT_PROPERTY)));

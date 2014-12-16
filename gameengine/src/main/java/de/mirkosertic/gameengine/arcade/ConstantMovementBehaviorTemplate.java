@@ -63,6 +63,11 @@ public class ConstantMovementBehaviorTemplate implements BehaviorTemplate<Consta
         return theResult;
     }
 
+    @Override
+    public void delete() {
+        owner.getGameScene().removeBehaviorFrom(owner, this);
+    }
+
     public static ConstantMovementBehaviorTemplate deserialize(GameEventManager aEventmanager, GameObject aOwner, Map<String, Object> aSerializedData) {
         ConstantMovementBehaviorTemplate theResult = new ConstantMovementBehaviorTemplate(aEventmanager, aOwner);
         theResult.speed.setQuietly(Speed.deserialize((Map<String, Object>) aSerializedData.get(SPEED_PROPERTY)));

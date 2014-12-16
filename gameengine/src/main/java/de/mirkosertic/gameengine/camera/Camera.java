@@ -7,4 +7,6 @@ public interface Camera {
     String TYPE_PROPERTY = "type";
 
     Property<CameraType> typeProperty();
+
+    void delete();
 }

@@ -56,6 +56,11 @@ public class PlayerScoreBehavior implements Behavior, PlayerScore, Reflectable<P
         return theResult;
     }
 
+    @Override
+    public void delete() {
+        objectInstance.getOwnerGameObject().getGameScene().removeBehaviorFrom(objectInstance.getOwnerGameObject(), this);
+    }
+
     public static PlayerScoreBehavior deserialize(GameObjectInstance aObjectInstance, Map<String, Object> aSerializedData) {
         PlayerScoreBehavior theComponent = new PlayerScoreBehavior(aObjectInstance);
         Map<String, Object> theScore = (Map<String, Object>) aSerializedData.get(SCORE_VALUE_PROPERTY);

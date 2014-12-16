@@ -21,7 +21,7 @@ import java.util.Optional;
 @ObjectInspectorElementConfiguratorType(clazz = Game.class)
 public class GameEditorElementConfigurator implements ObjectInspectorElementConfigurator<Game> {
 
-    private static final String CATEGORY_NAME = "Game";
+    private static final String CATEGORY_NAME = "01 Game";
 
     @Inject
     PersistenceManager persistenceManager;

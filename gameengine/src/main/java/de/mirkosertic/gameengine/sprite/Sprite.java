@@ -8,4 +8,6 @@ public interface Sprite {
     String RESOURCE_NAME_PROPERTY = "resourceName";
 
     Property<ResourceName> resourceNameProperty();
+
+    void delete();
 }

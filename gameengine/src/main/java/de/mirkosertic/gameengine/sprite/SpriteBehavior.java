@@ -55,6 +55,11 @@ public class SpriteBehavior implements Behavior, Sprite, Reflectable<SpriteClass
         return objectInstance.getOwnerGameObject().getBehaviorTemplate(SpriteBehaviorTemplate.class);
     }
 
+    @Override
+    public void delete() {
+        objectInstance.getOwnerGameObject().getGameScene().removeBehaviorFrom(objectInstance.getOwnerGameObject(), this);
+    }
+
     public static SpriteBehavior deserialize(GameObjectInstance aObjectInstance) {
         return new SpriteBehavior(aObjectInstance);
     }

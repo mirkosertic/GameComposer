@@ -12,4 +12,5 @@ public interface ConstantMovement {
 
     Property<Speed> rotationSpeedProperty();
 
+    void delete();
 }

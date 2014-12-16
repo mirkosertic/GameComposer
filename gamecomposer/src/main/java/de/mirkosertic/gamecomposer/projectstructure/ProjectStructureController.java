@@ -141,6 +141,10 @@ public class ProjectStructureController implements Controller {
         }
     }
 
+    public void onGameSceneDeleted(@Observes GameSceneDeletedEvent aEvent) {
+        initializeTree(persistenceManager.getGame());
+    }
+
     public void onGameObjectAdded(@Observes GameObjectAddedToScene aEvent) {
         initializeTree(persistenceManager.getGame());
         projectStructureTreeView.getSelectionModel().select(treeItemMap.get(aEvent.object));

@@ -22,4 +22,6 @@ public interface Physics {
     Property<Float> restitutionProperty();
 
     Property<Float> gravityScaleProperty();
+
+    void delete();
 }
