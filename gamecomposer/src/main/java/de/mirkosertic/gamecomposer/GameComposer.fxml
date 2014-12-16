@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
 
-<BorderPane id="BorderPane" fx:id="borderPane" disable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="636.0" prefWidth="1081.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.mirkosertic.gamecomposer.GameComposerController">
+<BorderPane id="BorderPane" fx:id="borderPane" disable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="600.0" minWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.mirkosertic.gamecomposer.GameComposerController">
   <bottom>
     <Label fx:id="statusBar" maxWidth="1.7976931348623157E308" style="-fx-background-color: rgb(200,200,200);" text="" BorderPane.alignment="CENTER_LEFT">
       <BorderPane.margin>
@@ -17,9 +17,6 @@
       </BorderPane.margin>
     </Label>
   </bottom>
-  <center>
-    <HBox fx:id="childViews" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="-1.0" prefWidth="-1.0" />
-  </center>
   <padding>
     <Insets top="30.0" />
   </padding>

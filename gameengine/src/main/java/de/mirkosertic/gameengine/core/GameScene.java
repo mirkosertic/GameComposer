@@ -148,15 +148,6 @@ public class GameScene implements Reflectable<GameSceneClassInformation> {
         return null;
     }
 
-    public GameObjectInstance findGameObjectInstanceByID(String aInstanceUUID) {
-        for (GameObjectInstance theInstance : instances) {
-            if (theInstance.uuidProperty().get().equals(aInstanceUUID)) {
-                return theInstance;
-            }
-        }
-        return null;
-    }
-
     public GameObjectInstance createFrom(GameObject aGameObject) {
         GameObjectInstance theInstance = new GameObjectInstance(gameRuntime.getEventManager(), aGameObject);
         theInstance.nameProperty().setQuietly(aGameObject.nameProperty().get() + "_" + System.currentTimeMillis());
@@ -302,5 +293,13 @@ public class GameScene implements Reflectable<GameSceneClassInformation> {
             theMaxY = Math.max(theMaxY, (int) thePosition.y + theSize.height);
         }
         return new Position(theMinX + (theMaxX - theMinX) / 2, theMinY + (theMaxY - theMinY) / 2);
+    }
+
+    public void removeBehaviorFrom(GameObject aObject, Behavior aBehavior) {
+        //TODO: Implement removal and eventing here...
+    }
+
+    public void removeBehaviorFrom(GameObject aObject, BehaviorTemplate aBehavior) {
+        //TODO: Implement removal and eventing here...
     }
 }

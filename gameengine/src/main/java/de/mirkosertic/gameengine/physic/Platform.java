@@ -20,4 +20,6 @@ public interface Platform {
     Property<Float> leftRightImpulseProperty();
 
     Property<Float> jumpImpulseProperty();
+
+    void delete();
 }

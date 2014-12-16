@@ -46,6 +46,11 @@ public class StaticBehaviorTemplate implements BehaviorTemplate<StaticBehavior>,
         return theResult;
     }
 
+    @Override
+    public void delete() {
+        owner.getGameScene().removeBehaviorFrom(owner, this);
+    }
+
     public static StaticBehaviorTemplate deserialize(GameEventManager aEventManager, GameObject aOwner) {
         return new StaticBehaviorTemplate(aEventManager, aOwner);
     }

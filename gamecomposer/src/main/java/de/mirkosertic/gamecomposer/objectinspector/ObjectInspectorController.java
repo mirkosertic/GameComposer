@@ -3,6 +3,7 @@ package de.mirkosertic.gamecomposer.objectinspector;
 import com.sun.javafx.collections.ObservableListWrapper;
 import de.mirkosertic.gamecomposer.Controller;
 import de.mirkosertic.gamecomposer.GameSceneCreatedEvent;
+import de.mirkosertic.gamecomposer.GameSceneDeletedEvent;
 import de.mirkosertic.gamecomposer.ObjectSelectedEvent;
 import de.mirkosertic.gameengine.arcade.ConstantMovement;
 import de.mirkosertic.gameengine.arcade.ConstantMovementBehavior;
@@ -117,6 +118,10 @@ public class ObjectInspectorController implements Controller {
     public void onGameObjectConfigurationChanged(@Observes GameObjectConfigurationChanged aEvent) {
         currentSelection = null;
         selectObject(aEvent.object);
+    }
+
+    public void onGameSceneDeleted(@Observes GameSceneDeletedEvent aEvent) {
+        selectObject(null);
     }
 
     private ObjectInspectorElementConfiguratorType createQualifier(final Class aClass) {

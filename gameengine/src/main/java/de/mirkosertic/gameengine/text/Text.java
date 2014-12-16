@@ -16,4 +16,6 @@ public interface Text {
     Property<TextExpression> textExpressionProperty();
 
     Property<Color> colorProperty();
+
+    void delete();
 }

@@ -181,6 +181,11 @@ public class PlatformBehavior implements Behavior, Platform, Reflectable<Platfor
         return objectInstance.getOwnerGameObject().getBehaviorTemplate(PlatformBehaviorTemplate.class);
     }
 
+    @Override
+    public void delete() {
+        objectInstance.getOwnerGameObject().getGameScene().removeBehaviorFrom(objectInstance.getOwnerGameObject(), this);
+    }
+
     public static PlatformBehavior deserialize(GameObjectInstance aObjectInstance, GameRuntime aGameRuntime) {
         PlatformBehavior theComponent = new PlatformBehavior(aObjectInstance, aGameRuntime);
         theComponent.registerEvents(aGameRuntime);

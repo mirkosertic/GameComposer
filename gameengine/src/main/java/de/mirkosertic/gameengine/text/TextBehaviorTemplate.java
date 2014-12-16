@@ -72,6 +72,11 @@ public class TextBehaviorTemplate implements BehaviorTemplate<TextBehavior>, Tex
         return theResult;
     }
 
+    @Override
+    public void delete() {
+        owner.getGameScene().removeBehaviorFrom(owner, this);
+    }
+
     public static TextBehaviorTemplate deserialize(GameEventManager aEventManager, GameObject aOwner, Map<String, Object> aSerializedData) {
         TextBehaviorTemplate theTemplate = new TextBehaviorTemplate(aEventManager, aOwner);
         theTemplate.font.setQuietly(Font.deserialize((Map<String, Object>) aSerializedData.get(FONT_PROPERTY)));

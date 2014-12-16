@@ -56,6 +56,11 @@ public class PlayerScoreBehaviorTemplate implements BehaviorTemplate<PlayerScore
         return theResult;
     }
 
+    @Override
+    public void delete() {
+        owner.getGameScene().removeBehaviorFrom(owner, this);
+    }
+
     public static PlayerScoreBehaviorTemplate deserialize(GameObject aOwner, GameEventManager aEventmanager, Map<String, Object> aSerializedData) {
         PlayerScoreBehaviorTemplate theResult = new PlayerScoreBehaviorTemplate(aEventmanager, aOwner);
         Map<String, Object> theScore = (Map<String, Object>) aSerializedData.get(SCORE_VALUE_PROPERTY);

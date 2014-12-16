@@ -56,6 +56,11 @@ public class CameraBehaviorTemplate implements BehaviorTemplate<CameraBehavior>,
         return theResult;
     }
 
+    @Override
+    public void delete() {
+        owner.getGameScene().removeBehaviorFrom(owner, this);
+    }
+
     public static CameraBehaviorTemplate deserialize(GameEventManager aEventManager, GameObject aOwner, Map<String, Object> aSerializedData) {
         CameraBehaviorTemplate theTemplate = new CameraBehaviorTemplate(aEventManager, aOwner);
         String theCameraType = (String) aSerializedData.get("cameratype");

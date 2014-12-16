@@ -57,6 +57,11 @@ public class SpriteBehaviorTemplate implements BehaviorTemplate<SpriteBehavior>,
         return theResult;
     }
 
+    @Override
+    public void delete() {
+        owner.getGameScene().removeBehaviorFrom(owner, this);
+    }
+
     public static SpriteBehaviorTemplate deserialize(GameEventManager aEventManager, GameObject aOwner, Map<String, Object> aSerializedData) {
         SpriteBehaviorTemplate theResult = new SpriteBehaviorTemplate(aEventManager, aOwner);
         Map<String, Object> theResourceName = (Map<String, Object>) aSerializedData.get("resourcename");

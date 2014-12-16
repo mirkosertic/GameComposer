@@ -162,4 +162,9 @@ public class CameraBehavior implements Behavior, Camera, Reflectable<CameraClass
                 break;
         }
     }
+
+    @Override
+    public void delete() {
+        objectInstance.getOwnerGameObject().getGameScene().removeBehaviorFrom(objectInstance.getOwnerGameObject(), this);
+    }
 }

@@ -70,6 +70,11 @@ public class PlatformBehaviorTemplate implements BehaviorTemplate<PlatformBehavi
     }
 
     @Override
+    public void delete() {
+        owner.getGameScene().removeBehaviorFrom(owner, this);
+    }
+
+    @Override
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<>();
         theResult.put(PlatformBehavior.TYPE_ATTRIBUTE, PlatformBehavior.TYPE);

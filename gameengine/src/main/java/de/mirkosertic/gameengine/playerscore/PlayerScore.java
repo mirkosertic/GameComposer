@@ -8,4 +8,6 @@ public interface PlayerScore {
     String SCORE_VALUE_PROPERTY = "scoreValue";
 
     Property<ScoreValue> scoreValueProperty();
+
+    void delete();
 }
