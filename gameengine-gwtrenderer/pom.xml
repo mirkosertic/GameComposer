@@ -19,6 +19,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>gwt-maven-plugin</artifactId>
+                <version>${gwt.version}</version>
                 <executions>
                     <!-- GWT version detected from dependencyManagement -->
                     <execution>
@@ -31,9 +32,9 @@
                 <configuration>
                     <runTarget>de.mirkosertic.gameengine.gwt.GWTRenderer/index.html</runTarget>
                     <draftCompile>false</draftCompile>
-                    <optimizationLevel>9</optimizationLevel>
+                    <optimizationLevel>0</optimizationLevel>
                     <disableCastChecking>true</disableCastChecking>
-                    <enableClosureCompiler>true</enableClosureCompiler>
+                    <enableClosureCompiler>false</enableClosureCompiler>
                     <!--<disableClassMetaData>true</disableClassMetaData>-->
                     <!--<style>DETAILED</style>
                     <disableCastChecking>true</disableCastChecking>-->

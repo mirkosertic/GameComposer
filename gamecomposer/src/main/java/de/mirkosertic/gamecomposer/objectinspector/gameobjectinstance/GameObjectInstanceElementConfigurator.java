@@ -3,7 +3,7 @@ package de.mirkosertic.gamecomposer.objectinspector.gameobjectinstance;
 import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorElementConfigurator;
 import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorElementConfiguratorType;
 import de.mirkosertic.gamecomposer.objectinspector.PropertyEditorItem;
-import de.mirkosertic.gamecomposer.objectinspector.utils.AbsolutePositionAnchorEditor;
+import de.mirkosertic.gamecomposer.objectinspector.utils.AbsolutePositionAnchorPropertyEditor;
 import de.mirkosertic.gamecomposer.objectinspector.utils.AnglePropertyEditor;
 import de.mirkosertic.gamecomposer.objectinspector.utils.PositionPropertyEditor;
 import de.mirkosertic.gamecomposer.objectinspector.utils.StringPropertyEditor;
@@ -27,7 +27,7 @@ public class GameObjectInstanceElementConfigurator implements ObjectInspectorEle
         theResult.add(new PropertyEditorItem<>(CATEGORY_NAME, aObject.visibleProperty(), "Visible", "Is the instance visible or not", Optional.empty()));
         theResult.add(new PropertyEditorItem<>(CATEGORY_NAME, aObject.rotationAngleProperty(), "Rotation angle", "The rotation angle of the instance", Optional.of(AnglePropertyEditor.class)));
         theResult.add(new PropertyEditorItem<>(CATEGORY_NAME, aObject.absolutePositionProperty(), "Absolute position", "Is the instances position absolute?", Optional.empty()));
-        theResult.add(new PropertyEditorItem<>(CATEGORY_NAME, aObject.absolutePositionAnchorProperty(), "Position anchor", "The position anchor of the instance", Optional.of(AbsolutePositionAnchorEditor.class)));
+        theResult.add(new PropertyEditorItem<>(CATEGORY_NAME, aObject.absolutePositionAnchorProperty(), "Position anchor", "The position anchor of the instance", Optional.of(AbsolutePositionAnchorPropertyEditor.class)));
         return theResult;
     }
 }
