@@ -1,28 +1,33 @@
 package de.mirkosertic.gamecomposer.objectinspector.utils;
 
-import de.mirkosertic.gameengine.type.Size;
+import de.mirkosertic.gameengine.type.Font;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+
+import org.apache.commons.lang3.StringUtils;
 import org.controlsfx.control.PropertySheet;
 import org.controlsfx.property.editor.PropertyEditor;
 import org.controlsfx.validation.ValidationSupport;
 import org.controlsfx.validation.Validator;
 
-public class SizePropertyEditor implements PropertyEditor<Size> {
+public class FontPropertyEditor implements PropertyEditor<Font> {
 
-    private Size size;
+    private Font value;
     private final HBox editor;
+    private final ComboBox<Font.FontName> fontNames;
     private final TextField width;
-    private final TextField height;
     private PropertySheet.Item item;
     private final ValidationSupport validationSupport;
 
-    public SizePropertyEditor(PropertySheet.Item aItem) {
+    public FontPropertyEditor(PropertySheet.Item aItem) {
 
         item = aItem;
 
@@ -32,24 +37,15 @@ public class SizePropertyEditor implements PropertyEditor<Size> {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 if (!newValue) {
-                    if (!validationSupport.isInvalid()) {
-                        size = size.changeWidth(Integer.parseInt(width.getText()));
-                        item.setValue(size);
-                    }
+                    updateFont();
                 }
             }
         });
-        height = new TextField();
-        height.setMaxWidth(50);
-        height.focusedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                if (!newValue) {
-                    if (!validationSupport.isInvalid()) {
-                        size = size.changeHeight(Integer.parseInt(height.getText()));
-                        item.setValue(size);
-                    }
-                }
+        fontNames = new ComboBox<>();
+        fontNames.getItems().addAll(Font.FontName.values());
+        fontNames.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent event) {
+                updateFont();
             }
         });
 
@@ -62,11 +58,17 @@ public class SizePropertyEditor implements PropertyEditor<Size> {
         );
 
         validationSupport.registerValidator(width, theValidator);
-        validationSupport.registerValidator(height, theValidator);
 
         editor = new HBox();
         editor.setAlignment(Pos.BASELINE_LEFT);
-        editor.getChildren().addAll(new Label("W:"), width, new Label("H:"), height);
+        editor.getChildren().addAll(fontNames, new Label("Size:"), width);
+    }
+
+    private void updateFont() {
+        if (!validationSupport.isInvalid() && !fontNames.getSelectionModel().isEmpty() && !StringUtils.isEmpty(width.getText())) {
+            value = new Font(fontNames.getSelectionModel().getSelectedItem(), Integer.valueOf(width.getText()));
+            item.setValue(value);
+        }
     }
 
     @Override
@@ -75,15 +77,15 @@ public class SizePropertyEditor implements PropertyEditor<Size> {
     }
 
     @Override
-    public Size getValue() {
-        return size;
+    public Font getValue() {
+        return value;
     }
 
     @Override
-    public void setValue(Size aValue) {
-        size = aValue;
-        width.setText("" + size.width);
-        height.setText("" + size.height);
+    public void setValue(Font aValue) {
+        fontNames.getSelectionModel().select(aValue.name);
+        width.setText("" + aValue.size);
         validationSupport.redecorate();
+        value = aValue;
     }
 }

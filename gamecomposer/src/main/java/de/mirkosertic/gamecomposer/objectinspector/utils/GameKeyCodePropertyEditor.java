@@ -1,25 +1,26 @@
 package de.mirkosertic.gamecomposer.objectinspector.utils;
 
-import de.mirkosertic.gameengine.type.AbsolutePositionAnchor;
+import de.mirkosertic.gameengine.type.GameKeyCode;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
+
 import org.controlsfx.control.PropertySheet;
 import org.controlsfx.property.editor.PropertyEditor;
 
-public class AbsolutePositionAnchorEditor implements PropertyEditor<AbsolutePositionAnchor> {
+public class GameKeyCodePropertyEditor implements PropertyEditor<GameKeyCode> {
 
-    private AbsolutePositionAnchor angle;
-    private final ComboBox<AbsolutePositionAnchor> editor;
+    private GameKeyCode value;
+    private final ComboBox<GameKeyCode> editor;
     private PropertySheet.Item item;
 
-    public AbsolutePositionAnchorEditor(PropertySheet.Item aItem) {
+    public GameKeyCodePropertyEditor(PropertySheet.Item aItem) {
 
         item = aItem;
 
         editor = new ComboBox<>();
-        editor.getItems().addAll(AbsolutePositionAnchor.values());
+        editor.getItems().addAll(GameKeyCode.values());
         editor.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -34,13 +35,13 @@ public class AbsolutePositionAnchorEditor implements PropertyEditor<AbsolutePosi
     }
 
     @Override
-    public AbsolutePositionAnchor getValue() {
-        return angle;
+    public GameKeyCode getValue() {
+        return value;
     }
 
     @Override
-    public void setValue(AbsolutePositionAnchor aValue) {
-        angle = aValue;
+    public void setValue(GameKeyCode aValue) {
+        value = aValue;
         editor.setValue(aValue);
     }
 }

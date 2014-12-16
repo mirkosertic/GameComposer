@@ -55,14 +55,14 @@ public class PositionPropertyEditor implements PropertyEditor<Position> {
 
         validationSupport = new ValidationSupport();
 
-        Validator theWidthAndHeightValidator = Validator.combine(
+        Validator theValidator = Validator.combine(
                 Validator.createEmptyValidator("A value is required"),
                 Validator.createPredicateValidator(new IntegerPredicate(), "Value is not a valid number"),
                 Validator.createPredicateValidator(new PositiveIntegerPredicate(), "Value must be positive")
         );
 
-        validationSupport.registerValidator(x, theWidthAndHeightValidator);
-        validationSupport.registerValidator(y, theWidthAndHeightValidator);
+        validationSupport.registerValidator(x, theValidator);
+        validationSupport.registerValidator(y, theValidator);
 
         editor = new HBox();
         editor.setAlignment(Pos.BASELINE_LEFT);
