@@ -1,6 +1,6 @@
 package de.mirkosertic.gamecomposer.exporter.html5;
 
-import de.mirkosertic.gamecomposer.ExportGameHTML5GWTEvent;
+import de.mirkosertic.gamecomposer.ExportGameHTML5TeaVMEvent;
 import de.mirkosertic.gamecomposer.PersistenceManager;
 import de.mirkosertic.gamecomposer.StatusEvent;
 import javafx.application.Application;
@@ -17,7 +17,7 @@ import javax.inject.Inject;
 import org.apache.commons.io.IOUtils;
 
 @Dependent
-public class HTML5GWTGameExporter {
+public class HTML5TeaVMGameExporter {
 
     @Inject
     PersistenceManager persistenceManager;
@@ -47,8 +47,8 @@ public class HTML5GWTGameExporter {
         return true;
     }
 
-    public void onExport(@Observes ExportGameHTML5GWTEvent aEvent) throws IOException {
-        InputStream theStream = HTML5GWTGameExporter.class.getResourceAsStream("/gameengine-gwtrenderer.war");
+    public void onExport(@Observes ExportGameHTML5TeaVMEvent aEvent) throws IOException {
+        InputStream theStream = HTML5TeaVMGameExporter.class.getResourceAsStream("/gameengine-teavmrenderer.war");
         ZipInputStream theZipStream = new ZipInputStream(theStream);
         ZipEntry theEntry;
         while ((theEntry = theZipStream.getNextEntry()) != null) {
@@ -68,6 +68,7 @@ public class HTML5GWTGameExporter {
         statusEvent.fire(new StatusEvent("Export finished", StatusEvent.Severity.INFO));
 
         File theGameIndexFile = new File(aEvent.getGameDirectory(), "index.html");
+
         application.getHostServices().showDocument(theGameIndexFile.toString());
     }
 }

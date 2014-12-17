@@ -11,7 +11,7 @@ public class GameEngineDragomeConfigurator extends ChainedInstrumentationDragome
 
     @Override
     public boolean filterClassPath(String aClassPathEntry) {
-        if (aClassPathEntry.contains("gameengine-0.2")) {
+        if (aClassPathEntry.contains("gameengine-0.3")) {
             return true;
         }
         if (aClassPathEntry.contains("jbox2d-")) {

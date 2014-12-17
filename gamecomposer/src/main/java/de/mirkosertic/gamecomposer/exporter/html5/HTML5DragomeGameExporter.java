@@ -3,20 +3,20 @@ package de.mirkosertic.gamecomposer.exporter.html5;
 import de.mirkosertic.gamecomposer.ExportGameHTML5DragomeEvent;
 import de.mirkosertic.gamecomposer.PersistenceManager;
 import de.mirkosertic.gamecomposer.StatusEvent;
+import javafx.application.Application;
 
-import java.awt.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import javax.enterprise.context.Dependent;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import org.apache.commons.io.IOUtils;
 
-@Singleton
+@Dependent
 public class HTML5DragomeGameExporter {
 
     @Inject
@@ -24,6 +24,9 @@ public class HTML5DragomeGameExporter {
 
     @Inject
     javax.enterprise.event.Event<StatusEvent> statusEvent;
+
+    @Inject
+    Application application;
 
     private boolean isValidEntry(ZipEntry aEntry) {
         if (aEntry.getName().endsWith("/")) {
@@ -65,6 +68,6 @@ public class HTML5DragomeGameExporter {
         statusEvent.fire(new StatusEvent("Export finished", StatusEvent.Severity.INFO));
 
         File theGameIndexFile = new File(aEvent.getGameDirectory(), "index.html");
-        Desktop.getDesktop().browse(theGameIndexFile.toURI());
+        application.getHostServices().showDocument(theGameIndexFile.toString());
     }
 }

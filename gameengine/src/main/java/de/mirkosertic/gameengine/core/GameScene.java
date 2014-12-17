@@ -296,10 +296,22 @@ public class GameScene implements Reflectable<GameSceneClassInformation> {
     }
 
     public void removeBehaviorFrom(GameObject aObject, Behavior aBehavior) {
-        //TODO: Implement removal and eventing here...
+        GameObjectInstance[] theInstances = getInstances();
+        for (GameObjectInstance theInstance : theInstances) {
+            if (theInstance.getOwnerGameObject() == aObject) {
+                theInstance.removeBehavior(aBehavior);
+            }
+        }
+        aObject.remove(aBehavior.getTemplate());
     }
 
-    public void removeBehaviorFrom(GameObject aObject, BehaviorTemplate aBehavior) {
-        //TODO: Implement removal and eventing here...
+    public void removeBehaviorFrom(GameObject aObject, BehaviorTemplate aBehaviorTemplate) {
+        GameObjectInstance[] theInstances = getInstances();
+        for (GameObjectInstance theInstance : theInstances) {
+            if (theInstance.getOwnerGameObject() == aObject) {
+                theInstance.removeBehaviorByTemplate(aBehaviorTemplate);
+            }
+        }
+        aObject.remove(aBehaviorTemplate);
     }
 }

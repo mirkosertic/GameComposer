@@ -8,6 +8,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,7 +20,11 @@ public class GameComposerFactory {
     @Inject
     FXMLLoaderFactory fxmlLoaderFactory;
 
-    public void createAndStart(Stage aStage, Application.Parameters aParameters) throws IOException {
+    private Application application;
+
+    public void createAndStart(Application aApplication, Stage aStage, Application.Parameters aParameters) throws IOException {
+
+        application = aApplication;
 
         try (InputStream fxml = GameComposerController.class.getResourceAsStream("GameComposer.fxml")) {
             FXMLLoader theLoader = fxmlLoaderFactory.createLoader();
@@ -39,5 +45,11 @@ public class GameComposerFactory {
             aStage.setScene(theUndecoratorScene);
             aStage.show();
         }
+    }
+
+    @Produces
+    @Any
+    public Application getApplication() {
+        return application;
     }
 }
