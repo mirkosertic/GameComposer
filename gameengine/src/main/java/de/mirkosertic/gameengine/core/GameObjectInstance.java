@@ -98,6 +98,19 @@ public class GameObjectInstance implements Reflectable<GameObjectInstanceClassIn
         behaviors.put(aBehavior.getClass(), aBehavior);
     }
 
+    public void removeBehavior(Behavior aBehavior) {
+        behaviors.remove(aBehavior.getClass());
+    }
+
+    public void removeBehaviorByTemplate(BehaviorTemplate aTemplate) {
+        Map<Class<? extends Behavior>, Behavior> theKnownBehaviors = new HashMap<>();
+        for (Map.Entry<Class<? extends Behavior>, Behavior> theEntry : theKnownBehaviors.entrySet()) {
+            if (theEntry.getValue().getTemplate() == aTemplate) {
+                removeBehavior(theEntry.getValue());
+            }
+        }
+    }
+
     public <T extends Behavior> T getBehavior(Class<T> aComponentClass) {
         return (T) behaviors.get(aComponentClass);
     }

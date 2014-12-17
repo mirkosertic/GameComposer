@@ -6,7 +6,7 @@
 
     <groupId>de.mirkosertic</groupId>
     <artifactId>gamecreator</artifactId>
-    <version>0.2-SNAPSHOT</version>
+    <version>0.3-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>GameComposer Parent POM</name>
 

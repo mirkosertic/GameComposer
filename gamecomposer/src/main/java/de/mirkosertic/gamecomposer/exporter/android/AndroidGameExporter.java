@@ -2,23 +2,26 @@ package de.mirkosertic.gamecomposer.exporter.android;
 
 import de.mirkosertic.gamecomposer.ExportGameAndroidEvent;
 import de.mirkosertic.gamecomposer.PersistenceManager;
-
 import de.mirkosertic.gamecomposer.StatusEvent;
+import javafx.application.Application;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
+import javax.enterprise.event.Event;
+import javax.enterprise.event.Observes;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.commons.lang3.SystemUtils;
-
-import javax.enterprise.event.Event;
-import javax.enterprise.event.Observes;
-import javax.inject.Inject;
-import javax.inject.Singleton;
-import java.awt.*;
-import java.io.*;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
-import java.util.zip.ZipOutputStream;
 
 @Singleton
 public class AndroidGameExporter {
@@ -28,6 +31,9 @@ public class AndroidGameExporter {
 
     @Inject
     Event<StatusEvent> statusEvent;
+
+    @Inject
+    Application application;
 
     public void onExport(@Observes ExportGameAndroidEvent aEvent) throws IOException {
 
@@ -143,6 +149,6 @@ public class AndroidGameExporter {
 
         }
 
-        Desktop.getDesktop().browse(aEvent.getGameDirectory().toURI());
+        application.getHostServices().showDocument(aEvent.getGameDirectory().toString());
     }
 }

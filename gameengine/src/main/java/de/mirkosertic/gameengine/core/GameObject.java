@@ -88,6 +88,11 @@ public class GameObject implements Reflectable<GameObjectClassInformation> {
         gameScene.getRuntime().getEventManager().fire(new GameObjectConfigurationChanged(this));
     }
 
+    public void remove(BehaviorTemplate aBehaviorTemplate) {
+        componentTemplates.remove(aBehaviorTemplate.getClass());
+        gameScene.getRuntime().getEventManager().fire(new GameObjectConfigurationChanged(this));
+    }
+
     public <T extends BehaviorTemplate> T getBehaviorTemplate(Class<T> aBehaviorClass) {
         return (T) componentTemplates.get(aBehaviorClass);
     }

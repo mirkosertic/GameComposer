@@ -15,7 +15,7 @@ public class GameComposerApplication extends Application {
     public void start(Stage aStage) throws Exception {
         weld = new Weld();
         weldContainer = weld.initialize();
-        weldContainer.instance().select(GameComposerFactory.class).get().createAndStart(aStage, getParameters());
+        weldContainer.instance().select(GameComposerFactory.class).get().createAndStart(this, aStage, getParameters());
     }
 
     @Override

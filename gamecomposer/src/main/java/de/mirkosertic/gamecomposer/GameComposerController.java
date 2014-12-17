@@ -167,6 +167,24 @@ public class GameComposerController {
     }
 
     @FXML
+    public void onSaveAndExportHTML5TeaVM() {
+        DirectoryChooser theDirectoryChooser = new DirectoryChooser();
+        theDirectoryChooser.setTitle("Choose target directory");
+
+        String theLastExportDir = directoryPreferences.get(GAME_EXPORTDIRECTORY_HTML_PREF_KEY, null);
+        if (theLastExportDir != null) {
+            theDirectoryChooser.setInitialDirectory(new File(theLastExportDir));
+        }
+
+        File theTargetDirectory = theDirectoryChooser.showDialog(stage);
+        if (theTargetDirectory != null) {
+            eventGateway.fire(new ExportGameHTML5TeaVMEvent(theTargetDirectory));
+
+            directoryPreferences.put(GAME_EXPORTDIRECTORY_HTML_PREF_KEY, theTargetDirectory.toString());
+        }
+    }
+
+    @FXML
     public void onSaveAndExportAndroid() {
         DirectoryChooser theDirectoryChooser = new DirectoryChooser();
         theDirectoryChooser.setTitle("Choose target directory");
