@@ -157,7 +157,7 @@ public class CameraBehavior implements Behavior, Camera, Reflectable<CameraClass
                 aGameScene.getRuntime().getEventManager().fire(new StartProcess(new FollowCameraProcess(objectInstance, aPlayerInstance)));
                 break;
             case CENTERONSCENE:
-                Position thePosition = aGameScene.computCenter();
+                Position thePosition = aGameScene.computeCenter();
                 centerOn(thePosition);
                 break;
         }
