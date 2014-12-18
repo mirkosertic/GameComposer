@@ -3,6 +3,7 @@ package de.mirkosertic.gameengine.core;
 import de.mirkosertic.gameengine.ArrayUtils;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
+import de.mirkosertic.gameengine.physic.PhysicsBehaviorTemplate;
 import de.mirkosertic.gameengine.type.*;
 
 import java.util.ArrayList;
@@ -276,7 +277,7 @@ public class GameScene implements Reflectable<GameSceneClassInformation> {
         return theScene;
     }
 
-    public Position computCenter() {
+    public Position computeCenter() {
         if (instances.length == 0) {
             return new Position(0, 0);
         }
@@ -313,5 +314,15 @@ public class GameScene implements Reflectable<GameSceneClassInformation> {
             }
         }
         aObject.remove(aBehaviorTemplate);
+    }
+
+    public <T extends Behavior> void addBehaviorToObject(GameObject aObject, BehaviorTemplate<T> aBehaviorTemplate) {
+        GameObjectInstance[] theInstances = getInstances();
+        for (GameObjectInstance theInstance : theInstances) {
+            if (theInstance.getOwnerGameObject() == aObject) {
+                theInstance.addBehavior(aBehaviorTemplate.create(theInstance, gameRuntime));
+            }
+        }
+        aObject.add(aBehaviorTemplate);
     }
 }
