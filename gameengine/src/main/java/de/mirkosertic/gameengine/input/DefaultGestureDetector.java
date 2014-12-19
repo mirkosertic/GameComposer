@@ -64,6 +64,10 @@ public class DefaultGestureDetector implements GestureDetector {
             TouchPosition theFirstPosition = aTouchPositions[0];
             TouchPosition theOriginTouchPosition = currentTouchPositions.get(theFirstPosition.identifier);
 
+            if (theFirstPosition == null || theOriginTouchPosition == null) {
+                return;
+            }
+
             int theDX = theFirstPosition.x - theOriginTouchPosition.x;
             int theDY = theFirstPosition.y - theOriginTouchPosition.y;
 

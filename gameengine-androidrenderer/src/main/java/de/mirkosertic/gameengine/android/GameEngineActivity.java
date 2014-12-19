@@ -135,7 +135,7 @@ public class GameEngineActivity extends Activity {
             JSONObject theSceneJSON = new JSONObject(IOUtils.toString(theStream));
             Map<String, Object> theGameData = JSONUtils.toMap(theSceneJSON);
 
-            AndroidGameResourceLoader theResourceLoader = new AndroidGameResourceLoader(getAssets(), aSceneID);
+            AndroidGameResourceLoader theResourceLoader = new AndroidGameResourceLoader(theAssetManager, getCacheDir(), aSceneID);
 
             GameRuntime theRuntime = gameRuntimeFactory.create(theResourceLoader, gameSoundSystemFactory);
             GameScene theGameScene = GameScene.deserialize(theRuntime, theGameData);

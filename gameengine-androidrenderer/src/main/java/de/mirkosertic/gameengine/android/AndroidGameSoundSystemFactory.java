@@ -17,6 +17,6 @@ public class AndroidGameSoundSystemFactory implements GameSoundSystemFactory<And
 
     @Override
     public GameSoundSystem<AndroidStreamIdentifier> create(GameRuntime aGameRuntime) {
-        return new AndroidGameSoundSystem(aGameRuntime.getResourceCache(), assetManager);
+        return new AndroidGameSoundSystem(aGameRuntime.getResourceCache());
     }
 }
