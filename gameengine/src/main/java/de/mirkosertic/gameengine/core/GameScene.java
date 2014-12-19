@@ -3,7 +3,6 @@ package de.mirkosertic.gameengine.core;
 import de.mirkosertic.gameengine.ArrayUtils;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
-import de.mirkosertic.gameengine.physic.PhysicsBehaviorTemplate;
 import de.mirkosertic.gameengine.type.*;
 
 import java.util.ArrayList;
