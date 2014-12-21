@@ -15,9 +15,8 @@ public class TouchIdentifier {
 
         TouchIdentifier that = (TouchIdentifier) o;
 
-        if (identifier != that.identifier) return false;
+        return identifier == that.identifier;
 
-        return true;
     }
 
     @Override

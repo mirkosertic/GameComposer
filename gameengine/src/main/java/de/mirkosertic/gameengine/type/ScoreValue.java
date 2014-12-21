@@ -27,9 +27,8 @@ public class ScoreValue implements ValueProvider<Long> {
 
         ScoreValue that = (ScoreValue) o;
 
-        if (score != that.score) return false;
+        return score == that.score;
 
-        return true;
     }
 
     @Override

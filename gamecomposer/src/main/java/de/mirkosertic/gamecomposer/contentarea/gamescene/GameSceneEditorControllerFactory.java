@@ -8,6 +8,7 @@ import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
 import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.event.GameEventManager;
+import de.mirkosertic.gameengine.input.DefaultGestureDetector;
 import de.mirkosertic.gameengine.physic.GamePhysicsManager;
 import de.mirkosertic.gameengine.type.Size;
 import javafx.fxml.FXMLLoader;
@@ -40,9 +41,9 @@ public class GameSceneEditorControllerFactory implements ContentAreaFactory<Game
         }
 
         // Detect and create a camera
-        GameObjectInstance theCameraObject = aScene.createFrom(theDefaultCamera);
-        CameraBehavior theCameraComponent = theCameraObject.getBehavior(CameraBehavior.class);
-        if (theCameraComponent == null) {
+        GameObjectInstance theCameraInstance = aScene.createFrom(theDefaultCamera);
+        CameraBehavior theCameraBehavior = theCameraInstance.getBehavior(CameraBehavior.class);
+        if (theCameraBehavior == null) {
             throw new IllegalArgumentException("No camera component in camera object");
         }
 
@@ -53,12 +54,12 @@ public class GameSceneEditorControllerFactory implements ContentAreaFactory<Game
             }
         }
 
-        EditorFXGameView theGameView = new EditorFXGameView(theRuntime, theCameraComponent, thePhysicsManager);
+        EditorFXGameView theGameView = new EditorFXGameView(theRuntime, theCameraBehavior, new DefaultGestureDetector(theEventManager), thePhysicsManager);
 
         GameLoopFactory theGameLoopFactory = new GameLoopFactory();
         GameLoop theMainLoop = theGameLoopFactory.create(aScene, theGameView, theRuntime);
 
-        final CameraBehavior theFinalCameraComponent = theCameraComponent;
+        final CameraBehavior theFinalCameraComponent = theCameraBehavior;
 
         // Set defaults, this will be overridden
         theEventManager.fire(new SetScreenResolution(new Size(200, 200)));
@@ -72,10 +73,10 @@ public class GameSceneEditorControllerFactory implements ContentAreaFactory<Game
             GameSceneEditorController theController = theLoader.getController();
             theController.centerBorderPane.widthProperty().addListener((observableValue, number, number2) -> theEventManager.fire(new SetScreenResolution(new Size((int) ((double) number2), theFinalCameraComponent.getScreenSize().height))));
             theController.centerBorderPane.heightProperty().addListener((observableValue, number, number2) -> theEventManager.fire(new SetScreenResolution(new Size(theFinalCameraComponent.getScreenSize().width, (int) ((double) number2)))));
-            theGameView.widthProperty().bind(theController.centerBorderPane.widthProperty());
-            theGameView.heightProperty().bind(theController.centerBorderPane.heightProperty());
+            theGameView.getCanvasNode().widthProperty().bind(theController.centerBorderPane.widthProperty());
+            theGameView.getCanvasNode().heightProperty().bind(theController.centerBorderPane.heightProperty());
 
-            return theController.initialize(theRuntime, aScene, root, theGameView, theMainLoop, theCameraComponent, objectSelectedEventEvent);
+            return theController.initialize(theRuntime, aScene, root, theGameView, theMainLoop, theCameraBehavior, objectSelectedEventEvent);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

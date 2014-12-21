@@ -35,9 +35,8 @@ public class Angle implements ValueProvider<Integer> {
 
         Angle angle = (Angle) o;
 
-        if (angleInDegrees != angle.angleInDegrees) return false;
+        return angleInDegrees == angle.angleInDegrees;
 
-        return true;
     }
 
     @Override

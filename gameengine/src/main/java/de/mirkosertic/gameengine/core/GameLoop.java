@@ -10,7 +10,7 @@ public class GameLoop implements Runnable {
     private final GameRuntime runtime;
     private long lastInvocation;
 
-    private RuntimeStatistics statistics;
+    private final RuntimeStatistics statistics;
 
     GameLoop(GameScene aScene, GameView aHumanGameView, GameRuntime aRuntime) {
         humanGameView = aHumanGameView;

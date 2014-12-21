@@ -11,6 +11,7 @@ import de.mirkosertic.gameengine.camera.SetScreenResolution;
 import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.GameEventManager;
+import de.mirkosertic.gameengine.input.DefaultGestureDetector;
 import de.mirkosertic.gameengine.type.Size;
 import de.mirkosertic.gameengine.type.TouchIdentifier;
 import de.mirkosertic.gameengine.type.TouchPosition;
@@ -160,7 +161,7 @@ public class GameEngineActivity extends Activity {
 
         GameObject theCameraObject = aGameScene.cameraObjectProperty().get();
         GameObjectInstance theCameraObjectInstance = aGameScene.createFrom(theCameraObject);
-        CameraBehavior theCameraComponent = theCameraObjectInstance.getBehavior(CameraBehavior.class);
+        CameraBehavior theCameraBehavior = theCameraObjectInstance.getBehavior(CameraBehavior.class);
 
         GameObjectInstance thePlayerInstance = null;
         for (GameObjectInstance theInstance : aGameScene.getInstances()) {
@@ -178,7 +179,8 @@ public class GameEngineActivity extends Activity {
             }
         });
 
-        AndroidGameView theGameView = new AndroidGameView(androidCanvas, theCameraComponent, theRuntime);
+        GestureDetector theGestureDetector = new DefaultGestureDetector(theRuntime.getEventManager());
+        AndroidGameView theGameView = new AndroidGameView(androidCanvas, theCameraBehavior, theRuntime, theGestureDetector);
 
         GameLoop theLoop = gameLoopFactory.create(aGameScene, theGameView, theRuntime);
 
@@ -186,7 +188,7 @@ public class GameEngineActivity extends Activity {
 
         runningGameLoop = theLoop;
 
-        theCameraComponent.initializeFor(aGameScene, thePlayerInstance);
+        theCameraBehavior.initializeFor(aGameScene, thePlayerInstance);
     }
 
     @Override

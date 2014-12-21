@@ -78,7 +78,7 @@ public class IndexPage extends DefaultVisualActivity {
                 if (runningGameLoop != null) {
                     Size theSize = new Size(window.getClientWidth(), window.getClientHeight());
                     runningRuntime.getEventManager().fire(new SetScreenResolution(theSize));
-                    gameView.setSize(theSize);
+                    gameView.setCurrentScreenSize(theSize);
                 }
             }
         });
@@ -126,7 +126,7 @@ public class IndexPage extends DefaultVisualActivity {
         // Detect and create a camera
         GameObject theCameraObject = aGameScene.cameraObjectProperty().get();
         GameObjectInstance theCameraObjectInstance = aGameScene.createFrom(theCameraObject);
-        CameraBehavior theCameraComponent = theCameraObjectInstance.getBehavior(CameraBehavior.class);
+        CameraBehavior theCameraBehavior = theCameraObjectInstance.getBehavior(CameraBehavior.class);
 
         GameObjectInstance thePlayerInstance = null;
         for (GameObjectInstance theInstance : aGameScene.getInstances()) {
@@ -149,17 +149,17 @@ public class IndexPage extends DefaultVisualActivity {
         DragomeCanvas theCanvas = new DragomeCanvas(ServiceLocator.getInstance().getDomHandler().getElementBySelector("#html5canvas"));
 
         if (gameView == null) {
-            gameView = new DragomeGameView(theRuntime, theCameraComponent, theGestureDetector, theCanvas);
+            gameView = new DragomeGameView(theRuntime, theCameraBehavior, theGestureDetector, theCanvas);
         } else {
-            gameView.prepareNewScene(theRuntime, theCameraComponent, theGestureDetector);
+            gameView.prepareNewScene(theRuntime, theCameraBehavior, theGestureDetector);
         }
 
-        gameView.setSize(new Size(window.getClientWidth(), window.getClientHeight()));
+        gameView.setCurrentScreenSize(new Size(window.getClientWidth(), window.getClientHeight()));
         theEventManager.fire(new SetScreenResolution(new Size(window.getClientWidth(), window.getClientHeight())));
 
         runningGameLoop = gameLoopFactory.create(aGameScene, gameView, theRuntime);
 
-        theCameraComponent.initializeFor(aGameScene, thePlayerInstance);
+        theCameraBehavior.initializeFor(aGameScene, thePlayerInstance);
 
         runSingleStep(runningGameLoop);
 

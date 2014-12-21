@@ -1,20 +1,8 @@
 package de.mirkosertic.gameengine.javafx;
 
 import de.mirkosertic.gameengine.camera.CameraBehavior;
-import de.mirkosertic.gameengine.core.ExpressionParser;
-import de.mirkosertic.gameengine.core.GameLoop;
-import de.mirkosertic.gameengine.core.GameObjectInstance;
-import de.mirkosertic.gameengine.core.GameRuntime;
-import de.mirkosertic.gameengine.core.GameScene;
-import de.mirkosertic.gameengine.core.GameView;
-import de.mirkosertic.gameengine.core.GestureDetector;
-import de.mirkosertic.gameengine.core.RuntimeStatistics;
-import de.mirkosertic.gameengine.event.SystemException;
-import de.mirkosertic.gameengine.input.DefaultGestureDetector;
-import de.mirkosertic.gameengine.sprite.Sprite;
-import de.mirkosertic.gameengine.sprite.SpriteBehavior;
-import de.mirkosertic.gameengine.text.Text;
-import de.mirkosertic.gameengine.text.TextBehavior;
+import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.generic.GenericAbstractGameView;
 import de.mirkosertic.gameengine.type.Angle;
 import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Size;
@@ -28,9 +16,7 @@ import javafx.scene.text.Font;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Rotate;
 
-import java.io.IOException;
-
-public class JavaFXGameView extends Canvas implements GameView {
+public class JavaFXGameView extends GenericAbstractGameView<JavaFXBitmapResource> {
 
     protected static class SavedState {
         public Paint fill;
@@ -42,14 +28,82 @@ public class JavaFXGameView extends Canvas implements GameView {
 
     private AnimationTimer animationTimer;
     private GameScene gameScene;
-    private final GameRuntime gameRuntime;
-    private final CameraBehavior cameraComponent;
-    private final GestureDetector gestureDetector;
+    private final Canvas canvasNode;
 
-    public JavaFXGameView(GameRuntime aRuntime, CameraBehavior aCameraComponent) {
-        cameraComponent = aCameraComponent;
-        gameRuntime = aRuntime;
-        gestureDetector = new DefaultGestureDetector(aRuntime.getEventManager());
+    public JavaFXGameView(GameRuntime aRuntime, CameraBehavior aCameraBehavior, GestureDetector aGestureDetector) {
+        super(aRuntime, aCameraBehavior, aGestureDetector);
+        canvasNode = new Canvas();
+    }
+
+    private GraphicsContext context;
+    private SavedState savedState;
+
+    protected GraphicsContext getContext() {
+        return context;
+    }
+
+    @Override
+    protected boolean beginFrame(GameScene aScene) {
+        context = canvasNode.getGraphicsContext2D();
+
+        savedState = saveState(context);
+
+        de.mirkosertic.gameengine.type.Color theBGColor = gameScene.backgroundColorProperty().get();
+
+        Color theFXColor = Color.rgb(theBGColor.r, theBGColor.g, theBGColor.b);
+        context.setFill(theFXColor);
+        context.setStroke(theFXColor);
+        context.fillRect(0, 0, canvasNode.getWidth(), canvasNode.getHeight());
+
+        return true;
+    }
+
+    @Override
+    protected void beforeInstance(GameObjectInstance aInstance, float aOffsetX, float aOffsetY, Angle aRotation) {
+        int theAngleInDegrees = aRotation.angleInDegrees;
+        context.translate(aOffsetX, aOffsetY);
+        if (theAngleInDegrees % 360 != 0) {
+            Rotate r = new Rotate(theAngleInDegrees, aOffsetX, aOffsetY);
+            context.setTransform(r.getMxx(), r.getMyx(), r.getMxy(), r.getMyy(), r.getTx(), r.getTy());
+        }
+    }
+
+    @Override
+    protected void drawImage(GameObjectInstance aInstance, JavaFXBitmapResource aResource, float aPositionX, float aPositionY) {
+        context.drawImage(aResource, aPositionX, aPositionY);
+    }
+
+    @Override
+    protected void drawText(GameObjectInstance aInstance, Position aPosition, de.mirkosertic.gameengine.type.Font aFont, de.mirkosertic.gameengine.type.Color aColor, String aText, Size aSize) {
+        Color theTextColor = Color.rgb(aColor.r, aColor.g, aColor.b);
+        context.setFill(theTextColor);
+        context.setStroke(theTextColor);
+        context.setFont(toFont(aFont));
+        context.translate(-aPosition.x, - aPosition.y);
+        context.fillText(aText, aPosition.x, aPosition.y + aFont.size);
+    }
+
+    @Override
+    protected void drawRect(GameObjectInstance aInstance, de.mirkosertic.gameengine.type.Color aColor, float aX, float aY, float aWidth, float aHeight) {
+        context.setFill(Color.WHITE);
+        context.setStroke(Color.WHITE);
+        context.setLineWidth(1);
+        context.strokeRect(aX, aY, aWidth, aHeight);
+    }
+
+    @Override
+    protected void afterInstance(GameObjectInstance aInstance) {
+        restoreState(savedState);
+    }
+
+    @Override
+    protected void framefinished() {
+
+    }
+
+    @Override
+    protected void logError(String aMessage) {
+        throw new RuntimeException(aMessage);
     }
 
     protected SavedState saveState(GraphicsContext aContext) {
@@ -62,68 +116,12 @@ public class JavaFXGameView extends Canvas implements GameView {
         return theResult;
     }
 
-    protected void restoreState(GraphicsContext aContext, SavedState aState) {
-        aContext.setFill(aState.fill);
-        aContext.setStroke(aState.stroke);
-        aContext.setTransform(aState.transform);
-        aContext.setFont(aState.font);
-        aContext.setLineWidth(aState.lineWidth);
-    }
-
-    private void renderScene() {
-        GraphicsContext theContext = getGraphicsContext2D();
-
-        SavedState theSavedState = saveState(theContext);
-
-        de.mirkosertic.gameengine.type.Color theBGColor = gameScene.backgroundColorProperty().get();
-
-        Color theFXColor = Color.rgb(theBGColor.r, theBGColor.g, theBGColor.b);
-        theContext.setFill(theFXColor);
-        theContext.setStroke(theFXColor);
-        theContext.fillRect(0, 0, getWidth(), getHeight());
-
-        for (GameObjectInstance theInstance : cameraComponent.getObjectsToDrawInRightOrder(gameScene)) {
-
-            Position thePosition = cameraComponent.transformToScreenPosition(theInstance);
-
-            Size theSize = theInstance.getOwnerGameObject().sizeProperty().get();
-
-            float theHalfWidth = theSize.width / 2;
-            float theHalfHeight = theSize.height / 2;
-
-            Angle theAngle = theInstance.rotationAngleProperty().get();
-            int theAngleInDegrees = theAngle.angleInDegrees;
-            if (theAngleInDegrees % 360 != 0) {
-                Rotate r = new Rotate(theAngleInDegrees, thePosition.x + theHalfWidth, thePosition.y + theHalfHeight);
-                theContext.setTransform(r.getMxx(), r.getMyx(), r.getMxy(), r.getMyy(), r.getTx(), r.getTy());
-            }
-
-            Sprite theTemplateComponent = theInstance.getBehavior(SpriteBehavior.class);
-            if (theTemplateComponent != null && !theTemplateComponent.resourceNameProperty().isNull()) {
-                try {
-                    JavaFXBitmapResource theBitmap = gameRuntime.getResourceCache().getResourceFor(
-                            theTemplateComponent.resourceNameProperty().get());
-                    drawGameObjectInstance(theContext, theInstance, thePosition, theSize, theBitmap);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            } else {
-                Text theTextComponent = theInstance.getBehavior(TextBehavior.class);
-                if (theTextComponent != null) {
-                    ExpressionParser theExpressionParser = gameScene.get(theTextComponent.textExpressionProperty().get());
-                    drawText(theContext, theInstance, thePosition, theTextComponent.fontProperty().get(),
-                            theTextComponent.colorProperty().get(), theExpressionParser.evaluateToString(), theSize);
-                } else {
-                    theContext.setFill(Color.WHITE);
-                    theContext.setStroke(Color.WHITE);
-                    theContext.setLineWidth(1);
-                    theContext.strokeRect(thePosition.x, thePosition.y, theSize.width, theSize.height);
-                }
-            }
-
-            restoreState(theContext, theSavedState);
-        }
-        afterRendering(theContext);
+    protected void restoreState(SavedState aState) {
+        context.setFill(aState.fill);
+        context.setStroke(aState.stroke);
+        context.setTransform(aState.transform);
+        context.setFont(aState.font);
+        context.setLineWidth(aState.lineWidth);
     }
 
     protected Font toFont(de.mirkosertic.gameengine.type.Font aFont) {
@@ -136,22 +134,6 @@ public class JavaFXGameView extends Canvas implements GameView {
         throw new IllegalArgumentException("Wrong font name : "+aFont.name);
     }
 
-    protected void afterRendering(GraphicsContext aContext) {
-    }
-
-    protected void drawText(GraphicsContext aContext, GameObjectInstance aInstance, Position aPosition, de.mirkosertic.gameengine.type.Font aFont, de.mirkosertic.gameengine.type.Color aColor, String aText, Size aSize) {
-        Color theTextColor = Color.rgb(aColor.r, aColor.g, aColor.b);
-        aContext.setFill(theTextColor);
-        aContext.setStroke(theTextColor);
-        aContext.setFont(toFont(aFont));
-        aContext.fillText(aText, aPosition.x, aPosition.y + aFont.size);
-    }
-
-    protected void drawGameObjectInstance(GraphicsContext aContext, GameObjectInstance aInstance, Position aPosition,
-            Size aSize, JavaFXBitmapResource aBitmapResource) {
-        aContext.drawImage(aBitmapResource, aPosition.x, aPosition.y);
-    }
-
     public void startTimer(final GameLoop aGameLoop) {
         if (animationTimer == null) {
             gameScene = aGameLoop.getScene();
@@ -159,11 +141,6 @@ public class JavaFXGameView extends Canvas implements GameView {
                 @Override
                 public void handle(long l) {
                     aGameLoop.singleRun();
-                    try {
-                        renderScene();
-                    } catch (Exception e) {
-                        gameScene.getRuntime().getEventManager().fire(new SystemException(e));
-                    }
                 }
             };
             animationTimer.start();
@@ -176,20 +153,11 @@ public class JavaFXGameView extends Canvas implements GameView {
         }
     }
 
-    @Override
-    public GestureDetector getGestureDetector() {
-        return gestureDetector;
-    }
-
-    public void renderGame(long aGameTime, long aElapsedTimeSinceLastLoop, GameScene aScene, RuntimeStatistics aStatistics) {
-        // Do just nothing here, as the real rendering is done by the animation timer
-    }
-
     protected GameScene getGameScene() {
         return gameScene;
     }
 
-    protected CameraBehavior getCameraComponent() {
-        return cameraComponent;
+    public Canvas getCanvasNode() {
+        return canvasNode;
     }
 }

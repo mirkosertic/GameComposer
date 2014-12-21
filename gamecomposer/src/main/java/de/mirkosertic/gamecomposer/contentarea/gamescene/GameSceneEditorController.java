@@ -9,6 +9,7 @@ import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.PropertyChanged;
 import de.mirkosertic.gameengine.event.SystemException;
+import de.mirkosertic.gameengine.input.DefaultGestureDetector;
 import de.mirkosertic.gameengine.javafx.JavaFXGameView;
 import de.mirkosertic.gameengine.physic.DisableDynamicPhysics;
 import de.mirkosertic.gameengine.physic.EnableDynamicPhysics;
@@ -21,6 +22,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
@@ -71,7 +73,9 @@ public class GameSceneEditorController implements ContentController<GameScene> {
 
         gameRuntime = aGameRuntime;
 
-        centerBorderPane.setCenter(aGameView);
+        Canvas theCanvasNode = aGameView.getCanvasNode();
+
+        centerBorderPane.setCenter(theCanvasNode);
 
         gameScene = aScene;
         view = aView;
@@ -80,49 +84,49 @@ public class GameSceneEditorController implements ContentController<GameScene> {
         cameraComponent = aCameraComponent;
         objectSelectedEventEvent = aSelectedEvent;
 
-        gameView.setOnDragOver(new EventHandler<DragEvent>() {
+        theCanvasNode.setOnDragOver(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent aEvent) {
                 onDragOver(aEvent);
             }
         });
-        gameView.setOnDragEntered(new EventHandler<DragEvent>() {
+        theCanvasNode.setOnDragEntered(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent aEvent) {
                 onDragEntered(aEvent);
             }
         });
-        gameView.setOnDragExited(new EventHandler<DragEvent>() {
+        theCanvasNode.setOnDragExited(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent aEvent) {
                 onDragExited(aEvent);
             }
         });
-        gameView.setOnDragDropped(new EventHandler<DragEvent>() {
+        theCanvasNode.setOnDragDropped(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent aEvent) {
                 setOnDragDropped(aEvent);
             }
         });
-        gameView.setOnMouseDragged(new EventHandler<MouseEvent>() {
+        theCanvasNode.setOnMouseDragged(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent aEvent) {
                 onMouseDragged(aEvent);
             }
         });
-        gameView.setOnMousePressed(new EventHandler<MouseEvent>() {
+        theCanvasNode.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent aEvent) {
                 onMousePressed(aEvent);
             }
         });
-        gameView.setOnMouseReleased(new EventHandler<MouseEvent>() {
+        theCanvasNode.setOnMouseReleased(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent aEvent) {
                 onMouseReleased(aEvent);
             }
         });
-        gameView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        theCanvasNode.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent aEvent) {
                 onMouseClicked(aEvent);
@@ -336,9 +340,9 @@ public class GameSceneEditorController implements ContentController<GameScene> {
         }
 
         // Detect and create a camera
-        GameObjectInstance theCameraObject = thePreviewScene.createFrom(theDefaultCamera);
-        final CameraBehavior theCameraComponent = theCameraObject.getBehavior(CameraBehavior.class);
-        if (theCameraComponent == null) {
+        GameObjectInstance theCameraInstance = thePreviewScene.createFrom(theDefaultCamera);
+        final CameraBehavior theCameraInstanceBehavior = theCameraInstance.getBehavior(CameraBehavior.class);
+        if (theCameraInstanceBehavior == null) {
             throw new IllegalArgumentException("No camera component in camera object");
         }
 
@@ -349,7 +353,7 @@ public class GameSceneEditorController implements ContentController<GameScene> {
             }
         }
 
-        final JavaFXGameView thePreviewGameView = new JavaFXGameView(theRuntime, theCameraComponent);
+        final JavaFXGameView thePreviewGameView = new JavaFXGameView(theRuntime, theCameraInstanceBehavior, new DefaultGestureDetector(theRuntime.getEventManager()));
 
         GameLoopFactory theGameLoopFactory = new GameLoopFactory();
         GameLoop theMainLoop = theGameLoopFactory.create(thePreviewScene, thePreviewGameView, theRuntime);
@@ -374,7 +378,7 @@ public class GameSceneEditorController implements ContentController<GameScene> {
         });
 
         BorderPane theBorderPane = new BorderPane();
-        theBorderPane.setCenter(thePreviewGameView);
+        theBorderPane.setCenter(thePreviewGameView.getCanvasNode());
         theBorderPane.setBottom(theLoggerView);
         theBorderPane.setMinWidth(BorderPane.USE_PREF_SIZE);
         theBorderPane.setMinHeight(BorderPane.USE_PREF_SIZE);
@@ -384,17 +388,17 @@ public class GameSceneEditorController implements ContentController<GameScene> {
         theBorderPane.widthProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
-                theEventManager.fire(new SetScreenResolution(new Size((int) ((double) number2), theCameraComponent.getScreenSize().height)));
+                theEventManager.fire(new SetScreenResolution(new Size((int) ((double) number2), theCameraInstanceBehavior.getScreenSize().height)));
             }
         });
         theBorderPane.heightProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
-                theEventManager.fire(new SetScreenResolution(new Size(theCameraComponent.getScreenSize().width, (int) ((double) number2))));
+                theEventManager.fire(new SetScreenResolution(new Size(theCameraInstanceBehavior.getScreenSize().width, (int) ((double) number2))));
             }
         });
-        thePreviewGameView.widthProperty().bind(theBorderPane.widthProperty());
-        thePreviewGameView.heightProperty().bind(theBorderPane.heightProperty());
+        thePreviewGameView.getCanvasNode().widthProperty().bind(theBorderPane.widthProperty());
+        thePreviewGameView.getCanvasNode().heightProperty().bind(theBorderPane.heightProperty());
 
         Stage theStage = new Stage();
         theStage.setTitle("Game Preview");
@@ -426,7 +430,7 @@ public class GameSceneEditorController implements ContentController<GameScene> {
         theStage.show();
         theStage.requestFocus();
 
-        theCameraComponent.initializeFor(thePreviewScene, thePlayerInstance);
+        theCameraInstanceBehavior.initializeFor(thePreviewScene, thePlayerInstance);
 
         thePreviewGameView.startTimer(theMainLoop);
     }

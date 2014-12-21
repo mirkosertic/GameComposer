@@ -1,18 +1,14 @@
 package de.mirkosertic.gamecomposer.contentarea.gamescene;
 
-import com.sun.javafx.tk.FontMetrics;
-import com.sun.javafx.tk.Toolkit;
-
 import de.mirkosertic.gamecomposer.ObjectSelectedEvent;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.core.GameScene;
-import de.mirkosertic.gameengine.javafx.JavaFXBitmapResource;
+import de.mirkosertic.gameengine.core.GestureDetector;
 import de.mirkosertic.gameengine.javafx.JavaFXGameView;
 import de.mirkosertic.gameengine.physic.GamePhysicsManager;
 import de.mirkosertic.gameengine.physic.PhysicsDebugCanvas;
-import de.mirkosertic.gameengine.type.Font;
 import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Rectangle;
 import de.mirkosertic.gameengine.type.Size;
@@ -36,8 +32,8 @@ public class EditorFXGameView extends JavaFXGameView {
     private final IntegerProperty gridsizeWidth;
     private final IntegerProperty gridsizeHeight;
 
-    public EditorFXGameView(GameRuntime aGameRuntime, CameraBehavior aCameraComponent, GamePhysicsManager aPhysicsManager) {
-        super(aGameRuntime, aCameraComponent);
+    public EditorFXGameView(GameRuntime aGameRuntime, CameraBehavior aCameraBehavior, GestureDetector aGestureDetector, GamePhysicsManager aPhysicsManager) {
+        super(aGameRuntime, aCameraBehavior, aGestureDetector);
 
         snapToGrid = new SimpleBooleanProperty(true);
         renderPhysicsDebug = new SimpleBooleanProperty(false);
@@ -46,9 +42,9 @@ public class EditorFXGameView extends JavaFXGameView {
 
         physicsManager = aPhysicsManager;
 
-        setOnMouseEntered(aEvent -> onMouseEntered(aEvent));
-        setOnMouseExited(aEvent -> onMouseExited(aEvent));
-        setOnMouseMoved(aEvent -> onMouseMoved(aEvent));
+        getCanvasNode().setOnMouseEntered(aEvent -> onMouseEntered(aEvent));
+        getCanvasNode().setOnMouseExited(aEvent -> onMouseExited(aEvent));
+        getCanvasNode().setOnMouseMoved(aEvent -> onMouseMoved(aEvent));
     }
 
     public BooleanProperty snapToGridProperty() {
@@ -90,17 +86,20 @@ public class EditorFXGameView extends JavaFXGameView {
     }
 
     @Override
-    protected void afterRendering(final GraphicsContext aContext) {
-        super.afterRendering(aContext);
+    protected void framefinished() {
+        super.framefinished();
+
+        GraphicsContext theContext = getContext();
+
+        CameraBehavior theCameraBehavior = getCameraBehavior();
 
         if (snapToGridProperty().get()) {
 
-            CameraBehavior theCameraComponent = getCameraComponent();
             int theGridsizeWidth = gridsizeWidthProperty().get();
             int theGridsizeHeight = gridsizeHeightProperty().get();
 
-            Position theCameraPosition = theCameraComponent.getObjectInstance().positionProperty().get();
-            Size theScreenSize = theCameraComponent.getScreenSize();
+            Position theCameraPosition = theCameraBehavior.getObjectInstance().positionProperty().get();
+            Size theScreenSize = theCameraBehavior.getScreenSize();
 
             float theStartX = theCameraPosition.x - (theCameraPosition.x % theGridsizeWidth);
             float theStartY = theCameraPosition.y - (theCameraPosition.y % theGridsizeHeight);
@@ -111,17 +110,17 @@ public class EditorFXGameView extends JavaFXGameView {
                 for (int theCol = 0; theCol < theCols; theCol++) {
                     float theX = theStartX + theCol * theGridsizeWidth;
                     float theY = theStartY + theRow * theGridsizeHeight;
-                    Position theScreenPosition = theCameraComponent.transformToScreenPosition(new Position(theX, theY));
+                    Position theScreenPosition = theCameraBehavior.transformToScreenPosition(new Position(theX, theY));
 
-                    aContext.setFill(Color.SILVER);
-                    aContext.setStroke(Color.SILVER);
-                    aContext.setLineWidth(1);
+                    theContext.setFill(Color.SILVER);
+                    theContext.setStroke(Color.SILVER);
+                    theContext.setLineWidth(1);
 
                     if (theCol == 0) {
-                        aContext.strokeLine(0, theScreenPosition.y, theScreenSize.width, theScreenPosition.y);
+                        theContext.strokeLine(0, theScreenPosition.y, theScreenSize.width, theScreenPosition.y);
                     }
 
-                    aContext.strokeLine(theScreenPosition.x, 0, theScreenPosition.x, theScreenSize.height);
+                    theContext.strokeLine(theScreenPosition.x, 0, theScreenPosition.x, theScreenSize.height);
                 }
             }
         }
@@ -131,34 +130,30 @@ public class EditorFXGameView extends JavaFXGameView {
                 @Override
                 public void drawLine(Position p1, Position p2, boolean awake) {
 
-                    CameraBehavior theCameraComponent = getCameraComponent();
-
-                    Position theScreenP1 = theCameraComponent.transformToScreenPosition(p1);
-                    Position theScreenP2 = theCameraComponent.transformToScreenPosition(p2);
+                    Position theScreenP1 = theCameraBehavior.transformToScreenPosition(p1);
+                    Position theScreenP2 = theCameraBehavior.transformToScreenPosition(p2);
 
                     if (awake) {
-                        aContext.setFill(Color.RED);
-                        aContext.setStroke(Color.RED);
-                        aContext.setLineWidth(3);
+                        theContext.setFill(Color.RED);
+                        theContext.setStroke(Color.RED);
+                        theContext.setLineWidth(3);
                     } else {
-                        aContext.setFill(Color.BLUE);
-                        aContext.setStroke(Color.BLUE);
-                        aContext.setLineWidth(2);
+                        theContext.setFill(Color.BLUE);
+                        theContext.setStroke(Color.BLUE);
+                        theContext.setLineWidth(2);
                     }
-                    aContext.strokeLine(theScreenP1.x, theScreenP1.y, theScreenP2.x, theScreenP2.y);
+                    theContext.strokeLine(theScreenP1.x, theScreenP1.y, theScreenP2.x, theScreenP2.y);
                 }
 
                 @Override
                 public void drawPosition(Position aPosition) {
 
-                    CameraBehavior theCameraComponent = getCameraComponent();
+                    Position theScreenP1 = theCameraBehavior.transformToScreenPosition(aPosition);
 
-                    Position theScreenP1 = theCameraComponent.transformToScreenPosition(aPosition);
-
-                    aContext.setFill(Color.BLUE);
-                    aContext.setStroke(Color.BLUE);
-                    aContext.setLineWidth(3);
-                    aContext.fillOval(theScreenP1.x, theScreenP1.y, 5, 5);
+                    theContext.setFill(Color.BLUE);
+                    theContext.setStroke(Color.BLUE);
+                    theContext.setLineWidth(3);
+                    theContext.fillOval(theScreenP1.x, theScreenP1.y, 5, 5);
                 }
             });
         }
@@ -166,48 +161,35 @@ public class EditorFXGameView extends JavaFXGameView {
         GameScene theGameScene = getGameScene();
         Rectangle theLayoutBounds = theGameScene.layoutBoundsProperty().get();
 
-        CameraBehavior theCameraComponent = getCameraComponent();
-        GameObjectInstance theCamera = theCameraComponent.getObjectInstance();
+        GameObjectInstance theCamera = theCameraBehavior.getObjectInstance();
         Position theCurrentCameraPosition = theCamera.positionProperty().get();
 
         // Draw layout bounds
         double theBoundsX = theLayoutBounds.position.x - theCurrentCameraPosition.x;
         double theBoundsY = theLayoutBounds.position.y - theCurrentCameraPosition.y;
 
-        aContext.setStroke(Color.YELLOW);
-        aContext.setLineWidth(3);
+        theContext.setStroke(Color.YELLOW);
+        theContext.setLineWidth(3);
 
-        aContext.strokeRect(theBoundsX, theBoundsY, theLayoutBounds.size.width, theLayoutBounds.size.height);
+        theContext.strokeRect(theBoundsX, theBoundsY, theLayoutBounds.size.width, theLayoutBounds.size.height);
     }
 
     @Override
-    protected void drawText(GraphicsContext aContext, GameObjectInstance aInstance, Position aPosition, Font aFont, de.mirkosertic.gameengine.type.Color aColor, String aText, Size aSize) {
-        super.drawText(aContext, aInstance, aPosition, aFont, aColor, aText, aSize);
+    protected void afterInstance(GameObjectInstance aInstance) {
 
-        javafx.scene.text.Font theFont = toFont(aFont);
-        FontMetrics theMetrics = Toolkit.getToolkit().getFontLoader().getFontMetrics(theFont);
-        int theWidth = (int) theMetrics.computeStringWidth(aText);
-        int theHeight = (int) theMetrics.getLineHeight();
+        super.afterInstance(aInstance);
 
-        drawSelectionAndHighlighting(aContext, aInstance, aPosition, new Size(theWidth, theHeight));
-    }
+        Position thePosition = aInstance.positionProperty().get();
+        Size theSize = aInstance.getOwnerGameObject().sizeProperty().get();
+        GraphicsContext theContext = getContext();
 
-    @Override
-    protected void drawGameObjectInstance(GraphicsContext aContext, GameObjectInstance aInstance, Position aPosition, Size aSize, JavaFXBitmapResource aBitmapResource) {
-        super.drawGameObjectInstance(aContext, aInstance, aPosition, aSize, aBitmapResource);
-
-        drawSelectionAndHighlighting(aContext, aInstance, aPosition, aSize);
-    }
-
-    void drawSelectionAndHighlighting(GraphicsContext aContext, GameObjectInstance aInstance, Position aPosition, Size aSize) {
-
-        SavedState theSavedState = saveState(aContext);
+        SavedState theSavedState = saveState(theContext);
 
         if (aInstance == selectedObject || aInstance.getOwnerGameObject() == selectedObject) {
-            aContext.setFill(Color.WHITE);
-            aContext.setStroke(Color.WHITE);
-            aContext.setLineWidth(1);
-            aContext.strokeRect(aPosition.x, aPosition.y, aSize.width, aSize.height);
+            theContext.setFill(Color.WHITE);
+            theContext.setStroke(Color.WHITE);
+            theContext.setLineWidth(1);
+            theContext.strokeRect(thePosition.x, thePosition.y, theSize.width, theSize.height);
         }
         if (currentMousePosition != null) {
             boolean theHighlighted = false;
@@ -216,7 +198,7 @@ public class EditorFXGameView extends JavaFXGameView {
                     theHighlighted = true;
                 }
             } else {
-                if (aInstance.contains(getCameraComponent().transformFromScreen(currentMousePosition))) {
+                if (aInstance.contains(getCameraBehavior().transformFromScreen(currentMousePosition))) {
                     theHighlighted = true;
                 }
             }
@@ -235,35 +217,35 @@ public class EditorFXGameView extends JavaFXGameView {
 
                 Color theColor = Color.rgb(theRed, theGreen, theBlue);
 
-                aContext.setFill(theColor);
-                aContext.setStroke(theColor);
-                aContext.setLineWidth(3);
+                theContext.setFill(theColor);
+                theContext.setStroke(theColor);
+                theContext.setLineWidth(3);
 
                 int theOffset = 5;
-                Position theTopLeft = new Position(aPosition.x - theOffset, aPosition.y - theOffset);
-                Position theTopRight = new Position(aPosition.x + aSize.width + theOffset, aPosition.y - theOffset);
-                Position theBottomLeft = new Position(aPosition.x - theOffset, aPosition.y + aSize.height + theOffset);
-                Position theBottomRight = new Position(aPosition.x + aSize.width + theOffset, aPosition.y + aSize.height + theOffset);
+                Position theTopLeft = new Position(thePosition.x - theOffset, thePosition.y - theOffset);
+                Position theTopRight = new Position(thePosition.x + theSize.width + theOffset, thePosition.y - theOffset);
+                Position theBottomLeft = new Position(thePosition.x - theOffset, thePosition.y + theSize.height + theOffset);
+                Position theBottomRight = new Position(thePosition.x + theSize.width + theOffset, thePosition.y + theSize.height + theOffset);
 
                 // Top left
-                aContext.strokeLine(theTopLeft.x, theTopLeft.y, theTopLeft.x + theOffset, theTopLeft.y);
-                aContext.strokeLine(theTopLeft.x, theTopLeft.y, theTopLeft.x, theTopLeft.y + theOffset);
+                theContext.strokeLine(theTopLeft.x, theTopLeft.y, theTopLeft.x + theOffset, theTopLeft.y);
+                theContext.strokeLine(theTopLeft.x, theTopLeft.y, theTopLeft.x, theTopLeft.y + theOffset);
 
                 // Top right
-                aContext.strokeLine(theTopRight.x, theTopLeft.y, theTopRight.x - theOffset, theTopRight.y);
-                aContext.strokeLine(theTopRight.x, theTopRight.y, theTopRight.x, theTopRight.y + theOffset);
+                theContext.strokeLine(theTopRight.x, theTopLeft.y, theTopRight.x - theOffset, theTopRight.y);
+                theContext.strokeLine(theTopRight.x, theTopRight.y, theTopRight.x, theTopRight.y + theOffset);
 
                 // Bottom left
-                aContext.strokeLine(theBottomLeft.x, theBottomLeft.y, theBottomLeft.x + theOffset, theBottomRight.y);
-                aContext.strokeLine(theBottomLeft.x, theBottomLeft.y, theBottomLeft.x, theBottomLeft.y - theOffset);
+                theContext.strokeLine(theBottomLeft.x, theBottomLeft.y, theBottomLeft.x + theOffset, theBottomRight.y);
+                theContext.strokeLine(theBottomLeft.x, theBottomLeft.y, theBottomLeft.x, theBottomLeft.y - theOffset);
 
                 // Bottom right
-                aContext.strokeLine(theBottomRight.x, theBottomRight.y, theBottomRight.x - theOffset, theBottomRight.y);
-                aContext.strokeLine(theBottomRight.x, theBottomRight.y, theBottomRight.x, theBottomRight.y - theOffset);
+                theContext.strokeLine(theBottomRight.x, theBottomRight.y, theBottomRight.x - theOffset, theBottomRight.y);
+                theContext.strokeLine(theBottomRight.x, theBottomRight.y, theBottomRight.x, theBottomRight.y - theOffset);
 
             }
         }
 
-        restoreState(aContext, theSavedState);
+        restoreState(theSavedState);
     }
 }
