@@ -2,7 +2,7 @@ package de.mirkosertic.gameengine.core;
 
 public class RuntimeStatistics {
 
-    private long startTime;
+    private final long startTime;
     private long numberTicks;
     private long cycleStart;
     private long averageTimePerLoopCycle;

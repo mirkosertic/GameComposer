@@ -216,7 +216,7 @@ public class TeaVMRenderer {
         // Detect and create a camera
         GameObject theCameraObject = aGameScene.cameraObjectProperty().get();
         GameObjectInstance theCameraObjectInstance = aGameScene.createFrom(theCameraObject);
-        CameraBehavior theCameraComponent = theCameraObjectInstance.getBehavior(CameraBehavior.class);
+        CameraBehavior theCameraBehavior = theCameraObjectInstance.getBehavior(CameraBehavior.class);
 
         GameObjectInstance thePlayerInstance = null;
         for (GameObjectInstance theInstance : aGameScene.getInstances()) {
@@ -237,9 +237,9 @@ public class TeaVMRenderer {
         GestureDetector theGestureDetector = new DefaultGestureDetector(theEventManager);
 
         if (gameView == null) {
-            gameView = new TeaVMGameView(theRuntime, theCameraComponent, theGestureDetector, canvasElement);
+            gameView = new TeaVMGameView(theRuntime, theCameraBehavior, theGestureDetector, canvasElement);
         } else {
-            gameView.prepareNewScene(theRuntime, theCameraComponent, theGestureDetector);
+            gameView.prepareNewScene(theRuntime, theCameraBehavior, theGestureDetector);
         }
 
         Size theSize = new Size(window.getInnerWidth(), window.getInnerHeight());
@@ -249,7 +249,7 @@ public class TeaVMRenderer {
 
         runningGameLoop = gameLoopFactory.create(aGameScene, gameView, theRuntime);
 
-        theCameraComponent.initializeFor(aGameScene, thePlayerInstance);
+        theCameraBehavior.initializeFor(aGameScene, thePlayerInstance);
 
         runSingleStep(runningGameLoop);
         runningRuntime = theRuntime;

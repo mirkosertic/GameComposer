@@ -85,7 +85,6 @@ class Parser {
                 if (!theOutputStack.isEmpty() && theOutputStack.peek().type == TokenType.FUNCTION) {
                     theOutputQueue.add(theOutputStack.pop());
                 }
-                continue;
             }
         }
 

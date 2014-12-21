@@ -28,7 +28,6 @@ public class GWTCanvasGameView extends AbstractWebGameView {
     private final Canvas canvas;
     private final CameraBehavior cameraComponent;
     private final GestureDetector gestureDetector;
-    private int counter;
 
     public GWTCanvasGameView(GameRuntime aGameRuntime, Canvas aCanvas, CameraBehavior aCameraComponent) {
         gameRuntime = aGameRuntime;
@@ -97,7 +96,6 @@ public class GWTCanvasGameView extends AbstractWebGameView {
 
             restoreState(theContext, theSavedState);
         }
-        counter++;
         theContext.setFillStyle(CssColor.make(255, 255, 255));
         theContext.setStrokeStyle(CssColor.make(255, 255, 255));
     }

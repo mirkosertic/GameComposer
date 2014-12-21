@@ -23,9 +23,8 @@ public class ResourceName implements ValueProvider<String> {
 
         ResourceName that = (ResourceName) o;
 
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        return !(name != null ? !name.equals(that.name) : that.name != null);
 
-        return true;
     }
 
     @Override

@@ -23,9 +23,8 @@ public class TextExpression implements ValueProvider<String> {
 
         TextExpression that = (TextExpression) o;
 
-        if (!expression.equals(that.expression)) return false;
+        return expression.equals(that.expression);
 
-        return true;
     }
 
     @Override

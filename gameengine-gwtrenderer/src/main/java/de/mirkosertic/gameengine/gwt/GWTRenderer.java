@@ -256,7 +256,7 @@ public class GWTRenderer implements EntryPoint {
         // Detect and create a camera
         GameObject theCameraObject = aGameScene.cameraObjectProperty().get();
         GameObjectInstance theCameraObjectInstance = aGameScene.createFrom(theCameraObject);
-        CameraBehavior theCameraComponent = theCameraObjectInstance.getBehavior(CameraBehavior.class);
+        CameraBehavior theCameraBehavior = theCameraObjectInstance.getBehavior(CameraBehavior.class);
 
         GameObjectInstance thePlayerInstance = null;
         for (GameObjectInstance theInstance : aGameScene.getInstances()) {
@@ -282,13 +282,13 @@ public class GWTRenderer implements EntryPoint {
             }
             if (theWebGLContext != null) {
                 // WebGL is supported
-                theGameView = new GWTWebGLGameView(theRuntime, theWebGLContext, overlayCanvas, theCameraComponent);
+                theGameView = new GWTWebGLGameView(theRuntime, theWebGLContext, overlayCanvas, theCameraBehavior);
             } else {
                 // Fallback to canvas
-                theGameView = new GWTCanvasGameView(theRuntime, canvas, theCameraComponent);
+                theGameView = new GWTCanvasGameView(theRuntime, canvas, theCameraBehavior);
             }
         } else {
-            theGameView = new GWTCanvasGameView(theRuntime, canvas, theCameraComponent);
+            theGameView = new GWTCanvasGameView(theRuntime, canvas, theCameraBehavior);
         }
 
         theGameView.setSize(new Size(Window.getClientWidth(), Window.getClientHeight()));
@@ -307,7 +307,7 @@ public class GWTRenderer implements EntryPoint {
             }
         });
 
-        theCameraComponent.initializeFor(aGameScene, thePlayerInstance);
+        theCameraBehavior.initializeFor(aGameScene, thePlayerInstance);
         canvas.setFocus(true);
    }
 

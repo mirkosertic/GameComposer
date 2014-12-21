@@ -5,10 +5,7 @@ import de.mirkosertic.gamecomposer.objectinspector.ActionPropertyEditorItem;
 import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorElementConfigurator;
 import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorElementConfiguratorType;
 import de.mirkosertic.gamecomposer.objectinspector.PropertyEditorItem;
-import de.mirkosertic.gamecomposer.objectinspector.utils.AbsolutePositionAnchorPropertyEditor;
-import de.mirkosertic.gamecomposer.objectinspector.utils.AnglePropertyEditor;
-import de.mirkosertic.gamecomposer.objectinspector.utils.PositionPropertyEditor;
-import de.mirkosertic.gamecomposer.objectinspector.utils.StringPropertyEditor;
+import de.mirkosertic.gamecomposer.objectinspector.utils.*;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -23,6 +20,7 @@ import java.util.Optional;
 @ObjectInspectorElementConfiguratorType(clazz = GameObjectInstance.class)
 public class GameObjectInstanceElementConfigurator implements ObjectInspectorElementConfigurator<GameObjectInstance> {
 
+    private static final String CATEGORY_NAME_GAMEOBJECT = "03 GameObject";
     private static final String CATEGORY_NAME = "05 Instance";
 
     @Inject
@@ -31,6 +29,11 @@ public class GameObjectInstanceElementConfigurator implements ObjectInspectorEle
     @Override
     public List<PropertySheet.Item> getItemsFor(final GameObjectInstance aObject) {
         List<PropertySheet.Item> theResult = new ArrayList<>();
+
+        theResult.add(new PropertyEditorItem<>(CATEGORY_NAME_GAMEOBJECT, aObject.getOwnerGameObject().nameProperty(), "Name", "The name of the object", Optional.of(StringPropertyEditor.class)));
+        theResult.add(new PropertyEditorItem<>(CATEGORY_NAME_GAMEOBJECT, aObject.getOwnerGameObject().sizeProperty(), "Size", "The size of the object", Optional.of(SizePropertyEditor.class)));
+        theResult.add(new PropertyEditorItem<>(CATEGORY_NAME_GAMEOBJECT, aObject.getOwnerGameObject().visibleProperty(), "Visible", "The visibility of the object"));
+
         theResult.add(new PropertyEditorItem<>(CATEGORY_NAME, aObject.nameProperty(), "Name", "The name of the scene", Optional.of(StringPropertyEditor.class)));
         theResult.add(new PropertyEditorItem<>(CATEGORY_NAME, aObject.positionProperty(), "Position", "The position of the instannce", Optional.of(PositionPropertyEditor.class)));
         theResult.add(new PropertyEditorItem<>(CATEGORY_NAME, aObject.visibleProperty(), "Visible", "Is the instance visible or not", Optional.empty()));

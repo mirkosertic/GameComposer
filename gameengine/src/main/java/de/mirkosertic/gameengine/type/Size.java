@@ -38,9 +38,8 @@ public class Size implements Reflectable<SizeClassInformation> {
         Size size = (Size) o;
 
         if (height != size.height) return false;
-        if (width != size.width) return false;
+        return width == size.width;
 
-        return true;
     }
 
     @Override
