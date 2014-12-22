@@ -287,7 +287,7 @@ public class GameSceneEditorController implements ContentController<GameScene> {
 
     @Override
     public void addedAsTab() {
-        gameView.startTimer(gameLoop);
+        gameView.startTimer(gameLoop, true);
     }
 
     @Override
@@ -432,6 +432,6 @@ public class GameSceneEditorController implements ContentController<GameScene> {
 
         theCameraInstanceBehavior.initializeFor(thePreviewScene, thePlayerInstance);
 
-        thePreviewGameView.startTimer(theMainLoop);
+        thePreviewGameView.startTimer(theMainLoop, false);
     }
 }

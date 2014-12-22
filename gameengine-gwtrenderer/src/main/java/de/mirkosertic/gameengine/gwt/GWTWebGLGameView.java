@@ -1,19 +1,14 @@
 package de.mirkosertic.gameengine.gwt;
 
 import de.mirkosertic.gameengine.camera.CameraBehavior;
-import de.mirkosertic.gameengine.core.ExpressionParser;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.core.GestureDetector;
-import de.mirkosertic.gameengine.core.RuntimeStatistics;
-import de.mirkosertic.gameengine.input.DefaultGestureDetector;
-import de.mirkosertic.gameengine.sprite.Sprite;
-import de.mirkosertic.gameengine.sprite.SpriteBehavior;
-import de.mirkosertic.gameengine.text.Text;
-import de.mirkosertic.gameengine.text.TextBehavior;
+import de.mirkosertic.gameengine.generic.GenericAbstractGameView;
 import de.mirkosertic.gameengine.type.Angle;
 import de.mirkosertic.gameengine.type.Color;
+import de.mirkosertic.gameengine.type.Font;
 import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Size;
 
@@ -43,18 +38,16 @@ import thothbot.parallax.core.client.gl2.enums.TextureTarget;
 import thothbot.parallax.core.client.gl2.enums.TextureUnit;
 import thothbot.parallax.core.shared.math.Matrix4;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
-import com.google.gwt.canvas.dom.client.CssColor;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.TextResource;
 
-public class GWTWebGLGameView extends AbstractWebGameView {
+public class GWTWebGLGameView extends GenericAbstractGameView<GWTBitmapResource> {
 
     interface Resource extends ClientBundle {
 
@@ -235,33 +228,24 @@ public class GWTWebGLGameView extends AbstractWebGameView {
         }
     }
 
-    private final GameRuntime gameRuntime;
     private final WebGLRenderingContext webGLRenderingContext;
     private final Canvas canvas;
-    private final CameraBehavior cameraComponent;
     private final GLSprite sprite;
-    private final GestureDetector gestureDetector;
 
     private Matrix4 transform;
 
-    public GWTWebGLGameView(GameRuntime aRuntime, WebGLRenderingContext aWebGLRenderingContext, Canvas aCanvas, CameraBehavior aCameraComponent) {
-        gameRuntime = aRuntime;
+    public GWTWebGLGameView(GameRuntime aRuntime, WebGLRenderingContext aWebGLRenderingContext, Canvas aCanvas, CameraBehavior aCameraBehavior, GestureDetector aGestureDetector) {
+        super(aRuntime, aCameraBehavior, aGestureDetector);
         webGLRenderingContext = aWebGLRenderingContext;
-        cameraComponent = aCameraComponent;
         canvas = aCanvas;
-        gestureDetector = new DefaultGestureDetector(aRuntime.getEventManager());
 
         sprite = new GLSprite(aWebGLRenderingContext);
     }
 
     @Override
-    public GestureDetector getGestureDetector() {
-        return gestureDetector;
-    }
+    public void setCurrentScreenSize(Size aSize) {
+        super.setCurrentScreenSize(aSize);
 
-    @Override
-    public void setSize(Size aSize) {
-        super.setSize(aSize);
         webGLRenderingContext.viewport(0, 0, aSize.width, aSize.height);
 
         Matrix4 theMat4 = new Matrix4();
@@ -270,19 +254,17 @@ public class GWTWebGLGameView extends AbstractWebGameView {
         transform = theMat4;
     }
 
-    @Override
-    public void renderGame(long aGameTime, long aElapsedTimeSinceLastLoop, GameScene aScene, RuntimeStatistics aStatistics) {
-        Size theCurrentSize = getSize();
+    private Context2d context2d;
 
-        Context2d theContext = canvas.getContext2d();
+    @Override
+    protected boolean beginFrame(GameScene aScene) {
+
+        context2d = canvas.getContext2d();
 
         Color theBGColor = aScene.backgroundColorProperty().get();
+        Size theSize = getCurrentScreenSize();
 
-        // Fill the context with transparent background
-        CssColor theCssBackground = CssColor.make("rgba(" + theBGColor.r + "," + theBGColor.g + "," + theBGColor.b + ",0)");
-        theContext.setFillStyle(theCssBackground);
-        theContext.setStrokeStyle(theCssBackground);
-        theContext.fillRect(0, 0, theCurrentSize.width, theCurrentSize.height);
+        context2d.clearRect(0,0, theSize.width, theSize.height);
 
         webGLRenderingContext.clearColor(theBGColor.r / 255, theBGColor.g / 255, theBGColor.b / 255, 1);
         webGLRenderingContext.clear(WebGLConstants.COLOR_BUFFER_BIT | WebGLConstants.DEPTH_BUFFER_BIT);
@@ -297,31 +279,37 @@ public class GWTWebGLGameView extends AbstractWebGameView {
         // Setup model world transform
         webGLRenderingContext.uniformMatrix4fv(sprite.modelViewTransform, false, transform.getArray());
 
-        for (GameObjectInstance theInstance : cameraComponent.getObjectsToDrawInRightOrder(aScene)) {
+        return true;
+    }
 
-            Position thePosition = cameraComponent.transformToScreenPosition(theInstance);
+    @Override
+    protected void beforeInstance(GameObjectInstance aInstance, float aOffsetX, float aOffsetY, Angle aRotation) {
+    }
 
-            Size theSize = theInstance.getOwnerGameObject().sizeProperty().get();
+    @Override
+    protected void drawImage(GameObjectInstance aInstance, Position aPositionOnScreen, GWTBitmapResource aResource, float aPositionX,
+            float aPositionY) {
+        sprite.render(aPositionOnScreen, aInstance.getOwnerGameObject().sizeProperty().get(), aInstance.rotationAngleProperty().get(), aResource);
+    }
 
-            Sprite theSpriteComponent = theInstance.getBehavior(SpriteBehavior.class);
-            if (theSpriteComponent != null) {
-                try {
-                    GWTBitmapResource theBitmap = gameRuntime.getResourceCache().getResourceFor(theSpriteComponent.resourceNameProperty().get());
+    @Override
+    protected void drawText(GameObjectInstance aInstance, Position aPosition, Font aFont, Color aColor, String aText,
+            Size aSize) {
+        GWTCanvasUtils.drawText(context2d, aPosition, aFont, aColor, aText, aSize);
+    }
 
-                    sprite.render(thePosition, theSize, theInstance.rotationAngleProperty().get(), theBitmap);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            } else {
-                Text theTextComponent = theInstance.getBehavior(TextBehavior.class);
-                if (theTextComponent != null) {
-                    ExpressionParser theExpressionParser = aScene.get(theTextComponent.textExpressionProperty().get());
-                    drawText(theContext, thePosition, theTextComponent.fontProperty().get(),
-                            theTextComponent.colorProperty().get(), theExpressionParser.evaluateToString(), theSize);
-                } else {
-                    sprite.render(thePosition, theSize, theInstance.rotationAngleProperty().get(), null);
-                }
-            }
-        }
+    @Override
+    protected void drawRect(GameObjectInstance aInstance, Position aPositionOnScreen, Color aColor, float aX, float aY, float aWidth,
+            float aHeight) {
+        sprite.render(aPositionOnScreen, aInstance.getOwnerGameObject().sizeProperty().get(), aInstance.rotationAngleProperty().get(), null);
+    }
+
+    @Override
+    protected void afterInstance(GameObjectInstance aInstance, Position aPositionOnScreen) {
+    }
+
+    @Override
+    protected void logError(String aMessage) {
+        throw new RuntimeException(aMessage);
     }
 }

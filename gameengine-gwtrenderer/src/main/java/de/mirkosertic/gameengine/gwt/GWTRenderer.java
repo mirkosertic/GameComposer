@@ -28,6 +28,8 @@ import com.google.gwt.user.client.ui.RootPanel;
 
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.core.Game;
+import de.mirkosertic.gameengine.generic.GenericAbstractGameView;
+import de.mirkosertic.gameengine.input.DefaultGestureDetector;
 import de.mirkosertic.gameengine.type.GameKeyCode;
 import de.mirkosertic.gameengine.core.GameLoop;
 import de.mirkosertic.gameengine.core.GameLoopFactory;
@@ -274,7 +276,8 @@ public class GWTRenderer implements EntryPoint {
             }
         });
 
-        AbstractWebGameView theGameView;
+        GenericAbstractGameView theGameView;
+        GestureDetector theGestureDetector = new DefaultGestureDetector(theEventManager);
         if (game.enableWebGLProperty().get()) {
             WebGLRenderingContext theWebGLContext = (WebGLRenderingContext) canvas.getContext("webgl");
             if (theWebGLContext == null) {
@@ -282,16 +285,16 @@ public class GWTRenderer implements EntryPoint {
             }
             if (theWebGLContext != null) {
                 // WebGL is supported
-                theGameView = new GWTWebGLGameView(theRuntime, theWebGLContext, overlayCanvas, theCameraBehavior);
+                theGameView = new GWTWebGLGameView(theRuntime, theWebGLContext, overlayCanvas, theCameraBehavior, theGestureDetector);
             } else {
                 // Fallback to canvas
-                theGameView = new GWTCanvasGameView(theRuntime, canvas, theCameraBehavior);
+                theGameView = new GWTCanvasGameView(theRuntime, canvas, theCameraBehavior, theGestureDetector);
             }
         } else {
-            theGameView = new GWTCanvasGameView(theRuntime, canvas, theCameraBehavior);
+            theGameView = new GWTCanvasGameView(theRuntime, canvas, theCameraBehavior, theGestureDetector);
         }
 
-        theGameView.setSize(new Size(Window.getClientWidth(), Window.getClientHeight()));
+        theGameView.setCurrentScreenSize(new Size(Window.getClientWidth(), Window.getClientHeight()));
         theEventManager.fire(new SetScreenResolution(new Size(Window.getClientWidth(), Window.getClientHeight())));
 
         runningGameLoop = gameLoopFactory.create(aGameScene, theGameView, theRuntime);

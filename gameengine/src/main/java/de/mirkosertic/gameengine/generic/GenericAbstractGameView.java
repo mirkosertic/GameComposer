@@ -41,15 +41,16 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
 
     protected abstract void beforeInstance(GameObjectInstance aInstance, float aOffsetX, float aOffsetY, Angle aRotation);
 
-    protected abstract void drawImage(GameObjectInstance aInstance, S aResource, float aPositionX, float aPositionY);
+    protected abstract void drawImage(GameObjectInstance aInstance, Position aPositionOnScreen, S aResource, float aPositionX, float aPositionY);
 
     protected abstract void drawText(GameObjectInstance aInstance, Position aPosition, de.mirkosertic.gameengine.type.Font aFont, de.mirkosertic.gameengine.type.Color aColor, String aText, Size aSize);
 
-    protected abstract void drawRect(GameObjectInstance aInstance, Color aColor, float aX, float aY, float aWidth, float aHeight);
+    protected abstract void drawRect(GameObjectInstance aInstance, Position aPositionOnScreen, Color aColor, float aX, float aY, float aWidth, float aHeight);
 
-    protected abstract void afterInstance(GameObjectInstance aInstance);
+    protected abstract void afterInstance(GameObjectInstance aInstance, Position aPositionOnScreen);
 
-    protected abstract void framefinished();
+    protected void framefinished() {
+    }
 
     protected abstract void logError(String aMessage);
 
@@ -82,7 +83,7 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
                     S theGameResource = gameRuntime.getResourceCache()
                             .getResourceFor(theSpriteResource);
 
-                    drawImage(theInstance, theGameResource, -theHalfWidth, -theHalfHeight);
+                    drawImage(theInstance, thePosition, theGameResource, -theHalfWidth, -theHalfHeight);
 
                 } catch (IOException e) {
                     logError("Error while rendering sprite " + theSpriteResource.name);
@@ -95,11 +96,11 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
                     drawText(theInstance, thePosition, theTextBehavior.fontProperty().get(),
                             theTextBehavior.colorProperty().get(), theExpressionParser.evaluateToString(), theSize);
                 } else {
-                    drawRect(theInstance, Color.WHITE, -theHalfWidth, -theHalfHeight, theSize.width, theSize.height);
+                    drawRect(theInstance, thePosition, Color.WHITE, -theHalfWidth, -theHalfHeight, theSize.width, theSize.height);
                 }
             }
 
-            afterInstance(theInstance);
+            afterInstance(theInstance, thePosition);
         }
 
         framefinished();
