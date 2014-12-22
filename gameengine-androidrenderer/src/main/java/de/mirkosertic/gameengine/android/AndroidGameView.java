@@ -66,7 +66,7 @@ public class AndroidGameView extends GenericAbstractGameView<AndroidBitmapResour
     }
 
     @Override
-    protected void drawImage(GameObjectInstance aInstance, AndroidBitmapResource aResource, float aPositionX, float aPositionY) {
+    protected void drawImage(GameObjectInstance aInstance, Position aPositionOnScreen, AndroidBitmapResource aResource, float aPositionX, float aPositionY) {
         Matrix theMatrix = new Matrix();
         theMatrix.postTranslate(aPositionX, aPositionY);
         canvas.drawBitmap(aResource.bitmap, theMatrix, emptyPaint);
@@ -81,12 +81,12 @@ public class AndroidGameView extends GenericAbstractGameView<AndroidBitmapResour
     }
 
     @Override
-    protected void drawRect(GameObjectInstance aInstance, Color aColor, float aX, float aY, float aWidth, float aHeight) {
+    protected void drawRect(GameObjectInstance aInstance, Position aPositionOnScreen, Color aColor, float aX, float aY, float aWidth, float aHeight) {
         canvas.drawRect(aX, aY, aX + aWidth, aY + aHeight, toPaint(aColor));
     }
 
     @Override
-    protected void afterInstance(GameObjectInstance aInstance) {
+    protected void afterInstance(GameObjectInstance aInstance, Position aPositionOnScreen) {
         canvas.restore();
     }
 

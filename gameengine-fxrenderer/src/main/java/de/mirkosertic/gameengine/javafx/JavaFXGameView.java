@@ -61,15 +61,15 @@ public class JavaFXGameView extends GenericAbstractGameView<JavaFXBitmapResource
     @Override
     protected void beforeInstance(GameObjectInstance aInstance, float aOffsetX, float aOffsetY, Angle aRotation) {
         int theAngleInDegrees = aRotation.angleInDegrees;
-        context.translate(aOffsetX, aOffsetY);
         if (theAngleInDegrees % 360 != 0) {
             Rotate r = new Rotate(theAngleInDegrees, aOffsetX, aOffsetY);
             context.setTransform(r.getMxx(), r.getMyx(), r.getMxy(), r.getMyy(), r.getTx(), r.getTy());
         }
+        context.translate(aOffsetX, aOffsetY);
     }
 
     @Override
-    protected void drawImage(GameObjectInstance aInstance, JavaFXBitmapResource aResource, float aPositionX, float aPositionY) {
+    protected void drawImage(GameObjectInstance aInstance, Position aPositionOnScreen, JavaFXBitmapResource aResource, float aPositionX, float aPositionY) {
         context.drawImage(aResource, aPositionX, aPositionY);
     }
 
@@ -79,12 +79,12 @@ public class JavaFXGameView extends GenericAbstractGameView<JavaFXBitmapResource
         context.setFill(theTextColor);
         context.setStroke(theTextColor);
         context.setFont(toFont(aFont));
-        context.translate(-aPosition.x, - aPosition.y);
+        context.translate(-aPosition.x, -aPosition.y);
         context.fillText(aText, aPosition.x, aPosition.y + aFont.size);
     }
 
     @Override
-    protected void drawRect(GameObjectInstance aInstance, de.mirkosertic.gameengine.type.Color aColor, float aX, float aY, float aWidth, float aHeight) {
+    protected void drawRect(GameObjectInstance aInstance, Position aPositionOnScreen, de.mirkosertic.gameengine.type.Color aColor, float aX, float aY, float aWidth, float aHeight) {
         context.setFill(Color.WHITE);
         context.setStroke(Color.WHITE);
         context.setLineWidth(1);
@@ -92,13 +92,8 @@ public class JavaFXGameView extends GenericAbstractGameView<JavaFXBitmapResource
     }
 
     @Override
-    protected void afterInstance(GameObjectInstance aInstance) {
+    protected void afterInstance(GameObjectInstance aInstance, Position aPositionOnScreen) {
         restoreState(savedState);
-    }
-
-    @Override
-    protected void framefinished() {
-
     }
 
     @Override
@@ -134,13 +129,17 @@ public class JavaFXGameView extends GenericAbstractGameView<JavaFXBitmapResource
         throw new IllegalArgumentException("Wrong font name : "+aFont.name);
     }
 
-    public void startTimer(final GameLoop aGameLoop) {
+    public void startTimer(final GameLoop aGameLoop, final boolean aEditingMode) {
         if (animationTimer == null) {
             gameScene = aGameLoop.getScene();
             animationTimer = new AnimationTimer() {
                 @Override
                 public void handle(long l) {
-                    aGameLoop.singleRun();
+                    if (aEditingMode) {
+                        aGameLoop.singleRunOnlyUpdateGameView();
+                    } else {
+                        aGameLoop.singleRun();
+                    }
                 }
             };
             animationTimer.start();

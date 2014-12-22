@@ -175,11 +175,10 @@ public class EditorFXGameView extends JavaFXGameView {
     }
 
     @Override
-    protected void afterInstance(GameObjectInstance aInstance) {
+    protected void afterInstance(GameObjectInstance aInstance, Position aPositionOnScreen) {
 
-        super.afterInstance(aInstance);
+        super.afterInstance(aInstance, aPositionOnScreen);
 
-        Position thePosition = aInstance.positionProperty().get();
         Size theSize = aInstance.getOwnerGameObject().sizeProperty().get();
         GraphicsContext theContext = getContext();
 
@@ -189,7 +188,7 @@ public class EditorFXGameView extends JavaFXGameView {
             theContext.setFill(Color.WHITE);
             theContext.setStroke(Color.WHITE);
             theContext.setLineWidth(1);
-            theContext.strokeRect(thePosition.x, thePosition.y, theSize.width, theSize.height);
+            theContext.strokeRect(aPositionOnScreen.x, aPositionOnScreen.y, theSize.width, theSize.height);
         }
         if (currentMousePosition != null) {
             boolean theHighlighted = false;
@@ -222,10 +221,10 @@ public class EditorFXGameView extends JavaFXGameView {
                 theContext.setLineWidth(3);
 
                 int theOffset = 5;
-                Position theTopLeft = new Position(thePosition.x - theOffset, thePosition.y - theOffset);
-                Position theTopRight = new Position(thePosition.x + theSize.width + theOffset, thePosition.y - theOffset);
-                Position theBottomLeft = new Position(thePosition.x - theOffset, thePosition.y + theSize.height + theOffset);
-                Position theBottomRight = new Position(thePosition.x + theSize.width + theOffset, thePosition.y + theSize.height + theOffset);
+                Position theTopLeft = new Position(aPositionOnScreen.x - theOffset, aPositionOnScreen.y - theOffset);
+                Position theTopRight = new Position(aPositionOnScreen.x + theSize.width + theOffset, aPositionOnScreen.y - theOffset);
+                Position theBottomLeft = new Position(aPositionOnScreen.x - theOffset, aPositionOnScreen.y + theSize.height + theOffset);
+                Position theBottomRight = new Position(aPositionOnScreen.x + theSize.width + theOffset, aPositionOnScreen.y + theSize.height + theOffset);
 
                 // Top left
                 theContext.strokeLine(theTopLeft.x, theTopLeft.y, theTopLeft.x + theOffset, theTopLeft.y);

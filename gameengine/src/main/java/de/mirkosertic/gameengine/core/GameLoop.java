@@ -34,6 +34,34 @@ public class GameLoop implements Runnable {
         }
     }
 
+    public void singleRunOnlyUpdateGameView() {
+        if  (lastInvocation == 0) {
+            // Initial state, we skip this to prevent computation errors
+            lastInvocation = System.currentTimeMillis();
+            return;
+        }
+        long theCurrentTime = System.currentTimeMillis();
+        long theGameTime = theCurrentTime - statistics.getStartTime();
+        long theElapsedTime = theCurrentTime - lastInvocation;
+        if (theElapsedTime > 0) {
+
+            try {
+                long theNumberOfTicks = statistics.incrementTicks();
+
+                statistics.beginGameLoop();
+
+                // Trigger rerendering of game view
+                humanGameView.renderGame(theGameTime, theElapsedTime, scene, statistics);
+
+                lastInvocation = theCurrentTime;
+            } catch (Exception e) {
+                runtime.getEventManager().fire(new SystemException(e));
+            } finally {
+                statistics.endGameLoop();
+            }
+        }
+    }
+
     public void singleRun() {
         if  (lastInvocation == 0) {
             // Initial state, we skip this to prevent computation errors

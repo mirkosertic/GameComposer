@@ -40,7 +40,7 @@ class DragomeGameView extends GenericAbstractGameView<DragomeGameResource> {
     }
 
     @Override
-    protected void drawImage(GameObjectInstance aInstance, DragomeGameResource aResource, float aPositionX, float aPositionY) {
+    protected void drawImage(GameObjectInstance aInstance, Position aPositionOnScreen, DragomeGameResource aResource, float aPositionX, float aPositionY) {
         renderingContext2D.drawImage(aResource.getElement(), aPositionX, aPositionY);
     }
 
@@ -54,7 +54,7 @@ class DragomeGameView extends GenericAbstractGameView<DragomeGameResource> {
     }
 
     @Override
-    protected void drawRect(GameObjectInstance aInstance, Color aColor, float aX, float aY, float aWidth, float aHeight) {
+    protected void drawRect(GameObjectInstance aInstance, Position aPositionOnScreen, Color aColor, float aX, float aY, float aWidth, float aHeight) {
         String theColor = CSSUtils.toColor(aColor);
         renderingContext2D.setFillStyle(theColor);
         renderingContext2D.setStrokeStyle(theColor);
@@ -63,12 +63,8 @@ class DragomeGameView extends GenericAbstractGameView<DragomeGameResource> {
     }
 
     @Override
-    protected void afterInstance(GameObjectInstance aInstance) {
+    protected void afterInstance(GameObjectInstance aInstance, Position aPositionOnScreen) {
         renderingContext2D.restore();
-    }
-
-    @Override
-    protected void framefinished() {
     }
 
     @Override
