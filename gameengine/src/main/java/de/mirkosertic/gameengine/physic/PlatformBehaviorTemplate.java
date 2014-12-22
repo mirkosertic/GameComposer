@@ -111,9 +111,4 @@ public class PlatformBehaviorTemplate implements BehaviorTemplate<PlatformBehavi
 
         return theResult;
     }
-
-    @Override
-    public String getTypeKey() {
-        return PlatformBehavior.TYPE;
-    }
 }

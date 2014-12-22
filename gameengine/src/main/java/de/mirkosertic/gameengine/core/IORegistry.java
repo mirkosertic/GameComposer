@@ -9,12 +9,14 @@ public class IORegistry {
     private final Map<String, BehaviorUnmarshaller> registeredBehaviorUnmarshaller;
     private final Map<String, ConditionUnmarshaller> registeredConditionUnmarshaller;
     private final Map<String, ActionUnmarshaller> registeredActionUnmarshaller;
+    private final Map<String, GameSceneEffectUnmarshaller> sceneEffectUnmarsheller;
 
     IORegistry() {
         registeredBehaviorTemplateUnmarshaller = new HashMap<>();
         registeredBehaviorUnmarshaller = new HashMap<>();
         registeredConditionUnmarshaller = new HashMap<>();
         registeredActionUnmarshaller = new HashMap<>();
+        sceneEffectUnmarsheller = new HashMap<>();
     }
 
     public void registerBehaviorTemplateUnmarshaller(BehaviorTemplateUnmarshaller aUnmarshaller) {
@@ -33,6 +35,10 @@ public class IORegistry {
         registeredActionUnmarshaller.put(aUnmarshaller.getTypeKey(), aUnmarshaller);
     }
 
+    public void registerGameSceneEffectUnmarshaller(GameSceneEffectUnmarshaller aUnmarshaller) {
+        sceneEffectUnmarsheller.put(aUnmarshaller.getTypeKey(), aUnmarshaller);
+    }
+
     public BehaviorTemplateUnmarshaller getBehaviorTemplateUnmarshallerFor(String aTypeKey) {
         return registeredBehaviorTemplateUnmarshaller.get(aTypeKey);
     }
@@ -47,5 +53,9 @@ public class IORegistry {
 
     public ActionUnmarshaller getActionUnmarshallerFor(String aTypeKey) {
         return registeredActionUnmarshaller.get(aTypeKey);
+    }
+
+    public GameSceneEffectUnmarshaller getSceneEffectUnmarshallerFor(String aTypeKey) {
+        return sceneEffectUnmarsheller.get(aTypeKey);
     }
 }

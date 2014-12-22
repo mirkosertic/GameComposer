@@ -9,6 +9,7 @@ import de.mirkosertic.gameengine.text.TextBehavior;
 import de.mirkosertic.gameengine.type.*;
 
 import java.io.IOException;
+import java.util.List;
 
 public abstract class GenericAbstractGameView<S extends GameResource> implements GameView {
 
@@ -54,6 +55,8 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
 
     protected abstract void logError(String aMessage);
 
+    protected abstract EffectCanvas createEffectCanvas();
+
     @Override
     public void renderGame(long aGameTime, long aElapsedTimeSinceLastLoop, GameScene aScene, RuntimeStatistics aStatistics) {
 
@@ -61,7 +64,16 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
             return;
         }
 
-        for (GameObjectInstance theInstance : cameraBehavior.getObjectsToDrawInRightOrder(aScene)) {
+        List<GameObjectInstance> theVisibleInstances = cameraBehavior.getObjectsToDrawInRightOrder(aScene);
+
+        EffectCanvas theEffectCanvas = createEffectCanvas();
+
+        // Run the preprocessors
+        for (GameSceneEffect theEffect : aScene.getPreprocessorEffects()) {
+            theEffect.render(theEffectCanvas, theVisibleInstances, cameraBehavior);
+        }
+
+        for (GameObjectInstance theInstance : theVisibleInstances) {
 
             Position thePosition = cameraBehavior.transformToScreenPosition(theInstance);
 
@@ -101,6 +113,11 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
             }
 
             afterInstance(theInstance, thePosition);
+        }
+
+        // Run the postprocessors
+        for (GameSceneEffect theEffect : aScene.getPostprocessorEffects()) {
+            theEffect.render(theEffectCanvas, theVisibleInstances, cameraBehavior);
         }
 
         framefinished();

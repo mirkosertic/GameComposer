@@ -48,6 +48,11 @@ class TeaVMGameView extends GenericAbstractGameView<TeaVMGameResource> {
     }
 
     @Override
+    protected EffectCanvas createEffectCanvas() {
+        return new TeaVMEffectCanvas(renderingContext2D);
+    }
+
+    @Override
     protected void beforeInstance(GameObjectInstance aInstance, float aOffsetX, float aOffsetY, Angle aRotation) {
         renderingContext2D.save();
 

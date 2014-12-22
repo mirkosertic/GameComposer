@@ -77,11 +77,6 @@ public class ConstantMovementBehavior implements Behavior, ConstantMovement, Ref
     }
 
     @Override
-    public String getTypeKey() {
-        return TYPE;
-    }
-
-    @Override
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<>();
         theResult.put(TYPE_ATTRIBUTE, TYPE);

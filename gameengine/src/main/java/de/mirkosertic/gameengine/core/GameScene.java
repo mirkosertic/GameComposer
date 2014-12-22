@@ -3,6 +3,7 @@ package de.mirkosertic.gameengine.core;
 import de.mirkosertic.gameengine.ArrayUtils;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
+import de.mirkosertic.gameengine.starfield.StarfieldGameSceneEffect;
 import de.mirkosertic.gameengine.type.*;
 
 import java.util.ArrayList;
@@ -28,6 +29,9 @@ public class GameScene implements Reflectable<GameSceneClassInformation> {
     private GameObjectInstance[] instances;
     private EventSheet[] eventSheets;
 
+    private GameSceneEffect[] preprocessorEffects;
+    private GameSceneEffect[] postprocessorEffects;
+
     private final GameRuntime gameRuntime;
     private final Map<TextExpression, ExpressionParser> knownParser;
 
@@ -43,6 +47,8 @@ public class GameScene implements Reflectable<GameSceneClassInformation> {
         instances = new GameObjectInstance[0];
         objects = new GameObject[0];
         eventSheets = new EventSheet[0];
+        preprocessorEffects = new GameSceneEffect[0];
+        postprocessorEffects = new GameSceneEffect[0];
         gameRuntime = aGameRuntime;
 
         knownParser = new HashMap<>();
@@ -111,6 +117,48 @@ public class GameScene implements Reflectable<GameSceneClassInformation> {
         }
     }
 
+    public void addEffect(GameSceneEffect aInstance) {
+        switch (aInstance.getEffectType()) {
+            case PREPROCESSOR:
+                List<GameSceneEffect> thePreEffects = ArrayUtils.asList(preprocessorEffects);
+                if (thePreEffects.add(aInstance)) {
+                    preprocessorEffects = thePreEffects.toArray(new GameSceneEffect[thePreEffects.size()]);
+                    gameRuntime.getEventManager().fire(new GameSceneEffectAddedToScene(this, aInstance));
+                }
+                break;
+            case POSTPROCESSOR:
+                List<GameSceneEffect> thePostEffects = ArrayUtils.asList(postprocessorEffects);
+                if (thePostEffects.add(aInstance)) {
+                    postprocessorEffects = thePostEffects.toArray(new GameSceneEffect[thePostEffects.size()]);
+                    gameRuntime.getEventManager().fire(new GameSceneEffectAddedToScene(this, aInstance));
+                }
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown effect type : " + aInstance.getEffectType());
+        }
+    }
+
+    public void removeEffect(StarfieldGameSceneEffect aInstance) {
+        switch (aInstance.getEffectType()) {
+            case PREPROCESSOR:
+                List<GameSceneEffect> thePreEffects = ArrayUtils.asList(preprocessorEffects);
+                if (thePreEffects.remove(aInstance)) {
+                    preprocessorEffects = thePreEffects.toArray(new GameSceneEffect[thePreEffects.size()]);
+                    gameRuntime.getEventManager().fire(new GameSceneEffectRemovedFromScene(this, aInstance));
+                }
+                break;
+            case POSTPROCESSOR:
+                List<GameSceneEffect> thePostEffects = ArrayUtils.asList(postprocessorEffects);
+                if (thePostEffects.remove(aInstance)) {
+                    postprocessorEffects = thePostEffects.toArray(new GameSceneEffect[thePostEffects.size()]);
+                    gameRuntime.getEventManager().fire(new GameSceneEffectRemovedFromScene(this, aInstance));
+                }
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown effect type : " + aInstance.getEffectType());
+        }
+    }
+
     public GameObjectInstance[] getInstances() {
         return instances;
     }
@@ -121,6 +169,14 @@ public class GameScene implements Reflectable<GameSceneClassInformation> {
 
     public EventSheet[] getEventSheets() {
         return eventSheets;
+    }
+
+    public GameSceneEffect[] getPreprocessorEffects() {
+        return preprocessorEffects;
+    }
+
+    public GameSceneEffect[] getPostprocessorEffects() {
+        return postprocessorEffects;
     }
 
     public List<GameObjectInstance> findAllAt(Position aScreenPosition, Position aWorldPosition) {
@@ -229,6 +285,16 @@ public class GameScene implements Reflectable<GameSceneClassInformation> {
         theResult.put("eventsheets", theEventSheets);
 
         theResult.put(LAYOUT_BOUNDS_PROPERTY, layoutBounds.get().serialize());
+
+        List<Map<String, Object>> theEffects = new ArrayList<>();
+        for (GameSceneEffect theEffect : preprocessorEffects) {
+            theEffects.add(theEffect.serialize());
+        }
+        for (GameSceneEffect theEffect : postprocessorEffects) {
+            theEffects.add(theEffect.serialize());
+        }
+        theResult.put("effects", theEffects);
+
         return theResult;
     }
 
@@ -273,6 +339,15 @@ public class GameScene implements Reflectable<GameSceneClassInformation> {
         if (theLayoutBounds != null) {
             theScene.layoutBounds.setQuietly(Rectangle.deserialize(theLayoutBounds));
         }
+
+        List<Map<String, Object>> theEffects = (List<Map<String, Object>>) aSerializedData.get("effects");
+        if (theEffects != null) {
+            for (Map<String, Object> theData : theEffects) {
+                String theType = (String) theData.get(GameSceneEffect.TYPE_ATTRIBUTE);
+                theScene.addEffect(aGameRuntime.getIORegistry().getSceneEffectUnmarshallerFor(theType).unmarshall(aGameRuntime, theScene, theData));
+            }
+        }
+
         return theScene;
     }
 

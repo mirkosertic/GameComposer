@@ -5,6 +5,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.view.SurfaceHolder;
+
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
@@ -48,11 +49,16 @@ public class AndroidGameView extends GenericAbstractGameView<AndroidBitmapResour
 
         canvas = theCanvas;
 
-        Paint theBackgroundPaint = toPaint(aScene.backgroundColorProperty().get());
+        Paint theBackgroundPaint = AndroidUtils.toPaint(aScene.backgroundColorProperty().get());
         theCanvas.drawPaint(theBackgroundPaint);
         theCanvas.drawRect(0, 0, theCanvas.getWidth(), theCanvas.getHeight(), theBackgroundPaint);
 
         return true;
+    }
+
+    @Override
+    protected EffectCanvas createEffectCanvas() {
+        return new AndroidEffectCanvas(canvas);
     }
 
     @Override
@@ -74,7 +80,7 @@ public class AndroidGameView extends GenericAbstractGameView<AndroidBitmapResour
 
     @Override
     protected void drawText(GameObjectInstance aInstance, Position aPosition, Font aFont, Color aColor, String aText, Size aSize) {
-        Paint thePaint = toPaint(aColor);
+        Paint thePaint = AndroidUtils.toPaint(aColor);
         thePaint.setTextSize(aFont.size);
         thePaint.setTypeface(toTypeface(aFont));
         canvas.drawText(aText, aPosition.x, aPosition.y, thePaint);
@@ -82,7 +88,7 @@ public class AndroidGameView extends GenericAbstractGameView<AndroidBitmapResour
 
     @Override
     protected void drawRect(GameObjectInstance aInstance, Position aPositionOnScreen, Color aColor, float aX, float aY, float aWidth, float aHeight) {
-        canvas.drawRect(aX, aY, aX + aWidth, aY + aHeight, toPaint(aColor));
+        canvas.drawRect(aX, aY, aX + aWidth, aY + aHeight, AndroidUtils.toPaint(aColor));
     }
 
     @Override
@@ -99,13 +105,6 @@ public class AndroidGameView extends GenericAbstractGameView<AndroidBitmapResour
     protected void logError(String aMessage) {
         // TODO: Android logging implement herre
         throw new RuntimeException(aMessage);
-    }
-
-    private Paint toPaint(de.mirkosertic.gameengine.type.Color aColor) {
-        Paint thePaint = new Paint();
-        thePaint.setARGB(255, aColor.r, aColor.g, aColor.b);
-        thePaint.setStyle(Paint.Style.FILL);
-        return thePaint;
     }
 
     private Typeface toTypeface(Font aFont) {

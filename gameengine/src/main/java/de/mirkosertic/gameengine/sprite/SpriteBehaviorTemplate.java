@@ -38,11 +38,6 @@ public class SpriteBehaviorTemplate implements BehaviorTemplate<SpriteBehavior>,
         return new SpriteBehavior(aInstance, this);
     }
 
-    @Override
-    public String getTypeKey() {
-        return SpriteBehavior.TYPE;
-    }
-
     public Property<ResourceName> resourceNameProperty() {
         return resourceName;
     }

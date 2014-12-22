@@ -6,11 +6,7 @@ import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.core.GestureDetector;
 import de.mirkosertic.gameengine.generic.GenericAbstractGameView;
-import de.mirkosertic.gameengine.type.Angle;
-import de.mirkosertic.gameengine.type.Color;
-import de.mirkosertic.gameengine.type.Font;
-import de.mirkosertic.gameengine.type.Position;
-import de.mirkosertic.gameengine.type.Size;
+import de.mirkosertic.gameengine.type.*;
 
 import thothbot.parallax.core.client.gl2.WebGLBuffer;
 import thothbot.parallax.core.client.gl2.WebGLConstants;
@@ -280,6 +276,11 @@ public class GWTWebGLGameView extends GenericAbstractGameView<GWTBitmapResource>
         webGLRenderingContext.uniformMatrix4fv(sprite.modelViewTransform, false, transform.getArray());
 
         return true;
+    }
+
+    @Override
+    protected EffectCanvas createEffectCanvas() {
+        return new GWTEffectCanvas(context2d);
     }
 
     @Override

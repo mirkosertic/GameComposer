@@ -44,11 +44,6 @@ public class CameraBehaviorTemplate implements BehaviorTemplate<CameraBehavior>,
     }
 
     @Override
-    public String getTypeKey() {
-        return CameraBehavior.TYPE;
-    }
-
-    @Override
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<>();
         theResult.put(CameraBehavior.TYPE_ATTRIBUTE, CameraBehavior.TYPE);

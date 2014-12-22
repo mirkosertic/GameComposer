@@ -21,6 +21,11 @@ class DragomeGameView extends GenericAbstractGameView<DragomeGameResource> {
     private DragomeCanvasRenderingContext2D renderingContext2D;
 
     @Override
+    protected EffectCanvas createEffectCanvas() {
+        return new DragomeEffectCanvas(renderingContext2D);
+    }
+
+    @Override
     protected boolean beginFrame(GameScene aScene) {
         renderingContext2D = canvas.getContext("2d");
         Size theCurrentScreenSize = getCurrentScreenSize();
