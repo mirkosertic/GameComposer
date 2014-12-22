@@ -23,6 +23,7 @@ import de.mirkosertic.gameengine.sound.GameSoundSystemFactory;
 import de.mirkosertic.gameengine.sound.PlaySoundActionUnmarshaller;
 import de.mirkosertic.gameengine.sprite.SpriteBehaviorTemplateUnmarshaller;
 import de.mirkosertic.gameengine.sprite.SpriteBehaviorUnmarshaller;
+import de.mirkosertic.gameengine.starfield.StarfieldGameSceneEffectUnmarshaller;
 import de.mirkosertic.gameengine.text.TextBehaviorTemplateUnmarshaller;
 import de.mirkosertic.gameengine.text.TextBehaviorUnmarshaller;
 import de.mirkosertic.gameengine.type.Reflectable;
@@ -87,6 +88,8 @@ public abstract class AbstractGameRuntimeFactory {
         theRegistry.registerActionUnmarshaller(new SpawnGameObjectInstanceActionUnmarshaller());
         theRegistry.registerActionUnmarshaller(new DeleteGameObjectInstanceActionUnmarshaller());
         theRegistry.registerActionUnmarshaller(new KillProcessesForInstanceUnmarshaller());
+
+        theRegistry.registerGameSceneEffectUnmarshaller(new StarfieldGameSceneEffectUnmarshaller());
 
         return theGameRuntime;
     }

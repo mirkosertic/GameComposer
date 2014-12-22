@@ -117,11 +117,6 @@ public class PhysicsBehaviorTemplate implements BehaviorTemplate<PhysicsBehavior
     }
 
     @Override
-    public String getTypeKey() {
-        return PhysicsBehavior.TYPE;
-    }
-
-    @Override
     public void delete() {
         owner.getGameScene().removeBehaviorFrom(owner, this);
     }

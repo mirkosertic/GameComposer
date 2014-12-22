@@ -115,6 +115,16 @@ public class ObjectInspectorController implements Controller {
         selectObject(aEvent.getSelectedObject());
     }
 
+    public void onGameObjectConfigurationChanged(@Observes GameSceneEffectAddedToScene aEvent) {
+        currentSelection = null;
+        selectObject(aEvent.instance);
+    }
+
+    public void onGameObjectConfigurationChanged(@Observes GameSceneEffectRemovedFromScene aEvent) {
+        currentSelection = null;
+        selectObject(aEvent.instance.getScene());
+    }
+
     public void onGameObjectConfigurationChanged(@Observes GameObjectConfigurationChanged aEvent) {
         currentSelection = null;
         selectObject(aEvent.object);
@@ -150,6 +160,26 @@ public class ObjectInspectorController implements Controller {
                 if (!theConfiguratorInstance.isUnsatisfied()) {
                     items.addAll(((ObjectInspectorElementConfigurator) theConfiguratorInstance.get()).getItemsFor(aObject));
                 }
+
+                if (aObject instanceof GameScene) {
+
+                    GameScene theScene = (GameScene) aObject;
+
+                    for (GameSceneEffect theEffect : theScene.getPreprocessorEffects()) {
+                        Instance<?> theTemplateConfiguratorInstance = singleObjectFactory.select(createQualifier(theEffect.getClass()));
+                        if (!theTemplateConfiguratorInstance.isUnsatisfied()) {
+                            items.addAll(((ObjectInspectorElementConfigurator) theTemplateConfiguratorInstance.get()).getItemsFor(theEffect));
+                        }
+                    }
+
+                    for (GameSceneEffect theEffect : theScene.getPostprocessorEffects()) {
+                        Instance<?> theTemplateConfiguratorInstance = singleObjectFactory.select(createQualifier(theEffect.getClass()));
+                        if (!theTemplateConfiguratorInstance.isUnsatisfied()) {
+                            items.addAll(((ObjectInspectorElementConfigurator) theTemplateConfiguratorInstance.get()).getItemsFor(theEffect));
+                        }
+                    }
+                }
+
                 if (aObject instanceof GameObject) {
 
                     GameObject theGameObject = (GameObject) aObject;

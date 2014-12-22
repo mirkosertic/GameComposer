@@ -69,11 +69,6 @@ public class PhysicsBehavior implements Behavior, Physics, Reflectable<PhysicsCl
     }
 
     @Override
-    public String getTypeKey() {
-        return TYPE;
-    }
-
-    @Override
     public Map<String, Object> serialize() {
         Map<String, Object> theStructure = new HashMap<>();
         theStructure.put(TYPE_ATTRIBUTE, TYPE);

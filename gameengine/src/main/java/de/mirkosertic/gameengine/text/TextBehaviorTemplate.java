@@ -58,11 +58,6 @@ public class TextBehaviorTemplate implements BehaviorTemplate<TextBehavior>, Tex
     }
 
     @Override
-    public String getTypeKey() {
-        return TextBehavior.TYPE;
-    }
-
-    @Override
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<>();
         theResult.put(TextBehavior.TYPE_ATTRIBUTE, TextBehavior.TYPE);

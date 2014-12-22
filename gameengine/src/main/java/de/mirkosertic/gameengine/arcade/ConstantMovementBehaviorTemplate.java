@@ -50,11 +50,6 @@ public class ConstantMovementBehaviorTemplate implements BehaviorTemplate<Consta
     }
 
     @Override
-    public String getTypeKey() {
-        return ConstantMovementBehavior.TYPE;
-    }
-
-    @Override
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<>();
         theResult.put(ConstantMovementBehavior.TYPE_ATTRIBUTE, ConstantMovementBehavior.TYPE);

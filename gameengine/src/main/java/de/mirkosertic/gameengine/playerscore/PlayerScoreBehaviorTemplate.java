@@ -29,11 +29,6 @@ public class PlayerScoreBehaviorTemplate implements BehaviorTemplate<PlayerScore
         return PlayerScoreClassInformation.INSTANCE;
     }
 
-    @Override
-    public String getTypeKey() {
-        return PlayerScoreBehavior.TYPE;
-    }
-
     public Property<ScoreValue> scoreValueProperty() {
         return scoreValue;
     }

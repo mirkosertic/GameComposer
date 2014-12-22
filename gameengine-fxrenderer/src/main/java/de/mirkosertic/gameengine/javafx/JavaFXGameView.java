@@ -4,6 +4,7 @@ import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.generic.GenericAbstractGameView;
 import de.mirkosertic.gameengine.type.Angle;
+import de.mirkosertic.gameengine.type.EffectCanvas;
 import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Size;
 
@@ -56,6 +57,11 @@ public class JavaFXGameView extends GenericAbstractGameView<JavaFXBitmapResource
         context.fillRect(0, 0, canvasNode.getWidth(), canvasNode.getHeight());
 
         return true;
+    }
+
+    @Override
+    protected EffectCanvas createEffectCanvas() {
+        return new JavaFXEffectCanvas(context);
     }
 
     @Override

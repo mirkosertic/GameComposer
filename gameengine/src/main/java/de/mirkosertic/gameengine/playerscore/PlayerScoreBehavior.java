@@ -35,11 +35,6 @@ public class PlayerScoreBehavior implements Behavior, PlayerScore, Reflectable<P
     }
 
     @Override
-    public String getTypeKey() {
-        return TYPE;
-    }
-
-    @Override
     public PlayerScoreBehaviorTemplate getTemplate() {
         return objectInstance.getOwnerGameObject().getBehaviorTemplate(PlayerScoreBehaviorTemplate.class);
     }

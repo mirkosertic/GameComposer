@@ -35,11 +35,6 @@ public class StaticBehaviorTemplate implements BehaviorTemplate<StaticBehavior>,
     }
 
     @Override
-    public String getTypeKey() {
-        return StaticBehavior.TYPE;
-    }
-
-    @Override
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<>();
         theResult.put(StaticBehavior.TYPE_ATTRIBUTE, StaticBehavior.TYPE);

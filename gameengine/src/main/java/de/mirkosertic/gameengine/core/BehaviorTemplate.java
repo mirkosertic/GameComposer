@@ -8,7 +8,5 @@ public interface BehaviorTemplate<T extends Behavior> {
 
     Map<String,Object> serialize();
 
-    String getTypeKey();
-
     GameObject getOwner();
 }

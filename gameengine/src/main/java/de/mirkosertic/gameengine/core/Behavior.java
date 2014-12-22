@@ -8,7 +8,5 @@ public interface Behavior {
 
     Map<String, Object> serialize();
 
-    String getTypeKey();
-
     <T extends BehaviorTemplate> T getTemplate();
 }
