@@ -23,6 +23,26 @@ public class Position implements Reflectable<PositionClassInformation> {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Position position = (Position) o;
+
+        if (Float.compare(position.x, x) != 0) return false;
+        if (Float.compare(position.y, y) != 0) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (x != +0.0f ? Float.floatToIntBits(x) : 0);
+        result = 31 * result + (y != +0.0f ? Float.floatToIntBits(y) : 0);
+        return result;
+    }
+
+    @Override
     public PositionClassInformation getClassInformation() {
         return PositionClassInformation.INSTANCE;
     }

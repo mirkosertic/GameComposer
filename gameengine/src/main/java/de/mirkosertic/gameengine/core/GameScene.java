@@ -207,7 +207,7 @@ public class GameScene implements Reflectable<GameSceneClassInformation> {
     public GameObjectInstance createFrom(GameObject aGameObject) {
         GameObjectInstance theInstance = new GameObjectInstance(gameRuntime.getEventManager(), aGameObject);
         theInstance.nameProperty().setQuietly(aGameObject.nameProperty().get() + "_" + System.currentTimeMillis());
-        for (BehaviorTemplate theFactory : aGameObject.getComponentTemplates()) {
+        for (BehaviorTemplate theFactory : aGameObject.getBehaviorTemplates()) {
             theInstance.addBehavior(theFactory.create(theInstance, gameRuntime));
         }
         return theInstance;
@@ -360,7 +360,7 @@ public class GameScene implements Reflectable<GameSceneClassInformation> {
         int theMaxX = Integer.MIN_VALUE;
         int theMaxY = Integer.MIN_VALUE;
         for (GameObjectInstance theInstance : instances) {
-            Position thePosition = theInstance.position.get();
+            Position thePosition = theInstance.positionProperty().get();
             Size theSize = theInstance.getOwnerGameObject().sizeProperty().get();
             theMinX = Math.min(theMinX, (int) thePosition.x);
             theMinY = Math.min(theMinY, (int) thePosition.y);

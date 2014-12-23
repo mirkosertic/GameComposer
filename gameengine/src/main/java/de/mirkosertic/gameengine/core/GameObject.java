@@ -21,10 +21,10 @@ public class GameObject implements Reflectable<GameObjectClassInformation> {
 
     private final GameScene gameScene;
 
-    final Property<String> uuid;
-    final Property<String> name;
-    final Property<Size> size;
-    final Property<Boolean> visible;
+    private final Property<String> uuid;
+    private final Property<String> name;
+    private final Property<Size> size;
+    private final Property<Boolean> visible;
 
     private final Map<Class<BehaviorTemplate>, BehaviorTemplate> componentTemplates;
 
@@ -42,9 +42,6 @@ public class GameObject implements Reflectable<GameObjectClassInformation> {
         size = new Property<>(Size.class, this, SIZE_PROPERTY, new Size(64, 64), theManager);
         visible = new Property<>(Boolean.class, this, VISIBLE_PROPERTY, Boolean.TRUE, theManager);
         componentTemplates = new HashMap<>();
-
-        name.setQuietly(aName);
-        uuid.setQuietly(aUUID);
     }
 
     public GameScene getGameScene() {
@@ -74,13 +71,12 @@ public class GameObject implements Reflectable<GameObjectClassInformation> {
 
         GameObject that = (GameObject) o;
 
-        return !(uuid != null ? !uuid.equals(that.uuid) : that.uuid != null);
-
+        return uuid.get().equals(that.uuid.get());
     }
 
     @Override
     public int hashCode() {
-        return uuid != null ? uuid.hashCode() : 0;
+        return uuid.get().hashCode();
     }
 
     public void add(BehaviorTemplate aBehaviorTemplate) {
@@ -102,7 +98,7 @@ public class GameObject implements Reflectable<GameObjectClassInformation> {
         return GameObjectClassInformation.INSTANCE;
     }
 
-    public Set<BehaviorTemplate> getComponentTemplates() {
+    public Set<BehaviorTemplate> getBehaviorTemplates() {
         HashSet<BehaviorTemplate> theResult = new HashSet<>();
         theResult.addAll(componentTemplates.values());
         return theResult;
@@ -112,6 +108,7 @@ public class GameObject implements Reflectable<GameObjectClassInformation> {
         Map<String, Object> theResult = new HashMap<>();
         theResult.put(NAME_PROPERTY, name.get());
         theResult.put(UUID_PROPERTY, uuid.get());
+        theResult.put(VISIBLE_PROPERTY, Boolean.toString(visible.get()));
         theResult.put(SIZE_PROPERTY, size.get().serialize());
         List<Map<String, Object>> theTemplates = new ArrayList<>();
         for (BehaviorTemplate theTemplate : componentTemplates.values()) {
@@ -125,6 +122,11 @@ public class GameObject implements Reflectable<GameObjectClassInformation> {
         String theName = (String) theSerializedData.get(NAME_PROPERTY);
         String theUUID = (String) theSerializedData.get(UUID_PROPERTY);
         GameObject theObject = new GameObject(aGameScene, theName, theUUID);
+
+        String theVisible = (String) theSerializedData.get(VISIBLE_PROPERTY);
+        if (theVisible != null) {
+            theObject.visibleProperty().setQuietly(Boolean.valueOf(theVisible));
+        }
 
         Map<String, Object> theSize = (Map<String, Object>) theSerializedData.get(SIZE_PROPERTY);
         if (theSize != null) {
