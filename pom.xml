@@ -134,6 +134,7 @@
                         <mutator>NON_VOID_METHOD_CALLS</mutator>
                     </mutators>
                     <verbose>false</verbose>
+                    <threads>4</threads>
                 </configuration>
             </plugin>
         </plugins>
