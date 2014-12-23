@@ -8,7 +8,7 @@ public class Angle implements ValueProvider<Integer> {
     public final int angleInDegrees;
 
     public Angle(int aAngleInDegrees) {
-        angleInDegrees = aAngleInDegrees;
+        angleInDegrees = aAngleInDegrees % 360;
     }
 
     @Override
@@ -17,7 +17,7 @@ public class Angle implements ValueProvider<Integer> {
     }
 
     public Angle add(int aDiff) {
-        return new Angle(angleInDegrees + aDiff % 360);
+        return new Angle(angleInDegrees + aDiff);
     }
 
     public Angle invert() {

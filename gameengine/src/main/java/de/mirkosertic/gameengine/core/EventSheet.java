@@ -50,9 +50,7 @@ public class EventSheet {
         EventSheet theResult = new EventSheet(aGameScene);
 
         String theName = (String) aSerializedData.get(NAME_PROPERTY);
-        if (theName != null) {
-            theResult.nameProperty.setQuietly(theName);
-        }
+        theResult.nameProperty.setQuietly(theName);
 
         List<Map<String, Object>> theRules = (List<Map<String, Object>>) aSerializedData.get("rules");
         List<GameRule> theRuleList = new ArrayList<>();

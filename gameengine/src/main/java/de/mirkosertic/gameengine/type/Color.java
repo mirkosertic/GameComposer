@@ -23,8 +23,8 @@ public class Color implements Reflectable<ColorClassInformation> {
         return ColorClassInformation.INSTANCE;
     }
 
-    public Map<String, String> serialize() {
-        Map<String, String> theResult = new HashMap<>();
+    public Map<String, Object> serialize() {
+        Map<String, Object> theResult = new HashMap<>();
         theResult.put("r", Integer.toString(r));
         theResult.put("g", Integer.toString(g));
         theResult.put("b", Integer.toString(b));
