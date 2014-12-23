@@ -102,4 +102,8 @@ public class GameLoop implements Runnable {
     public boolean isShutdown() {
         return shutdownSignal;
     }
+
+    RuntimeStatistics getStatistics() {
+        return statistics;
+    }
 }

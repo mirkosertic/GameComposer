@@ -51,8 +51,8 @@ public class Size implements Reflectable<SizeClassInformation> {
 
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<>();
-        theResult.put("width", "" + width);
-        theResult.put("height", "" + height);
+        theResult.put("width", Integer.toString(width));
+        theResult.put("height", Integer.toString(height));
         return theResult;
     }
 
