@@ -27,13 +27,13 @@ public class GameObjectInstance implements Reflectable<GameObjectInstanceClassIn
 
     private final GameObject ownerGameObject;
 
-    final Property<String> uuid;
-    final Property<String> name;
-    final Property<Position> position;
-    final Property<Angle> rotationAngle;
-    final Property<Boolean> visible;
-    final Property<Boolean> absolutePosition;
-    final Property<AbsolutePositionAnchor> absolutePositionAnchor;
+    private final Property<String> uuid;
+    private final Property<String> name;
+    private final Property<Position> position;
+    private final Property<Angle> rotationAngle;
+    private final Property<Boolean> visible;
+    private final Property<Boolean> absolutePosition;
+    private final Property<AbsolutePositionAnchor> absolutePositionAnchor;
 
     GameObjectInstance(GameEventManager aEventManager, GameObject aOwnerGameObject) {
 
@@ -103,7 +103,7 @@ public class GameObjectInstance implements Reflectable<GameObjectInstanceClassIn
     }
 
     public void removeBehaviorByTemplate(BehaviorTemplate aTemplate) {
-        Map<Class<? extends Behavior>, Behavior> theKnownBehaviors = new HashMap<>();
+        Map<Class<? extends Behavior>, Behavior> theKnownBehaviors = new HashMap<>(behaviors);
         for (Map.Entry<Class<? extends Behavior>, Behavior> theEntry : theKnownBehaviors.entrySet()) {
             if (theEntry.getValue().getTemplate() == aTemplate) {
                 removeBehavior(theEntry.getValue());
@@ -143,7 +143,7 @@ public class GameObjectInstance implements Reflectable<GameObjectInstanceClassIn
         String theGameObjectUUID = (String) theInstance.get("gameobjectuuid");
         GameObject theGameObject = aScene.findGameObjectByID(theGameObjectUUID);
         if (theGameObject == null) {
-            throw new RuntimeException("Cannot find gameobject with uuid" + theGameObjectUUID);
+            throw new RuntimeException("Cannot find gameobject with uuid " + theGameObjectUUID);
         }
 
         GameObjectInstance theResult = new GameObjectInstance(aGameRuntime.getEventManager(), theGameObject);

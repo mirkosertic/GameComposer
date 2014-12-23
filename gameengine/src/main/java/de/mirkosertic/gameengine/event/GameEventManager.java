@@ -27,6 +27,9 @@ public class GameEventManager implements GameEventListener {
     }
 
     public void fire(GameEvent aEvent) {
+        if (aEvent == null) {
+            throw new IllegalArgumentException("Event must not be null!");
+        }
         try {
             GameEventListener[] theRegisteredListener = registeredListeners.get(GameEvent.class);
             if (theRegisteredListener != null) {

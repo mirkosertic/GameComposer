@@ -98,4 +98,24 @@ public class PositionTest {
         assertEquals(11, (int) theTranslated.x);
         assertEquals(5, (int) theTranslated.y);
     }
+
+    @Test
+    public void testHashCode() {
+        Position thePosition = new Position(6, 7);
+        assertEquals(404750336, thePosition.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        Position thePosition = new Position(6, 7);
+        Position thePosition2 = new Position(6, 7);
+        Position thePosition3 = new Position(6, 9);
+        Position thePosition4 = new Position(9, 7);
+        assertEquals(thePosition, thePosition);
+        assertEquals(thePosition, thePosition2);
+        assertNotEquals(thePosition, thePosition3);
+        assertNotEquals(thePosition, thePosition4);
+        assertNotEquals(thePosition, "lala");
+        assertNotEquals(thePosition, null);
+    }
 }
