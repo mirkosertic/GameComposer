@@ -10,7 +10,7 @@ public class GameObjectInstanceLeftLayoutConditionUnmarshaller implements Condit
     }
 
     @Override
-    public Condition unmarshall(GameScene aGameScene, Map<String, Object> aSerializedData) {
+    public GameObjectInstanceLeftLayoutCondition unmarshall(GameScene aGameScene, Map<String, Object> aSerializedData) {
         return GameObjectInstanceLeftLayoutCondition.unmarshall(aGameScene, aSerializedData);
     }
 }
