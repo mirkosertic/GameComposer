@@ -5,7 +5,7 @@ public class PropertyChanged extends GameEvent {
     public final Property property;
     public final Object oldValue;
 
-    PropertyChanged(Property aProperty, Object aOldValue) {
+    public PropertyChanged(Property aProperty, Object aOldValue) {
         super("PropertyChanged");
         property = aProperty;
         oldValue = aOldValue;
