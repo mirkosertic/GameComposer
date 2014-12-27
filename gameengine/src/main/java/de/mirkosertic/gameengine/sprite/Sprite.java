@@ -1,13 +1,22 @@
 package de.mirkosertic.gameengine.sprite;
 
+import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.event.Property;
-import de.mirkosertic.gameengine.type.ResourceName;
+import de.mirkosertic.gameengine.type.Animation;
 
 public interface Sprite {
 
-    String RESOURCE_NAME_PROPERTY = "resourceName";
+    String CURRENT_ANIMATION_PROPERTY = "currentAnimation";
 
-    Property<ResourceName> resourceNameProperty();
+    String SPEED_PROPERTY = "speed";
+
+    Property<Animation> currentAnimationProperty();
+
+    Property<Integer> speedProperty();
+
+    GameScene getGameScene();
 
     void delete();
+
+    Animation[] getAnimations();
 }

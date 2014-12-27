@@ -2,9 +2,7 @@ package de.mirkosertic.gameengine.generic;
 
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.core.*;
-import de.mirkosertic.gameengine.sprite.Sprite;
 import de.mirkosertic.gameengine.sprite.SpriteBehavior;
-import de.mirkosertic.gameengine.text.Text;
 import de.mirkosertic.gameengine.text.TextBehavior;
 import de.mirkosertic.gameengine.type.*;
 
@@ -86,30 +84,38 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
 
             beforeInstance(theInstance, thePosition.x + theHalfWidth, thePosition.y + theHalfHeight, theAngle);
 
-            Sprite theSpriteBehavior = theInstance.getBehavior(SpriteBehavior.class);
-            if (theSpriteBehavior != null && !theSpriteBehavior.resourceNameProperty().isNull()) {
+            boolean theSomethingRendered = false;
 
-                ResourceName theSpriteResource = theSpriteBehavior.resourceNameProperty().get();
+            SpriteBehavior theSpriteBehavior = theInstance.getBehavior(SpriteBehavior.class);
+            if (theSpriteBehavior != null) {
 
-                try {
-                    S theGameResource = gameRuntime.getResourceCache()
-                            .getResourceFor(theSpriteResource);
+                ResourceName theSpriteResource = theSpriteBehavior.computeCurrentFrame(aGameTime);
+                if (theSpriteResource != null) {
+                    try {
+                        S theGameResource = gameRuntime.getResourceCache()
+                                .getResourceFor(theSpriteResource);
 
-                    drawImage(theInstance, thePosition, theGameResource, -theHalfWidth, -theHalfHeight);
+                        drawImage(theInstance, thePosition, theGameResource, -theHalfWidth, -theHalfHeight);
 
-                } catch (IOException e) {
-                    logError("Error while rendering sprite " + theSpriteResource.name);
+                        theSomethingRendered = true;
+
+                    } catch (IOException e) {
+                        logError("Error while rendering sprite " + theSpriteResource.name);
+                    }
                 }
-            } else {
-                Text theTextBehavior = theInstance.getBehavior(TextBehavior.class);
-                if (theTextBehavior != null) {
-                    ExpressionParser theExpressionParser = aScene.get(theTextBehavior.textExpressionProperty().get());
+            }
+            TextBehavior theTextBehavior = theInstance.getBehavior(TextBehavior.class);
+            if (theTextBehavior != null) {
+                ExpressionParser theExpressionParser = aScene.get(theTextBehavior.textExpressionProperty().get());
 
-                    drawText(theInstance, thePosition, theTextBehavior.fontProperty().get(),
-                            theTextBehavior.colorProperty().get(), theExpressionParser.evaluateToString(), theSize);
-                } else {
-                    drawRect(theInstance, thePosition, Color.WHITE, -theHalfWidth, -theHalfHeight, theSize.width, theSize.height);
-                }
+                drawText(theInstance, thePosition, theTextBehavior.fontProperty().get(),
+                        theTextBehavior.colorProperty().get(), theExpressionParser.evaluateToString(), theSize);
+
+                theSomethingRendered = true;
+            }
+
+            if (!theSomethingRendered) {
+                drawRect(theInstance, thePosition, Color.WHITE, -theHalfWidth, -theHalfHeight, theSize.width, theSize.height);
             }
 
             afterInstance(theInstance, thePosition);

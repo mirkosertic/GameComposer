@@ -4,7 +4,6 @@ import de.mirkosertic.gameengine.core.BehaviorTemplate;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
-import de.mirkosertic.gameengine.core.UsedByReflection;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.type.GameKeyCode;
@@ -23,7 +22,6 @@ public class PlatformBehaviorTemplate implements BehaviorTemplate<PlatformBehavi
     private final Property<Float> leftRightImpulse;
     private final Property<Float> jumpImpulse;
 
-    @UsedByReflection
     public PlatformBehaviorTemplate(GameEventManager aEventManager, GameObject aOwner) {
         owner = aOwner;
         moveLeftKey = new Property<>(GameKeyCode.class, this, MOVE_LEFT_KEY_PROPERTY, GameKeyCode.LEFT, aEventManager);

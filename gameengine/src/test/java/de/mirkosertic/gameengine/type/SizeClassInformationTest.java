@@ -10,11 +10,12 @@ public class SizeClassInformationTest {
     public void testWidth() {
         Size theSize = new Size(10, 20);
         SizeClassInformation theInformation = SizeClassInformation.INSTANCE;
-        Field theField = theInformation.getFieldByName("width");
+        assertEquals("width", theInformation.getFieldByName("width").getName());
+        assertEquals("height", theInformation.getFieldByName("height").getName());
         assertEquals(2, theInformation.getFields().length);
-        assertNotNull(theInformation.getFieldByName("height"));
+
+        Field theField = theInformation.getFieldByName("width");
         assertSame(SizeClassInformation.WIDTH, theField);
-        assertEquals("width", theField.getName());
         assertEquals(Integer.class, theField.getType());
         assertEquals(10, theField.getValue(theSize));
     }
@@ -23,13 +24,13 @@ public class SizeClassInformationTest {
     public void testHeight() {
         Size theSize = new Size(10, 20);
         SizeClassInformation theInformation = SizeClassInformation.INSTANCE;
-        Field theField = theInformation.getFieldByName("height");
+        assertEquals("width", theInformation.getFieldByName("width").getName());
+        assertEquals("height", theInformation.getFieldByName("height").getName());
         assertEquals(2, theInformation.getFields().length);
-        assertNotNull(theInformation.getFieldByName("width"));
+
+        Field theField = theInformation.getFieldByName("height");
         assertSame(SizeClassInformation.HEIGHT, theField);
-        assertEquals("height", theField.getName());
         assertEquals(Integer.class, theField.getType());
         assertEquals(20, theField.getValue(theSize));
     }
-
 }

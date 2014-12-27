@@ -7,7 +7,6 @@ import de.mirkosertic.gameengine.core.BehaviorTemplate;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
-import de.mirkosertic.gameengine.core.UsedByReflection;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.type.Reflectable;
@@ -17,7 +16,6 @@ public class CameraBehaviorTemplate implements BehaviorTemplate<CameraBehavior>,
     private final Property<CameraType> type;
     private final GameObject owner;
 
-    @UsedByReflection
     public CameraBehaviorTemplate(GameEventManager aEventManager, GameObject aOwner) {
         type = new Property<>(CameraType.class, this, TYPE_PROPERTY, CameraType.FOLLOWPLAYER, aEventManager);
         owner = aOwner;
