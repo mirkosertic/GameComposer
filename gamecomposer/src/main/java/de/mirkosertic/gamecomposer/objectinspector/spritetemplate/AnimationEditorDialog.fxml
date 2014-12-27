@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.mirkosertic.gamecomposer.objectinspector.spritetemplate.AnimationEditorDialog">
+   <top>
+      <HBox BorderPane.alignment="CENTER">
+         <children>
+            <Label contentDisplay="CENTER" maxHeight="1.7976931348623157E308" text="Animation name:">
+               <padding>
+                  <Insets right="5.0" />
+               </padding>
+            </Label>
+            <TextField fx:id="animationName" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+         </children>
+         <BorderPane.margin>
+            <Insets bottom="5.0" />
+         </BorderPane.margin>
+      </HBox>
+   </top>
+   <bottom>
+      <HBox alignment="CENTER_RIGHT" maxWidth="1.7976931348623157E308" BorderPane.alignment="CENTER_RIGHT">
+         <children>
+            <Button minWidth="100.0" mnemonicParsing="false" onAction="#onCancel" text="Cancel">
+               <HBox.margin>
+                  <Insets right="5.0" />
+               </HBox.margin>
+            </Button>
+            <Button minWidth="100.0" mnemonicParsing="false" onAction="#onOk" text="Ok" />
+         </children>
+         <BorderPane.margin>
+            <Insets top="5.0" />
+         </BorderPane.margin>
+      </HBox>
+   </bottom>
+   <padding>
+      <Insets bottom="5.0" left="5.0" right="5.0" top="35.0" />
+   </padding>
+</BorderPane>

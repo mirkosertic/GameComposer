@@ -33,7 +33,6 @@ public class StarfieldGameSceneEffect implements GameSceneEffect {
 
     private Size currentSize;
 
-    @UsedByReflection
     public StarfieldGameSceneEffect(GameScene aParent, GameEventManager aEventManager) {
 
         scene = aParent;

@@ -4,7 +4,6 @@ import de.mirkosertic.gameengine.core.BehaviorTemplate;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
-import de.mirkosertic.gameengine.core.UsedByReflection;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.type.Color;
@@ -23,7 +22,6 @@ public class TextBehaviorTemplate implements BehaviorTemplate<TextBehavior>, Tex
 
     private final GameObject owner;
 
-    @UsedByReflection
     public TextBehaviorTemplate(GameEventManager aEventManager, GameObject aOwner) {
         font = new Property<>(Font.class, this, FONT_PROPERTY, Font.DEFAULT_FONT, aEventManager);
         textExpression = new Property<>(TextExpression.class, this, TEXT_EXPRESSION_PROPERTY, new TextExpression(""), aEventManager);

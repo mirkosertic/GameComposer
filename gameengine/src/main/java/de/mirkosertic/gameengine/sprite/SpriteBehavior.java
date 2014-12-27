@@ -2,8 +2,10 @@ package de.mirkosertic.gameengine.sprite;
 
 import de.mirkosertic.gameengine.core.Behavior;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
+import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
+import de.mirkosertic.gameengine.type.Animation;
 import de.mirkosertic.gameengine.type.Reflectable;
 import de.mirkosertic.gameengine.type.ResourceName;
 
@@ -15,7 +17,8 @@ public class SpriteBehavior implements Behavior, Sprite, Reflectable<SpriteClass
     static final String TYPE = "Sprite";
 
     private final GameObjectInstance objectInstance;
-    private final Property<ResourceName> resourceName;
+    private final Property<Animation> currentAnimation;
+    private final Property<Integer> speed;
 
     private SpriteBehavior(GameObjectInstance aObjectInstance) {
         this(aObjectInstance, aObjectInstance.getOwnerGameObject().getBehaviorTemplate(SpriteBehaviorTemplate.class));
@@ -26,7 +29,8 @@ public class SpriteBehavior implements Behavior, Sprite, Reflectable<SpriteClass
 
         GameEventManager theEventManager = aObjectInstance.getOwnerGameObject().getGameScene().getRuntime().getEventManager();
 
-        resourceName = new Property<>(ResourceName.class, this, RESOURCE_NAME_PROPERTY, aTemplate.resourceNameProperty().get(), theEventManager);
+        currentAnimation = new Property<>(Animation.class, this, CURRENT_ANIMATION_PROPERTY, aTemplate.currentAnimationProperty().get(), theEventManager);
+        speed = new Property<>(Integer.class, this, SPEED_PROPERTY, aTemplate.speedProperty().get(), theEventManager);
     }
 
     @Override
@@ -34,8 +38,14 @@ public class SpriteBehavior implements Behavior, Sprite, Reflectable<SpriteClass
         return SpriteClassInformation.INSTANCE;
     }
 
-    public Property<ResourceName> resourceNameProperty() {
-        return resourceName;
+    @Override
+    public Property<Animation> currentAnimationProperty() {
+        return currentAnimation;
+    }
+
+    @Override
+    public Property<Integer> speedProperty() {
+        return speed;
     }
 
     @Override
@@ -55,7 +65,25 @@ public class SpriteBehavior implements Behavior, Sprite, Reflectable<SpriteClass
         objectInstance.getOwnerGameObject().getGameScene().removeBehaviorFrom(objectInstance.getOwnerGameObject(), this);
     }
 
+    @Override
+    public GameScene getGameScene() {
+        return getTemplate().getGameScene();
+    }
+
+    @Override
+    public Animation[] getAnimations() {
+        return getTemplate().getAnimations();
+    }
+
     public static SpriteBehavior deserialize(GameObjectInstance aObjectInstance) {
         return new SpriteBehavior(aObjectInstance);
+    }
+
+    public ResourceName computeCurrentFrame(long aGameTime) {
+        Animation theCurrentAnimation = currentAnimation.get();
+        if (theCurrentAnimation != null) {
+            return theCurrentAnimation.computeCurrentFrame(aGameTime, speed.get());
+        }
+        return null;
     }
 }

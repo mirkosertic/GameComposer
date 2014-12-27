@@ -15,7 +15,6 @@ public class ConstantMovementBehaviorTemplate implements BehaviorTemplate<Consta
     private final Property<Speed> rotationSpeed;
     private final GameObject owner;
 
-    @UsedByReflection
     public ConstantMovementBehaviorTemplate(GameEventManager aEventManager, GameObject aOwner) {
         speed = new Property<>(Speed.class, this, SPEED_PROPERTY, new Speed(0), aEventManager);
         rotationSpeed = new Property<>(Speed.class, this, ROTATIONSPEED_PROPERTY, new Speed(0), aEventManager);
