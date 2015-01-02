@@ -1,5 +1,10 @@
 package de.mirkosertic.gameengine.dragome;
 
+import com.dragome.enhancers.jsdelegate.JsDelegateFactory;
+import com.dragome.html.dom.html5canvas.CanvasImageSource;
+import com.dragome.html.dom.html5canvas.CanvasRenderingContext2D;
+import com.dragome.html.dom.html5canvas.HTMLCanvasElement;
+
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
@@ -7,18 +12,23 @@ import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.core.GestureDetector;
 import de.mirkosertic.gameengine.generic.CSSUtils;
 import de.mirkosertic.gameengine.generic.GenericAbstractGameView;
-import de.mirkosertic.gameengine.type.*;
+import de.mirkosertic.gameengine.type.Angle;
+import de.mirkosertic.gameengine.type.Color;
+import de.mirkosertic.gameengine.type.EffectCanvas;
+import de.mirkosertic.gameengine.type.Font;
+import de.mirkosertic.gameengine.type.Position;
+import de.mirkosertic.gameengine.type.Size;
 
 class DragomeGameView extends GenericAbstractGameView<DragomeGameResource> {
 
-    private final DragomeCanvas canvas;
+    private final HTMLCanvasElement canvas;
 
-    public DragomeGameView(GameRuntime aGameRuntime, CameraBehavior aCameraBehavior, GestureDetector aGestureDetector, DragomeCanvas aCanvas) {
+    public DragomeGameView(GameRuntime aGameRuntime, CameraBehavior aCameraBehavior, GestureDetector aGestureDetector, HTMLCanvasElement aCanvas) {
         super(aGameRuntime, aCameraBehavior, aGestureDetector);
         canvas = aCanvas;
     }
 
-    private DragomeCanvasRenderingContext2D renderingContext2D;
+    private CanvasRenderingContext2D renderingContext2D;
 
     @Override
     protected EffectCanvas createEffectCanvas() {
@@ -46,7 +56,8 @@ class DragomeGameView extends GenericAbstractGameView<DragomeGameResource> {
 
     @Override
     protected void drawImage(GameObjectInstance aInstance, Position aPositionOnScreen, DragomeGameResource aResource, float aPositionX, float aPositionY) {
-        renderingContext2D.drawImage(aResource.getElement(), aPositionX, aPositionY);
+		CanvasImageSource imageSource= JsDelegateFactory.createFromNode(aResource.getElement(), CanvasImageSource.class);
+        renderingContext2D.drawImage(imageSource, aPositionX, aPositionY);
     }
 
     @Override

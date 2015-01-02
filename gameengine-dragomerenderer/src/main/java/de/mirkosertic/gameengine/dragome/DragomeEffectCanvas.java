@@ -1,5 +1,7 @@
 package de.mirkosertic.gameengine.dragome;
 
+import com.dragome.html.dom.html5canvas.CanvasRenderingContext2D;
+
 import de.mirkosertic.gameengine.generic.CSSUtils;
 import de.mirkosertic.gameengine.type.Color;
 import de.mirkosertic.gameengine.type.EffectCanvas;
@@ -7,9 +9,9 @@ import de.mirkosertic.gameengine.type.Position;
 
 public class DragomeEffectCanvas implements EffectCanvas {
 
-    private final DragomeCanvasRenderingContext2D renderingContext;
+    private final CanvasRenderingContext2D renderingContext;
 
-    public DragomeEffectCanvas(DragomeCanvasRenderingContext2D renderingContext) {
+    public DragomeEffectCanvas(CanvasRenderingContext2D renderingContext) {
         this.renderingContext = renderingContext;
     }
 

@@ -1,20 +1,32 @@
 package de.mirkosertic.gameengine.dragome;
 
-import com.dragome.model.DefaultVisualActivity;
+import org.w3c.dom.Element;
+import org.w3c.dom.events.Event;
+import org.w3c.dom.events.EventListener;
+import org.w3c.dom.events.KeyboardEvent;
+
+import com.dragome.annotations.PageAlias;
+import com.dragome.enhancers.jsdelegate.JsDelegateFactory;
+import com.dragome.html.dom.html5canvas.HTMLCanvasElement;
 import com.dragome.services.ServiceLocator;
+import com.dragome.view.DefaultVisualActivity;
+
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
-import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.core.Game;
+import de.mirkosertic.gameengine.core.GameLoop;
+import de.mirkosertic.gameengine.core.GameLoopFactory;
+import de.mirkosertic.gameengine.core.GameObject;
+import de.mirkosertic.gameengine.core.GameObjectInstance;
+import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.GestureDetector;
+import de.mirkosertic.gameengine.core.RunScene;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.input.DefaultGestureDetector;
 import de.mirkosertic.gameengine.type.GameKeyCode;
 import de.mirkosertic.gameengine.type.Size;
-
-import com.dragome.annotations.PageAlias;
-import org.w3c.dom.events.Event;
-import org.w3c.dom.events.EventListener;
-import org.w3c.dom.events.KeyboardEvent;
 
 @PageAlias(alias= "index")
 public class IndexPage extends DefaultVisualActivity {
@@ -146,7 +158,8 @@ public class IndexPage extends DefaultVisualActivity {
 
         GestureDetector theGestureDetector = new DefaultGestureDetector(theEventManager);
 
-        DragomeCanvas theCanvas = new DragomeCanvas(ServiceLocator.getInstance().getDomHandler().getElementBySelector("#html5canvas"));
+        Element elementBySelector= ServiceLocator.getInstance().getDomHandler().getElementBySelector("#html5canvas");
+        HTMLCanvasElement theCanvas= JsDelegateFactory.createFromNode(elementBySelector, HTMLCanvasElement.class);
 
         if (gameView == null) {
             gameView = new DragomeGameView(theRuntime, theCameraBehavior, theGestureDetector, theCanvas);
