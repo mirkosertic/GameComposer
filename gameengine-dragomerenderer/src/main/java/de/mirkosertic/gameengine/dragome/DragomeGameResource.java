@@ -1,6 +1,7 @@
 package de.mirkosertic.gameengine.dragome;
 
-import com.dragome.html.dom.w3c.BrowserElement;
+import org.w3c.dom.Element;
+
 import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.core.GameResourceType;
 
@@ -8,9 +9,9 @@ public class DragomeGameResource implements GameResource {
 
     private final GameResourceType type;
     private final String name;
-    private final BrowserElement element;
+    private final Element element;
 
-    public DragomeGameResource(String aName, GameResourceType aType, BrowserElement aBrowserElement) {
+    public DragomeGameResource(String aName, GameResourceType aType, Element aBrowserElement) {
         name = aName;
         type = aType;
         element = aBrowserElement;
@@ -25,7 +26,7 @@ public class DragomeGameResource implements GameResource {
         return name;
     }
 
-    public BrowserElement getElement() {
+    public Element getElement() {
         return element;
     }
 }

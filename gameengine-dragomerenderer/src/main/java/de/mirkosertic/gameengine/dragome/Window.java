@@ -4,7 +4,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.events.EventListener;
 
 import com.dragome.commons.javascript.ScriptHelper;
-import com.dragome.model.EventDispatcherImpl;
+import com.dragome.dispatcher.EventDispatcherImpl;
 import com.dragome.services.ServiceLocator;
 
 public final class Window {
