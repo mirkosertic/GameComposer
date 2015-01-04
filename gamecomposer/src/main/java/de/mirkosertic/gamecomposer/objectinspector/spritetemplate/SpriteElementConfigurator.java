@@ -11,8 +11,6 @@ import de.mirkosertic.gamecomposer.objectinspector.utils.IntegerPropertyEditor;
 import de.mirkosertic.gameengine.sprite.Sprite;
 import de.mirkosertic.gameengine.sprite.SpriteBehaviorTemplate;
 import de.mirkosertic.gameengine.type.Animation;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Node;
 import org.controlsfx.control.PropertySheet;
 
@@ -32,6 +30,9 @@ public class SpriteElementConfigurator implements ObjectInspectorElementConfigur
     @Inject
     MessageBox messageBox;
 
+    @Inject
+    AnimationEditorDialogFactory animationEditorDialogFactory;
+
     @Override
     public List<PropertySheet.Item> getItemsFor(Sprite aObject) {
         List<PropertySheet.Item> theResult = new ArrayList<>();
@@ -45,25 +46,20 @@ public class SpriteElementConfigurator implements ObjectInspectorElementConfigur
         if (aObject instanceof SpriteBehaviorTemplate) {
             final SpriteBehaviorTemplate theTemplate = (SpriteBehaviorTemplate) aObject;
             for (Animation theAnimation : theTemplate.getAnimations()) {
-                theResult.add(new AnimationPropertySheetItem(persistenceManager, theAnimation, theTemplate, CATEGORY_NAME, theAnimation.getName(), "An animation"));
+                theResult.add(new AnimationPropertySheetItem(persistenceManager, theAnimation, theTemplate, CATEGORY_NAME, theAnimation.getName(), "An animation", animationEditorDialogFactory));
             }
-            theActions.addAction(new ActionPropertyEditorItem.Action("New animation...", new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent aEvent) {
-                    Animation theAnimation = AnimationEditorDialog.performEditingOf((Node) aEvent.getSource(), theTemplate, new Animation(""), persistenceManager);
-                    if (theAnimation != null) {
-                        theTemplate.addAnimation(theAnimation);
-                    }
+            theActions.addAction(new ActionPropertyEditorItem.Action("New animation...", aEvent -> {
+                AnimationEditorDialog theDialog = animationEditorDialogFactory.createFor((Node)aEvent.getSource(), theTemplate, new Animation(""));
+                Animation theAnimation = theDialog.performEditing();
+                if (theAnimation != null) {
+                    theTemplate.addAnimation(theAnimation);
                 }
             }));
         }
 
-        theActions.addAction(new ActionPropertyEditorItem.Action("Delete behavior...", new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent aEvent) {
-                if (messageBox.showMessageBox((Node) aEvent.getSource(), "Delete behavior", "Do you really want to delete this behavior?", MessageBox.ButtonType.YES, MessageBox.ButtonType.NO) == MessageBox.ButtonType.YES) {
-                    aObject.delete();
-                }
+        theActions.addAction(new ActionPropertyEditorItem.Action("Delete behavior...", aEvent -> {
+            if (messageBox.showMessageBox((Node) aEvent.getSource(), "Delete behavior", "Do you really want to delete this behavior?", MessageBox.ButtonType.YES, MessageBox.ButtonType.NO) == MessageBox.ButtonType.YES) {
+                aObject.delete();
             }
         }));
         theResult.add(theActions);

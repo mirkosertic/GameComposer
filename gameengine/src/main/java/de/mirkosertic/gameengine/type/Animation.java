@@ -45,6 +45,12 @@ public class Animation {
         return new Animation(uuid, name, theNewSequence);
     }
 
+    public Animation removeFromAnimationSequence(int aIndex) {
+        List<ResourceName> theNewSequence = new ArrayList<>(animationSequence);
+        theNewSequence.remove(aIndex);
+        return new Animation(uuid, name, theNewSequence);
+    }
+
     public int getSequenceSize() {
         return animationSequence.size();
     }

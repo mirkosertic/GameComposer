@@ -101,6 +101,10 @@ public class SpriteBehaviorTemplate implements BehaviorTemplate<SpriteBehavior>,
     }
 
     public void replaceAnimation(Animation aOldAnimation, Animation aNewAnimation) {
+        if (aOldAnimation == aNewAnimation) {
+            // Nothing to do
+            return;
+        }
         List<Animation> theNewList = new ArrayList<>();
         for (Animation theAnim : animations) {
             if (aOldAnimation.getUuid().equals(theAnim.getUuid())) {

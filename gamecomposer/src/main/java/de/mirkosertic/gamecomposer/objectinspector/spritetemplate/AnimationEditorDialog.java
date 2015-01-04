@@ -1,20 +1,16 @@
 package de.mirkosertic.gamecomposer.objectinspector.spritetemplate;
 
+import de.mirkosertic.gamecomposer.GameAssetSelector;
 import de.mirkosertic.gamecomposer.PersistenceManager;
 import de.mirkosertic.gameengine.core.GameResourceLoader;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.javafx.JavaFXBitmapResource;
-import de.mirkosertic.gameengine.sprite.Sprite;
 import de.mirkosertic.gameengine.type.Animation;
 import de.mirkosertic.gameengine.type.ResourceName;
 
-import insidefx.undecorator.UndecoratorScene;
-
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.JavaFXBuilderFactory;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -22,52 +18,27 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import javafx.util.Callback;
+import javafx.util.Duration;
 import org.controlsfx.control.GridCell;
 import org.controlsfx.control.GridView;
+import org.controlsfx.control.HiddenSidesPane;
 import org.controlsfx.validation.ValidationSupport;
 import org.controlsfx.validation.Validator;
 
-import java.io.InputStream;
+import javax.inject.Inject;
 
 public class AnimationEditorDialog {
 
-    public static Animation performEditingOf(Node aParent, Sprite aSprite, Animation aAnimation, PersistenceManager aPersistenceManager) {
-        FXMLLoader theLoader = new FXMLLoader();
-        theLoader.setBuilderFactory(new JavaFXBuilderFactory());
-        try (InputStream fxml = AnimationEditorDialog.class.getResourceAsStream("AnimationEditorDialog.fxml")) {
-            BorderPane thePane = theLoader.load(fxml);
-
-            AnimationEditorDialog theDialog = theLoader.getController();
-
-            Stage theModalStage = new Stage();
-            theModalStage.setResizable(false);
-            theModalStage.setTitle("Edit animation");
-            UndecoratorScene theUndecoratorScene = new UndecoratorScene(theModalStage, thePane);
-
-            // Hacky, but works
-            theUndecoratorScene.getUndecorator().setStyle("-fx-background-color: rgba(0, 0, 0, 0);");
-
-            theModalStage.initStyle(StageStyle.TRANSPARENT);
-            theUndecoratorScene.setFill(Color.TRANSPARENT);
-
-            theModalStage.setScene(theUndecoratorScene);
-            theModalStage.initModality(Modality.APPLICATION_MODAL);
-            theModalStage.initOwner(aParent.getScene().getWindow());
-            theDialog.initializeFor(aPersistenceManager, aSprite.getGameScene(), aAnimation, theModalStage);
-            theModalStage.showAndWait();
-
-            return theDialog.getAnimation();
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+    private static final ResourceName ADD_RESOURCE_MARKER = new ResourceName("ADDRESOURCEMARKER");
 
     private Animation animation;
+
+    @Inject
+    GameAssetSelector gameAssetSelector;
+
+    @Inject
+    PersistenceManager persistenceManager;
 
     @FXML
     private TextField animationName;
@@ -79,14 +50,30 @@ public class AnimationEditorDialog {
 
     private ValidationSupport validationSupport;
 
-    private static class ResourceNameGridCell extends GridCell<ResourceName> {
+    private GridView<ResourceName> gridView;
+
+    private GameScene gameScene;
+
+    private class ResourceNameGridCell extends GridCell<ResourceName> {
 
         private final GameResourceLoader resourceLoader;
+        private final HiddenSidesPane singleResourceNode;
         private final ImageView imageView;
+        private final Button addAnimationButton;
 
         public ResourceNameGridCell(GameResourceLoader aResourceLoader) {
             resourceLoader = aResourceLoader;
+            singleResourceNode = new HiddenSidesPane();
             imageView = new ImageView();
+            singleResourceNode.setContent(imageView);
+
+            Button theDeleteButton = new Button("Remove");
+            theDeleteButton.setOnAction((e) -> removeImageFromAnimationSequence(getIndex()));
+            singleResourceNode.setBottom(theDeleteButton);
+            singleResourceNode.setAnimationDelay(Duration.millis(50));
+
+            addAnimationButton = new Button("Add...");
+            addAnimationButton.setOnAction((e) -> addImageToAnimationSequence());
         }
 
         @Override
@@ -96,36 +83,35 @@ public class AnimationEditorDialog {
             if (empty) {
                 setGraphic(null);
             } else {
-                try {
-                    JavaFXBitmapResource theResource = (JavaFXBitmapResource) resourceLoader.load(aItem);
-                    imageView.setImage(theResource);
-                    setGraphic(imageView);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                if (aItem == ADD_RESOURCE_MARKER) {
+                    setGraphic(addAnimationButton);
+                } else {
+                    try {
+                        JavaFXBitmapResource theResource = (JavaFXBitmapResource) resourceLoader.load(aItem);
+                        imageView.setImage(theResource);
+
+                        setGraphic(singleResourceNode);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
     }
 
-    private void initializeFor(PersistenceManager aPersistenceManager, GameScene aGameScene, Animation aAnimation, Stage aStage) {
-        animation = aAnimation;
+    public void initialize(GameScene aGameScene, Animation aAnimation, Stage aStage) {
         stage = aStage;
+        gameScene = aGameScene;
 
-        GridView<ResourceName> theGrid = new GridView<>();
-        for (int i=0;i<aAnimation.getSequenceSize();i++) {
-            theGrid.getItems().add(aAnimation.getResourceByIndex(i));
-        }
+        gridView = new GridView<>();
+        final GameResourceLoader theLoader = persistenceManager.createResourceLoaderFor(aGameScene);
 
-        final GameResourceLoader theLoader = aPersistenceManager.createResourceLoaderFor(aGameScene);
+        gridView.setCellFactory(param -> new ResourceNameGridCell(theLoader));
+        gridView.backgroundProperty().set(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
 
-        theGrid.setCellFactory(new Callback<GridView<ResourceName>, GridCell<ResourceName>>() {
-            @Override
-            public GridCell<ResourceName> call(GridView<ResourceName> param) {
-                return new ResourceNameGridCell(theLoader);
-            }
-        });
-        theGrid.backgroundProperty().set(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
-        borderPane.setCenter(theGrid);
+        updateAnimationSequence(aAnimation);
+
+        borderPane.setCenter(gridView);
 
         validationSupport = new ValidationSupport();
         validationSupport.registerValidator(animationName, Validator.createEmptyValidator("Name must not be empty"));
@@ -133,10 +119,33 @@ public class AnimationEditorDialog {
         animationName.setText(aAnimation.getName());
     }
 
+    private void updateAnimationSequence(Animation aAnimation) {
+
+        gridView.getItems().clear();
+        for (int i=0;i<aAnimation.getSequenceSize();i++) {
+            gridView.getItems().add(aAnimation.getResourceByIndex(i));
+        }
+        gridView.getItems().add(ADD_RESOURCE_MARKER);
+
+        animation = aAnimation;
+    }
+
+    private void addImageToAnimationSequence() {
+        ResourceName theNewImage = gameAssetSelector.selectImageAssetFrom(gameScene, borderPane.getScene().getWindow());
+        if (theNewImage != null) {
+            updateAnimationSequence(animation.addToAnimationSequence(theNewImage));
+        }
+    }
+
+    private void removeImageFromAnimationSequence(int aIndex) {
+        updateAnimationSequence(animation.removeFromAnimationSequence(aIndex));
+    }
+
     @FXML
     public void onOk() {
         validationSupport.redecorate();
         if (!validationSupport.isInvalid()) {
+            animation = animation.changeName(animationName.getText());
             stage.close();
         }
     }
@@ -147,7 +156,8 @@ public class AnimationEditorDialog {
         stage.close();
     }
 
-    public Animation getAnimation() {
+    public Animation performEditing() {
+        stage.showAndWait();
         return animation;
     }
 }
