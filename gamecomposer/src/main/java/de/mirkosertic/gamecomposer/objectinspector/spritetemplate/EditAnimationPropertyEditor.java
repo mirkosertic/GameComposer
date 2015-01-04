@@ -5,8 +5,6 @@ import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.javafx.JavaFXBitmapResource;
 import de.mirkosertic.gameengine.type.Animation;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.image.ImageView;
@@ -26,13 +24,10 @@ public class EditAnimationPropertyEditor implements PropertyEditor<Animation> {
         imageView = new ImageView();
 
         Hyperlink theEditAnimation = new Hyperlink("Edit animation...");
-        theEditAnimation.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent aEvent) {
-                Animation theAnimation = AnimationEditorDialog.performEditingOf((Node) aEvent.getSource(), item.getTemplate(), getValue(), item.getPersistenceManager());
-                if (theAnimation != null) {
-                    setValue(theAnimation);
-                }
+        theEditAnimation.setOnAction(aEvent -> {
+            Animation theNewAnimation = item.editAnimationSequence((Node) aEvent.getSource());
+            if (theNewAnimation != null) {
+                setValue(theNewAnimation);
             }
         });
 

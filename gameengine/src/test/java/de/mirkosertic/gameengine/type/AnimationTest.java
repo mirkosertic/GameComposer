@@ -54,6 +54,19 @@ public class AnimationTest {
     }
 
     @Test
+    public void testRemoveFromAnimationSequenceWithIndex() throws Exception {
+        Animation theAnimation = new Animation("Test");
+        Animation theNewAnimation = theAnimation.addToAnimationSequence(new ResourceName("Res"));
+        Animation theDeletedAnimation = theNewAnimation.removeFromAnimationSequence(0);
+        assertEquals(1, theNewAnimation.getSequenceSize());
+        assertEquals(0, theAnimation.getSequenceSize());
+        assertEquals(0, theDeletedAnimation.getSequenceSize());
+        assertNotSame(theAnimation, theNewAnimation);
+        assertNotSame(theAnimation, theDeletedAnimation);
+        assertNotSame(theNewAnimation, theDeletedAnimation);
+    }
+
+    @Test
     public void testSerialize() throws Exception {
         Animation theAnimation = new Animation("Test").addToAnimationSequence(new ResourceName("1")).addToAnimationSequence(new ResourceName("2"));
         Map<String, Object> theData = theAnimation.serialize();

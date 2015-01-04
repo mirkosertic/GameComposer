@@ -4,6 +4,7 @@ import de.mirkosertic.gamecomposer.PersistenceManager;
 import de.mirkosertic.gameengine.sprite.SpriteBehaviorTemplate;
 import de.mirkosertic.gameengine.type.Animation;
 
+import javafx.scene.Node;
 import org.controlsfx.control.PropertySheet;
 import org.controlsfx.property.editor.PropertyEditor;
 
@@ -17,14 +18,16 @@ public class AnimationPropertySheetItem implements PropertySheet.Item {
     private final String category;
     private final String name;
     private final String description;
+    private final AnimationEditorDialogFactory animationEditorDialogFactory;
 
-    public AnimationPropertySheetItem(PersistenceManager aPersistenceManager, Animation aAnimation, SpriteBehaviorTemplate aTermplate, String aCategory, String aName, String aDescription) {
+    public AnimationPropertySheetItem(PersistenceManager aPersistenceManager, Animation aAnimation, SpriteBehaviorTemplate aTermplate, String aCategory, String aName, String aDescription, AnimationEditorDialogFactory aAnimationEditorFactory) {
         persistenceManager = aPersistenceManager;
         animation = aAnimation;
         template = aTermplate;
         category = aCategory;
         name = aName;
         description = aDescription;
+        animationEditorDialogFactory = aAnimationEditorFactory;
     }
 
     @Override
@@ -68,5 +71,14 @@ public class AnimationPropertySheetItem implements PropertySheet.Item {
     @Override
     public Optional<Class<? extends PropertyEditor<?>>> getPropertyEditorClass() {
         return Optional.of(EditAnimationPropertyEditor.class);
+    }
+
+    public Animation editAnimationSequence(Node aSource) {
+        AnimationEditorDialog theDialog = animationEditorDialogFactory.createFor(aSource, template, animation);
+        Animation theAnimation = theDialog.performEditing();
+        if (theAnimation != null) {
+            template.replaceAnimation(animation, theAnimation);
+        }
+        return theAnimation;
     }
 }
