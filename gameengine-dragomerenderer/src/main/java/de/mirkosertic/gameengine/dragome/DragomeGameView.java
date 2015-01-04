@@ -40,7 +40,7 @@ class DragomeGameView extends GenericAbstractGameView<DragomeGameResource> {
         renderingContext2D = canvas.getContext("2d");
         Size theCurrentScreenSize = getCurrentScreenSize();
         renderingContext2D.setFillStyle(CSSUtils.toColor(aScene.backgroundColorProperty().get()));
-        renderingContext2D.clearRect(0, 0, theCurrentScreenSize.width, theCurrentScreenSize.height);
+        renderingContext2D.fillRect(0, 0, theCurrentScreenSize.width, theCurrentScreenSize.height);
         return true;
     }
 
