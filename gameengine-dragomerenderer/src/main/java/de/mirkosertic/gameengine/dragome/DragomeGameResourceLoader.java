@@ -1,20 +1,19 @@
 package de.mirkosertic.gameengine.dragome;
 
-import com.dragome.html.dom.DomHandler;
-import com.dragome.html.dom.w3c.BrowserElement;
-import com.dragome.services.ServiceLocator;
-
-import de.mirkosertic.gameengine.core.GameResource;
-import de.mirkosertic.gameengine.core.GameResourceLoader;
-import de.mirkosertic.gameengine.core.GameResourceType;
-import de.mirkosertic.gameengine.type.ResourceName;
+import java.io.IOException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import java.io.IOException;
+import com.dragome.html.dom.DomHandler;
+import com.dragome.services.ServiceLocator;
+
+import de.mirkosertic.gameengine.core.GameResource;
+import de.mirkosertic.gameengine.core.GameResourceLoader;
+import de.mirkosertic.gameengine.core.GameResourceType;
+import de.mirkosertic.gameengine.type.ResourceName;
 
 public class DragomeGameResourceLoader implements GameResourceLoader {
 
@@ -38,7 +37,7 @@ public class DragomeGameResourceLoader implements GameResourceLoader {
             return new DragomeGameResource(theResourceName, GameResourceType.SOUND, null);
         }
 
-        BrowserElement theImage = (BrowserElement) document.createElement("img");
+        Element theImage = (Element) document.createElement("img");
         theImage.setAttribute("src", theResourceName);
         cacheElement.appendChild(theImage);
 
