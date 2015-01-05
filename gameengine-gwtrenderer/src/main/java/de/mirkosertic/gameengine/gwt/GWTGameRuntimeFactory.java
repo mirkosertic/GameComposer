@@ -1,13 +1,15 @@
 package de.mirkosertic.gameengine.gwt;
 
-import com.google.gwt.core.client.GWT;
 import de.mirkosertic.gameengine.AbstractGameRuntimeFactory;
 import de.mirkosertic.gameengine.core.GameResourceLoader;
 import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.SystemException;
+import de.mirkosertic.gameengine.scriptengine.ScriptEngineFactory;
 import de.mirkosertic.gameengine.sound.GameSoundSystemFactory;
 import de.mirkosertic.gameengine.type.Reflectable;
+
+import com.google.gwt.core.client.GWT;
 
 class GWTGameRuntimeFactory extends AbstractGameRuntimeFactory {
 
@@ -26,5 +28,11 @@ class GWTGameRuntimeFactory extends AbstractGameRuntimeFactory {
             }
         });
         return theRuntime;
+    }
+
+    @Override
+    protected ScriptEngineFactory createScriptEngine() {
+        //TODO: Implement script engine here...
+        return null;
     }
 }

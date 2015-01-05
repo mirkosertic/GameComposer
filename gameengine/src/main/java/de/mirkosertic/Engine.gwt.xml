@@ -1,4 +1,5 @@
 <module>
     <inherits name="org.jbox2d.JBox2D"/>
+    <inherits name="de.mirkosertic.gameengine.Annotations"/>
     <source path="gameengine"/>
 </module>

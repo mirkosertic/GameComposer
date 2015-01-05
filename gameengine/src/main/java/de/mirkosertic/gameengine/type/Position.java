@@ -1,11 +1,17 @@
 package de.mirkosertic.gameengine.type;
 
+import de.mirkosertic.gameengine.annotations.ReflectiveField;
+import de.mirkosertic.gameengine.annotations.ReflectiveMethod;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class Position implements Reflectable<PositionClassInformation> {
 
+    @ReflectiveField
     public final float x;
+
+    @ReflectiveField
     public final float y;
 
     public Position() {
@@ -45,18 +51,22 @@ public class Position implements Reflectable<PositionClassInformation> {
         return PositionClassInformation.INSTANCE;
     }
 
+    @ReflectiveMethod
     public Position add(Position aOffset) {
         return new Position(x + aOffset.x, y + aOffset.y);
     }
 
+    @ReflectiveMethod
     public Position changeX(Float aNewX) {
         return new Position(aNewX, y);
     }
 
+    @ReflectiveMethod
     public Position changeY(Float aNewY) {
         return new Position(x, aNewY);
     }
 
+    @ReflectiveMethod
     public Position snapToGrid(int aGridWidth, int aGridHeight) {
         float theSnapX = x - x % aGridWidth;
         float theSnapY = y - y % aGridHeight;

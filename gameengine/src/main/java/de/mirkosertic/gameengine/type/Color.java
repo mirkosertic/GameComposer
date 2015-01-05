@@ -1,5 +1,7 @@
 package de.mirkosertic.gameengine.type;
 
+import de.mirkosertic.gameengine.annotations.ReflectiveField;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,8 +10,13 @@ public class Color implements Reflectable<ColorClassInformation> {
     public static final Color WHITE = new Color(255, 255, 255);
     public static final Color BLACK = new Color(0, 0, 0);
 
+    @ReflectiveField
     public final int r;
+
+    @ReflectiveField
     public final int g;
+
+    @ReflectiveField
     public final int b;
 
     public Color(int aR, int aG, int aB) {
