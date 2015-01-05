@@ -6,6 +6,7 @@ import de.mirkosertic.gameengine.core.GameScene;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.dragome.services.RequestExecutorImpl;
 import com.dragome.services.ServiceLocator;
 import com.dragome.services.interfaces.AsyncCallback;
 
@@ -25,7 +26,7 @@ class DragomeGameSceneLoader {
     }
 
     public void loadFromServer(String aSceneName, final DragomeGameResourceLoader aResourceLoader) {
-        ServiceLocator.getInstance().getRequestExecutor().executeAsynchronousRequest(aSceneName+"/scene.json", new HashMap<>(), new AsyncCallback<String>() {
+        RequestExecutorImpl.executeHttpRequest(true, aSceneName+"/scene.json", new HashMap<>(), new AsyncCallback<String>() {
             @Override
             public void onSuccess(String result) {
                 listener.onGameSceneLoaded(parse(result, aResourceLoader));
@@ -35,7 +36,7 @@ class DragomeGameSceneLoader {
             public void onError() {
                 listener.onGameSceneLoadedError();
             }
-        });
+        }, false, true);
     }
 
     private GameScene parse(String aResponse, DragomeGameResourceLoader aResourceLoader) {

@@ -5,6 +5,7 @@ import de.mirkosertic.gameengine.core.Game;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.dragome.services.RequestExecutorImpl;
 import com.dragome.services.ServiceLocator;
 import com.dragome.services.interfaces.AsyncCallback;
 
@@ -12,6 +13,7 @@ class DragomeGameLoader {
 
     public static interface GameLoadedListener {
         void onGameLoaded(Game aGame);
+
         void onGameLoadedError();
     }
 
@@ -22,7 +24,7 @@ class DragomeGameLoader {
     }
 
     public void loadFromServer() {
-        ServiceLocator.getInstance().getRequestExecutor().executeAsynchronousRequest("game.json", new HashMap<>(), new AsyncCallback<String>() {
+        RequestExecutorImpl.executeHttpRequest(true, "game.json", new HashMap<>(), new AsyncCallback<String>() {
             @Override
             public void onSuccess(String result) {
                 listener.onGameLoaded(parse(result));
@@ -33,7 +35,7 @@ class DragomeGameLoader {
                 listener.onGameLoadedError();
 
             }
-        });
+        }, false, true);
     }
 
     private Game parse(String aResponse) {
