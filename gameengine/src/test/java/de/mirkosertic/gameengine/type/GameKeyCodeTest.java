@@ -74,7 +74,7 @@ public class GameKeyCodeTest {
         assertEquals(GameKeyCode.LEFT_PARENTHESIS, GameKeyCode.fromChar('{'));
         assertEquals(GameKeyCode.RIGHT_PARENTHESIS, GameKeyCode.fromChar('}'));
         assertEquals(GameKeyCode.UNDERSCORE, GameKeyCode.fromChar('_'));
-        assertNull(GameKeyCode.fromChar('ö'));
+        assertNull(GameKeyCode.fromChar('?'));
     }
 
     @Test
