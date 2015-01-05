@@ -1,5 +1,6 @@
 package de.mirkosertic.gameengine.starfield;
 
+import de.mirkosertic.gameengine.annotations.ReflectiveField;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
 import de.mirkosertic.gameengine.core.*;
@@ -62,14 +63,17 @@ public class StarfieldGameSceneEffect implements GameSceneEffect {
         return GameSceneEffectType.PREPROCESSOR;
     }
 
+    @ReflectiveField
     public Property<Integer> numberofStars() {
         return numberOfStars;
     }
 
+    @ReflectiveField
     public Property<Float> starSpeed() {
         return starSpeed;
     }
 
+    @ReflectiveField
     public Property<Color> color() {
         return color;
     }

@@ -1,5 +1,8 @@
 package de.mirkosertic.gameengine.apt;
 
+import de.mirkosertic.gameengine.annotations.ReflectiveField;
+import de.mirkosertic.gameengine.annotations.ReflectiveMethod;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -12,6 +15,7 @@ import javax.annotation.processing.Filer;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.ExecutableType;
@@ -35,6 +39,14 @@ public class AnnotationProcessor extends AbstractProcessor {
         }
         if (aTypeName.startsWith("java.lang.")) {
             return aTypeName.substring(10);
+        }
+        return aTypeName;
+    }
+
+    private String stripGenerics(String aTypeName) {
+        int p = aTypeName.indexOf("<");
+        if (p>0) {
+            return aTypeName.substring(0, p);
         }
         return aTypeName;
     }
@@ -77,82 +89,94 @@ public class AnnotationProcessor extends AbstractProcessor {
                 theClassWriter.print(" extends ClassInformation {");
                 theClassWriter.println();
                 for (Element theElement : theEntry.getValue()) {
-                    switch (theElement.getKind()) {
-                        case FIELD: {
-                            // Field annotation
+                    ReflectiveField theField = theElement.getAnnotation(ReflectiveField.class);
+                    if (theField != null) {
+                        // Field annotation
+                        String theTypename;
+                        boolean isMethod = false;
+                        if (theElement.getKind() == ElementKind.FIELD) {
                             TypeMirror theType = theElement.asType();
-                            String theTypename = toTypeName(theType.toString());
-
-                            String theFieldName = theElement.getSimpleName().toString().toUpperCase();
-                            theClassWriter.println();
-                            theClassWriter.print("  public static final Field<");
-                            theClassWriter.print(theClass.getSimpleName().toString());
-                            theClassWriter.print(", ");
-                            theClassWriter.print(theTypename);
-                            theClassWriter.print("> ");
-                            theClassWriter.print(theFieldName);
-                            theClassWriter.print(" = new Field<");
-                            theClassWriter.print(theClass.getSimpleName().toString());
-                            theClassWriter.print(", ");
-                            theClassWriter.print(theTypename);
-                            theClassWriter.print(">(\"");
-                            theClassWriter.print(theElement.getSimpleName().toString());
-                            theClassWriter.print("\", ");
-                            theClassWriter.print(theTypename);
-                            theClassWriter.println(".class) {");
-                            theClassWriter.println("    @Override");
-                            theClassWriter.print("    public ");
-                            theClassWriter.print(theTypename);
-                            theClassWriter.print(" getValue(");
-                            theClassWriter.print(theClass.getSimpleName().toString());
-                            theClassWriter.println(" aObject) {");
-                            theClassWriter.print("      return aObject.");
-                            theClassWriter.print(theElement.getSimpleName().toString());
-                            theClassWriter.println(";");
-                            theClassWriter.println("    }");
-                            theClassWriter.println("  };");
-
-                            break;
+                            theTypename = toTypeName(theType.toString());
+                        } else {
+                            // Method
+                            TypeMirror theType = ((ExecutableType) theElement.asType()).getReturnType();
+                            theTypename = toTypeName(theType.toString());
+                            isMethod = true;
                         }
-                        case METHOD: {
-                            ExecutableType theElementType = (ExecutableType) theElement.asType();
-                            // Field annotation
-                            TypeMirror theType = theElementType.getReturnType();
-                            String theTypename = toTypeName(theType.toString());
 
-                            String theFieldName = theElement.getSimpleName().toString().toUpperCase();
-                            theClassWriter.println();
-                            theClassWriter.print("  public static final Method<");
-                            theClassWriter.print(theClass.getQualifiedName().toString());
-                            theClassWriter.print("> ");
-                            theClassWriter.print(theFieldName);
-                            theClassWriter.print(" = new Method<");
-                            theClassWriter.print(theClass.getQualifiedName().toString());
-                            theClassWriter.print(">(\"");
-                            theClassWriter.print(theElement.getSimpleName().toString());
-                            theClassWriter.print("\", ");
-                            theClassWriter.print(theTypename);
-                            theClassWriter.print(".class, new Class[] {");
+                        String theFieldName = theElement.getSimpleName().toString().toUpperCase();
+                        theClassWriter.println();
+                        theClassWriter.print("  public static final Field<");
+                        theClassWriter.print(theClass.getSimpleName().toString());
+                        theClassWriter.print(", ");
+                        theClassWriter.print(theTypename);
+                        theClassWriter.print("> ");
+                        theClassWriter.print(theFieldName);
+                        theClassWriter.print(" = new Field<");
+                        theClassWriter.print(theClass.getSimpleName().toString());
+                        theClassWriter.print(", ");
+                        theClassWriter.print(theTypename);
+                        theClassWriter.print(">(\"");
+                        theClassWriter.print(theElement.getSimpleName().toString());
+                        theClassWriter.print("\", ");
+                        theClassWriter.print(stripGenerics(theTypename));
+                        theClassWriter.println(".class) {");
+                        theClassWriter.println("    @Override");
+                        theClassWriter.print("    public ");
+                        theClassWriter.print(theTypename);
+                        theClassWriter.print(" getValue(");
+                        theClassWriter.print(theClass.getSimpleName().toString());
+                        theClassWriter.println(" aObject) {");
+                        theClassWriter.print("      return aObject.");
+                        theClassWriter.print(theElement.getSimpleName().toString());
+                        if (isMethod) {
+                            theClassWriter.print("()");
+                        }
+                        theClassWriter.println(";");
+                        theClassWriter.println("    }");
+                        theClassWriter.println("  };");
+                    }
+                    ReflectiveMethod theMethod = theElement.getAnnotation(ReflectiveMethod.class);
+                    if (theMethod != null) {
+                        ExecutableType theElementType = (ExecutableType) theElement.asType();
+                        // Field annotation
+                        TypeMirror theType = theElementType.getReturnType();
+                        String theTypename = toTypeName(theType.toString());
 
-                            List<? extends TypeMirror> theTypes = theElementType.getParameterTypes();
-                            for (int i=0;i<theTypes.size();i++) {
-                                if (i>0) {
-                                    theClassWriter.print(", ");
-                                }
-                                theClassWriter.print(toTypeName(theTypes.get(i).toString()));
-                                theClassWriter.print(".class");
+                        String theFieldName = theElement.getSimpleName().toString().toUpperCase();
+                        theClassWriter.println();
+                        theClassWriter.print("  public static final Method<");
+                        theClassWriter.print(theClass.getQualifiedName().toString());
+                        theClassWriter.print("> ");
+                        theClassWriter.print(theFieldName);
+                        theClassWriter.print(" = new Method<");
+                        theClassWriter.print(theClass.getQualifiedName().toString());
+                        theClassWriter.print(">(\"");
+                        theClassWriter.print(theElement.getSimpleName().toString());
+                        theClassWriter.print("\", ");
+                        theClassWriter.print(theTypename);
+                        theClassWriter.print(".class, new Class[] {");
+
+                        List<? extends TypeMirror> theTypes = theElementType.getParameterTypes();
+                        for (int i=0;i<theTypes.size();i++) {
+                            if (i>0) {
+                                theClassWriter.print(", ");
                             }
+                            theClassWriter.print(stripGenerics(toTypeName(theTypes.get(i).toString())));
+                            theClassWriter.print(".class");
+                        }
 
-                            theClassWriter.println("}) {");
-                            theClassWriter.println("    @Override");
-                            theClassWriter.print("    public Object invoke(");
-                            theClassWriter.print(theClass.getSimpleName().toString());
-                            theClassWriter.println(" aObject, Object[] aArguments) {");
+                        theClassWriter.println("}) {");
+                        theClassWriter.println("    @Override");
+                        theClassWriter.print("    public Object invoke(");
+                        theClassWriter.print(theClass.getSimpleName().toString());
+                        theClassWriter.println(" aObject, Object[] aArguments) {");
+                        if (!"void".equals(theTypename)) {
                             theClassWriter.print("      return aObject.");
                             theClassWriter.print(theElement.getSimpleName().toString());
                             theClassWriter.print("(");
-                            for (int i=0;i<theTypes.size();i++) {
-                                if (i>0) {
+                            for (int i = 0; i < theTypes.size(); i++) {
+                                if (i > 0) {
                                     theClassWriter.print(", ");
                                 }
                                 theClassWriter.print("(");
@@ -163,11 +187,26 @@ public class AnnotationProcessor extends AbstractProcessor {
                             }
 
                             theClassWriter.println(");");
-                            theClassWriter.println("    }");
-                            theClassWriter.println("  };");
+                        } else {
+                            theClassWriter.print("      aObject.");
+                            theClassWriter.print(theElement.getSimpleName().toString());
+                            theClassWriter.print("(");
+                            for (int i = 0; i < theTypes.size(); i++) {
+                                if (i > 0) {
+                                    theClassWriter.print(", ");
+                                }
+                                theClassWriter.print("(");
+                                theClassWriter.print(toTypeName(theTypes.get(i).toString()));
+                                theClassWriter.print(") aArguments[");
+                                theClassWriter.print(i);
+                                theClassWriter.print("]");
+                            }
 
-                            break;
+                            theClassWriter.println(");");
+                            theClassWriter.println("      return null;");
                         }
+                        theClassWriter.println("    }");
+                        theClassWriter.println("  };");
                     }
                 }
                 theClassWriter.println();
