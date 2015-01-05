@@ -1,5 +1,6 @@
 package de.mirkosertic.gameengine.scriptengine.lua;
 
+import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.scriptengine.ScriptEngine;
 import de.mirkosertic.gameengine.type.ClassInformation;
 import de.mirkosertic.gameengine.type.Field;
@@ -98,6 +99,10 @@ public class LuaScriptEngine implements ScriptEngine {
 
         @Override
         public LuaValue call() {
+            if (field.getType() == Property.class) {
+                Property theProperty = (Property) field.getValue(object);
+                return toLuaValue(theProperty.get());
+            }
             return toLuaValue(field.getValue(object));
         }
     }
