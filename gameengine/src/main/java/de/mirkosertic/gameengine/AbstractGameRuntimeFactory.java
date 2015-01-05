@@ -6,17 +6,39 @@ import de.mirkosertic.gameengine.arcade.ConstantMovementBehaviorTemplateUnmarsha
 import de.mirkosertic.gameengine.arcade.ConstantMovementBehaviorUnmarshaller;
 import de.mirkosertic.gameengine.camera.CameraBehaviorTemplateUnmarshaller;
 import de.mirkosertic.gameengine.camera.CameraBehaviorUnmarshaller;
-import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.core.DeleteGameObjectInstanceActionUnmarshaller;
+import de.mirkosertic.gameengine.core.ExpressionParserFactory;
+import de.mirkosertic.gameengine.core.GameObjectInstanceAddedToSceneConditionUnmarshaller;
+import de.mirkosertic.gameengine.core.GameObjectInstanceLeftLayoutConditionUnmarshaller;
+import de.mirkosertic.gameengine.core.GameObjectInstanceRemovedFromSceneConditionUnmarshaller;
+import de.mirkosertic.gameengine.core.GameResourceLoader;
+import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.IORegistry;
+import de.mirkosertic.gameengine.core.RunSceneActionUnmarshaller;
+import de.mirkosertic.gameengine.core.SetPropertyActionUnmarshaller;
+import de.mirkosertic.gameengine.core.SpawnGameObjectInstanceActionUnmarshaller;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.expression.GeExpressionParserFactory;
 import de.mirkosertic.gameengine.input.KeyEventConditionUnmarshaller;
-import de.mirkosertic.gameengine.physic.*;
+import de.mirkosertic.gameengine.physic.GamePhysicsManager;
+import de.mirkosertic.gameengine.physic.GamePhysicsManagerFactory;
+import de.mirkosertic.gameengine.physic.ObjectCollisionConditionUnmarshaller;
+import de.mirkosertic.gameengine.physic.PhysicsBehaviorTemplateUnmarshaller;
+import de.mirkosertic.gameengine.physic.PhysicsBehaviorUnmarshaller;
+import de.mirkosertic.gameengine.physic.PlatformBehaviorTemplateUnmarshaller;
+import de.mirkosertic.gameengine.physic.PlatformBehaviorUnmarshaller;
+import de.mirkosertic.gameengine.physic.StaticBehaviorTemplateUnmarshaller;
+import de.mirkosertic.gameengine.physic.StaticBehaviorUnmarshaller;
 import de.mirkosertic.gameengine.physic.jbox2d.JBox2DGamePhysicsManagerFactory;
 import de.mirkosertic.gameengine.playerscore.PlayerScoreBehaviorTemplateUnmarshaller;
 import de.mirkosertic.gameengine.playerscore.PlayerScoreBehaviorUnmarshaller;
 import de.mirkosertic.gameengine.process.GameProcessManager;
 import de.mirkosertic.gameengine.process.GameProcessManagerFactory;
 import de.mirkosertic.gameengine.process.KillProcessesForInstanceUnmarshaller;
+import de.mirkosertic.gameengine.script.RunScriptActionUnmarshaller;
+import de.mirkosertic.gameengine.scriptengine.ScriptEngineFactory;
+import de.mirkosertic.gameengine.scriptengine.lua.LuaScriptEngineFactory;
 import de.mirkosertic.gameengine.sound.GameSoundManager;
 import de.mirkosertic.gameengine.sound.GameSoundManagerFactory;
 import de.mirkosertic.gameengine.sound.GameSoundSystemFactory;
@@ -32,6 +54,10 @@ public abstract class AbstractGameRuntimeFactory {
 
     protected abstract Reflectable createBuildInFunctions();
 
+    protected ScriptEngineFactory createScriptEngine() {
+        return new LuaScriptEngineFactory();
+    }
+
     public GameRuntime create(GameResourceLoader aResourceLoader, GameSoundSystemFactory aSoundSystemFactory) {
 
         GameEventManager theEventManager = new GameEventManager();
@@ -45,8 +71,11 @@ public abstract class AbstractGameRuntimeFactory {
         // Expression parser
         ExpressionParserFactory theExpressionParserFactory = new GeExpressionParserFactory(createBuildInFunctions());
 
+        // By default we use Lua as a script engine
+        ScriptEngineFactory theScriptEngineFactory = createScriptEngine();
+
         // Runtime
-        GameRuntime theGameRuntime = new GameRuntime(theEventManager, aResourceLoader, theExpressionParserFactory);
+        GameRuntime theGameRuntime = new GameRuntime(theEventManager, aResourceLoader, theExpressionParserFactory, theScriptEngineFactory);
 
         // Sound
         GameSoundManager theSoundManager = GameSoundManagerFactory.create(theEventManager, aSoundSystemFactory.create(theGameRuntime));
@@ -88,6 +117,7 @@ public abstract class AbstractGameRuntimeFactory {
         theRegistry.registerActionUnmarshaller(new SpawnGameObjectInstanceActionUnmarshaller());
         theRegistry.registerActionUnmarshaller(new DeleteGameObjectInstanceActionUnmarshaller());
         theRegistry.registerActionUnmarshaller(new KillProcessesForInstanceUnmarshaller());
+        theRegistry.registerActionUnmarshaller(new RunScriptActionUnmarshaller());
 
         theRegistry.registerGameSceneEffectUnmarshaller(new StarfieldGameSceneEffectUnmarshaller());
 

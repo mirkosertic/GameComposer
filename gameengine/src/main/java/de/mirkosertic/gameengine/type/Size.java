@@ -1,11 +1,17 @@
 package de.mirkosertic.gameengine.type;
 
+import de.mirkosertic.gameengine.annotations.ReflectiveField;
+import de.mirkosertic.gameengine.annotations.ReflectiveMethod;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class Size implements Reflectable<SizeClassInformation> {
 
+    @ReflectiveField
     public final int width;
+
+    @ReflectiveField
     public final int height;
 
     public Size() {
@@ -22,10 +28,12 @@ public class Size implements Reflectable<SizeClassInformation> {
         return SizeClassInformation.INSTANCE;
     }
 
+    @ReflectiveMethod
     public Size changeWidth(int aNewWidth) {
         return new Size(aNewWidth, height);
     }
 
+    @ReflectiveMethod
     public Size changeHeight(int aNewHeight) {
         return new Size(width, aNewHeight);
     }

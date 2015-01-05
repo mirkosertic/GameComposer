@@ -45,7 +45,6 @@
                     </execution>
                 </executions>
             </plugin>
-
             <plugin>
                 <groupId>org.gaul</groupId>
                 <artifactId>modernizer-maven-plugin</artifactId>
@@ -62,13 +61,40 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>add-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>target/generated-sources/annotations</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
     <dependencies>
         <dependency>
+            <groupId>de.mirkosertic</groupId>
+            <artifactId>gameengine-apt</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.jbox2d</groupId>
             <artifactId>jbox2d-library</artifactId>
             <version>2.2.1.2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.luaj</groupId>
+            <artifactId>luaj-jme</artifactId>
+            <version>3.0</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

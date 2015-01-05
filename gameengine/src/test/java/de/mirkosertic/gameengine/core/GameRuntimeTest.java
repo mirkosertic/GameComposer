@@ -1,6 +1,8 @@
 package de.mirkosertic.gameengine.core;
 
 import de.mirkosertic.gameengine.event.GameEventManager;
+import de.mirkosertic.gameengine.scriptengine.ScriptEngineFactory;
+
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -13,7 +15,8 @@ public class GameRuntimeTest {
         GameEventManager theEventManager = mock(GameEventManager.class);
         GameResourceLoader theResourceLoader = mock(GameResourceLoader.class);
         ExpressionParserFactory theExFactory = mock(ExpressionParserFactory.class);
-        GameRuntime theRuntime = new GameRuntime(theEventManager, theResourceLoader, theExFactory);
+        ScriptEngineFactory theScriptEngineFactory = mock(ScriptEngineFactory.class);
+        GameRuntime theRuntime = new GameRuntime(theEventManager, theResourceLoader, theExFactory, theScriptEngineFactory);
         assertNotNull(theRuntime.getResourceCache());
     }
 
@@ -22,7 +25,8 @@ public class GameRuntimeTest {
         GameEventManager theEventManager = mock(GameEventManager.class);
         GameResourceLoader theResourceLoader = mock(GameResourceLoader.class);
         ExpressionParserFactory theExFactory = mock(ExpressionParserFactory.class);
-        GameRuntime theRuntime = new GameRuntime(theEventManager, theResourceLoader, theExFactory);
+        ScriptEngineFactory theScriptEngineFactory = mock(ScriptEngineFactory.class);
+        GameRuntime theRuntime = new GameRuntime(theEventManager, theResourceLoader, theExFactory, theScriptEngineFactory);
         assertSame(theEventManager, theRuntime.getEventManager());
     }
 
@@ -31,7 +35,8 @@ public class GameRuntimeTest {
         GameEventManager theEventManager = mock(GameEventManager.class);
         GameResourceLoader theResourceLoader = mock(GameResourceLoader.class);
         ExpressionParserFactory theExFactory = mock(ExpressionParserFactory.class);
-        GameRuntime theRuntime = new GameRuntime(theEventManager, theResourceLoader, theExFactory);
+        ScriptEngineFactory theScriptEngineFactory = mock(ScriptEngineFactory.class);
+        GameRuntime theRuntime = new GameRuntime(theEventManager, theResourceLoader, theExFactory, theScriptEngineFactory);
         assertSame(theExFactory, theRuntime.getExpressionParserFactory());
     }
 
@@ -40,7 +45,8 @@ public class GameRuntimeTest {
         GameEventManager theEventManager = mock(GameEventManager.class);
         GameResourceLoader theResourceLoader = mock(GameResourceLoader.class);
         ExpressionParserFactory theExFactory = mock(ExpressionParserFactory.class);
-        GameRuntime theRuntime = new GameRuntime(theEventManager, theResourceLoader, theExFactory);
+        ScriptEngineFactory theScriptEngineFactory = mock(ScriptEngineFactory.class);
+        GameRuntime theRuntime = new GameRuntime(theEventManager, theResourceLoader, theExFactory, theScriptEngineFactory);
         assertNotNull(theRuntime.getSystems());
         assertEquals(0, theRuntime.getSystems().length);
         GameSystem theSystem = mock(GameSystem.class);
@@ -54,7 +60,18 @@ public class GameRuntimeTest {
         GameEventManager theEventManager = mock(GameEventManager.class);
         GameResourceLoader theResourceLoader = mock(GameResourceLoader.class);
         ExpressionParserFactory theExFactory = mock(ExpressionParserFactory.class);
-        GameRuntime theRuntime = new GameRuntime(theEventManager, theResourceLoader, theExFactory);
+        ScriptEngineFactory theScriptEngineFactory = mock(ScriptEngineFactory.class);
+        GameRuntime theRuntime = new GameRuntime(theEventManager, theResourceLoader, theExFactory, theScriptEngineFactory);
         assertNotNull(theRuntime.getIORegistry());
+    }
+
+    @Test
+    public void testGetScriptEngineFactory() throws Exception {
+        GameEventManager theEventManager = mock(GameEventManager.class);
+        GameResourceLoader theResourceLoader = mock(GameResourceLoader.class);
+        ExpressionParserFactory theExFactory = mock(ExpressionParserFactory.class);
+        ScriptEngineFactory theScriptEngineFactory = mock(ScriptEngineFactory.class);
+        GameRuntime theRuntime = new GameRuntime(theEventManager, theResourceLoader, theExFactory, theScriptEngineFactory);
+        assertSame(theScriptEngineFactory, theRuntime.getScriptEngineFactory());
     }
 }

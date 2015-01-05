@@ -32,4 +32,8 @@ public abstract class ClassInformation {
     public Method getMethodByName(String aMethodName) {
         return methods.get(aMethodName);
     }
+
+    public Method[] getMethods() {
+        return methods.values().toArray(new Method[methods.size()]);
+    }
 }
