@@ -1,6 +1,7 @@
 package de.mirkosertic.gameengine.core;
 
 import de.mirkosertic.gameengine.ArrayUtils;
+import de.mirkosertic.gameengine.annotations.ReflectiveField;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.starfield.StarfieldGameSceneEffect;
@@ -75,22 +76,27 @@ public class GameScene implements Reflectable<GameSceneClassInformation> {
         return gameRuntime;
     }
 
+    @ReflectiveField
     public Property<String> nameProperty() {
         return name;
     }
 
+    @ReflectiveField
     public Property<GameObject> cameraObjectProperty() {
         return cameraObject;
     }
 
+    @ReflectiveField
     public Property<Color> backgroundColorProperty() {
         return backgroundColor;
     }
 
+    @ReflectiveField
     public Property<GameObject> defaultPlayerProperty() {
         return defaultPlayer;
     }
 
+    @ReflectiveField
     public Property<Rectangle> layoutBoundsProperty() {
         return layoutBounds;
     }

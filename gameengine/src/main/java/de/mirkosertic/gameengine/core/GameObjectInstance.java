@@ -1,5 +1,6 @@
 package de.mirkosertic.gameengine.core;
 
+import de.mirkosertic.gameengine.annotations.ReflectiveField;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.type.AbsolutePositionAnchor;
@@ -62,30 +63,37 @@ public class GameObjectInstance implements Reflectable<GameObjectInstanceClassIn
                 aPosition.y <= thePosition.y + theSize.height);
     }
 
+    @ReflectiveField
     public Property<String> uuidProperty() {
         return uuid;
     }
 
+    @ReflectiveField
     public Property<Position> positionProperty() {
         return position;
     }
 
+    @ReflectiveField
     public Property<String> nameProperty() {
         return name;
     }
 
+    @ReflectiveField
     public Property<Angle> rotationAngleProperty() {
         return rotationAngle;
     }
 
+    @ReflectiveField
     public Property<Boolean> visibleProperty() {
         return visible;
     }
 
+    @ReflectiveField
     public Property<Boolean> absolutePositionProperty() {
         return absolutePosition;
     }
 
+    @ReflectiveField
     public Property<AbsolutePositionAnchor> absolutePositionAnchorProperty() {
         return absolutePositionAnchor;
     }

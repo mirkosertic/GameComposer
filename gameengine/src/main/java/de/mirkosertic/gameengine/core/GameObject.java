@@ -1,5 +1,6 @@
 package de.mirkosertic.gameengine.core;
 
+import de.mirkosertic.gameengine.annotations.ReflectiveField;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.type.Reflectable;
@@ -48,18 +49,22 @@ public class GameObject implements Reflectable<GameObjectClassInformation> {
         return gameScene;
     }
 
+    @ReflectiveField
     public Property<String> uuidProperty() {
         return uuid;
     }
 
+    @ReflectiveField
     public Property<String> nameProperty() {
         return name;
     }
 
+    @ReflectiveField
     public Property<Size> sizeProperty() {
         return size;
     }
 
+    @ReflectiveField
     public Property<Boolean> visibleProperty() {
         return visible;
     }
