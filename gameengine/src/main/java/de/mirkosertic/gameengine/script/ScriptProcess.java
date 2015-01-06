@@ -43,8 +43,6 @@ public class ScriptProcess implements GameProcess {
 
     @Override
     public ProceedResult proceedGame(long aGameTime, long aElapsedTimeSinceLastLoop) {
-        scriptEngine.registerPrimitive("gameTime", aGameTime);
-        scriptEngine.registerPrimitive("elapsedTimeSinceLastLoop", aElapsedTimeSinceLastLoop);
         Object theResult = scriptEngine.proceedGame(aGameTime, aElapsedTimeSinceLastLoop);
         if (theResult instanceof String) {
             return ProceedResult.valueOf((String) theResult);

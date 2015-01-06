@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.web.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.mirkosertic.gamecomposer.contentarea.eventsheet.runscript.EditScriptDialog">
+   <center>
+      <WebView fx:id="editorView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets top="50.0" />
+         </BorderPane.margin>
+      </WebView>
+   </center>
+   <bottom>
+      <VBox maxWidth="1.7976931348623157E308" BorderPane.alignment="CENTER">
+         <children>
+            <TextArea fx:id="compileErrors" editable="false" prefHeight="150.0" />
+            <HBox maxWidth="-Infinity">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#onTest" prefWidth="150.0" text="TEST" />
+                  <Button mnemonicParsing="false" onAction="#onOk" prefWidth="100.0" text="Ok">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#onCancel" prefWidth="100.0" text="Cancel">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </bottom>
+</BorderPane>

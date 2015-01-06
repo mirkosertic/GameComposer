@@ -1,0 +1,56 @@
+package de.mirkosertic.gamecomposer.contentarea.eventsheet.runscript;
+
+import de.mirkosertic.gamecomposer.FXMLLoaderFactory;
+import de.mirkosertic.gamecomposer.objectinspector.spritetemplate.AnimationEditorDialog;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.script.RunScriptAction;
+import de.mirkosertic.gameengine.sprite.Sprite;
+import de.mirkosertic.gameengine.type.Animation;
+import insidefx.undecorator.UndecoratorScene;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+
+import java.io.InputStream;
+import javax.inject.Inject;
+
+public class EditScriptDialogFactory {
+
+    @Inject
+    FXMLLoaderFactory loaderFactory;
+
+    public EditScriptDialog createFor(GameScene aGameScene, Node aParent, RunScriptAction aAction) {
+        try (InputStream fxml = EditScriptDialog.class.getResourceAsStream("EditScriptDialog.fxml")) {
+            FXMLLoader theLoader = loaderFactory.createLoader();
+            BorderPane thePane = theLoader.load(fxml);
+
+            EditScriptDialog theDialog = theLoader.getController();
+
+            Stage theModalStage = new Stage();
+            theModalStage.setResizable(false);
+            theModalStage.setTitle("Edit script");
+            UndecoratorScene theUndecoratorScene = new UndecoratorScene(theModalStage, thePane);
+
+            // Hacky, but works
+            theUndecoratorScene.getUndecorator().setStyle("-fx-background-color: rgba(0, 0, 0, 0);");
+
+            theModalStage.initStyle(StageStyle.TRANSPARENT);
+            theUndecoratorScene.setFill(Color.TRANSPARENT);
+
+            theModalStage.setScene(theUndecoratorScene);
+            theModalStage.initModality(Modality.APPLICATION_MODAL);
+            theModalStage.initOwner(aParent.getScene().getWindow());
+            theDialog.initialize(aGameScene, aAction, theModalStage);
+
+            return theDialog;
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+}
