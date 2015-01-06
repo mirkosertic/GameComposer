@@ -19,7 +19,9 @@ public class RunScriptAction implements Action {
     private static final String DEFAULT_SCRIPT = "--\n"
             + "-- This is the default method of every action. It is called once for every game loop cycle.\n"
             + "--\n"
-            + "-- instance is an injected object which is a reference to the GameObjectInstance for \n"
+            + "-- instance is an optional injected object which is a reference to the GameObjectInstance for \n"
+            + "-- which this script is executed.\n"
+            + "-- scene is an injected object which is a reference to the GameScene for \n"
             + "-- which this script is executed.\n"
             + "--\n"
             + "function proceedGame(aGameTime, aElapsedTimeSinceLastLoop) \n"
@@ -49,8 +51,19 @@ public class RunScriptAction implements Action {
         Script theScript = script.get();
         GameEventManager theManager = aScene.getRuntime().getEventManager();
         ScriptEngineFactory theScriptEngineFactory = aScene.getRuntime().getScriptEngineFactory();
-        for (GameObjectInstance theInstance : aResult.getAffectedInstances()) {
-            ScriptProcess theProcess = new ScriptProcess(theInstance, theScriptEngineFactory, theScript);
+        int theNumberOfProcesses = 0;
+        GameObjectInstance[] theInstances = aResult.getAffectedInstances();
+        // Spawn only instance specific script instances if there are not all instances selected...
+        if (theInstances.length < aScene.getInstances().length) {
+            for (GameObjectInstance theInstance : theInstances) {
+                ScriptProcess theProcess = new ScriptProcess(theInstance, theScriptEngineFactory, theScript);
+                theManager.fire(new StartProcess(theProcess));
+                theNumberOfProcesses++;
+            }
+        }
+        if (theNumberOfProcesses == 0) {
+            // No instance specific processes created, so we will spawn a scene based process
+            ScriptProcess theProcess = new ScriptProcess(aScene, theScriptEngineFactory, theScript);
             theManager.fire(new StartProcess(theProcess));
         }
     }
@@ -59,16 +72,14 @@ public class RunScriptAction implements Action {
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<>();
         theResult.put(TYPE_ATTRIBUTE, TYPE_VALUE);
-        theResult.put("script", script.get());
+        theResult.put("script", script.get().serialize());
         return theResult;
     }
 
     public static RunScriptAction unmarshall(Map<String, Object> aSerializedData) {
         RunScriptAction theResult = new RunScriptAction();
-        String theScript = (String) aSerializedData.get("script");
-        if (theScript != null) {
-            theResult.script.setQuietly(new Script(theScript));
-        }
+        Script theScript = Script.deserialize((Map<String, Object>) aSerializedData.get("script"));
+        theResult.script.setQuietly(theScript);
         return theResult;
     }
 }

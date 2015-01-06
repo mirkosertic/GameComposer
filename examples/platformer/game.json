@@ -1,5 +1,5 @@
 {
-  "name" : "Dukes Adventure",
   "enablewebgl" : "true",
+  "name" : "Dukes Adventure",
   "defaultscene" : "scene1"
 }

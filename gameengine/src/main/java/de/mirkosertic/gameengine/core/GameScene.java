@@ -2,6 +2,7 @@ package de.mirkosertic.gameengine.core;
 
 import de.mirkosertic.gameengine.ArrayUtils;
 import de.mirkosertic.gameengine.annotations.ReflectiveField;
+import de.mirkosertic.gameengine.annotations.ReflectiveMethod;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.starfield.StarfieldGameSceneEffect;
@@ -205,6 +206,16 @@ public class GameScene implements Reflectable<GameSceneClassInformation> {
         for (GameObject theObject : objects) {
             if (theObject.uuidProperty().get().equals(aObjectUUID)) {
                 return theObject;
+            }
+        }
+        return null;
+    }
+
+    @ReflectiveMethod
+    public GameObjectInstance findInstanceByName(String aName) {
+        for (GameObjectInstance theInstance : instances) {
+            if (aName.equals(theInstance.nameProperty().get())) {
+                return theInstance;
             }
         }
         return null;

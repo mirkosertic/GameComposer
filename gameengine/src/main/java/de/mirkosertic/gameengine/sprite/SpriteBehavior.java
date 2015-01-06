@@ -34,6 +34,11 @@ public class SpriteBehavior implements Behavior, Sprite, Reflectable<SpriteClass
     }
 
     @Override
+    public String getType() {
+        return TYPE;
+    }
+
+    @Override
     public SpriteClassInformation getClassInformation() {
         return SpriteClassInformation.INSTANCE;
     }

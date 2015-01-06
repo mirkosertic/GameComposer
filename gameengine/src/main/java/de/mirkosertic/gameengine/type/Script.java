@@ -1,5 +1,8 @@
 package de.mirkosertic.gameengine.type;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Script {
 
     public final String script;
@@ -29,5 +32,15 @@ public class Script {
     @Override
     public int hashCode() {
         return script.hashCode();
+    }
+
+    public Map<String, Object> serialize() {
+        Map<String, Object> theData = new HashMap<>();
+        theData.put("script", script);
+        return theData;
+    }
+
+    public static Script deserialize(Map<String, Object> aData) {
+        return new Script((String) aData.get("script"));
     }
 }

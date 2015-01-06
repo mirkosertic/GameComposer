@@ -1,6 +1,7 @@
 package de.mirkosertic.gameengine.core;
 
 import de.mirkosertic.gameengine.annotations.ReflectiveField;
+import de.mirkosertic.gameengine.annotations.ReflectiveMethod;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.type.AbsolutePositionAnchor;
@@ -117,6 +118,16 @@ public class GameObjectInstance implements Reflectable<GameObjectInstanceClassIn
                 removeBehavior(theEntry.getValue());
             }
         }
+    }
+
+    @ReflectiveMethod
+    public Behavior findBehaviorByType(String aType) {
+        for (Map.Entry<Class<? extends Behavior>, Behavior> theEntry : behaviors.entrySet()) {
+            if (aType.equals(theEntry.getValue().getType())) {
+                return theEntry.getValue();
+            }
+        }
+        return null;
     }
 
     public <T extends Behavior> T getBehavior(Class<T> aComponentClass) {

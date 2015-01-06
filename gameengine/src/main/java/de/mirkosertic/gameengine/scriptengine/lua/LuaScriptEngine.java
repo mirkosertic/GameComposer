@@ -2,6 +2,7 @@ package de.mirkosertic.gameengine.scriptengine.lua;
 
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.scriptengine.ScriptEngine;
+import de.mirkosertic.gameengine.type.TypeConverters;
 import de.mirkosertic.gameengine.type.ClassInformation;
 import de.mirkosertic.gameengine.type.Field;
 import de.mirkosertic.gameengine.type.Method;
@@ -41,19 +42,27 @@ public class LuaScriptEngine implements ScriptEngine {
         if (aValue instanceof String) {
             return LuaString.valueOf((String) aValue);
         }
-        throw new IllegalArgumentException("Unsupported datatype for " + aValue);
+
+        // Objects are converted to plain tables
+        LuaTable theTable = new LuaTable();
+        theTable.set("javaobject", LuaValue.userdataOf(aValue));
+        return theTable;
+    }
+
+    private static void registerTo(LuaTable aTable, Reflectable aObject) {
+        ClassInformation theClassInformation = aObject.getClassInformation();
+        for (Field theField : theClassInformation.getFields()) {
+            aTable.set(theField.getName(), new FieldAccessFunction(aObject, theField));
+        }
+        for (Method theMethod : theClassInformation.getMethods()) {
+            aTable.set(theMethod.getName(), new MethodInvocationFunction(aObject, theMethod));
+        }
     }
 
     private static LuaValue toLuaValue(Reflectable aObject) {
         LuaTable theTable = new LuaTable();
         theTable.set("javaobject", LuaValue.userdataOf(aObject));
-        ClassInformation theClassInformation = aObject.getClassInformation();
-        for (Field theField : theClassInformation.getFields()) {
-            theTable.set(theField.getName(), new FieldAccessFunction(aObject, theField));
-        }
-        for (Method theMethod : theClassInformation.getMethods()) {
-            theTable.set(theMethod.getName(), new MethodInvocationFunction(aObject, theMethod));
-        }
+        registerTo(theTable, aObject);
         return theTable;
     }
 
@@ -159,6 +168,9 @@ public class LuaScriptEngine implements ScriptEngine {
 
         // Initialize the code
         closure.call();
+
+        // Register generic Type converters
+        registerTo(globals, new TypeConverters());
 
         // Retrieve function from globals
         proceedGameFunction = globals.get("proceedGame");

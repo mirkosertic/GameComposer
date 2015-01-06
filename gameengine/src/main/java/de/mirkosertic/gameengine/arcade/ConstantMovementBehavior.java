@@ -36,6 +36,11 @@ public class ConstantMovementBehavior implements Behavior, ConstantMovement, Ref
         rotationSpeed = new Property<>(Speed.class, this, ROTATIONSPEED_PROPERTY, aTemplate.rotationSpeedProperty().get(), theEventManager);
     }
 
+    @Override
+    public String getType() {
+        return TYPE;
+    }
+
     public void registerEvents(GameRuntime aGameRuntime) {
         aGameRuntime.getEventManager().register(objectInstance, SystemTick.class, new GameEventListener<SystemTick>() {
             public void handleGameEvent(SystemTick aEvent) {

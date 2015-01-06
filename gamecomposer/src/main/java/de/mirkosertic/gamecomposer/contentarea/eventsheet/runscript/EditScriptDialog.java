@@ -17,7 +17,7 @@ import javafx.stage.Stage;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import org.apache.commons.lang3.StringEscapeUtils;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -40,7 +40,6 @@ public class EditScriptDialog {
 
         editorView.setContextMenuEnabled(false);
         editorView.getEngine().setJavaScriptEnabled(true);
-        editorView.getEngine().load(EditScriptDialog.class.getResource("/ace/editor.html").toExternalForm());
         editorView.getEngine().getLoadWorker().stateProperty().addListener(new ChangeListener<Worker.State>() {
             @Override public void changed(ObservableValue<? extends Worker.State> observable, Worker.State oldValue,
                     Worker.State newValue) {
@@ -49,15 +48,16 @@ public class EditScriptDialog {
                 }
             }
         });
+        editorView.getEngine().load(EditScriptDialog.class.getResource("/ace/editor.html").toExternalForm());
     }
 
     private void initializeHTML() {
         Document theDocument = editorView.getEngine().getDocument();
         Element theEditorElement = theDocument.getElementById("editor");
 
-        theEditorElement.setTextContent(StringEscapeUtils.escapeHtml4(action.scriptProperty().get().script));
+        theEditorElement.setTextContent(action.scriptProperty().get().script);
 
-        editorView.getEngine().executeScript("initialize()");
+        editorView.getEngine().executeScript("initeditor()");
     }
 
     private boolean test(Script aScript) {
@@ -68,6 +68,7 @@ public class EditScriptDialog {
             GameObjectInstance theInstance = gameScene.createFrom(theObject);
             theEngine = gameScene.getRuntime().getScriptEngineFactory().createNewEngine(aScript);
             theEngine.registerObject("instance", theInstance);
+            theEngine.registerObject("scene", gameScene);
 
             Object theResult = theEngine.proceedGame(100, 16);
             if (theResult == null) {
@@ -100,11 +101,11 @@ public class EditScriptDialog {
         String theContent = (String) editorView.getEngine().executeScript("getvalue()");
         Script theNewScript = new Script(theContent);
 
-        if (test(theNewScript)) {
+        //if (test(theNewScript)) {
             action.scriptProperty().set(theNewScript);
 
             modalStage.close();
-        }
+        //}
     }
 
     @FXML
