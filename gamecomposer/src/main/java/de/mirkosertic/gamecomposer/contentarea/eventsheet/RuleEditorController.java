@@ -7,6 +7,7 @@ import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.input.KeyEventCondition;
 import de.mirkosertic.gameengine.physic.ObjectCollisionCondition;
 import de.mirkosertic.gameengine.process.KillProcessesForInstanceAction;
+import de.mirkosertic.gameengine.script.RunScriptAction;
 import de.mirkosertic.gameengine.sound.PlaySoundAction;
 import javafx.fxml.FXML;
 import javafx.geometry.Side;
@@ -78,6 +79,7 @@ public class RuleEditorController implements Controller {
         knownActions.add(DeleteGameObjectInstanceAction.class);
         knownActions.add(SpawnGameObjectInstanceAction.class);
         knownActions.add(KillProcessesForInstanceAction.class);
+        knownActions.add(RunScriptAction.class);
 
         setupConditionSelection();
         updateActions();

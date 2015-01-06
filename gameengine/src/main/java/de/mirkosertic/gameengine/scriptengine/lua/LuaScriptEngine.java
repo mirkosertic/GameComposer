@@ -16,7 +16,6 @@ import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.Varargs;
 import org.luaj.vm2.lib.VarArgFunction;
-import org.luaj.vm2.lib.ZeroArgFunction;
 
 public class LuaScriptEngine implements ScriptEngine {
 
@@ -47,10 +46,10 @@ public class LuaScriptEngine implements ScriptEngine {
 
     private static LuaValue toLuaValue(Reflectable aObject) {
         LuaTable theTable = new LuaTable();
+        theTable.set("javaobject", LuaValue.userdataOf(aObject));
         ClassInformation theClassInformation = aObject.getClassInformation();
         for (Field theField : theClassInformation.getFields()) {
             theTable.set(theField.getName(), new FieldAccessFunction(aObject, theField));
-            // TODO: add field write methods to table
         }
         for (Method theMethod : theClassInformation.getMethods()) {
             theTable.set(theMethod.getName(), new MethodInvocationFunction(aObject, theMethod));
@@ -78,6 +77,14 @@ public class LuaScriptEngine implements ScriptEngine {
     }
 
     private static Object toJavaValue(LuaValue aValue) {
+        if (aValue.istable()) {
+            LuaTable theTable = (LuaTable) aValue;
+            LuaValue theObject = theTable.get("javaobject");
+            if (theObject.isuserdata()) {
+                return theObject.checkuserdata();
+            }
+            throw new IllegalArgumentException("Cannot convert " + aValue+" to java object");
+        }
         if (aValue.isnil()) {
             return null;
         }
@@ -87,7 +94,7 @@ public class LuaScriptEngine implements ScriptEngine {
         return aValue.toString();
     }
 
-    private static class FieldAccessFunction extends ZeroArgFunction {
+    private static class FieldAccessFunction extends VarArgFunction {
 
         private final Object object;
         private final Field field;
@@ -98,10 +105,22 @@ public class LuaScriptEngine implements ScriptEngine {
         }
 
         @Override
-        public LuaValue call() {
+        public Varargs invoke(Varargs aArgs) {
             if (field.getType() == Property.class) {
                 Property theProperty = (Property) field.getValue(object);
-                return toLuaValue(theProperty.get());
+                // If zero arg, it is a property read access
+                if (aArgs.narg() == 0) {
+                    return toLuaValue(theProperty.get());
+                }
+                if (aArgs.narg() != 1) {
+                    throw new IllegalArgumentException("Only one argument supported to set property value, got " + aArgs.narg()+" arguments");
+                }
+                theProperty.set(toJavaValue(aArgs.arg(1)));
+                return LuaValue.NIL;
+            }
+            // Normal field, we just support read access
+            if (aArgs.narg() != 0) {
+                throw new IllegalArgumentException("Field is read only, but got " + aArgs.narg()+" arguments");
             }
             return toLuaValue(field.getValue(object));
         }
@@ -119,26 +138,14 @@ public class LuaScriptEngine implements ScriptEngine {
 
         @Override
         public Varargs invoke(Varargs aArguments) {
-            Object[] theArguments;
-            if (aArguments instanceof LuaValue) {
-                // Single value provided
-                if (method.getArgument().length == 1) {
-                    theArguments = new Object[1];
-                    theArguments[0] = toJavaValue((LuaValue) aArguments, method.getArgument()[0]);
-                } else {
-                    throw new IllegalArgumentException(method.getArgument().length+" arguments required for " + method.getName());
+            if (aArguments.narg() == method.getArgument().length) {
+                Object[] theArguments = new Object[aArguments.narg()];
+                for (int i = 1; i <= aArguments.narg(); i++) {
+                    theArguments[i-1] = toJavaValue(aArguments.arg(i), method.getArgument()[i-1]);
                 }
-            } else {
-                theArguments = new Object[aArguments.narg()];
-                if (aArguments.narg() == method.getArgument().length) {
-                    for (int i = 0; i < aArguments.narg(); i++) {
-                        theArguments[i] = toJavaValue(aArguments.arg(i));
-                    }
-                } else {
-                    throw new IllegalArgumentException(method.getArgument().length+" arguments required for " + method.getName());
-                }
+                return toLuaValue(method.invoke(object, theArguments));
             }
-            return toLuaValue(method.invoke(object, theArguments));
+            throw new IllegalArgumentException(method.getArgument().length+" arguments required for " + method.getName());
         }
     }
 
@@ -183,8 +190,8 @@ public class LuaScriptEngine implements ScriptEngine {
         });
 
         Varargs theResult = proceedGameFunction.invoke(theArguments);
-        if (theResult instanceof LuaValue) {
-            return toJavaValue((LuaValue) theResult);
+        if (theResult.narg() == 1) {
+            return toJavaValue(theResult.arg(1));
         }
         throw new IllegalStateException("Not supported return type : " + theResult);
     }
