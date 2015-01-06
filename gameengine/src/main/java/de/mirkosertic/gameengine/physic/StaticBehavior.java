@@ -18,6 +18,11 @@ public class StaticBehavior implements Behavior, Static, Reflectable<StaticClass
     }
 
     @Override
+    public String getType() {
+        return TYPE;
+    }
+
+    @Override
     public StaticClassInformation getClassInformation() {
         return StaticClassInformation.INSTANCE;
     }

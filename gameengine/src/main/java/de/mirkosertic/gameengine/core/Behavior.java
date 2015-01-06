@@ -6,6 +6,8 @@ public interface Behavior {
 
     String TYPE_ATTRIBUTE = "type";
 
+    String getType();
+
     Map<String, Object> serialize();
 
     <T extends BehaviorTemplate> T getTemplate();

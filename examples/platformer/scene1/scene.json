@@ -1,14 +1,5 @@
 {
-  "layoutBounds" : {
-    "position" : {
-      "y" : "0.0",
-      "x" : "0.0"
-    },
-    "size" : {
-      "height" : "800",
-      "width" : "1400"
-    }
-  },
+  "cameraobjectid" : "-1997482371798076675",
   "eventsheets" : [ {
     "name" : "Eventsheet first level",
     "rules" : [ {
@@ -19,1795 +10,1920 @@
       },
       "name" : "Play a sound while duke jumps",
       "actions" : [ {
-        "type" : "PlaySoundAction",
-        "resourceName" : "/assets/audio/boing.wav"
+        "resourceName" : "/assets/audio/boing.wav",
+        "type" : "PlaySoundAction"
       } ]
     }, {
       "condition" : {
-        "position" : "EVERYWHERE",
+        "primaryObjectUuid" : "4343694719606608272",
         "secondaryObjectUuid" : "-279500599772276169",
-        "type" : "ObjectCollisionCondition",
-        "primaryObjectUuid" : "4343694719606608272"
+        "position" : "EVERYWHERE",
+        "type" : "ObjectCollisionCondition"
       },
       "name" : "Collect a star",
       "actions" : [ {
-        "propertyName" : "visible",
+        "gameObject" : "4343694719606608272",
+        "propertyName" : "visibleProperty",
+        "type" : "SetPropertyAction",
         "value" : {
           "expression" : "false"
-        },
-        "type" : "SetPropertyAction",
-        "gameObject" : "4343694719606608272"
+        }
       }, {
-        "type" : "PlaySoundAction",
-        "resourceName" : "/assets/audio/pickup_gem_1.wav"
+        "resourceName" : "/assets/audio/pickup_gem_1.wav",
+        "type" : "PlaySoundAction"
       } ]
     }, {
       "condition" : {
-        "position" : "EVERYWHERE",
+        "primaryObjectUuid" : "-279500599772276169",
         "secondaryObjectUuid" : "-3769331226440908538",
-        "type" : "ObjectCollisionCondition",
-        "primaryObjectUuid" : "-279500599772276169"
+        "position" : "EVERYWHERE",
+        "type" : "ObjectCollisionCondition"
       },
       "name" : "Jump to next level if duke hits the sign",
       "actions" : [ {
         "gameScene" : "scene2",
         "type" : "RunSceneAction"
       } ]
+    }, {
+      "condition" : {
+        "keyCode" : "T",
+        "eventType" : "PRESSED",
+        "type" : "KeyEventCondition"
+      },
+      "name" : "Start LUA Script by pressing T key",
+      "actions" : [ {
+        "type" : "RunScriptAction",
+        "script" : {
+          "script" : "--\n-- This is the default method of every action. It is called once for every game loop cycle.\n--\n-- instance is an optional injected object which is a reference to the GameObjectInstance for \n-- which this script is executed.\n-- scene is an injected object which is a reference to the GameScene for \n-- which this script is executed.\n--\nfunction proceedGame(aGameTime, aElapsedTimeSinceLastLoop) \n\n    local leveltext = scene.findInstanceByName('leveltext')\n    local textbehavior = leveltext.findBehaviorByType('Text')\n    textbehavior.textExpressionProperty(textexpression('\\\"Changed by LUA at ' .. aGameTime .. '\\\"'))\n\t-- The method must return either STOPPED or CONTINUE_RUNNING\n\t-- STOPPED will kill the script, it is not invoked the next time\n\t-- CONTINUE_RUNNING will invoke the skript the next game loop cycle.\n\treturn 'CONTINUE_RUNNING'\nend"
+        }
+      } ]
     } ]
   } ],
-  "defaultplayerobjectid" : "-279500599772276169",
-  "cameraobjectid" : "-1997482371798076675",
-  "name" : "First level",
+  "effects" : [ ],
+  "layoutBounds" : {
+    "size" : {
+      "width" : "1400",
+      "height" : "800"
+    },
+    "position" : {
+      "x" : "0.0",
+      "y" : "0.0"
+    }
+  },
   "instances" : [ {
-    "position" : {
-      "y" : "298.00003",
-      "x" : "234.02475"
-    },
-    "visible" : "true",
+    "absolutePosition" : "false",
     "rotationangle" : {
       "angleindegrees" : "0"
     },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "-279500599772276169",
-    "name" : "Duke_1384374064987",
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Platform"
+    }, {
+      "type" : "Sprite"
     } ],
-    "uuid" : "8227887913504513730",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "64.0",
-      "x" : "128.0"
-    },
     "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "true",
-    "gameobjectuuid" : "2371203598469434471",
-    "name" : "First level text_1387815297341",
-    "components" : [ {
-      "color" : {
-        "g" : "255",
-        "b" : "255",
-        "r" : "255"
-      },
-      "font" : {
-        "name" : "ARIAL",
-        "size" : "32"
-      },
-      "textExpression" : {
-        "expression" : "\"First Level\""
-      },
-      "type" : "Text"
-    } ],
-    "uuid" : "-4506315511269709264",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
+    "name" : "Duke_1384374064987",
+    "gameobjectuuid" : "-279500599772276169",
     "position" : {
-      "y" : "187.0",
-      "x" : "284.0"
+      "x" : "234.02475",
+      "y" : "298.00003"
     },
-    "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "8227887913504513730"
+  }, {
     "absolutePosition" : "false",
-    "gameobjectuuid" : "4343694719606608272",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
+    "components" : [ {
+      "active" : "true",
+      "type" : "Physics"
+    }, {
+      "type" : "Sprite"
+    } ],
+    "visible" : "true",
     "name" : "Star_1384888985355",
+    "gameobjectuuid" : "4343694719606608272",
+    "position" : {
+      "x" : "284.0",
+      "y" : "187.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "1168806397977091524"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
     "components" : [ {
       "active" : "true",
       "type" : "Physics"
     }, {
       "type" : "Sprite"
     } ],
-    "uuid" : "1168806397977091524",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "185.0",
-      "x" : "407.0"
-    },
     "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "4343694719606608272",
     "name" : "Star_1384888988875",
+    "gameobjectuuid" : "4343694719606608272",
+    "position" : {
+      "x" : "407.0",
+      "y" : "185.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "39450811341575419"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
     "components" : [ {
       "active" : "true",
       "type" : "Physics"
     }, {
       "type" : "Sprite"
     } ],
-    "uuid" : "39450811341575419",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "142.0",
-      "x" : "525.0"
-    },
     "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "4343694719606608272",
     "name" : "Star_1384888993618",
+    "gameobjectuuid" : "4343694719606608272",
+    "position" : {
+      "x" : "525.0",
+      "y" : "142.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "940107331463765884"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
     "components" : [ {
       "active" : "true",
       "type" : "Physics"
     }, {
       "type" : "Sprite"
     } ],
-    "uuid" : "940107331463765884",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "136.0",
-      "x" : "641.0"
-    },
     "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "4343694719606608272",
     "name" : "Star_1384888996543",
+    "gameobjectuuid" : "4343694719606608272",
+    "position" : {
+      "x" : "641.0",
+      "y" : "136.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "3860926572867008005"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
     "components" : [ {
       "active" : "true",
       "type" : "Physics"
     }, {
       "type" : "Sprite"
     } ],
-    "uuid" : "3860926572867008005",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "189.99998",
-      "x" : "756.0"
-    },
     "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "4343694719606608272",
     "name" : "Star_1384888999417",
-    "components" : [ {
-      "active" : "true",
-      "type" : "Physics"
-    }, {
-      "type" : "Sprite"
-    } ],
-    "uuid" : "-8948331873596536217",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "263.0",
-      "x" : "864.99994"
-    },
-    "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "false",
     "gameobjectuuid" : "4343694719606608272",
-    "name" : "Star_1384889002239",
+    "position" : {
+      "x" : "756.0",
+      "y" : "189.99998"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-8948331873596536217"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
     "components" : [ {
       "active" : "true",
       "type" : "Physics"
     }, {
       "type" : "Sprite"
     } ],
-    "uuid" : "6402095516018938434",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "684.0",
-      "x" : "152.0"
-    },
     "visible" : "true",
+    "name" : "Star_1384889002239",
+    "gameobjectuuid" : "4343694719606608272",
+    "position" : {
+      "x" : "864.99994",
+      "y" : "263.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "6402095516018938434"
+  }, {
+    "absolutePosition" : "false",
     "rotationangle" : {
       "angleindegrees" : "0"
     },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "-6077101624070649173",
+    "components" : [ {
+      "type" : "Static"
+    }, {
+      "type" : "Sprite"
+    } ],
+    "visible" : "true",
     "name" : "Walkway_botom_left_1384373866404",
-    "components" : [ {
-      "type" : "Static"
-    }, {
-      "type" : "Sprite"
-    } ],
-    "uuid" : "-9130541298977119470",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "684.0",
-      "x" : "684.0"
-    },
-    "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "false",
     "gameobjectuuid" : "-6077101624070649173",
+    "position" : {
+      "x" : "152.0",
+      "y" : "684.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-9130541298977119470"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
+    "components" : [ {
+      "type" : "Static"
+    }, {
+      "type" : "Sprite"
+    } ],
+    "visible" : "true",
     "name" : "Walkway_botom_left_1384373869515",
+    "gameobjectuuid" : "-6077101624070649173",
+    "position" : {
+      "x" : "684.0",
+      "y" : "684.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "2084723174261956618"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
     "components" : [ {
       "type" : "Static"
     }, {
       "type" : "Sprite"
     } ],
-    "uuid" : "2084723174261956618",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "684.0",
-      "x" : "228.0"
-    },
     "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "-7220657972923747107",
     "name" : "Walkway_bottom_middle_1384373937322",
+    "gameobjectuuid" : "-7220657972923747107",
+    "position" : {
+      "x" : "228.0",
+      "y" : "684.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-5924046217461532233"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
     "components" : [ {
       "type" : "Static"
     }, {
       "type" : "Sprite"
     } ],
-    "uuid" : "-5924046217461532233",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "684.0",
-      "x" : "304.0"
-    },
     "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "-7220657972923747107",
     "name" : "Walkway_bottom_middle_1384373940351",
+    "gameobjectuuid" : "-7220657972923747107",
+    "position" : {
+      "x" : "304.0",
+      "y" : "684.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "7276908389860950553"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
     "components" : [ {
       "type" : "Static"
     }, {
       "type" : "Sprite"
     } ],
-    "uuid" : "7276908389860950553",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "684.0",
-      "x" : "380.0"
-    },
     "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "-7220657972923747107",
     "name" : "Walkway_bottom_middle_1384373942839",
+    "gameobjectuuid" : "-7220657972923747107",
+    "position" : {
+      "x" : "380.0",
+      "y" : "684.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-2414861174645972307"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
     "components" : [ {
       "type" : "Static"
     }, {
       "type" : "Sprite"
     } ],
-    "uuid" : "-2414861174645972307",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "684.0",
-      "x" : "456.0"
-    },
     "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "-7220657972923747107",
     "name" : "Walkway_bottom_middle_1384373945327",
+    "gameobjectuuid" : "-7220657972923747107",
+    "position" : {
+      "x" : "456.0",
+      "y" : "684.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "9148903409216005804"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
     "components" : [ {
       "type" : "Static"
     }, {
       "type" : "Sprite"
     } ],
-    "uuid" : "9148903409216005804",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "684.0",
-      "x" : "760.0"
-    },
     "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "-7220657972923747107",
     "name" : "Walkway_bottom_middle_1384373947993",
+    "gameobjectuuid" : "-7220657972923747107",
+    "position" : {
+      "x" : "760.0",
+      "y" : "684.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "6644550441668090506"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
     "components" : [ {
       "type" : "Static"
     }, {
       "type" : "Sprite"
     } ],
-    "uuid" : "6644550441668090506",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "684.0",
-      "x" : "836.0"
-    },
     "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "-7220657972923747107",
     "name" : "Walkway_bottom_middle_1384373950229",
+    "gameobjectuuid" : "-7220657972923747107",
+    "position" : {
+      "x" : "836.0",
+      "y" : "684.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-6276929232068228153"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
     "components" : [ {
       "type" : "Static"
     }, {
       "type" : "Sprite"
     } ],
-    "uuid" : "-6276929232068228153",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "684.0",
-      "x" : "912.0"
-    },
     "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "-7220657972923747107",
     "name" : "Walkway_bottom_middle_1384373952212",
-    "components" : [ {
-      "type" : "Static"
-    }, {
-      "type" : "Sprite"
-    } ],
-    "uuid" : "-3182057660233158510",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "684.0",
-      "x" : "988.0"
-    },
-    "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "false",
     "gameobjectuuid" : "-7220657972923747107",
+    "position" : {
+      "x" : "912.0",
+      "y" : "684.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-3182057660233158510"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
+    "components" : [ {
+      "type" : "Static"
+    }, {
+      "type" : "Sprite"
+    } ],
+    "visible" : "true",
     "name" : "Walkway_bottom_middle_1384373954506",
+    "gameobjectuuid" : "-7220657972923747107",
+    "position" : {
+      "x" : "988.0",
+      "y" : "684.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-2863549189502005721"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
     "components" : [ {
       "type" : "Static"
     }, {
       "type" : "Sprite"
     } ],
-    "uuid" : "-2863549189502005721",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "684.0",
-      "x" : "532.0"
-    },
     "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "647197498473429375",
     "name" : "Walkway_bottom_right_1384373903304",
-    "components" : [ {
-      "type" : "Static"
-    }, {
-      "type" : "Sprite"
-    } ],
-    "uuid" : "8124995567563228431",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "684.0",
-      "x" : "1064.0"
-    },
-    "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "false",
     "gameobjectuuid" : "647197498473429375",
+    "position" : {
+      "x" : "532.0",
+      "y" : "684.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "8124995567563228431"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
+    "components" : [ {
+      "type" : "Static"
+    }, {
+      "type" : "Sprite"
+    } ],
+    "visible" : "true",
     "name" : "Walkway_bottom_right_1384373905720",
+    "gameobjectuuid" : "647197498473429375",
+    "position" : {
+      "x" : "1064.0",
+      "y" : "684.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "955418005072267144"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
     "components" : [ {
       "type" : "Static"
     }, {
       "type" : "Sprite"
     } ],
-    "uuid" : "955418005072267144",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "456.0",
-      "x" : "152.0"
-    },
     "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "-2648947804278990847",
     "name" : "Walkway_left_middle_1384373702860",
+    "gameobjectuuid" : "-2648947804278990847",
+    "position" : {
+      "x" : "152.0",
+      "y" : "456.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "4899214085185082707"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
     "components" : [ {
       "type" : "Static"
     }, {
       "type" : "Sprite"
     } ],
-    "uuid" : "4899214085185082707",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "456.0",
-      "x" : "684.0"
-    },
     "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "-2648947804278990847",
     "name" : "Walkway_left_middle_1384373742444",
+    "gameobjectuuid" : "-2648947804278990847",
+    "position" : {
+      "x" : "684.0",
+      "y" : "456.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "2459193256519610896"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
     "components" : [ {
       "type" : "Static"
     }, {
       "type" : "Sprite"
     } ],
-    "uuid" : "2459193256519610896",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "532.0",
-      "x" : "684.0"
-    },
     "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "-2648947804278990847",
     "name" : "Walkway_left_middle_1384373786249",
+    "gameobjectuuid" : "-2648947804278990847",
+    "position" : {
+      "x" : "684.0",
+      "y" : "532.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "1412930764447231900"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
     "components" : [ {
       "type" : "Static"
     }, {
       "type" : "Sprite"
     } ],
-    "uuid" : "1412930764447231900",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "608.0",
-      "x" : "684.0"
-    },
     "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "-2648947804278990847",
     "name" : "Walkway_left_middle_1384373788796",
+    "gameobjectuuid" : "-2648947804278990847",
+    "position" : {
+      "x" : "684.0",
+      "y" : "608.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-5337211145287793294"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
     "components" : [ {
       "type" : "Static"
     }, {
       "type" : "Sprite"
     } ],
-    "uuid" : "-5337211145287793294",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "532.0",
-      "x" : "152.0"
-    },
     "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "-2648947804278990847",
     "name" : "Walkway_left_middle_1384373794008",
-    "components" : [ {
-      "type" : "Static"
-    }, {
-      "type" : "Sprite"
-    } ],
-    "uuid" : "-1337944454046873726",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "608.0",
-      "x" : "152.0"
-    },
-    "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "false",
     "gameobjectuuid" : "-2648947804278990847",
+    "position" : {
+      "x" : "152.0",
+      "y" : "532.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-1337944454046873726"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
+    "components" : [ {
+      "type" : "Static"
+    }, {
+      "type" : "Sprite"
+    } ],
+    "visible" : "true",
     "name" : "Walkway_left_middle_1384373796399",
+    "gameobjectuuid" : "-2648947804278990847",
+    "position" : {
+      "x" : "152.0",
+      "y" : "608.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "4897812486001926900"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
     "components" : [ {
       "type" : "Static"
     }, {
       "type" : "Sprite"
     } ],
-    "uuid" : "4897812486001926900",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "380.0",
-      "x" : "152.0"
-    },
     "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "6595711303285831883",
     "name" : "Walkway_left_top_1384373708219",
-    "components" : [ {
-      "type" : "Static"
-    }, {
-      "type" : "Sprite"
-    } ],
-    "uuid" : "-4623081538804671596",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "380.0",
-      "x" : "684.0"
-    },
-    "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "false",
     "gameobjectuuid" : "6595711303285831883",
+    "position" : {
+      "x" : "152.0",
+      "y" : "380.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-4623081538804671596"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
+    "components" : [ {
+      "type" : "Static"
+    }, {
+      "type" : "Sprite"
+    } ],
+    "visible" : "true",
     "name" : "Walkway_left_top_1384373747571",
+    "gameobjectuuid" : "6595711303285831883",
+    "position" : {
+      "x" : "684.0",
+      "y" : "380.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "7618606351438302177"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
     "components" : [ {
       "type" : "Static"
     }, {
       "type" : "Sprite"
     } ],
-    "uuid" : "7618606351438302177",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "380.0",
-      "x" : "228.0"
-    },
     "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "2738111980994969784",
     "name" : "Walkway_middle_top_1_1384373723738",
+    "gameobjectuuid" : "2738111980994969784",
+    "position" : {
+      "x" : "228.0",
+      "y" : "380.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "1830815569162173433"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
     "components" : [ {
       "type" : "Static"
     }, {
       "type" : "Sprite"
     } ],
-    "uuid" : "1830815569162173433",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "380.0",
-      "x" : "456.0"
-    },
     "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "2738111980994969784",
     "name" : "Walkway_middle_top_1_1384373730420",
+    "gameobjectuuid" : "2738111980994969784",
+    "position" : {
+      "x" : "456.0",
+      "y" : "380.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-6084733247009304075"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
     "components" : [ {
       "type" : "Static"
     }, {
       "type" : "Sprite"
     } ],
-    "uuid" : "-6084733247009304075",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "380.0",
-      "x" : "760.0"
-    },
     "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "2738111980994969784",
     "name" : "Walkway_middle_top_1_1384373756271",
-    "components" : [ {
-      "type" : "Static"
-    }, {
-      "type" : "Sprite"
-    } ],
-    "uuid" : "1907134997320601018",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "380.0",
-      "x" : "911.0"
-    },
-    "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "false",
     "gameobjectuuid" : "2738111980994969784",
+    "position" : {
+      "x" : "760.0",
+      "y" : "380.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "1907134997320601018"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
+    "components" : [ {
+      "type" : "Static"
+    }, {
+      "type" : "Sprite"
+    } ],
+    "visible" : "true",
     "name" : "Walkway_middle_top_1_1384373766125",
+    "gameobjectuuid" : "2738111980994969784",
+    "position" : {
+      "x" : "911.0",
+      "y" : "380.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-5682141513202019649"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
     "components" : [ {
       "type" : "Static"
     }, {
       "type" : "Sprite"
     } ],
-    "uuid" : "-5682141513202019649",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "381.0",
-      "x" : "304.0"
-    },
     "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "7991002059236720051",
     "name" : "Walkway_middle_top_2_1384373718708",
+    "gameobjectuuid" : "7991002059236720051",
+    "position" : {
+      "x" : "304.0",
+      "y" : "381.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "3416998575014759515"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
     "components" : [ {
       "type" : "Static"
     }, {
       "type" : "Sprite"
     } ],
-    "uuid" : "3416998575014759515",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "380.0",
-      "x" : "380.0"
-    },
     "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "7991002059236720051",
     "name" : "Walkway_middle_top_2_1384373727382",
+    "gameobjectuuid" : "7991002059236720051",
+    "position" : {
+      "x" : "380.0",
+      "y" : "380.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-7034660220744349773"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
     "components" : [ {
       "type" : "Static"
     }, {
       "type" : "Sprite"
     } ],
-    "uuid" : "-7034660220744349773",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "380.0",
-      "x" : "836.0"
-    },
     "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "7991002059236720051",
     "name" : "Walkway_middle_top_2_1384373752335",
-    "components" : [ {
-      "type" : "Static"
-    }, {
-      "type" : "Sprite"
-    } ],
-    "uuid" : "-3798169070298949750",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "380.0",
-      "x" : "988.0"
-    },
-    "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "false",
     "gameobjectuuid" : "7991002059236720051",
+    "position" : {
+      "x" : "836.0",
+      "y" : "380.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-3798169070298949750"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
+    "components" : [ {
+      "type" : "Static"
+    }, {
+      "type" : "Sprite"
+    } ],
+    "visible" : "true",
     "name" : "Walkway_middle_top_2_1384373760777",
+    "gameobjectuuid" : "7991002059236720051",
+    "position" : {
+      "x" : "988.0",
+      "y" : "380.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-2726851823993427772"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
     "components" : [ {
       "type" : "Static"
     }, {
       "type" : "Sprite"
     } ],
-    "uuid" : "-2726851823993427772",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "456.0",
-      "x" : "532.0"
-    },
     "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "-4597433157293241913",
     "name" : "Walkway_right_middle_1384373738825",
+    "gameobjectuuid" : "-4597433157293241913",
+    "position" : {
+      "x" : "532.0",
+      "y" : "456.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "2640340260337280351"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
     "components" : [ {
       "type" : "Static"
     }, {
       "type" : "Sprite"
     } ],
-    "uuid" : "2640340260337280351",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "456.0",
-      "x" : "1064.0"
-    },
     "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "-4597433157293241913",
     "name" : "Walkway_right_middle_1384373775354",
+    "gameobjectuuid" : "-4597433157293241913",
+    "position" : {
+      "x" : "1064.0",
+      "y" : "456.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-1829636652991652958"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
     "components" : [ {
       "type" : "Static"
     }, {
       "type" : "Sprite"
     } ],
-    "uuid" : "-1829636652991652958",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "532.0",
-      "x" : "1064.0"
-    },
     "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "-4597433157293241913",
     "name" : "Walkway_right_middle_1384373778182",
+    "gameobjectuuid" : "-4597433157293241913",
+    "position" : {
+      "x" : "1064.0",
+      "y" : "532.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-2968653554644457718"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
     "components" : [ {
       "type" : "Static"
     }, {
       "type" : "Sprite"
     } ],
-    "uuid" : "-2968653554644457718",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "608.0",
-      "x" : "1064.0"
-    },
     "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "-4597433157293241913",
     "name" : "Walkway_right_middle_1384373780605",
+    "gameobjectuuid" : "-4597433157293241913",
+    "position" : {
+      "x" : "1064.0",
+      "y" : "608.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-3114540901084116106"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
     "components" : [ {
       "type" : "Static"
     }, {
       "type" : "Sprite"
     } ],
-    "uuid" : "-3114540901084116106",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "532.0",
-      "x" : "532.0"
-    },
     "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "-4597433157293241913",
     "name" : "Walkway_right_middle_1384373814800",
-    "components" : [ {
-      "type" : "Static"
-    }, {
-      "type" : "Sprite"
-    } ],
-    "uuid" : "-6438995082162911799",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "608.0",
-      "x" : "532.0"
-    },
-    "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "false",
     "gameobjectuuid" : "-4597433157293241913",
+    "position" : {
+      "x" : "532.0",
+      "y" : "532.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-6438995082162911799"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
+    "components" : [ {
+      "type" : "Static"
+    }, {
+      "type" : "Sprite"
+    } ],
+    "visible" : "true",
     "name" : "Walkway_right_middle_1384373817523",
+    "gameobjectuuid" : "-4597433157293241913",
+    "position" : {
+      "x" : "532.0",
+      "y" : "608.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "9021703004368768177"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
     "components" : [ {
       "type" : "Static"
     }, {
       "type" : "Sprite"
     } ],
-    "uuid" : "9021703004368768177",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "380.0",
-      "x" : "532.0"
-    },
     "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "7431117854133416743",
     "name" : "Walkway_right_top_1384373733619",
-    "components" : [ {
-      "type" : "Static"
-    }, {
-      "type" : "Sprite"
-    } ],
-    "uuid" : "-1212330343408472744",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "380.0",
-      "x" : "1064.0"
-    },
-    "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "false",
     "gameobjectuuid" : "7431117854133416743",
-    "name" : "Walkway_right_top_1384373769677",
+    "position" : {
+      "x" : "532.0",
+      "y" : "380.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-1212330343408472744"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
     "components" : [ {
       "type" : "Static"
     }, {
       "type" : "Sprite"
     } ],
-    "uuid" : "-1706163825880803156",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "456.0",
-      "x" : "228.0"
-    },
     "visible" : "true",
+    "name" : "Walkway_right_top_1384373769677",
+    "gameobjectuuid" : "7431117854133416743",
+    "position" : {
+      "x" : "1064.0",
+      "y" : "380.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-1706163825880803156"
+  }, {
+    "absolutePosition" : "false",
     "rotationangle" : {
       "angleindegrees" : "0"
     },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "4804364675067024140",
+    "components" : [ {
+      "type" : "Sprite"
+    } ],
+    "visible" : "true",
     "name" : "Walkway_solid_1_1384373997489",
-    "components" : [ {
-      "type" : "Sprite"
-    } ],
-    "uuid" : "-6433433590493936999",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
+    "gameobjectuuid" : "4804364675067024140",
     "position" : {
-      "y" : "532.0",
-      "x" : "228.0"
+      "x" : "228.0",
+      "y" : "456.0"
     },
-    "visible" : "true",
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-6433433590493936999"
+  }, {
+    "absolutePosition" : "false",
     "rotationangle" : {
       "angleindegrees" : "0"
     },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "4804364675067024140",
+    "components" : [ {
+      "type" : "Sprite"
+    } ],
+    "visible" : "true",
     "name" : "Walkway_solid_1_1384373999592",
-    "components" : [ {
-      "type" : "Sprite"
-    } ],
-    "uuid" : "-8299349146787770003",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
+    "gameobjectuuid" : "4804364675067024140",
     "position" : {
-      "y" : "532.0",
-      "x" : "304.0"
+      "x" : "228.0",
+      "y" : "532.0"
     },
-    "visible" : "true",
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-8299349146787770003"
+  }, {
+    "absolutePosition" : "false",
     "rotationangle" : {
       "angleindegrees" : "0"
     },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "4804364675067024140",
+    "components" : [ {
+      "type" : "Sprite"
+    } ],
+    "visible" : "true",
     "name" : "Walkway_solid_1_1384374009952",
-    "components" : [ {
-      "type" : "Sprite"
-    } ],
-    "uuid" : "-20336956224241984",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
+    "gameobjectuuid" : "4804364675067024140",
     "position" : {
-      "y" : "456.0",
-      "x" : "304.0"
+      "x" : "304.0",
+      "y" : "532.0"
     },
-    "visible" : "true",
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-20336956224241984"
+  }, {
+    "absolutePosition" : "false",
     "rotationangle" : {
       "angleindegrees" : "0"
     },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "4804364675067024140",
+    "components" : [ {
+      "type" : "Sprite"
+    } ],
+    "visible" : "true",
     "name" : "Walkway_solid_1_1384374012520",
-    "components" : [ {
-      "type" : "Sprite"
-    } ],
-    "uuid" : "397249705901546678",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
+    "gameobjectuuid" : "4804364675067024140",
     "position" : {
-      "y" : "456.0",
-      "x" : "380.0"
+      "x" : "304.0",
+      "y" : "456.0"
     },
-    "visible" : "true",
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "397249705901546678"
+  }, {
+    "absolutePosition" : "false",
     "rotationangle" : {
       "angleindegrees" : "0"
     },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "4804364675067024140",
+    "components" : [ {
+      "type" : "Sprite"
+    } ],
+    "visible" : "true",
     "name" : "Walkway_solid_1_1384374014699",
-    "components" : [ {
-      "type" : "Sprite"
-    } ],
-    "uuid" : "-907089557018023402",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
+    "gameobjectuuid" : "4804364675067024140",
     "position" : {
-      "y" : "456.0",
-      "x" : "456.0"
+      "x" : "380.0",
+      "y" : "456.0"
     },
-    "visible" : "true",
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-907089557018023402"
+  }, {
+    "absolutePosition" : "false",
     "rotationangle" : {
       "angleindegrees" : "0"
     },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "4804364675067024140",
+    "components" : [ {
+      "type" : "Sprite"
+    } ],
+    "visible" : "true",
     "name" : "Walkway_solid_1_1384374017019",
-    "components" : [ {
-      "type" : "Sprite"
-    } ],
-    "uuid" : "-3373061421478893031",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
+    "gameobjectuuid" : "4804364675067024140",
     "position" : {
-      "y" : "532.0",
-      "x" : "456.0"
+      "x" : "456.0",
+      "y" : "456.0"
     },
-    "visible" : "true",
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-3373061421478893031"
+  }, {
+    "absolutePosition" : "false",
     "rotationangle" : {
       "angleindegrees" : "0"
     },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "4804364675067024140",
+    "components" : [ {
+      "type" : "Sprite"
+    } ],
+    "visible" : "true",
     "name" : "Walkway_solid_1_1384374019249",
-    "components" : [ {
-      "type" : "Sprite"
-    } ],
-    "uuid" : "1971015540079926064",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
+    "gameobjectuuid" : "4804364675067024140",
     "position" : {
-      "y" : "532.0",
-      "x" : "380.0"
+      "x" : "456.0",
+      "y" : "532.0"
     },
-    "visible" : "true",
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "1971015540079926064"
+  }, {
+    "absolutePosition" : "false",
     "rotationangle" : {
       "angleindegrees" : "0"
     },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "4804364675067024140",
+    "components" : [ {
+      "type" : "Sprite"
+    } ],
+    "visible" : "true",
     "name" : "Walkway_solid_1_1384374021396",
-    "components" : [ {
-      "type" : "Sprite"
-    } ],
-    "uuid" : "4122859652119354338",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
+    "gameobjectuuid" : "4804364675067024140",
     "position" : {
-      "y" : "608.0",
-      "x" : "456.0"
+      "x" : "380.0",
+      "y" : "532.0"
     },
-    "visible" : "true",
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "4122859652119354338"
+  }, {
+    "absolutePosition" : "false",
     "rotationangle" : {
       "angleindegrees" : "0"
     },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "4804364675067024140",
+    "components" : [ {
+      "type" : "Sprite"
+    } ],
+    "visible" : "true",
     "name" : "Walkway_solid_1_1384374023574",
-    "components" : [ {
-      "type" : "Sprite"
-    } ],
-    "uuid" : "-6054970995768048315",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
+    "gameobjectuuid" : "4804364675067024140",
     "position" : {
-      "y" : "608.0",
-      "x" : "380.0"
+      "x" : "456.0",
+      "y" : "608.0"
     },
-    "visible" : "true",
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-6054970995768048315"
+  }, {
+    "absolutePosition" : "false",
     "rotationangle" : {
       "angleindegrees" : "0"
     },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "4804364675067024140",
-    "name" : "Walkway_solid_1_1384374026003",
     "components" : [ {
       "type" : "Sprite"
     } ],
-    "uuid" : "579801954869220501",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "608.0",
-      "x" : "304.0"
-    },
     "visible" : "true",
+    "name" : "Walkway_solid_1_1384374026003",
+    "gameobjectuuid" : "4804364675067024140",
+    "position" : {
+      "x" : "380.0",
+      "y" : "608.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "579801954869220501"
+  }, {
+    "absolutePosition" : "false",
     "rotationangle" : {
       "angleindegrees" : "90"
     },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "4804364675067024140",
+    "components" : [ {
+      "type" : "Sprite"
+    } ],
+    "visible" : "true",
     "name" : "Walkway_solid_1_1384374028321",
-    "components" : [ {
-      "type" : "Sprite"
-    } ],
-    "uuid" : "31490859355355632",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
+    "gameobjectuuid" : "4804364675067024140",
     "position" : {
-      "y" : "608.0",
-      "x" : "228.0"
+      "x" : "304.0",
+      "y" : "608.0"
     },
-    "visible" : "true",
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "31490859355355632"
+  }, {
+    "absolutePosition" : "false",
     "rotationangle" : {
       "angleindegrees" : "0"
     },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "4804364675067024140",
+    "components" : [ {
+      "type" : "Sprite"
+    } ],
+    "visible" : "true",
     "name" : "Walkway_solid_1_1384374030452",
-    "components" : [ {
-      "type" : "Sprite"
-    } ],
-    "uuid" : "1320413292987832402",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
+    "gameobjectuuid" : "4804364675067024140",
     "position" : {
-      "y" : "456.0",
-      "x" : "760.0"
+      "x" : "228.0",
+      "y" : "608.0"
     },
-    "visible" : "true",
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "1320413292987832402"
+  }, {
+    "absolutePosition" : "false",
     "rotationangle" : {
       "angleindegrees" : "0"
     },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "4804364675067024140",
+    "components" : [ {
+      "type" : "Sprite"
+    } ],
+    "visible" : "true",
     "name" : "Walkway_solid_1_1384374032717",
-    "components" : [ {
-      "type" : "Sprite"
-    } ],
-    "uuid" : "-7578103406382775500",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
+    "gameobjectuuid" : "4804364675067024140",
     "position" : {
-      "y" : "456.0",
-      "x" : "836.0"
+      "x" : "760.0",
+      "y" : "456.0"
     },
-    "visible" : "true",
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-7578103406382775500"
+  }, {
+    "absolutePosition" : "false",
     "rotationangle" : {
       "angleindegrees" : "0"
     },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "4804364675067024140",
+    "components" : [ {
+      "type" : "Sprite"
+    } ],
+    "visible" : "true",
     "name" : "Walkway_solid_1_1384374035243",
-    "components" : [ {
-      "type" : "Sprite"
-    } ],
-    "uuid" : "2351312385625579649",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
+    "gameobjectuuid" : "4804364675067024140",
     "position" : {
-      "y" : "456.0",
-      "x" : "912.0"
+      "x" : "836.0",
+      "y" : "456.0"
     },
-    "visible" : "true",
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "2351312385625579649"
+  }, {
+    "absolutePosition" : "false",
     "rotationangle" : {
       "angleindegrees" : "0"
     },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "4804364675067024140",
+    "components" : [ {
+      "type" : "Sprite"
+    } ],
+    "visible" : "true",
     "name" : "Walkway_solid_1_1384374037418",
-    "components" : [ {
-      "type" : "Sprite"
-    } ],
-    "uuid" : "6164818933259114945",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
+    "gameobjectuuid" : "4804364675067024140",
     "position" : {
-      "y" : "456.0",
-      "x" : "988.0"
+      "x" : "912.0",
+      "y" : "456.0"
     },
-    "visible" : "true",
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "6164818933259114945"
+  }, {
+    "absolutePosition" : "false",
     "rotationangle" : {
       "angleindegrees" : "0"
     },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "4804364675067024140",
+    "components" : [ {
+      "type" : "Sprite"
+    } ],
+    "visible" : "true",
     "name" : "Walkway_solid_1_1384374039356",
-    "components" : [ {
-      "type" : "Sprite"
-    } ],
-    "uuid" : "7335484514090124714",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
+    "gameobjectuuid" : "4804364675067024140",
     "position" : {
-      "y" : "532.0",
-      "x" : "760.0"
+      "x" : "988.0",
+      "y" : "456.0"
     },
-    "visible" : "true",
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "7335484514090124714"
+  }, {
+    "absolutePosition" : "false",
     "rotationangle" : {
       "angleindegrees" : "0"
     },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "4804364675067024140",
+    "components" : [ {
+      "type" : "Sprite"
+    } ],
+    "visible" : "true",
     "name" : "Walkway_solid_1_1384374041297",
-    "components" : [ {
-      "type" : "Sprite"
-    } ],
-    "uuid" : "-1577370472445461643",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
+    "gameobjectuuid" : "4804364675067024140",
     "position" : {
-      "y" : "532.0",
-      "x" : "836.0"
+      "x" : "760.0",
+      "y" : "532.0"
     },
-    "visible" : "true",
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-1577370472445461643"
+  }, {
+    "absolutePosition" : "false",
     "rotationangle" : {
       "angleindegrees" : "0"
     },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "4804364675067024140",
+    "components" : [ {
+      "type" : "Sprite"
+    } ],
+    "visible" : "true",
     "name" : "Walkway_solid_1_1384374043295",
-    "components" : [ {
-      "type" : "Sprite"
-    } ],
-    "uuid" : "-6185579629678500956",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
+    "gameobjectuuid" : "4804364675067024140",
     "position" : {
-      "y" : "532.0",
-      "x" : "912.0"
+      "x" : "836.0",
+      "y" : "532.0"
     },
-    "visible" : "true",
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-6185579629678500956"
+  }, {
+    "absolutePosition" : "false",
     "rotationangle" : {
       "angleindegrees" : "0"
     },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "4804364675067024140",
+    "components" : [ {
+      "type" : "Sprite"
+    } ],
+    "visible" : "true",
     "name" : "Walkway_solid_1_1384374045664",
-    "components" : [ {
-      "type" : "Sprite"
-    } ],
-    "uuid" : "-3897203054971804123",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
+    "gameobjectuuid" : "4804364675067024140",
     "position" : {
-      "y" : "532.0",
-      "x" : "988.0"
+      "x" : "912.0",
+      "y" : "532.0"
     },
-    "visible" : "true",
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-3897203054971804123"
+  }, {
+    "absolutePosition" : "false",
     "rotationangle" : {
       "angleindegrees" : "0"
     },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "4804364675067024140",
+    "components" : [ {
+      "type" : "Sprite"
+    } ],
+    "visible" : "true",
     "name" : "Walkway_solid_1_1384374047730",
-    "components" : [ {
-      "type" : "Sprite"
-    } ],
-    "uuid" : "-2024817945479242767",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
+    "gameobjectuuid" : "4804364675067024140",
     "position" : {
-      "y" : "608.0",
-      "x" : "760.0"
+      "x" : "988.0",
+      "y" : "532.0"
     },
-    "visible" : "true",
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-2024817945479242767"
+  }, {
+    "absolutePosition" : "false",
     "rotationangle" : {
       "angleindegrees" : "0"
     },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "4804364675067024140",
+    "components" : [ {
+      "type" : "Sprite"
+    } ],
+    "visible" : "true",
     "name" : "Walkway_solid_1_1384374049916",
-    "components" : [ {
-      "type" : "Sprite"
-    } ],
-    "uuid" : "1785462415249193628",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
+    "gameobjectuuid" : "4804364675067024140",
     "position" : {
-      "y" : "608.0",
-      "x" : "836.0"
+      "x" : "760.0",
+      "y" : "608.0"
     },
-    "visible" : "true",
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "1785462415249193628"
+  }, {
+    "absolutePosition" : "false",
     "rotationangle" : {
       "angleindegrees" : "0"
     },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "4804364675067024140",
+    "components" : [ {
+      "type" : "Sprite"
+    } ],
+    "visible" : "true",
     "name" : "Walkway_solid_1_1384374051974",
-    "components" : [ {
-      "type" : "Sprite"
-    } ],
-    "uuid" : "6586812290152651368",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
+    "gameobjectuuid" : "4804364675067024140",
     "position" : {
-      "y" : "608.0",
-      "x" : "912.0"
+      "x" : "836.0",
+      "y" : "608.0"
     },
-    "visible" : "true",
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "6586812290152651368"
+  }, {
+    "absolutePosition" : "false",
     "rotationangle" : {
       "angleindegrees" : "0"
     },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "4804364675067024140",
+    "components" : [ {
+      "type" : "Sprite"
+    } ],
+    "visible" : "true",
     "name" : "Walkway_solid_1_1384374054176",
-    "components" : [ {
-      "type" : "Sprite"
-    } ],
-    "uuid" : "-8384154793107305501",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "608.0",
-      "x" : "988.0"
-    },
-    "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "false",
     "gameobjectuuid" : "4804364675067024140",
+    "position" : {
+      "x" : "912.0",
+      "y" : "608.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-8384154793107305501"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
+    "components" : [ {
+      "type" : "Sprite"
+    } ],
+    "visible" : "true",
     "name" : "Walkway_solid_1_1384374056494",
-    "components" : [ {
-      "type" : "Sprite"
-    } ],
-    "uuid" : "-1236704362356015084",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
+    "gameobjectuuid" : "4804364675067024140",
     "position" : {
-      "y" : "252.32492",
-      "x" : "602.1187"
+      "x" : "988.0",
+      "y" : "608.0"
     },
-    "visible" : "true",
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-1236704362356015084"
+  }, {
+    "absolutePosition" : "false",
     "rotationangle" : {
       "angleindegrees" : "0"
     },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "427110152030095327",
+    "components" : [ {
+      "active" : "true",
+      "type" : "Physics"
+    }, {
+      "type" : "Sprite"
+    } ],
+    "visible" : "true",
     "name" : "bean_small_1384375980691",
+    "gameobjectuuid" : "427110152030095327",
+    "position" : {
+      "x" : "602.1187",
+      "y" : "252.32492"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-6045248509559337206"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
     "components" : [ {
       "active" : "true",
       "type" : "Physics"
     }, {
       "type" : "Sprite"
     } ],
-    "uuid" : "-6045248509559337206",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "252.33383",
-      "x" : "546.87024"
-    },
     "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "427110152030095327",
     "name" : "bean_small_1384414773959",
-    "components" : [ {
-      "active" : "true",
-      "type" : "Physics"
-    }, {
-      "type" : "Sprite"
-    } ],
-    "uuid" : "-6549010255961436150",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "216.94318",
-      "x" : "583.45233"
-    },
-    "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "false",
     "gameobjectuuid" : "427110152030095327",
-    "name" : "bean_small_1384414777213",
+    "position" : {
+      "x" : "546.87024",
+      "y" : "252.33383"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-6549010255961436150"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
     "components" : [ {
       "active" : "true",
       "type" : "Physics"
     }, {
       "type" : "Sprite"
     } ],
-    "uuid" : "-5663747140516834865",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "266.0",
-      "x" : "1024.0"
-    },
     "visible" : "true",
+    "name" : "bean_small_1384414777213",
+    "gameobjectuuid" : "427110152030095327",
+    "position" : {
+      "x" : "583.45233",
+      "y" : "216.94318"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-5663747140516834865"
+  }, {
+    "absolutePosition" : "false",
     "rotationangle" : {
       "angleindegrees" : "0"
     },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "-3769331226440908538",
-    "name" : "finish_sign_1384374697378",
     "components" : [ {
       "type" : "Static"
     }, {
       "type" : "Sprite"
     } ],
-    "uuid" : "-1353019716393943362",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "298.68362",
-      "x" : "516.3799"
-    },
     "visible" : "true",
+    "name" : "finish_sign_1384374697378",
+    "gameobjectuuid" : "-3769331226440908538",
+    "position" : {
+      "x" : "1024.0",
+      "y" : "266.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-1353019716393943362"
+  }, {
+    "absolutePosition" : "false",
     "rotationangle" : {
       "angleindegrees" : "0"
     },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "-8230513384194179997",
+    "components" : [ {
+      "active" : "true",
+      "type" : "Physics"
+    } ],
+    "visible" : "true",
     "name" : "iron_physics_leftright_1384375094093",
+    "gameobjectuuid" : "-8230513384194179997",
+    "position" : {
+      "x" : "516.3799",
+      "y" : "298.68362"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "5312266426240520798"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
     "components" : [ {
       "active" : "true",
       "type" : "Physics"
     } ],
-    "uuid" : "5312266426240520798",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "298.6309",
-      "x" : "715.73486"
-    },
     "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "-8230513384194179997",
     "name" : "iron_physics_leftright_1384375968306",
+    "gameobjectuuid" : "-8230513384194179997",
+    "position" : {
+      "x" : "715.73486",
+      "y" : "298.6309"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-412422503757210931"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
     "components" : [ {
       "active" : "true",
       "type" : "Physics"
     } ],
-    "uuid" : "-412422503757210931",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "298.4531",
-      "x" : "464.0009"
-    },
     "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "-8230513384194179997",
     "name" : "iron_physics_leftright_1384414725844",
+    "gameobjectuuid" : "-8230513384194179997",
+    "position" : {
+      "x" : "464.0009",
+      "y" : "298.4531"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "3505778794746106084"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
     "components" : [ {
       "active" : "true",
       "type" : "Physics"
     } ],
-    "uuid" : "3505778794746106084",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "298.27777",
-      "x" : "416.0"
-    },
     "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "-8230513384194179997",
     "name" : "iron_physics_leftright_1384414729986",
-    "components" : [ {
-      "active" : "true",
-      "type" : "Physics"
-    } ],
-    "uuid" : "-7612409674715369523",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
-    "position" : {
-      "y" : "299.27777",
-      "x" : "357.0"
-    },
-    "visible" : "true",
-    "rotationangle" : {
-      "angleindegrees" : "0"
-    },
-    "absolutePosition" : "false",
     "gameobjectuuid" : "-8230513384194179997",
-    "name" : "iron_physics_leftright_1384414734142",
-    "components" : [ {
-      "active" : "true",
-      "type" : "Physics"
-    } ],
-    "uuid" : "6105785280505011624",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  }, {
     "position" : {
-      "y" : "287.5795",
-      "x" : "494.9721"
+      "x" : "416.0",
+      "y" : "298.27777"
     },
-    "visible" : "true",
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-7612409674715369523"
+  }, {
+    "absolutePosition" : "false",
     "rotationangle" : {
       "angleindegrees" : "0"
     },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "-721453412061472676",
-    "name" : "iron_physics_top_1384374940194",
     "components" : [ {
       "active" : "true",
       "type" : "Physics"
     } ],
-    "uuid" : "5438046358578793031",
-    "absolutePositionAnchor" : "TOP_LEFT"
-  } ],
-  "backgroundcolor" : {
-    "g" : "0",
-    "b" : "0",
-    "r" : "0"
-  },
-  "objects" : [ {
-    "templates" : [ {
-      "cameratype" : "FOLLOWPLAYER",
-      "type" : "Camera"
-    } ],
-    "name" : "Camera",
-    "uuid" : "-1997482371798076675",
-    "size" : {
-      "height" : "64",
-      "width" : "64"
-    }
+    "visible" : "true",
+    "name" : "iron_physics_leftright_1384414734142",
+    "gameobjectuuid" : "-8230513384194179997",
+    "position" : {
+      "x" : "357.0",
+      "y" : "299.27777"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "6105785280505011624"
   }, {
-    "templates" : [ {
-      "jumpKey" : "UP",
-      "moveRightKey" : "RIGHT",
-      "leftRightImpulse" : "4.0",
-      "moveLeftKey" : "LEFT",
-      "jumpImpulse" : "2.0",
-      "type" : "Platform"
-    }, {
-      "resourcename" : {
-        "name" : "/assets/objects/duke_small.png"
-      },
-      "type" : "Sprite"
-    }, {
-      "gravityScale" : "1.0",
-      "density" : "1.0",
-      "fixedrotation" : "true",
-      "friction" : "1.8",
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
+    "components" : [ {
       "active" : "true",
-      "type" : "Physics",
-      "restitution" : "0.0"
+      "type" : "Physics"
     } ],
-    "name" : "Duke",
-    "uuid" : "-279500599772276169",
-    "size" : {
-      "height" : "81",
-      "width" : "48"
-    }
+    "visible" : "true",
+    "name" : "iron_physics_top_1384374940194",
+    "gameobjectuuid" : "-721453412061472676",
+    "position" : {
+      "x" : "494.9721",
+      "y" : "287.5795"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "5438046358578793031"
   }, {
-    "templates" : [ {
-      "color" : {
-        "g" : "255",
-        "b" : "255",
-        "r" : "255"
-      },
-      "font" : {
-        "name" : "ARIAL",
-        "size" : "32"
-      },
+    "absolutePosition" : "true",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
+    "components" : [ {
       "textExpression" : {
         "expression" : "\"First Level\""
       },
-      "type" : "Text"
-    } ],
-    "name" : "First level text",
-    "uuid" : "2371203598469434471",
-    "size" : {
-      "height" : "64",
-      "width" : "64"
-    }
-  }, {
-    "templates" : [ {
-      "resourcename" : {
-        "name" : "/assets/objects/star.png"
+      "color" : {
+        "r" : "255",
+        "b" : "255",
+        "g" : "255"
       },
-      "type" : "Sprite"
+      "type" : "Text",
+      "font" : {
+        "size" : "32",
+        "name" : "ARIAL"
+      }
+    } ],
+    "visible" : "true",
+    "name" : "leveltext",
+    "gameobjectuuid" : "2371203598469434471",
+    "position" : {
+      "x" : "128.0",
+      "y" : "64.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-4506315511269709264"
+  } ],
+  "defaultplayerobjectid" : "-279500599772276169",
+  "objects" : [ {
+    "visible" : "true",
+    "size" : {
+      "width" : "64",
+      "height" : "64"
+    },
+    "templates" : [ {
+      "type" : "Camera",
+      "cameratype" : "FOLLOWPLAYER"
+    } ],
+    "name" : "Camera",
+    "uuid" : "-1997482371798076675"
+  }, {
+    "visible" : "true",
+    "size" : {
+      "width" : "48",
+      "height" : "81"
+    },
+    "templates" : [ {
+      "animations" : [ {
+        "animationSequence" : [ {
+          "name" : "/assets/objects/duke_small.png"
+        } ],
+        "name" : "Default",
+        "uuid" : "2546253489879601260"
+      } ],
+      "currentAnimation" : "2546253489879601260",
+      "type" : "Sprite",
+      "speed" : "5"
     }, {
-      "gravityScale" : "0.0",
+      "fixedrotation" : "true",
       "density" : "1.0",
-      "fixedrotation" : "false",
-      "friction" : "1.8",
+      "restitution" : "0.0",
+      "gravityScale" : "1.0",
       "active" : "true",
       "type" : "Physics",
-      "restitution" : "0.0"
+      "friction" : "1.8"
+    }, {
+      "jumpImpulse" : "2.0",
+      "leftRightImpulse" : "4.0",
+      "moveLeftKey" : "LEFT",
+      "type" : "Platform",
+      "moveRightKey" : "RIGHT",
+      "jumpKey" : "UP"
+    } ],
+    "name" : "Duke",
+    "uuid" : "-279500599772276169"
+  }, {
+    "visible" : "true",
+    "size" : {
+      "width" : "64",
+      "height" : "64"
+    },
+    "templates" : [ {
+      "textExpression" : {
+        "expression" : "\"First Level\""
+      },
+      "color" : {
+        "r" : "255",
+        "b" : "255",
+        "g" : "255"
+      },
+      "type" : "Text",
+      "font" : {
+        "size" : "32",
+        "name" : "ARIAL"
+      }
+    } ],
+    "name" : "First level text",
+    "uuid" : "2371203598469434471"
+  }, {
+    "visible" : "true",
+    "size" : {
+      "width" : "48",
+      "height" : "48"
+    },
+    "templates" : [ {
+      "animations" : [ {
+        "animationSequence" : [ {
+          "name" : "/assets/objects/star.png"
+        } ],
+        "name" : "Default",
+        "uuid" : "2308829684020853259"
+      } ],
+      "currentAnimation" : "2308829684020853259",
+      "type" : "Sprite",
+      "speed" : "5"
+    }, {
+      "fixedrotation" : "false",
+      "density" : "1.0",
+      "restitution" : "0.0",
+      "gravityScale" : "0.0",
+      "active" : "true",
+      "type" : "Physics",
+      "friction" : "1.8"
     } ],
     "name" : "Star",
-    "uuid" : "4343694719606608272",
-    "size" : {
-      "height" : "48",
-      "width" : "48"
-    }
+    "uuid" : "4343694719606608272"
   }, {
+    "visible" : "true",
+    "size" : {
+      "width" : "76",
+      "height" : "76"
+    },
     "templates" : [ {
-      "resourcename" : {
-        "name" : "/assets/tiles/wall1_4.png"
-      },
-      "type" : "Sprite"
+      "animations" : [ {
+        "animationSequence" : [ {
+          "name" : "/assets/tiles/wall1_4.png"
+        } ],
+        "name" : "Default",
+        "uuid" : "-3617740025644479607"
+      } ],
+      "currentAnimation" : "-3617740025644479607",
+      "type" : "Sprite",
+      "speed" : "5"
     }, {
       "type" : "Static"
     } ],
     "name" : "Walkway_botom_left",
-    "uuid" : "-6077101624070649173",
-    "size" : {
-      "height" : "76",
-      "width" : "76"
-    }
+    "uuid" : "-6077101624070649173"
   }, {
+    "visible" : "true",
+    "size" : {
+      "width" : "76",
+      "height" : "76"
+    },
     "templates" : [ {
-      "resourcename" : {
-        "name" : "/assets/tiles/wall2_3.png"
-      },
-      "type" : "Sprite"
+      "animations" : [ {
+        "animationSequence" : [ {
+          "name" : "/assets/tiles/wall2_3.png"
+        } ],
+        "name" : "Default",
+        "uuid" : "-1911316133071175867"
+      } ],
+      "currentAnimation" : "-1911316133071175867",
+      "type" : "Sprite",
+      "speed" : "5"
     }, {
       "type" : "Static"
     } ],
     "name" : "Walkway_bottom_middle",
-    "uuid" : "-7220657972923747107",
-    "size" : {
-      "height" : "76",
-      "width" : "76"
-    }
+    "uuid" : "-7220657972923747107"
   }, {
+    "visible" : "true",
+    "size" : {
+      "width" : "76",
+      "height" : "76"
+    },
     "templates" : [ {
-      "resourcename" : {
-        "name" : "/assets/tiles/wall1_3.png"
-      },
-      "type" : "Sprite"
+      "animations" : [ {
+        "animationSequence" : [ {
+          "name" : "/assets/tiles/wall1_3.png"
+        } ],
+        "name" : "Default",
+        "uuid" : "6762356826147938311"
+      } ],
+      "currentAnimation" : "6762356826147938311",
+      "type" : "Sprite",
+      "speed" : "5"
     }, {
       "type" : "Static"
     } ],
     "name" : "Walkway_bottom_right",
-    "uuid" : "647197498473429375",
-    "size" : {
-      "height" : "76",
-      "width" : "76"
-    }
+    "uuid" : "647197498473429375"
   }, {
+    "visible" : "true",
+    "size" : {
+      "width" : "76",
+      "height" : "76"
+    },
     "templates" : [ {
-      "resourcename" : {
-        "name" : "/assets/tiles/wall3_2.png"
-      },
-      "type" : "Sprite"
+      "animations" : [ {
+        "animationSequence" : [ {
+          "name" : "/assets/tiles/wall3_2.png"
+        } ],
+        "name" : "Default",
+        "uuid" : "1900263349052368358"
+      } ],
+      "currentAnimation" : "1900263349052368358",
+      "type" : "Sprite",
+      "speed" : "5"
     }, {
       "type" : "Static"
     } ],
     "name" : "Walkway_left_middle",
-    "uuid" : "-2648947804278990847",
-    "size" : {
-      "height" : "76",
-      "width" : "76"
-    }
+    "uuid" : "-2648947804278990847"
   }, {
+    "visible" : "true",
+    "size" : {
+      "width" : "76",
+      "height" : "76"
+    },
     "templates" : [ {
-      "resourcename" : {
-        "name" : "/assets/tiles/wall1_2.png"
-      },
-      "type" : "Sprite"
+      "animations" : [ {
+        "animationSequence" : [ {
+          "name" : "/assets/tiles/wall1_2.png"
+        } ],
+        "name" : "Default",
+        "uuid" : "-2544116446002469819"
+      } ],
+      "currentAnimation" : "-2544116446002469819",
+      "type" : "Sprite",
+      "speed" : "5"
     }, {
       "type" : "Static"
     } ],
     "name" : "Walkway_left_top",
-    "uuid" : "6595711303285831883",
-    "size" : {
-      "height" : "76",
-      "width" : "76"
-    }
+    "uuid" : "6595711303285831883"
   }, {
+    "visible" : "true",
+    "size" : {
+      "width" : "76",
+      "height" : "76"
+    },
     "templates" : [ {
-      "resourcename" : {
-        "name" : "/assets/tiles/wall2_1.png"
-      },
-      "type" : "Sprite"
+      "animations" : [ {
+        "animationSequence" : [ {
+          "name" : "/assets/tiles/wall2_1.png"
+        } ],
+        "name" : "Default",
+        "uuid" : "6138609569507368632"
+      } ],
+      "currentAnimation" : "6138609569507368632",
+      "type" : "Sprite",
+      "speed" : "5"
     }, {
       "type" : "Static"
     } ],
     "name" : "Walkway_middle_top_1",
-    "uuid" : "2738111980994969784",
-    "size" : {
-      "height" : "76",
-      "width" : "76"
-    }
+    "uuid" : "2738111980994969784"
   }, {
+    "visible" : "true",
+    "size" : {
+      "width" : "76",
+      "height" : "76"
+    },
     "templates" : [ {
-      "resourcename" : {
-        "name" : "/assets/tiles/wall2_2.png"
-      },
-      "type" : "Sprite"
+      "animations" : [ {
+        "animationSequence" : [ {
+          "name" : "/assets/tiles/wall2_2.png"
+        } ],
+        "name" : "Default",
+        "uuid" : "1041627437992952789"
+      } ],
+      "currentAnimation" : "1041627437992952789",
+      "type" : "Sprite",
+      "speed" : "5"
     }, {
       "type" : "Static"
     } ],
     "name" : "Walkway_middle_top_2",
-    "uuid" : "7991002059236720051",
-    "size" : {
-      "height" : "76",
-      "width" : "76"
-    }
+    "uuid" : "7991002059236720051"
   }, {
+    "visible" : "true",
+    "size" : {
+      "width" : "76",
+      "height" : "76"
+    },
     "templates" : [ {
-      "resourcename" : {
-        "name" : "/assets/tiles/wall3_1.png"
-      },
-      "type" : "Sprite"
+      "animations" : [ {
+        "animationSequence" : [ {
+          "name" : "/assets/tiles/wall3_1.png"
+        } ],
+        "name" : "Default",
+        "uuid" : "2904276789676505145"
+      } ],
+      "currentAnimation" : "2904276789676505145",
+      "type" : "Sprite",
+      "speed" : "5"
     }, {
       "type" : "Static"
     } ],
     "name" : "Walkway_right_middle",
-    "uuid" : "-4597433157293241913",
-    "size" : {
-      "height" : "76",
-      "width" : "76"
-    }
+    "uuid" : "-4597433157293241913"
   }, {
+    "visible" : "true",
+    "size" : {
+      "width" : "76",
+      "height" : "76"
+    },
     "templates" : [ {
-      "resourcename" : {
-        "name" : "/assets/tiles/wall1_1.png"
-      },
-      "type" : "Sprite"
+      "animations" : [ {
+        "animationSequence" : [ {
+          "name" : "/assets/tiles/wall1_1.png"
+        } ],
+        "name" : "Default",
+        "uuid" : "-4183316136272242354"
+      } ],
+      "currentAnimation" : "-4183316136272242354",
+      "type" : "Sprite",
+      "speed" : "5"
     }, {
       "type" : "Static"
     } ],
     "name" : "Walkway_right_top",
-    "uuid" : "7431117854133416743",
-    "size" : {
-      "height" : "76",
-      "width" : "76"
-    }
+    "uuid" : "7431117854133416743"
   }, {
+    "visible" : "true",
+    "size" : {
+      "width" : "76",
+      "height" : "76"
+    },
     "templates" : [ {
-      "resourcename" : {
-        "name" : "/assets/tiles/wall4_3.png"
-      },
-      "type" : "Sprite"
+      "animations" : [ {
+        "animationSequence" : [ {
+          "name" : "/assets/tiles/wall4_3.png"
+        } ],
+        "name" : "Default",
+        "uuid" : "3985512548166205070"
+      } ],
+      "currentAnimation" : "3985512548166205070",
+      "type" : "Sprite",
+      "speed" : "5"
     } ],
     "name" : "Walkway_solid_1",
-    "uuid" : "4804364675067024140",
-    "size" : {
-      "height" : "76",
-      "width" : "76"
-    }
+    "uuid" : "4804364675067024140"
   }, {
+    "visible" : "true",
+    "size" : {
+      "width" : "48",
+      "height" : "34"
+    },
     "templates" : [ {
-      "resourcename" : {
-        "name" : "/assets/objects/bean_small.png"
-      },
-      "type" : "Sprite"
+      "animations" : [ {
+        "animationSequence" : [ {
+          "name" : "/assets/objects/bean_small.png"
+        } ],
+        "name" : "Default",
+        "uuid" : "4698902611196449120"
+      } ],
+      "currentAnimation" : "4698902611196449120",
+      "type" : "Sprite",
+      "speed" : "5"
     }, {
-      "gravityScale" : "1.0",
-      "density" : "1.0",
       "fixedrotation" : "false",
-      "friction" : "1.8",
+      "density" : "1.0",
+      "restitution" : "0.0",
+      "gravityScale" : "1.0",
       "active" : "true",
       "type" : "Physics",
-      "restitution" : "0.0"
+      "friction" : "1.8"
     } ],
     "name" : "bean_small",
-    "uuid" : "427110152030095327",
-    "size" : {
-      "height" : "34",
-      "width" : "48"
-    }
+    "uuid" : "427110152030095327"
   }, {
+    "visible" : "true",
+    "size" : {
+      "width" : "110",
+      "height" : "113"
+    },
     "templates" : [ {
-      "resourcename" : {
-        "name" : "/assets/objects/finish.png"
-      },
-      "type" : "Sprite"
+      "animations" : [ {
+        "animationSequence" : [ {
+          "name" : "/assets/objects/finish.png"
+        } ],
+        "name" : "Default",
+        "uuid" : "771901600513599160"
+      } ],
+      "currentAnimation" : "771901600513599160",
+      "type" : "Sprite",
+      "speed" : "5"
     }, {
       "type" : "Static"
     } ],
     "name" : "finish_sign",
-    "uuid" : "-3769331226440908538",
-    "size" : {
-      "height" : "113",
-      "width" : "110"
-    }
+    "uuid" : "-3769331226440908538"
   }, {
+    "visible" : "true",
+    "size" : {
+      "width" : "10",
+      "height" : "80"
+    },
     "templates" : [ {
-      "gravityScale" : "1.0",
-      "density" : "1.0",
       "fixedrotation" : "false",
-      "friction" : "1.8",
+      "density" : "1.0",
+      "restitution" : "0.0",
+      "gravityScale" : "1.0",
       "active" : "true",
       "type" : "Physics",
-      "restitution" : "0.0"
+      "friction" : "1.8"
     } ],
     "name" : "iron_physics_leftright",
-    "uuid" : "-8230513384194179997",
-    "size" : {
-      "height" : "80",
-      "width" : "10"
-    }
+    "uuid" : "-8230513384194179997"
   }, {
+    "visible" : "true",
+    "size" : {
+      "width" : "250",
+      "height" : "10"
+    },
     "templates" : [ {
-      "gravityScale" : "1.0",
-      "density" : "1.0",
       "fixedrotation" : "false",
-      "friction" : "1.8",
+      "density" : "1.0",
+      "restitution" : "0.0",
+      "gravityScale" : "1.0",
       "active" : "true",
       "type" : "Physics",
-      "restitution" : "0.0"
+      "friction" : "1.8"
     } ],
     "name" : "iron_physics_top",
-    "uuid" : "-721453412061472676",
-    "size" : {
-      "height" : "10",
-      "width" : "250"
-    }
-  } ]
+    "uuid" : "-721453412061472676"
+  } ],
+  "name" : "First level",
+  "backgroundcolor" : {
+    "r" : "0",
+    "b" : "0",
+    "g" : "0"
+  }
 }

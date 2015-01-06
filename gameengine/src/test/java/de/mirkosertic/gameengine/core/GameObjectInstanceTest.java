@@ -212,6 +212,12 @@ public class GameObjectInstanceTest {
         when(theBehavior.getTemplate()).thenReturn(theTemplate);
 
         Behavior theBehavior2 = new Behavior() {
+
+            @Override
+            public String getType() {
+                return null;
+            }
+
             @Override
             public Map<String, Object> serialize() {
                 return new HashMap<>();
@@ -245,6 +251,12 @@ public class GameObjectInstanceTest {
         when(theOwner.visibleProperty()).thenReturn(theVisibleProperty);
 
         Behavior theBehavior = new Behavior() {
+
+            @Override
+            public String getType() {
+                return null;
+            }
+
             @Override
             public Map<String, Object> serialize() {
                 return new HashMap<>();

@@ -37,6 +37,11 @@ public class TextBehavior implements Behavior, Text, Reflectable<TextClassInform
     }
 
     @Override
+    public String getType() {
+        return TYPE;
+    }
+
+    @Override
     public TextClassInformation getClassInformation() {
         return TextClassInformation.INSTANCE;
     }

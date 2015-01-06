@@ -55,6 +55,11 @@ public class PlatformBehavior implements Behavior, Platform, Reflectable<Platfor
         return PlatformClassInformation.INSTANCE;
     }
 
+    @Override
+    public String getType() {
+        return TYPE;
+    }
+
     public void registerEvents(GameRuntime aGameRuntime) {
         aGameRuntime.getEventManager().register(objectInstance, KeyPressed.class, new GameEventListener<KeyPressed>() {
             public void handleGameEvent(KeyPressed aEvent) {

@@ -49,6 +49,11 @@ public class CameraBehavior implements Behavior, Camera, Reflectable<CameraClass
     }
 
     @Override
+    public String getType() {
+        return TYPE;
+    }
+
+    @Override
     public CameraClassInformation getClassInformation() {
         return CameraClassInformation.INSTANCE;
     }

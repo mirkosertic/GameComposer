@@ -40,6 +40,11 @@ public class PhysicsBehavior implements Behavior, Physics, Reflectable<PhysicsCl
     }
 
     @Override
+    public String getType() {
+        return TYPE;
+    }
+
+    @Override
     public PhysicsClassInformation getClassInformation() {
         return PhysicsClassInformation.INSTANCE;
     }

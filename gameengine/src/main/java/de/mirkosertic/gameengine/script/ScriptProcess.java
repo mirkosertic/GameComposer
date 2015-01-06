@@ -1,6 +1,7 @@
 package de.mirkosertic.gameengine.script;
 
 import de.mirkosertic.gameengine.core.GameObjectInstance;
+import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.process.GameProcess;
 import de.mirkosertic.gameengine.scriptengine.ScriptEngine;
 import de.mirkosertic.gameengine.scriptengine.ScriptEngineFactory;
@@ -10,16 +11,22 @@ import java.io.IOException;
 
 public class ScriptProcess implements GameProcess {
 
-    private final GameObjectInstance instance;
+    private final GameScene scene;
+    private GameObjectInstance instance;
     private final ScriptEngineFactory scriptEngineFactory;
     private final Script script;
 
     private ScriptEngine scriptEngine;
 
-    public ScriptProcess(GameObjectInstance aInstance, ScriptEngineFactory aScriptEngineFactory, Script aScript) {
-        instance = aInstance;
+    public ScriptProcess(GameScene aScene, ScriptEngineFactory aScriptEngineFactory, Script aScript) {
+        scene = aScene;
         scriptEngineFactory = aScriptEngineFactory;
         script = aScript;
+    }
+
+    public ScriptProcess(GameObjectInstance aInstance, ScriptEngineFactory aScriptEngineFactory, Script aScript) {
+        this(aInstance.getOwnerGameObject().getGameScene(), aScriptEngineFactory, aScript);
+        instance = aInstance;
     }
 
     @Override
@@ -27,7 +34,10 @@ public class ScriptProcess implements GameProcess {
         if (scriptEngine == null) {
             try {
                 scriptEngine = scriptEngineFactory.createNewEngine(script);
-                scriptEngine.registerObject("instance", instance);
+                if (instance != null) {
+                    scriptEngine.registerObject("instance", instance);
+                }
+                scriptEngine.registerObject("scene", scene);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

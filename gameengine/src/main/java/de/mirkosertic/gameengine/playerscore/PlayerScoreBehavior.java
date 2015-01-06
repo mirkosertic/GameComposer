@@ -30,6 +30,11 @@ public class PlayerScoreBehavior implements Behavior, PlayerScore, Reflectable<P
     }
 
     @Override
+    public String getType() {
+        return TYPE;
+    }
+
+    @Override
     public PlayerScoreClassInformation getClassInformation() {
         return PlayerScoreClassInformation.INSTANCE;
     }
