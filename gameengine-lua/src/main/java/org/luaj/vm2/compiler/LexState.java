@@ -24,7 +24,7 @@ package org.luaj.vm2.compiler;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
-import java.util.Hashtable;
+import java.util.HashMap;
 
 import org.luaj.vm2.LocVars;
 import org.luaj.vm2.Lua;
@@ -55,7 +55,7 @@ public class LexState {
         RESERVED_LOCAL_VAR_FOR_STATE,
         RESERVED_LOCAL_VAR_FOR_STEP
     };
-    private static final Hashtable RESERVED_LOCAL_VAR_KEYWORDS_TABLE = new Hashtable();
+    private static final HashMap RESERVED_LOCAL_VAR_KEYWORDS_TABLE = new HashMap();
     static {
     	for ( int i=0; i<RESERVED_LOCAL_VAR_KEYWORDS.length; i++ )
         	RESERVED_LOCAL_VAR_KEYWORDS_TABLE.put( RESERVED_LOCAL_VAR_KEYWORDS[i], Boolean.TRUE );
@@ -167,7 +167,7 @@ public class LexState {
 	final static int FIRST_RESERVED = TK_AND;
 	final static int NUM_RESERVED = TK_WHILE+1-FIRST_RESERVED;
 	
-	final static Hashtable RESERVED = new Hashtable();
+	final static HashMap RESERVED = new HashMap();
 	static {
 		for ( int i=0; i<NUM_RESERVED; i++ ) {
 			LuaString ts = (LuaString) LuaValue.valueOf( luaX_tokens[i] );

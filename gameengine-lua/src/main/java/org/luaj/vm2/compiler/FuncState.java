@@ -21,8 +21,6 @@
 ******************************************************************************/
 package org.luaj.vm2.compiler;
 
-import java.util.Hashtable;
-
 import org.luaj.vm2.LocVars;
 import org.luaj.vm2.Lua;
 import org.luaj.vm2.LuaDouble;
@@ -35,6 +33,8 @@ import org.luaj.vm2.Prototype;
 import org.luaj.vm2.Upvaldesc;
 import org.luaj.vm2.compiler.LexState.ConsControl;
 import org.luaj.vm2.compiler.LexState.expdesc;
+
+import java.util.HashMap;
 
 
 public class FuncState extends LuaC {
@@ -49,7 +49,7 @@ public class FuncState extends LuaC {
 	};
 	
 	Prototype f;  /* current function header */
-	Hashtable h;  /* table to find (and reuse) elements in `k' */
+	HashMap h;  /* table to find (and reuse) elements in `k' */
 	FuncState prev;  /* enclosing function */
 	LexState ls;  /* lexical state */
 	LuaC L;  /* compiler being invoked */
@@ -477,7 +477,7 @@ public class FuncState extends LuaC {
 	}
 	int addk(LuaValue v) {
 		if (this.h == null) {
-			this.h = new Hashtable();
+			this.h = new HashMap();
 		} else if (this.h.containsKey(v)) {
 			return ((Integer) h.get(v)).intValue();
 		} 

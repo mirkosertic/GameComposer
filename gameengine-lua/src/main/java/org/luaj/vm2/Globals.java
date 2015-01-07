@@ -28,7 +28,6 @@ import java.io.Reader;
 
 import org.luaj.vm2.lib.BaseLib;
 import org.luaj.vm2.lib.DebugLib;
-import org.luaj.vm2.lib.PackageLib;
 import org.luaj.vm2.lib.ResourceFinder;
 
 /**
@@ -130,9 +129,6 @@ public class Globals extends LuaTable {
 	/** The BaseLib instance loaded into this Globals */
 	public BaseLib baselib;
 	
-	/** The PackageLib instance loaded into this Globals */
-	public PackageLib package_;
-	
 	/** The DebugLib instance loaded into this Globals, or null if debugging is not enabled */
 	public DebugLib debuglib;
 
@@ -167,85 +163,7 @@ public class Globals extends LuaTable {
 	 * @see Compiler */
 	public Compiler compiler;
 
-	/** The installed undumper.
-	 * @see Undumper */
-	public Undumper undumper;
-
-	/** Convenience function for loading a file that is either binary lua or lua source.
-	 * @param filename Name of the file to load.
-	 * @return LuaValue that can be call()'ed or invoke()'ed.
-	 * @throws LuaError if the file could not be loaded.
-	 */
-	public LuaValue loadfile(String filename) {
-		try {
-			return load(finder.findResource(filename), "@"+filename, "bt", this);
-		} catch (Exception e) {
-			return error("load "+filename+": "+e);
-		}
-	}
-
-	/** Convenience function to load a string value as a script.  Must be lua source.
-	 * @param script Contents of a lua script, such as "print 'hello, world.'"
-	 * @param chunkname Name that will be used within the chunk as the source.
-	 * @return LuaValue that may be executed via .call(), .invoke(), or .method() calls.
-	 * @throws LuaError if the script could not be compiled.
-	 */
-	public LuaValue load(String script, String chunkname) {
-		return load(new StrReader(script), chunkname);
-	}
-	
-	/** Convenience function to load a string value as a script.  Must be lua source.
-	 * @param script Contents of a lua script, such as "print 'hello, world.'"
-	 * @return LuaValue that may be executed via .call(), .invoke(), or .method() calls.
-	 * @throws LuaError if the script could not be compiled.
-	 */
-	public LuaValue load(String script) {
-		return load(new StrReader(script), script);
-	}
-	
-	/** Load the content form a reader as a text file.  Must be lua source. 
-	 * The source is converted to UTF-8, so any characters appearing in quoted literals 
-	 * above the range 128 will be converted into multiple bytes.  */
-	public LuaValue load(Reader reader, String chunkname) {
-		return load(new UTF8Stream(reader), chunkname, "t", this);
-	}
-
-	/** Load the content form an input stream as a binary chunk or text file. */
-	public LuaValue load(InputStream is, String chunkname, String mode, LuaValue env) {
-		try {
-			Prototype p = loadPrototype(is, chunkname, mode);
-			return loader.load(p, chunkname, env);
-		} catch (LuaError l) {
-			throw l;
-		} catch (Exception e) {
-			return error("load "+chunkname+": "+e);
-		}
-	}
-
-	/** Load lua source or lua binary from an input stream into a Prototype. 
-	 * The InputStream is either a binary lua chunk starting with the lua binary chunk signature, 
-	 * or a text input file.  If it is a text input file, it is interpreted as a UTF-8 byte sequence.  
-	 */
-	public Prototype loadPrototype(InputStream is, String chunkname, String mode) throws IOException {
-		if (mode.indexOf('b') >= 0) {
-			if (undumper == null)
-				error("No undumper.");
-			if (!is.markSupported())
-				is = new BufferedStream(is);
-			is.mark(4);
-			final Prototype p = undumper.undump(is, chunkname);
-			if (p != null)
-				return p;
-			is.reset();
-		}
-		if (mode.indexOf('t') >= 0) {
-			return compilePrototype(is, chunkname);
-		}
-		error("Failed to load prototype "+chunkname+" using mode '"+mode+"'");
-		return null;
-	}
-	
-	/** Compile lua source from a Reader into a Prototype. The characters in the reader 
+	/** Compile lua source from a Reader into a Prototype. The characters in the reader
 	 * are converted to bytes using the UTF-8 encoding, so a string literal containing 
 	 * characters with codepoints 128 or above will be converted into multiple bytes. 
 	 */
@@ -261,40 +179,6 @@ public class Globals extends LuaTable {
 		if (compiler == null)
 			error("No compiler.");
 		return compiler.compile(stream, chunkname);
-	}
-
-	/** Function which yields the current thread. 
-	 * @param args  Arguments to supply as return values in the resume function of the resuming thread.
-	 * @return Values supplied as arguments to the resume() call that reactivates this thread.
-	 */
-	public Varargs yield(Varargs args) {
-		if (running == null || running.isMainThread())
-			throw new LuaError("cannot yield main thread");
-		final LuaThread.State s = running.state;
-		return s.lua_yield(args);
-	}
-
-	/** Reader implementation to read chars from a String in JME or JSE. */
-	static class StrReader extends Reader {
-		final String s;
-		int i = 0;
-		final int n;
-		StrReader(String s) {
-			this.s = s;
-			n = s.length();
-		}
-		public void close() throws IOException {
-			i = n;
-		}
-		public int read() throws IOException {
-			return i < n ? s.charAt(i++) : -1;
-		}
-		public int read(char[] cbuf, int off, int len) throws IOException {
-			int j = 0;
-			for (; j < len && i < n; ++j, ++i)
-				cbuf[off+j] = s.charAt(i);
-			return j > 0 || len == 0 ? j : -1;
-		}
 	}
 
 	/* Abstract base class to provide basic buffered input storage and delivery.
@@ -360,58 +244,6 @@ public class Globals extends LuaTable {
 		}
 		public void close() throws IOException {
 			r.close();
-		}
-	}
-	
-	/** Simple buffered InputStream that supports mark.
-	 * Used to examine an InputStream for a 4-byte binary lua signature, 
-	 * and fall back to text input when the signature is not found,
-	 * as well as speed up normal compilation and reading of lua scripts.
-	 * This class may be moved to its own package in the future.
-	 */
-	static class BufferedStream extends AbstractBufferedStream {
-		private final InputStream s;
-		public BufferedStream(InputStream s) {
-			this(128, s);
-		}
-		BufferedStream(int buflen, InputStream s) {
-			super(buflen);
-			this.s = s;
-		}
-		protected int avail() throws IOException {
-			if (i < j) return j - i;
-			if (j >= b.length) i = j = 0;
-			// leave previous bytes in place to implement mark()/reset().
-			int n = s.read(b, j, b.length - j);
-			if (n < 0)
-				return -1;
-			if (n == 0) {
-				int u = s.read();
-				if (u < 0)
-					return -1;
-				b[j] = (byte) u;
-				n = 1;
-			}
-			j += n;
-			return n;
-		}
-		public void close() throws IOException {
-			s.close();
-		}
-		public synchronized void mark(int n) {
-			if (i > 0 || n > b.length) {
-				byte[] dest = n > b.length ? new byte[n] : b;
-				System.arraycopy(b, i, dest, 0, j - i);
-				j -= i;
-				i = 0;
-				b = dest;
-			}
-		}
-		public boolean markSupported() {
-			return true;
-		}
-		public synchronized void reset() throws IOException {
-			i = 0;
 		}
 	}
 }

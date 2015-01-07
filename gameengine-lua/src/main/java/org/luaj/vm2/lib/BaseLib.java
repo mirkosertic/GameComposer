@@ -21,9 +21,6 @@
 ******************************************************************************/
 package org.luaj.vm2.lib;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.Lua;
 import org.luaj.vm2.LuaError;
@@ -75,23 +72,18 @@ import org.luaj.vm2.Varargs;
  * @see JmePlatform
  * @see <a href="http://www.lua.org/manual/5.2/manual.html#6.1">Lua 5.2 Base Lib Reference</a>
  */
-public class BaseLib extends TwoArgFunction implements ResourceFinder {
+public class BaseLib extends TwoArgFunction {
 	
 	Globals globals;
 	
 	public LuaValue call(LuaValue modname, LuaValue env) {
 		globals = env.checkglobals();
-		globals.finder = this;
 		globals.baselib = this;
 		env.set( "_G", env );
 		env.set( "_VERSION", Lua._VERSION );
 		env.set("assert", new _assert());
-		env.set("collectgarbage", new collectgarbage());
-		env.set("dofile", new dofile());
 		env.set("error", new error());
 		env.set("getmetatable", new getmetatable());
-		env.set("load", new load());
-		env.set("loadfile", new loadfile());
 		env.set("pcall", new pcall());
 		env.set("print", new print(this));
 		env.set("rawequal", new rawequal());
@@ -113,54 +105,12 @@ public class BaseLib extends TwoArgFunction implements ResourceFinder {
 		return env;
 	}
 
-	/** ResourceFinder implementation 
-	 * 
-	 * Tries to open the file as a resource, which can work for JSE and JME. 
-	 */
-	public InputStream findResource(String filename) {
-		return getClass().getResourceAsStream(filename.startsWith("/")? filename: "/"+filename);
-	}
-
-	
 	// "assert", // ( v [,message] ) -> v, message | ERR
 	static final class _assert extends VarArgFunction {
 		public Varargs invoke(Varargs args) {
 			if ( !args.arg1().toboolean() ) 
 				error( args.narg()>1? args.optjstring(2,"assertion failed!"): "assertion failed!" );
 			return args;
-		}
-	}
-
-	// "collectgarbage", // ( opt [,arg] ) -> value
-	static final class collectgarbage extends VarArgFunction {
-		public Varargs invoke(Varargs args) {
-			String s = args.checkjstring(1);
-			if ( "collect".equals(s) ) {
-				System.gc();
-				return ZERO;
-			} else if ( "count".equals(s) ) {
-				Runtime rt = Runtime.getRuntime();
-				long used = rt.totalMemory() - rt.freeMemory();
-				return varargsOf(valueOf(used/1024.), valueOf(used%1024));
-			} else if ( "step".equals(s) ) {
-				System.gc();
-				return LuaValue.TRUE;
-			} else {
-				this.argerror("gc op");
-			}
-			return NIL;
-		}
-	}
-
-	// "dofile", // ( filename ) -> result1, ...
-	final class dofile extends VarArgFunction {
-		public Varargs invoke(Varargs args) {
-			args.argcheck(args.isstring(1) || args.isnil(1), 1, "filename must be string or nil");
-			String filename = args.isstring(1)? args.tojstring(1): null;
-			Varargs v = filename == null? 
-					loadStream( globals.STDIN, "=stdin", "bt", globals ):
-					loadFile( args.checkjstring(1), "bt", globals );
-			return v.isnil(1)? error(v.tojstring(2)): v.arg1().invoke();			
 		}
 	}
 
@@ -181,32 +131,7 @@ public class BaseLib extends TwoArgFunction implements ResourceFinder {
 			return mt!=null? mt.rawget(METATABLE).optvalue(mt): NIL;
 		}
 	}
-	// "load", // ( ld [, source [, mode [, env]]] ) -> chunk | nil, msg
-	final class load extends VarArgFunction {
-		public Varargs invoke(Varargs args) {
-			LuaValue ld = args.arg1();
-			args.argcheck(ld.isstring() || ld.isfunction(), 1, "ld must be string or function");
-			String source = args.optjstring(2, ld.isstring()? ld.tojstring(): "=(load)");
-			String mode = args.optjstring(3, "bt");
-			LuaValue env = args.optvalue(4, globals);
-			return loadStream(ld.isstring()? ld.strvalue().toInputStream(): 
-				new StringInputStream(ld.checkfunction()), source, mode, env);
-		}
-	}
 
-	// "loadfile", // ( [filename [, mode [, env]]] ) -> chunk | nil, msg
-	final class loadfile extends VarArgFunction {
-		public Varargs invoke(Varargs args) {
-			args.argcheck(args.isstring(1) || args.isnil(1), 1, "filename must be string or nil");
-			String filename = args.isstring(1)? args.tojstring(1): null;
-			String mode = args.optjstring(2, "bt");
-			LuaValue env = args.optvalue(3, globals);
-			return filename == null? 
-				loadStream( globals.STDIN, "=stdin", mode, env ):
-				loadFile( filename, mode, env );
-		}
-	}
-		
 	// "pcall", // (f, arg1, ...) -> status, result1, ...
 	final class pcall extends VarArgFunction {
 		public Varargs invoke(Varargs args) {
@@ -414,62 +339,6 @@ public class BaseLib extends TwoArgFunction implements ResourceFinder {
 	static final class inext extends VarArgFunction {
 		public Varargs invoke(Varargs args) {
 			return args.checktable(1).inext(args.arg(2));
-		}
-	}
-	
-	/** 
-	 * Load from a named file, returning the chunk or nil,error of can't load
-	 * @param env 
-	 * @param mode 
-	 * @return Varargs containing chunk, or NIL,error-text on error
-	 */
-	public Varargs loadFile(String filename, String mode, LuaValue env) {
-		InputStream is = globals.finder.findResource(filename);
-		if ( is == null )
-			return varargsOf(NIL, valueOf("cannot open "+filename+": No such file or directory"));
-		try {
-			return loadStream(is, "@"+filename, mode, env);
-		} finally {
-			try {
-				is.close();
-			} catch ( Exception e ) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	public Varargs loadStream(InputStream is, String chunkname, String mode, LuaValue env) {
-		try {
-			if ( is == null )
-				return varargsOf(NIL, valueOf("not found: "+chunkname));
-			return globals.load(is, chunkname, mode, env);
-		} catch (Exception e) {
-			return varargsOf(NIL, valueOf(e.getMessage()));
-		}
-	}
-	
-	
-	private static class StringInputStream extends InputStream {
-		final LuaValue func;
-		byte[] bytes; 
-		int offset, remaining = 0;
-		StringInputStream(LuaValue func) {
-			this.func = func;
-		}
-		public int read() throws IOException {
-			if ( remaining <= 0 ) {
-				LuaValue s = func.call();
-				if ( s.isnil() )
-					return -1;
-				LuaString ls = s.strvalue();
-				bytes = ls.m_bytes;
-				offset = ls.m_offset;
-				remaining = ls.m_length;
-				if (remaining <= 0)
-					return -1;
-			}
-			--remaining;
-			return bytes[offset++];
 		}
 	}
 }

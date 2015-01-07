@@ -22,10 +22,6 @@
 package org.luaj.vm2;
 
 
-import java.io.ByteArrayInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintStream;
 
 import org.luaj.vm2.lib.MathLib;
@@ -450,10 +446,6 @@ public class LuaString extends LuaValue {
 		return true;
 	}
 
-	public void write(DataOutputStream writer, int i, int len) throws IOException {
-		writer.write(m_bytes,m_offset+i,len);
-	}
-	
 	public LuaValue len() {
 		return LuaInteger.valueOf(m_length);
 	}
@@ -482,14 +474,6 @@ public class LuaString extends LuaValue {
 
 	public LuaString checkstring() {
 		return this;
-	}
-	
-	/** Convert value to an input stream.
-	 * 
-	 * @return {@link InputStream} whose data matches the bytes in this {@link LuaString}
-	 */
-	public InputStream toInputStream() {
-		return new ByteArrayInputStream(m_bytes, m_offset, m_length);
 	}
 	
 	/**

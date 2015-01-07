@@ -23,7 +23,7 @@ package org.luaj.vm2.compiler;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Hashtable;
+import java.util.HashMap;
 
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LocVars;
@@ -235,11 +235,11 @@ public class LuaC extends Lua implements Globals.Compiler, Globals.Loader {
 	}
 
 	public int nCcalls;
-	Hashtable strings;
+	HashMap strings;
 
 	protected LuaC() {}
 	
-	private LuaC(Hashtable strings) {
+	private LuaC(HashMap strings) {
 		 this.strings = strings;
 	}
 
@@ -250,17 +250,8 @@ public class LuaC extends Lua implements Globals.Compiler, Globals.Loader {
 	 * @throws IOException
 	 */
 	public Prototype compile(InputStream stream, String chunkname) throws IOException {
-		return (new LuaC(new Hashtable())).luaY_parser(stream, chunkname);
+		return (new LuaC(new HashMap())).luaY_parser(stream, chunkname);
 	}
-
-	/** @deprecated
-	 * Use Globals.load(InputString, String, String) instead, 
-	 * or LuaC.compil(InputStream, String) and construct LuaClosure directly.
-	 */
-	public LuaValue load(InputStream stream, String chunkname, Globals globals) throws IOException {
-		return new LuaClosure(compile(stream, chunkname), globals);
-	}
-
 
 	/** Parse the input */
 	private Prototype luaY_parser(InputStream z, String name) throws IOException{

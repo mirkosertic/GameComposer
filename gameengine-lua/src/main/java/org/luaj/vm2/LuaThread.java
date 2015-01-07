@@ -149,22 +149,6 @@ public class LuaThread extends LuaValue {
 		return s_metatable; 
 	}
 	
-	public String getStatus() {
-		return STATUS_NAMES[state.status];
-	}
-
-	public boolean isMainThread() {
-		return this.state.function == null;
-	}
-
-	public Varargs resume(Varargs args) {
-		final LuaThread.State s = this.state;
-		if (s.status > LuaThread.STATUS_SUSPENDED)
-			return LuaValue.varargsOf(LuaValue.FALSE, 
-					LuaValue.valueOf("cannot resume "+(s.status==LuaThread.STATUS_DEAD? "dead": "non-suspended")+" coroutine"));
-		return s.lua_resume(this, args);
-	}
-
 	public static class State implements Runnable {
 		private final Globals globals;
 		final WeakReference lua_thread;
@@ -189,61 +173,7 @@ public class LuaThread extends LuaValue {
 				this.error = t.getMessage();
 			} finally {
 				this.status = LuaThread.STATUS_DEAD;
-				this.notify();
-			}
-		}
-
-		public synchronized Varargs lua_resume(LuaThread new_thread, Varargs args) {
-			LuaThread previous_thread = globals.running;
-			try {
-				globals.running = new_thread;
-				this.args = args;
-				if (this.status == STATUS_INITIAL) {
-					this.status = STATUS_RUNNING; 
-					new Thread(this, "Coroutine-"+(++coroutine_count)).start();
-				} else {
-					this.notify();
-				}
-				if (previous_thread != null)
-					previous_thread.state.status = STATUS_NORMAL;
-				this.status = STATUS_RUNNING;
-				this.wait();
-				return (this.error != null? 
-					LuaValue.varargsOf(LuaValue.FALSE, LuaValue.valueOf(this.error)):
-					LuaValue.varargsOf(LuaValue.TRUE, this.result));
-			} catch (InterruptedException ie) {
-				throw new OrphanedThread();
-			} finally {
-				this.args = LuaValue.NONE;
-				this.result = LuaValue.NONE;
-				this.error = null;
-				globals.running = previous_thread;
-				if (previous_thread != null)
-					globals.running.state.status =STATUS_RUNNING;
-			}
-		}
-
-		public synchronized Varargs lua_yield(Varargs args) {
-			try {
-				this.result = args;
-				this.status = STATUS_SUSPENDED;
-				this.notify();
-				do {
-					this.wait(thread_orphan_check_interval);
-					if (this.lua_thread.get() == null) {
-						this.status = STATUS_DEAD;
-						throw new OrphanedThread();
-					}
-				} while (this.status == STATUS_SUSPENDED);
-				return this.args;
-			} catch (InterruptedException ie) {
-				this.status = STATUS_DEAD;
-				throw new OrphanedThread();
-			} finally {
-				this.args = LuaValue.NONE;
-				this.result = LuaValue.NONE;
 			}
 		}
 	}
-		
 }

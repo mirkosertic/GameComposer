@@ -36,8 +36,8 @@
                     <disableCastChecking>true</disableCastChecking>
                     <enableClosureCompiler>false</enableClosureCompiler>
                     <!--<disableClassMetaData>true</disableClassMetaData>-->
-                    <!--<style>DETAILED</style>
-                    <disableCastChecking>true</disableCastChecking>-->
+                    <style>DETAILED</style>
+                    <!--<disableCastChecking>true</disableCastChecking>-->
                 </configuration>
                 <dependencies>
                     <dependency>
