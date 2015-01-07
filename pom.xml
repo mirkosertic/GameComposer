@@ -12,6 +12,8 @@
 
     <modules>
         <module>gameengine-apt</module>
+        <module>gameengine-jbox2d</module>
+        <module>gameengine-lua</module>
         <module>gameengine</module>
         <module>gameengine-fxrenderer</module>
         <module>gameengine-gwtrenderer</module>
@@ -27,6 +29,16 @@
             <dependency>
                 <groupId>de.mirkosertic</groupId>
                 <artifactId>gameengine-apt</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.mirkosertic</groupId>
+                <artifactId>gameengine-jbox2d</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.mirkosertic</groupId>
+                <artifactId>gameengine-lua</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
