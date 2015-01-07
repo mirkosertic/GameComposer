@@ -2,8 +2,10 @@ package de.mirkosertic.gamecomposer;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.geometry.Orientation;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
+import javafx.scene.control.SplitPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
@@ -61,9 +63,12 @@ public class GameComposerController {
         directoryPreferences = Preferences.userNodeForPackage(GameComposerController.class);
         exportMenu.setDisable(true);
 
-        borderPane.setLeft(objectInspector.getView());
-        borderPane.setCenter(contentArea.getView());
-        borderPane.setRight(projectStructure.getView());
+        SplitPane theSplitPane = new SplitPane();
+        theSplitPane.setOrientation(Orientation.HORIZONTAL);
+        theSplitPane.getItems().addAll(objectInspector.getView(), contentArea.getView(), projectStructure.getView());
+        theSplitPane.setDividerPositions(0.3, 0.3);
+
+        borderPane.setCenter(theSplitPane);
 
         eventGateway.fire(new ApplicationStartedEvent());
     }
