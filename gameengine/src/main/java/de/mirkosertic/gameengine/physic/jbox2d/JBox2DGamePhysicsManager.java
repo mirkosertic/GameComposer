@@ -179,15 +179,15 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
         BodyDef theBodyDef = new BodyDef();
         theBodyDef.userData = aInstance;
         theBodyDef.type = aBodyType;
-        theBodyDef.setAngle(aInstance.rotationAngleProperty().get().invert().toRadians());
+        theBodyDef.angle = aInstance.rotationAngleProperty().get().invert().toRadians();
         theBodyDef.position = computePosition(aInstance);
         theBodyDef.gravityScale = 1;
 
         PhysicsBehaviorTemplate theTemplate = aInstance.getOwnerGameObject().getBehaviorTemplate(PhysicsBehaviorTemplate.class);
         if (theTemplate != null) {
-            theBodyDef.setActive(theTemplate.activeProperty().get());
-            theBodyDef.setFixedRotation(theTemplate.fixedRotationProperty().get());
-            theBodyDef.setGravityScale(theTemplate.gravityScaleProperty().get());
+            theBodyDef.active = theTemplate.activeProperty().get();
+            theBodyDef.fixedRotation = theTemplate.fixedRotationProperty().get();
+            theBodyDef.gravityScale = theTemplate.gravityScaleProperty().get();
         }
 
         return theBodyDef;
