@@ -34,7 +34,6 @@ import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaThread;
 import org.luaj.vm2.LuaUserdata;
 import org.luaj.vm2.LuaValue;
-import org.luaj.vm2.Print;
 import org.luaj.vm2.Prototype;
 import org.luaj.vm2.Varargs;
 
@@ -72,13 +71,7 @@ import org.luaj.vm2.Varargs;
  * @see <a href="http://www.lua.org/manual/5.2/manual.html#6.10">Lua 5.2 Debug Lib Reference</a>
  */
 public class DebugLib extends TwoArgFunction {
-	public static boolean CALLS;
-	public static boolean TRACE;
-	static {
-		try { CALLS = (null != System.getProperty("CALLS")); } catch (Exception e) {}
-		try { TRACE = (null != System.getProperty("TRACE")); } catch (Exception e) {}
-	}
-	
+
 	private static final LuaString LUA             = valueOf("Lua");  
 	private static final LuaString QMARK           = valueOf("?");  
 	private static final LuaString CALL            = valueOf("call");  
@@ -657,8 +650,6 @@ public class DebugLib extends TwoArgFunction {
 			this.pc = pc;
 			this.v = v;
 			this.top = top;
-			if (TRACE)
-				Print.printState(f.checkclosure(), pc, stack, top, v);
 		}
 		Varargs getLocal(int i) {
 			LuaString name = getlocalname(i);

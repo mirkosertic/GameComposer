@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.luaj.vm2.Globals;
-import org.luaj.vm2.LoadState;
 import org.luaj.vm2.LuaClosure;
 import org.luaj.vm2.Prototype;
 import org.luaj.vm2.compiler.LuaC;
@@ -33,7 +32,7 @@ public class LuaScriptEngineFactory implements ScriptEngineFactory {
 //        globals.load(new StringLib());
 //        globals.load(new CoroutineLib());
 //        globals.load(new JmeIoLib());
-        LoadState.install(globals);
+//        LoadState.install(globals);
         LuaC.install(globals);
         return globals;
     }

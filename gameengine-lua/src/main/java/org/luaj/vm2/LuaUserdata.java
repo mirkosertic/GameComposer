@@ -57,16 +57,9 @@ public class LuaUserdata extends LuaValue {
 	}
 	
 	public boolean isuserdata()                        { return true; }
-	public boolean isuserdata(Class c)                 { return c.isAssignableFrom(m_instance.getClass()); }
 	public Object  touserdata()                        { return m_instance; }
-	public Object  touserdata(Class c)                 { return c.isAssignableFrom(m_instance.getClass())? m_instance: null; }
 	public Object  optuserdata(Object defval)          { return m_instance; }
-	public Object optuserdata(Class c, Object defval) {
-		if (!c.isAssignableFrom(m_instance.getClass()))
-			typerror(c.getName());
-		return m_instance;
-	}
-	
+
 	public LuaValue getmetatable() {
 		return m_metatable;
 	}
@@ -78,12 +71,6 @@ public class LuaUserdata extends LuaValue {
 
 	public Object checkuserdata() {
 		return m_instance;
-	}
-	
-	public Object checkuserdata(Class c) { 
-		if ( c.isAssignableFrom(m_instance.getClass()) )
-			return m_instance;		
-		return typerror(c.getName());
 	}
 	
 	public LuaValue get( LuaValue key ) {

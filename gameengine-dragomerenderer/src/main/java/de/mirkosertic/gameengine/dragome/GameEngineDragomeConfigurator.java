@@ -35,9 +35,9 @@ public class GameEngineDragomeConfigurator extends DomHandlerApplicationConfigur
     public boolean filterClassPath(String aClassPathEntry) {
         if (aClassPathEntry.contains("gameengine-0.3"))
             return true;
-        if (aClassPathEntry.contains("luaj-"))
+        if (aClassPathEntry.contains("gameengine-lua"))
             return true;
-        if (aClassPathEntry.contains("jbox2d-"))
+        if (aClassPathEntry.contains("gameengine-jbox2d"))
             return true;
         if (aClassPathEntry.contains("dragome-js-jre"))
             return true;

@@ -21,16 +21,11 @@
 ******************************************************************************/
 package org.luaj.vm2.lib;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
-import org.luaj.vm2.LuaClosure;
 import org.luaj.vm2.Buffer;
 import org.luaj.vm2.LuaString;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.Varargs;
-import org.luaj.vm2.compiler.DumpState;
 
 /** 
  * Subclass of {@link LibFunction} which implements the lua standard {@code string} 
@@ -68,9 +63,9 @@ public class StringLib extends TwoArgFunction {
 
 	public LuaValue call(LuaValue modname, LuaValue env) {
 		LuaTable t = new LuaTable();
-		bind(t, StringLib1.class, new String[] {
-			"dump", "len", "lower", "reverse", "upper", } );
-		bind(t, StringLibV.class, new String[] {
+		bind(t, new StringLib1(), new String[] {
+			"len", "lower", "reverse", "upper", } );
+		bind(t, new StringLibV(), new String[] {
 			"byte", "char", "find", "format", 
 			"gmatch", "gsub", "match", "rep", 
 			"sub"} );
@@ -85,7 +80,6 @@ public class StringLib extends TwoArgFunction {
 	static final class StringLib1 extends OneArgFunction {
 		public LuaValue call(LuaValue arg) {
 			switch ( opcode ) { 
-			case 0: return dump(arg); // dump (function)
 			case 1: return StringLib.len(arg); // len (function)
 			case 2: return lower(arg); // lower (function)
 			case 3: return reverse(arg); // reverse (function)
@@ -163,27 +157,7 @@ public class StringLib extends TwoArgFunction {
 		return LuaString.valueOf( bytes );
 	}
 		
-	/** 
-	 * string.dump (function)
-	 * 
-	 * Returns a string containing a binary representation of the given function, 
-	 * so that a later loadstring on this string returns a copy of the function. 
-	 * function must be a Lua function without upvalues.
-	 *  
-	 * TODO: port dumping code as optional add-on
-	 */
-	static LuaValue dump( LuaValue arg ) {
-		LuaValue f = arg.checkfunction();
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		try {
-			DumpState.dump( ((LuaClosure)f).p, baos, true );
-			return LuaString.valueOf(baos.toByteArray());
-		} catch (IOException e) {
-			return error( e.getMessage() );
-		}
-	}
-
-	/** 
+	/**
 	 * string.find (s, pattern [, init [, plain]])
 	 * 
 	 * Looks for the first match of pattern in the string s. 

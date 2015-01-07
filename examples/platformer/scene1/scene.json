@@ -76,9 +76,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Platform"
-    }, {
       "type" : "Sprite"
+    }, {
+      "type" : "Platform"
     } ],
     "visible" : "true",
     "name" : "Duke_1384374064987",
@@ -95,10 +95,10 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
+      "type" : "Sprite"
+    }, {
       "active" : "true",
       "type" : "Physics"
-    }, {
-      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Star_1384888985355",
@@ -115,10 +115,10 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
+      "type" : "Sprite"
+    }, {
       "active" : "true",
       "type" : "Physics"
-    }, {
-      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Star_1384888988875",
@@ -135,10 +135,10 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
+      "type" : "Sprite"
+    }, {
       "active" : "true",
       "type" : "Physics"
-    }, {
-      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Star_1384888993618",
@@ -155,10 +155,10 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
+      "type" : "Sprite"
+    }, {
       "active" : "true",
       "type" : "Physics"
-    }, {
-      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Star_1384888996543",
@@ -175,10 +175,10 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
+      "type" : "Sprite"
+    }, {
       "active" : "true",
       "type" : "Physics"
-    }, {
-      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Star_1384888999417",
@@ -195,10 +195,10 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
+      "type" : "Sprite"
+    }, {
       "active" : "true",
       "type" : "Physics"
-    }, {
-      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Star_1384889002239",
@@ -215,9 +215,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Static"
-    }, {
       "type" : "Sprite"
+    }, {
+      "type" : "Static"
     } ],
     "visible" : "true",
     "name" : "Walkway_botom_left_1384373866404",
@@ -234,9 +234,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Static"
-    }, {
       "type" : "Sprite"
+    }, {
+      "type" : "Static"
     } ],
     "visible" : "true",
     "name" : "Walkway_botom_left_1384373869515",
@@ -253,9 +253,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Static"
-    }, {
       "type" : "Sprite"
+    }, {
+      "type" : "Static"
     } ],
     "visible" : "true",
     "name" : "Walkway_bottom_middle_1384373937322",
@@ -272,9 +272,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Static"
-    }, {
       "type" : "Sprite"
+    }, {
+      "type" : "Static"
     } ],
     "visible" : "true",
     "name" : "Walkway_bottom_middle_1384373940351",
@@ -291,9 +291,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Static"
-    }, {
       "type" : "Sprite"
+    }, {
+      "type" : "Static"
     } ],
     "visible" : "true",
     "name" : "Walkway_bottom_middle_1384373942839",
@@ -310,9 +310,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Static"
-    }, {
       "type" : "Sprite"
+    }, {
+      "type" : "Static"
     } ],
     "visible" : "true",
     "name" : "Walkway_bottom_middle_1384373945327",
@@ -329,9 +329,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Static"
-    }, {
       "type" : "Sprite"
+    }, {
+      "type" : "Static"
     } ],
     "visible" : "true",
     "name" : "Walkway_bottom_middle_1384373947993",
@@ -348,9 +348,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Static"
-    }, {
       "type" : "Sprite"
+    }, {
+      "type" : "Static"
     } ],
     "visible" : "true",
     "name" : "Walkway_bottom_middle_1384373950229",
@@ -367,9 +367,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Static"
-    }, {
       "type" : "Sprite"
+    }, {
+      "type" : "Static"
     } ],
     "visible" : "true",
     "name" : "Walkway_bottom_middle_1384373952212",
@@ -386,9 +386,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Static"
-    }, {
       "type" : "Sprite"
+    }, {
+      "type" : "Static"
     } ],
     "visible" : "true",
     "name" : "Walkway_bottom_middle_1384373954506",
@@ -405,9 +405,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Static"
-    }, {
       "type" : "Sprite"
+    }, {
+      "type" : "Static"
     } ],
     "visible" : "true",
     "name" : "Walkway_bottom_right_1384373903304",
@@ -424,9 +424,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Static"
-    }, {
       "type" : "Sprite"
+    }, {
+      "type" : "Static"
     } ],
     "visible" : "true",
     "name" : "Walkway_bottom_right_1384373905720",
@@ -443,9 +443,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Static"
-    }, {
       "type" : "Sprite"
+    }, {
+      "type" : "Static"
     } ],
     "visible" : "true",
     "name" : "Walkway_left_middle_1384373702860",
@@ -462,9 +462,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Static"
-    }, {
       "type" : "Sprite"
+    }, {
+      "type" : "Static"
     } ],
     "visible" : "true",
     "name" : "Walkway_left_middle_1384373742444",
@@ -481,9 +481,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Static"
-    }, {
       "type" : "Sprite"
+    }, {
+      "type" : "Static"
     } ],
     "visible" : "true",
     "name" : "Walkway_left_middle_1384373786249",
@@ -500,9 +500,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Static"
-    }, {
       "type" : "Sprite"
+    }, {
+      "type" : "Static"
     } ],
     "visible" : "true",
     "name" : "Walkway_left_middle_1384373788796",
@@ -519,9 +519,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Static"
-    }, {
       "type" : "Sprite"
+    }, {
+      "type" : "Static"
     } ],
     "visible" : "true",
     "name" : "Walkway_left_middle_1384373794008",
@@ -538,9 +538,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Static"
-    }, {
       "type" : "Sprite"
+    }, {
+      "type" : "Static"
     } ],
     "visible" : "true",
     "name" : "Walkway_left_middle_1384373796399",
@@ -557,9 +557,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Static"
-    }, {
       "type" : "Sprite"
+    }, {
+      "type" : "Static"
     } ],
     "visible" : "true",
     "name" : "Walkway_left_top_1384373708219",
@@ -576,9 +576,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Static"
-    }, {
       "type" : "Sprite"
+    }, {
+      "type" : "Static"
     } ],
     "visible" : "true",
     "name" : "Walkway_left_top_1384373747571",
@@ -595,9 +595,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Static"
-    }, {
       "type" : "Sprite"
+    }, {
+      "type" : "Static"
     } ],
     "visible" : "true",
     "name" : "Walkway_middle_top_1_1384373723738",
@@ -614,9 +614,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Static"
-    }, {
       "type" : "Sprite"
+    }, {
+      "type" : "Static"
     } ],
     "visible" : "true",
     "name" : "Walkway_middle_top_1_1384373730420",
@@ -633,9 +633,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Static"
-    }, {
       "type" : "Sprite"
+    }, {
+      "type" : "Static"
     } ],
     "visible" : "true",
     "name" : "Walkway_middle_top_1_1384373756271",
@@ -652,9 +652,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Static"
-    }, {
       "type" : "Sprite"
+    }, {
+      "type" : "Static"
     } ],
     "visible" : "true",
     "name" : "Walkway_middle_top_1_1384373766125",
@@ -671,9 +671,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Static"
-    }, {
       "type" : "Sprite"
+    }, {
+      "type" : "Static"
     } ],
     "visible" : "true",
     "name" : "Walkway_middle_top_2_1384373718708",
@@ -690,9 +690,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Static"
-    }, {
       "type" : "Sprite"
+    }, {
+      "type" : "Static"
     } ],
     "visible" : "true",
     "name" : "Walkway_middle_top_2_1384373727382",
@@ -709,9 +709,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Static"
-    }, {
       "type" : "Sprite"
+    }, {
+      "type" : "Static"
     } ],
     "visible" : "true",
     "name" : "Walkway_middle_top_2_1384373752335",
@@ -728,9 +728,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Static"
-    }, {
       "type" : "Sprite"
+    }, {
+      "type" : "Static"
     } ],
     "visible" : "true",
     "name" : "Walkway_middle_top_2_1384373760777",
@@ -747,9 +747,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Static"
-    }, {
       "type" : "Sprite"
+    }, {
+      "type" : "Static"
     } ],
     "visible" : "true",
     "name" : "Walkway_right_middle_1384373738825",
@@ -766,9 +766,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Static"
-    }, {
       "type" : "Sprite"
+    }, {
+      "type" : "Static"
     } ],
     "visible" : "true",
     "name" : "Walkway_right_middle_1384373775354",
@@ -785,9 +785,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Static"
-    }, {
       "type" : "Sprite"
+    }, {
+      "type" : "Static"
     } ],
     "visible" : "true",
     "name" : "Walkway_right_middle_1384373778182",
@@ -804,9 +804,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Static"
-    }, {
       "type" : "Sprite"
+    }, {
+      "type" : "Static"
     } ],
     "visible" : "true",
     "name" : "Walkway_right_middle_1384373780605",
@@ -823,9 +823,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Static"
-    }, {
       "type" : "Sprite"
+    }, {
+      "type" : "Static"
     } ],
     "visible" : "true",
     "name" : "Walkway_right_middle_1384373814800",
@@ -842,9 +842,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Static"
-    }, {
       "type" : "Sprite"
+    }, {
+      "type" : "Static"
     } ],
     "visible" : "true",
     "name" : "Walkway_right_middle_1384373817523",
@@ -861,9 +861,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Static"
-    }, {
       "type" : "Sprite"
+    }, {
+      "type" : "Static"
     } ],
     "visible" : "true",
     "name" : "Walkway_right_top_1384373733619",
@@ -880,9 +880,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Static"
-    }, {
       "type" : "Sprite"
+    }, {
+      "type" : "Static"
     } ],
     "visible" : "true",
     "name" : "Walkway_right_top_1384373769677",
@@ -1307,10 +1307,10 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
+      "type" : "Sprite"
+    }, {
       "active" : "true",
       "type" : "Physics"
-    }, {
-      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "bean_small_1384375980691",
@@ -1327,10 +1327,10 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
+      "type" : "Sprite"
+    }, {
       "active" : "true",
       "type" : "Physics"
-    }, {
-      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "bean_small_1384414773959",
@@ -1347,10 +1347,10 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
+      "type" : "Sprite"
+    }, {
       "active" : "true",
       "type" : "Physics"
-    }, {
-      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "bean_small_1384414777213",
@@ -1367,9 +1367,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Static"
-    }, {
       "type" : "Sprite"
+    }, {
+      "type" : "Static"
     } ],
     "visible" : "true",
     "name" : "finish_sign_1384374697378",
@@ -1538,6 +1538,21 @@
       "height" : "81"
     },
     "templates" : [ {
+      "jumpImpulse" : "2.0",
+      "leftRightImpulse" : "4.0",
+      "moveLeftKey" : "LEFT",
+      "type" : "Platform",
+      "moveRightKey" : "RIGHT",
+      "jumpKey" : "UP"
+    }, {
+      "fixedrotation" : "true",
+      "density" : "1.0",
+      "restitution" : "0.0",
+      "gravityScale" : "1.0",
+      "active" : "true",
+      "type" : "Physics",
+      "friction" : "1.8"
+    }, {
       "animations" : [ {
         "animationSequence" : [ {
           "name" : "/assets/objects/duke_small.png"
@@ -1548,21 +1563,6 @@
       "currentAnimation" : "2546253489879601260",
       "type" : "Sprite",
       "speed" : "5"
-    }, {
-      "fixedrotation" : "true",
-      "density" : "1.0",
-      "restitution" : "0.0",
-      "gravityScale" : "1.0",
-      "active" : "true",
-      "type" : "Physics",
-      "friction" : "1.8"
-    }, {
-      "jumpImpulse" : "2.0",
-      "leftRightImpulse" : "4.0",
-      "moveLeftKey" : "LEFT",
-      "type" : "Platform",
-      "moveRightKey" : "RIGHT",
-      "jumpKey" : "UP"
     } ],
     "name" : "Duke",
     "uuid" : "-279500599772276169"
@@ -1596,6 +1596,14 @@
       "height" : "48"
     },
     "templates" : [ {
+      "fixedrotation" : "false",
+      "density" : "1.0",
+      "restitution" : "0.0",
+      "gravityScale" : "0.0",
+      "active" : "true",
+      "type" : "Physics",
+      "friction" : "1.8"
+    }, {
       "animations" : [ {
         "animationSequence" : [ {
           "name" : "/assets/objects/star.png"
@@ -1606,14 +1614,6 @@
       "currentAnimation" : "2308829684020853259",
       "type" : "Sprite",
       "speed" : "5"
-    }, {
-      "fixedrotation" : "false",
-      "density" : "1.0",
-      "restitution" : "0.0",
-      "gravityScale" : "0.0",
-      "active" : "true",
-      "type" : "Physics",
-      "friction" : "1.8"
     } ],
     "name" : "Star",
     "uuid" : "4343694719606608272"
@@ -1624,6 +1624,8 @@
       "height" : "76"
     },
     "templates" : [ {
+      "type" : "Static"
+    }, {
       "animations" : [ {
         "animationSequence" : [ {
           "name" : "/assets/tiles/wall1_4.png"
@@ -1634,8 +1636,6 @@
       "currentAnimation" : "-3617740025644479607",
       "type" : "Sprite",
       "speed" : "5"
-    }, {
-      "type" : "Static"
     } ],
     "name" : "Walkway_botom_left",
     "uuid" : "-6077101624070649173"
@@ -1646,6 +1646,8 @@
       "height" : "76"
     },
     "templates" : [ {
+      "type" : "Static"
+    }, {
       "animations" : [ {
         "animationSequence" : [ {
           "name" : "/assets/tiles/wall2_3.png"
@@ -1656,8 +1658,6 @@
       "currentAnimation" : "-1911316133071175867",
       "type" : "Sprite",
       "speed" : "5"
-    }, {
-      "type" : "Static"
     } ],
     "name" : "Walkway_bottom_middle",
     "uuid" : "-7220657972923747107"
@@ -1668,6 +1668,8 @@
       "height" : "76"
     },
     "templates" : [ {
+      "type" : "Static"
+    }, {
       "animations" : [ {
         "animationSequence" : [ {
           "name" : "/assets/tiles/wall1_3.png"
@@ -1678,8 +1680,6 @@
       "currentAnimation" : "6762356826147938311",
       "type" : "Sprite",
       "speed" : "5"
-    }, {
-      "type" : "Static"
     } ],
     "name" : "Walkway_bottom_right",
     "uuid" : "647197498473429375"
@@ -1690,6 +1690,8 @@
       "height" : "76"
     },
     "templates" : [ {
+      "type" : "Static"
+    }, {
       "animations" : [ {
         "animationSequence" : [ {
           "name" : "/assets/tiles/wall3_2.png"
@@ -1700,8 +1702,6 @@
       "currentAnimation" : "1900263349052368358",
       "type" : "Sprite",
       "speed" : "5"
-    }, {
-      "type" : "Static"
     } ],
     "name" : "Walkway_left_middle",
     "uuid" : "-2648947804278990847"
@@ -1712,6 +1712,8 @@
       "height" : "76"
     },
     "templates" : [ {
+      "type" : "Static"
+    }, {
       "animations" : [ {
         "animationSequence" : [ {
           "name" : "/assets/tiles/wall1_2.png"
@@ -1722,8 +1724,6 @@
       "currentAnimation" : "-2544116446002469819",
       "type" : "Sprite",
       "speed" : "5"
-    }, {
-      "type" : "Static"
     } ],
     "name" : "Walkway_left_top",
     "uuid" : "6595711303285831883"
@@ -1734,6 +1734,8 @@
       "height" : "76"
     },
     "templates" : [ {
+      "type" : "Static"
+    }, {
       "animations" : [ {
         "animationSequence" : [ {
           "name" : "/assets/tiles/wall2_1.png"
@@ -1744,8 +1746,6 @@
       "currentAnimation" : "6138609569507368632",
       "type" : "Sprite",
       "speed" : "5"
-    }, {
-      "type" : "Static"
     } ],
     "name" : "Walkway_middle_top_1",
     "uuid" : "2738111980994969784"
@@ -1756,6 +1756,8 @@
       "height" : "76"
     },
     "templates" : [ {
+      "type" : "Static"
+    }, {
       "animations" : [ {
         "animationSequence" : [ {
           "name" : "/assets/tiles/wall2_2.png"
@@ -1766,8 +1768,6 @@
       "currentAnimation" : "1041627437992952789",
       "type" : "Sprite",
       "speed" : "5"
-    }, {
-      "type" : "Static"
     } ],
     "name" : "Walkway_middle_top_2",
     "uuid" : "7991002059236720051"
@@ -1778,6 +1778,8 @@
       "height" : "76"
     },
     "templates" : [ {
+      "type" : "Static"
+    }, {
       "animations" : [ {
         "animationSequence" : [ {
           "name" : "/assets/tiles/wall3_1.png"
@@ -1788,8 +1790,6 @@
       "currentAnimation" : "2904276789676505145",
       "type" : "Sprite",
       "speed" : "5"
-    }, {
-      "type" : "Static"
     } ],
     "name" : "Walkway_right_middle",
     "uuid" : "-4597433157293241913"
@@ -1800,6 +1800,8 @@
       "height" : "76"
     },
     "templates" : [ {
+      "type" : "Static"
+    }, {
       "animations" : [ {
         "animationSequence" : [ {
           "name" : "/assets/tiles/wall1_1.png"
@@ -1810,8 +1812,6 @@
       "currentAnimation" : "-4183316136272242354",
       "type" : "Sprite",
       "speed" : "5"
-    }, {
-      "type" : "Static"
     } ],
     "name" : "Walkway_right_top",
     "uuid" : "7431117854133416743"
@@ -1842,6 +1842,14 @@
       "height" : "34"
     },
     "templates" : [ {
+      "fixedrotation" : "false",
+      "density" : "1.0",
+      "restitution" : "0.0",
+      "gravityScale" : "1.0",
+      "active" : "true",
+      "type" : "Physics",
+      "friction" : "1.8"
+    }, {
       "animations" : [ {
         "animationSequence" : [ {
           "name" : "/assets/objects/bean_small.png"
@@ -1852,14 +1860,6 @@
       "currentAnimation" : "4698902611196449120",
       "type" : "Sprite",
       "speed" : "5"
-    }, {
-      "fixedrotation" : "false",
-      "density" : "1.0",
-      "restitution" : "0.0",
-      "gravityScale" : "1.0",
-      "active" : "true",
-      "type" : "Physics",
-      "friction" : "1.8"
     } ],
     "name" : "bean_small",
     "uuid" : "427110152030095327"
@@ -1870,6 +1870,8 @@
       "height" : "113"
     },
     "templates" : [ {
+      "type" : "Static"
+    }, {
       "animations" : [ {
         "animationSequence" : [ {
           "name" : "/assets/objects/finish.png"
@@ -1880,8 +1882,6 @@
       "currentAnimation" : "771901600513599160",
       "type" : "Sprite",
       "speed" : "5"
-    }, {
-      "type" : "Static"
     } ],
     "name" : "finish_sign",
     "uuid" : "-3769331226440908538"
