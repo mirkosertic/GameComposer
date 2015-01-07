@@ -1,5 +1,6 @@
 package de.mirkosertic.gamecomposer.contentarea.eventsheet.runscript;
 
+import de.mirkosertic.gamecomposer.PersistenceManager;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameScene;
@@ -21,7 +22,12 @@ import java.io.StringWriter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import javax.inject.Inject;
+
 public class EditScriptDialog {
+
+    @Inject
+    PersistenceManager persistenceManager;
 
     @FXML
     WebView editorView;
@@ -63,12 +69,17 @@ public class EditScriptDialog {
     private boolean test(Script aScript) {
         ScriptEngine theEngine = null;
         try {
+
+            // We only want to test on a clone
+            // so the test does not change enything
+            GameScene theClone = persistenceManager.cloneSceneForPreview(gameScene);
+
             // Execute a single run for verification
-            GameObject theObject = new GameObject(gameScene, "dummy");
-            GameObjectInstance theInstance = gameScene.createFrom(theObject);
-            theEngine = gameScene.getRuntime().getScriptEngineFactory().createNewEngine(aScript);
+            GameObject theObject = new GameObject(theClone, "dummy");
+            GameObjectInstance theInstance = theClone.createFrom(theObject);
+            theEngine = theClone.getRuntime().getScriptEngineFactory().createNewEngine(aScript);
             theEngine.registerObject("instance", theInstance);
-            theEngine.registerObject("scene", gameScene);
+            theEngine.registerObject("scene", theClone);
 
             Object theResult = theEngine.proceedGame(100, 16);
             if (theResult == null) {
