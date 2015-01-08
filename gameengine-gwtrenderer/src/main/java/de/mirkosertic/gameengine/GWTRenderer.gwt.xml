@@ -5,6 +5,8 @@
     <inherits name="thothbot.parallax.plugins.sprite.Sprite"/>
     <inherits name="thothbot.parallax.plugins.postprocessing.Postprocessing"/>
     <inherits name="de.mirkosertic.Engine"/>
+    <inherits name="de.mirkosertic.gameengine.physics.JBox2D"/>
+    <inherits name="de.mirkosertic.gameengine.scriptengine.LUA"/>
     <entry-point class="de.mirkosertic.gameengine.gwt.GWTRenderer"/>
     <source path="gwt"/>
 </module>

@@ -30,7 +30,6 @@ import de.mirkosertic.gameengine.physic.PlatformBehaviorTemplateUnmarshaller;
 import de.mirkosertic.gameengine.physic.PlatformBehaviorUnmarshaller;
 import de.mirkosertic.gameengine.physic.StaticBehaviorTemplateUnmarshaller;
 import de.mirkosertic.gameengine.physic.StaticBehaviorUnmarshaller;
-import de.mirkosertic.gameengine.physic.jbox2d.JBox2DGamePhysicsManagerFactory;
 import de.mirkosertic.gameengine.playerscore.PlayerScoreBehaviorTemplateUnmarshaller;
 import de.mirkosertic.gameengine.playerscore.PlayerScoreBehaviorUnmarshaller;
 import de.mirkosertic.gameengine.process.GameProcessManager;
@@ -38,7 +37,6 @@ import de.mirkosertic.gameengine.process.GameProcessManagerFactory;
 import de.mirkosertic.gameengine.process.KillProcessesForInstanceUnmarshaller;
 import de.mirkosertic.gameengine.script.RunScriptActionUnmarshaller;
 import de.mirkosertic.gameengine.scriptengine.ScriptEngineFactory;
-import de.mirkosertic.gameengine.scriptengine.lua.LuaScriptEngineFactory;
 import de.mirkosertic.gameengine.sound.GameSoundManager;
 import de.mirkosertic.gameengine.sound.GameSoundManagerFactory;
 import de.mirkosertic.gameengine.sound.GameSoundSystemFactory;
@@ -54,9 +52,9 @@ public abstract class AbstractGameRuntimeFactory {
 
     protected abstract Reflectable createBuildInFunctions();
 
-    protected ScriptEngineFactory createScriptEngine() {
-        return new LuaScriptEngineFactory();
-    }
+    protected abstract ScriptEngineFactory createScriptEngine();
+
+    protected abstract GamePhysicsManagerFactory createPhysicsManagerFactory();
 
     public GameRuntime create(GameResourceLoader aResourceLoader, GameSoundSystemFactory aSoundSystemFactory) {
 
@@ -65,7 +63,7 @@ public abstract class AbstractGameRuntimeFactory {
         GameProcessManager theProcessManager = theProcessManagerFactory.create(theEventManager);
 
         // Physics system
-        GamePhysicsManagerFactory thePhysicsManagerFactory = new JBox2DGamePhysicsManagerFactory();
+        GamePhysicsManagerFactory thePhysicsManagerFactory = createPhysicsManagerFactory();
         GamePhysicsManager thePhysicsManager = thePhysicsManagerFactory.create(theEventManager);
 
         // Expression parser

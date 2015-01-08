@@ -1,4 +1,4 @@
-package de.mirkosertic.gameengine.physic.jbox2d;
+package de.mirkosertic.gameengine.physics.jbox2d;
 
 import de.mirkosertic.gameengine.core.GameObjectConfigurationChanged;
 import de.mirkosertic.gameengine.core.GameObjectInstanceAddedToScene;

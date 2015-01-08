@@ -73,6 +73,14 @@
             <artifactId>gameengine</artifactId>
         </dependency>
         <dependency>
+            <groupId>de.mirkosertic</groupId>
+            <artifactId>gameengine-jbox2d</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.mirkosertic</groupId>
+            <artifactId>gameengine-lua</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.parallax3d</groupId>
             <artifactId>parallax-library</artifactId>
             <version>1.4-SNAPSHOT</version>
