@@ -40,6 +40,22 @@
         </repository>
     </repositories>
 
+    <pluginRepositories>
+        <pluginRepository>
+            <id>gamecreator-plugins</id>
+            <name>gamecreator-plugins</name>
+            <snapshots>
+                <checksumPolicy>ignore</checksumPolicy>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <checksumPolicy>ignore</checksumPolicy>
+                <enabled>true</enabled>
+            </releases>
+            <url>http://mirkosertic.github.io/GameComposer/maven</url>
+        </pluginRepository>
+    </pluginRepositories>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
