@@ -1,7 +1,5 @@
 package java.io;
 
-import java.io.IOException;
-
 public class InputStream {
 
     public int read(byte[] b, int off, int len) throws IOException {
