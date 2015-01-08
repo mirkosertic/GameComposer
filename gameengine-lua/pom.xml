@@ -9,7 +9,7 @@
         <version>0.3-SNAPSHOT</version>
     </parent>
     <artifactId>gameengine-lua</artifactId>
-    <name>GameComposer LuaJ library with GWT patch</name>
+    <name>GameComposer LuaJ Scriptengine Implementation</name>
     <build>
         <plugins>
             <plugin>
@@ -34,4 +34,20 @@
             </plugin>
         </plugins>
     </build>
+    <dependencies>
+        <dependency>
+            <groupId>de.mirkosertic</groupId>
+            <artifactId>gameengine</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </project>

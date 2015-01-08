@@ -14,7 +14,6 @@ public class StringReader extends Reader {
     private int count;
 
     public StringReader(String str) {
-        super(str);
         this.str = str;
         this.count = str.length();
     }

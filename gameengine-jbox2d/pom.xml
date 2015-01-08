@@ -9,7 +9,7 @@
         <version>0.3-SNAPSHOT</version>
     </parent>
     <artifactId>gameengine-jbox2d</artifactId>
-    <name>GameComposer JBox2D library with GWT patch</name>
+    <name>GameComposer JBox2D Physics Library Implementation</name>
     <build>
         <plugins>
             <plugin>
@@ -34,4 +34,10 @@
             </plugin>
         </plugins>
     </build>
+    <dependencies>
+        <dependency>
+            <groupId>de.mirkosertic</groupId>
+            <artifactId>gameengine</artifactId>
+        </dependency>
+    </dependencies>
 </project>
