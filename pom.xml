@@ -36,7 +36,7 @@
                 <checksumPolicy>ignore</checksumPolicy>
                 <enabled>true</enabled>
             </releases>
-            <url>http://mirkosertic.github.io/GameComposer/maven</url>
+            <url>https://raw.githubusercontent.com/mirkosertic/GameComposer/gh-pages/maven</url>
         </repository>
     </repositories>
 
@@ -52,7 +52,7 @@
                 <checksumPolicy>ignore</checksumPolicy>
                 <enabled>true</enabled>
             </releases>
-            <url>http://mirkosertic.github.io/GameComposer/maven</url>
+            <url>https://raw.githubusercontent.com/mirkosertic/GameComposer/gh-pages/maven</url>
         </pluginRepository>
     </pluginRepositories>
 
