@@ -160,7 +160,6 @@ public class LuaScriptEngine implements ScriptEngine {
 
     private final Globals globals;
     private final LuaClosure closure;
-    private final LuaValue proceedGameFunction;
 
     public LuaScriptEngine(Globals aGlobals, LuaClosure aClosure) {
         globals = aGlobals;
@@ -171,12 +170,6 @@ public class LuaScriptEngine implements ScriptEngine {
 
         // Register generic Type converters
         registerTo(globals, new TypeConverters());
-
-        // Retrieve function from globals
-        proceedGameFunction = globals.get("proceedGame");
-        if (proceedGameFunction == null) {
-            throw new IllegalStateException("No proceedGame function defined");
-        }
     }
 
     @Override
@@ -201,7 +194,13 @@ public class LuaScriptEngine implements ScriptEngine {
             LuaInteger.valueOf(aElapsedTimeSinceLastLoop)
         });
 
-        Varargs theResult = proceedGameFunction.invoke(theArguments);
+        // Retrieve function from globals
+        LuaValue theProceedGameFunction = globals.get("proceedGame");
+        if (theProceedGameFunction == null) {
+            throw new IllegalStateException("No proceedGame function defined");
+        }
+
+        Varargs theResult = theProceedGameFunction.invoke(theArguments);
         if (theResult.narg() == 1) {
             return toJavaValue(theResult.arg(1));
         }
