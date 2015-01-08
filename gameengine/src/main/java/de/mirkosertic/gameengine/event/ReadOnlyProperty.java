@@ -29,6 +29,7 @@ public class ReadOnlyProperty<T> implements ValueProvider {
         return name;
     }
 
+    @Override
     public T get() {
         return value;
     }

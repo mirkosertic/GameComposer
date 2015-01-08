@@ -124,7 +124,8 @@ public final class Buffer {
 	 * Convert the buffer to a Java String
 	 * @return the value as a Java String
 	 */
-	public String toString() {
+	@Override
+    public String toString() {
 		return tojstring();
 	}
 
@@ -237,7 +238,7 @@ public final class Buffer {
 	 * @param newSize the size of the buffer to use 
 	 * @param newOffset the offset to use 
 	 */
-	private final void realloc( int newSize, int newOffset ) {
+	private void realloc( int newSize, int newOffset ) {
 		if ( newSize != bytes.length ) {
 			byte[] newBytes = new byte[ newSize ];
 			System.arraycopy( bytes, offset, newBytes, newOffset, length );

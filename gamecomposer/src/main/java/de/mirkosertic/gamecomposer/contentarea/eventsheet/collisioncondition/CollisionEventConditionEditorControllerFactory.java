@@ -19,6 +19,7 @@ public class CollisionEventConditionEditorControllerFactory implements Condition
     @Inject
     FXMLLoaderFactory fxmlLoaderFactory;
 
+    @Override
     public CollisionEventConditionEditorController createFor(GameScene aGameScene, ObjectCollisionCondition aCondition) {
         try (InputStream fxml = CollisionEventConditionEditorController.class.getResourceAsStream("CollisionEventConditionEditor.fxml")) {
             FXMLLoader theLoader = fxmlLoaderFactory.createLoader();

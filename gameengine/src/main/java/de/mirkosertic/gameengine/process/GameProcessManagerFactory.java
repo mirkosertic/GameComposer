@@ -9,16 +9,19 @@ public class GameProcessManagerFactory {
     public GameProcessManager create(GameEventManager aEventManager) {
         final GameProcessManager theManager = new GameProcessManager();
         aEventManager.register(null, StartProcess.class, new GameEventListener<StartProcess>() {
+            @Override
             public void handleGameEvent(StartProcess aEvent) {
                 theManager.start(aEvent.process);
             }
         });
         aEventManager.register(null, KillProcessesForInstance.class, new GameEventListener<KillProcessesForInstance>() {
+            @Override
             public void handleGameEvent(KillProcessesForInstance aEvent) {
                 theManager.killProcessesForInstance(aEvent.instance);
             }
         });
         aEventManager.register(null, GameObjectInstanceRemovedFromScene.class, new GameEventListener<GameObjectInstanceRemovedFromScene>() {
+            @Override
             public void handleGameEvent(GameObjectInstanceRemovedFromScene aEvent) {
                 theManager.instanceRemovedFromScene(aEvent.instance);
             }

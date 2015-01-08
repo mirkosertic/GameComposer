@@ -494,7 +494,8 @@ public abstract class Varargs {
 	 * @return String value in human readable form. 
 	 * @see Varargs#tojstring()
 	 */
-	public String toString() { return tojstring(); }
+	@Override
+    public String toString() { return tojstring(); }
 
 	/**
 	 * Create a {@code Varargs} instance containing arguments starting at index {@code start}
@@ -516,17 +517,21 @@ public abstract class Varargs {
 			this.start = start;
 			this.end = end;
 		}
-		public LuaValue arg(int i) {
+		@Override
+        public LuaValue arg(int i) {
 			i += start-1;
 			return i>=start && i<=end? v.arg(i): LuaValue.NIL;
 		}
-		public LuaValue arg1() {
+		@Override
+        public LuaValue arg1() {
 			return v.arg(start);
 		}
-		public int narg() {
+		@Override
+        public int narg() {
 			return end+1-start;
 		}
-		public Varargs subargs(final int start) {
+		@Override
+        public Varargs subargs(final int start) {
 			if (start == 1)
 				return this;
 			final int newstart = this.start + start - 1;
@@ -564,16 +569,20 @@ public abstract class Varargs {
 			this.v1 = v1;
 			this.v2 = v2;
 		}
-		public LuaValue arg(int i) {
+		@Override
+        public LuaValue arg(int i) {
 			return i==1? v1: v2.arg(i-1);
 		}
-		public int narg() {
+		@Override
+        public int narg() {
 			return 1+v2.narg();
 		}
-		public LuaValue arg1() { 
+		@Override
+        public LuaValue arg1() {
 			return v1; 
 		}
-		public Varargs subargs(final int start) {
+		@Override
+        public Varargs subargs(final int start) {
 			if (start == 1)
 				return this;
 			if (start == 2)
@@ -610,14 +619,18 @@ public abstract class Varargs {
 				if (v[i] == null)
 					throw new IllegalArgumentException("nulls in array");
 		}
-		public LuaValue arg(int i) {
+		@Override
+        public LuaValue arg(int i) {
 			return i < 1 ? LuaValue.NIL: i <= v.length? v[i - 1]: r.arg(i-v.length);
 		}
-		public int narg() {
+		@Override
+        public int narg() {
 			return v.length+r.narg();
 		}
-		public LuaValue arg1() { return v.length>0? v[0]: r.arg1(); }
-		public Varargs subargs(int start) {
+		@Override
+        public LuaValue arg1() { return v.length>0? v[0]: r.arg1(); }
+		@Override
+        public Varargs subargs(int start) {
 			if (start <= 0)
 				LuaValue.argerror(1, "start must be > 0");
 			if (start == 1)
@@ -667,16 +680,20 @@ public abstract class Varargs {
 			this.length = length;
 			this.more = more;
 		}
-		public LuaValue arg(final int i) {
+		@Override
+        public LuaValue arg(final int i) {
 			return i < 1? LuaValue.NIL: i <= length? v[offset+i-1]: more.arg(i-length);
 		}
-		public int narg() {
+		@Override
+        public int narg() {
 			return length + more.narg();
 		}
-		public LuaValue arg1() { 
+		@Override
+        public LuaValue arg1() {
 			return length>0? v[offset]: more.arg1(); 
 		}
-		public Varargs subargs(int start) {
+		@Override
+        public Varargs subargs(int start) {
 			if (start <= 0)
 				LuaValue.argerror(1, "start must be > 0");
 			if (start == 1)

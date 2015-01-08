@@ -62,43 +62,52 @@ public class PlatformBehavior implements Behavior, Platform, Reflectable<Platfor
 
     public void registerEvents(GameRuntime aGameRuntime) {
         aGameRuntime.getEventManager().register(objectInstance, KeyPressed.class, new GameEventListener<KeyPressed>() {
+            @Override
             public void handleGameEvent(KeyPressed aEvent) {
                 handleKeyPressed(aEvent);
             }
         });
         aGameRuntime.getEventManager().register(objectInstance, KeyReleased.class, new GameEventListener<KeyReleased>() {
+            @Override
             public void handleGameEvent(KeyReleased aEvent) {
                 handleKeyReleased(aEvent);
             }
         });
         aGameRuntime.getEventManager().register(objectInstance, GameObjectCollision.class, new GameEventListener<GameObjectCollision>() {
+            @Override
             public void handleGameEvent(GameObjectCollision aEvent) {
                 handleCollision(aEvent);
             }
         });
         aGameRuntime.getEventManager().register(objectInstance, SystemTick.class, new GameEventListener<SystemTick>() {
+            @Override
             public void handleGameEvent(SystemTick aEvent) {
                 handleGameLoop();
             }
         });
     }
 
+    @Override
     public Property<GameKeyCode> moveLeftKeyProperty() {
         return moveLeftKey;
     }
 
+    @Override
     public Property<GameKeyCode> moveRightKeyProperty() {
         return moveRightKey;
     }
 
+    @Override
     public Property<GameKeyCode> jumpKeyProperty() {
         return jumpKey;
     }
 
+    @Override
     public Property<Float> leftRightImpulseProperty() {
         return leftRightImpulse;
     }
 
+    @Override
     public Property<Float> jumpImpulseProperty() {
         return jumpImpulse;
     }

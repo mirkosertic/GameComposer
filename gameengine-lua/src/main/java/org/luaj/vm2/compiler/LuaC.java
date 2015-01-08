@@ -249,7 +249,8 @@ public class LuaC extends Lua implements Globals.Compiler, Globals.Loader {
 	 * @return Prototype representing the lua chunk for this source.
 	 * @throws IOException
 	 */
-	public Prototype compile(InputStream stream, String chunkname) throws IOException {
+	@Override
+    public Prototype compile(InputStream stream, String chunkname) throws IOException {
 		return (new LuaC(new HashMap())).luaY_parser(stream, chunkname);
 	}
 
@@ -259,10 +260,10 @@ public class LuaC extends Lua implements Globals.Compiler, Globals.Loader {
 		FuncState funcstate = new FuncState();
 		// lexstate.buff = buff;
 		lexstate.fs = funcstate;
-		lexstate.setinput( this, z.read(), z, (LuaString) LuaValue.valueOf(name) );
+		lexstate.setinput( this, z.read(), z, LuaValue.valueOf(name));
 		/* main func. is always vararg */
 		funcstate.f = new Prototype();
-		funcstate.f.source = (LuaString) LuaValue.valueOf(name);
+		funcstate.f.source = LuaValue.valueOf(name);
 		lexstate.mainfunc(funcstate);
 		LuaC._assert (funcstate.prev == null);
 		/* all scopes should be correctly finished */
@@ -293,7 +294,8 @@ public class LuaC extends Lua implements Globals.Compiler, Globals.Loader {
 		return string;
 	}
 
-	public LuaFunction load(Prototype prototype, String chunkname, LuaValue env) throws IOException {
+	@Override
+    public LuaFunction load(Prototype prototype, String chunkname, LuaValue env) throws IOException {
 		return new LuaClosure(prototype, env);
 	}
 }

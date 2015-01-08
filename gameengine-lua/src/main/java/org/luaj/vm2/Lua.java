@@ -147,7 +147,7 @@ public class Lua {
 
 	/** gets the index of the constant */
 	public static int INDEXK(int r) {
-		return ((int)(r) & ~BITRK);
+		return (r & ~BITRK);
 	}
 
 	public static final int MAXINDEXRK	= (BITRK - 1);

@@ -28,6 +28,7 @@ public class GameLoop implements Runnable {
         return scene;
     }
 
+    @Override
     public void run() {
         while (!shutdownSignal) {
             singleRun();

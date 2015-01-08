@@ -24,12 +24,14 @@ public class DragomeBuildInFunctions extends BuiltInFunctions
 	{
 		AsyncCallback<String> asyncCallback= new AsyncCallback<String>()
 		{
-			public void onSuccess(String result)
+			@Override
+            public void onSuccess(String result)
 			{
 				runnable.run();
 			}
 
-			public void onError()
+			@Override
+            public void onError()
 			{
 			}
 		};
@@ -38,7 +40,8 @@ public class DragomeBuildInFunctions extends BuiltInFunctions
 
 		Runnable runnable2= new Runnable()
 		{
-			public void run()
+			@Override
+            public void run()
 			{
 				ScriptHelper.eval("window['callback_'+this.javaId].$onSuccess___java_lang_Object$void(new String())", this);
 			}

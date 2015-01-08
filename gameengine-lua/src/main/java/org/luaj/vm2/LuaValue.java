@@ -533,7 +533,8 @@ public class LuaValue extends Varargs {
 	 * @see #isstring()
 	 * @see TSTRING
 	 */
-	public String  tojstring()           { return typename() + ": " + Integer.toHexString(hashCode()); }
+	@Override
+    public String  tojstring()           { return typename() + ": " + Integer.toHexString(hashCode()); }
 	
 	/** Convert to userdata instance, or null.
 	 * @return userdata instance if userdata, or null if not {@link LuaUserdata}
@@ -563,7 +564,8 @@ public class LuaValue extends Varargs {
 	 * @see #checkstring()
 	 * @see #toString() 
 	 */
-	public String toString() { return tojstring(); }
+	@Override
+    public String toString() { return tojstring(); }
 	
 	/** Conditionally convert to lua number without throwing errors.
 	 * <p> 
@@ -1365,9 +1367,13 @@ public class LuaValue extends Varargs {
 	public LuaValue load(LuaValue library) { return library.call(EMPTYSTRING, this); }
 
 	// varargs references
-	public LuaValue arg(int index) { return index==1? this: NIL; }
-	public int narg() { return 1; };
-	public LuaValue arg1() { return this; }
+	@Override
+    public LuaValue arg(int index) { return index==1? this: NIL; }
+	@Override
+    public int narg() { return 1; }
+
+    @Override
+    public LuaValue arg1() { return this; }
 	
 	/** 
 	 * Get the metatable for this {@link LuaValue}
@@ -2014,7 +2020,8 @@ public class LuaValue extends Varargs {
 	public int rawlen() { typerror("table or string"); return 0; }
 	
 	// object equality, used for key comparison
-	public boolean equals(Object obj)         { return this == obj; } 
+	@Override
+    public boolean equals(Object obj)         { return this == obj; }
 	
 	/** Equals: Perform equality comparison with another value 
 	 * including metatag processing using {@link EQ}.
@@ -2135,7 +2142,7 @@ public class LuaValue extends Varargs {
 	 * @see #raweq(LuaValue)
 	 * @see #EQ
 	 */
-	public static final boolean eqmtcall(LuaValue lhs, LuaValue lhsmt, LuaValue rhs, LuaValue rhsmt) {
+	public static boolean eqmtcall(LuaValue lhs, LuaValue lhsmt, LuaValue rhs, LuaValue rhsmt) {
 		LuaValue h = lhsmt.rawget(EQ);
 		return h.isnil() || h!=rhsmt.rawget(EQ)? false: h.call(lhs,rhs).toboolean();
 	}
@@ -3140,9 +3147,9 @@ public class LuaValue extends Varargs {
 	 * @param b boolean value to convert
 	 * @return {@link TRUE} if not  or {@link FALSE} if false
 	 */
-	public static LuaBoolean  valueOf(boolean b)    { return b? LuaValue.TRUE: FALSE; };
+	public static LuaBoolean  valueOf(boolean b)    { return b? LuaValue.TRUE: FALSE; }
 
-	/** Convert java int to a {@link LuaValue}.
+    /** Convert java int to a {@link LuaValue}.
 	 * 
 	 * @param i int value to convert
 	 * @return {@link LuaInteger} instance, possibly pooled, whose value is i
@@ -3156,9 +3163,9 @@ public class LuaValue extends Varargs {
 	 * @param d double value to convert
 	 * @return {@link LuaNumber} instance, possibly pooled, whose value is d
 	 */
-	public static LuaNumber   valueOf(double d)     { return LuaDouble.valueOf(d); };
-	
-	/** Convert java string to a {@link LuaValue}.
+	public static LuaNumber   valueOf(double d)     { return LuaDouble.valueOf(d); }
+
+    /** Convert java string to a {@link LuaValue}.
 	 * 
 	 * @param s String value to convert
 	 * @return {@link LuaString} instance, possibly pooled, whose value is s
@@ -3424,7 +3431,7 @@ public class LuaValue extends Varargs {
 		switch ( length ) {
 		case 0: return NONE;
 		case 1: return v[offset];
-		case 2: return new Varargs.PairVarargs(v[offset+0],v[offset+1]);
+		case 2: return new Varargs.PairVarargs(v[offset],v[offset+1]);
 		default: return new Varargs.ArrayPartVarargs(v,offset,length);
 		}
 	}
@@ -3536,11 +3543,16 @@ public class LuaValue extends Varargs {
 	 */
 	private static final class None extends LuaNil {
 		static None _NONE = new None();
-		public LuaValue arg(int i) { return NIL; }
-		public int narg() { return 0; }
-		public LuaValue arg1() { return NIL; }
-		public String tojstring() { return "none"; }
-		public Varargs subargs(final int start) { return start > 0? this: argerror(1, "start must be > 0"); }
+		@Override
+        public LuaValue arg(int i) { return NIL; }
+		@Override
+        public int narg() { return 0; }
+		@Override
+        public LuaValue arg1() { return NIL; }
+		@Override
+        public String tojstring() { return "none"; }
+		@Override
+        public Varargs subargs(final int start) { return start > 0? this: argerror(1, "start must be > 0"); }
 
 	}
 	
@@ -3549,7 +3561,8 @@ public class LuaValue extends Varargs {
 	 * @param start the index from which to include arguments, where 1 is the first argument.
 	 * @return Varargs containing argument { start, start+1,  ... , narg-start-1 }
 	 */
-	public Varargs subargs(final int start) {
+	@Override
+    public Varargs subargs(final int start) {
 		if (start == 1)
 			return this;
 		if (start > 1)

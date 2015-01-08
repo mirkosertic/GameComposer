@@ -56,7 +56,8 @@ public class Bit32Lib extends TwoArgFunction {
 	public Bit32Lib() {
 	}
 
-	public LuaValue call(LuaValue modname, LuaValue env) {
+	@Override
+    public LuaValue call(LuaValue modname, LuaValue env) {
 		LuaTable t = new LuaTable();
 		bind(t, new Bit32LibV(), new String[] {
 			"band", "bnot", "bor", "btest", "bxor", "extract", "replace"
@@ -70,7 +71,8 @@ public class Bit32Lib extends TwoArgFunction {
 	}
 
 	static final class Bit32LibV extends VarArgFunction {
-		public Varargs invoke(Varargs args) {
+		@Override
+        public Varargs invoke(Varargs args) {
 			switch ( opcode ) {
 			case 0: return Bit32Lib.band( args );
 			case 1: return Bit32Lib.bnot( args );
@@ -89,7 +91,8 @@ public class Bit32Lib extends TwoArgFunction {
 
 	static final class Bit32Lib2 extends TwoArgFunction {
 
-		public LuaValue call(LuaValue arg1, LuaValue arg2) {
+		@Override
+        public LuaValue call(LuaValue arg1, LuaValue arg2) {
 			switch ( opcode ) {
 			case 0: return Bit32Lib.arshift(arg1.checkint(), arg2.checkint());
 			case 1: return Bit32Lib.lrotate(arg1.checkint(), arg2.checkint());

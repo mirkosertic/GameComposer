@@ -21,6 +21,7 @@ public class DeleteInstanceEditorControllerFactory implements ActionControllerFa
     @Inject
     FXMLLoaderFactory fxmlLoaderFactory;
 
+    @Override
     public DeleteInstanceEditorController createFor(GameScene aGameScene, GameRule aRule, DeleteGameObjectInstanceAction aAction) {
         try (InputStream fxml = DeleteInstanceEditorController.class.getResourceAsStream("DeleteInstanceEditor.fxml")) {
             FXMLLoader theLoader = fxmlLoaderFactory.createLoader();

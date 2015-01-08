@@ -36,6 +36,7 @@ public class PlaySoundEditorController implements ActionController {
         return this;
     }
 
+    @Override
     public Node getView() {
         return view;
     }

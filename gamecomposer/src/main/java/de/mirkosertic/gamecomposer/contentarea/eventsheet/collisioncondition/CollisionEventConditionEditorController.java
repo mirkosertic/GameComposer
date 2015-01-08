@@ -65,6 +65,7 @@ public class CollisionEventConditionEditorController implements Controller {
         return this;
     }
 
+    @Override
     public Node getView() {
         return view;
     }

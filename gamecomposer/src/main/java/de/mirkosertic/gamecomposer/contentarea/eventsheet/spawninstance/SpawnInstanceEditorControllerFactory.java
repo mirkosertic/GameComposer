@@ -20,6 +20,7 @@ public class SpawnInstanceEditorControllerFactory implements ActionControllerFac
     @Inject
     FXMLLoaderFactory fxmlLoaderFactory;
 
+    @Override
     public SpawnIstanceEditorController createFor(GameScene aGameScene, GameRule aRule, SpawnGameObjectInstanceAction aAction) {
         try (InputStream fxml = SpawnIstanceEditorController.class.getResourceAsStream("SpawnInstanceEditor.fxml")) {
             FXMLLoader theLoader = fxmlLoaderFactory.createLoader();

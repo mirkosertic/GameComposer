@@ -25,10 +25,12 @@ public class DefaultGestureDetector implements GestureDetector {
         currentTouchPositions = new HashMap<>();
     }
 
+    @Override
     public void keyPressed(GameKeyCode aKeyCode) {
         eventManager.fire(new KeyPressed(aKeyCode));
     }
 
+    @Override
     public void keyReleased(GameKeyCode aKeyCode) {
         eventManager.fire(new KeyReleased(aKeyCode));
     }

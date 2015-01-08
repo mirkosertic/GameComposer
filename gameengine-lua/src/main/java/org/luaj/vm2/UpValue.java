@@ -42,7 +42,8 @@ public final class UpValue {
 		this.index = index;
 	}
 
-	public String toString() {
+	@Override
+    public String toString() {
 		return index + "/" + array.length + " " + array[index];
 	}
 	

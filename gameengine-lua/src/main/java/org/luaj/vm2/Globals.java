@@ -151,7 +151,8 @@ public class Globals extends LuaTable {
 	}
 	
 	/** Check that this object is a Globals object, and return it, otherwise throw an error. */
-	public Globals checkglobals() {
+	@Override
+    public Globals checkglobals() {
 		return this;
 	}
 	
@@ -187,18 +188,23 @@ public class Globals extends LuaTable {
 	abstract static class AbstractBufferedStream extends InputStream {
 		protected byte[] b;
 		protected int i = 0, j = 0;
+
 		protected AbstractBufferedStream(int buflen) {
 			this.b = new byte[buflen];
 		}
+
 		abstract protected int avail() throws IOException;
-		public int read() throws IOException {
+
+        public int read() throws IOException {
 			int a = avail();
 			return (a <= 0 ? -1 : 0xff & b[i++]);
 		}
-		public int read(byte[] b) throws IOException {
+
+        public int read(byte[] b) throws IOException {
 			return read(b, 0, b.length);
 		}
-		public int read(byte[] b, int i0, int n) throws IOException {
+
+        public int read(byte[] b, int i0, int n) throws IOException {
 			int a = avail();
 			if (a <= 0) return -1;
 			final int n_read = Math.min(a, n);
@@ -206,12 +212,14 @@ public class Globals extends LuaTable {
 			i += n_read;
 			return n_read;
 		}
-		public long skip(long n) throws IOException {
+
+        public long skip(long n) throws IOException {
 			final long k = Math.min(n, j - i);
 			i += k;
 			return k;
 		}		
-		public int available() throws IOException {
+
+        public int available() throws IOException {
 			return j - i;
 		}
 	}
@@ -227,7 +235,8 @@ public class Globals extends LuaTable {
 			super(96);
 			this.r = r;
 		}
-		protected int avail() throws IOException {
+
+        protected int avail() throws IOException {
 			if (i < j) return j - i;
 			int n = r.read(c);
 			if (n < 0)
@@ -242,7 +251,8 @@ public class Globals extends LuaTable {
 			j = LuaString.encodeToUtf8(c, n, b, i = 0);
 			return j;
 		}
-		public void close() throws IOException {
+
+        public void close() throws IOException {
 			r.close();
 		}
 	}

@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -32,6 +31,7 @@ public class TextElementConfigurator implements ObjectInspectorElementConfigurat
     @Override
     public List<PropertySheet.Item> getItemsFor(Text aObject) {
         List<PropertySheet.Item> theResult = new ArrayList<>();
+        theResult.add(new PropertyEditorItem<>(CATEGORY_NAME, aObject.isScriptProperty(), "Is Script", "Is the text expression a script?"));
         theResult.add(new PropertyEditorItem<>(CATEGORY_NAME, aObject.textExpressionProperty(), "Text", "The text expression", Optional
                 .of(TextExpressionPropertyEditor.class)));
         theResult.add(new PropertyEditorItem<>(CATEGORY_NAME, aObject.fontProperty(), "Font", "The text font", Optional

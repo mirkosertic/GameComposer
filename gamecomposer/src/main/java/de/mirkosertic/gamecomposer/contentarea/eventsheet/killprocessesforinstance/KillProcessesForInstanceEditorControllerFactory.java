@@ -21,6 +21,7 @@ public class KillProcessesForInstanceEditorControllerFactory implements ActionCo
     @Inject
     FXMLLoaderFactory fxmlLoaderFactory;
 
+    @Override
     public KillProcessesForInstanceEditorController createFor(GameScene aGameScene, GameRule aRule, KillProcessesForInstanceAction aAction) {        try (InputStream fxml = KillProcessesForInstanceEditorController.class.getResourceAsStream("KillInstanceProcessEditor.fxml")) {
             FXMLLoader theLoader = fxmlLoaderFactory.createLoader();
             ResourceBundle theBundle = ResourceBundle.getBundle("de.mirkosertic.gamecomposer.contentarea.eventsheet.killinstanceprocesses.KillInstanceProcessEditor");

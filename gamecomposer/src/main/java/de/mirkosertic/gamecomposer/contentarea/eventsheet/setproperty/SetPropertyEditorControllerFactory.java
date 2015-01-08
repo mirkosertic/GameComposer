@@ -20,6 +20,7 @@ public class SetPropertyEditorControllerFactory implements ActionControllerFacto
     @Inject
     FXMLLoaderFactory fxmlLoaderFactory;
 
+    @Override
     public SetPropertyEditorController createFor(GameScene aGameScene, GameRule aRule, SetPropertyAction aAction) {
         try (InputStream fxml = SetPropertyEditorController.class.getResourceAsStream("SetPropertyEditor.fxml")) {
             FXMLLoader theLoader = fxmlLoaderFactory.createLoader();

@@ -25,7 +25,7 @@ public class AnimationPropertyEditor implements PropertyEditor<Animation> {
 
         item = (PersistentPropertyEditorItem<AnimationPropertyEditor>) aItem;
 
-        availableAnimations = new ComboBox<Animation>();
+        availableAnimations = new ComboBox<>();
         availableAnimations.setConverter(new StringConverter<Animation>() {
             @Override
             public String toString(Animation aValue) {

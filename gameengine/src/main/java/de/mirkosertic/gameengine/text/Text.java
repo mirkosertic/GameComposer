@@ -12,6 +12,7 @@ public interface Text {
     String FONT_PROPERTY = "font";
     String COLOR_PROPERTY = "color";
     String TEXT_EXPRESSION_PROPERTY = "textExpression";
+    String ISSCRIPT_PROPERTY = "isScript";
 
     @ReflectiveField
     Property<Font> fontProperty();
@@ -21,6 +22,9 @@ public interface Text {
 
     @ReflectiveField
     Property<Color> colorProperty();
+
+    @ReflectiveField
+    Property<Boolean> isScriptProperty();
 
     @ReflectiveMethod
     void delete();

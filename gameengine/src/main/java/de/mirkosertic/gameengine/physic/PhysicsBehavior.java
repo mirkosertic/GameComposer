@@ -49,26 +49,32 @@ public class PhysicsBehavior implements Behavior, Physics, Reflectable<PhysicsCl
         return PhysicsClassInformation.INSTANCE;
     }
 
+    @Override
     public Property<Boolean> activeProperty() {
         return active;
     }
 
+    @Override
     public Property<Boolean> fixedRotationProperty() {
         return fixedRotation;
     }
 
+    @Override
     public Property<Float> densityProperty() {
         return density;
     }
 
+    @Override
     public Property<Float> frictionProperty() {
         return friction;
     }
 
+    @Override
     public Property<Float> restitutionProperty() {
         return restitution;
     }
 
+    @Override
     public Property<Float> gravityScaleProperty() {
         return gravityScale;
     }

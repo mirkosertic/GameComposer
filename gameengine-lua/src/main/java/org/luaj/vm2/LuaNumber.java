@@ -37,45 +37,58 @@ public class LuaNumber extends LuaValue {
 	/** Shared static metatable for all number values represented in lua. */
 	public static LuaValue s_metatable;
 	
-	public int type() {
+	@Override
+    public int type() {
 		return TNUMBER;
 	}
 	
-	public String typename() {
+	@Override
+    public String typename() {
 		return "number";
 	}
 	
-	public LuaNumber checknumber() {
+	@Override
+    public LuaNumber checknumber() {
 		return this; 
 	}
 	
-	public LuaNumber checknumber(String errmsg) {
+	@Override
+    public LuaNumber checknumber(String errmsg) {
 		return this; 
 	}
 	
-	public LuaNumber optnumber(LuaNumber defval) {
+	@Override
+    public LuaNumber optnumber(LuaNumber defval) {
 		return this; 
 	}
 	
-	public LuaValue tonumber() {
+	@Override
+    public LuaValue tonumber() {
 		return this;
 	}
 	
-	public boolean isnumber() {
+	@Override
+    public boolean isnumber() {
 		return true;
 	}
 	
-	public boolean isstring() {
+	@Override
+    public boolean isstring() {
 		return true;
 	}
 	
-	public LuaValue getmetatable() { 
+	@Override
+    public LuaValue getmetatable() {
 		return s_metatable; 
 	}
 
-	public LuaValue concat(LuaValue rhs)      { return rhs.concatTo(this); }
-	public Buffer   concat(Buffer rhs)        { return rhs.concatTo(this); }
-	public LuaValue concatTo(LuaNumber lhs)   { return strvalue().concatTo(lhs.strvalue()); }
-	public LuaValue concatTo(LuaString lhs)   { return strvalue().concatTo(lhs); }
+	@Override
+    public LuaValue concat(LuaValue rhs)      { return rhs.concatTo(this); }
+	@Override
+    public Buffer   concat(Buffer rhs)        { return rhs.concatTo(this); }
+	@Override
+    public LuaValue concatTo(LuaNumber lhs)   { return strvalue().concatTo(lhs.strvalue()); }
+	@Override
+    public LuaValue concatTo(LuaString lhs)   { return strvalue().concatTo(lhs); }
 
 }

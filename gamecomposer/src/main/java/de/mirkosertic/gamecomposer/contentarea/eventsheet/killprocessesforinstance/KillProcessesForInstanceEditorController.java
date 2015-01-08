@@ -19,6 +19,7 @@ public class KillProcessesForInstanceEditorController implements ActionControlle
         return this;
     }
 
+    @Override
     public Node getView() {
         return view;
     }

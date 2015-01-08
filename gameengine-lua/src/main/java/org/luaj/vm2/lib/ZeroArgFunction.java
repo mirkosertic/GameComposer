@@ -46,25 +46,30 @@ import org.luaj.vm2.Varargs;
  */
 abstract public class ZeroArgFunction extends LibFunction {
 
-	abstract public LuaValue call();
+	@Override
+    abstract public LuaValue call();
 
 	/** Default constructor */
 	public ZeroArgFunction() {
 	}
 	
-	public LuaValue call(LuaValue arg) {
+	@Override
+    public LuaValue call(LuaValue arg) {
 		return call();
 	}
 
-	public LuaValue call(LuaValue arg1, LuaValue arg2) {
+	@Override
+    public LuaValue call(LuaValue arg1, LuaValue arg2) {
 		return call();
 	}
 
-	public LuaValue call(LuaValue arg1, LuaValue arg2, LuaValue arg3) {
+	@Override
+    public LuaValue call(LuaValue arg1, LuaValue arg2, LuaValue arg3) {
 		return call();
 	}
 
-	public Varargs invoke(Varargs varargs) {
+	@Override
+    public Varargs invoke(Varargs varargs) {
 		return call();
 	}
 } 

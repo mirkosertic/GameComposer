@@ -38,35 +38,43 @@ public class LuaFunction extends LuaValue {
 	/** Shared static metatable for all functions and closures. */
 	public static LuaValue s_metatable;
 
-	public int type() {
+	@Override
+    public int type() {
 		return TFUNCTION;
 	}
 	
-	public String typename() {
+	@Override
+    public String typename() {
 		return "function";
 	}
 	
-	public boolean isfunction() {
+	@Override
+    public boolean isfunction() {
 		return true;
 	}
 
-	public LuaFunction checkfunction()  {
+	@Override
+    public LuaFunction checkfunction()  {
 		return this;
 	}
 	
-	public LuaFunction optfunction(LuaFunction defval) {
+	@Override
+    public LuaFunction optfunction(LuaFunction defval) {
 		return this; 
 	}
 
-	public LuaValue getmetatable() { 
+	@Override
+    public LuaValue getmetatable() {
 		return s_metatable; 
 	}
 
-	public String tojstring() {
+	@Override
+    public String tojstring() {
 		return "function: " + classnamestub();
 	}
 
-	public LuaString strvalue() {
+	@Override
+    public LuaString strvalue() {
 		return valueOf(tojstring());
 	}
 

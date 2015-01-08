@@ -37,7 +37,7 @@ public class DragomeGameResourceLoader implements GameResourceLoader {
             return new DragomeGameResource(theResourceName, GameResourceType.SOUND, null);
         }
 
-        Element theImage = (Element) document.createElement("img");
+        Element theImage = document.createElement("img");
         theImage.setAttribute("src", theResourceName);
         cacheElement.appendChild(theImage);
 

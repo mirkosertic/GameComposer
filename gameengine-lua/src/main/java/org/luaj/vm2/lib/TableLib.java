@@ -55,7 +55,8 @@ import org.luaj.vm2.Varargs;
  */
 public class TableLib extends TwoArgFunction {
 
-	public LuaValue call(LuaValue modname, LuaValue env) {
+	@Override
+    public LuaValue call(LuaValue modname, LuaValue env) {
 		LuaTable table = new LuaTable();
 		table.set("concat", new concat());
 		table.set("insert", new insert());
@@ -69,37 +70,45 @@ public class TableLib extends TwoArgFunction {
 	}
 
 	static class TableLibFunction extends LibFunction {
-		public LuaValue call() {
+		@Override
+        public LuaValue call() {
 			return argerror(1, "table expected, got no value");
 		}
 	}
 	
 	// "concat" (table [, sep [, i [, j]]]) -> string
 	static class concat extends TableLibFunction {
-		public LuaValue call(LuaValue list) {
+		@Override
+        public LuaValue call(LuaValue list) {
 			return list.checktable().concat(EMPTYSTRING,1,list.length());
 		}
-		public LuaValue call(LuaValue list, LuaValue sep) {
+		@Override
+        public LuaValue call(LuaValue list, LuaValue sep) {
 			return list.checktable().concat(sep.checkstring(),1,list.length());
 		}
-		public LuaValue call(LuaValue list, LuaValue sep, LuaValue i) {
+		@Override
+        public LuaValue call(LuaValue list, LuaValue sep, LuaValue i) {
 			return list.checktable().concat(sep.checkstring(),i.checkint(),list.length());
 		}
-		public LuaValue call(LuaValue list, LuaValue sep, LuaValue i, LuaValue j) {
+		@Override
+        public LuaValue call(LuaValue list, LuaValue sep, LuaValue i, LuaValue j) {
 			return list.checktable().concat(sep.checkstring(),i.checkint(),j.checkint());
 		}
 	}
 
 	// "insert" (table, [pos,] value) -> prev-ele
 	static class insert extends TableLibFunction {
-		public LuaValue call(LuaValue list) {
+		@Override
+        public LuaValue call(LuaValue list) {
 			return argerror(2, "value expected");
 		}
-		public LuaValue call(LuaValue table, LuaValue value) {
+		@Override
+        public LuaValue call(LuaValue table, LuaValue value) {
 			table.checktable().insert(table.length()+1,value);
 			return NONE;
 		}
-		public LuaValue call(LuaValue table, LuaValue pos, LuaValue value) {
+		@Override
+        public LuaValue call(LuaValue table, LuaValue pos, LuaValue value) {
 			table.checktable().insert(pos.checkint(),value);
 			return NONE;
 		}
@@ -107,7 +116,8 @@ public class TableLib extends TwoArgFunction {
 	
 	// "pack" (...) -> table
 	static class pack extends VarArgFunction {
-		public Varargs invoke(Varargs args) {
+		@Override
+        public Varargs invoke(Varargs args) {
 			LuaValue t = tableOf(args, 1);
 			t.set("n", args.narg());
 			return t;
@@ -116,17 +126,20 @@ public class TableLib extends TwoArgFunction {
 
 	// "remove" (table [, pos]) -> removed-ele
 	static class remove extends TableLibFunction {
-		public LuaValue call(LuaValue list) {
+		@Override
+        public LuaValue call(LuaValue list) {
 			return list.checktable().remove(0);
 		}
-		public LuaValue call(LuaValue list, LuaValue pos) {
+		@Override
+        public LuaValue call(LuaValue list, LuaValue pos) {
 			return list.checktable().remove(pos.checkint());
 		}
 	}
 
 	// "sort" (table [, comp])
 	static class sort extends TwoArgFunction {
-		public LuaValue call(LuaValue table, LuaValue compare) {
+		@Override
+        public LuaValue call(LuaValue table, LuaValue compare) {
 			table.checktable().sort(compare.isnil()? NIL: compare.checkfunction());
 			return NONE;
 		}
@@ -134,7 +147,8 @@ public class TableLib extends TwoArgFunction {
 
 	// "unpack", // (list [,i [,j]]) -> result1, ...
 	static class unpack extends VarArgFunction {
-		public Varargs invoke(Varargs args) {
+		@Override
+        public Varargs invoke(Varargs args) {
 			LuaTable t = args.checktable(1);
 			switch (args.narg()) {
 			case 1: return t.unpack();

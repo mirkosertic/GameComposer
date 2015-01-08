@@ -76,7 +76,8 @@ public class BaseLib extends TwoArgFunction {
 	
 	Globals globals;
 	
-	public LuaValue call(LuaValue modname, LuaValue env) {
+	@Override
+    public LuaValue call(LuaValue modname, LuaValue env) {
 		globals = env.checkglobals();
 		globals.baselib = this;
 		env.set( "_G", env );
@@ -107,7 +108,8 @@ public class BaseLib extends TwoArgFunction {
 
 	// "assert", // ( v [,message] ) -> v, message | ERR
 	static final class _assert extends VarArgFunction {
-		public Varargs invoke(Varargs args) {
+		@Override
+        public Varargs invoke(Varargs args) {
 			if ( !args.arg1().toboolean() ) 
 				error( args.narg()>1? args.optjstring(2,"assertion failed!"): "assertion failed!" );
 			return args;
@@ -116,17 +118,20 @@ public class BaseLib extends TwoArgFunction {
 
 	// "error", // ( message [,level] ) -> ERR
 	static final class error extends TwoArgFunction {
-		public LuaValue call(LuaValue arg1, LuaValue arg2) {
+		@Override
+        public LuaValue call(LuaValue arg1, LuaValue arg2) {
 			throw new LuaError( arg1.isnil()? null: arg1.tojstring(), arg2.optint(1) );
 		}
 	}
 
 	// "getmetatable", // ( object ) -> table 
 	static final class getmetatable extends LibFunction {
-		public LuaValue call() {
+		@Override
+        public LuaValue call() {
 			return argerror(1, "value");
 		}
-		public LuaValue call(LuaValue arg) {
+		@Override
+        public LuaValue call(LuaValue arg) {
 			LuaValue mt = arg.getmetatable();
 			return mt!=null? mt.rawget(METATABLE).optvalue(mt): NIL;
 		}
@@ -134,7 +139,8 @@ public class BaseLib extends TwoArgFunction {
 
 	// "pcall", // (f, arg1, ...) -> status, result1, ...
 	final class pcall extends VarArgFunction {
-		public Varargs invoke(Varargs args) {
+		@Override
+        public Varargs invoke(Varargs args) {
 			LuaValue func = args.checkvalue(1);
 			if (globals != null && globals.debuglib != null)
 				globals.debuglib.onCall(this);
@@ -159,7 +165,8 @@ public class BaseLib extends TwoArgFunction {
 		print(BaseLib baselib) {
 			this.baselib = baselib;
 		}
-		public Varargs invoke(Varargs args) {
+		@Override
+        public Varargs invoke(Varargs args) {
 			LuaValue tostring = globals.get("tostring"); 
 			for ( int i=1, n=args.narg(); i<=n; i++ ) {
 				if ( i>1 ) globals.STDOUT.print( '\t' );
@@ -174,26 +181,32 @@ public class BaseLib extends TwoArgFunction {
 
 	// "rawequal", // (v1, v2) -> boolean
 	static final class rawequal extends LibFunction {
-		public LuaValue call() {
+		@Override
+        public LuaValue call() {
 			return argerror(1, "value");
 		}
-		public LuaValue call(LuaValue arg) {
+		@Override
+        public LuaValue call(LuaValue arg) {
 			return argerror(2, "value");
 		}
-		public LuaValue call(LuaValue arg1, LuaValue arg2) {
+		@Override
+        public LuaValue call(LuaValue arg1, LuaValue arg2) {
 			return valueOf(arg1.raweq(arg2));
 		}
 	}
 
 	// "rawget", // (table, index) -> value
 	static final class rawget extends LibFunction {
-		public LuaValue call() {
+		@Override
+        public LuaValue call() {
 			return argerror(1, "value");
 		}
-		public LuaValue call(LuaValue arg) {
+		@Override
+        public LuaValue call(LuaValue arg) {
 			return argerror(2, "value");
 		}
-		public LuaValue call(LuaValue arg1, LuaValue arg2) {
+		@Override
+        public LuaValue call(LuaValue arg1, LuaValue arg2) {
 			return arg1.checktable().rawget(arg2);
 		}
 	}
@@ -201,20 +214,24 @@ public class BaseLib extends TwoArgFunction {
 	
 	// "rawlen", // (v) -> value
 	static final class rawlen extends LibFunction {
-		public LuaValue call(LuaValue arg) {
+		@Override
+        public LuaValue call(LuaValue arg) {
 			return valueOf(arg.rawlen());
 		}
 	}
 
 	// "rawset", // (table, index, value) -> table
 	static final class rawset extends LibFunction {
-		public LuaValue call(LuaValue table) {
+		@Override
+        public LuaValue call(LuaValue table) {
 			return argerror(2,"value");
 		}
-		public LuaValue call(LuaValue table, LuaValue index) {
+		@Override
+        public LuaValue call(LuaValue table, LuaValue index) {
 			return argerror(3,"value");
 		}
-		public LuaValue call(LuaValue table, LuaValue index, LuaValue value) {
+		@Override
+        public LuaValue call(LuaValue table, LuaValue index, LuaValue value) {
 			LuaTable t = table.checktable();
 			t.rawset(index.checknotnil(), value);
 			return t;
@@ -223,7 +240,8 @@ public class BaseLib extends TwoArgFunction {
 	
 	// "select", // (f, ...) -> value1, ...
 	static final class select extends VarArgFunction {
-		public Varargs invoke(Varargs args) {
+		@Override
+        public Varargs invoke(Varargs args) {
 			int n = args.narg()-1; 				
 			if ( args.arg1().equals(valueOf("#")) )
 				return valueOf(n);
@@ -236,10 +254,12 @@ public class BaseLib extends TwoArgFunction {
 	
 	// "setmetatable", // (table, metatable) -> table
 	static final class setmetatable extends LibFunction {
-		public LuaValue call(LuaValue table) {
+		@Override
+        public LuaValue call(LuaValue table) {
 			return argerror(2,"value");
 		}
-		public LuaValue call(LuaValue table, LuaValue metatable) {
+		@Override
+        public LuaValue call(LuaValue table, LuaValue metatable) {
 			final LuaValue mt0 = table.getmetatable();
 			if ( mt0!=null && !mt0.rawget(METATABLE).isnil() )
 				error("cannot change a protected metatable");
@@ -249,10 +269,12 @@ public class BaseLib extends TwoArgFunction {
 	
 	// "tonumber", // (e [,base]) -> value
 	static final class tonumber extends LibFunction {
-		public LuaValue call(LuaValue e) {
+		@Override
+        public LuaValue call(LuaValue e) {
 			return e.tonumber();
 		}
-		public LuaValue call(LuaValue e, LuaValue base) {
+		@Override
+        public LuaValue call(LuaValue e, LuaValue base) {
 			if (base.isnil())
 				return e.tonumber();
 			final int b = base.checkint();
@@ -264,7 +286,8 @@ public class BaseLib extends TwoArgFunction {
 	
 	// "tostring", // (e) -> value
 	static final class tostring extends LibFunction {
-		public LuaValue call(LuaValue arg) {
+		@Override
+        public LuaValue call(LuaValue arg) {
 			LuaValue h = arg.metatag(TOSTRING);
 			if ( ! h.isnil() ) 
 				return h.call(arg);
@@ -277,14 +300,16 @@ public class BaseLib extends TwoArgFunction {
 
 	// "type",  // (v) -> value
 	static final class type extends LibFunction {
-		public LuaValue call(LuaValue arg) {
+		@Override
+        public LuaValue call(LuaValue arg) {
 			return valueOf(arg.typename());
 		}
 	}
 
 	// "xpcall", // (f, err) -> result1, ...				
 	final class xpcall extends VarArgFunction {
-		public Varargs invoke(Varargs args) {
+		@Override
+        public Varargs invoke(Varargs args) {
 			final LuaThread t = globals.running;
 			final LuaValue preverror = t.errorfunc;
 			t.errorfunc = args.checkvalue(2);
@@ -315,7 +340,8 @@ public class BaseLib extends TwoArgFunction {
 		pairs(next next) {
 			this.next = next;
 		}
-		public Varargs invoke(Varargs args) {
+		@Override
+        public Varargs invoke(Varargs args) {
 				return varargsOf( next, args.checktable(1), NIL );
 		}
 	}
@@ -323,21 +349,24 @@ public class BaseLib extends TwoArgFunction {
 	// // "ipairs", // (t) -> iter-func, t, 0
 	static final class ipairs extends VarArgFunction {
 		inext inext = new inext();
-		public Varargs invoke(Varargs args) {
+		@Override
+        public Varargs invoke(Varargs args) {
 			return varargsOf( inext, args.checktable(1), ZERO );
 		}
 	}
 	
 	// "next"  ( table, [index] ) -> next-index, next-value
 	static final class next extends VarArgFunction {
-		public Varargs invoke(Varargs args) {
+		@Override
+        public Varargs invoke(Varargs args) {
 			return args.checktable(1).next(args.arg(2));
 		}
 	}
 	
 	// "inext" ( table, [int-index] ) -> next-index, next-value
 	static final class inext extends VarArgFunction {
-		public Varargs invoke(Varargs args) {
+		@Override
+        public Varargs invoke(Varargs args) {
 			return args.checktable(1).inext(args.arg(2));
 		}
 	}

@@ -68,19 +68,23 @@ public class WeakTable implements Metatable {
 		this.backing = backing;
 	}
 
-	public boolean useWeakKeys() {
+	@Override
+    public boolean useWeakKeys() {
 		return weakkeys;
 	}
 
-	public boolean useWeakValues() {
+	@Override
+    public boolean useWeakValues() {
 		return weakvalues;
 	}
 
-	public LuaValue toLuaValue() {
+	@Override
+    public LuaValue toLuaValue() {
 		return backing;
 	}
 
-	public Slot entry(LuaValue key, LuaValue value) {
+	@Override
+    public Slot entry(LuaValue key, LuaValue value) {
 		value = value.strongvalue();
 		if ( value == null )
 			return null;
@@ -109,11 +113,13 @@ public class WeakTable implements Metatable {
 			this.next = next;
 		}
 
-		public abstract int keyindex( int hashMask );
+		@Override
+        public abstract int keyindex( int hashMask );
 
 		public abstract Slot set(LuaValue value);
 
-		public StrongSlot first() {
+		@Override
+        public StrongSlot first() {
 			LuaValue key = strongkey();
 			LuaValue value = strongvalue();
 			if ( key != null && value != null ) {
@@ -125,26 +131,31 @@ public class WeakTable implements Metatable {
 			}
 		}
 
-		public StrongSlot find(LuaValue key) {
+		@Override
+        public StrongSlot find(LuaValue key) {
 			StrongSlot first = first();
 			return ( first != null ) ? first.find( key ) : null;
 		}
 
-		public boolean keyeq(LuaValue key) {
+		@Override
+        public boolean keyeq(LuaValue key) {
 			StrongSlot first = first();
 			return ( first != null ) && first.keyeq( key );
 		}
 
-		public Slot rest() {
+		@Override
+        public Slot rest() {
 			return next;
 		}
 
-		public int arraykey(int max) {
+		@Override
+        public int arraykey(int max) {
 			// Integer keys can never be weak.
 			return 0;
 		}
 
-		public Slot set(StrongSlot target, LuaValue value) {
+		@Override
+        public Slot set(StrongSlot target, LuaValue value) {
 			LuaValue key = strongkey();
 			if ( key != null && target.find( key ) != null ) {
 				return set( value );
@@ -158,7 +169,8 @@ public class WeakTable implements Metatable {
 			}
 		}
 
-		public Slot add( Slot entry ) {
+		@Override
+        public Slot add( Slot entry ) {
 			next = ( next != null ) ? next.add( entry ) : entry;
 			if ( strongkey() != null && strongvalue() != null ) {
 				return this;
@@ -167,7 +179,8 @@ public class WeakTable implements Metatable {
 			}
 		}
 
-		public Slot remove( StrongSlot target ) {
+		@Override
+        public Slot remove( StrongSlot target ) {
 			LuaValue key = strongkey();
 			if ( key == null ) {
 				return next.remove( target );
@@ -180,7 +193,8 @@ public class WeakTable implements Metatable {
 			}
 		}
 
-		public Slot relink( Slot rest ) {
+		@Override
+        public Slot relink( Slot rest ) {
 			if ( strongkey() != null && strongvalue() != null ) {
 				if ( rest == null && this.next == null ) {
 					return this;
@@ -217,20 +231,24 @@ public class WeakTable implements Metatable {
 			this.keyhash = copyFrom.keyhash;
 		}
 
-		public int keyindex( int mask ) {
+		@Override
+        public int keyindex( int mask ) {
 			return LuaTable.hashmod( keyhash, mask );
 		}
 
-		public Slot set(LuaValue value) {
+		@Override
+        public Slot set(LuaValue value) {
 			this.value = value;
 			return this;
 		}
 
-		public LuaValue strongkey() {
+		@Override
+        public LuaValue strongkey() {
 			return strengthen( key );
 		}
 
-		protected WeakSlot copy( Slot rest ) {
+		@Override
+        protected WeakSlot copy( Slot rest ) {
 			return new WeakKeySlot( this, rest );
 		}
 	}
@@ -245,20 +263,24 @@ public class WeakTable implements Metatable {
 			super( copyFrom.key, copyFrom.value, next );
 		}
 
-		public int keyindex( int mask ) {
+		@Override
+        public int keyindex( int mask ) {
 			return LuaTable.hashSlot( strongkey(), mask );
 		}
 
-		public Slot set(LuaValue value) {
+		@Override
+        public Slot set(LuaValue value) {
 			this.value = weaken(value);
 			return this;
 		}
 
-		public LuaValue strongvalue() {
+		@Override
+        public LuaValue strongvalue() {
 			return strengthen( value );
 		}
 
-		protected WeakSlot copy(Slot next) {
+		@Override
+        protected WeakSlot copy(Slot next) {
 			return new WeakValueSlot( this, next );
 		}
 	}
@@ -277,24 +299,29 @@ public class WeakTable implements Metatable {
 			keyhash = copyFrom.keyhash;
 		}
 
-		public int keyindex( int hashMask ) {
+		@Override
+        public int keyindex( int hashMask ) {
 			return LuaTable.hashmod( keyhash, hashMask );
 		}
 
-		public Slot set(LuaValue value) {
+		@Override
+        public Slot set(LuaValue value) {
 			this.value = weaken(value);
 			return this;
 		}
 
-		public LuaValue strongkey() {
+		@Override
+        public LuaValue strongkey() {
 			return strengthen( key );
 		}
 
-		public LuaValue strongvalue() {
+		@Override
+        public LuaValue strongvalue() {
 			return strengthen( value );
 		}
 
-		protected WeakSlot copy( Slot next ) {
+		@Override
+        protected WeakSlot copy( Slot next ) {
 			return new WeakKeyAndValueSlot( this, next );
 		}
 	}
@@ -343,26 +370,31 @@ public class WeakTable implements Metatable {
 			ref = new WeakReference(value);
 		}
 
-		public int type() {
+		@Override
+        public int type() {
 			illegal("type","weak value");
 			return 0;
 		}
 
-		public String typename() {
+		@Override
+        public String typename() {
 			illegal("typename","weak value");
 			return null;
 		}
 
-		public String toString() {
+		@Override
+        public String toString() {
 			return "weak<"+ref.get()+">";
 		}
 
-		public LuaValue strongvalue() {
+		@Override
+        public LuaValue strongvalue() {
 			Object o = ref.get();
 			return (LuaValue)o;
 		}
 
-		public boolean raweq(LuaValue rhs) {
+		@Override
+        public boolean raweq(LuaValue rhs) {
 			Object o = ref.get();
 			return o!=null && rhs.raweq((LuaValue)o);
 		}
@@ -381,7 +413,8 @@ public class WeakTable implements Metatable {
 			mt = value.getmetatable();
 		}
 
-		public LuaValue strongvalue() {
+		@Override
+        public LuaValue strongvalue() {
 			Object u = ref.get();
 			if ( u != null )
 				return (LuaValue) u;
@@ -396,11 +429,13 @@ public class WeakTable implements Metatable {
 		}
 	}
 
-	public LuaValue wrap(LuaValue value) {
+	@Override
+    public LuaValue wrap(LuaValue value) {
 		return weakvalues ? weaken( value ) : value;
 	}
 
-	public LuaValue arrayget(LuaValue[] array, int index) {
+	@Override
+    public LuaValue arrayget(LuaValue[] array, int index) {
 		LuaValue value = array[index];
 		if (value != null) {
 			value = strengthen(value);

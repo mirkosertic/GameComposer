@@ -20,6 +20,7 @@ public class RunSceneEditorControllerFactory implements ActionControllerFactory<
     @Inject
     FXMLLoaderFactory fxmlLoaderFactory;
 
+    @Override
     public RunSceneEditorController createFor(GameScene aGameScene, GameRule aRule, RunSceneAction aAction) {
         try (InputStream fxml = RunSceneEditorController.class.getResourceAsStream("RunSceneEditor.fxml")) {
             FXMLLoader theLoader = fxmlLoaderFactory.createLoader();
