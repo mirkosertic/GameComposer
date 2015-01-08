@@ -11,9 +11,6 @@
     <artifactId>gameengine-gwtrenderer</artifactId>
     <name>GameComposer GWT HTML5 Canvas / WebGL Renderer</name>
     <packaging>war</packaging>
-    <properties>
-        <gwt.version>2.7.0</gwt.version>
-    </properties>
     <build>
         <plugins>
             <plugin>
