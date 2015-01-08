@@ -1,3 +1,6 @@
 language: java
+env:
+  - MAVEN_OPTS="-Xmx1024m -XX:MaxPermSize=256M"
+  - JAVA_OPTS="-Xmx1024m -XX:MaxPermSize=256M"
 jdk:
   - oraclejdk8
