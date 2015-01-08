@@ -38,6 +38,7 @@ public class SpriteBehaviorTemplate implements BehaviorTemplate<SpriteBehavior>,
         return owner;
     }
 
+    @Override
     public SpriteBehavior create(GameObjectInstance aInstance, GameRuntime aGameRuntime) {
         return new SpriteBehavior(aInstance, this);
     }

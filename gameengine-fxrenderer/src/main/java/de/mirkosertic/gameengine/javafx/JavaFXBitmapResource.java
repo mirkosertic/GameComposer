@@ -12,6 +12,7 @@ public class JavaFXBitmapResource extends Image implements GameResource {
         super(inputStream);
     }
 
+    @Override
     public GameResourceType getType() {
         return GameResourceType.BITMAP;
     }

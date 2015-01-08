@@ -19,6 +19,7 @@ public abstract class AbstractGameProcess implements GameProcess {
     public void killed() {
     }
 
+    @Override
     public GameProcess getChildProcess() {
         return childProcess;
     }

@@ -23,7 +23,6 @@ package org.luaj.vm2.compiler;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Reader;
 import java.util.HashMap;
 
 import org.luaj.vm2.LocVars;
@@ -66,8 +65,8 @@ public class LexState {
 	private static final int UCHAR_MAX = 255; // TODO, convert to unicode CHAR_MAX? 
 	private static final int LUAI_MAXCCALLS = 200;
 	
-	private static final String LUA_QS(String s) { return "'"+s+"'"; }
-	private static final String LUA_QL(Object o) { return LUA_QS(String.valueOf(o)); }
+	private static String LUA_QS(String s) { return "'"+s+"'"; }
+	private static String LUA_QL(Object o) { return LUA_QS(String.valueOf(o)); }
 	
 	private static final int     LUA_COMPAT_LSTR   =    1; // 1 for compatibility, 2 for old behavior
 	private static final boolean LUA_COMPAT_VARARG = true;	
@@ -117,9 +116,9 @@ public class LexState {
 	private static class SemInfo {
 		LuaValue r;
 		LuaString ts;
-	};
+	}
 
-	private static class Token {
+    private static class Token {
 		int token;
 		final SemInfo seminfo = new SemInfo();
 		public void set(Token other) {
@@ -127,9 +126,9 @@ public class LexState {
 			this.seminfo.r = other.seminfo.r;
 			this.seminfo.ts = other.seminfo.ts;
 		}
-	};
-	
-	int current;  /* current character (charint) */
+	}
+
+    int current;  /* current character (charint) */
 	int linenumber;  /* input line counter */
 	int lastline;  /* line of last token `consumed' */
 	final Token t = new Token();  /* current token */
@@ -170,8 +169,8 @@ public class LexState {
 	final static HashMap RESERVED = new HashMap();
 	static {
 		for ( int i=0; i<NUM_RESERVED; i++ ) {
-			LuaString ts = (LuaString) LuaValue.valueOf( luaX_tokens[i] );
-			RESERVED.put(ts, new Integer(FIRST_RESERVED+i));
+			LuaString ts = LuaValue.valueOf( luaX_tokens[i] );
+			RESERVED.put(ts, FIRST_RESERVED + i);
 		}
 	}
 
@@ -237,7 +236,7 @@ public class LexState {
 	String token2str( int token ) {
 		if ( token < FIRST_RESERVED ) {
 			return iscntrl(token)? 
-					L.pushfstring( "char("+((int)token)+")" ):
+					L.pushfstring( "char("+ token +")" ):
 					L.pushfstring( String.valueOf( (char) token ) );
 		} else {
 			return luaX_tokens[token-FIRST_RESERVED];
@@ -704,7 +703,7 @@ public class LexState {
 					} while (isalnum(current) || current == '_');
 					ts = newstring(buff, 0, nbuff);
 					if ( RESERVED.containsKey(ts) )
-						return ((Integer)RESERVED.get(ts)).intValue();
+						return (Integer) RESERVED.get(ts);
 					else {
 						seminfo.ts = ts;
 						return TK_NAME;
@@ -742,11 +741,11 @@ public class LexState {
 	// from lparser.c
 	// =============================================================
 
-	static final boolean vkisvar(final int k) {
+	static boolean vkisvar(final int k) {
 		return (VLOCAL <= (k) && (k) <= VINDEXED);
 	}
 
-	static final boolean vkisinreg(final int k) {
+	static boolean vkisinreg(final int k) {
 		return ((k) == VNONRELOC || (k) == VLOCAL);
 	}
 
@@ -764,8 +763,9 @@ public class LexState {
 			public LuaValue nval() {
 				return (_nval == null? LuaInteger.valueOf(info): _nval);
 			}
-		};
-		final U u = new U();
+		}
+
+        final U u = new U();
 		final IntPtr t = new IntPtr(); /* patch list of `exit when true' */
 		final IntPtr f = new IntPtr(); /* patch list of `exit when false' */
 		void init( int k, int i ) {
@@ -802,10 +802,10 @@ public class LexState {
 		Vardesc(int idx) {
 			this.idx = (short) idx;
 		}
-	};
+	}
 
 
-	/* description of pending goto statements and label statements */
+    /* description of pending goto statements and label statements */
 	static class Labeldesc {
 		LuaString name;  /* label identifier */
 		int pc;  /* position in code */
@@ -817,10 +817,10 @@ public class LexState {
 			this.line = line;
 			this.nactvar = nactvar;
 		}
-	};
+	}
 
 
-	/* dynamic structures used by the parser */
+    /* dynamic structures used by the parser */
 	static class Dyndata {
 		Vardesc[] actvar;  /* list of active local variables */ 
 		int n_actvar = 0;
@@ -828,10 +828,10 @@ public class LexState {
 		int n_gt = 0;
 		Labeldesc[] label;   /* list of active labels */
 		int n_label = 0;
-	};
-	
-	
-	boolean hasmultret(int k) {
+	}
+
+
+    boolean hasmultret(int k) {
 		return ((k) == VCALL || (k) == VVARARG);
 	}
 
@@ -1164,10 +1164,10 @@ public class LexState {
 		int nh; /* total number of `record' elements */
 		int na; /* total number of array elements */
 		int tostore; /* number of array elements pending to be stored */
-	};
+	}
 
 
-	void recfield(ConsControl cc) {
+    void recfield(ConsControl cc) {
 		/* recfield -> (NAME | `['exp1`]') = exp1 */
 		FuncState fs = this.fs;
 		int reg = this.fs.freereg;
@@ -1251,7 +1251,7 @@ public class LexState {
 	    e++;
 	  }
 	  if (x < 8) return x;
-	  else return ((e+1) << 3) | (((int)x) - 8);
+	  else return ((e+1) << 3) | (x - 8);
 	}
 
 
@@ -1547,9 +1547,9 @@ public class LexState {
 			left = (byte) i;
 			right = (byte) j;
 		}
-	};
-	
-	static Priority[] priority = {  /* ORDER OPR */
+	}
+
+    static Priority[] priority = {  /* ORDER OPR */
 	   new Priority(6, 6), new Priority(6, 6), new Priority(7, 7), new Priority(7, 7), new Priority(7, 7),  /* `+' `-' `/' `%' */
 	   new Priority(10, 9), new Priority(5, 4),                 /* power and concat (right associative) */
 	   new Priority(3, 3), new Priority(3, 3),                  /* equality and inequality */
@@ -1636,18 +1636,18 @@ public class LexState {
 		LHS_assign prev;
 		/* variable (global, local, upvalue, or indexed) */
 		expdesc v = new expdesc(); 
-	};
+	}
 
 
-	/*
-	** check whether, in an assignment to a local variable, the local variable
-	** is needed in a previous assignment (to a table). If so, save original
-	** local value in a safe place and use this safe copy in the previous
-	** assignment.
-	*/
+    /*
+    ** check whether, in an assignment to a local variable, the local variable
+    ** is needed in a previous assignment (to a table). If so, save original
+    ** local value in a safe place and use this safe copy in the previous
+    ** assignment.
+    */
 	void check_conflict (LHS_assign lh, expdesc v) {
 		FuncState fs = this.fs;
-		short extra = (short) fs.freereg;  /* eventual position to save local variable */
+		short extra = fs.freereg;  /* eventual position to save local variable */
 		boolean conflict = false;
 		for (; lh!=null; lh = lh.prev) {
 			if (lh.v.k == VINDEXED) {

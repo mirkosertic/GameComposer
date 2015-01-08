@@ -316,6 +316,7 @@ public class GameSceneEditorController implements ContentController<GameScene> {
         }
     }
 
+    @Override
     public void onObjectUpdated(Tab aTab, PropertyChanged aEvent) {
         if (aEvent.getOwner() == gameScene) {
             aTab.setText(gameScene.nameProperty().get());

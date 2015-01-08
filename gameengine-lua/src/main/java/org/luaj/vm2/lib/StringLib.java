@@ -61,7 +61,8 @@ public class StringLib extends TwoArgFunction {
 	public StringLib() {
 	}
 
-	public LuaValue call(LuaValue modname, LuaValue env) {
+	@Override
+    public LuaValue call(LuaValue modname, LuaValue env) {
 		LuaTable t = new LuaTable();
 		bind(t, new StringLib1(), new String[] {
 			"len", "lower", "reverse", "upper", } );
@@ -78,7 +79,8 @@ public class StringLib extends TwoArgFunction {
 	}
 	
 	static final class StringLib1 extends OneArgFunction {
-		public LuaValue call(LuaValue arg) {
+		@Override
+        public LuaValue call(LuaValue arg) {
 			switch ( opcode ) { 
 			case 1: return StringLib.len(arg); // len (function)
 			case 2: return lower(arg); // lower (function)
@@ -90,7 +92,8 @@ public class StringLib extends TwoArgFunction {
 	}
 
 	static final class StringLibV extends VarArgFunction {
-		public Varargs invoke(Varargs args) {
+		@Override
+        public Varargs invoke(Varargs args) {
 			switch ( opcode ) {
 			case 0: return StringLib.byte_( args );
 			case 1: return StringLib.char_( args );
@@ -126,7 +129,7 @@ public class StringLib extends TwoArgFunction {
 		if (posi <= 0) posi = 1;
 		if (pose > l) pose = l;
 		if (posi > pose) return NONE;  /* empty interval; return no values */
-		n = (int)(pose -  posi + 1);
+		n = pose -  posi + 1;
 		if (posi + n <= pose)  /* overflow? */
 		    error("string slice too long");
 		LuaValue[] v = new LuaValue[n];
@@ -446,7 +449,7 @@ public class StringLib extends TwoArgFunction {
 			buf.append(s);
 		}
 		
-		public static final void pad(Buffer buf, char c, int n) {
+		public static void pad(Buffer buf, char c, int n) {
 			byte b = (byte)c;
 			while ( n-- > 0 )
 				buf.append(b);
@@ -492,7 +495,8 @@ public class StringLib extends TwoArgFunction {
 			this.ms = new MatchState(args, src, pat);
 			this.soffset = 0;
 		}
-		public Varargs invoke(Varargs args) {
+		@Override
+        public Varargs invoke(Varargs args) {
 			for ( ; soffset<srclen; soffset++ ) {
 				ms.reset();
 				int res = ms.match(soffset, 0);
@@ -787,9 +791,9 @@ public class StringLib extends TwoArgFunction {
 		CHAR_TABLE['\t'] |= MASK_SPACE;
 		CHAR_TABLE[0x0C /* '\v' */ ] |= MASK_SPACE;
 		CHAR_TABLE['\f'] |= MASK_SPACE;
-	};
-	
-	static class MatchState {
+	}
+
+    static class MatchState {
 		final LuaString s;
 		final LuaString p;
 		final Varargs args;
@@ -815,7 +819,7 @@ public class StringLib extends TwoArgFunction {
 			for ( int i = 0; i < l; ++i ) {
 				byte b = (byte) news.luaByte( i );
 				if ( b != L_ESC ) {
-					lbuf.append( (byte) b );
+					lbuf.append(b);
 				} else {
 					++i; // skip ESC
 					b = (byte) news.luaByte( i );

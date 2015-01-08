@@ -41,6 +41,7 @@ public class SystemTickConditionEditorController implements Controller {
         return this;
     }
 
+    @Override
     public Node getView() {
         return view;
     }

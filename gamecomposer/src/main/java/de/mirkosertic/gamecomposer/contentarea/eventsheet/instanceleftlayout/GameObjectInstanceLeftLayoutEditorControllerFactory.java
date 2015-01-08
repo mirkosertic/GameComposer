@@ -20,6 +20,7 @@ public class GameObjectInstanceLeftLayoutEditorControllerFactory implements Cond
     @Inject
     FXMLLoaderFactory fxmlLoaderFactory;
 
+    @Override
     public GameObjectInstanceLeftLayoutEditorController createFor(GameScene aGameScene, GameObjectInstanceLeftLayoutCondition aCondition) {
         try (InputStream fxml = GameObjectInstanceLeftLayoutEditorController.class.getResourceAsStream("GameObjectInstanceLeftLayoutEditor.fxml")) {
             FXMLLoader theLoader = fxmlLoaderFactory.createLoader();

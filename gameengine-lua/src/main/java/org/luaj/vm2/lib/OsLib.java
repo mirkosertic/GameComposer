@@ -120,7 +120,8 @@ public class OsLib extends TwoArgFunction {
 	public OsLib() {
 	}
 	
-	public LuaValue call(LuaValue modname, LuaValue env) {
+	@Override
+    public LuaValue call(LuaValue modname, LuaValue env) {
 		globals = env.checkglobals();
 		LuaTable os = new LuaTable();
 		for (int i = 0; i < NAMES.length; ++i)
@@ -135,7 +136,8 @@ public class OsLib extends TwoArgFunction {
 			this.opcode = opcode;
 			this.name = name;
 		}
-		public Varargs invoke(Varargs args) {
+		@Override
+        public Varargs invoke(Varargs args) {
 			try {
 				switch ( opcode ) {
 				case CLOCK:

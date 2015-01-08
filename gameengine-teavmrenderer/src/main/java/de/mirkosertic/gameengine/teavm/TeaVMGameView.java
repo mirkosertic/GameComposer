@@ -27,6 +27,7 @@ class TeaVMGameView extends GenericAbstractGameView<TeaVMGameResource> {
         instanceCache = new HashMap<>();
     }
 
+    @Override
     public void prepareNewScene(GameRuntime aGameRuntime, CameraBehavior aCameraBehavior, GestureDetector aGestureDetector) {
         super.prepareNewScene(aGameRuntime, aCameraBehavior,aGestureDetector);
         for (Map.Entry<String, HTMLElement> theEntry : instanceCache.entrySet()) {

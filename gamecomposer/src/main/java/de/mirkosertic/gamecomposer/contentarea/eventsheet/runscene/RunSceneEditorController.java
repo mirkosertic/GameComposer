@@ -48,6 +48,7 @@ public class RunSceneEditorController implements ActionController {
         return this;
     }
 
+    @Override
     public Node getView() {
         return view;
     }

@@ -45,7 +45,8 @@ public class LuaError extends RuntimeException {
 	
 	protected Throwable cause;
 
-	public String getMessage() {
+	@Override
+    public String getMessage() {
 		if (traceback != null)
 			return traceback;
 		String m = super.getMessage();
@@ -91,7 +92,8 @@ public class LuaError extends RuntimeException {
 	/** 
 	 * Get the cause, if any.
 	 */
-	public Throwable getCause() {
+	@Override
+    public Throwable getCause() {
 		return cause;
 	}
 

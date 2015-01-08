@@ -31,10 +31,12 @@ public class CameraBehaviorTemplate implements BehaviorTemplate<CameraBehavior>,
         return owner;
     }
 
+    @Override
     public Property<CameraType> typeProperty() {
         return type;
     }
 
+    @Override
     public CameraBehavior create(GameObjectInstance aInstance, GameRuntime aGameRuntime) {
         final CameraBehavior theResult = new CameraBehavior(aInstance, this);
         theResult.registerEvents(aGameRuntime);

@@ -41,26 +41,32 @@ public class PlatformBehaviorTemplate implements BehaviorTemplate<PlatformBehavi
         return owner;
     }
 
+    @Override
     public Property<GameKeyCode> moveLeftKeyProperty() {
         return moveLeftKey;
     }
 
+    @Override
     public Property<GameKeyCode> moveRightKeyProperty() {
         return moveRightKey;
     }
 
+    @Override
     public Property<GameKeyCode> jumpKeyProperty() {
         return jumpKey;
     }
 
+    @Override
     public Property<Float> leftRightImpulseProperty() {
         return leftRightImpulse;
     }
 
+    @Override
     public Property<Float> jumpImpulseProperty() {
         return jumpImpulse;
     }
 
+    @Override
     public PlatformBehavior create(GameObjectInstance aInstance, GameRuntime aGameRuntime) {
         PlatformBehavior theSpriteComponent = new PlatformBehavior(aInstance, aGameRuntime);
         theSpriteComponent.registerEvents(aGameRuntime);

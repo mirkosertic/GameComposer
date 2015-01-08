@@ -1,11 +1,8 @@
 package de.mirkosertic.gamecomposer.contentarea.eventsheet.runscript;
 
 import de.mirkosertic.gamecomposer.FXMLLoaderFactory;
-import de.mirkosertic.gamecomposer.objectinspector.spritetemplate.AnimationEditorDialog;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.script.RunScriptAction;
-import de.mirkosertic.gameengine.sprite.Sprite;
-import de.mirkosertic.gameengine.type.Animation;
 import insidefx.undecorator.UndecoratorScene;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;

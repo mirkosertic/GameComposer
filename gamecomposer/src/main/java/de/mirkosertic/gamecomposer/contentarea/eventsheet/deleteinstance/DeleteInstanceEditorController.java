@@ -22,6 +22,7 @@ public class DeleteInstanceEditorController implements ActionController {
         return this;
     }
 
+    @Override
     public Node getView() {
         return view;
     }

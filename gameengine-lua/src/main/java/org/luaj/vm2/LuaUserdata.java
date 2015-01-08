@@ -36,19 +36,23 @@ public class LuaUserdata extends LuaValue {
 		m_metatable = metatable;
 	}
 	
-	public String tojstring() {
+	@Override
+    public String tojstring() {
 		return String.valueOf(m_instance);
 	}
 	
-	public int type() {
+	@Override
+    public int type() {
 		return LuaValue.TUSERDATA;
 	}
 	
-	public String typename() {
+	@Override
+    public String typename() {
 		return "userdata";
 	}
 
-	public int hashCode() {
+	@Override
+    public int hashCode() {
 		return m_instance.hashCode();
 	}
 	
@@ -56,33 +60,42 @@ public class LuaUserdata extends LuaValue {
 		return m_instance;
 	}
 	
-	public boolean isuserdata()                        { return true; }
-	public Object  touserdata()                        { return m_instance; }
-	public Object  optuserdata(Object defval)          { return m_instance; }
+	@Override
+    public boolean isuserdata()                        { return true; }
+	@Override
+    public Object  touserdata()                        { return m_instance; }
+	@Override
+    public Object  optuserdata(Object defval)          { return m_instance; }
 
-	public LuaValue getmetatable() {
+	@Override
+    public LuaValue getmetatable() {
 		return m_metatable;
 	}
 
-	public LuaValue setmetatable(LuaValue metatable) {
+	@Override
+    public LuaValue setmetatable(LuaValue metatable) {
 		this.m_metatable = metatable;
 		return this;
 	}
 
-	public Object checkuserdata() {
+	@Override
+    public Object checkuserdata() {
 		return m_instance;
 	}
 	
-	public LuaValue get( LuaValue key ) {
+	@Override
+    public LuaValue get( LuaValue key ) {
 		return m_metatable!=null? gettable(this,key): NIL;
 	}
 	
-	public void set( LuaValue key, LuaValue value ) {
+	@Override
+    public void set( LuaValue key, LuaValue value ) {
 		if ( m_metatable==null || ! settable(this,key,value) )
 			error( "cannot set "+key+" for userdata" );
 	}
 
-	public boolean equals( Object val ) {
+	@Override
+    public boolean equals( Object val ) {
 		if ( this == val )
 			return true;
 		if ( ! (val instanceof LuaUserdata) )
@@ -92,8 +105,10 @@ public class LuaUserdata extends LuaValue {
 	}
 
 	// equality w/ metatable processing
-	public LuaValue eq( LuaValue val )     { return eq_b(val)? TRUE: FALSE; } 
-	public boolean eq_b( LuaValue val ) { 
+	@Override
+    public LuaValue eq( LuaValue val )     { return eq_b(val)? TRUE: FALSE; }
+	@Override
+    public boolean eq_b( LuaValue val ) {
 		if ( val.raweq(this) ) return true;
 		if ( m_metatable == null || !val.isuserdata() ) return false;
 		LuaValue valmt = val.getmetatable();
@@ -101,8 +116,10 @@ public class LuaUserdata extends LuaValue {
 	}
 	
 	// equality w/o metatable processing
-	public boolean raweq( LuaValue val )      { return val.raweq(this); }
-	public boolean raweq( LuaUserdata val )   {
+	@Override
+    public boolean raweq( LuaValue val )      { return val.raweq(this); }
+	@Override
+    public boolean raweq( LuaUserdata val )   {
 		return this == val || (m_metatable == val.m_metatable && m_instance.equals(val.m_instance)); 
 	}
 	

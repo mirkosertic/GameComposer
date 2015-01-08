@@ -21,9 +21,6 @@
 ******************************************************************************/
 package org.luaj.vm2;
 
-import org.luaj.vm2.Varargs.ArrayPartVarargs;
-import org.luaj.vm2.Varargs.PairVarargs;
-
 /**
  * Subclass of {@link Varargs} that represents a lua tail call 
  * in a Java library function execution environment. 
@@ -59,11 +56,13 @@ public class TailcallVarargs extends Varargs {
 		this.args = LuaValue.varargsOf(object, args);
 	}
 	
-	public boolean isTailcall() {
+	@Override
+    public boolean isTailcall() {
 		return true;
 	}
 	
-	public Varargs eval() {
+	@Override
+    public Varargs eval() {
 		while ( result == null ) {
 			Varargs r = func.onInvoke(args);
 			if (r.isTailcall()) {
@@ -80,25 +79,29 @@ public class TailcallVarargs extends Varargs {
 		return result;
 	}
 	
-	public LuaValue arg( int i ) {
+	@Override
+    public LuaValue arg( int i ) {
 		if ( result == null )
 			eval();
 		return result.arg(i);
 	}
 	
-	public LuaValue arg1() {
+	@Override
+    public LuaValue arg1() {
 		if (result == null)
 			eval();
 		return result.arg1();
 	}
 	
-	public int narg() {
+	@Override
+    public int narg() {
 		if (result == null)
 			eval();
 		return result.narg();
 	}
 
-	public Varargs subargs(int start) {
+	@Override
+    public Varargs subargs(int start) {
 		if (result == null)
 			eval();
 		return result.subargs(start);

@@ -31,6 +31,7 @@ public class JavaFXAudioResource implements GameResource {
         return theClip;
     }
 
+    @Override
     public GameResourceType getType() {
         return GameResourceType.SOUND;
     }

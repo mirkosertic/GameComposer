@@ -21,6 +21,7 @@ public class TextBehavior implements Behavior, Text, Reflectable<TextClassInform
     private final Property<Font> font;
     private final Property<Color> color;
     private final Property<TextExpression> textExpression;
+    private final Property<Boolean> isScript;
 
     TextBehavior(GameObjectInstance aObjectInstance) {
         this(aObjectInstance, aObjectInstance.getOwnerGameObject().getBehaviorTemplate(TextBehaviorTemplate.class));
@@ -34,6 +35,7 @@ public class TextBehavior implements Behavior, Text, Reflectable<TextClassInform
         font = new Property<>(Font.class, this, FONT_PROPERTY, aTemplate.fontProperty().get(), theEventManager);
         color = new Property<>(Color.class, this, COLOR_PROPERTY, aTemplate.colorProperty().get(), theEventManager);
         textExpression = new Property<>(TextExpression.class, this, TEXT_EXPRESSION_PROPERTY, aTemplate.textExpressionProperty().get(), theEventManager);
+        isScript = new Property<>(Boolean.class, this, ISSCRIPT_PROPERTY, aTemplate.isScriptProperty().get(), theEventManager);
     }
 
     @Override
@@ -46,16 +48,24 @@ public class TextBehavior implements Behavior, Text, Reflectable<TextClassInform
         return TextClassInformation.INSTANCE;
     }
 
+    @Override
     public Property<Font> fontProperty() {
         return font;
     }
 
+    @Override
     public Property<Color> colorProperty() {
         return color;
     }
 
+    @Override
     public Property<TextExpression> textExpressionProperty() {
         return textExpression;
+    }
+
+    @Override
+    public Property<Boolean> isScriptProperty() {
+        return isScript;
     }
 
     @Override
@@ -65,6 +75,7 @@ public class TextBehavior implements Behavior, Text, Reflectable<TextClassInform
         theResult.put(FONT_PROPERTY, font.get().serialize());
         theResult.put(TEXT_EXPRESSION_PROPERTY, textExpression.get().serialize());
         theResult.put(COLOR_PROPERTY, color.get().serialize());
+        theResult.put(ISSCRIPT_PROPERTY, Boolean.toString(isScript.get()));
         return theResult;
     }
 
@@ -83,6 +94,12 @@ public class TextBehavior implements Behavior, Text, Reflectable<TextClassInform
         theTemplate.font.setQuietly(Font.deserialize((Map<String, Object>) aSerializedData.get(FONT_PROPERTY)));
         theTemplate.textExpression.setQuietly(TextExpression.deserialize((Map<String, Object>) aSerializedData.get(TEXT_EXPRESSION_PROPERTY)));
         theTemplate.color.setQuietly(Color.deserialize((Map<String, Object>) aSerializedData.get(COLOR_PROPERTY)));
+
+        String theIsScript = (String) aSerializedData.get(ISSCRIPT_PROPERTY);
+        if (theIsScript != null) {
+            theTemplate.isScript.setQuietly(Boolean.valueOf(theIsScript));
+        }
+
         return theTemplate;
     }
 }

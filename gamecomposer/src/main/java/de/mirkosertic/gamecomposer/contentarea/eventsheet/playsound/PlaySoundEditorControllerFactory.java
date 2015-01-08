@@ -20,6 +20,7 @@ public class PlaySoundEditorControllerFactory implements ActionControllerFactory
     @Inject
     FXMLLoaderFactory fxmlLoaderFactory;
 
+    @Override
     public PlaySoundEditorController createFor(GameScene aGameScene, GameRule aRule, PlaySoundAction aAction) {
         try (InputStream fxml = PlaySoundEditorController.class.getResourceAsStream("PlaySoundEditor.fxml")) {
             FXMLLoader theLoader = fxmlLoaderFactory.createLoader();

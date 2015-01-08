@@ -39,6 +39,7 @@ public class IndexPage extends DefaultVisualActivity {
     private DragomeGameView gameView;
     private Window window;
 
+    @Override
     public void build() {
 
         window = new Window();

@@ -2,10 +2,9 @@ package java.io;
 
 public abstract class Reader {
 
-    protected Object lock;
+    protected final Object lock;
 
     protected Reader() {
-        super();
         lock = this;
     }
 

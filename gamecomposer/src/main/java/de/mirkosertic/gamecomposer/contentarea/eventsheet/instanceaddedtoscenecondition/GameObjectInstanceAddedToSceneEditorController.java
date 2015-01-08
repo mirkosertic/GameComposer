@@ -45,6 +45,7 @@ public class GameObjectInstanceAddedToSceneEditorController implements Controlle
         return this;
     }
 
+    @Override
     public Node getView() {
         return view;
     }

@@ -19,6 +19,7 @@ public class GameObjectInstanceRemovedFromSceneEditorControllerFactory implement
     @Inject
     FXMLLoaderFactory fxmlLoaderFactory;
 
+    @Override
     public GameObjectInstanceRemovedFromSceneEditorController createFor(GameScene aGameScene, GameObjectInstanceRemovedFromSceneCondition aCondition) {
         try (InputStream fxml = GameObjectInstanceRemovedFromSceneEditorController.class.getResourceAsStream("GameObjectInstanceRemovedFromSceneEditor.fxml")) {
             FXMLLoader theLoader = fxmlLoaderFactory.createLoader();

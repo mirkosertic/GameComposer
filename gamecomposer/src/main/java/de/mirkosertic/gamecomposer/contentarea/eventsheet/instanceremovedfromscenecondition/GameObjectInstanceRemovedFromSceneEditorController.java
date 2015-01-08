@@ -45,6 +45,7 @@ public class GameObjectInstanceRemovedFromSceneEditorController implements Contr
         return this;
     }
 
+    @Override
     public Node getView() {
         return view;
     }

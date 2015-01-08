@@ -14,6 +14,7 @@ public class GameEngineDragomeConfigurator extends DomHandlerApplicationConfigur
         System.setProperty("dragome-compile-mode", CompilerMode.Production.toString());
 
         setClasspathFilter(new DefaultClasspathFilter() {
+            @Override
             public boolean accept(File pathname) {
                 boolean accept = super.accept(pathname);
 
@@ -32,6 +33,7 @@ public class GameEngineDragomeConfigurator extends DomHandlerApplicationConfigur
         });
     }
 
+    @Override
     public boolean filterClassPath(String aClassPathEntry) {
         if (aClassPathEntry.contains("gameengine-0.3"))
             return true;
@@ -49,6 +51,7 @@ public class GameEngineDragomeConfigurator extends DomHandlerApplicationConfigur
         return false;
     }
 
+    @Override
     public boolean isCheckingCast() {
         return false;
     }

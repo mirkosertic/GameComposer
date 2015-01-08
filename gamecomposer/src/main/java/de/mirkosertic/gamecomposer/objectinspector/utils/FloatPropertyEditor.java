@@ -1,11 +1,9 @@
 package de.mirkosertic.gamecomposer.objectinspector.utils;
 
-import de.mirkosertic.gameengine.type.Angle;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 

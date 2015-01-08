@@ -20,6 +20,7 @@ public class GameObjectInstanceAddedToSceneEditorControllerFactory implements Co
     @Inject
     FXMLLoaderFactory fxmlLoaderFactory;
 
+    @Override
     public GameObjectInstanceAddedToSceneEditorController createFor(GameScene aGameScene, GameObjectInstanceAddedToSceneCondition aCondition) {
         try (InputStream fxml = GameObjectInstanceAddedToSceneEditorController.class.getResourceAsStream("GameObjectInstanceAddedToSceneEditor.fxml")) {
             FXMLLoader theLoader = fxmlLoaderFactory.createLoader();

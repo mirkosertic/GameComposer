@@ -30,6 +30,7 @@ public class StaticBehaviorTemplate implements BehaviorTemplate<StaticBehavior>,
         return owner;
     }
 
+    @Override
     public StaticBehavior create(GameObjectInstance aInstance, GameRuntime aGameRuntime) {
         return new StaticBehavior(aInstance);
     }

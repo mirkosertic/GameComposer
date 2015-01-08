@@ -27,6 +27,7 @@ public class PlayerScoreBehaviorTemplate implements BehaviorTemplate<PlayerScore
         return PlayerScoreClassInformation.INSTANCE;
     }
 
+    @Override
     public Property<ScoreValue> scoreValueProperty() {
         return scoreValue;
     }

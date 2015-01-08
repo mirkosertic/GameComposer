@@ -96,6 +96,7 @@ public class SetPropertyEditorController implements ActionController {
         action.propertyValueProperty().set(new TextExpression(propertyValueTextField.getText()));
     }
 
+    @Override
     public Node getView() {
         return view;
     }

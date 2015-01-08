@@ -132,6 +132,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
         Vec2 gravity = new Vec2(0.0f, -10.0f);
         physicsWorld = new World(gravity);
         physicsWorld.setContactListener(new ContactListener() {
+            @Override
             public void beginContact(Contact aContact) {
                 Body theObjectA = aContact.getFixtureA().getBody();
                 Body theObjectB = aContact.getFixtureB().getBody();
@@ -139,12 +140,15 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
                         (GameObjectInstance) theObjectB.getUserData()));
             }
 
+            @Override
             public void endContact(Contact aContact) {
             }
 
+            @Override
             public void preSolve(Contact aContact, Manifold aOldManifold) {
             }
 
+            @Override
             public void postSolve(Contact aContact, ContactImpulse aImpulse) {
             }
         });

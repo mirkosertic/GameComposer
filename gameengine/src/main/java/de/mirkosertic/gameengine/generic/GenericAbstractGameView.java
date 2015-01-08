@@ -106,10 +106,19 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
             }
             TextBehavior theTextBehavior = theInstance.getBehavior(TextBehavior.class);
             if (theTextBehavior != null) {
-                ExpressionParser theExpressionParser = aScene.get(theTextBehavior.textExpressionProperty().get());
+                if (theTextBehavior.isScriptProperty().get()) {
+                    // Scripting is enabled, so we have to evaluate the expression
+                    ExpressionParser theExpressionParser = aScene.get(theTextBehavior.textExpressionProperty().get());
 
-                drawText(theInstance, thePosition, theTextBehavior.fontProperty().get(),
-                        theTextBehavior.colorProperty().get(), theExpressionParser.evaluateToString(), theSize);
+                    drawText(theInstance, thePosition, theTextBehavior.fontProperty().get(),
+                            theTextBehavior.colorProperty().get(), theExpressionParser.evaluateToString(), theSize);
+                } else {
+                    // No scripting, hence just print the text
+                    TextExpression theExpression = theTextBehavior.textExpressionProperty().get();
+
+                    drawText(theInstance, thePosition, theTextBehavior.fontProperty().get(),
+                            theTextBehavior.colorProperty().get(), theExpression.get(), theSize);
+                }
 
                 theSomethingRendered = true;
             }

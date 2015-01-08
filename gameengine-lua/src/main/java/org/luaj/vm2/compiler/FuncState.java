@@ -26,8 +26,6 @@ import org.luaj.vm2.Lua;
 import org.luaj.vm2.LuaDouble;
 import org.luaj.vm2.LuaInteger;
 import org.luaj.vm2.LuaString;
-import org.luaj.vm2.LuaTable;
-import org.luaj.vm2.LuaUserdata;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.Prototype;
 import org.luaj.vm2.Upvaldesc;
@@ -46,9 +44,9 @@ public class FuncState extends LuaC {
 		short nactvar; /* # active locals outside the breakable structure */
 		boolean upval; /* true if some variable in the block is an upvalue */
 		boolean isloop; /* true if `block' is a loop */
-	};
-	
-	Prototype f;  /* current function header */
+	}
+
+    Prototype f;  /* current function header */
 	HashMap h;  /* table to find (and reuse) elements in `k' */
 	FuncState prev;  /* enclosing function */
 	LexState ls;  /* lexical state */
@@ -479,10 +477,10 @@ public class FuncState extends LuaC {
 		if (this.h == null) {
 			this.h = new HashMap();
 		} else if (this.h.containsKey(v)) {
-			return ((Integer) h.get(v)).intValue();
+			return (Integer) h.get(v);
 		} 
 		final int idx = this.nk;
-		this.h.put(v, new Integer(idx));
+		this.h.put(v, idx);
 		final Prototype f = this.f;
 		if (f.k == null || nk + 1 >= f.k.length)
 			f.k = realloc( f.k, nk*2 + 1 );
