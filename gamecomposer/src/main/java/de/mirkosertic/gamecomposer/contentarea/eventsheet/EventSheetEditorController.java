@@ -61,7 +61,11 @@ public class EventSheetEditorController implements ContentController<EventSheet>
                 setGraphic(null);
             } else {
                 RuleEditorController theRuleController = controllerMap.get(aRule);
-                setGraphic(theRuleController.getView());
+                if (theRuleController != null) {
+                    setGraphic(theRuleController.getView());
+                } else {
+                    setGraphic(null);
+                }
             }
         }
     }
@@ -85,6 +89,7 @@ public class EventSheetEditorController implements ContentController<EventSheet>
 
     @Override
     public void removed() {
+        cleanupControllers();
     }
 
     @Override
@@ -111,11 +116,19 @@ public class EventSheetEditorController implements ContentController<EventSheet>
         return viewNode;
     }
 
+    private void cleanupControllers() {
+        for (RuleEditorController theController : controllerMap.values()) {
+            theController.removed();
+        }
+        controllerMap.clear();
+    }
+
     void initializeRuleList() {
 
-        controllerMap.clear();
         rules.getItems().clear();
-        for (GameRule theRule : editingObject.getRules()) {
+
+        cleanupControllers();
+         for (GameRule theRule : editingObject.getRules()) {
 
             RuleEditorController theRuleController = ruleEditorControllerFactory.createFor(EventSheetEditorController.this, editingObject, theRule);
             controllerMap.put(theRule, theRuleController);

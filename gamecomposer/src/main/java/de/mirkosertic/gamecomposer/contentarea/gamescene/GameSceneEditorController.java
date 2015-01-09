@@ -292,7 +292,7 @@ public class GameSceneEditorController implements ContentController<GameScene> {
 
     @Override
     public void removed() {
-        gameScene.getRuntime().getEventManager().fire(new GameShutdown());
+        gameScene.getRuntime().getEventManager().fire(new SceneShutdown());
         gameView.stopTimer();
     }
 
@@ -304,7 +304,7 @@ public class GameSceneEditorController implements ContentController<GameScene> {
     @Override
     public void onShutdown(ShutdownEvent aEvent) {
         gameView.stopTimer();
-        gameScene.getRuntime().getEventManager().fire(new GameShutdown());
+        gameScene.getRuntime().getEventManager().fire(new SceneShutdown());
     }
 
     void onMouseClicked(MouseEvent aEvent) {

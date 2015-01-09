@@ -1,9 +1,11 @@
 package de.mirkosertic.gameengine.core;
 
+import de.mirkosertic.gameengine.event.GameEvent;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.SystemException;
 
 import org.junit.Test;
+import org.mockito.InOrder;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -87,10 +89,13 @@ public class GameLoopTest {
         GameScene theScene = mock(GameScene.class);
         GameView theGameView = mock(GameView.class);
         GameRuntime theRuntime = mock(GameRuntime.class);
+        GameEventManager theEventManager = mock(GameEventManager.class);
+        when(theRuntime.getEventManager()).thenReturn(theEventManager);
 
         GameLoop theLoop = new GameLoop(theScene, theGameView, theRuntime);
         theLoop.singleRun();
         assertEquals(0, theLoop.getStatistics().getNumberTicks());
+        verify(theEventManager).fire(any(SceneStarted.class));
     }
 
     @Test
@@ -99,6 +104,8 @@ public class GameLoopTest {
         GameScene theScene = mock(GameScene.class);
         GameView theGameView = mock(GameView.class);
         GameRuntime theRuntime = mock(GameRuntime.class);
+        GameEventManager theEventManager = mock(GameEventManager.class);
+        when(theRuntime.getEventManager()).thenReturn(theEventManager);
 
         GameSystem theSystem = mock(GameSystem.class);
         when(theRuntime.getSystems()).thenReturn(new GameSystem[] {theSystem});
@@ -127,7 +134,7 @@ public class GameLoopTest {
         Thread.sleep(10);
         theLoop.singleRun();
 
-        verify(theManager).fire(any(SystemException.class));
+        verify(theManager, times(2)).fire(any(GameEvent.class));
     }
 
     @Test

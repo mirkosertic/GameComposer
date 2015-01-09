@@ -24,7 +24,7 @@ public class GameObjectInstanceLeftLayoutEditorControllerFactory implements Cond
     public GameObjectInstanceLeftLayoutEditorController createFor(GameScene aGameScene, GameObjectInstanceLeftLayoutCondition aCondition) {
         try (InputStream fxml = GameObjectInstanceLeftLayoutEditorController.class.getResourceAsStream("GameObjectInstanceLeftLayoutEditor.fxml")) {
             FXMLLoader theLoader = fxmlLoaderFactory.createLoader();
-            ResourceBundle theBundle = ResourceBundle.getBundle("de.mirkosertic.gamecomposer.contentarea.eventsheet.instanceleftlayoutcondition.GameObjectInstanceLeftLayoutEditor");
+            ResourceBundle theBundle = ResourceBundle.getBundle("de.mirkosertic.gamecomposer.contentarea.eventsheet.instanceleftlayout.GameObjectInstanceLeftLayoutEditor");
             theLoader.setResources(theBundle);
             BorderPane theRoot = theLoader.load(fxml);
 

@@ -2,9 +2,9 @@ package de.mirkosertic.gameengine.core;
 
 import de.mirkosertic.gameengine.event.GameEvent;
 
-public class GameShutdown extends GameEvent {
+public class SceneShutdown extends GameEvent {
 
-    public GameShutdown() {
+    public SceneShutdown() {
         super("GameShutdown");
     }
 }

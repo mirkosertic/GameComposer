@@ -65,6 +65,7 @@ public class RuleEditorController implements Controller {
         gameRule = aGameRule;
 
         knownEventTypes = new HashMap<>();
+        knownEventTypes.put(SceneStartedCondition.class.getSimpleName(), SceneStartedCondition.class);
         knownEventTypes.put(KeyEventCondition.class.getSimpleName(), KeyEventCondition.class);
         knownEventTypes.put(ObjectCollisionCondition.class.getSimpleName(), ObjectCollisionCondition.class);
         knownEventTypes.put(GameObjectInstanceAddedToSceneCondition.class.getSimpleName(), GameObjectInstanceAddedToSceneCondition.class);
