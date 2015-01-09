@@ -6,15 +6,14 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
+
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
 import de.mirkosertic.gameengine.core.*;
-import de.mirkosertic.gameengine.event.GameEventListener;
-import de.mirkosertic.gameengine.event.GameEventManager;
-import de.mirkosertic.gameengine.input.DefaultGestureDetector;
 import de.mirkosertic.gameengine.type.Size;
 import de.mirkosertic.gameengine.type.TouchIdentifier;
 import de.mirkosertic.gameengine.type.TouchPosition;
+
 import org.apache.commons.io.IOUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,12 +32,34 @@ public class GameEngineActivity extends Activity {
     private AndroidCanvas androidCanvas;
 
     private Game game;
-
-    private GameLoop runningGameLoop;
+    private PlaySceneStrategy playSceneStrategy;
 
     public GameEngineActivity() {
         gameRuntimeFactory = new AndroidGameRuntimeFactory();
         gameLoopFactory = new GameLoopFactory();
+
+        playSceneStrategy = new PlaySceneStrategy(gameRuntimeFactory, gameLoopFactory) {
+            @Override
+            protected void loadOtherScene(String aSceneId) {
+                loadScene(aSceneId);
+            }
+
+            @Override
+            protected Size getScreenSize() {
+                return new Size(androidCanvas.getWidth(), androidCanvas.getHeight());
+            }
+
+            @Override
+            protected GameView getOrCreateCurrentGameView(GameRuntime aGameRuntime, CameraBehavior aCamera, GestureDetector aGestureDetector) {
+                return new AndroidGameView(androidCanvas, aCamera, aGameRuntime, aGestureDetector);
+            }
+
+            @Override
+            public void handleResize() {
+                Size theCurrentSize = getScreenSize();
+                getRunningGameLoop().getScene().getRuntime().getEventManager().fire(new SetScreenResolution(theCurrentSize));
+            }
+        };
     }
 
     /**
@@ -84,8 +105,8 @@ public class GameEngineActivity extends Activity {
     }
 
     private void handleTouchEvent(MotionEvent aEvent) {
-        if (runningGameLoop != null) {
-            GestureDetector theGestureDetector = runningGameLoop.getHumanGameView().getGestureDetector();
+        if (playSceneStrategy.hasGameLoop()) {
+            GestureDetector theGestureDetector = playSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector();
 
             switch (aEvent.getAction()) {
                 case MotionEvent.ACTION_DOWN:
@@ -119,8 +140,9 @@ public class GameEngineActivity extends Activity {
         new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                if (runningGameLoop != null && !runningGameLoop.isShutdown()) {
-                    runningGameLoop.singleRun();
+                GameLoop theLoop = playSceneStrategy.getRunningGameLoop();
+                if (theLoop != null && !theLoop.isShutdown()) {
+                    theLoop.singleRun();
                 }
             }
         }, 0, 16);
@@ -149,46 +171,7 @@ public class GameEngineActivity extends Activity {
     }
 
     private void playScene(GameScene aGameScene) {
-
-        if (runningGameLoop != null) {
-            runningGameLoop.shutdown();
-        }
-
-        GameRuntime theRuntime = aGameScene.getRuntime();
-        GameEventManager theEventManager = theRuntime.getEventManager();
-
-        gameRuntimeFactory.loadingFinished(aGameScene);
-
-        GameObject theCameraObject = aGameScene.cameraObjectProperty().get();
-        GameObjectInstance theCameraObjectInstance = aGameScene.createFrom(theCameraObject);
-        CameraBehavior theCameraBehavior = theCameraObjectInstance.getBehavior(CameraBehavior.class);
-
-        GameObjectInstance thePlayerInstance = null;
-        for (GameObjectInstance theInstance : aGameScene.getInstances()) {
-            if (theInstance.getOwnerGameObject() == aGameScene.defaultPlayerProperty().get()) {
-                thePlayerInstance = theInstance;
-            }
-        }
-
-        // This is our hook to load new scenes
-        theEventManager.register(null, RunScene.class, new GameEventListener<RunScene>() {
-            @Override
-            public void handleGameEvent(RunScene aEvent) {
-                String theSceneId = aEvent.sceneId;
-                loadScene(theSceneId);
-            }
-        });
-
-        GestureDetector theGestureDetector = new DefaultGestureDetector(theRuntime.getEventManager());
-        AndroidGameView theGameView = new AndroidGameView(androidCanvas, theCameraBehavior, theRuntime, theGestureDetector);
-
-        GameLoop theLoop = gameLoopFactory.create(aGameScene, theGameView, theRuntime);
-
-        theEventManager.fire(new SetScreenResolution(new Size(androidCanvas.getWidth(), androidCanvas.getHeight())));
-
-        runningGameLoop = theLoop;
-
-        theCameraBehavior.initializeFor(aGameScene, thePlayerInstance);
+        playSceneStrategy.playScene(aGameScene);
     }
 
     @Override

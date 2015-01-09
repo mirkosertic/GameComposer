@@ -27,21 +27,10 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 
 import de.mirkosertic.gameengine.camera.CameraBehavior;
-import de.mirkosertic.gameengine.core.Game;
+import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.generic.GenericAbstractGameView;
-import de.mirkosertic.gameengine.input.DefaultGestureDetector;
 import de.mirkosertic.gameengine.type.GameKeyCode;
-import de.mirkosertic.gameengine.core.GameLoop;
-import de.mirkosertic.gameengine.core.GameLoopFactory;
-import de.mirkosertic.gameengine.core.GameObject;
-import de.mirkosertic.gameengine.core.GameObjectInstance;
-import de.mirkosertic.gameengine.core.GameRuntime;
-import de.mirkosertic.gameengine.core.GameScene;
-import de.mirkosertic.gameengine.core.GestureDetector;
-import de.mirkosertic.gameengine.core.RunScene;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
-import de.mirkosertic.gameengine.event.GameEventListener;
-import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.type.TouchIdentifier;
 import de.mirkosertic.gameengine.type.TouchPosition;
 import de.mirkosertic.gameengine.type.Size;
@@ -63,8 +52,8 @@ public class GWTRenderer implements EntryPoint {
     private GWTGameRuntimeFactory runtimeFactory;
     private GWTGameSceneLoader sceneLoader;
     private Game game;
-    private GameLoop runningGameLoop;
     private GameLoopFactory gameLoopFactory;
+    private PlaySceneStrategy playSceneStrategy;
 
     @Override
     public void onModuleLoad() {
@@ -112,6 +101,52 @@ public class GWTRenderer implements EntryPoint {
                 LOGGER.log(Level.SEVERE, "Error loading game", aThrowable);
             }
         });
+
+        playSceneStrategy = new PlaySceneStrategy(runtimeFactory, gameLoopFactory) {
+
+            private GenericAbstractGameView gameView;
+
+            @Override
+            protected void loadOtherScene(String aSceneId) {
+                sceneLoader.loadFromServer(aSceneId, new GWTGameResourceLoader(aSceneId));
+            }
+
+            @Override
+            protected Size getScreenSize() {
+                return new Size(Window.getClientWidth(), Window.getClientHeight());
+            }
+
+            @Override
+            protected GameView getOrCreateCurrentGameView(GameRuntime aGameRuntime, CameraBehavior aCamera, GestureDetector aGestureDetector) {
+                if (game.enableWebGLProperty().get()) {
+                    WebGLRenderingContext theWebGLContext = (WebGLRenderingContext) canvas.getContext("webgl");
+                    if (theWebGLContext == null) {
+                        theWebGLContext = (WebGLRenderingContext) canvas.getContext("experimental-webgl");
+                    }
+                    if (theWebGLContext != null) {
+                        // WebGL is supported
+                        gameView = new GWTWebGLGameView(aGameRuntime, theWebGLContext, overlayCanvas, aCamera, aGestureDetector);
+                    } else {
+                        // Fallback to canvas
+                        gameView = new GWTCanvasGameView(aGameRuntime, canvas, aCamera, aGestureDetector);
+                    }
+                } else {
+                    gameView = new GWTCanvasGameView(aGameRuntime, canvas, aCamera, aGestureDetector);
+                }
+
+                gameView.setCurrentScreenSize(getScreenSize());
+
+                return gameView;
+            }
+
+            @Override
+            public void handleResize() {
+                Size theSize = getScreenSize();
+                getRunningGameLoop().getScene().getRuntime().getEventManager().fire(new SetScreenResolution(theSize));
+                resizeCanvas(theSize.width, theSize.height);
+            }
+        };
+
         theLoader.loadFromServer();
 
         canvas.setStyleName("mainCanvas");
@@ -123,7 +158,9 @@ public class GWTRenderer implements EntryPoint {
         Window.addResizeHandler(new ResizeHandler() {
             @Override
             public void onResize(ResizeEvent event) {
-                resizeCanvas(event.getWidth(), event.getHeight());
+                if (playSceneStrategy.hasGameLoop()) {
+                    playSceneStrategy.handleResize();
+                }
             }
         });
 
@@ -179,28 +216,28 @@ public class GWTRenderer implements EntryPoint {
     }
 
     private void handleOnKeyUpEvent(KeyUpEvent aEvent) {
-        if (runningGameLoop != null) {
+        if (playSceneStrategy.hasGameLoop()) {
             GameKeyCode theCode = GWTKeyCodeTranslator.translate(aEvent.getNativeKeyCode());
             if (theCode != null) {
-                runningGameLoop.getHumanGameView().getGestureDetector().keyReleased(theCode);
+                playSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector().keyReleased(theCode);
             }
         }
     }
 
     private void handleOnKeyDownEvent(KeyDownEvent aEvent) {
-        if (runningGameLoop != null) {
+        if (playSceneStrategy.hasGameLoop()) {
             GameKeyCode theCode = GWTKeyCodeTranslator.translate(aEvent.getNativeKeyCode());
             if (theCode != null) {
-                runningGameLoop.getHumanGameView().getGestureDetector().keyPressed(theCode);
+                playSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector().keyPressed(theCode);
             }
         }
     }
 
     private void handleOnKeyPressedEvent(KeyPressEvent aEvent) {
-        if (runningGameLoop != null) {
+        if (playSceneStrategy.hasGameLoop()) {
             GameKeyCode theCode = GameKeyCode.fromChar(aEvent.getCharCode());
             if (theCode != null) {
-                runningGameLoop.getHumanGameView().getGestureDetector().keyPressed(theCode);
+                playSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector().keyPressed(theCode);
             }
         }
     }
@@ -215,103 +252,51 @@ public class GWTRenderer implements EntryPoint {
     }
 
     private void handleOnTouchStart(TouchStartEvent aEvent) {
-        if (runningGameLoop != null) {
-            GestureDetector theDetector = runningGameLoop.getHumanGameView().getGestureDetector();
+        if (playSceneStrategy.hasGameLoop()) {
+            GestureDetector theDetector = playSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector();
             theDetector.touchStarted(toArray(aEvent.getTouches()));
         }
     }
 
     private void handleOnTouchEnd(TouchEndEvent aEvent) {
-        if (runningGameLoop != null) {
-            GestureDetector theDetector = runningGameLoop.getHumanGameView().getGestureDetector();
+        if (playSceneStrategy.hasGameLoop()) {
+            GestureDetector theDetector = playSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector();
             theDetector.touchEnded(toArray(aEvent.getTouches()));
         }
     }
 
     private void handleOnTouchMoved(TouchMoveEvent aEvent) {
-        if (runningGameLoop != null) {
-            GestureDetector theDetector = runningGameLoop.getHumanGameView().getGestureDetector();
+        if (playSceneStrategy.hasGameLoop()) {
+            GestureDetector theDetector = playSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector();
             theDetector.touchMoved(toArray(aEvent.getTouches()));
         }
     }
 
     private void handleOnTouchCanceled(TouchCancelEvent aEvent) {
-        if (runningGameLoop != null) {
-            GestureDetector theDetector = runningGameLoop.getHumanGameView().getGestureDetector();
+        if (playSceneStrategy.hasGameLoop()) {
+            GestureDetector theDetector = playSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector();
             theDetector.touchCanceled(toArray(aEvent.getTouches()));
         }
     }
 
     private void playScene(GameScene aGameScene) {
 
-        // Shutdown the game loop for the previous loaded scene
-        // This will also shutdown the animation scheduler
-        if (runningGameLoop != null) {
-            runningGameLoop.shutdown();
-        }
+        playSceneStrategy.playScene(aGameScene);
+        canvas.setFocus(true);
 
-        GameEventManager theEventManager = aGameScene.getRuntime().getEventManager();
-        GameRuntime theRuntime = aGameScene.getRuntime();
-
-        runtimeFactory.loadingFinished(aGameScene);
-
-        // Detect and create a camera
-        GameObject theCameraObject = aGameScene.cameraObjectProperty().get();
-        GameObjectInstance theCameraObjectInstance = aGameScene.createFrom(theCameraObject);
-        CameraBehavior theCameraBehavior = theCameraObjectInstance.getBehavior(CameraBehavior.class);
-
-        GameObjectInstance thePlayerInstance = null;
-        for (GameObjectInstance theInstance : aGameScene.getInstances()) {
-            if (theInstance.getOwnerGameObject() == aGameScene.defaultPlayerProperty().get()) {
-                thePlayerInstance = theInstance;
-            }
-        }
-
-        // This is our hook to load new scenes
-        theEventManager.register(null, RunScene.class, new GameEventListener<RunScene>() {
-            @Override
-            public void handleGameEvent(RunScene aEvent) {
-                String theSceneId = aEvent.sceneId;
-                sceneLoader.loadFromServer(theSceneId, new GWTGameResourceLoader(theSceneId));
-            }
-        });
-
-        GenericAbstractGameView theGameView;
-        GestureDetector theGestureDetector = new DefaultGestureDetector(theEventManager);
-        if (game.enableWebGLProperty().get()) {
-            WebGLRenderingContext theWebGLContext = (WebGLRenderingContext) canvas.getContext("webgl");
-            if (theWebGLContext == null) {
-                theWebGLContext = (WebGLRenderingContext) canvas.getContext("experimental-webgl");
-            }
-            if (theWebGLContext != null) {
-                // WebGL is supported
-                theGameView = new GWTWebGLGameView(theRuntime, theWebGLContext, overlayCanvas, theCameraBehavior, theGestureDetector);
-            } else {
-                // Fallback to canvas
-                theGameView = new GWTCanvasGameView(theRuntime, canvas, theCameraBehavior, theGestureDetector);
-            }
-        } else {
-            theGameView = new GWTCanvasGameView(theRuntime, canvas, theCameraBehavior, theGestureDetector);
-        }
-
-        theGameView.setCurrentScreenSize(new Size(Window.getClientWidth(), Window.getClientHeight()));
-        theEventManager.fire(new SetScreenResolution(new Size(Window.getClientWidth(), Window.getClientHeight())));
-
-        runningGameLoop = gameLoopFactory.create(aGameScene, theGameView, theRuntime);
+        final GameLoop theCurrentLoop = playSceneStrategy.getRunningGameLoop();
 
         AnimationScheduler.get().requestAnimationFrame(new AnimationScheduler.AnimationCallback() {
+
             @Override
             public void execute(double v) {
-                runningGameLoop.singleRun();
+                theCurrentLoop.singleRun();
                 // Request another animation
-                if (!runningGameLoop.isShutdown()) {
+                if (!theCurrentLoop.isShutdown()) {
                     AnimationScheduler.get().requestAnimationFrame(this);
                 }
             }
         });
-
-        theCameraBehavior.initializeFor(aGameScene, thePlayerInstance);
-        canvas.setFocus(true);
    }
 
     void resizeCanvas(int aWidth, int aHeight) {

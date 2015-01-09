@@ -2,18 +2,7 @@ package de.mirkosertic.gameengine.teavm;
 
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
-import de.mirkosertic.gameengine.core.Game;
-import de.mirkosertic.gameengine.core.GameLoop;
-import de.mirkosertic.gameengine.core.GameLoopFactory;
-import de.mirkosertic.gameengine.core.GameObject;
-import de.mirkosertic.gameengine.core.GameObjectInstance;
-import de.mirkosertic.gameengine.core.GameRuntime;
-import de.mirkosertic.gameengine.core.GameScene;
-import de.mirkosertic.gameengine.core.GestureDetector;
-import de.mirkosertic.gameengine.core.RunScene;
-import de.mirkosertic.gameengine.event.GameEventListener;
-import de.mirkosertic.gameengine.event.GameEventManager;
-import de.mirkosertic.gameengine.input.DefaultGestureDetector;
+import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.type.GameKeyCode;
 import de.mirkosertic.gameengine.type.Size;
 import de.mirkosertic.gameengine.type.TouchIdentifier;
@@ -38,12 +27,10 @@ public class TeaVMRenderer {
         theRenderer.boot();
     }
 
-    private GameRuntime runningRuntime;
-    private GameLoop runningGameLoop;
     private GameLoopFactory gameLoopFactory;
+    private PlaySceneStrategy runSceneStrategy;
     private TeaVMGameRuntimeFactory runtimeFactory;
     private TeaVMGameSceneLoader sceneLoader;
-    private TeaVMGameView gameView;
     private HTMLCanvasElement canvasElement;
     private HTMLElement resourceCache;
 
@@ -71,6 +58,39 @@ public class TeaVMRenderer {
                 TeaVMLogger.error("Failed to load scene : " + aError.getMessage());
             }
         }, runtimeFactory, window);
+
+        runSceneStrategy = new PlaySceneStrategy(runtimeFactory, gameLoopFactory) {
+
+            private TeaVMGameView gameView;
+
+            @Override
+            protected void loadOtherScene(String aSceneId) {
+                sceneLoader.loadFromServer(aSceneId, new TeaVMGameResourceLoader(aSceneId, document, resourceCache));
+            }
+
+            @Override
+            protected Size getScreenSize() {
+                return new Size(window.getInnerWidth(), window.getInnerHeight());
+            }
+
+            @Override
+            protected GameView getOrCreateCurrentGameView(GameRuntime aGameRuntime, CameraBehavior aCamera, GestureDetector aGestureDetector) {
+                if (gameView == null) {
+                    gameView = new TeaVMGameView(aGameRuntime, aCamera, aGestureDetector, canvasElement);
+                } else {
+                    gameView.prepareNewScene(aGameRuntime, aCamera, aGestureDetector);
+                }
+                gameView.setSize(getScreenSize());
+                return gameView;
+            }
+
+            @Override
+            public void handleResize() {
+                Size theCurrentSize = getScreenSize();
+                getRunningGameLoop().getScene().getRuntime().getEventManager().fire(new SetScreenResolution(theCurrentSize));
+                gameView.setSize(theCurrentSize);
+            }
+        };
 
         new TeaVMGameLoader(new TeaVMGameLoader.GameLoadedListener() {
             @Override
@@ -127,29 +147,27 @@ public class TeaVMRenderer {
         ((EventTarget) window).addEventListener("resize", new EventListener() {
             @Override
             public void handleEvent(Event evt) {
-                if (runningGameLoop != null) {
-                    Size theSize = new Size(window.getInnerWidth(), window.getInnerHeight());
-                    runningRuntime.getEventManager().fire(new SetScreenResolution(theSize));
-                    gameView.setSize(theSize);
+                if (runSceneStrategy.hasGameLoop()) {
+                    runSceneStrategy.handleResize();
                 }
             }
         }, true);
     }
 
     private void keyPressed(TeaVMKeyEvent aEvent) {
-        if (runningGameLoop != null) {
+        if (runSceneStrategy.hasGameLoop()) {
             int theCode = JS.isUndefined(aEvent.getWhich()) ? JS.unwrapInt(aEvent.getWhich()) : aEvent.getKeyCode();
             GameKeyCode theKeyCode = TeaVMKeyCodeTranslator.translate(theCode);
-            runningGameLoop.getHumanGameView().getGestureDetector().keyPressed(theKeyCode);
+            runSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector().keyPressed(theKeyCode);
             TeaVMLogger.info("KeyEvent keyPressed " + theCode);
         }
     }
 
     private void keyReleased(TeaVMKeyEvent aEvent) {
-        if (runningGameLoop != null) {
+        if (runSceneStrategy.hasGameLoop()) {
             int theCode = JS.isUndefined(aEvent.getWhich()) ? JS.unwrapInt(aEvent.getWhich()) : aEvent.getKeyCode();
             GameKeyCode theKeyCode = TeaVMKeyCodeTranslator.translate(theCode);
-            runningGameLoop.getHumanGameView().getGestureDetector().keyReleased(theKeyCode);
+            runSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector().keyReleased(theKeyCode);
             TeaVMLogger.info("KeyEvent keyReleased " + theCode);
         }
     }
@@ -164,29 +182,29 @@ public class TeaVMRenderer {
     }
 
     private void touchStarted(TeaVMTouchEvent aEvent) {
-        if (runningGameLoop != null) {
-            GestureDetector theDetector = runningGameLoop.getHumanGameView().getGestureDetector();
+        if (runSceneStrategy.hasGameLoop()) {
+            GestureDetector theDetector = runSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector();
             theDetector.touchStarted(toArray(aEvent.getTouches()));
         }
     }
 
     private void touchEnded(TeaVMTouchEvent aEvent) {
-        if (runningGameLoop != null) {
-            GestureDetector theDetector = runningGameLoop.getHumanGameView().getGestureDetector();
+        if (runSceneStrategy.hasGameLoop()) {
+            GestureDetector theDetector = runSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector();
             theDetector.touchEnded(toArray(aEvent.getTouches()));
         }
     }
 
     private void touchMoved(TeaVMTouchEvent aEvent) {
-        if (runningGameLoop != null) {
-            GestureDetector theDetector = runningGameLoop.getHumanGameView().getGestureDetector();
+        if (runSceneStrategy.hasGameLoop()) {
+            GestureDetector theDetector = runSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector();
             theDetector.touchMoved(toArray(aEvent.getTouches()));
         }
     }
 
     private void touchCanceled(TeaVMTouchEvent aEvent) {
-        if (runningGameLoop != null) {
-            GestureDetector theDetector = runningGameLoop.getHumanGameView().getGestureDetector();
+        if (runSceneStrategy.hasGameLoop()) {
+            GestureDetector theDetector = runSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector();
             theDetector.touchCanceled(toArray(aEvent.getTouches()));
         }
     }
@@ -204,54 +222,7 @@ public class TeaVMRenderer {
     }
 
     private void playScene(GameScene aGameScene) {
-        if (runningGameLoop != null) {
-            runningGameLoop.shutdown();
-        }
-
-        GameEventManager theEventManager = aGameScene.getRuntime().getEventManager();
-        GameRuntime theRuntime = aGameScene.getRuntime();
-
-        runtimeFactory.loadingFinished(aGameScene);
-
-        // Detect and create a camera
-        GameObject theCameraObject = aGameScene.cameraObjectProperty().get();
-        GameObjectInstance theCameraObjectInstance = aGameScene.createFrom(theCameraObject);
-        CameraBehavior theCameraBehavior = theCameraObjectInstance.getBehavior(CameraBehavior.class);
-
-        GameObjectInstance thePlayerInstance = null;
-        for (GameObjectInstance theInstance : aGameScene.getInstances()) {
-            if (theInstance.getOwnerGameObject() == aGameScene.defaultPlayerProperty().get()) {
-                thePlayerInstance = theInstance;
-            }
-        }
-
-        // This is our hook to load new scenes
-        theEventManager.register(null, RunScene.class, new GameEventListener<RunScene>() {
-            @Override
-            public void handleGameEvent(RunScene aEvent) {
-                String theSceneId = aEvent.sceneId;
-                sceneLoader.loadFromServer(theSceneId, new TeaVMGameResourceLoader(theSceneId, document, resourceCache));
-            }
-        });
-
-        GestureDetector theGestureDetector = new DefaultGestureDetector(theEventManager);
-
-        if (gameView == null) {
-            gameView = new TeaVMGameView(theRuntime, theCameraBehavior, theGestureDetector, canvasElement);
-        } else {
-            gameView.prepareNewScene(theRuntime, theCameraBehavior, theGestureDetector);
-        }
-
-        Size theSize = new Size(window.getInnerWidth(), window.getInnerHeight());
-        TeaVMLogger.info("Size is " + theSize.width + " " + theSize.height);
-        gameView.setSize(theSize);
-        theEventManager.fire(new SetScreenResolution(theSize));
-
-        runningGameLoop = gameLoopFactory.create(aGameScene, gameView, theRuntime);
-
-        theCameraBehavior.initializeFor(aGameScene, thePlayerInstance);
-
-        runSingleStep(runningGameLoop);
-        runningRuntime = theRuntime;
+        runSceneStrategy.playScene(aGameScene);
+        runSingleStep(runSceneStrategy.getRunningGameLoop());
     }
 }
