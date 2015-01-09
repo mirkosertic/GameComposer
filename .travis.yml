@@ -4,7 +4,7 @@ jdk:
 env:
   global:
     - "MAVEN_OPTS=-Xmx2536m -XX:MaxPermSize=1024m -XX:+CMSClassUnloadingEnabled -XX:-UseGCOverheadLimit"
-before-install:
+before_install:
   - "env"
   - "echo 'MAVEN_OPTS = $MAVEN_OPTS'"
 script: "mvn clean test"
