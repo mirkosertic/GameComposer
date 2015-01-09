@@ -66,7 +66,7 @@ public class GameComposerController {
         SplitPane theSplitPane = new SplitPane();
         theSplitPane.setOrientation(Orientation.HORIZONTAL);
         theSplitPane.getItems().addAll(objectInspector.getView(), contentArea.getView(), projectStructure.getView());
-        theSplitPane.setDividerPositions(0.3, 0.3);
+        theSplitPane.setDividerPositions(0.1, 0.1);
 
         borderPane.setCenter(theSplitPane);
 

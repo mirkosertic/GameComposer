@@ -203,7 +203,7 @@ public class RuleEditorController implements Controller {
 
         for (Class<? extends Action> theActionClass : knownActions) {
             final Class<? extends Action> theFinalAction = theActionClass;
-            MenuItem theItem = new MenuItem(theActionClass.getSimpleName());
+            MenuItem theItem = new MenuItem(theActionClass.getSimpleName().replace("Action", ""));
             theItem.setOnAction(actionEvent -> {
                 try {
                     Action theNewAction = theFinalAction.newInstance();

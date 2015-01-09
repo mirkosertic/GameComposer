@@ -8,11 +8,16 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
 
-<BorderPane id="BorderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="de.mirkosertic.gamecomposer.contentarea.eventsheet.RuleEditorController">
+<BorderPane id="BorderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.mirkosertic.gamecomposer.contentarea.eventsheet.RuleEditorController">
   <center>
     <VBox>
       <children>
-        <TextField fx:id="ruleName" maxWidth="1.7976931348623157E308" style="-fx-background-color: rgb(255,266,186);&#10;-fx-border-color: rgb(234,245,0);" />
+            <HBox>
+               <children>
+              <TextField fx:id="ruleName" maxWidth="1.7976931348623157E308" style="-fx-background-color: rgb(255,266,186);&#10;-fx-border-color: rgb(234,245,0);" HBox.hgrow="ALWAYS" />
+            <Hyperlink onAction="#onRemoveRule" text="Remove rule" />
+               </children>
+            </HBox>
         <HBox VBox.vgrow="ALWAYS">
           <children>
             <VBox prefWidth="-1.0" style="-fx-background-color: rgb(243,241,255);&#10;&#10;&#10;" HBox.hgrow="NEVER">
@@ -56,7 +61,6 @@
                 <VBox fx:id="actions" prefHeight="-1.0" prefWidth="-1.0" />
               </children>
             </VBox>
-            <Hyperlink onAction="#onRemoveRule" text="Remove rule" />
           </children>
           <VBox.margin>
             <Insets top="5.0" fx:id="x2" />
