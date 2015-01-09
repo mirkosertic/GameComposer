@@ -27,7 +27,7 @@ public class TextBehaviorTemplate implements BehaviorTemplate<TextBehavior>, Tex
         font = new Property<>(Font.class, this, FONT_PROPERTY, Font.DEFAULT_FONT, aEventManager);
         textExpression = new Property<>(TextExpression.class, this, TEXT_EXPRESSION_PROPERTY, new TextExpression(""), aEventManager);
         color = new Property<>(Color.class, this, COLOR_PROPERTY, Color.WHITE, aEventManager);
-        isscript = new Property<>(Boolean.class, this, ISSCRIPT_PROPERTY, true, aEventManager);
+        isscript = new Property<>(Boolean.class, this, ISSCRIPT_PROPERTY, false, aEventManager);
         owner = aOwner;
     }
 

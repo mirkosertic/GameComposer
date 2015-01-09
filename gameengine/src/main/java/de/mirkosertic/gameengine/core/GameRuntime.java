@@ -12,15 +12,13 @@ public class GameRuntime {
     private GameSystem[] systems;
     private final GameResourceCache gameResourceCache;
     private final IORegistry ioRegistry;
-    private final ExpressionParserFactory expressionParserFactory;
     private final ScriptEngineFactory scriptEngineFactory;
 
-    public GameRuntime(GameEventManager aEventManager, GameResourceLoader aResourceLoader, ExpressionParserFactory aExpressionParserFactory, ScriptEngineFactory aScriptEngineFactory) {
+    public GameRuntime(GameEventManager aEventManager, GameResourceLoader aResourceLoader, ScriptEngineFactory aScriptEngineFactory) {
         ioRegistry = new IORegistry();
         eventManager = aEventManager;
         systems = new GameSystem[0];
         gameResourceCache = new GameResourceCache(aResourceLoader);
-        expressionParserFactory = aExpressionParserFactory;
         scriptEngineFactory = aScriptEngineFactory;
     }
 
@@ -30,10 +28,6 @@ public class GameRuntime {
 
     public GameEventManager getEventManager() {
         return eventManager;
-    }
-
-    public ExpressionParserFactory getExpressionParserFactory() {
-        return expressionParserFactory;
     }
 
     public void addSystem(GameSystem aSystem) {

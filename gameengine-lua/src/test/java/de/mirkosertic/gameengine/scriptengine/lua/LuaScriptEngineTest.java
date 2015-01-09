@@ -1,12 +1,14 @@
 package de.mirkosertic.gameengine.scriptengine.lua;
 
 import de.mirkosertic.gameengine.core.GameObject;
+import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.type.Color;
 import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Script;
+import de.mirkosertic.gameengine.type.TextExpression;
 
 import java.io.IOException;
 import org.junit.Test;
@@ -93,5 +95,24 @@ public class LuaScriptEngineTest {
         theEngine.proceedGame(1, 3);
         assertEquals("hallo", theObject.nameProperty().get());
         assertSame(theObject, theEngine.proceedGame(1, 3));
+    }
+
+    @Test
+    public void testEvaluateSimpleExpression() throws IOException {
+
+        GameEventManager theEventManager = new GameEventManager();
+        GameRuntime theRuntime = mock(GameRuntime.class);
+        when(theRuntime.getEventManager()).thenReturn(theEventManager);
+
+        GameScene theGameScene = new GameScene(theRuntime);
+        GameObject theObject = new GameObject(theGameScene, "Test");
+        GameObjectInstance theInstance = theGameScene.createFrom(theObject);
+
+
+        TextExpression theExpression = new TextExpression("\"hello\" .. \" world\"");
+        LuaScriptEngineFactory theFactory = new LuaScriptEngineFactory();
+        LuaScriptEngine theEngine = theFactory.createNewEngine(theExpression);
+
+        assertEquals("hello world", theEngine.evaluateSimpleExpressionFor(theInstance));
     }
 }

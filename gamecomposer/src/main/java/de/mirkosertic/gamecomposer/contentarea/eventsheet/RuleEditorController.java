@@ -74,7 +74,6 @@ public class RuleEditorController implements Controller {
 
         knownActions = new ArrayList<>();
         knownActions.add(PlaySoundAction.class);
-        knownActions.add(SetPropertyAction.class);
         knownActions.add(RunSceneAction.class);
         knownActions.add(DeleteGameObjectInstanceAction.class);
         knownActions.add(SpawnGameObjectInstanceAction.class);
@@ -97,7 +96,7 @@ public class RuleEditorController implements Controller {
         conditionType.setConverter(new StringConverter<Class>() {
             @Override
             public String toString(Class aClass) {
-                return aClass.getSimpleName();
+                return aClass.getSimpleName().replace("Condition", "");
             }
 
             @Override

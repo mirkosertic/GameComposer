@@ -1,5 +1,6 @@
 package de.mirkosertic.gameengine.apt;
 
+import de.mirkosertic.gameengine.annotations.InheritedClassInformation;
 import de.mirkosertic.gameengine.annotations.ReflectiveField;
 import de.mirkosertic.gameengine.annotations.ReflectiveMethod;
 
@@ -19,7 +20,9 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.ExecutableType;
+import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 
 @SupportedAnnotationTypes(
@@ -64,13 +67,14 @@ public class AnnotationProcessor extends AbstractProcessor {
 
         for (TypeElement theAnnotation : aAnnotations) {
             for (Element theElement :  aEnvironment.getElementsAnnotatedWith(theAnnotation)) {
-                TypeElement theType = (TypeElement) theElement.getEnclosingElement();
-                List<Element> theAnnotations = theAnnotatedClassNames.get(theType);
-                if (theAnnotations == null) {
-                    theAnnotations = new ArrayList<>();
-                    theAnnotatedClassNames.put(theType, theAnnotations);
-                }
-                theAnnotations.add(theElement);
+                Element theA = theElement.getEnclosingElement();
+                    TypeElement theType = (TypeElement) theA;
+                    List<Element> theAnnotations = theAnnotatedClassNames.get(theType);
+                    if (theAnnotations == null) {
+                        theAnnotations = new ArrayList<>();
+                        theAnnotatedClassNames.put(theType, theAnnotations);
+                    }
+                    theAnnotations.add(theElement);
             }
         }
 
@@ -78,6 +82,11 @@ public class AnnotationProcessor extends AbstractProcessor {
         for (Map.Entry<TypeElement, List<Element>> theEntry : theAnnotatedClassNames.entrySet()) {
 
             TypeElement theClass = theEntry.getKey();
+
+            String theSuperClass = "ClassInformation";
+            if (theClass.getAnnotation(InheritedClassInformation.class) != null) {
+                theSuperClass = theClass.getSuperclass().toString()+"ClassInformation";
+            }
 
             String theClassInfoFQName = theClass.getQualifiedName().toString()+"ClassInformation";
             String theClassInfoName = theClass.getSimpleName().toString()+"ClassInformation";
@@ -92,7 +101,9 @@ public class AnnotationProcessor extends AbstractProcessor {
 
                 theClassWriter.print("public class ");
                 theClassWriter.print(theClassInfoName);
-                theClassWriter.print(" extends ClassInformation {");
+                theClassWriter.print(" extends ");
+                theClassWriter.print(theSuperClass);
+                theClassWriter.print(" {");
                 theClassWriter.println();
                 for (Element theElement : theEntry.getValue()) {
                     ReflectiveField theField = theElement.getAnnotation(ReflectiveField.class);
@@ -222,7 +233,7 @@ public class AnnotationProcessor extends AbstractProcessor {
                 theClassWriter.print(theClassInfoName);
                 theClassWriter.println("();");
                 theClassWriter.println();
-                theClassWriter.print("  private ");
+                theClassWriter.print("  protected ");
                 theClassWriter.print(theClassInfoName);
                 theClassWriter.println("() {");
 

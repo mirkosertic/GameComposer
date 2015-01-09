@@ -1,7 +1,9 @@
 package de.mirkosertic.gameengine.scriptengine.lua;
 
+import de.mirkosertic.gameengine.scriptengine.ScriptEngine;
 import de.mirkosertic.gameengine.scriptengine.ScriptEngineFactory;
 import de.mirkosertic.gameengine.type.Script;
+import de.mirkosertic.gameengine.type.TextExpression;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -12,6 +14,7 @@ import org.luaj.vm2.Globals;
 import org.luaj.vm2.LuaClosure;
 import org.luaj.vm2.Prototype;
 import org.luaj.vm2.compiler.LuaC;
+import org.luaj.vm2.lib.BaseLib;
 
 public class LuaScriptEngineFactory implements ScriptEngineFactory {
 
@@ -39,16 +42,29 @@ public class LuaScriptEngineFactory implements ScriptEngineFactory {
 
     @Override
     public LuaScriptEngine createNewEngine(Script aScript) throws IOException {
+        return create(aScript.script, "proceedGame");
+    }
+
+    @Override
+    public LuaScriptEngine createNewEngine(TextExpression aExpression) throws IOException {
+
+        StringBuilder theScriptCode = new StringBuilder("function process(aInstance) return ");
+        theScriptCode.append(aExpression.expression);
+        theScriptCode.append(" end");
+
+        return create(theScriptCode.toString(), "process");
+    }
+
+    private LuaScriptEngine create(String aScriptCode, String aMethodName) throws IOException {
 
         Globals theGlobals = createGlobals();
 
-        String theScriptCode = aScript.script;
-        Prototype thePrototype = prototypes.get(theScriptCode);
+        Prototype thePrototype = prototypes.get(aScriptCode);
         if (thePrototype == null) {
-            thePrototype = theGlobals.compilePrototype(new StringReader(theScriptCode), "script");
-            prototypes.put(theScriptCode, thePrototype);
+            thePrototype = theGlobals.compilePrototype(new StringReader(aScriptCode), "script");
+            prototypes.put(aScriptCode, thePrototype);
         }
 
-        return new LuaScriptEngine(theGlobals, new LuaClosure(thePrototype, theGlobals));
+        return new LuaScriptEngine(theGlobals, new LuaClosure(thePrototype, theGlobals), aMethodName);
     }
 }
