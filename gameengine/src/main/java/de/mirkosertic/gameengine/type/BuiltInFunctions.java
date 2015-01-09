@@ -1,14 +1,8 @@
-package de.mirkosertic.gameengine.expression;
+package de.mirkosertic.gameengine.type;
 
 import de.mirkosertic.gameengine.annotations.ReflectiveMethod;
-import de.mirkosertic.gameengine.type.Reflectable;
 
 public abstract class BuiltInFunctions implements Reflectable {
-
-    @Override
-    public BuiltInFunctionsClassInformation getClassInformation() {
-        return BuiltInFunctionsClassInformation.INSTANCE;
-    }
 
     @ReflectiveMethod
     public Number systime() {

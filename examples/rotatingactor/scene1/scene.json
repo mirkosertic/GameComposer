@@ -18,14 +18,7 @@
         "type" : "KeyEventCondition"
       },
       "name" : "Rotate left",
-      "actions" : [ {
-        "propertyName" : "constantMovement.rotationSpeed",
-        "value" : {
-          "expression" : "instance.constantMovement.rotationSpeed - 8"
-        },
-        "type" : "SetPropertyAction",
-        "gameObject" : "4889509885749884898"
-      } ]
+      "actions" : [ ]
     }, {
       "condition" : {
         "keyCode" : "RIGHT",
@@ -33,14 +26,7 @@
         "type" : "KeyEventCondition"
       },
       "name" : "Rorate right",
-      "actions" : [ {
-        "propertyName" : "constantMovement.rotationSpeed",
-        "value" : {
-          "expression" : "instance.constantMovement.rotationSpeed + 8"
-        },
-        "type" : "SetPropertyAction",
-        "gameObject" : "4889509885749884898"
-      } ]
+      "actions" : [ ]
     }, {
       "condition" : {
         "keyCode" : "ANY",
@@ -48,14 +34,7 @@
         "type" : "KeyEventCondition"
       },
       "name" : "Stop rotation if key released",
-      "actions" : [ {
-        "propertyName" : "constantMovement.rotationSpeed",
-        "value" : {
-          "expression" : "0"
-        },
-        "type" : "SetPropertyAction",
-        "gameObject" : "4889509885749884898"
-      } ]
+      "actions" : [ ]
     }, {
       "condition" : {
         "keyCode" : "UP",
@@ -63,14 +42,7 @@
         "type" : "KeyEventCondition"
       },
       "name" : "Fly",
-      "actions" : [ {
-        "propertyName" : "constantMovement.speed",
-        "value" : {
-          "expression" : "instance.constantMovement.speed + 32"
-        },
-        "type" : "SetPropertyAction",
-        "gameObject" : "4889509885749884898"
-      } ]
+      "actions" : [ ]
     }, {
       "condition" : {
         "keyCode" : "ANY",
@@ -78,14 +50,7 @@
         "type" : "KeyEventCondition"
       },
       "name" : "Stop flying",
-      "actions" : [ {
-        "propertyName" : "constantMovement.speed",
-        "value" : {
-          "expression" : "0"
-        },
-        "type" : "SetPropertyAction",
-        "gameObject" : "4889509885749884898"
-      } ]
+      "actions" : [ ]
     } ]
   } ],
   "defaultplayerobjectid" : "4889509885749884898",

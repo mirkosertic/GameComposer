@@ -9,10 +9,14 @@ import com.dragome.helpers.DragomeEntityManager;
 import com.dragome.services.RequestExecutorImpl;
 import com.dragome.services.interfaces.AsyncCallback;
 
-import de.mirkosertic.gameengine.expression.BuiltInFunctions;
+import de.mirkosertic.gameengine.annotations.InheritedClassInformation;
+import de.mirkosertic.gameengine.annotations.ReflectiveMethod;
+import de.mirkosertic.gameengine.type.BuiltInFunctions;
 
+@InheritedClassInformation
 public class DragomeBuildInFunctions extends BuiltInFunctions
 {
+    @ReflectiveMethod
 	@Override
 	public String formatTime(Number aTimeInMilis, String aPattern)
 	{
@@ -52,4 +56,9 @@ public class DragomeBuildInFunctions extends BuiltInFunctions
 		ScriptHelper.eval("window['callback_'+javaId]= callback", null);
 		return runnable2;
 	}
+
+    @Override
+    public DragomeBuildInFunctionsClassInformation getClassInformation() {
+        return DragomeBuildInFunctionsClassInformation.INSTANCE;
+    }
 }

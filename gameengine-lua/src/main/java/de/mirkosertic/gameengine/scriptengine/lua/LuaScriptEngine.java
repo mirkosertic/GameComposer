@@ -1,5 +1,6 @@
 package de.mirkosertic.gameengine.scriptengine.lua;
 
+import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.scriptengine.ScriptEngine;
 import de.mirkosertic.gameengine.type.TypeConverters;
@@ -160,13 +161,20 @@ public class LuaScriptEngine implements ScriptEngine {
 
     private final Globals globals;
     private final LuaClosure closure;
+    private final LuaValue methodToCall;
 
-    public LuaScriptEngine(Globals aGlobals, LuaClosure aClosure) {
+    public LuaScriptEngine(Globals aGlobals, LuaClosure aClosure, String aMethodName) {
         globals = aGlobals;
         closure = aClosure;
 
         // Initialize the code
         closure.call();
+
+        // Retrieve function from globals
+        methodToCall = globals.get(aMethodName);
+        if (methodToCall == null) {
+            throw new IllegalStateException("No "+aMethodName+" function defined");
+        }
 
         // Register generic Type converters
         registerTo(globals, new TypeConverters());
@@ -178,7 +186,9 @@ public class LuaScriptEngine implements ScriptEngine {
 
     @Override
     public void registerObject(String aObjectName, Reflectable aObject) {
-        globals.set(aObjectName, toLuaValue(aObject));
+        if (aObject != null) {
+            globals.set(aObjectName, toLuaValue(aObject));
+        }
     }
 
     @Override
@@ -194,16 +204,22 @@ public class LuaScriptEngine implements ScriptEngine {
             LuaInteger.valueOf(aElapsedTimeSinceLastLoop)
         });
 
-        // Retrieve function from globals
-        LuaValue theProceedGameFunction = globals.get("proceedGame");
-        if (theProceedGameFunction == null) {
-            throw new IllegalStateException("No proceedGame function defined");
-        }
-
-        Varargs theResult = theProceedGameFunction.invoke(theArguments);
+        Varargs theResult = methodToCall.invoke(theArguments);
         if (theResult.narg() == 1) {
             return toJavaValue(theResult.arg(1));
         }
         throw new IllegalStateException("Not supported return type : " + theResult);
+    }
+
+    @Override
+    public String evaluateSimpleExpressionFor(GameObjectInstance aObjectInstance) {
+        Varargs theArguments = LuaValue.varargsOf(new LuaValue[] {
+                    toLuaValue(aObjectInstance)
+            });
+        Varargs theResult = methodToCall.invoke(theArguments);
+        if (theResult.narg() == 1) {
+            return toJavaValue(theResult.arg(1)).toString();
+        }
+        throw new IllegalStateException("Invalid return type : " + theResult);
     }
 }

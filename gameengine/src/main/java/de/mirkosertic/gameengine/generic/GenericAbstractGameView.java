@@ -2,6 +2,7 @@ package de.mirkosertic.gameengine.generic;
 
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.scriptengine.ScriptEngine;
 import de.mirkosertic.gameengine.sprite.SpriteBehavior;
 import de.mirkosertic.gameengine.text.TextBehavior;
 import de.mirkosertic.gameengine.type.*;
@@ -106,19 +107,28 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
             }
             TextBehavior theTextBehavior = theInstance.getBehavior(TextBehavior.class);
             if (theTextBehavior != null) {
+                TextExpression theExpression = theTextBehavior.textExpressionProperty().get();
+                String theTextToDraw;
                 if (theTextBehavior.isScriptProperty().get()) {
                     // Scripting is enabled, so we have to evaluate the expression
-                    ExpressionParser theExpressionParser = aScene.get(theTextBehavior.textExpressionProperty().get());
+                    try {
+                        ScriptEngine theEngine = gameRuntime.getScriptEngineFactory()
+                                .createNewEngine(theExpression);
 
-                    drawText(theInstance, thePosition, theTextBehavior.fontProperty().get(),
-                            theTextBehavior.colorProperty().get(), theExpressionParser.evaluateToString(), theSize);
+                        theTextToDraw = theEngine.evaluateSimpleExpressionFor(theInstance);
+                    } catch (Exception e) {
+                        // Failed to process the script
+                        // can be IOException
+                        // or more likely compile errors
+                        theTextToDraw = "Processing error : " + e.getMessage();
+                    }
                 } else {
-                    // No scripting, hence just print the text
-                    TextExpression theExpression = theTextBehavior.textExpressionProperty().get();
-
-                    drawText(theInstance, thePosition, theTextBehavior.fontProperty().get(),
-                            theTextBehavior.colorProperty().get(), theExpression.get(), theSize);
+                    theTextToDraw = theExpression.expression;
                 }
+
+                drawText(theInstance, thePosition, theTextBehavior.fontProperty().get(),
+                        theTextBehavior.colorProperty().get(), theTextToDraw, theSize);
+
 
                 theSomethingRendered = true;
             }

@@ -35,7 +35,6 @@ public class GameScene implements Reflectable<GameSceneClassInformation> {
     private GameSceneEffect[] postprocessorEffects;
 
     private final GameRuntime gameRuntime;
-    private final Map<TextExpression, ExpressionParser> knownParser;
 
     public GameScene(GameRuntime aGameRuntime) {
 
@@ -52,25 +51,11 @@ public class GameScene implements Reflectable<GameSceneClassInformation> {
         preprocessorEffects = new GameSceneEffect[0];
         postprocessorEffects = new GameSceneEffect[0];
         gameRuntime = aGameRuntime;
-
-        knownParser = new HashMap<>();
     }
 
     @Override
     public GameSceneClassInformation getClassInformation() {
         return GameSceneClassInformation.INSTANCE;
-    }
-
-    public ExpressionParser get(TextExpression aExpression) {
-        ExpressionParser theParser = knownParser.get(aExpression);
-        if (theParser == null) {
-            theParser = gameRuntime.getExpressionParserFactory().create(aExpression);
-            theParser.registerVariable(ExpressionParser.SCENE_VARIABLE, this);
-            theParser.registerVariable(ExpressionParser.PLAYER_VARIABLE, defaultPlayer);
-            theParser.registerVariable(ExpressionParser.CAMERA_VARIABLE, cameraObject);
-            knownParser.put(aExpression, theParser);
-        }
-        return theParser;
     }
 
     public GameRuntime getRuntime() {

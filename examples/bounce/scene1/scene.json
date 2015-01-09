@@ -9,14 +9,7 @@
         "position" : "EVERYWHERE",
         "type" : "ObjectCollisionCondition"
       },
-      "actions" : [ {
-        "gameObject" : "2955937955858173841",
-        "propertyName" : "rotationAngle",
-        "type" : "SetPropertyAction",
-        "value" : {
-          "expression" : "instance.rotationAngle + 180"
-        }
-      } ]
+      "actions" : [ ]
     } ]
   } ],
   "layoutBounds" : {

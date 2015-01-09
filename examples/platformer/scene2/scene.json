@@ -22,13 +22,6 @@
       },
       "name" : "Collect a star",
       "actions" : [ {
-        "gameObject" : "4343694719606608272",
-        "propertyName" : "visibleProperty",
-        "type" : "SetPropertyAction",
-        "value" : {
-          "expression" : "false"
-        }
-      }, {
         "resourceName" : "/assets/audio/pickup_gem_1.wav",
         "type" : "PlaySoundAction"
       } ]
