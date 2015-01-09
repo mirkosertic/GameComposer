@@ -25,7 +25,7 @@ public class GameLoopFactoryTest {
         assertSame(theScene, theLoop.getScene());
         assertSame(theView, theLoop.getHumanGameView());
         assertFalse(theLoop.isShutdown());
-        theEventManager.fire(new GameShutdown());
+        theEventManager.fire(new SceneShutdown());
         assertTrue(theLoop.isShutdown());
     }
 }

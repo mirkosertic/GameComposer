@@ -67,6 +67,8 @@ public class GameLoop implements Runnable {
         if  (lastInvocation == 0) {
             // Initial state, we skip this to prevent computation errors
             lastInvocation = System.currentTimeMillis();
+            // Instead, we fill fire the SceneStarted event
+            runtime.getEventManager().fire(new SceneStarted());
             return;
         }
         long theCurrentTime = System.currentTimeMillis();

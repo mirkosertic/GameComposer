@@ -6,9 +6,9 @@ public class GameLoopFactory {
 
     public GameLoop create(GameScene aGameScene, GameView aHumanGameView, GameRuntime aRuntime) {
         final GameLoop theLoop = new GameLoop(aGameScene, aHumanGameView, aRuntime);
-        aRuntime.getEventManager().register(null, GameShutdown.class, new GameEventListener<GameShutdown>() {
+        aRuntime.getEventManager().register(null, SceneShutdown.class, new GameEventListener<SceneShutdown>() {
             @Override
-            public void handleGameEvent(GameShutdown aEvent) {
+            public void handleGameEvent(SceneShutdown aEvent) {
                 theLoop.shutdown();
             }
         });

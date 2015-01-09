@@ -6,16 +6,7 @@ import de.mirkosertic.gameengine.arcade.ConstantMovementBehaviorTemplateUnmarsha
 import de.mirkosertic.gameengine.arcade.ConstantMovementBehaviorUnmarshaller;
 import de.mirkosertic.gameengine.camera.CameraBehaviorTemplateUnmarshaller;
 import de.mirkosertic.gameengine.camera.CameraBehaviorUnmarshaller;
-import de.mirkosertic.gameengine.core.DeleteGameObjectInstanceActionUnmarshaller;
-import de.mirkosertic.gameengine.core.GameObjectInstanceAddedToSceneConditionUnmarshaller;
-import de.mirkosertic.gameengine.core.GameObjectInstanceLeftLayoutConditionUnmarshaller;
-import de.mirkosertic.gameengine.core.GameObjectInstanceRemovedFromSceneConditionUnmarshaller;
-import de.mirkosertic.gameengine.core.GameResourceLoader;
-import de.mirkosertic.gameengine.core.GameRuntime;
-import de.mirkosertic.gameengine.core.GameScene;
-import de.mirkosertic.gameengine.core.IORegistry;
-import de.mirkosertic.gameengine.core.RunSceneActionUnmarshaller;
-import de.mirkosertic.gameengine.core.SpawnGameObjectInstanceActionUnmarshaller;
+import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.input.KeyEventConditionUnmarshaller;
 import de.mirkosertic.gameengine.physic.GamePhysicsManager;
@@ -96,6 +87,7 @@ public abstract class AbstractGameRuntimeFactory {
         theRegistry.registerBehaviorUnmarshaller(new PlayerScoreBehaviorUnmarshaller());
         theRegistry.registerBehaviorUnmarshaller(new ConstantMovementBehaviorUnmarshaller());
 
+        theRegistry.registerConditionUnmarshaller(new SceneStartedConditionUnmarshaller());
         theRegistry.registerConditionUnmarshaller(new KeyEventConditionUnmarshaller());
         theRegistry.registerConditionUnmarshaller(new ObjectCollisionConditionUnmarshaller());
         theRegistry.registerConditionUnmarshaller(new SystemTickConditionUnmarshaller());
