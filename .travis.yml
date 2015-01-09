@@ -7,4 +7,4 @@ env:
 before_install:
   - "env"
   - "echo 'MAVEN_OPTS = $MAVEN_OPTS'"
-script: "mvn clean test"
+install: travis_wait mvn install
