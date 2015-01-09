@@ -6,7 +6,7 @@ import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.process.GameProcess;
 import de.mirkosertic.gameengine.script.RunScriptAction;
-import de.mirkosertic.gameengine.scriptengine.ScriptEngine;
+import de.mirkosertic.gameengine.scriptengine.LUAScriptEngine;
 import de.mirkosertic.gameengine.type.Script;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -67,7 +67,7 @@ public class EditScriptDialog {
     }
 
     private boolean test(Script aScript) {
-        ScriptEngine theEngine = null;
+        LUAScriptEngine theEngine = null;
         try {
 
             // We only want to test on a clone

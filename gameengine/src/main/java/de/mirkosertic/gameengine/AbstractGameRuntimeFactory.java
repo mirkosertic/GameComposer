@@ -33,7 +33,7 @@ import de.mirkosertic.gameengine.process.GameProcessManager;
 import de.mirkosertic.gameengine.process.GameProcessManagerFactory;
 import de.mirkosertic.gameengine.process.KillProcessesForInstanceUnmarshaller;
 import de.mirkosertic.gameengine.script.RunScriptActionUnmarshaller;
-import de.mirkosertic.gameengine.scriptengine.ScriptEngineFactory;
+import de.mirkosertic.gameengine.scriptengine.LUAScriptEngineFactory;
 import de.mirkosertic.gameengine.sound.GameSoundManager;
 import de.mirkosertic.gameengine.sound.GameSoundManagerFactory;
 import de.mirkosertic.gameengine.sound.GameSoundSystemFactory;
@@ -49,7 +49,7 @@ public abstract class AbstractGameRuntimeFactory {
 
     protected abstract Reflectable createBuildInFunctions();
 
-    protected abstract ScriptEngineFactory createScriptEngine();
+    protected abstract LUAScriptEngineFactory createScriptEngine();
 
     protected abstract GamePhysicsManagerFactory createPhysicsManagerFactory();
 
@@ -64,7 +64,7 @@ public abstract class AbstractGameRuntimeFactory {
         GamePhysicsManager thePhysicsManager = thePhysicsManagerFactory.create(theEventManager);
 
         // By default we use Lua as a script engine
-        ScriptEngineFactory theScriptEngineFactory = createScriptEngine();
+        LUAScriptEngineFactory theScriptEngineFactory = createScriptEngine();
 
         // Runtime
         GameRuntime theGameRuntime = new GameRuntime(theEventManager, aResourceLoader, theScriptEngineFactory);

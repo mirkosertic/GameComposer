@@ -2,7 +2,7 @@ package de.mirkosertic.gameengine.core;
 
 import de.mirkosertic.gameengine.ArrayUtils;
 import de.mirkosertic.gameengine.event.GameEventManager;
-import de.mirkosertic.gameengine.scriptengine.ScriptEngineFactory;
+import de.mirkosertic.gameengine.scriptengine.LUAScriptEngineFactory;
 
 import java.util.List;
 
@@ -12,9 +12,9 @@ public class GameRuntime {
     private GameSystem[] systems;
     private final GameResourceCache gameResourceCache;
     private final IORegistry ioRegistry;
-    private final ScriptEngineFactory scriptEngineFactory;
+    private final LUAScriptEngineFactory scriptEngineFactory;
 
-    public GameRuntime(GameEventManager aEventManager, GameResourceLoader aResourceLoader, ScriptEngineFactory aScriptEngineFactory) {
+    public GameRuntime(GameEventManager aEventManager, GameResourceLoader aResourceLoader, LUAScriptEngineFactory aScriptEngineFactory) {
         ioRegistry = new IORegistry();
         eventManager = aEventManager;
         systems = new GameSystem[0];
@@ -44,7 +44,7 @@ public class GameRuntime {
         return ioRegistry;
     }
 
-    public ScriptEngineFactory getScriptEngineFactory() {
+    public LUAScriptEngineFactory getScriptEngineFactory() {
         return scriptEngineFactory;
     }
 }

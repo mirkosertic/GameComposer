@@ -8,7 +8,7 @@ import de.mirkosertic.gameengine.core.UsedByReflection;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.process.StartProcess;
-import de.mirkosertic.gameengine.scriptengine.ScriptEngineFactory;
+import de.mirkosertic.gameengine.scriptengine.LUAScriptEngineFactory;
 import de.mirkosertic.gameengine.type.Script;
 
 import java.util.HashMap;
@@ -50,7 +50,7 @@ public class RunScriptAction implements Action {
     public void invoke(GameScene aScene, ConditionResult aResult) {
         Script theScript = script.get();
         GameEventManager theManager = aScene.getRuntime().getEventManager();
-        ScriptEngineFactory theScriptEngineFactory = aScene.getRuntime().getScriptEngineFactory();
+        LUAScriptEngineFactory theScriptEngineFactory = aScene.getRuntime().getScriptEngineFactory();
         int theNumberOfProcesses = 0;
         GameObjectInstance[] theInstances = aResult.getAffectedInstances();
         // Spawn only instance specific script instances if there are not all instances selected...

@@ -1,7 +1,6 @@
-package de.mirkosertic.gameengine.scriptengine.lua;
+package de.mirkosertic.gameengine.scriptengine.luaj;
 
-import de.mirkosertic.gameengine.scriptengine.ScriptEngine;
-import de.mirkosertic.gameengine.scriptengine.ScriptEngineFactory;
+import de.mirkosertic.gameengine.scriptengine.LUAScriptEngineFactory;
 import de.mirkosertic.gameengine.type.Script;
 import de.mirkosertic.gameengine.type.TextExpression;
 
@@ -14,13 +13,12 @@ import org.luaj.vm2.Globals;
 import org.luaj.vm2.LuaClosure;
 import org.luaj.vm2.Prototype;
 import org.luaj.vm2.compiler.LuaC;
-import org.luaj.vm2.lib.BaseLib;
 
-public class LuaScriptEngineFactory implements ScriptEngineFactory {
+public class LuaJScriptEngineFactory implements LUAScriptEngineFactory {
 
     private Map<String, Prototype> prototypes;
 
-    public LuaScriptEngineFactory() {
+    public LuaJScriptEngineFactory() {
         prototypes = new HashMap<>();
     }
 
@@ -41,12 +39,12 @@ public class LuaScriptEngineFactory implements ScriptEngineFactory {
     }
 
     @Override
-    public LuaScriptEngine createNewEngine(Script aScript) throws IOException {
+    public LuaJScriptEngine createNewEngine(Script aScript) throws IOException {
         return create(aScript.script, "proceedGame");
     }
 
     @Override
-    public LuaScriptEngine createNewEngine(TextExpression aExpression) throws IOException {
+    public LuaJScriptEngine createNewEngine(TextExpression aExpression) throws IOException {
 
         StringBuilder theScriptCode = new StringBuilder("function process(aInstance) return ");
         theScriptCode.append(aExpression.expression);
@@ -55,7 +53,7 @@ public class LuaScriptEngineFactory implements ScriptEngineFactory {
         return create(theScriptCode.toString(), "process");
     }
 
-    private LuaScriptEngine create(String aScriptCode, String aMethodName) throws IOException {
+    private LuaJScriptEngine create(String aScriptCode, String aMethodName) throws IOException {
 
         Globals theGlobals = createGlobals();
 
@@ -65,6 +63,6 @@ public class LuaScriptEngineFactory implements ScriptEngineFactory {
             prototypes.put(aScriptCode, thePrototype);
         }
 
-        return new LuaScriptEngine(theGlobals, new LuaClosure(thePrototype, theGlobals), aMethodName);
+        return new LuaJScriptEngine(theGlobals, new LuaClosure(thePrototype, theGlobals), aMethodName);
     }
 }

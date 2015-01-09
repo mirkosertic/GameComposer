@@ -3,8 +3,8 @@ package de.mirkosertic.gameengine.script;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.process.GameProcess;
-import de.mirkosertic.gameengine.scriptengine.ScriptEngine;
-import de.mirkosertic.gameengine.scriptengine.ScriptEngineFactory;
+import de.mirkosertic.gameengine.scriptengine.LUAScriptEngine;
+import de.mirkosertic.gameengine.scriptengine.LUAScriptEngineFactory;
 import de.mirkosertic.gameengine.type.Script;
 
 import java.io.IOException;
@@ -13,18 +13,18 @@ public class ScriptProcess implements GameProcess {
 
     private final GameScene scene;
     private GameObjectInstance instance;
-    private final ScriptEngineFactory scriptEngineFactory;
+    private final LUAScriptEngineFactory scriptEngineFactory;
     private final Script script;
 
-    private ScriptEngine scriptEngine;
+    private LUAScriptEngine scriptEngine;
 
-    public ScriptProcess(GameScene aScene, ScriptEngineFactory aScriptEngineFactory, Script aScript) {
+    public ScriptProcess(GameScene aScene, LUAScriptEngineFactory aScriptEngineFactory, Script aScript) {
         scene = aScene;
         scriptEngineFactory = aScriptEngineFactory;
         script = aScript;
     }
 
-    public ScriptProcess(GameObjectInstance aInstance, ScriptEngineFactory aScriptEngineFactory, Script aScript) {
+    public ScriptProcess(GameObjectInstance aInstance, LUAScriptEngineFactory aScriptEngineFactory, Script aScript) {
         this(aInstance.getOwnerGameObject().getGameScene(), aScriptEngineFactory, aScript);
         instance = aInstance;
     }
