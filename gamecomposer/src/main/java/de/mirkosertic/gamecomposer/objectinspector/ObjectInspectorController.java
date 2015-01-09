@@ -41,19 +41,6 @@ import java.util.Map;
 @Singleton
 public class ObjectInspectorController implements Controller {
 
-    public static class Test {
-
-        String name;
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-    }
-
     @FXML
     BorderPane content;
 

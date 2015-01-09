@@ -1,12 +1,11 @@
 package de.mirkosertic.gamecomposer.contentarea.eventsheet;
 
-import java.util.ArrayList;
-import java.util.List;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
 
@@ -17,27 +16,54 @@ import de.mirkosertic.gamecomposer.contentarea.ContentController;
 import de.mirkosertic.gameengine.core.EventSheet;
 import de.mirkosertic.gameengine.core.GameRule;
 import de.mirkosertic.gameengine.event.PropertyChanged;
+import javafx.util.Callback;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class EventSheetEditorController implements ContentController<EventSheet> {
 
     @FXML
-    VBox rulesList;
+    ListView<GameRule> rules;
 
     @Inject
     RuleEditorControllerFactory ruleEditorControllerFactory;
 
     private EventSheet editingObject;
     private Node viewNode;
-    private List<RuleEditorController> controllerList;
+    private Map<GameRule, RuleEditorController> controllerMap;
 
     EventSheetEditorController initialize(Node aViewNode, EventSheet aEventSheet) {
         viewNode = aViewNode;
         editingObject = aEventSheet;
-        controllerList = new ArrayList<>();
+        controllerMap = new HashMap<>();
+
+        rules.setCellFactory(new Callback<ListView<GameRule>, ListCell<GameRule>>() {
+            @Override
+            public ListCell<GameRule> call(ListView<GameRule> aListView) {
+                return new GameRuleCell();
+            }
+        });
 
         initializeRuleList();
 
         return this;
+    }
+
+    private class GameRuleCell extends ListCell<GameRule> {
+
+        private GameRuleCell() {
+        }
+
+        @Override
+        protected void updateItem(GameRule aRule, boolean empty) {
+            if (empty) {
+                setGraphic(null);
+            } else {
+                RuleEditorController theRuleController = controllerMap.get(aRule);
+                setGraphic(theRuleController.getView());
+            }
+        }
     }
 
     @Override
@@ -86,16 +112,15 @@ public class EventSheetEditorController implements ContentController<EventSheet>
     }
 
     void initializeRuleList() {
-        rulesList.getChildren().clear();
-        for (RuleEditorController theController : controllerList) {
-            theController.removed();
-        }
-        controllerList.clear();
-        for (GameRule theRule : editingObject.getRules()) {
-            RuleEditorController theRuleController = ruleEditorControllerFactory.createFor(this, editingObject, theRule);
-            rulesList.getChildren().add(theRuleController.getView());
 
-            controllerList.add(theRuleController);
+        controllerMap.clear();
+        rules.getItems().clear();
+        for (GameRule theRule : editingObject.getRules()) {
+
+            RuleEditorController theRuleController = ruleEditorControllerFactory.createFor(EventSheetEditorController.this, editingObject, theRule);
+            controllerMap.put(theRule, theRuleController);
+
+            rules.getItems().add(theRule);
         }
     }
 
