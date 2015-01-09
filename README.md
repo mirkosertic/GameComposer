@@ -1,6 +1,8 @@
 FXGameComposer
 =============
 
+Build status: [![Build Status](https://travis-ci.org/mirkosertic/GameComposer.svg?branch=master)](https://travis-ci.org/mirkosertic/GameComposer)
+
 FXGameComposer is a game authoring tool and also a game runtime environment, targeting at JavaFX2 or HTML5 capable devices.
 
 To see it in action please visit [this page](http://www.mirkosertic.de/doku.php/javastuff/javafxgameauthoring)
