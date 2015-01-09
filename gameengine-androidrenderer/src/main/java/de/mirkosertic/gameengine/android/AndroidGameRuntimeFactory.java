@@ -7,7 +7,7 @@ import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.SystemException;
 import de.mirkosertic.gameengine.physics.jbox2d.JBox2DGamePhysicsManagerFactory;
-import de.mirkosertic.gameengine.scriptengine.lua.LuaScriptEngineFactory;
+import de.mirkosertic.gameengine.scriptengine.luaj.LuaJScriptEngineFactory;
 import de.mirkosertic.gameengine.sound.GameSoundSystemFactory;
 import de.mirkosertic.gameengine.type.Reflectable;
 
@@ -31,8 +31,8 @@ class AndroidGameRuntimeFactory extends AbstractGameRuntimeFactory {
     }
 
     @Override
-    protected LuaScriptEngineFactory createScriptEngine() {
-        return new LuaScriptEngineFactory();
+    protected LuaJScriptEngineFactory createScriptEngine() {
+        return new LuaJScriptEngineFactory();
     }
 
     @Override

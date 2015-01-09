@@ -1,8 +1,8 @@
-package de.mirkosertic.gameengine.scriptengine.lua;
+package de.mirkosertic.gameengine.scriptengine.luaj;
 
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.event.Property;
-import de.mirkosertic.gameengine.scriptengine.ScriptEngine;
+import de.mirkosertic.gameengine.scriptengine.LUAScriptEngine;
 import de.mirkosertic.gameengine.type.TypeConverters;
 import de.mirkosertic.gameengine.type.ClassInformation;
 import de.mirkosertic.gameengine.type.Field;
@@ -19,7 +19,7 @@ import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.Varargs;
 import org.luaj.vm2.lib.VarArgFunction;
 
-public class LuaScriptEngine implements ScriptEngine {
+public class LuaJScriptEngine implements LUAScriptEngine {
 
     private static LuaValue toLuaValue(Object aValue) {
         if (aValue == null) {
@@ -163,7 +163,7 @@ public class LuaScriptEngine implements ScriptEngine {
     private final LuaClosure closure;
     private final LuaValue methodToCall;
 
-    public LuaScriptEngine(Globals aGlobals, LuaClosure aClosure, String aMethodName) {
+    public LuaJScriptEngine(Globals aGlobals, LuaClosure aClosure, String aMethodName) {
         globals = aGlobals;
         closure = aClosure;
 

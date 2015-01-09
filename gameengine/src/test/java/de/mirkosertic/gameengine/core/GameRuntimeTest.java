@@ -1,7 +1,7 @@
 package de.mirkosertic.gameengine.core;
 
 import de.mirkosertic.gameengine.event.GameEventManager;
-import de.mirkosertic.gameengine.scriptengine.ScriptEngineFactory;
+import de.mirkosertic.gameengine.scriptengine.LUAScriptEngineFactory;
 
 import org.junit.Test;
 
@@ -14,7 +14,7 @@ public class GameRuntimeTest {
     public void testGetResourceCache() throws Exception {
         GameEventManager theEventManager = mock(GameEventManager.class);
         GameResourceLoader theResourceLoader = mock(GameResourceLoader.class);
-        ScriptEngineFactory theScriptEngineFactory = mock(ScriptEngineFactory.class);
+        LUAScriptEngineFactory theScriptEngineFactory = mock(LUAScriptEngineFactory.class);
         GameRuntime theRuntime = new GameRuntime(theEventManager, theResourceLoader, theScriptEngineFactory);
         assertNotNull(theRuntime.getResourceCache());
     }
@@ -23,7 +23,7 @@ public class GameRuntimeTest {
     public void testGetEventManager() throws Exception {
         GameEventManager theEventManager = mock(GameEventManager.class);
         GameResourceLoader theResourceLoader = mock(GameResourceLoader.class);
-        ScriptEngineFactory theScriptEngineFactory = mock(ScriptEngineFactory.class);
+        LUAScriptEngineFactory theScriptEngineFactory = mock(LUAScriptEngineFactory.class);
         GameRuntime theRuntime = new GameRuntime(theEventManager, theResourceLoader, theScriptEngineFactory);
         assertSame(theEventManager, theRuntime.getEventManager());
     }
@@ -32,7 +32,7 @@ public class GameRuntimeTest {
     public void testAddSystem() throws Exception {
         GameEventManager theEventManager = mock(GameEventManager.class);
         GameResourceLoader theResourceLoader = mock(GameResourceLoader.class);
-        ScriptEngineFactory theScriptEngineFactory = mock(ScriptEngineFactory.class);
+        LUAScriptEngineFactory theScriptEngineFactory = mock(LUAScriptEngineFactory.class);
         GameRuntime theRuntime = new GameRuntime(theEventManager, theResourceLoader, theScriptEngineFactory);
         assertNotNull(theRuntime.getSystems());
         assertEquals(0, theRuntime.getSystems().length);
@@ -46,7 +46,7 @@ public class GameRuntimeTest {
     public void testGetIORegistry() throws Exception {
         GameEventManager theEventManager = mock(GameEventManager.class);
         GameResourceLoader theResourceLoader = mock(GameResourceLoader.class);
-        ScriptEngineFactory theScriptEngineFactory = mock(ScriptEngineFactory.class);
+        LUAScriptEngineFactory theScriptEngineFactory = mock(LUAScriptEngineFactory.class);
         GameRuntime theRuntime = new GameRuntime(theEventManager, theResourceLoader, theScriptEngineFactory);
         assertNotNull(theRuntime.getIORegistry());
     }
@@ -55,7 +55,7 @@ public class GameRuntimeTest {
     public void testGetScriptEngineFactory() throws Exception {
         GameEventManager theEventManager = mock(GameEventManager.class);
         GameResourceLoader theResourceLoader = mock(GameResourceLoader.class);
-        ScriptEngineFactory theScriptEngineFactory = mock(ScriptEngineFactory.class);
+        LUAScriptEngineFactory theScriptEngineFactory = mock(LUAScriptEngineFactory.class);
         GameRuntime theRuntime = new GameRuntime(theEventManager, theResourceLoader, theScriptEngineFactory);
         assertSame(theScriptEngineFactory, theRuntime.getScriptEngineFactory());
     }

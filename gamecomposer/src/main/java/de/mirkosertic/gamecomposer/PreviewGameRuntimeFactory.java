@@ -3,7 +3,7 @@ package de.mirkosertic.gamecomposer;
 import de.mirkosertic.gameengine.AbstractGameRuntimeFactory;
 import de.mirkosertic.gameengine.javafx.JDKBuiltInFunctions;
 import de.mirkosertic.gameengine.physics.jbox2d.JBox2DGamePhysicsManagerFactory;
-import de.mirkosertic.gameengine.scriptengine.lua.LuaScriptEngineFactory;
+import de.mirkosertic.gameengine.scriptengine.luaj.LuaJScriptEngineFactory;
 import de.mirkosertic.gameengine.type.Reflectable;
 
 import javax.inject.Singleton;
@@ -17,8 +17,8 @@ public class PreviewGameRuntimeFactory extends AbstractGameRuntimeFactory {
     }
 
     @Override
-    protected LuaScriptEngineFactory createScriptEngine() {
-        return new LuaScriptEngineFactory();
+    protected LuaJScriptEngineFactory createScriptEngine() {
+        return new LuaJScriptEngineFactory();
     }
 
     @Override

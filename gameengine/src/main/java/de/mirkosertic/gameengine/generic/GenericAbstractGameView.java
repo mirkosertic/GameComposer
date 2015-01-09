@@ -2,7 +2,7 @@ package de.mirkosertic.gameengine.generic;
 
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.core.*;
-import de.mirkosertic.gameengine.scriptengine.ScriptEngine;
+import de.mirkosertic.gameengine.scriptengine.LUAScriptEngine;
 import de.mirkosertic.gameengine.sprite.SpriteBehavior;
 import de.mirkosertic.gameengine.text.TextBehavior;
 import de.mirkosertic.gameengine.type.*;
@@ -112,7 +112,7 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
                 if (theTextBehavior.isScriptProperty().get()) {
                     // Scripting is enabled, so we have to evaluate the expression
                     try {
-                        ScriptEngine theEngine = gameRuntime.getScriptEngineFactory()
+                        LUAScriptEngine theEngine = gameRuntime.getScriptEngineFactory()
                                 .createNewEngine(theExpression);
 
                         theTextToDraw = theEngine.evaluateSimpleExpressionFor(theInstance);
