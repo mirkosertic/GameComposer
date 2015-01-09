@@ -1,14 +1,6 @@
 language: java
 jdk:
   - oraclejdk8
-android:
-  components:
-    - build-tools-19.1.0
-    - android-19
-    - extra-google-google_play_services
-    - extra-google-m2repository
-    - extra-android-m2repository
-    - addon-google_apis-google-19
 env:
   global:
     - "MAVEN_OPTS=-Xmx2536m -XX:MaxPermSize=1024m -XX:+CMSClassUnloadingEnabled -XX:-UseGCOverheadLimit"
