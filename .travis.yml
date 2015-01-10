@@ -4,6 +4,17 @@ jdk:
 env:
   global:
     - "MAVEN_OPTS=-Xmx2536m -XX:MaxPermSize=1024m -XX:+CMSClassUnloadingEnabled -XX:-UseGCOverheadLimit"
+    - "ANDROID_SDKS=android-10"
 before_install:
   - "env"
   - "echo 'MAVEN_OPTS = $MAVEN_OPTS'"
+  # Install base Android SDK
+  - sudo apt-get update -qq
+  - if [ `uname -m` = x86_64 ]; then sudo apt-get install -qq --force-yes libgd2-xpm ia32-libs ia32-libs-multiarch; fi
+  - wget http://dl.google.com/android/android-sdk_r24.0.2-linux.tgz
+  - tar xzf android-sdk_r24.0.2-linux.tgz
+  - export ANDROID_HOME=$PWD/android-sdk-linux
+  - export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
+
+  # Install required Android components.
+  - android update sdk --filter platform-tools,android-16,extra-android-support,$ANDROID_SDKS --no-ui --force
