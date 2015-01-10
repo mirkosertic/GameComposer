@@ -16,5 +16,38 @@ before_install:
   - export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
 
   # Install required Android components.
-  - android list sdk
-  - echo "y" | android update sdk --filter platform-tools,android-16,extra-android-support,android-10 --no-ui --force
+  # - android list sdk
+  #1- Android SDK Tools, revision 24.0.2
+  #2- Android SDK Platform-tools, revision 20
+  #3- Android SDK Build-tools, revision 19.1
+  #4- Documentation for Android SDK, API 19, revision 2
+  #5- SDK Platform Android 4.4.2, API 19, revision 3
+  #6- SDK Platform Android 4.3, API 18, revision 2
+  #7- SDK Platform Android 4.2.2, API 17, revision 2
+  #8- SDK Platform Android 4.1.2, API 16, revision 4
+  #9- SDK Platform Android 4.0.3, API 15, revision 3
+  #10- SDK Platform Android 4.0, API 14, revision 3
+  #11- SDK Platform Android 3.2, API 13, revision 1
+  #12- SDK Platform Android 3.1, API 12, revision 3
+  #13- SDK Platform Android 3.0, API 11, revision 2
+  #14- SDK Platform Android 2.3.3, API 10, revision 2
+  #15- SDK Platform Android 2.2, API 8, revision 3
+  #16- SDK Platform Android 2.1, API 7, revision 3
+  #17- SDK Platform Android 1.6, API 4, revision 3
+  #18- SDK Platform Android 1.5, API 3, revision 4
+  #19- Samples for SDK API 19, revision 5
+  #20- Samples for SDK API 18, revision 1
+  #21- Samples for SDK API 17, revision 1
+  #22- Samples for SDK API 16, revision 1
+  #23- Samples for SDK API 15, revision 2
+  #24- Samples for SDK API 14, revision 2
+  #25- Samples for SDK API 13, revision 1
+  #26- Samples for SDK API 12, revision 1
+  #27- Samples for SDK API 11, revision 1
+  #28- Samples for SDK API 10, revision 1
+  #29- Samples for SDK API 8, revision 1
+  #30- Samples for SDK API 7, revision 1
+  #31- Glass Development Kit Preview, Android API 19, revision 11
+  #32- Android Support Library, revision 19.1
+
+  - echo "y" | android update sdk -u -t 1,2,3,14
