@@ -32,7 +32,7 @@ class PlatformMathUtils {
   private static final float SHIFT23 = 1 << 23;
   private static final float INV_SHIFT23 = 1.0f / SHIFT23;
 
-  public static final float fastPow(float a, float b) {
+  public static float fastPow(float a, float b) {
     float x = Float.floatToRawIntBits(a);
     x *= INV_SHIFT23;
     x -= 127;

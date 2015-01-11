@@ -187,74 +187,74 @@ public class Vec2 implements Serializable {
    * Static
    */
 
-  public final static Vec2 abs(Vec2 a) {
+  public static Vec2 abs(Vec2 a) {
     return new Vec2(MathUtils.abs(a.x), MathUtils.abs(a.y));
   }
 
-  public final static void absToOut(Vec2 a, Vec2 out) {
+  public static void absToOut(Vec2 a, Vec2 out) {
     out.x = MathUtils.abs(a.x);
     out.y = MathUtils.abs(a.y);
   }
 
-  public final static float dot(Vec2 a, Vec2 b) {
+  public static float dot(Vec2 a, Vec2 b) {
     return a.x * b.x + a.y * b.y;
   }
 
-  public final static float cross(Vec2 a, Vec2 b) {
+  public static float cross(Vec2 a, Vec2 b) {
     return a.x * b.y - a.y * b.x;
   }
 
-  public final static Vec2 cross(Vec2 a, float s) {
+  public static Vec2 cross(Vec2 a, float s) {
     return new Vec2(s * a.y, -s * a.x);
   }
 
-  public final static void crossToOut(Vec2 a, float s, Vec2 out) {
+  public static void crossToOut(Vec2 a, float s, Vec2 out) {
     final float tempy = -s * a.x;
     out.x = s * a.y;
     out.y = tempy;
   }
 
-  public final static void crossToOutUnsafe(Vec2 a, float s, Vec2 out) {
+  public static void crossToOutUnsafe(Vec2 a, float s, Vec2 out) {
     assert (out != a);
     out.x = s * a.y;
     out.y = -s * a.x;
   }
 
-  public final static Vec2 cross(float s, Vec2 a) {
+  public static Vec2 cross(float s, Vec2 a) {
     return new Vec2(-s * a.y, s * a.x);
   }
 
-  public final static void crossToOut(float s, Vec2 a, Vec2 out) {
+  public static void crossToOut(float s, Vec2 a, Vec2 out) {
     final float tempY = s * a.x;
     out.x = -s * a.y;
     out.y = tempY;
   }
 
-  public final static void crossToOutUnsafe(float s, Vec2 a, Vec2 out) {
+  public static void crossToOutUnsafe(float s, Vec2 a, Vec2 out) {
     assert (out != a);
     out.x = -s * a.y;
     out.y = s * a.x;
   }
 
-  public final static void negateToOut(Vec2 a, Vec2 out) {
+  public static void negateToOut(Vec2 a, Vec2 out) {
     out.x = -a.x;
     out.y = -a.y;
   }
 
-  public final static Vec2 min(Vec2 a, Vec2 b) {
+  public static Vec2 min(Vec2 a, Vec2 b) {
     return new Vec2(a.x < b.x ? a.x : b.x, a.y < b.y ? a.y : b.y);
   }
 
-  public final static Vec2 max(Vec2 a, Vec2 b) {
+  public static Vec2 max(Vec2 a, Vec2 b) {
     return new Vec2(a.x > b.x ? a.x : b.x, a.y > b.y ? a.y : b.y);
   }
 
-  public final static void minToOut(Vec2 a, Vec2 b, Vec2 out) {
+  public static void minToOut(Vec2 a, Vec2 b, Vec2 out) {
     out.x = a.x < b.x ? a.x : b.x;
     out.y = a.y < b.y ? a.y : b.y;
   }
 
-  public final static void maxToOut(Vec2 a, Vec2 b, Vec2 out) {
+  public static void maxToOut(Vec2 a, Vec2 b, Vec2 out) {
     out.x = a.x > b.x ? a.x : b.x;
     out.y = a.y > b.y ? a.y : b.y;
   }

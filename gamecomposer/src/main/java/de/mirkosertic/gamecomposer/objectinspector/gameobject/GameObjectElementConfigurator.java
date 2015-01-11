@@ -8,6 +8,7 @@ import de.mirkosertic.gamecomposer.objectinspector.PropertyEditorItem;
 import de.mirkosertic.gamecomposer.objectinspector.utils.SizePropertyEditor;
 import de.mirkosertic.gamecomposer.objectinspector.utils.StringPropertyEditor;
 import de.mirkosertic.gameengine.arcade.ConstantMovementBehaviorTemplate;
+import de.mirkosertic.gameengine.camera.CameraBehaviorTemplate;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.physic.PhysicsBehaviorTemplate;
 import de.mirkosertic.gameengine.physic.PlatformBehaviorTemplate;
@@ -52,6 +53,15 @@ public class GameObjectElementConfigurator implements ObjectInspectorElementConf
         theResult.add(theActions);
 
         List<ActionPropertyEditorItem.Action> theAddBehaviorActions = new ArrayList<>();
+        if (aObject.getBehaviorTemplate(CameraBehaviorTemplate.class) == null) {
+            theAddBehaviorActions.add(new ActionPropertyEditorItem.Action("Add camera behavior", new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    aObject.getGameScene().addBehaviorToObject(
+                            aObject, new CameraBehaviorTemplate(aObject.getGameScene().getRuntime().getEventManager(), aObject));
+                }
+            }));
+        }
         if (aObject.getBehaviorTemplate(PhysicsBehaviorTemplate.class) == null) {
             theAddBehaviorActions.add(new ActionPropertyEditorItem.Action("Add physics behavior", new EventHandler<ActionEvent>() {
                 @Override

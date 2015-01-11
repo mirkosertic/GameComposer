@@ -77,7 +77,7 @@ public class MathUtils extends PlatformMathUtils {
     }
   }
 
-  public static final float sin(float x) {
+  public static float sin(float x) {
     if (Settings.SINCOS_LUT_ENABLED) {
       return sinLUT(x);
     } else {
@@ -85,7 +85,7 @@ public class MathUtils extends PlatformMathUtils {
     }
   }
 
-  public static final float sinLUT(float x) {
+  public static float sinLUT(float x) {
     x %= TWOPI;
 
     if (x < 0) {
@@ -114,7 +114,7 @@ public class MathUtils extends PlatformMathUtils {
     }
   }
 
-  public static final float cos(float x) {
+  public static float cos(float x) {
     if (Settings.SINCOS_LUT_ENABLED) {
       return sinLUT(HALF_PI - x);
     } else {
@@ -122,7 +122,7 @@ public class MathUtils extends PlatformMathUtils {
     }
   }
 
-  public static final float abs(final float x) {
+  public static float abs(final float x) {
     if (Settings.FAST_ABS) {
       return x > 0 ? x : -x;
     } else {
@@ -130,12 +130,12 @@ public class MathUtils extends PlatformMathUtils {
     }
   }
 
-  public static final int abs(int x) {
+  public static int abs(int x) {
     int y = x >> 31;
     return (x ^ y) - y;
   }
 
-  public static final int floor(final float x) {
+  public static int floor(final float x) {
     if (Settings.FAST_FLOOR) {
       int y = (int) x;
       if (x < 0 && x != y) {
@@ -147,7 +147,7 @@ public class MathUtils extends PlatformMathUtils {
     }
   }
 
-  public static final int ceil(final float x) {
+  public static int ceil(final float x) {
     if (Settings.FAST_CEIL) {
       int y = (int) x;
       if (x > 0 && x != y) {
@@ -159,7 +159,7 @@ public class MathUtils extends PlatformMathUtils {
     }
   }
 
-  public static final int round(final float x) {
+  public static int round(final float x) {
     if (Settings.FAST_ROUND) {
       return floor(x + .5f);
     } else {
@@ -173,7 +173,7 @@ public class MathUtils extends PlatformMathUtils {
    * @param x
    * @return power^2 value
    */
-  public static final int ceilPowerOf2(int x) {
+  public static int ceilPowerOf2(int x) {
     int pow2 = 1;
     while (pow2 < x) {
       pow2 <<= 1;
@@ -181,23 +181,23 @@ public class MathUtils extends PlatformMathUtils {
     return pow2;
   }
 
-  public final static float max(final float a, final float b) {
+  public static float max(final float a, final float b) {
     return a > b ? a : b;
   }
 
-  public final static int max(final int a, final int b) {
+  public static int max(final int a, final int b) {
     return a > b ? a : b;
   }
 
-  public final static float min(final float a, final float b) {
+  public static float min(final float a, final float b) {
     return a < b ? a : b;
   }
 
-  public final static int min(final int a, final int b) {
+  public static int min(final int a, final int b) {
     return a < b ? a : b;
   }
 
-  public final static float map(final float val, final float fromMin, final float fromMax,
+  public static float map(final float val, final float fromMin, final float fromMax,
       final float toMin, final float toMax) {
     final float mult = (val - fromMin) / (fromMax - fromMin);
     final float res = toMin + mult * (toMax - toMin);
@@ -205,11 +205,11 @@ public class MathUtils extends PlatformMathUtils {
   }
 
   /** Returns the closest value to 'a' that is in between 'low' and 'high' */
-  public final static float clamp(final float a, final float low, final float high) {
+  public static float clamp(final float a, final float low, final float high) {
     return max(low, min(a, high));
   }
 
-  public final static Vec2 clamp(final Vec2 a, final Vec2 low, final Vec2 high) {
+  public static Vec2 clamp(final Vec2 a, final Vec2 low, final Vec2 high) {
     final Vec2 min = new Vec2();
     min.x = a.x < high.x ? a.x : high.x;
     min.y = a.y < high.y ? a.y : high.y;
@@ -218,7 +218,7 @@ public class MathUtils extends PlatformMathUtils {
     return min;
   }
 
-  public final static void clampToOut(final Vec2 a, final Vec2 low, final Vec2 high, final Vec2 dest) {
+  public static void clampToOut(final Vec2 a, final Vec2 low, final Vec2 high, final Vec2 dest) {
     dest.x = a.x < high.x ? a.x : high.x;
     dest.y = a.y < high.y ? a.y : high.y;
     dest.x = low.x > dest.x ? low.x : dest.x;
@@ -231,7 +231,7 @@ public class MathUtils extends PlatformMathUtils {
    * process yields a bit vector with the same most significant 1 as x, but all 1's below it. Adding
    * 1 to that value yields the next largest power of 2.
    */
-  public final static int nextPowerOfTwo(int x) {
+  public static int nextPowerOfTwo(int x) {
     x |= x >> 1;
     x |= x >> 2;
     x |= x >> 4;
@@ -240,11 +240,11 @@ public class MathUtils extends PlatformMathUtils {
     return x + 1;
   }
 
-  public final static boolean isPowerOfTwo(final int x) {
+  public static boolean isPowerOfTwo(final int x) {
     return x > 0 && (x & x - 1) == 0;
   }
 
-  public static final float atan2(final float y, final float x) {
+  public static float atan2(final float y, final float x) {
     if (Settings.FAST_ATAN2) {
       return fastAtan2(y, x);
     } else {
@@ -252,7 +252,7 @@ public class MathUtils extends PlatformMathUtils {
     }
   }
 
-  public static final float fastAtan2(float y, float x) {
+  public static float fastAtan2(float y, float x) {
     if (x == 0.0f) {
       if (y > 0.0f) return HALF_PI;
       if (y == 0.0f) return 0.0f;
@@ -273,7 +273,7 @@ public class MathUtils extends PlatformMathUtils {
     return atan;
   }
 
-  public static final float reduceAngle(float theta) {
+  public static float reduceAngle(float theta) {
     theta %= TWOPI;
     if (abs(theta) > PI) {
       theta = theta - TWOPI;
@@ -284,25 +284,25 @@ public class MathUtils extends PlatformMathUtils {
     return theta;
   }
 
-  public static final float randomFloat(float argLow, float argHigh) {
+  public static float randomFloat(float argLow, float argHigh) {
     return (float) Math.random() * (argHigh - argLow) + argLow;
   }
 
-  public static final float randomFloat(Random r, float argLow, float argHigh) {
+  public static float randomFloat(Random r, float argLow, float argHigh) {
     return r.nextFloat() * (argHigh - argLow) + argLow;
   }
 
-  public static final float sqrt(float x) {
+  public static float sqrt(float x) {
     return (float) StrictMath.sqrt(x);
   }
 
-  public final static float distanceSquared(Vec2 v1, Vec2 v2) {
+  public static float distanceSquared(Vec2 v1, Vec2 v2) {
     float dx = (v1.x - v2.x);
     float dy = (v1.y - v2.y);
     return dx * dx + dy * dy;
   }
 
-  public final static float distance(Vec2 v1, Vec2 v2) {
+  public static float distance(Vec2 v1, Vec2 v2) {
     return sqrt(distanceSquared(v1, v2));
   }
 }

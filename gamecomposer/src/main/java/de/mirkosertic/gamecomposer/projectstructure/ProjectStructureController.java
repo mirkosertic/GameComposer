@@ -115,7 +115,7 @@ public class ProjectStructureController implements Controller {
 
     public void onNewGameEvent(@Observes NewGameEvent aEvent) {
         treeItemMap.clear();
-        Game theCurrentGame = persistenceManager.getGame();
+        Game theCurrentGame = aEvent.getGame();
 
         TreeItem theRootTreeItem = new TreeItem(theCurrentGame.nameProperty().get());
         theRootTreeItem.setValue(theCurrentGame);

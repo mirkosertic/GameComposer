@@ -5,7 +5,6 @@ import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.SystemException;
 
 import org.junit.Test;
-import org.mockito.InOrder;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
