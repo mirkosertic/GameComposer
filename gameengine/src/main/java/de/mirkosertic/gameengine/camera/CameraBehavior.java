@@ -84,8 +84,13 @@ public class CameraBehavior implements Behavior, Camera, Reflectable<CameraClass
         if (theScreenSize != null) {
             Position theCameraPosition = objectInstance.positionProperty().get();
             for (GameObjectInstance theInstance : aScene.getInstances()) {
+                if (theInstance == objectInstance) {
+                    // The camera object itself does not need to be drawn
+                    continue;
+                }
                 // Just visible instances need to be drawn
                 if (theInstance.visibleProperty().get()) {
+                    //TODO: Optimize position handling here
                     if (theInstance.absolutePositionProperty().get()) {
                         theResult.add(theInstance);
                     } else {

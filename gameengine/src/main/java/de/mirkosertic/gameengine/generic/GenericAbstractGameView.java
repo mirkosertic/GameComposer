@@ -134,6 +134,7 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
             }
 
             if (!theSomethingRendered) {
+                // Nothing was rendered.
                 drawRect(theInstance, thePosition, Color.WHITE, -theHalfWidth, -theHalfHeight, theSize.width, theSize.height);
             }
 

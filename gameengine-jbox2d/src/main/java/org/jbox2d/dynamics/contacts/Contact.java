@@ -347,7 +347,7 @@ public abstract class Contact {
    * @param friction2
    * @return
    */
-  public static final float mixFriction(float friction1, float friction2) {
+  public static float mixFriction(float friction1, float friction2) {
     return MathUtils.sqrt(friction1 * friction2);
   }
 
@@ -359,7 +359,7 @@ public abstract class Contact {
    * @param restitution2
    * @return
    */
-  public static final float mixRestitution(float restitution1, float restitution2) {
+  public static float mixRestitution(float restitution1, float restitution2) {
     return restitution1 > restitution2 ? restitution1 : restitution2;
   }
 }

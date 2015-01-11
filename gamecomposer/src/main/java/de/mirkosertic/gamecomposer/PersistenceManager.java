@@ -52,9 +52,17 @@ public class PersistenceManager {
     }
 
     public void onNewGameEvent(@Observes NewGameEvent aEvent) {
-        game = new Game();
-        gameScenes.clear();
         currentGameDirectory = aEvent.getProjectDirectory();
+        game = aEvent.getGame();
+
+        try {
+            File theGameDescriptor = new File(currentGameDirectory, "game.json");
+            ObjectMapper theObjectMapper = new ObjectMapper();
+            ObjectWriter theWriter = theObjectMapper.writerWithDefaultPrettyPrinter().withType(Map.class);
+            theWriter.writeValue(theGameDescriptor, game.serialize());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public boolean isGameLoaded() {
@@ -74,6 +82,12 @@ public class PersistenceManager {
 
         File theSceneDirectory = new File(currentGameDirectory, theSceneID);
         theSceneDirectory.mkdirs();
+
+        // We also create a default assets folder
+        File theAssets = new File(theSceneDirectory, "assets");
+        new File(theAssets, "sprites").mkdirs();
+        new File(theAssets, "sounds").mkdirs();
+        new File(theAssets, "backgrounds").mkdirs();
 
         GameResourceLoader theResourceLoader = new JavaFXFileGameResourceLoader(theSceneDirectory);
         GameRuntime theRuntime = gameRuntimeFactory.create(theResourceLoader, new JavaSoundAPISoundSystemFactory());

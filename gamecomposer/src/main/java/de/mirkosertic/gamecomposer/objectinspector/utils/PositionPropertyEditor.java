@@ -57,8 +57,7 @@ public class PositionPropertyEditor implements PropertyEditor<Position> {
 
         Validator theValidator = Validator.combine(
                 Validator.createEmptyValidator("A value is required"),
-                Validator.createPredicateValidator(new IntegerPredicate(), "Value is not a valid number"),
-                Validator.createPredicateValidator(new PositiveIntegerPredicate(), "Value must be positive")
+                Validator.createPredicateValidator(new IntegerPredicate(), "Value is not a valid number")
         );
 
         validationSupport.registerValidator(x, theValidator);

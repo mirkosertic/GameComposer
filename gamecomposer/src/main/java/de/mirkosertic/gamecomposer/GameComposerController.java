@@ -1,5 +1,6 @@
 package de.mirkosertic.gamecomposer;
 
+import de.mirkosertic.gameengine.core.Game;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Orientation;
@@ -90,7 +91,9 @@ public class GameComposerController {
         theDirectoryChooser.setTitle("Choose target directory");
         File theProjectDirectory = theDirectoryChooser.showDialog(stage);
         if (theProjectDirectory != null) {
-            eventGateway.fire(new NewGameEvent(theProjectDirectory));
+            Game theNewGame = new Game();
+            theNewGame.nameProperty().set("New game");
+            eventGateway.fire(new NewGameEvent(theProjectDirectory, theNewGame));
 
             directoryPreferences.put(GAME_DIRECTORY_PREF_KEY, theProjectDirectory.toString());
             exportMenu.setDisable(false);
@@ -142,7 +145,10 @@ public class GameComposerController {
 
         String theLastExportDir = directoryPreferences.get(GAME_EXPORTDIRECTORY_HTML_PREF_KEY, null);
         if (theLastExportDir != null) {
-            theDirectoryChooser.setInitialDirectory(new File(theLastExportDir));
+            File theFile = new File(theLastExportDir);
+            if (theFile.exists() && theFile.isDirectory()) {
+                theDirectoryChooser.setInitialDirectory(theFile);
+            }
         }
 
         File theTargetDirectory = theDirectoryChooser.showDialog(stage);
@@ -160,7 +166,10 @@ public class GameComposerController {
 
         String theLastExportDir = directoryPreferences.get(GAME_EXPORTDIRECTORY_HTML_PREF_KEY, null);
         if (theLastExportDir != null) {
-            theDirectoryChooser.setInitialDirectory(new File(theLastExportDir));
+            File theFile = new File(theLastExportDir);
+            if (theFile.exists() && theFile.isDirectory()) {
+                theDirectoryChooser.setInitialDirectory(theFile);
+            }
         }
 
         File theTargetDirectory = theDirectoryChooser.showDialog(stage);
@@ -178,7 +187,10 @@ public class GameComposerController {
 
         String theLastExportDir = directoryPreferences.get(GAME_EXPORTDIRECTORY_HTML_PREF_KEY, null);
         if (theLastExportDir != null) {
-            theDirectoryChooser.setInitialDirectory(new File(theLastExportDir));
+            File theFile = new File(theLastExportDir);
+            if (theFile.exists() && theFile.isDirectory()) {
+                theDirectoryChooser.setInitialDirectory(theFile);
+            }
         }
 
         File theTargetDirectory = theDirectoryChooser.showDialog(stage);
@@ -196,7 +208,10 @@ public class GameComposerController {
 
         String theLastExportDir = directoryPreferences.get(GAME_EXPORTDIRECTORY_ANDROID_PREF_KEY, null);
         if (theLastExportDir != null) {
-            theDirectoryChooser.setInitialDirectory(new File(theLastExportDir));
+            File theFile = new File(theLastExportDir);
+            if (theFile.exists() && theFile.isDirectory()) {
+                theDirectoryChooser.setInitialDirectory(theFile);
+            }
         }
 
         File theTargetDirectory = theDirectoryChooser.showDialog(stage);

@@ -82,29 +82,29 @@ public class Transform implements Serializable {
     q.setIdentity();
   }
 
-  public final static Vec2 mul(final Transform T, final Vec2 v) {
+  public static Vec2 mul(final Transform T, final Vec2 v) {
     return new Vec2((T.q.c * v.x - T.q.s * v.y) + T.p.x, (T.q.s * v.x + T.q.c * v.y) + T.p.y);
   }
 
-  public final static void mulToOut(final Transform T, final Vec2 v, final Vec2 out) {
+  public static void mulToOut(final Transform T, final Vec2 v, final Vec2 out) {
     final float tempy = (T.q.s * v.x + T.q.c * v.y) + T.p.y;
     out.x = (T.q.c * v.x - T.q.s * v.y) + T.p.x;
     out.y = tempy;
   }
 
-  public final static void mulToOutUnsafe(final Transform T, final Vec2 v, final Vec2 out) {
+  public static void mulToOutUnsafe(final Transform T, final Vec2 v, final Vec2 out) {
     assert (v != out);
     out.x = (T.q.c * v.x - T.q.s * v.y) + T.p.x;
     out.y = (T.q.s * v.x + T.q.c * v.y) + T.p.y;
   }
 
-  public final static Vec2 mulTrans(final Transform T, final Vec2 v) {
+  public static Vec2 mulTrans(final Transform T, final Vec2 v) {
     final float px = v.x - T.p.x;
     final float py = v.y - T.p.y;
     return new Vec2((T.q.c * px + T.q.s * py), (-T.q.s * px + T.q.c * py));
   }
 
-  public final static void mulTransToOut(final Transform T, final Vec2 v, final Vec2 out) {
+  public static void mulTransToOut(final Transform T, final Vec2 v, final Vec2 out) {
     final float px = v.x - T.p.x;
     final float py = v.y - T.p.y;
     final float tempy = (-T.q.s * px + T.q.c * py);
@@ -112,7 +112,7 @@ public class Transform implements Serializable {
     out.y = tempy;
   }
   
-  public final static void mulTransToOutUnsafe(final Transform T, final Vec2 v, final Vec2 out) {
+  public static void mulTransToOutUnsafe(final Transform T, final Vec2 v, final Vec2 out) {
     assert(v != out);
     final float px = v.x - T.p.x;
     final float py = v.y - T.p.y;
@@ -120,7 +120,7 @@ public class Transform implements Serializable {
     out.y = (-T.q.s * px + T.q.c * py);
   }
 
-  public final static Transform mul(final Transform A, final Transform B) {
+  public static Transform mul(final Transform A, final Transform B) {
     Transform C = new Transform();
     Rot.mulUnsafe(A.q, B.q, C.q);
     Rot.mulToOutUnsafe(A.q, B.p, C.p);
@@ -128,14 +128,14 @@ public class Transform implements Serializable {
     return C;
   }
 
-  public final static void mulToOut(final Transform A, final Transform B, final Transform out) {
+  public static void mulToOut(final Transform A, final Transform B, final Transform out) {
     assert (out != A);
     Rot.mul(A.q, B.q, out.q);
     Rot.mulToOut(A.q, B.p, out.p);
     out.p.addLocal(A.p);
   }
 
-  public final static void mulToOutUnsafe(final Transform A, final Transform B, final Transform out) {
+  public static void mulToOutUnsafe(final Transform A, final Transform B, final Transform out) {
     assert (out != B);
     assert (out != A);
     Rot.mulUnsafe(A.q, B.q, out.q);
@@ -145,7 +145,7 @@ public class Transform implements Serializable {
 
   private static Vec2 pool = new Vec2();
 
-  public final static Transform mulTrans(final Transform A, final Transform B) {
+  public static Transform mulTrans(final Transform A, final Transform B) {
     Transform C = new Transform();
     Rot.mulTransUnsafe(A.q, B.q, C.q);
     pool.set(B.p).subLocal(A.p);
@@ -153,14 +153,14 @@ public class Transform implements Serializable {
     return C;
   }
 
-  public final static void mulTransToOut(final Transform A, final Transform B, final Transform out) {
+  public static void mulTransToOut(final Transform A, final Transform B, final Transform out) {
     assert (out != A);
     Rot.mulTrans(A.q, B.q, out.q);
     pool.set(B.p).subLocal(A.p);
     Rot.mulTrans(A.q, pool, out.p);
   }
 
-  public final static void mulTransToOutUnsafe(final Transform A, final Transform B,
+  public static void mulTransToOutUnsafe(final Transform A, final Transform B,
       final Transform out) {
     assert (out != A);
     assert (out != B);
