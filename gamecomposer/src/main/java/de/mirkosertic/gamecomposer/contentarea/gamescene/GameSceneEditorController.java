@@ -378,21 +378,23 @@ public class GameSceneEditorController implements ContentController<GameScene> {
             }
         });
 
+        Canvas thePreviewNode = thePreviewGameView.getCanvasNode();
+
         BorderPane theBorderPane = new BorderPane();
-        theBorderPane.setCenter(thePreviewGameView.getCanvasNode());
+        theBorderPane.setCenter(thePreviewNode);
         theBorderPane.setBottom(theLoggerView);
         theBorderPane.setMinWidth(BorderPane.USE_PREF_SIZE);
         theBorderPane.setMinHeight(BorderPane.USE_PREF_SIZE);
         theBorderPane.setPrefWidth(800);
         theBorderPane.setPrefHeight(600);
 
-        theBorderPane.widthProperty().addListener(new ChangeListener<Number>() {
+        thePreviewNode.widthProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
                 theEventManager.fire(new SetScreenResolution(new Size((int) ((double) number2), theCameraInstanceBehavior.getScreenSize().height)));
             }
         });
-        theBorderPane.heightProperty().addListener(new ChangeListener<Number>() {
+        thePreviewNode.heightProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
                 theEventManager.fire(new SetScreenResolution(new Size(theCameraInstanceBehavior.getScreenSize().width, (int) ((double) number2))));

@@ -34,7 +34,7 @@ public class GWTCanvasUtils {
         aContext.setFillStyle(theTextColor);
         aContext.setStrokeStyle(theTextColor);
         aContext.setFont(CSSUtils.toFont(aFont));
-        aContext.fillText(aText, aPosition.x, aPosition.y + aFont.size);
+        aContext.fillText(aText, -aSize.width / 2, aFont.size - aSize.height / 2);
         GWTCanvasUtils.restoreState(aContext, theSavedState);
     }
 

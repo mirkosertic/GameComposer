@@ -45,37 +45,34 @@ class DragomeGameView extends GenericAbstractGameView<DragomeGameResource> {
     }
 
     @Override
-    protected void beforeInstance(GameObjectInstance aInstance, float aOffsetX, float aOffsetY, Angle aRotation) {
+    protected void beforeInstance(GameObjectInstance aInstance, Position aPositionOnScreen, Position aCenterOffset, Angle aRotation) {
         renderingContext2D.save();
-        int theAngleInDegrees = aRotation.angleInDegrees;
-        renderingContext2D.translate(aOffsetX, aOffsetY);
-        if (theAngleInDegrees % 360 != 0) {
-            renderingContext2D.rotate(aRotation.toRadians());
-        }
+        renderingContext2D.translate(aPositionOnScreen.x + aCenterOffset.x, aPositionOnScreen.y + aCenterOffset.y);
+        renderingContext2D.rotate(aRotation.toRadians());
     }
 
     @Override
-    protected void drawImage(GameObjectInstance aInstance, Position aPositionOnScreen, DragomeGameResource aResource, float aPositionX, float aPositionY) {
+    protected void drawImage(GameObjectInstance aInstance, Position aPositionOnScreen, Position aCenterOffset, DragomeGameResource aResource) {
 		CanvasImageSource imageSource= JsDelegateFactory.createFromNode(aResource.getElement(), CanvasImageSource.class);
-        renderingContext2D.drawImage(imageSource, aPositionX, aPositionY);
+        renderingContext2D.drawImage(imageSource, -aCenterOffset.x, -aCenterOffset.y);
     }
 
     @Override
-    protected void drawText(GameObjectInstance aInstance, Position aPosition, Font aFont, Color aColor, String aText, Size aSize) {
+    protected void drawText(GameObjectInstance aInstance, Position aPosition, Position aCenterOffset, Font aFont, Color aColor, String aText, Size aSize) {
         String theTextColor = CSSUtils.toColor(aColor);
         renderingContext2D.setFillStyle(theTextColor);
         renderingContext2D.setStrokeStyle(theTextColor);
         renderingContext2D.setFont(CSSUtils.toFont(aFont));
-        renderingContext2D.fillText(aText, aPosition.x, aPosition.y + aFont.size);
+        renderingContext2D.fillText(aText, -aCenterOffset.x, aFont.size - aCenterOffset.y);
     }
 
     @Override
-    protected void drawRect(GameObjectInstance aInstance, Position aPositionOnScreen, Color aColor, float aX, float aY, float aWidth, float aHeight) {
+    protected void drawRect(GameObjectInstance aInstance, Position aPositionOnScreen, Position aCenterOffset, Color aColor, Size aSize) {
         String theColor = CSSUtils.toColor(aColor);
         renderingContext2D.setFillStyle(theColor);
         renderingContext2D.setStrokeStyle(theColor);
         renderingContext2D.setLineWidth(1);
-        renderingContext2D.strokeRect(aX, aY, (int) aWidth, (int) aHeight);
+        renderingContext2D.strokeRect(-aCenterOffset.x, -aCenterOffset.y, aSize.width, aSize.height);
     }
 
     @Override

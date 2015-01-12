@@ -251,11 +251,13 @@ public class GWTWebGLGameView extends GenericAbstractGameView<GWTBitmapResource>
     }
 
     private Context2d context2d;
+    private GWTCanvasUtils.SavedState savedState;
 
     @Override
     protected boolean beginFrame(GameScene aScene) {
 
         context2d = canvas.getContext2d();
+        savedState = GWTCanvasUtils.saveState(context2d);
 
         Color theBGColor = aScene.backgroundColorProperty().get();
         Size theSize = getCurrentScreenSize();
@@ -284,29 +286,30 @@ public class GWTWebGLGameView extends GenericAbstractGameView<GWTBitmapResource>
     }
 
     @Override
-    protected void beforeInstance(GameObjectInstance aInstance, float aOffsetX, float aOffsetY, Angle aRotation) {
+    protected void beforeInstance(GameObjectInstance aInstance, Position aPositionOnScreen, Position aCenterOffset, Angle aRotation) {
+        context2d.translate(aPositionOnScreen.x + aCenterOffset.x, aPositionOnScreen.y + aCenterOffset.y);
+        context2d.rotate(aRotation.toRadians());
     }
 
     @Override
-    protected void drawImage(GameObjectInstance aInstance, Position aPositionOnScreen, GWTBitmapResource aResource, float aPositionX,
-            float aPositionY) {
+    protected void drawImage(GameObjectInstance aInstance, Position aPositionOnScreen, Position aCenterOffset, GWTBitmapResource aResource) {
         sprite.render(aPositionOnScreen, aInstance.getOwnerGameObject().sizeProperty().get(), aInstance.rotationAngleProperty().get(), aResource);
     }
 
     @Override
-    protected void drawText(GameObjectInstance aInstance, Position aPosition, Font aFont, Color aColor, String aText,
+    protected void drawText(GameObjectInstance aInstance, Position aPosition, Position aCenterOffset, Font aFont, Color aColor, String aText,
             Size aSize) {
         GWTCanvasUtils.drawText(context2d, aPosition, aFont, aColor, aText, aSize);
     }
 
     @Override
-    protected void drawRect(GameObjectInstance aInstance, Position aPositionOnScreen, Color aColor, float aX, float aY, float aWidth,
-            float aHeight) {
+    protected void drawRect(GameObjectInstance aInstance, Position aPositionOnScreen, Position aCenterOffset, Color aColor, Size aSize) {
         sprite.render(aPositionOnScreen, aInstance.getOwnerGameObject().sizeProperty().get(), aInstance.rotationAngleProperty().get(), null);
     }
 
     @Override
     protected void afterInstance(GameObjectInstance aInstance, Position aPositionOnScreen) {
+        GWTCanvasUtils.restoreState(context2d, savedState);
     }
 
     @Override
