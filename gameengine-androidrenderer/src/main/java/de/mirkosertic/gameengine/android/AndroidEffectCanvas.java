@@ -17,6 +17,6 @@ public class AndroidEffectCanvas implements EffectCanvas {
     @Override
     public void drawSingleDot(Position aPosition, Color aColor) {
         canvas.drawRect(aPosition.x, aPosition.y, aPosition.x + 1, aPosition.y + 1,
-                AndroidUtils.toPaint(aColor));
+                AndroidUtils.toFilledPaint(aColor));
     }
 }
