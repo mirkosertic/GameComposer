@@ -65,36 +65,34 @@ public class JavaFXGameView extends GenericAbstractGameView<JavaFXBitmapResource
     }
 
     @Override
-    protected void beforeInstance(GameObjectInstance aInstance, float aOffsetX, float aOffsetY, Angle aRotation) {
+    protected void beforeInstance(GameObjectInstance aInstance, Position aPositionOnScreen, Position aCenterOffset, Angle aRotation) {
         int theAngleInDegrees = aRotation.angleInDegrees;
         if (theAngleInDegrees % 360 != 0) {
-            Rotate r = new Rotate(theAngleInDegrees, aOffsetX, aOffsetY);
+            Rotate r = new Rotate(theAngleInDegrees, aPositionOnScreen.x + aCenterOffset.x, aPositionOnScreen.y + aCenterOffset.y);
             context.setTransform(r.getMxx(), r.getMyx(), r.getMxy(), r.getMyy(), r.getTx(), r.getTy());
         }
-        context.translate(aOffsetX, aOffsetY);
     }
 
     @Override
-    protected void drawImage(GameObjectInstance aInstance, Position aPositionOnScreen, JavaFXBitmapResource aResource, float aPositionX, float aPositionY) {
-        context.drawImage(aResource, aPositionX, aPositionY);
+    protected void drawImage(GameObjectInstance aInstance, Position aPositionOnScreen, Position aCenterOffset, JavaFXBitmapResource aResource) {
+        context.drawImage(aResource, aPositionOnScreen.x, aPositionOnScreen.y);
     }
 
     @Override
-    protected void drawText(GameObjectInstance aInstance, Position aPosition, de.mirkosertic.gameengine.type.Font aFont, de.mirkosertic.gameengine.type.Color aColor, String aText, Size aSize) {
+    protected void drawText(GameObjectInstance aInstance, Position aPosition, Position aCenterOffset, de.mirkosertic.gameengine.type.Font aFont, de.mirkosertic.gameengine.type.Color aColor, String aText, Size aSize) {
         Color theTextColor = Color.rgb(aColor.r, aColor.g, aColor.b);
         context.setFill(theTextColor);
         context.setStroke(theTextColor);
         context.setFont(toFont(aFont));
-        context.translate(-aPosition.x, -aPosition.y);
         context.fillText(aText, aPosition.x, aPosition.y + aFont.size);
     }
 
     @Override
-    protected void drawRect(GameObjectInstance aInstance, Position aPositionOnScreen, de.mirkosertic.gameengine.type.Color aColor, float aX, float aY, float aWidth, float aHeight) {
+    protected void drawRect(GameObjectInstance aInstance, Position aPositionOnScreen, Position aCenterOffset, de.mirkosertic.gameengine.type.Color aColor, Size aSize) {
         context.setFill(Color.WHITE);
         context.setStroke(Color.WHITE);
         context.setLineWidth(1);
-        context.strokeRect(aX, aY, aWidth, aHeight);
+        context.strokeRect(aPositionOnScreen.x, aPositionOnScreen.y, aSize.width, aSize.height);
     }
 
     @Override

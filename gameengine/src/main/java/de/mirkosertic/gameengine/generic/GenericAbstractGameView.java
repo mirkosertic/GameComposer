@@ -39,13 +39,13 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
 
     protected abstract boolean beginFrame(GameScene aScene);
 
-    protected abstract void beforeInstance(GameObjectInstance aInstance, float aOffsetX, float aOffsetY, Angle aRotation);
+    protected abstract void beforeInstance(GameObjectInstance aInstance, Position aPositionOnScreen, Position aCenterOffset, Angle aRotation);
 
-    protected abstract void drawImage(GameObjectInstance aInstance, Position aPositionOnScreen, S aResource, float aPositionX, float aPositionY);
+    protected abstract void drawImage(GameObjectInstance aInstance, Position aPositionOnScreen, Position aCenterOffset, S aResource);
 
-    protected abstract void drawText(GameObjectInstance aInstance, Position aPosition, de.mirkosertic.gameengine.type.Font aFont, de.mirkosertic.gameengine.type.Color aColor, String aText, Size aSize);
+    protected abstract void drawText(GameObjectInstance aInstance, Position aPositionOnScreen, Position aCenterOffset, de.mirkosertic.gameengine.type.Font aFont, de.mirkosertic.gameengine.type.Color aColor, String aText, Size aSize);
 
-    protected abstract void drawRect(GameObjectInstance aInstance, Position aPositionOnScreen, Color aColor, float aX, float aY, float aWidth, float aHeight);
+    protected abstract void drawRect(GameObjectInstance aInstance, Position aPositionOnScreen, Position aCenterOffset, Color aColor, Size aSize);
 
     protected abstract void afterInstance(GameObjectInstance aInstance, Position aPositionOnScreen);
 
@@ -74,16 +74,18 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
 
         for (GameObjectInstance theInstance : theVisibleInstances) {
 
-            Position thePosition = cameraBehavior.transformToScreenPosition(theInstance);
+            Position thePositionOnScreen = cameraBehavior.transformToScreenPosition(theInstance);
 
             Size theSize = theInstance.getOwnerGameObject().sizeProperty().get();
 
             float theHalfWidth = theSize.width / 2;
             float theHalfHeight = theSize.height / 2;
 
+            Position theCenterOffset = new Position(theHalfWidth, theHalfHeight);
+
             Angle theAngle = theInstance.rotationAngleProperty().get();
 
-            beforeInstance(theInstance, thePosition.x + theHalfWidth, thePosition.y + theHalfHeight, theAngle);
+            beforeInstance(theInstance, thePositionOnScreen, theCenterOffset, theAngle);
 
             boolean theSomethingRendered = false;
 
@@ -96,7 +98,7 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
                         S theGameResource = gameRuntime.getResourceCache()
                                 .getResourceFor(theSpriteResource);
 
-                        drawImage(theInstance, thePosition, theGameResource, -theHalfWidth, -theHalfHeight);
+                        drawImage(theInstance, thePositionOnScreen, theCenterOffset, theGameResource);
 
                         theSomethingRendered = true;
 
@@ -126,7 +128,7 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
                     theTextToDraw = theExpression.expression;
                 }
 
-                drawText(theInstance, thePosition, theTextBehavior.fontProperty().get(),
+                drawText(theInstance, thePositionOnScreen, theCenterOffset, theTextBehavior.fontProperty().get(),
                         theTextBehavior.colorProperty().get(), theTextToDraw, theSize);
 
 
@@ -135,10 +137,10 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
 
             if (!theSomethingRendered) {
                 // Nothing was rendered.
-                drawRect(theInstance, thePosition, Color.WHITE, -theHalfWidth, -theHalfHeight, theSize.width, theSize.height);
+                drawRect(theInstance, thePositionOnScreen, theCenterOffset, Color.WHITE, theSize);
             }
 
-            afterInstance(theInstance, thePosition);
+            afterInstance(theInstance, thePositionOnScreen);
         }
 
         // Run the postprocessors

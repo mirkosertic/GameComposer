@@ -108,10 +108,15 @@ public class CameraBehavior implements Behavior, Camera, Reflectable<CameraClass
         }
         return theResult;
     }
+
     public Position transformToScreenPosition(GameObjectInstance aInstance) {
         if (aInstance.absolutePositionProperty().get()) {
             AbsolutePositionAnchor theAnchor = aInstance.absolutePositionAnchorProperty().get();
-            return theAnchor.compute(aInstance.positionProperty().get(), screenSize);
+            if (theAnchor != null) {
+                return theAnchor.compute(aInstance.positionProperty().get(), screenSize);
+            } else {
+                throw new IllegalStateException("instance " + aInstance.nameProperty().get()+" is set to invalid absolute position anchor");
+            }
         }
         return transformToScreenPosition(aInstance.positionProperty().get());
     }

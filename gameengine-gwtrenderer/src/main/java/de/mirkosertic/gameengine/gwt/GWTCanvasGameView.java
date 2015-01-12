@@ -46,42 +46,37 @@ public class GWTCanvasGameView extends GenericAbstractGameView<GWTBitmapResource
     }
 
     @Override
-    protected void beforeInstance(GameObjectInstance aInstance, float aOffsetX, float aOffsetY, Angle aRotation) {
-        int theAngleInDegrees = aRotation.angleInDegrees;
-        context2d.translate(aOffsetX, aOffsetY);
-        if (theAngleInDegrees % 360 != 0) {
-            context2d.rotate(aRotation.toRadians());
-        }
+    protected void beforeInstance(GameObjectInstance aInstance, Position aPositionOnScreen, Position aCenterOffset, Angle aRotation) {
+        context2d.translate(aPositionOnScreen.x + aCenterOffset.x, aPositionOnScreen.y + aCenterOffset.y);
+        context2d.rotate(aRotation.toRadians());
     }
 
     @Override
-    protected void drawImage(GameObjectInstance aInstance, Position aPositionOnScreen, GWTBitmapResource aResource, float aPositionX,
-            float aPositionY) {
+    protected void drawImage(GameObjectInstance aInstance, Position aPositionOnScreen, Position aCenterOffset, GWTBitmapResource aResource) {
         if (aResource.isLoaded()) {
-            context2d.drawImage(aResource.getImage(), aPositionX, aPositionY);
+            context2d.drawImage(aResource.getImage(), -aCenterOffset.x, -aCenterOffset.y);
         } else {
             Size theSize = aInstance.getOwnerGameObject().sizeProperty().get();
             context2d.setFillStyle(CssColor.make(255, 255, 255));
             context2d.setStrokeStyle(CssColor.make(255, 255, 255));
             context2d.setLineWidth(1);
-            context2d.strokeRect(aPositionX, aPositionY, theSize.width, theSize.height);
+            context2d.strokeRect(-aCenterOffset.x, -aCenterOffset.y, theSize.width, theSize.height);
         }
 
     }
 
     @Override
-    protected void drawText(GameObjectInstance aInstance, Position aPosition, Font aFont, Color aColor, String aText,
+    protected void drawText(GameObjectInstance aInstance, Position aPosition, Position aCenterOffset, Font aFont, Color aColor, String aText,
             Size aSize) {
         GWTCanvasUtils.drawText(context2d, aPosition, aFont, aColor, aText, aSize);
     }
 
     @Override
-    protected void drawRect(GameObjectInstance aInstance, Position aPositionOnScren, Color aColor, float aX, float aY, float aWidth,
-            float aHeight) {
+    protected void drawRect(GameObjectInstance aInstance, Position aPositionOnScren, Position aCenterOffset, Color aColor, Size aSize) {
         context2d.setFillStyle(CssColor.make(255, 255, 255));
         context2d.setStrokeStyle(CssColor.make(255, 255, 255));
         context2d.setLineWidth(1);
-        context2d.strokeRect(aX, aY, aWidth, aHeight);
+        context2d.strokeRect(-aCenterOffset.x, -aCenterOffset.y, aSize.width, aSize.height);
     }
 
     @Override

@@ -142,7 +142,11 @@ public class GWTRenderer implements EntryPoint {
             @Override
             public void handleResize() {
                 Size theSize = getScreenSize();
-                getRunningGameLoop().getScene().getRuntime().getEventManager().fire(new SetScreenResolution(theSize));
+                if (hasGameLoop()) {
+                    getRunningGameLoop().getScene().getRuntime().getEventManager().fire(new SetScreenResolution(theSize));
+                    gameView.setCurrentScreenSize(theSize);
+                }
+
                 resizeCanvas(theSize.width, theSize.height);
             }
         };

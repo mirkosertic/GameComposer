@@ -62,24 +62,24 @@ public class AndroidGameView extends GenericAbstractGameView<AndroidBitmapResour
     }
 
     @Override
-    protected void beforeInstance(GameObjectInstance aInstance, float aOffsetX, float aOffsetY, Angle aRotation) {
+    protected void beforeInstance(GameObjectInstance aInstance, Position aPositionOnScreen, Position aCenterOffset, Angle aRotation) {
         canvas.save();
 
         int theAngleInDegrees = aRotation.angleInDegrees;
         if (theAngleInDegrees % 360 != 0) {
-            canvas.rotate(theAngleInDegrees, aOffsetX, aOffsetY);
+            canvas.rotate(theAngleInDegrees, aPositionOnScreen.x + aCenterOffset.x, aPositionOnScreen.y + aCenterOffset.y);
         }
     }
 
     @Override
-    protected void drawImage(GameObjectInstance aInstance, Position aPositionOnScreen, AndroidBitmapResource aResource, float aPositionX, float aPositionY) {
+    protected void drawImage(GameObjectInstance aInstance, Position aPositionOnScreen, Position aCenterOffset, AndroidBitmapResource aResource) {
         Matrix theMatrix = new Matrix();
-        theMatrix.postTranslate(aPositionX, aPositionY);
+        theMatrix.postTranslate(aPositionOnScreen.x, aPositionOnScreen.y);
         canvas.drawBitmap(aResource.bitmap, theMatrix, emptyPaint);
     }
 
     @Override
-    protected void drawText(GameObjectInstance aInstance, Position aPosition, Font aFont, Color aColor, String aText, Size aSize) {
+    protected void drawText(GameObjectInstance aInstance, Position aPosition, Position aCenterOffset, Font aFont, Color aColor, String aText, Size aSize) {
         Paint thePaint = AndroidUtils.toPaint(aColor);
         thePaint.setTextSize(aFont.size);
         thePaint.setTypeface(toTypeface(aFont));
@@ -87,8 +87,8 @@ public class AndroidGameView extends GenericAbstractGameView<AndroidBitmapResour
     }
 
     @Override
-    protected void drawRect(GameObjectInstance aInstance, Position aPositionOnScreen, Color aColor, float aX, float aY, float aWidth, float aHeight) {
-        canvas.drawRect(aX, aY, aX + aWidth, aY + aHeight, AndroidUtils.toPaint(aColor));
+    protected void drawRect(GameObjectInstance aInstance, Position aPositionOnScreen, Position aCenterOffset, Color aColor, Size aSize) {
+        canvas.drawRect(aPositionOnScreen.x, aPositionOnScreen.y, aPositionOnScreen.x + aSize.width, aPositionOnScreen.y + aSize.height, AndroidUtils.toPaint(aColor));
     }
 
     @Override
