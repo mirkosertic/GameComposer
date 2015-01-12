@@ -49,7 +49,7 @@ public class AndroidGameView extends GenericAbstractGameView<AndroidBitmapResour
 
         canvas = theCanvas;
 
-        Paint theBackgroundPaint = AndroidUtils.toPaint(aScene.backgroundColorProperty().get());
+        Paint theBackgroundPaint = AndroidUtils.toFilledPaint(aScene.backgroundColorProperty().get());
         theCanvas.drawPaint(theBackgroundPaint);
         theCanvas.drawRect(0, 0, theCanvas.getWidth(), theCanvas.getHeight(), theBackgroundPaint);
 
@@ -65,10 +65,7 @@ public class AndroidGameView extends GenericAbstractGameView<AndroidBitmapResour
     protected void beforeInstance(GameObjectInstance aInstance, Position aPositionOnScreen, Position aCenterOffset, Angle aRotation) {
         canvas.save();
 
-        int theAngleInDegrees = aRotation.angleInDegrees;
-        if (theAngleInDegrees % 360 != 0) {
-            canvas.rotate(theAngleInDegrees, aPositionOnScreen.x + aCenterOffset.x, aPositionOnScreen.y + aCenterOffset.y);
-        }
+        canvas.rotate(aRotation.angleInDegrees, aPositionOnScreen.x + aCenterOffset.x, aPositionOnScreen.y + aCenterOffset.y);
     }
 
     @Override
@@ -80,15 +77,15 @@ public class AndroidGameView extends GenericAbstractGameView<AndroidBitmapResour
 
     @Override
     protected void drawText(GameObjectInstance aInstance, Position aPosition, Position aCenterOffset, Font aFont, Color aColor, String aText, Size aSize) {
-        Paint thePaint = AndroidUtils.toPaint(aColor);
+        Paint thePaint = AndroidUtils.toFilledPaint(aColor);
         thePaint.setTextSize(aFont.size);
         thePaint.setTypeface(toTypeface(aFont));
-        canvas.drawText(aText, aPosition.x, aPosition.y, thePaint);
+        canvas.drawText(aText, aPosition.x, aPosition.y + aFont.size, thePaint);
     }
 
     @Override
     protected void drawRect(GameObjectInstance aInstance, Position aPositionOnScreen, Position aCenterOffset, Color aColor, Size aSize) {
-        canvas.drawRect(aPositionOnScreen.x, aPositionOnScreen.y, aPositionOnScreen.x + aSize.width, aPositionOnScreen.y + aSize.height, AndroidUtils.toPaint(aColor));
+        canvas.drawRect(aPositionOnScreen.x, aPositionOnScreen.y, aPositionOnScreen.x + aSize.width, aPositionOnScreen.y + aSize.height, AndroidUtils.toStrokePaint(aColor));
     }
 
     @Override
