@@ -18,7 +18,7 @@ public class PreviewGameRuntimeFactory extends AbstractGameRuntimeFactory {
 
     @Override
     protected LuaJScriptEngineFactory createScriptEngine() {
-        return new LuaJScriptEngineFactory();
+        return new LuaJScriptEngineFactory(createBuildInFunctions());
     }
 
     @Override

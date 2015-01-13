@@ -74,6 +74,12 @@ public class CameraBehavior implements Behavior, Camera, Reflectable<CameraClass
 
     void setScreenSize(Size screenSize) {
         this.screenSize = screenSize;
+        switch (getTemplate().typeProperty().get()) {
+            case CENTERONSCENE:
+                // Recompute the center during resize
+                centerOnScene();
+                break;
+        }
     }
 
     public List<GameObjectInstance> getObjectsToDrawInRightOrder(GameScene aScene) {
@@ -169,10 +175,14 @@ public class CameraBehavior implements Behavior, Camera, Reflectable<CameraClass
                 aGameScene.getRuntime().getEventManager().fire(new StartProcess(new FollowCameraProcess(objectInstance, aPlayerInstance)));
                 break;
             case CENTERONSCENE:
-                Position thePosition = aGameScene.computeCenter();
-                centerOn(thePosition);
+                centerOnScene();
                 break;
         }
+    }
+
+    public void centerOnScene() {
+        Position thePosition = objectInstance.getOwnerGameObject().getGameScene().computeCenter();
+        centerOn(thePosition);
     }
 
     @Override

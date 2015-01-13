@@ -1,5 +1,5 @@
 {
-  "name" : "Example game",
   "enablewebgl" : "true",
+  "name" : "Example game",
   "defaultscene" : "scene1"
 }

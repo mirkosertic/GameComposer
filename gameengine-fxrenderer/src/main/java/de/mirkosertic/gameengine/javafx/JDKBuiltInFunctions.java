@@ -1,16 +1,13 @@
 package de.mirkosertic.gameengine.javafx;
 
-import de.mirkosertic.gameengine.annotations.InheritedClassInformation;
-import de.mirkosertic.gameengine.annotations.ReflectiveMethod;
 import de.mirkosertic.gameengine.type.BuiltInFunctions;
+import de.mirkosertic.gameengine.type.BuiltInFunctionsClassInformation;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 
-@InheritedClassInformation
 public class JDKBuiltInFunctions extends BuiltInFunctions {
 
-    @ReflectiveMethod
     @Override
     public String formatTime(Number aTimeInMilis, String aPattern) {
         SimpleDateFormat theFormat = new SimpleDateFormat(aPattern);
@@ -18,7 +15,7 @@ public class JDKBuiltInFunctions extends BuiltInFunctions {
     }
 
     @Override
-    public JDKBuiltInFunctionsClassInformation getClassInformation() {
-        return JDKBuiltInFunctionsClassInformation.INSTANCE;
+    public BuiltInFunctionsClassInformation getClassInformation() {
+        return BuiltInFunctionsClassInformation.INSTANCE;
     }
 }

@@ -50,7 +50,7 @@ public class LuaJScriptEngine implements LUAScriptEngine {
         return theTable;
     }
 
-    private static void registerTo(LuaTable aTable, Reflectable aObject) {
+    static void registerTo(LuaTable aTable, Reflectable aObject) {
         ClassInformation theClassInformation = aObject.getClassInformation();
         for (Field theField : theClassInformation.getFields()) {
             aTable.set(theField.getName(), new FieldAccessFunction(aObject, theField));
@@ -68,6 +68,15 @@ public class LuaJScriptEngine implements LUAScriptEngine {
     }
 
     private static Object toJavaValue(LuaValue aValue, Class aTargetClass) {
+        if (aTargetClass == Number.class) {
+            if (aValue.islong()) {
+                return aValue.tolong();
+            }
+            if (aValue.isint()) {
+                return aValue.toint();
+            }
+            throw new IllegalArgumentException("Cannot convert " + aValue +" to " + aTargetClass);
+        }
         if (aTargetClass == String.class) {
             return aValue.toString();
         }
