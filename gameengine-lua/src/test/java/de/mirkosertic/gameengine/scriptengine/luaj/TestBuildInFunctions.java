@@ -1,17 +1,17 @@
-package de.mirkosertic.gameengine.teavm;
+package de.mirkosertic.gameengine.scriptengine.luaj;
 
 import de.mirkosertic.gameengine.type.BuiltInFunctions;
 import de.mirkosertic.gameengine.type.BuiltInFunctionsClassInformation;
 
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
-public class TeaVMBuildInFunctions extends BuiltInFunctions {
+public class TestBuildInFunctions extends BuiltInFunctions {
 
     @Override
     public String formatTime(Number aTimeInMilis, String aPattern) {
         SimpleDateFormat theFormat = new SimpleDateFormat(aPattern);
-        return theFormat.format(new Date(aTimeInMilis.longValue()));
+        return theFormat.format(new Timestamp(aTimeInMilis.longValue()));
     }
 
     @Override

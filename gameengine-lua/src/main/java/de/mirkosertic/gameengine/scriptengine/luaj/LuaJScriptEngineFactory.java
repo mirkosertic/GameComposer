@@ -1,6 +1,7 @@
 package de.mirkosertic.gameengine.scriptengine.luaj;
 
 import de.mirkosertic.gameengine.scriptengine.LUAScriptEngineFactory;
+import de.mirkosertic.gameengine.type.Reflectable;
 import de.mirkosertic.gameengine.type.Script;
 import de.mirkosertic.gameengine.type.TextExpression;
 
@@ -18,12 +19,15 @@ public class LuaJScriptEngineFactory implements LUAScriptEngineFactory {
 
     private Map<String, Prototype> prototypes;
 
-    public LuaJScriptEngineFactory() {
+    private final Reflectable buildInFunctions;
+
+    public LuaJScriptEngineFactory(Reflectable aBuildInFunctions) {
         prototypes = new HashMap<>();
+        buildInFunctions = aBuildInFunctions;
     }
 
     private Globals createGlobals() {
-        Globals globals = new Globals();
+        Globals theGlobals = new Globals();
 //         globals.load(new BaseLib());
 //        globals.load(new PackageLib());
 //        globals.load(new Bit32Lib());
@@ -34,8 +38,12 @@ public class LuaJScriptEngineFactory implements LUAScriptEngineFactory {
 //        globals.load(new CoroutineLib());
 //        globals.load(new JmeIoLib());
 //        LoadState.install(globals);
-        LuaC.install(globals);
-        return globals;
+        LuaC.install(theGlobals);
+
+        LuaJScriptEngine.registerTo(theGlobals, buildInFunctions);
+
+
+        return theGlobals;
     }
 
     @Override

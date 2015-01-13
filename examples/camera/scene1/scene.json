@@ -1,85 +1,90 @@
 {
+  "cameraobjectid" : "1485398224565066807",
+  "eventsheets" : [ ],
+  "effects" : [ ],
   "layoutBounds" : {
-    "position" : {
-      "y" : "0.0",
-      "x" : "0.0"
-    },
     "size" : {
-      "height" : "2147483647",
-      "width" : "2147483647"
+      "width" : "2147483647",
+      "height" : "2147483647"
+    },
+    "position" : {
+      "x" : "0.0",
+      "y" : "0.0"
     }
   },
-  "eventsheets" : [ ],
-  "defaultplayerobjectid" : "8301087200528948168",
-  "cameraobjectid" : "1485398224565066807",
-  "name" : "First scene",
   "instances" : [ {
-    "position" : {
-      "y" : "328.0",
-      "x" : "371.0"
-    },
-    "visible" : "true",
+    "absolutePosition" : "false",
     "rotationangle" : {
       "angleindegrees" : "0"
     },
-    "absolutePosition" : "false",
-    "gameobjectuuid" : "8301087200528948168",
-    "name" : "Text_1390068921728",
     "components" : [ {
-      "color" : {
-        "g" : "255",
-        "b" : "255",
-        "r" : "255"
-      },
-      "font" : {
-        "name" : "ARIAL",
-        "size" : "65"
-      },
       "textExpression" : {
-        "expression" : "formattime(systime(),\"yyyy/MM/dd hh:mm:ss\")"
+        "expression" : "\"LUA said \" .. formatTime(systime(),\"yyyy/MM/dd hh:mm:ss\")"
       },
-      "type" : "Text"
+      "color" : {
+        "r" : "255",
+        "b" : "255",
+        "g" : "255"
+      },
+      "isScript" : "true",
+      "type" : "Text",
+      "font" : {
+        "size" : "30",
+        "name" : "ARIAL"
+      }
     } ],
-    "uuid" : "-7264050696901685674",
-    "absolutePositionAnchor" : "TOP_LEFT"
+    "visible" : "true",
+    "name" : "Text_1390068921728",
+    "gameobjectuuid" : "8301087200528948168",
+    "position" : {
+      "x" : "371.0",
+      "y" : "328.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-7264050696901685674"
   } ],
-  "backgroundcolor" : {
-    "g" : "0",
-    "b" : "0",
-    "r" : "0"
-  },
+  "defaultplayerobjectid" : "8301087200528948168",
   "objects" : [ {
+    "visible" : "true",
+    "size" : {
+      "width" : "64",
+      "height" : "64"
+    },
     "templates" : [ {
-      "cameratype" : "CENTERONSCENE",
-      "type" : "Camera"
+      "type" : "Camera",
+      "cameratype" : "CENTERONSCENE"
     } ],
     "name" : "Camera",
-    "uuid" : "1485398224565066807",
-    "size" : {
-      "height" : "64",
-      "width" : "64"
-    }
+    "uuid" : "1485398224565066807"
   }, {
+    "visible" : "true",
+    "size" : {
+      "width" : "460",
+      "height" : "64"
+    },
     "templates" : [ {
-      "color" : {
-        "g" : "255",
-        "b" : "255",
-        "r" : "255"
-      },
-      "font" : {
-        "name" : "ARIAL",
-        "size" : "65"
-      },
       "textExpression" : {
-        "expression" : "formattime(systime(),\"yyyy/MM/dd hh:mm:ss\")"
+        "expression" : "\"LUA said \" .. formatTime(systime(),\"yyyy/MM/dd hh:mm:ss\")"
       },
-      "type" : "Text"
+      "color" : {
+        "r" : "255",
+        "b" : "255",
+        "g" : "255"
+      },
+      "isScript" : "false",
+      "type" : "Text",
+      "font" : {
+        "size" : "65",
+        "name" : "ARIAL"
+      }
     } ],
     "name" : "Text",
-    "uuid" : "8301087200528948168",
-    "size" : {
-      "height" : "64",
-      "width" : "600"
-    }
-  } ]
+    "uuid" : "8301087200528948168"
+  } ],
+  "name" : "First scene",
+  "backgroundcolor" : {
+    "r" : "0",
+    "b" : "0",
+    "g" : "0"
+  }
 }
