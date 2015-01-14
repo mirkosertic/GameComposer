@@ -1,8 +1,6 @@
 package de.mirkosertic.gameengine.event;
 
-import de.mirkosertic.gameengine.type.ValueProvider;
-
-public class ReadOnlyProperty<T> implements ValueProvider {
+public class ReadOnlyProperty<T> {
 
     private final String name;
 
@@ -29,7 +27,6 @@ public class ReadOnlyProperty<T> implements ValueProvider {
         return name;
     }
 
-    @Override
     public T get() {
         return value;
     }

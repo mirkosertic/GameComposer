@@ -15,6 +15,22 @@ public class SpeedTest {
     }
 
     @Test
+    public void testIncrementBy() {
+        Speed theSpeed = new Speed(20);
+        Speed theOtherSpeed = theSpeed.incrementBy(10);
+        assertEquals(30L, theOtherSpeed.get(), 0);
+        assertNotSame(theSpeed, theOtherSpeed);
+    }
+
+    @Test
+    public void testResetToZero() {
+        Speed theSpeed = new Speed(10);
+        Speed theOtherSpeed = theSpeed.resetToZero();
+        assertEquals(0l, theOtherSpeed.get(), 0);
+        assertNotSame(theSpeed, theOtherSpeed);
+    }
+
+    @Test
     public void testSerialize() throws Exception {
         Speed theSpeed = new Speed(28);
         Map<String, Object> theData = theSpeed.serialize();

@@ -3,7 +3,7 @@ package de.mirkosertic.gameengine.type;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TextExpression implements ValueProvider<String> {
+public class TextExpression {
 
     public final String expression;
 
@@ -11,7 +11,6 @@ public class TextExpression implements ValueProvider<String> {
         expression = aExpression;
     }
 
-    @Override
     public String get() {
         return expression;
     }

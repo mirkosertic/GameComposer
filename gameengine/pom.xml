@@ -10,6 +10,12 @@
     </parent>
     <artifactId>gameengine</artifactId>
     <name>GameComposer Core GameEngine</name>
+
+    <scm>
+        <url>https://github.com/mirkosertic/GameComposer</url>
+        <connection>scm:git:git://github.com/mirkosertic/GameComposer.git</connection>
+    </scm>
+
     <build>
         <plugins>
             <plugin>

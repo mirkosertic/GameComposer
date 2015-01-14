@@ -15,6 +15,22 @@ public class ScoreValueTest {
     }
 
     @Test
+    public void testIncrement() {
+        ScoreValue theValue = new ScoreValue(10);
+        ScoreValue theNewValue = theValue.incrementBy(10);
+        assertEquals(20, theNewValue.get(), 0);
+        assertNotSame(theValue, theNewValue);
+    }
+
+    @Test
+    public void testResetToZero() {
+        ScoreValue theValue = new ScoreValue(10);
+        ScoreValue theNewValue = theValue.resetToZero();
+        assertEquals(0, theNewValue.get(), 0);
+        assertNotSame(theValue, theNewValue);
+    }
+
+    @Test
     public void testInitWithValue() {
         ScoreValue theValue = new ScoreValue(13);
         assertEquals(13l, theValue.get().longValue());
