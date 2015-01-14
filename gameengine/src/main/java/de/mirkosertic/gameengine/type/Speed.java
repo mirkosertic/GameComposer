@@ -1,9 +1,11 @@
 package de.mirkosertic.gameengine.type;
 
+import de.mirkosertic.gameengine.annotations.ReflectiveMethod;
+
 import java.util.HashMap;
 import java.util.Map;
 
-public class Speed implements ValueProvider<Long> {
+public class Speed implements Reflectable {
 
     public final long speed;
 
@@ -11,9 +13,23 @@ public class Speed implements ValueProvider<Long> {
         speed = aSpeed;
     }
 
-    @Override
     public Long get() {
         return speed;
+    }
+
+    @ReflectiveMethod
+    public Speed incrementBy(int aAmount) {
+        return new Speed(speed + aAmount);
+    }
+
+    @ReflectiveMethod
+    public Speed resetToZero() {
+        return new Speed(0);
+    }
+
+    @Override
+    public SpeedClassInformation getClassInformation() {
+        return SpeedClassInformation.INSTANCE;
     }
 
     public Map<String, Object> serialize() {

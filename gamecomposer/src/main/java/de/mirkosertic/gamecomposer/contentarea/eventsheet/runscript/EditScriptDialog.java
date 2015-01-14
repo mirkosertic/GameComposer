@@ -44,7 +44,6 @@ public class EditScriptDialog {
         modalStage = aModalStage;
         gameScene = aGameScene;
 
-        editorView.setContextMenuEnabled(false);
         editorView.getEngine().setJavaScriptEnabled(true);
         editorView.getEngine().getLoadWorker().stateProperty().addListener(new ChangeListener<Worker.State>() {
             @Override public void changed(ObservableValue<? extends Worker.State> observable, Worker.State oldValue,
@@ -132,6 +131,6 @@ public class EditScriptDialog {
     }
 
     public void performEditing() {
-        modalStage.showAndWait();
+        modalStage.show();
     }
 }

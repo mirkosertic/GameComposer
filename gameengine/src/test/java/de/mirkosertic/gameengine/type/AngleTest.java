@@ -31,6 +31,14 @@ public class AngleTest {
     }
 
     @Test
+    public void testResetToZero() {
+        Angle theAngle = new Angle(19);
+        Angle theZero = theAngle.resetToZero();
+        assertNotSame(theAngle, theZero);
+        assertEquals(0, theZero.get(), 0);
+    }
+
+    @Test
     public void testEquals() throws Exception {
         Angle theAngle1 = new Angle(10);
         Angle theAngle2 = new Angle(10);

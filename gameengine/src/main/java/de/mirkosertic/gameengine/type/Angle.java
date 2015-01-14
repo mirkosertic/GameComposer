@@ -1,9 +1,11 @@
 package de.mirkosertic.gameengine.type;
 
+import de.mirkosertic.gameengine.annotations.ReflectiveMethod;
+
 import java.util.HashMap;
 import java.util.Map;
 
-public class Angle implements ValueProvider<Integer> {
+public class Angle implements Reflectable {
 
     public final int angleInDegrees;
 
@@ -11,17 +13,23 @@ public class Angle implements ValueProvider<Integer> {
         angleInDegrees = aAngleInDegrees % 360;
     }
 
-    @Override
     public Integer get() {
         return angleInDegrees;
     }
 
+    @ReflectiveMethod
     public Angle add(int aDiff) {
         return new Angle(angleInDegrees + aDiff);
     }
 
+    @ReflectiveMethod
     public Angle invert() {
         return new Angle(-angleInDegrees);
+    }
+
+    @ReflectiveMethod
+    public Angle resetToZero() {
+        return new Angle(0);
     }
 
     public float toRadians() {
@@ -42,6 +50,11 @@ public class Angle implements ValueProvider<Integer> {
     @Override
     public int hashCode() {
         return angleInDegrees;
+    }
+
+    @Override
+    public AngleClassInformation getClassInformation() {
+        return AngleClassInformation.INSTANCE;
     }
 
     public Map<String, Object> serialize() {

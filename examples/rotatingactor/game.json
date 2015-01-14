@@ -1,5 +1,5 @@
 {
-  "name" : "Rotating actor example",
   "enablewebgl" : "true",
+  "name" : "Rotating actor example",
   "defaultscene" : "scene1"
 }

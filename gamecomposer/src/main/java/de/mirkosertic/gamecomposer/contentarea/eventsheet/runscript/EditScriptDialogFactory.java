@@ -39,7 +39,7 @@ public class EditScriptDialogFactory {
             theUndecoratorScene.setFill(Color.TRANSPARENT);
 
             theModalStage.setScene(theUndecoratorScene);
-            theModalStage.initModality(Modality.APPLICATION_MODAL);
+            //theModalStage.initModality(Modality.APPLICATION_MODAL);
             theModalStage.initOwner(aParent.getScene().getWindow());
             theDialog.initialize(aGameScene, aAction, theModalStage);
 

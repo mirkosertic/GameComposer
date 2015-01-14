@@ -2,6 +2,7 @@ package de.mirkosertic.gameengine.scriptengine.luaj;
 
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.event.Property;
+import de.mirkosertic.gameengine.event.ReadOnlyProperty;
 import de.mirkosertic.gameengine.scriptengine.LUAScriptEngine;
 import de.mirkosertic.gameengine.type.TypeConverters;
 import de.mirkosertic.gameengine.type.ClassInformation;
@@ -125,8 +126,8 @@ public class LuaJScriptEngine implements LUAScriptEngine {
 
         @Override
         public Varargs invoke(Varargs aArgs) {
-            if (field.getType() == Property.class) {
-                Property theProperty = (Property) field.getValue(object);
+            if ((field.getType() == Property.class) || (field.getType() == ReadOnlyProperty.class)) {
+                ReadOnlyProperty theProperty = (ReadOnlyProperty) field.getValue(object);
                 // If zero arg, it is a property read access
                 if (aArgs.narg() == 0) {
                     return toLuaValue(theProperty.get());
@@ -134,7 +135,11 @@ public class LuaJScriptEngine implements LUAScriptEngine {
                 if (aArgs.narg() != 1) {
                     throw new IllegalArgumentException("Only one argument supported to set property value, got " + aArgs.narg()+" arguments");
                 }
-                theProperty.set(toJavaValue(aArgs.arg(1)));
+                if (field.getType() == Property.class) {
+                    ((Property) theProperty).set(toJavaValue(aArgs.arg(1)));
+                } else {
+                    throw new IllegalArgumentException("Cannot set read-only properties");
+                }
                 return LuaValue.NIL;
             }
             // Normal field, we just support read access

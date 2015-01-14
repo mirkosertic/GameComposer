@@ -1,9 +1,11 @@
 package de.mirkosertic.gameengine.type;
 
+import de.mirkosertic.gameengine.annotations.ReflectiveMethod;
+
 import java.util.HashMap;
 import java.util.Map;
 
-public class ScoreValue implements ValueProvider<Long> {
+public class ScoreValue implements Reflectable {
 
     public final long score;
 
@@ -15,9 +17,23 @@ public class ScoreValue implements ValueProvider<Long> {
         score = aScore;
     }
 
-    @Override
+    @ReflectiveMethod
+    public ScoreValue incrementBy(long aAmount) {
+        return new ScoreValue(score + aAmount);
+    }
+
+    @ReflectiveMethod
+    public ScoreValue resetToZero() {
+        return new ScoreValue(0);
+    }
+
     public Long get() {
         return score;
+    }
+
+    @Override
+    public ScoreValueClassInformation getClassInformation() {
+        return ScoreValueClassInformation.INSTANCE;
     }
 
     @Override
