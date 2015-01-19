@@ -92,7 +92,7 @@ public class PersistenceManager {
         GameResourceLoader theResourceLoader = new JavaFXFileGameResourceLoader(theSceneDirectory);
         GameRuntime theRuntime = gameRuntimeFactory.create(theResourceLoader, new JavaSoundAPISoundSystemFactory());
 
-        GameScene theNewGameScene = new GameScene(theRuntime);
+        GameScene theNewGameScene = new GameScene(game, theRuntime);
         gameScenes.put(theSceneID, theNewGameScene);
 
         if (game.defaultSceneProperty().isNull()) {
@@ -126,6 +126,8 @@ public class PersistenceManager {
         ObjectReader theReader = theObjectMapper.reader(Map.class);
         Game theLoadedGame = Game.deserialize(theReader.<Map<String, Object>>readValue(aEvent.getGameFile()));
 
+        game = theLoadedGame;
+
         Map<String, GameScene> theLoadedScenes = new HashMap<>();
 
         // We detect scenes by scanning the directory for subdirectories with a game scene definition
@@ -142,7 +144,7 @@ public class PersistenceManager {
 
                     Map<String, Object> theSerializedData = theReader.readValue(theSceneDescriptor);
 
-                    GameScene theLoadedScene = GameScene.deserialize(gameRuntimeFactory.create(theResourceLoader, new JavaSoundAPISoundSystemFactory()), theSerializedData);
+                    GameScene theLoadedScene = GameScene.deserialize(game, gameRuntimeFactory.create(theResourceLoader, new JavaSoundAPISoundSystemFactory()), theSerializedData);
 
                     gameRuntimeFactory.loadingFinished(theLoadedScene);
 
@@ -152,7 +154,6 @@ public class PersistenceManager {
             }
         }
 
-        game = theLoadedGame;
         gameScenes = theLoadedScenes;
         eventGateway.fire(new GameLoadedEvent());
         currentGameDirectory = theGameDirectory;
@@ -224,15 +225,20 @@ public class PersistenceManager {
     }
 
     public GameScene cloneSceneForPreview(GameScene aGameScene) {
+
         for (Map.Entry<String, GameScene> theEntry : gameScenes.entrySet()) {
             if (theEntry.getValue() == aGameScene) {
+
                 File theSceneDirectory = new File(currentGameDirectory, theEntry.getKey());
 
                 GameResourceLoader theResourceLoader = new JavaFXFileGameResourceLoader(theSceneDirectory);
 
                 Map<String, Object> theSerializedData = aGameScene.serialize();
+                Map<String, Object> theSerializedGame = aGameScene.getGame().serialize();
 
-                GameScene theLoadedScene = GameScene.deserialize(previewGameRuntimeFactory.create(theResourceLoader, new JavaSoundAPISoundSystemFactory()), theSerializedData);
+                Game theClonedGame = Game.deserialize(theSerializedGame);
+
+                GameScene theLoadedScene = GameScene.deserialize(theClonedGame, previewGameRuntimeFactory.create(theResourceLoader, new JavaSoundAPISoundSystemFactory()), theSerializedData);
 
                 previewGameRuntimeFactory.loadingFinished(theLoadedScene);
 

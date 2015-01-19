@@ -25,6 +25,7 @@ public class IndexPage extends DefaultVisualActivity {
     private DragomeGameSceneLoader sceneLoader;
     private Window window;
     private PlaySceneStrategy playSceneStrategy;
+    private Game game;
 
     @Override
     public void build() {
@@ -50,9 +51,10 @@ public class IndexPage extends DefaultVisualActivity {
         DragomeGameLoader theLoader = new DragomeGameLoader(new DragomeGameLoader.GameLoadedListener() {
             @Override
             public void onGameLoaded(Game aGame) {
+                game = aGame;
                 String theSceneId = aGame.defaultSceneProperty().get();
                 DragomeLogger.info("Loading game scene " + theSceneId);
-                sceneLoader.loadFromServer(aGame.defaultSceneProperty().get(), new DragomeGameResourceLoader(theSceneId));
+                sceneLoader.loadFromServer(aGame, aGame.defaultSceneProperty().get(), new DragomeGameResourceLoader(theSceneId));
             }
 
             @Override
@@ -67,7 +69,7 @@ public class IndexPage extends DefaultVisualActivity {
 
             @Override
             protected void loadOtherScene(String aSceneId) {
-                sceneLoader.loadFromServer(aSceneId, new DragomeGameResourceLoader(aSceneId));
+                sceneLoader.loadFromServer(game, aSceneId, new DragomeGameResourceLoader(aSceneId));
             }
 
             @Override

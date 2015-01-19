@@ -50,11 +50,16 @@ public class GameTest {
         Game theGame = new Game();
         theGame.nameProperty().set("Testgame");
         theGame.defaultSceneProperty().set("scene1");
+        theGame.customPropertiesProperty().get().set("key", "value");
         Map<String, Object> theData = theGame.serialize();
-        assertEquals(3, theData.size());
+        assertEquals(4, theData.size());
         assertEquals("Testgame", theData.get(Game.NAME_PROPERTY));
         assertEquals("scene1", theData.get("defaultscene"));
         assertEquals("true", theData.get("enablewebgl"));
+
+        Map<String, String> theProps = (Map<String, String>) theData.get("customProperties");
+        assertEquals(1, theProps.size(), 0);
+        assertEquals("value", theProps.get("key"));
     }
 
     @Test
@@ -74,9 +79,15 @@ public class GameTest {
         theData.put(Game.NAME_PROPERTY, "Testgame");
         theData.put("defaultscene", "scene1");
         theData.put("enablewebgl", "false");
+
+        Map<String, String> theCustomProperties = new HashMap<>();
+        theCustomProperties.put("key", "value");
+        theData.put("customProperties", theCustomProperties);
+
         Game theGame = Game.deserialize(theData);
         assertEquals("Testgame", theGame.nameProperty().get());
         assertEquals("scene1", theGame.defaultSceneProperty().get());
         assertFalse(theGame.enableWebGLProperty().get());
+        assertEquals("value", theGame.customPropertiesProperty().get().get("key"));
     }
 }

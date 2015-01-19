@@ -69,6 +69,14 @@ public class LuaJScriptEngine implements LUAScriptEngine {
     }
 
     private static Object toJavaValue(LuaValue aValue, Class aTargetClass) {
+        if (aValue.istable()) {
+            LuaTable theTable = (LuaTable) aValue;
+            LuaValue theObject = theTable.get("javaobject");
+            if (theObject.isuserdata()) {
+                return theObject.checkuserdata();
+            }
+            throw new IllegalArgumentException("Cannot convert " + aValue+" to java object");
+        }
         if (aTargetClass == Number.class) {
             if (aValue.islong()) {
                 return aValue.tolong();
@@ -228,7 +236,9 @@ public class LuaJScriptEngine implements LUAScriptEngine {
     @Override
     public String evaluateSimpleExpressionFor(GameObjectInstance aObjectInstance) {
         Varargs theArguments = LuaValue.varargsOf(new LuaValue[] {
-                    toLuaValue(aObjectInstance)
+                    toLuaValue(aObjectInstance),
+                    toLuaValue(aObjectInstance.getOwnerGameObject().getGameScene()),
+                    toLuaValue(aObjectInstance.getOwnerGameObject().getGameScene().getGame()),
             });
         Varargs theResult = methodToCall.invoke(theArguments);
         if (theResult.narg() == 1) {

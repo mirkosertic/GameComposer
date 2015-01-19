@@ -54,7 +54,7 @@ public class LuaJScriptEngineFactory implements LUAScriptEngineFactory {
     @Override
     public LuaJScriptEngine createNewEngine(TextExpression aExpression) throws IOException {
 
-        StringBuilder theScriptCode = new StringBuilder("function process(aInstance) return ");
+        StringBuilder theScriptCode = new StringBuilder("function process(instance, scene, game) return ");
         theScriptCode.append(aExpression.expression);
         theScriptCode.append(" end");
 
