@@ -33,6 +33,7 @@ public class TeaVMRenderer {
     private TeaVMGameSceneLoader sceneLoader;
     private HTMLCanvasElement canvasElement;
     private HTMLElement resourceCache;
+    private Game game;
 
     private TeaVMRenderer() {
     }
@@ -65,7 +66,7 @@ public class TeaVMRenderer {
 
             @Override
             protected void loadOtherScene(String aSceneId) {
-                sceneLoader.loadFromServer(aSceneId, new TeaVMGameResourceLoader(aSceneId, document, resourceCache));
+                sceneLoader.loadFromServer(game, aSceneId, new TeaVMGameResourceLoader(aSceneId, document, resourceCache));
             }
 
             @Override
@@ -95,9 +96,10 @@ public class TeaVMRenderer {
         new TeaVMGameLoader(new TeaVMGameLoader.GameLoadedListener() {
             @Override
             public void onGameLoaded(Game aGame) {
+                game = aGame;
                 String theSceneId = aGame.defaultSceneProperty().get();
                 TeaVMLogger.info("Loading scene " + theSceneId);
-                sceneLoader.loadFromServer(theSceneId, new TeaVMGameResourceLoader(theSceneId, document, resourceCache));
+                sceneLoader.loadFromServer(game, theSceneId, new TeaVMGameResourceLoader(theSceneId, document, resourceCache));
             }
 
             @Override

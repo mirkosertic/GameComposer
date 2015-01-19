@@ -24,6 +24,11 @@
       "actions" : [ {
         "resourceName" : "/assets/audio/pickup_gem_1.wav",
         "type" : "PlaySoundAction"
+      }, {
+        "type" : "RunScriptAction",
+        "script" : {
+          "script" : "--\n-- This is the default method of every action. It is called once for every game loop cycle.\n--\n-- instance is an optional injected object which is a reference to the GameObjectInstance for \n-- which this script is executed.\n-- scene is an injected object which is a reference to the GameScene for \n-- which this script is executed.\n--\nfunction proceedGame(aGameTime, aElapsedTimeSinceLastLoop) \n\n    -- Remove the star from the scene, completely kill it\n    scene.removeGameObjectInstance(instance)\n    \n\t-- The method must return either STOPPED or CONTINUE_RUNNING\n\t-- STOPPED will kill the script, it is not invoked the next time\n\t-- CONTINUE_RUNNING will invoke the skript the next game loop cycle.\n\treturn 'STOPPED'\nend"
+        }
       } ]
     }, {
       "condition" : {
@@ -37,22 +42,10 @@
         "gameScene" : "scene2",
         "type" : "RunSceneAction"
       } ]
-    }, {
-      "condition" : {
-        "keyCode" : "T",
-        "eventType" : "PRESSED",
-        "type" : "KeyEventCondition"
-      },
-      "name" : "Start LUA Script by pressing T key",
-      "actions" : [ {
-        "type" : "RunScriptAction",
-        "script" : {
-          "script" : "--\n-- This is the default method of every action. It is called once for every game loop cycle.\n--\n-- instance is an optional injected object which is a reference to the GameObjectInstance for \n-- which this script is executed.\n-- scene is an injected object which is a reference to the GameScene for \n-- which this script is executed.\n--\nfunction proceedGame(aGameTime, aElapsedTimeSinceLastLoop) \n\n    local leveltext = scene.findInstanceByName('leveltext')\n    local textbehavior = leveltext.findBehaviorByType('Text')\n    textbehavior.textExpressionProperty(textexpression('\\\"Changed by LUA at ' .. aGameTime .. '\\\"'))\n\t-- The method must return either STOPPED or CONTINUE_RUNNING\n\t-- STOPPED will kill the script, it is not invoked the next time\n\t-- CONTINUE_RUNNING will invoke the skript the next game loop cycle.\n\treturn 'CONTINUE_RUNNING'\nend"
-        }
-      } ]
     } ]
   } ],
   "effects" : [ ],
+  "customProperties" : { },
   "layoutBounds" : {
     "size" : {
       "width" : "1400",
@@ -88,10 +81,10 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "active" : "true",
       "type" : "Physics"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Star_1384888985355",
@@ -108,10 +101,10 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "active" : "true",
       "type" : "Physics"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Star_1384888988875",
@@ -128,10 +121,10 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "active" : "true",
       "type" : "Physics"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Star_1384888993618",
@@ -148,10 +141,10 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "active" : "true",
       "type" : "Physics"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Star_1384888996543",
@@ -168,10 +161,10 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "active" : "true",
       "type" : "Physics"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Star_1384888999417",
@@ -188,10 +181,10 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "active" : "true",
       "type" : "Physics"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Star_1384889002239",
@@ -1300,10 +1293,10 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "active" : "true",
       "type" : "Physics"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "bean_small_1384375980691",
@@ -1320,10 +1313,10 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "active" : "true",
       "type" : "Physics"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "bean_small_1384414773959",
@@ -1340,10 +1333,10 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "active" : "true",
       "type" : "Physics"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "bean_small_1384414777213",
@@ -1495,6 +1488,7 @@
         "b" : "255",
         "g" : "255"
       },
+      "isScript" : "false",
       "type" : "Text",
       "font" : {
         "size" : "32",
@@ -1538,14 +1532,6 @@
       "moveRightKey" : "RIGHT",
       "jumpKey" : "UP"
     }, {
-      "fixedrotation" : "true",
-      "density" : "1.0",
-      "restitution" : "0.0",
-      "gravityScale" : "1.0",
-      "active" : "true",
-      "type" : "Physics",
-      "friction" : "1.8"
-    }, {
       "animations" : [ {
         "animationSequence" : [ {
           "name" : "/assets/objects/duke_small.png"
@@ -1556,6 +1542,14 @@
       "currentAnimation" : "2546253489879601260",
       "type" : "Sprite",
       "speed" : "5"
+    }, {
+      "fixedrotation" : "true",
+      "density" : "1.0",
+      "restitution" : "0.0",
+      "gravityScale" : "1.0",
+      "active" : "true",
+      "type" : "Physics",
+      "friction" : "1.8"
     } ],
     "name" : "Duke",
     "uuid" : "-279500599772276169"
@@ -1574,6 +1568,7 @@
         "b" : "255",
         "g" : "255"
       },
+      "isScript" : "false",
       "type" : "Text",
       "font" : {
         "size" : "32",
@@ -1589,14 +1584,6 @@
       "height" : "48"
     },
     "templates" : [ {
-      "fixedrotation" : "false",
-      "density" : "1.0",
-      "restitution" : "0.0",
-      "gravityScale" : "0.0",
-      "active" : "true",
-      "type" : "Physics",
-      "friction" : "1.8"
-    }, {
       "animations" : [ {
         "animationSequence" : [ {
           "name" : "/assets/objects/star.png"
@@ -1607,6 +1594,14 @@
       "currentAnimation" : "2308829684020853259",
       "type" : "Sprite",
       "speed" : "5"
+    }, {
+      "fixedrotation" : "false",
+      "density" : "1.0",
+      "restitution" : "0.0",
+      "gravityScale" : "0.0",
+      "active" : "true",
+      "type" : "Physics",
+      "friction" : "1.8"
     } ],
     "name" : "Star",
     "uuid" : "4343694719606608272"
@@ -1835,14 +1830,6 @@
       "height" : "34"
     },
     "templates" : [ {
-      "fixedrotation" : "false",
-      "density" : "1.0",
-      "restitution" : "0.0",
-      "gravityScale" : "1.0",
-      "active" : "true",
-      "type" : "Physics",
-      "friction" : "1.8"
-    }, {
       "animations" : [ {
         "animationSequence" : [ {
           "name" : "/assets/objects/bean_small.png"
@@ -1853,6 +1840,14 @@
       "currentAnimation" : "4698902611196449120",
       "type" : "Sprite",
       "speed" : "5"
+    }, {
+      "fixedrotation" : "false",
+      "density" : "1.0",
+      "restitution" : "0.0",
+      "gravityScale" : "1.0",
+      "active" : "true",
+      "type" : "Physics",
+      "friction" : "1.8"
     } ],
     "name" : "bean_small",
     "uuid" : "427110152030095327"

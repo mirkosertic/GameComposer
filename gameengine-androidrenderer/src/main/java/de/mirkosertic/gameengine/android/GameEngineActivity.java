@@ -161,7 +161,7 @@ public class GameEngineActivity extends Activity {
             AndroidGameResourceLoader theResourceLoader = new AndroidGameResourceLoader(theAssetManager, getCacheDir(), aSceneID);
 
             GameRuntime theRuntime = gameRuntimeFactory.create(theResourceLoader, gameSoundSystemFactory);
-            GameScene theGameScene = GameScene.deserialize(theRuntime, theGameData);
+            GameScene theGameScene = GameScene.deserialize(game, theRuntime, theGameData);
 
             playScene(theGameScene);
 

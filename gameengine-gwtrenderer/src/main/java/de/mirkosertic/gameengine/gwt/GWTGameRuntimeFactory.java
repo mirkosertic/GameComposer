@@ -1,6 +1,7 @@
 package de.mirkosertic.gameengine.gwt;
 
 import de.mirkosertic.gameengine.AbstractGameRuntimeFactory;
+import de.mirkosertic.gameengine.core.Game;
 import de.mirkosertic.gameengine.core.GameResourceLoader;
 import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.event.GameEventListener;

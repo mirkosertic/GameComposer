@@ -93,7 +93,7 @@ public class GWTRenderer implements EntryPoint {
             @Override
             public void onGameLoaded(Game aGame) {
                 game = aGame;
-                sceneLoader.loadFromServer(aGame.defaultSceneProperty().get(), new GWTGameResourceLoader(aGame.defaultSceneProperty().get()));
+                sceneLoader.loadFromServer(aGame, aGame.defaultSceneProperty().get(), new GWTGameResourceLoader(aGame.defaultSceneProperty().get()));
             }
 
             @Override
@@ -108,7 +108,7 @@ public class GWTRenderer implements EntryPoint {
 
             @Override
             protected void loadOtherScene(String aSceneId) {
-                sceneLoader.loadFromServer(aSceneId, new GWTGameResourceLoader(aSceneId));
+                sceneLoader.loadFromServer(game, aSceneId, new GWTGameResourceLoader(aSceneId));
             }
 
             @Override

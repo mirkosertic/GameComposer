@@ -38,6 +38,7 @@ public class ScriptProcess implements GameProcess {
                     scriptEngine.registerObject("instance", instance);
                 }
                 scriptEngine.registerObject("scene", scene);
+                scriptEngine.registerObject("game", scene.getGame());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

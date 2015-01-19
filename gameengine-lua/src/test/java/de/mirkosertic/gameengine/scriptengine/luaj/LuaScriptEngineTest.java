@@ -1,5 +1,6 @@
 package de.mirkosertic.gameengine.scriptengine.luaj;
 
+import de.mirkosertic.gameengine.core.Game;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
@@ -68,8 +69,9 @@ public class LuaScriptEngineTest {
         GameEventManager theEventManager = new GameEventManager();
         GameRuntime theRuntime = mock(GameRuntime.class);
         when(theRuntime.getEventManager()).thenReturn(theEventManager);
+        Game theGame = mock(Game.class);
 
-        GameScene theGameScene = new GameScene(theRuntime);
+        GameScene theGameScene = new GameScene(theGame, theRuntime);
         GameObject theObject = new GameObject(theGameScene, "Test");
 
         String theScript = "function proceedGame(aGameTime, aElapsedTimeSinceLastLoop) return go.nameProperty() end";
@@ -86,7 +88,8 @@ public class LuaScriptEngineTest {
         GameRuntime theRuntime = mock(GameRuntime.class);
         when(theRuntime.getEventManager()).thenReturn(theEventManager);
 
-        GameScene theGameScene = new GameScene(theRuntime);
+        Game theGame = mock(Game.class);
+        GameScene theGameScene = new GameScene(theGame, theRuntime);
         GameObject theObject = new GameObject(theGameScene, "Test");
 
         String theScript = "function proceedGame(aGameTime, aElapsedTimeSinceLastLoop) go.nameProperty('hallo'); return go end";
@@ -104,8 +107,8 @@ public class LuaScriptEngineTest {
         GameEventManager theEventManager = new GameEventManager();
         GameRuntime theRuntime = mock(GameRuntime.class);
         when(theRuntime.getEventManager()).thenReturn(theEventManager);
-
-        GameScene theGameScene = new GameScene(theRuntime);
+        Game theGame = new Game();
+        GameScene theGameScene = new GameScene(theGame, theRuntime);
         GameObject theObject = new GameObject(theGameScene, "Test");
         GameObjectInstance theInstance = theGameScene.createFrom(theObject);
 

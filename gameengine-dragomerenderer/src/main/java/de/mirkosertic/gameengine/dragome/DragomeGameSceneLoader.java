@@ -1,6 +1,7 @@
 package de.mirkosertic.gameengine.dragome;
 
 import de.mirkosertic.gameengine.AbstractGameRuntimeFactory;
+import de.mirkosertic.gameengine.core.Game;
 import de.mirkosertic.gameengine.core.GameScene;
 
 import java.util.HashMap;
@@ -25,11 +26,11 @@ class DragomeGameSceneLoader {
         runtimeFactory = aRuntimeFactory;
     }
 
-    public void loadFromServer(String aSceneName, final DragomeGameResourceLoader aResourceLoader) {
+    public void loadFromServer(Game aGame, String aSceneName, final DragomeGameResourceLoader aResourceLoader) {
         RequestExecutorImpl.executeHttpRequest(true, aSceneName+"/scene.json", new HashMap<>(), new AsyncCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                listener.onGameSceneLoaded(parse(result, aResourceLoader));
+                listener.onGameSceneLoaded(parse(aGame, result, aResourceLoader));
             }
 
             @Override
@@ -39,9 +40,9 @@ class DragomeGameSceneLoader {
         }, false, true);
     }
 
-    private GameScene parse(String aResponse, DragomeGameResourceLoader aResourceLoader) {
+    private GameScene parse(Game aGame, String aResponse, DragomeGameResourceLoader aResourceLoader) {
         Map<String, Object> theResult = (Map<String, Object>)
                 ServiceLocator.getInstance().getSerializationService().deserialize(aResponse);
-        return GameScene.deserialize(runtimeFactory.create(aResourceLoader, new DragomeGameSoundSystemFactory()), theResult);
+        return GameScene.deserialize(aGame, runtimeFactory.create(aResourceLoader, new DragomeGameSoundSystemFactory()), theResult);
     }
 }

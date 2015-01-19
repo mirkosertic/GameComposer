@@ -10,6 +10,7 @@ import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONValue;
 
 import de.mirkosertic.gameengine.AbstractGameRuntimeFactory;
+import de.mirkosertic.gameengine.core.Game;
 import de.mirkosertic.gameengine.core.GameScene;
 
 class GWTGameSceneLoader {
@@ -27,13 +28,13 @@ class GWTGameSceneLoader {
         runtimeFactory = aRuntimeFactory;
     }
 
-    public void loadFromServer(String aSceneName, final GWTGameResourceLoader aResourceLoader) {
+    public void loadFromServer(final Game aGame, String aSceneName, final GWTGameResourceLoader aResourceLoader) {
         RequestBuilder theBuilder = new RequestBuilder(RequestBuilder.GET, aSceneName+"/scene.json");
         try {
             theBuilder.sendRequest(null, new RequestCallback() {
                 @Override
                 public void onResponseReceived(Request aRequest, Response aResponse) {
-                    listener.onGameSceneLoaded(parse(aResponse, aResourceLoader));
+                    listener.onGameSceneLoaded(parse(aGame, aResponse, aResourceLoader));
                 }
 
                 @Override
@@ -48,9 +49,9 @@ class GWTGameSceneLoader {
         }
     }
     
-    private GameScene parse(Response aResponse, GWTGameResourceLoader aResourceLoader) {
+    private GameScene parse(Game aGame, Response aResponse, GWTGameResourceLoader aResourceLoader) {
         JSONValue theJSONParsed = JSONParser.parseStrict(aResponse.getText());
         Map<String, Object> theResult = JSONUtils.toMap(theJSONParsed);
-        return GameScene.deserialize(runtimeFactory.create(aResourceLoader, new GWTGameSoundSystemFactory()), theResult);
+        return GameScene.deserialize(aGame, runtimeFactory.create(aResourceLoader, new GWTGameSoundSystemFactory()), theResult);
     }
 }

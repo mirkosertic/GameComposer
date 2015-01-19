@@ -208,6 +208,11 @@
                     </mutators>
                     <verbose>false</verbose>
                     <threads>4</threads>
+                    <outputFormats>
+                        <outputFormat>HTML</outputFormat>
+                        <outputFormat>XML</outputFormat>
+                    </outputFormats>
+                    <failWhenNoMutations>false</failWhenNoMutations>
                 </configuration>
             </plugin>
             <plugin>
@@ -227,6 +232,11 @@
                     <shortRevisionLength>7</shortRevisionLength>
                     <getRevisionOnlyOnce>true</getRevisionOnlyOnce>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>2.5</version>
             </plugin>
         </plugins>
     </build>

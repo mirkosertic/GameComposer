@@ -1,6 +1,7 @@
 package de.mirkosertic.gameengine.teavm;
 
 import de.mirkosertic.gameengine.AbstractGameRuntimeFactory;
+import de.mirkosertic.gameengine.core.Game;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.teavm.json.JSONAPI;
 import de.mirkosertic.gameengine.teavm.json.JSONAPIProvider;
@@ -30,7 +31,7 @@ public class TeaVMGameSceneLoader {
         window = aWindow;
     }
 
-    public void loadFromServer(String aSceneName, final TeaVMGameResourceLoader aResourceLoader) {
+    public void loadFromServer(final Game aGame, String aSceneName, final TeaVMGameResourceLoader aResourceLoader) {
         final XMLHttpRequest theRequest = window.createXMLHttpRequest();
         theRequest.open("GET", aSceneName+"/scene.json");
         theRequest.setOnReadyStateChange(new ReadyStateChangeHandler() {
@@ -40,16 +41,16 @@ public class TeaVMGameSceneLoader {
                     default:
                         break;
                     case XMLHttpRequest.DONE:
-                        listener.onGameSceneLoaded(parse(theRequest.getResponseText(), aResourceLoader));
+                        listener.onGameSceneLoaded(parse(aGame, theRequest.getResponseText(), aResourceLoader));
                 }
             }
         });
         theRequest.send();
     }
 
-    private GameScene parse(String aResponse, TeaVMGameResourceLoader aResourceLoader) {
+    private GameScene parse(Game aGame, String aResponse, TeaVMGameResourceLoader aResourceLoader) {
         JSONAPI theAPI = ((JSONAPIProvider) JS.getGlobal()).getJSONAPI();
         Map<String, Object> theResult = new JSONMap(theAPI.parse(aResponse));
-        return GameScene.deserialize(runtimeFactory.create(aResourceLoader, new TeaVMGameSoundSystemFactory()), theResult);
+        return GameScene.deserialize(aGame, runtimeFactory.create(aResourceLoader, new TeaVMGameSoundSystemFactory()), theResult);
     }
 }

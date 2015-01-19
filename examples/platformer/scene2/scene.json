@@ -39,6 +39,7 @@
     } ]
   } ],
   "effects" : [ ],
+  "customProperties" : { },
   "layoutBounds" : {
     "size" : {
       "width" : "1400",
@@ -82,6 +83,7 @@
         "b" : "255",
         "g" : "255"
       },
+      "isScript" : "false",
       "type" : "Text",
       "font" : {
         "size" : "32",
@@ -103,10 +105,10 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "active" : "true",
       "type" : "Physics"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Star_1384888985355",
@@ -123,10 +125,10 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "active" : "true",
       "type" : "Physics"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Star_1384888988875",
@@ -143,10 +145,10 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "active" : "true",
       "type" : "Physics"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Star_1384888993618",
@@ -163,10 +165,10 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "active" : "true",
       "type" : "Physics"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Star_1384888996543",
@@ -183,10 +185,10 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "active" : "true",
       "type" : "Physics"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Star_1384888999417",
@@ -203,10 +205,10 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "active" : "true",
       "type" : "Physics"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Star_1384889002239",
@@ -1315,10 +1317,10 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "active" : "true",
       "type" : "Physics"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "bean_small_1384375980691",
@@ -1335,10 +1337,10 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "active" : "true",
       "type" : "Physics"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "bean_small_1384414773959",
@@ -1355,10 +1357,10 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "active" : "true",
       "type" : "Physics"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "bean_small_1384414777213",
@@ -1524,14 +1526,6 @@
       "moveRightKey" : "RIGHT",
       "jumpKey" : "UP"
     }, {
-      "fixedrotation" : "true",
-      "density" : "1.0",
-      "restitution" : "0.0",
-      "gravityScale" : "1.0",
-      "active" : "true",
-      "type" : "Physics",
-      "friction" : "1.8"
-    }, {
       "animations" : [ {
         "animationSequence" : [ {
           "name" : "/assets/objects/duke_small.png"
@@ -1542,6 +1536,14 @@
       "currentAnimation" : "-3179839752120044799",
       "type" : "Sprite",
       "speed" : "5"
+    }, {
+      "fixedrotation" : "true",
+      "density" : "1.0",
+      "restitution" : "0.0",
+      "gravityScale" : "1.0",
+      "active" : "true",
+      "type" : "Physics",
+      "friction" : "1.8"
     } ],
     "name" : "Duke",
     "uuid" : "-279500599772276169"
@@ -1560,6 +1562,7 @@
         "b" : "255",
         "g" : "255"
       },
+      "isScript" : "false",
       "type" : "Text",
       "font" : {
         "size" : "32",
@@ -1575,14 +1578,6 @@
       "height" : "48"
     },
     "templates" : [ {
-      "fixedrotation" : "false",
-      "density" : "1.0",
-      "restitution" : "0.0",
-      "gravityScale" : "0.0",
-      "active" : "true",
-      "type" : "Physics",
-      "friction" : "1.8"
-    }, {
       "animations" : [ {
         "animationSequence" : [ {
           "name" : "/assets/objects/star.png"
@@ -1593,6 +1588,14 @@
       "currentAnimation" : "-6069259192229564253",
       "type" : "Sprite",
       "speed" : "5"
+    }, {
+      "fixedrotation" : "false",
+      "density" : "1.0",
+      "restitution" : "0.0",
+      "gravityScale" : "0.0",
+      "active" : "true",
+      "type" : "Physics",
+      "friction" : "1.8"
     } ],
     "name" : "Star",
     "uuid" : "4343694719606608272"
@@ -1821,14 +1824,6 @@
       "height" : "34"
     },
     "templates" : [ {
-      "fixedrotation" : "false",
-      "density" : "1.0",
-      "restitution" : "0.0",
-      "gravityScale" : "1.0",
-      "active" : "true",
-      "type" : "Physics",
-      "friction" : "1.8"
-    }, {
       "animations" : [ {
         "animationSequence" : [ {
           "name" : "/assets/objects/bean_small.png"
@@ -1839,6 +1834,14 @@
       "currentAnimation" : "-1156592985157513399",
       "type" : "Sprite",
       "speed" : "5"
+    }, {
+      "fixedrotation" : "false",
+      "density" : "1.0",
+      "restitution" : "0.0",
+      "gravityScale" : "1.0",
+      "active" : "true",
+      "type" : "Physics",
+      "friction" : "1.8"
     } ],
     "name" : "bean_small",
     "uuid" : "427110152030095327"

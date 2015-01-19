@@ -20,12 +20,14 @@ public class GameScene implements Reflectable<GameSceneClassInformation> {
     public static final String DEFAULT_PLAYER_PROPERTY = "defaultPlayer";
     public static final String COLOR_PROPERTY = "color";
     public static final String LAYOUT_BOUNDS_PROPERTY = "layoutBounds";
+    public static final String CUSTOM_PROPERTIES_PROPERTY = "customProperties";
 
-    final Property<String> name;
-    final Property<GameObject> cameraObject;
-    final Property<GameObject> defaultPlayer;
-    final Property<Color> backgroundColor;
-    final Property<Rectangle> layoutBounds;
+    private final Property<String> name;
+    private final Property<GameObject> cameraObject;
+    private final Property<GameObject> defaultPlayer;
+    private final Property<Color> backgroundColor;
+    private final Property<Rectangle> layoutBounds;
+    private final Property<CustomProperties> customProperties;
 
     private GameObject[] objects;
     private GameObjectInstance[] instances;
@@ -36,8 +38,11 @@ public class GameScene implements Reflectable<GameSceneClassInformation> {
 
     private final GameRuntime gameRuntime;
 
-    public GameScene(GameRuntime aGameRuntime) {
+    private final Game game;
 
+    public GameScene(Game aGame, GameRuntime aGameRuntime) {
+
+        game = aGame;
         GameEventManager theManager = aGameRuntime.getEventManager();
 
         name = new Property<>(String.class, this, NAME_PROPERTY, null, theManager);
@@ -45,6 +50,7 @@ public class GameScene implements Reflectable<GameSceneClassInformation> {
         defaultPlayer = new Property<>(GameObject.class, this, DEFAULT_PLAYER_PROPERTY, null, theManager);
         backgroundColor = new Property<>(Color.class, this, COLOR_PROPERTY, new Color(0, 0, 0), theManager);
         layoutBounds = new Property<>(Rectangle.class, this, LAYOUT_BOUNDS_PROPERTY, new Rectangle(), theManager);
+        customProperties = new Property<>(CustomProperties.class, this, CUSTOM_PROPERTIES_PROPERTY, new CustomProperties(), theManager);
         instances = new GameObjectInstance[0];
         objects = new GameObject[0];
         eventSheets = new EventSheet[0];
@@ -60,6 +66,10 @@ public class GameScene implements Reflectable<GameSceneClassInformation> {
 
     public GameRuntime getRuntime() {
         return gameRuntime;
+    }
+
+    public Game getGame() {
+        return game;
     }
 
     @ReflectiveField
@@ -85,6 +95,11 @@ public class GameScene implements Reflectable<GameSceneClassInformation> {
     @ReflectiveField
     public Property<Rectangle> layoutBoundsProperty() {
         return layoutBounds;
+    }
+
+    @ReflectiveField
+    public Property<CustomProperties> customPropertiesProperty() {
+        return customProperties;
     }
 
     public GameObject createNewGameObject(String aName) {
@@ -215,6 +230,7 @@ public class GameScene implements Reflectable<GameSceneClassInformation> {
         return theInstance;
     }
 
+    @ReflectiveMethod
     public void removeGameObjectInstance(GameObjectInstance aInstance) {
         List<GameObjectInstance> theInstances = ArrayUtils.asList(instances);
         if (theInstances.remove(aInstance)) {
@@ -297,11 +313,13 @@ public class GameScene implements Reflectable<GameSceneClassInformation> {
         }
         theResult.put("effects", theEffects);
 
+        theResult.put("customProperties", customProperties.get().serialize());
+
         return theResult;
     }
 
-    public static GameScene deserialize(GameRuntime aGameRuntime, Map<String, Object> aSerializedData) {
-        GameScene theScene = new GameScene(aGameRuntime);
+    public static GameScene deserialize(Game aGame, GameRuntime aGameRuntime, Map<String, Object> aSerializedData) {
+        GameScene theScene = new GameScene(aGame, aGameRuntime);
         theScene.name.setQuietly((String) aSerializedData.get(NAME_PROPERTY));
 
         List<Map<String, Object>> theObjects = (List<Map<String, Object>>) aSerializedData.get("objects");
@@ -348,6 +366,11 @@ public class GameScene implements Reflectable<GameSceneClassInformation> {
                 String theType = (String) theData.get(GameSceneEffect.TYPE_ATTRIBUTE);
                 theScene.addEffect(aGameRuntime.getIORegistry().getSceneEffectUnmarshallerFor(theType).unmarshall(aGameRuntime, theScene, theData));
             }
+        }
+
+        Map<String, Object> theCustomProperties = (Map<String, Object>) aSerializedData.get("customProperties");
+        if (theCustomProperties != null) {
+            theScene.customProperties.setQuietly(CustomProperties.deserialize(theCustomProperties));
         }
 
         return theScene;
