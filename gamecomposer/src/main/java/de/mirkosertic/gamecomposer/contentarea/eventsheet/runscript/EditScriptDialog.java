@@ -79,6 +79,7 @@ public class EditScriptDialog {
             theEngine = theClone.getRuntime().getScriptEngineFactory().createNewEngine(aScript);
             theEngine.registerObject("instance", theInstance);
             theEngine.registerObject("scene", theClone);
+            theEngine.registerObject("game", theClone.getGame());
 
             Object theResult = theEngine.proceedGame(100, 16);
             if (theResult == null) {

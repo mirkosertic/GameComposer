@@ -27,22 +27,4 @@ public class CustomPropertiesTest {
         assertNull(theProperties.get("key"));
         assertFalse(theProperties.has("key"));
     }
-
-    @Test
-    public void testSerialize() throws Exception {
-        CustomProperties theProperties = new CustomProperties();
-        theProperties.set("key", "value");
-        Map<String, Object> theData = theProperties.serialize();
-        assertEquals(1, theData.size(), 0);
-        assertEquals("value", theProperties.get("key"));
-    }
-
-    @Test
-    public void testDeserialize() throws Exception {
-        Map<String, Object> theData = new HashMap<>();
-        theData.put("key", "value");
-        CustomProperties theProperties = CustomProperties.deserialize(theData);
-        assertTrue(theProperties.has("key"));
-        assertEquals("value", theProperties.get("key"));
-    }
 }

@@ -19,7 +19,6 @@ import static org.mockito.Mockito.*;
 
 public class LuaScriptEngineTest {
 
-
     @Test
     public void testShutdown() throws Exception {
         LuaJScriptEngineFactory theFactory = new LuaJScriptEngineFactory(new TestBuildInFunctions());
@@ -33,7 +32,7 @@ public class LuaScriptEngineTest {
         LuaJScriptEngineFactory theFactory = new LuaJScriptEngineFactory(new TestBuildInFunctions());
         LuaJScriptEngine theEngine = theFactory.createNewEngine(new Script(theScript));
         theEngine.registerPrimitive("counter", 17);
-        assertEquals(21L, theEngine.proceedGame(1, 3));
+        assertEquals(21, theEngine.proceedGame(1, 3));
     }
 
     @Test
@@ -42,7 +41,7 @@ public class LuaScriptEngineTest {
         LuaJScriptEngineFactory theFactory = new LuaJScriptEngineFactory(new TestBuildInFunctions());
         LuaJScriptEngine theEngine = theFactory.createNewEngine(new Script(theScript));
         theEngine.registerObject("color", new Color(10, 20, 30));
-        assertEquals(10L, theEngine.proceedGame(1, 3));
+        assertEquals(10, theEngine.proceedGame(1, 3));
     }
 
     @Test
@@ -51,7 +50,7 @@ public class LuaScriptEngineTest {
         LuaJScriptEngineFactory theFactory = new LuaJScriptEngineFactory(new TestBuildInFunctions());
         LuaJScriptEngine theEngine = theFactory.createNewEngine(new Script(theScript));
         theEngine.registerObject("position", new Position());
-        assertEquals(10L, theEngine.proceedGame(1, 3));
+        assertEquals(10, theEngine.proceedGame(1, 3));
     }
 
     @Test(expected = IllegalArgumentException.class)

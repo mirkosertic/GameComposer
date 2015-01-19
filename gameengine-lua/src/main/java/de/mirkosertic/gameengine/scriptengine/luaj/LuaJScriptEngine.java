@@ -69,6 +69,9 @@ public class LuaJScriptEngine implements LUAScriptEngine {
     }
 
     private static Object toJavaValue(LuaValue aValue, Class aTargetClass) {
+        if (aValue.isnil()) {
+            return null;
+        }
         if (aValue.istable()) {
             LuaTable theTable = (LuaTable) aValue;
             LuaValue theObject = theTable.get("javaobject");
@@ -101,10 +104,21 @@ public class LuaJScriptEngine implements LUAScriptEngine {
         if (aTargetClass == Double.class) {
             return aValue.todouble();
         }
+        if (aTargetClass == Object.class || aTargetClass == Number.class) {
+            if (aValue.isint()) {
+                return aValue.toint();
+            }
+            if (aValue.islong()) {
+                return aValue.tolong();
+            }
+        }
         throw new IllegalArgumentException("Cannot convert " + aValue+" to " + aTargetClass);
     }
 
     private static Object toJavaValue(LuaValue aValue) {
+        if (aValue.isnil()) {
+            return null;
+        }
         if (aValue.istable()) {
             LuaTable theTable = (LuaTable) aValue;
             LuaValue theObject = theTable.get("javaobject");
@@ -113,11 +127,14 @@ public class LuaJScriptEngine implements LUAScriptEngine {
             }
             throw new IllegalArgumentException("Cannot convert " + aValue+" to java object");
         }
-        if (aValue.isnil()) {
-            return null;
+        if (aValue.isint()) {
+            return aValue.toint();
         }
         if (aValue.islong()) {
             return aValue.tolong();
+        }
+        if (aValue.isstring()) {
+            return aValue.toString();
         }
         return aValue.toString();
     }
@@ -144,7 +161,7 @@ public class LuaJScriptEngine implements LUAScriptEngine {
                     throw new IllegalArgumentException("Only one argument supported to set property value, got " + aArgs.narg()+" arguments");
                 }
                 if (field.getType() == Property.class) {
-                    ((Property) theProperty).set(toJavaValue(aArgs.arg(1)));
+                    ((Property) theProperty).set(toJavaValue(aArgs.arg(1), theProperty.getType()));
                 } else {
                     throw new IllegalArgumentException("Cannot set read-only properties");
                 }
@@ -242,7 +259,7 @@ public class LuaJScriptEngine implements LUAScriptEngine {
             });
         Varargs theResult = methodToCall.invoke(theArguments);
         if (theResult.narg() == 1) {
-            return toJavaValue(theResult.arg(1)).toString();
+            return toJavaValue(theResult.arg(1), String.class).toString();
         }
         throw new IllegalStateException("Invalid return type : " + theResult);
     }
