@@ -27,4 +27,12 @@ public abstract class BuiltInFunctions implements Reflectable {
         }
         return Math.min(aNumber1.doubleValue(), aNumber2.doubleValue());
     }
+
+    @ReflectiveMethod
+    public Object nvl(Object aObject, Object aDefault) {
+        if (aObject == null) {
+            return aDefault;
+        }
+        return aObject;
+    }
 }

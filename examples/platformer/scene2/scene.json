@@ -24,6 +24,11 @@
       "actions" : [ {
         "resourceName" : "/assets/audio/pickup_gem_1.wav",
         "type" : "PlaySoundAction"
+      }, {
+        "type" : "RunScriptAction",
+        "script" : {
+          "script" : "--\n-- This is the default method of every action. It is called once for every game loop cycle.\n--\n-- instance is an optional injected object which is a reference to the GameObjectInstance for \n-- which this script is executed.\n-- scene is an injected object which is a reference to the GameScene for \n-- which this script is executed.\n--\n\nfunction increaseScoreIn(aCustomProperties) \n    local theCurrentScore = nvl(aCustomProperties.get('score') , 0)\n    aCustomProperties.set('score', theCurrentScore + 1)\nend    \n\nfunction proceedGame(aGameTime, aElapsedTimeSinceLastLoop) \n\n    -- Remove the star from the scene, completely kill it\n    scene.removeGameObjectInstance(instance)\n    \n    -- Increase the level score by 1\n    increaseScoreIn(scene.customPropertiesProperty())\n    \n    -- Do the same with the total score\n    increaseScoreIn(game.customPropertiesProperty())\n\n\t-- The method must return either STOPPED or CONTINUE_RUNNING\n\t-- STOPPED will kill the script, it is not invoked the next time\n\t-- CONTINUE_RUNNING will invoke the skript the next game loop cycle.\n\treturn 'STOPPED'\nend"
+        }
       } ]
     }, {
       "condition" : {
@@ -38,8 +43,19 @@
       } ]
     } ]
   } ],
-  "effects" : [ ],
-  "customProperties" : { },
+  "effects" : [ {
+    "numberOfStars" : "30",
+    "starSpeed" : "7.0",
+    "color" : {
+      "r" : "255",
+      "b" : "255",
+      "g" : "255"
+    },
+    "type" : "StarfieldGameSceneEffect"
+  } ],
+  "customProperties" : {
+    "data" : [ ]
+  },
   "layoutBounds" : {
     "size" : {
       "width" : "1400",
@@ -56,9 +72,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Platform"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Duke_1384374064987",
@@ -76,7 +92,7 @@
     },
     "components" : [ {
       "textExpression" : {
-        "expression" : "\"Duke rules!\""
+        "expression" : "Second awesome level!"
       },
       "color" : {
         "r" : "255",
@@ -94,8 +110,8 @@
     "name" : "Duke_rules_text_1387815048728",
     "gameobjectuuid" : "4159726285677583442",
     "position" : {
-      "x" : "30.0",
-      "y" : "34.0"
+      "x" : "5.0",
+      "y" : "0.0"
     },
     "absolutePositionAnchor" : "TOP_LEFT",
     "uuid" : "-1204360881395284219"
@@ -105,10 +121,10 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
+      "type" : "Sprite"
+    }, {
       "active" : "true",
       "type" : "Physics"
-    }, {
-      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Star_1384888985355",
@@ -125,10 +141,10 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
+      "type" : "Sprite"
+    }, {
       "active" : "true",
       "type" : "Physics"
-    }, {
-      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Star_1384888988875",
@@ -145,10 +161,10 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
+      "type" : "Sprite"
+    }, {
       "active" : "true",
       "type" : "Physics"
-    }, {
-      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Star_1384888993618",
@@ -165,10 +181,10 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
+      "type" : "Sprite"
+    }, {
       "active" : "true",
       "type" : "Physics"
-    }, {
-      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Star_1384888996543",
@@ -185,10 +201,10 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
+      "type" : "Sprite"
+    }, {
       "active" : "true",
       "type" : "Physics"
-    }, {
-      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Star_1384888999417",
@@ -205,10 +221,10 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
+      "type" : "Sprite"
+    }, {
       "active" : "true",
       "type" : "Physics"
-    }, {
-      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Star_1384889002239",
@@ -225,9 +241,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Walkway_botom_left_1384373866404",
@@ -244,9 +260,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Walkway_botom_left_1384373869515",
@@ -263,9 +279,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Walkway_bottom_middle_1384373937322",
@@ -282,9 +298,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Walkway_bottom_middle_1384373940351",
@@ -301,9 +317,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Walkway_bottom_middle_1384373942839",
@@ -320,9 +336,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Walkway_bottom_middle_1384373945327",
@@ -339,9 +355,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Walkway_bottom_middle_1384373947993",
@@ -358,9 +374,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Walkway_bottom_middle_1384373950229",
@@ -377,9 +393,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Walkway_bottom_middle_1384373952212",
@@ -396,9 +412,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Walkway_bottom_middle_1384373954506",
@@ -415,9 +431,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Walkway_bottom_right_1384373903304",
@@ -434,9 +450,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Walkway_bottom_right_1384373905720",
@@ -453,9 +469,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Walkway_left_middle_1384373702860",
@@ -472,9 +488,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Walkway_left_middle_1384373742444",
@@ -491,9 +507,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Walkway_left_middle_1384373786249",
@@ -510,9 +526,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Walkway_left_middle_1384373788796",
@@ -529,9 +545,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Walkway_left_middle_1384373794008",
@@ -548,9 +564,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Walkway_left_middle_1384373796399",
@@ -567,9 +583,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Walkway_left_top_1384373708219",
@@ -586,9 +602,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Walkway_left_top_1384373747571",
@@ -605,9 +621,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Walkway_middle_top_1_1384373723738",
@@ -624,9 +640,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Walkway_middle_top_1_1384373730420",
@@ -643,9 +659,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Walkway_middle_top_1_1384373756271",
@@ -662,9 +678,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Walkway_middle_top_1_1384373766125",
@@ -681,9 +697,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Walkway_middle_top_2_1384373718708",
@@ -700,9 +716,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Walkway_middle_top_2_1384373727382",
@@ -719,9 +735,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Walkway_middle_top_2_1384373752335",
@@ -738,9 +754,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Walkway_middle_top_2_1384373760777",
@@ -757,9 +773,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Walkway_right_middle_1384373738825",
@@ -776,9 +792,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Walkway_right_middle_1384373775354",
@@ -795,9 +811,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Walkway_right_middle_1384373778182",
@@ -814,9 +830,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Walkway_right_middle_1384373780605",
@@ -833,9 +849,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Walkway_right_middle_1384373814800",
@@ -852,9 +868,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Walkway_right_middle_1384373817523",
@@ -871,9 +887,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Walkway_right_top_1384373733619",
@@ -890,9 +906,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Walkway_right_top_1384373769677",
@@ -1317,10 +1333,10 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
+      "type" : "Sprite"
+    }, {
       "active" : "true",
       "type" : "Physics"
-    }, {
-      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "bean_small_1384375980691",
@@ -1337,10 +1353,10 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
+      "type" : "Sprite"
+    }, {
       "active" : "true",
       "type" : "Physics"
-    }, {
-      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "bean_small_1384414773959",
@@ -1357,10 +1373,10 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
+      "type" : "Sprite"
+    }, {
       "active" : "true",
       "type" : "Physics"
-    }, {
-      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "bean_small_1384414777213",
@@ -1372,14 +1388,74 @@
     "absolutePositionAnchor" : "TOP_LEFT",
     "uuid" : "-5663747140516834865"
   }, {
+    "absolutePosition" : "true",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
+    "components" : [ {
+      "textExpression" : {
+        "expression" : "nvl(scene.customPropertiesProperty().get('score'), 0) .. ' stars'"
+      },
+      "color" : {
+        "r" : "255",
+        "b" : "255",
+        "g" : "255"
+      },
+      "isScript" : "true",
+      "type" : "Text",
+      "font" : {
+        "size" : "20",
+        "name" : "ARIAL"
+      }
+    } ],
+    "visible" : "true",
+    "name" : "dynamictext_1421689769984",
+    "gameobjectuuid" : "4603074773244458377",
+    "position" : {
+      "x" : "124.0",
+      "y" : "53.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "1624787005599192136"
+  }, {
+    "absolutePosition" : "true",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
+    "components" : [ {
+      "textExpression" : {
+        "expression" : "nvl(game.customPropertiesProperty().get('score'), 0) .. ' stars'"
+      },
+      "color" : {
+        "r" : "255",
+        "b" : "255",
+        "g" : "255"
+      },
+      "isScript" : "true",
+      "type" : "Text",
+      "font" : {
+        "size" : "20",
+        "name" : "ARIAL"
+      }
+    } ],
+    "visible" : "true",
+    "name" : "dynamictext_1421689812229",
+    "gameobjectuuid" : "4603074773244458377",
+    "position" : {
+      "x" : "124.0",
+      "y" : "80.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "4294911004885975925"
+  }, {
     "absolutePosition" : "false",
     "rotationangle" : {
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Sprite"
-    }, {
       "type" : "Static"
+    }, {
+      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "finish_sign_1384374697378",
@@ -1498,6 +1574,66 @@
     },
     "absolutePositionAnchor" : "TOP_LEFT",
     "uuid" : "5438046358578793031"
+  }, {
+    "absolutePosition" : "true",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
+    "components" : [ {
+      "textExpression" : {
+        "expression" : "Level score:"
+      },
+      "color" : {
+        "r" : "230",
+        "b" : "77",
+        "g" : "230"
+      },
+      "isScript" : "false",
+      "type" : "Text",
+      "font" : {
+        "size" : "20",
+        "name" : "ARIAL"
+      }
+    } ],
+    "visible" : "true",
+    "name" : "static text_1421689620373",
+    "gameobjectuuid" : "1565477445277525425",
+    "position" : {
+      "x" : "4.0",
+      "y" : "53.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "8946673448671826919"
+  }, {
+    "absolutePosition" : "true",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
+    "components" : [ {
+      "textExpression" : {
+        "expression" : "Total score:"
+      },
+      "color" : {
+        "r" : "255",
+        "b" : "102",
+        "g" : "102"
+      },
+      "isScript" : "false",
+      "type" : "Text",
+      "font" : {
+        "size" : "20",
+        "name" : "ARIAL"
+      }
+    } ],
+    "visible" : "true",
+    "name" : "static text_1421689691771",
+    "gameobjectuuid" : "1565477445277525425",
+    "position" : {
+      "x" : "5.0",
+      "y" : "80.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-5513782710988509830"
   } ],
   "defaultplayerobjectid" : "-279500599772276169",
   "objects" : [ {
@@ -1519,12 +1655,13 @@
       "height" : "81"
     },
     "templates" : [ {
-      "jumpImpulse" : "2.0",
-      "leftRightImpulse" : "4.0",
-      "moveLeftKey" : "LEFT",
-      "type" : "Platform",
-      "moveRightKey" : "RIGHT",
-      "jumpKey" : "UP"
+      "fixedrotation" : "true",
+      "density" : "1.0",
+      "restitution" : "0.0",
+      "gravityScale" : "1.0",
+      "active" : "true",
+      "type" : "Physics",
+      "friction" : "1.8"
     }, {
       "animations" : [ {
         "animationSequence" : [ {
@@ -1537,21 +1674,20 @@
       "type" : "Sprite",
       "speed" : "5"
     }, {
-      "fixedrotation" : "true",
-      "density" : "1.0",
-      "restitution" : "0.0",
-      "gravityScale" : "1.0",
-      "active" : "true",
-      "type" : "Physics",
-      "friction" : "1.8"
+      "jumpImpulse" : "2.0",
+      "leftRightImpulse" : "4.0",
+      "moveLeftKey" : "LEFT",
+      "type" : "Platform",
+      "moveRightKey" : "RIGHT",
+      "jumpKey" : "UP"
     } ],
     "name" : "Duke",
     "uuid" : "-279500599772276169"
   }, {
     "visible" : "true",
     "size" : {
-      "width" : "64",
-      "height" : "64"
+      "width" : "350",
+      "height" : "40"
     },
     "templates" : [ {
       "textExpression" : {
@@ -1569,7 +1705,7 @@
         "name" : "ARIAL"
       }
     } ],
-    "name" : "Duke_rules_text",
+    "name" : "Second level text",
     "uuid" : "4159726285677583442"
   }, {
     "visible" : "true",
@@ -1578,6 +1714,14 @@
       "height" : "48"
     },
     "templates" : [ {
+      "fixedrotation" : "false",
+      "density" : "1.0",
+      "restitution" : "0.0",
+      "gravityScale" : "0.0",
+      "active" : "true",
+      "type" : "Physics",
+      "friction" : "1.8"
+    }, {
       "animations" : [ {
         "animationSequence" : [ {
           "name" : "/assets/objects/star.png"
@@ -1588,14 +1732,6 @@
       "currentAnimation" : "-6069259192229564253",
       "type" : "Sprite",
       "speed" : "5"
-    }, {
-      "fixedrotation" : "false",
-      "density" : "1.0",
-      "restitution" : "0.0",
-      "gravityScale" : "0.0",
-      "active" : "true",
-      "type" : "Physics",
-      "friction" : "1.8"
     } ],
     "name" : "Star",
     "uuid" : "4343694719606608272"
@@ -1824,6 +1960,14 @@
       "height" : "34"
     },
     "templates" : [ {
+      "fixedrotation" : "false",
+      "density" : "1.0",
+      "restitution" : "0.0",
+      "gravityScale" : "1.0",
+      "active" : "true",
+      "type" : "Physics",
+      "friction" : "1.8"
+    }, {
       "animations" : [ {
         "animationSequence" : [ {
           "name" : "/assets/objects/bean_small.png"
@@ -1834,17 +1978,33 @@
       "currentAnimation" : "-1156592985157513399",
       "type" : "Sprite",
       "speed" : "5"
-    }, {
-      "fixedrotation" : "false",
-      "density" : "1.0",
-      "restitution" : "0.0",
-      "gravityScale" : "1.0",
-      "active" : "true",
-      "type" : "Physics",
-      "friction" : "1.8"
     } ],
     "name" : "bean_small",
     "uuid" : "427110152030095327"
+  }, {
+    "visible" : "true",
+    "size" : {
+      "width" : "200",
+      "height" : "25"
+    },
+    "templates" : [ {
+      "textExpression" : {
+        "expression" : ""
+      },
+      "color" : {
+        "r" : "255",
+        "b" : "255",
+        "g" : "255"
+      },
+      "isScript" : "false",
+      "type" : "Text",
+      "font" : {
+        "size" : "20",
+        "name" : "ARIAL"
+      }
+    } ],
+    "name" : "dynamictext",
+    "uuid" : "4603074773244458377"
   }, {
     "visible" : "true",
     "size" : {
@@ -1901,6 +2061,30 @@
     } ],
     "name" : "iron_physics_top",
     "uuid" : "-721453412061472676"
+  }, {
+    "visible" : "true",
+    "size" : {
+      "width" : "128",
+      "height" : "25"
+    },
+    "templates" : [ {
+      "textExpression" : {
+        "expression" : "Text"
+      },
+      "color" : {
+        "r" : "255",
+        "b" : "255",
+        "g" : "255"
+      },
+      "isScript" : "false",
+      "type" : "Text",
+      "font" : {
+        "size" : "20",
+        "name" : "ARIAL"
+      }
+    } ],
+    "name" : "static text",
+    "uuid" : "1565477445277525425"
   } ],
   "name" : "Second level",
   "backgroundcolor" : {

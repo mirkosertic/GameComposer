@@ -2,7 +2,9 @@ package de.mirkosertic.gameengine.type;
 
 import de.mirkosertic.gameengine.annotations.ReflectiveMethod;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CustomProperties implements Reflectable {
@@ -44,16 +46,29 @@ public class CustomProperties implements Reflectable {
 
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<>();
+
+        List<Map<String, String>> theEntries = new ArrayList<>();
         for (Map.Entry<String, String> theEntry : values.entrySet()) {
-            theResult.put(theEntry.getKey(), theEntry.getValue());
+            Map<String, String> theData = new HashMap<>();
+            theData.put("key", theEntry.getKey());
+            theData.put("value", theEntry.getValue());
+            theEntries.add(theData);
         }
+        theResult.put("data", theEntries);
+
         return theResult;
     }
 
     public static CustomProperties deserialize(Map<String, Object> aData) {
+
         CustomProperties theProperties = new CustomProperties();
-        for (Map.Entry<String, Object> theEntry : aData.entrySet()) {
-            theProperties.set(theEntry.getKey(), (String) theEntry.getValue());
+        List<Map<String, String>> theEntries = (List<Map<String, String>>) aData.get("data");
+        if (theEntries != null) {
+            for (Map<String, String> theEntry : theEntries) {
+                String theKey = theEntry.get("key");
+                String theValue = theEntry.get("value");
+                theProperties.set(theKey, theValue);
+            }
         }
         return theProperties;
     }
