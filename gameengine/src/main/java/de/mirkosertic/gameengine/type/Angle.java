@@ -10,6 +10,9 @@ public class Angle implements Reflectable {
     public final int angleInDegrees;
 
     public Angle(int aAngleInDegrees) {
+        while (aAngleInDegrees < 0) {
+            aAngleInDegrees += 360;
+        }
         angleInDegrees = aAngleInDegrees % 360;
     }
 
@@ -25,6 +28,20 @@ public class Angle implements Reflectable {
     @ReflectiveMethod
     public Angle invert() {
         return new Angle(-angleInDegrees);
+    }
+
+    @ReflectiveMethod
+    public Angle snapTo(int aStep) {
+        int theStepHalf = aStep / 2;
+        for (int i = 0;i<=360 / aStep;i++) {
+            int theStep = i * aStep;
+            int theMinAngle = theStep - theStepHalf;
+            int theMaxAngle = theStep + theStepHalf;
+            if (angleInDegrees >=theMinAngle && angleInDegrees < theMaxAngle) {
+                return new Angle(theStep);
+            }
+        }
+        return new Angle(angleInDegrees);
     }
 
     @ReflectiveMethod

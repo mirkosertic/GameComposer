@@ -1,4 +1,7 @@
 {
+  "customProperties" : {
+    "data" : [ ]
+  },
   "enablewebgl" : "true",
   "name" : "Bounce game",
   "defaultscene" : "scene1"
