@@ -22,7 +22,7 @@ public class AngleTest {
 
     @Test
     public void testInvert() throws Exception {
-        assertEquals(-10, new Angle(10).invert().get().intValue());
+        assertEquals(350, new Angle(10).invert().get().intValue());
     }
 
     @Test
@@ -74,5 +74,12 @@ public class AngleTest {
     @Test
     public void testFromRadians() throws Exception {
         assertEquals(180, Angle.fromRadians((float) Math.PI).get().intValue());
+    }
+
+    @Test
+    public void testSnap() {
+        assertEquals(0, new Angle(0).snapTo(15).get(), 0);
+        assertEquals(345, new Angle(-13).snapTo(15).get(), 0);
+        assertEquals(15, new Angle(13).snapTo(15).get(), 0);
     }
 }
