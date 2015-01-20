@@ -16,12 +16,21 @@
 <div id="editor"></div>
 
 <script src="ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="ext-language_tools.js" type="text/javascript" charset="utf-8"></script>
 <script>
 
     var editor;
 
+    // http://plnkr.co/edit/6MVntVmXYUbjR0DI82Cr?p=preview
+
     function initeditor() {
+        ace.require("ace/ext/language_tools")
         editor = ace.edit("editor");
+        editor.setOptions({
+            enableBasicAutocompletion: true,
+            enableSnippets: true,
+            enableLiveAutocompletion: false
+        });
         editor.setTheme("ace/theme/monokai");
         editor.getSession().setMode("ace/mode/lua");
     }
