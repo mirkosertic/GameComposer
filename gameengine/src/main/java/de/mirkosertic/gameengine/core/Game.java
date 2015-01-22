@@ -14,16 +14,19 @@ public class Game implements Reflectable {
     public static final String DEFAULT_SCENE_PROPERTY = "defaultScene";
     public static final String ENABLE_WEB_GL_PROPERTY = "enableWebGL";
     public static final String CUSTOM_PROPERTIES_PROPERTY = "customProperties";
+    public static final String ENABLE_DEBUG_PROPERTY = "enableDebug";
 
     private final Property<String> name;
     private final Property<String> defaultScene;
     private final Property<Boolean> enableWebGL;
     private final Property<CustomProperties> customProperties;
+    private final Property<Boolean> enableDebug;
 
     public Game() {
         name = new Property<>(String.class, this, NAME_PROPERTY, (String) null);
         defaultScene = new Property<>(String.class, this, DEFAULT_SCENE_PROPERTY, (String) null);
         enableWebGL = new Property<>(Boolean.class, this, ENABLE_WEB_GL_PROPERTY, Boolean.TRUE);
+        enableDebug = new Property<>(Boolean.class, this, ENABLE_DEBUG_PROPERTY, Boolean.FALSE);
         customProperties = new Property<>(CustomProperties.class, this, CUSTOM_PROPERTIES_PROPERTY, new CustomProperties());
     }
 
@@ -40,6 +43,11 @@ public class Game implements Reflectable {
     @ReflectiveField
     public Property<Boolean> enableWebGLProperty() {
         return enableWebGL;
+    }
+
+    @ReflectiveField
+    public Property<Boolean> enableDebugProperty() {
+        return enableDebug;
     }
 
     public void removeScene(String aSceneName) {
@@ -64,6 +72,7 @@ public class Game implements Reflectable {
         theResult.put("defaultscene", defaultScene.get());
         theResult.put("enablewebgl", Boolean.toString(enableWebGL.get()));
         theResult.put("customProperties", customProperties.get().serialize());
+        theResult.put("enableDebug", Boolean.toString(enableDebug.get()));
         return theResult;
     }
 
@@ -75,6 +84,10 @@ public class Game implements Reflectable {
         String theWebGl = (String) aSerializedData.get("enablewebgl");
         if (theWebGl != null) {
             theResult.enableWebGL.setQuietly(Boolean.valueOf(theWebGl));
+        }
+        String theDebug = (String) aSerializedData.get("enableDebug");
+        if (theDebug != null) {
+            theResult.enableDebug.setQuietly(Boolean.valueOf(theDebug));
         }
         Map<String, Object> theCustomProperties = (Map<String, Object>) aSerializedData.get("customProperties");
         if (theCustomProperties != null) {

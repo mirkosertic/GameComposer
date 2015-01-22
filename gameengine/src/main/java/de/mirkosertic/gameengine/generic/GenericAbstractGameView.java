@@ -1,5 +1,6 @@
 package de.mirkosertic.gameengine.generic;
 
+import de.mirkosertic.gameengine.Version;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.scriptengine.LUAScriptEngine;
@@ -148,7 +149,31 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
             theEffect.render(theEffectCanvas, theVisibleInstances, cameraBehavior);
         }
 
+        // Shall we print Debug Information to the Screen?
+        if (aScene.getGame().enableDebugProperty().get()) {
+            Color theDebugColor = new Color(255,0,0);
+            Size theTextSize = new Size(200,10);
+            Position theCenterOffset = new Position(100, 5);
+            Font theFont = new Font(Font.FontName.ARIAL, 10);
+            // Draw version information
+            AbsolutePositionAnchor theAnchor = AbsolutePositionAnchor.BOTTOM_LEFT;
+            drawTextAt(theAnchor, new Position(0, 30), theCenterOffset, theTextSize, theFont, theDebugColor, Version.VERSION);
+            drawTextAt(theAnchor, new Position(0, 20), theCenterOffset, theTextSize, theFont, theDebugColor,
+                    "Time for every frame : " + aStatistics.getAverageTimePerLoopCycle() + " ms");
+            drawTextAt(theAnchor, new Position(0, 10), theCenterOffset, theTextSize, theFont, theDebugColor,
+                    "Number of visible instances : " + theVisibleInstances.size());
+        }
+
         framefinished();
+    }
+
+    private void drawTextAt(AbsolutePositionAnchor aAnchor, Position aPosition, Position aCenterOffset, Size aSize, Font aFont, Color aColor, String aText) {
+
+        Position thePositionOnScreen = aAnchor.compute(aPosition, getCurrentScreenSize());
+
+        beforeInstance(null, thePositionOnScreen, aCenterOffset, new Angle(0));
+        drawText(null, thePositionOnScreen, aCenterOffset, aFont, aColor, aText, aSize);
+        afterInstance(null, thePositionOnScreen);
     }
 
     @Override
