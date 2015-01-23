@@ -9,6 +9,7 @@ import de.mirkosertic.gameengine.camera.CameraBehaviorUnmarshaller;
 import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.input.KeyEventConditionUnmarshaller;
+import de.mirkosertic.gameengine.input.MouseEventConditionUnmarshaller;
 import de.mirkosertic.gameengine.physic.GamePhysicsManager;
 import de.mirkosertic.gameengine.physic.GamePhysicsManagerFactory;
 import de.mirkosertic.gameengine.physic.ObjectCollisionConditionUnmarshaller;
@@ -94,6 +95,7 @@ public abstract class AbstractGameRuntimeFactory {
         theRegistry.registerConditionUnmarshaller(new GameObjectInstanceAddedToSceneConditionUnmarshaller());
         theRegistry.registerConditionUnmarshaller(new GameObjectInstanceRemovedFromSceneConditionUnmarshaller());
         theRegistry.registerConditionUnmarshaller(new GameObjectInstanceLeftLayoutConditionUnmarshaller());
+        theRegistry.registerConditionUnmarshaller(new MouseEventConditionUnmarshaller());
 
         theRegistry.registerActionUnmarshaller(new PlaySoundActionUnmarshaller());
         theRegistry.registerActionUnmarshaller(new RunSceneActionUnmarshaller());

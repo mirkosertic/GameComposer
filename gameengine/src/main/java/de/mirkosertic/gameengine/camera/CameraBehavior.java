@@ -82,14 +82,16 @@ public class CameraBehavior implements Behavior, Camera, Reflectable<CameraClass
         }
     }
 
-    public List<GameObjectInstance> getObjectsToDrawInRightOrder(GameScene aScene) {
+    public List<GameObjectInstance> getObjectsToDrawInRightOrder() {
         // TODO: Implement Z-Ordering here
         List<GameObjectInstance> theResult = new ArrayList<>();
+
+        GameScene theScene = getTemplate().getOwner().getGameScene();
 
         Size theScreenSize = getScreenSize();
         if (theScreenSize != null) {
             Position theCameraPosition = objectInstance.positionProperty().get();
-            for (GameObjectInstance theInstance : aScene.getInstances()) {
+            for (GameObjectInstance theInstance : theScene.getInstances()) {
                 if (theInstance == objectInstance) {
                     // The camera object itself does not need to be drawn
                     continue;
@@ -188,5 +190,16 @@ public class CameraBehavior implements Behavior, Camera, Reflectable<CameraClass
     @Override
     public void delete() {
         objectInstance.getOwnerGameObject().getGameScene().removeBehaviorFrom(objectInstance.getOwnerGameObject(), this);
+    }
+
+    public GameObjectInstance[] findInstancesAt(Position aScreenPosition) {
+        List<GameObjectInstance> theInstances = new ArrayList<>();
+        Position thePositionInGame = transformFromScreen(aScreenPosition);
+        for (GameObjectInstance theInstance : getObjectsToDrawInRightOrder()) {
+            if (theInstance.contains(thePositionInGame)) {
+                theInstances.add(theInstance);
+            }
+        }
+        return theInstances.toArray(new GameObjectInstance[theInstances.size()]);
     }
 }

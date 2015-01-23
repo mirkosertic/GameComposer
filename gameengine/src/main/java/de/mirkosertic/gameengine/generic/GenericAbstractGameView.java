@@ -64,7 +64,7 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
             return;
         }
 
-        List<GameObjectInstance> theVisibleInstances = cameraBehavior.getObjectsToDrawInRightOrder(aScene);
+        List<GameObjectInstance> theVisibleInstances = cameraBehavior.getObjectsToDrawInRightOrder();
 
         EffectCanvas theEffectCanvas = createEffectCanvas();
 
