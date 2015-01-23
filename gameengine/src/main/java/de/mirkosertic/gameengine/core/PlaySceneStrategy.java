@@ -69,7 +69,7 @@ public abstract class PlaySceneStrategy {
             }
         });
 
-        GestureDetector theGestureDetector = new DefaultGestureDetector(theRuntime.getEventManager());
+        GestureDetector theGestureDetector = new DefaultGestureDetector(theRuntime.getEventManager(), theCameraBehavior);
         GameView theGameView = getOrCreateCurrentGameView(theRuntime, theCameraBehavior, theGestureDetector);
 
         GameLoop theLoop = gameLoopFactory.create(aGameScene, theGameView, theRuntime);

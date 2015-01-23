@@ -1,8 +1,10 @@
 package de.mirkosertic.gameengine.input;
 
+import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.core.GestureDetector;
 import de.mirkosertic.gameengine.type.GameKeyCode;
 import de.mirkosertic.gameengine.event.GameEventManager;
+import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.TouchIdentifier;
 import de.mirkosertic.gameengine.type.TouchPosition;
 
@@ -14,15 +16,17 @@ public class DefaultGestureDetector implements GestureDetector {
     private static final int THRESHOLD = 40;
 
     private final GameEventManager eventManager;
+    private final CameraBehavior cameraBehavior;
     private final Map<TouchIdentifier, TouchPosition> currentTouchPositions;
 
     private boolean rightKeyDown;
     private boolean leftKeyDown;
     private boolean upKeyDown;
 
-    public DefaultGestureDetector(GameEventManager aEventManager) {
+    public DefaultGestureDetector(GameEventManager aEventManager, CameraBehavior aCameraBehavior) {
         eventManager = aEventManager;
         currentTouchPositions = new HashMap<>();
+        cameraBehavior = aCameraBehavior;
     }
 
     @Override
@@ -134,5 +138,15 @@ public class DefaultGestureDetector implements GestureDetector {
         clearLeftKeyDown();
         clearRightKeyDown();
         clearUpKeyDown();
+    }
+
+    @Override
+    public void mousePressed(Position aMousePosition) {
+        eventManager.fire(new MousePressed(aMousePosition, cameraBehavior.findInstancesAt(aMousePosition)));
+    }
+
+    @Override
+    public void mouseReleased(Position aMousePosition) {
+        eventManager.fire(new MouseReleased(aMousePosition, cameraBehavior.findInstancesAt(aMousePosition)));
     }
 }

@@ -309,7 +309,7 @@ public class GameSceneEditorController implements ContentController<GameScene> {
 
     void onMouseClicked(MouseEvent aEvent) {
         Position theClickPosition = new Position(aEvent.getX(), aEvent.getY());
-        for (GameObjectInstance theInstance : cameraComponent.getObjectsToDrawInRightOrder(gameScene)) {
+        for (GameObjectInstance theInstance : cameraComponent.getObjectsToDrawInRightOrder()) {
             if (theInstance.contains(theClickPosition)) {
                 objectSelectedEventEvent.fire(new ObjectSelectedEvent(theInstance));
             }
@@ -354,7 +354,7 @@ public class GameSceneEditorController implements ContentController<GameScene> {
             }
         }
 
-        final JavaFXGameView thePreviewGameView = new JavaFXGameView(theRuntime, theCameraInstanceBehavior, new DefaultGestureDetector(theRuntime.getEventManager()));
+        final JavaFXGameView thePreviewGameView = new JavaFXGameView(theRuntime, theCameraInstanceBehavior, new DefaultGestureDetector(theRuntime.getEventManager(), theCameraInstanceBehavior));
 
         GameLoopFactory theGameLoopFactory = new GameLoopFactory();
         GameLoop theMainLoop = theGameLoopFactory.create(thePreviewScene, thePreviewGameView, theRuntime);
