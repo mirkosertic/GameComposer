@@ -4,6 +4,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.events.Event;
 import org.w3c.dom.events.EventListener;
 import org.w3c.dom.events.KeyboardEvent;
+import org.w3c.dom.events.MouseEvent;
 
 import com.dragome.annotations.PageAlias;
 import com.dragome.enhancers.jsdelegate.JsDelegateFactory;
@@ -15,6 +16,7 @@ import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
 import de.mirkosertic.gameengine.type.GameKeyCode;
+import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Size;
 
 @PageAlias(alias= "index")
@@ -108,6 +110,9 @@ public class IndexPage extends DefaultVisualActivity {
                 if (aEvent instanceof KeyboardEvent) {
                     handleSingleKeyboardEvent((KeyboardEvent) aEvent);
                 }
+                if (aEvent instanceof MouseEvent) {
+                    handleSingleMouseEvent((MouseEvent) aEvent);
+                }
             }
         };
 
@@ -120,7 +125,22 @@ public class IndexPage extends DefaultVisualActivity {
             }
         });
 
-        window.addEventListener(theGlobalEventListener, "keydown", "keypress", "keyup");
+        window.addEventListener(theGlobalEventListener, "keydown", "keypress", "keyup", "mousedown", "mouseup");
+    }
+
+    private void handleSingleMouseEvent(MouseEvent aMouseEvent) {
+        if (playSceneStrategy.hasGameLoop()) {
+            if ("mousedown".equals(aMouseEvent.getType())) {
+                playSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector().mousePressed(
+                        new Position(aMouseEvent.getClientX(), aMouseEvent.getClientY())
+                );
+            }
+            if ("mouseup".equals(aMouseEvent.getType())) {
+                playSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector().mouseReleased(
+                        new Position(aMouseEvent.getClientX(), aMouseEvent.getClientY())
+                );
+            }
+        }
     }
 
     private void handleSingleKeyboardEvent(KeyboardEvent aKeyboardEvent) {

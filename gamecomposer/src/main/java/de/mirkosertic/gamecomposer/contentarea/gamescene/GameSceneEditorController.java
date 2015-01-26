@@ -423,6 +423,18 @@ public class GameSceneEditorController implements ContentController<GameScene> {
                 thePreviewGameView.getGestureDetector().keyReleased(GameKeyCode.valueOf(aKeyEvent.getCode().name()));
             }
         });
+        theStage.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent aEvent) {
+                thePreviewGameView.getGestureDetector().mousePressed(new Position(aEvent.getX(), aEvent.getY()));
+            }
+        });
+        theStage.addEventFilter(MouseEvent.MOUSE_RELEASED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent aEvent) {
+                thePreviewGameView.getGestureDetector().mouseReleased(new Position(aEvent.getX(), aEvent.getY()));
+            }
+        });
 
         theStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override

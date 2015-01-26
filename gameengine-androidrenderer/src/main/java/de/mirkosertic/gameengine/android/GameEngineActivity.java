@@ -10,6 +10,7 @@ import android.view.View;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
 import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Size;
 import de.mirkosertic.gameengine.type.TouchIdentifier;
 import de.mirkosertic.gameengine.type.TouchPosition;

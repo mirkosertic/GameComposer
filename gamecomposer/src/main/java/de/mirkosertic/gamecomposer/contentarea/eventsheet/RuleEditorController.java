@@ -5,6 +5,7 @@ import de.mirkosertic.gamecomposer.PropertyBinder;
 import de.mirkosertic.gameengine.action.SystemTickCondition;
 import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.input.KeyEventCondition;
+import de.mirkosertic.gameengine.input.MouseEventCondition;
 import de.mirkosertic.gameengine.physic.ObjectCollisionCondition;
 import de.mirkosertic.gameengine.process.KillProcessesForInstanceAction;
 import de.mirkosertic.gameengine.script.RunScriptAction;
@@ -72,6 +73,7 @@ public class RuleEditorController implements Controller {
         knownEventTypes.put(GameObjectInstanceRemovedFromSceneCondition.class.getSimpleName(), GameObjectInstanceRemovedFromSceneCondition.class);
         knownEventTypes.put(SystemTickCondition.class.getSimpleName(), SystemTickCondition.class);
         knownEventTypes.put(GameObjectInstanceLeftLayoutCondition.class.getSimpleName(), GameObjectInstanceLeftLayoutCondition.class);
+        knownEventTypes.put(MouseEventCondition.class.getSimpleName(), MouseEventCondition.class);
 
         knownActions = new ArrayList<>();
         knownActions.add(PlaySoundAction.class);
