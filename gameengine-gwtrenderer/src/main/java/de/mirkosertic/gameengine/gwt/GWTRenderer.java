@@ -11,6 +11,10 @@ import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseUpEvent;
+import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.dom.client.TouchCancelEvent;
 import com.google.gwt.event.dom.client.TouchCancelHandler;
 import com.google.gwt.event.dom.client.TouchEndEvent;
@@ -31,6 +35,7 @@ import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.generic.GenericAbstractGameView;
 import de.mirkosertic.gameengine.type.GameKeyCode;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
+import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.TouchIdentifier;
 import de.mirkosertic.gameengine.type.TouchPosition;
 import de.mirkosertic.gameengine.type.Size;
@@ -214,9 +219,45 @@ public class GWTRenderer implements EntryPoint {
                 handleOnTouchCanceled(aEvent);
             }
         }, TouchCancelEvent.getType());
+        RootPanel.get().addHandler(new MouseDownHandler() {
+            @Override
+            public void onMouseDown(MouseDownEvent aEvent) {
+                handleMouseDown(aEvent);
+            }
+        }, MouseDownEvent.getType());
+        RootPanel.get().addHandler(new MouseDownHandler() {
+            @Override
+            public void onMouseDown(MouseDownEvent aEvent) {
+                handleMouseDown(aEvent);
+            }
+        }, MouseDownEvent.getType());
+        RootPanel.get().addHandler(new MouseUpHandler() {
+            @Override
+            public void onMouseUp(MouseUpEvent aEvent) {
+                handleMouseUp(aEvent);
+            }
+        }, MouseUpEvent.getType());
 
         // This must be done or no events are fired at all
         RootPanel.get().sinkEvents(Event.KEYEVENTS);
+        RootPanel.get().sinkEvents(Event.TOUCHEVENTS);
+        RootPanel.get().sinkEvents(Event.MOUSEEVENTS);
+    }
+
+    private void handleMouseUp(MouseUpEvent aEvent) {
+        if (playSceneStrategy.hasGameLoop()) {
+            playSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector().mouseReleased(
+                    new Position(aEvent.getClientX(), aEvent.getClientY())
+            );
+        }
+    }
+
+    private void handleMouseDown(MouseDownEvent aEvent) {
+        if (playSceneStrategy.hasGameLoop()) {
+            playSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector().mousePressed(
+                    new Position(aEvent.getClientX(), aEvent.getClientY())
+            );
+        }
     }
 
     private void handleOnKeyUpEvent(KeyUpEvent aEvent) {

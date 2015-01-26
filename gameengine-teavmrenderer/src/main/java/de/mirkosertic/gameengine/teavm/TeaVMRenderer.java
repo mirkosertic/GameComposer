@@ -4,6 +4,7 @@ import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
 import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.type.GameKeyCode;
+import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Size;
 import de.mirkosertic.gameengine.type.TouchIdentifier;
 import de.mirkosertic.gameengine.type.TouchPosition;
@@ -16,6 +17,8 @@ import org.teavm.dom.html.HTMLDocument;
 import org.teavm.dom.html.HTMLElement;
 import org.teavm.jso.JS;
 import org.teavm.jso.JSArrayReader;
+
+import org.w3c.dom.events.MouseEvent;
 
 public class TeaVMRenderer {
 
@@ -145,7 +148,18 @@ public class TeaVMRenderer {
                 touchMoved((TeaVMTouchEvent) aEvent);
             }
         }, false);
-
+        canvasElement.addEventListener("mousedown", new EventListener() {
+            @Override
+            public void handleEvent(Event aEvent) {
+                mouseDown((MouseEvent) aEvent);
+            }
+        });
+        canvasElement.addEventListener("mouseup", new EventListener() {
+            @Override
+            public void handleEvent(Event aEvent) {
+                mouseUp((MouseEvent) aEvent);
+            }
+        });
         ((EventTarget) window).addEventListener("resize", new EventListener() {
             @Override
             public void handleEvent(Event evt) {
@@ -154,6 +168,22 @@ public class TeaVMRenderer {
                 }
             }
         }, true);
+    }
+
+    private void mouseDown(MouseEvent aEvent) {
+        if (runSceneStrategy.hasGameLoop()) {
+            runSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector().mousePressed(
+                    new Position(aEvent.getClientX(), aEvent.getClientY())
+            );
+        }
+    }
+
+    private void mouseUp(MouseEvent aEvent) {
+        if (runSceneStrategy.hasGameLoop()) {
+            runSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector().mouseReleased(
+                    new Position(aEvent.getClientX(), aEvent.getClientY())
+            );
+        }
     }
 
     private void keyPressed(TeaVMKeyEvent aEvent) {
