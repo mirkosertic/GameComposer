@@ -15,6 +15,6 @@ public class MouseEventConditionUnmarshaller implements ConditionUnmarshaller {
 
     @Override
     public Condition unmarshall(GameScene aGameScene, Map<String, Object> aSerializedData) {
-        return MouseEventCondition.unmarshall(aSerializedData);
+        return MouseEventCondition.unmarshall(aGameScene, aSerializedData);
     }
 }
