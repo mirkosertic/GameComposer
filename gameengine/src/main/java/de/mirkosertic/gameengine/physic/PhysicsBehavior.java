@@ -11,6 +11,8 @@ import de.mirkosertic.gameengine.type.Reflectable;
 
 public class PhysicsBehavior implements Behavior, Physics, Reflectable<PhysicsClassInformation> {
 
+    private static final PhysicsClassInformation CIINSTANCE = new PhysicsClassInformation();
+
     static final String TYPE = "Physics";
 
     private final GameObjectInstance objectInstance;
@@ -46,7 +48,7 @@ public class PhysicsBehavior implements Behavior, Physics, Reflectable<PhysicsCl
 
     @Override
     public PhysicsClassInformation getClassInformation() {
-        return PhysicsClassInformation.INSTANCE;
+        return CIINSTANCE;
     }
 
     @Override

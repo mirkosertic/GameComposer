@@ -8,6 +8,8 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 
 public class GWTBuiltInFunctions extends BuiltInFunctions {
 
+    private static final BuiltInFunctionsClassInformation CIINSTANCE = new BuiltInFunctionsClassInformation();
+
     @Override
     public String formatTime(Number aTimeInMilis, String aPattern) {
         DateTimeFormat theFormat = DateTimeFormat.getFormat(aPattern);
@@ -16,6 +18,6 @@ public class GWTBuiltInFunctions extends BuiltInFunctions {
 
     @Override
     public BuiltInFunctionsClassInformation getClassInformation() {
-        return BuiltInFunctionsClassInformation.INSTANCE;
+        return CIINSTANCE;
     }
 }

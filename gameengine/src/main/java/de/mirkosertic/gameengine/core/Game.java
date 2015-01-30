@@ -10,6 +10,8 @@ import java.util.Map;
 
 public class Game implements Reflectable {
 
+    private static final GameClassInformation CIINSTANCE = new GameClassInformation();
+
     public static final String NAME_PROPERTY = "name";
     public static final String DEFAULT_SCENE_PROPERTY = "defaultScene";
     public static final String ENABLE_WEB_GL_PROPERTY = "enableWebGL";
@@ -63,7 +65,7 @@ public class Game implements Reflectable {
 
     @Override
     public GameClassInformation getClassInformation() {
-        return GameClassInformation.INSTANCE;
+        return CIINSTANCE;
     }
 
     public Map<String, Object> serialize() {

@@ -20,6 +20,8 @@ import java.util.Map;
 
 public class PlatformBehavior implements Behavior, Platform, Reflectable<PlatformClassInformation> {
 
+    private static final PlatformClassInformation CIINSTANCE = new PlatformClassInformation();
+
     static final String TYPE = "Platform";
 
     private final GameRuntime gameRuntime;
@@ -52,7 +54,7 @@ public class PlatformBehavior implements Behavior, Platform, Reflectable<Platfor
 
     @Override
     public PlatformClassInformation getClassInformation() {
-        return PlatformClassInformation.INSTANCE;
+        return CIINSTANCE;
     }
 
     @Override

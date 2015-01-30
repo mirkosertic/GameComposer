@@ -118,7 +118,7 @@ public class MouseEventCondition implements Condition {
         theResult.filterType.setQuietly(FilterType.valueOf((String) aSerializedData.get(FILTER_TYPE_PROPERTY)));
         String theObjectID = (String) aSerializedData.get(OBJECT_TYPE_PROPERTY);
         if (theObjectID != null) {
-            theResult.objectType.setQuietly(aGameScene.findGameObjectByID(theObjectID));
+            theResult.objectType.setQuietly(aGameScene.findObjectByID(theObjectID));
         }
         return theResult;
     }

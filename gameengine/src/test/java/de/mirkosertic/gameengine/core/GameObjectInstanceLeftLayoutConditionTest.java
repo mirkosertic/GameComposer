@@ -83,7 +83,7 @@ public class GameObjectInstanceLeftLayoutConditionTest {
     public void testUnmarshall() throws Exception {
         GameScene theScene = mock(GameScene.class);
         GameObject theObject = mock(GameObject.class);
-        when(theScene.findGameObjectByID(eq("UUID"))).thenReturn(theObject);
+        when(theScene.findObjectByID(eq("UUID"))).thenReturn(theObject);
 
         Map<String, Object> theData = new HashMap<>();
         theData.put(GameObjectInstanceLeftLayoutCondition.TYPE_ATTRIBUTE, GameObjectInstanceLeftLayoutCondition.TYPE_VALUE);
@@ -94,6 +94,6 @@ public class GameObjectInstanceLeftLayoutConditionTest {
         theData.put("gameObjectUUID", "UUID");
         GameObjectInstanceLeftLayoutCondition theCondition1 = GameObjectInstanceLeftLayoutCondition.unmarshall(theScene, theData);
         assertSame(theObject, theCondition1.gameObjectProperty().get());
-        verify(theScene, times(1)).findGameObjectByID(eq("UUID"));
+        verify(theScene, times(1)).findObjectByID(eq("UUID"));
     }
 }

@@ -16,6 +16,8 @@ import java.util.Map;
 
 public class ConstantMovementBehavior implements Behavior, ConstantMovement, Reflectable<ConstantMovementClassInformation> {
 
+    private static final ConstantMovementClassInformation CIINSTANCE = new ConstantMovementClassInformation();
+
     static final String TYPE = "ConstantMovement";
 
     private final GameObjectInstance objectInstance;
@@ -64,7 +66,7 @@ public class ConstantMovementBehavior implements Behavior, ConstantMovement, Ref
 
     @Override
     public ConstantMovementClassInformation getClassInformation() {
-        return ConstantMovementClassInformation.INSTANCE;
+        return CIINSTANCE;
     }
 
     @Override

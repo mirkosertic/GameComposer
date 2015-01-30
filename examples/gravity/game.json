@@ -1,0 +1,9 @@
+{
+  "enableDebug" : "false",
+  "customProperties" : {
+    "data" : [ ]
+  },
+  "enablewebgl" : "true",
+  "name" : "Gravity example",
+  "defaultscene" : "scene1"
+}

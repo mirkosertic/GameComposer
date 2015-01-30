@@ -16,6 +16,8 @@ import java.util.Map;
 
 public class TextBehaviorTemplate implements BehaviorTemplate<TextBehavior>, Text, Reflectable<TextClassInformation> {
 
+    private static final TextClassInformation CIINSTANCE = new TextClassInformation();
+
     private final Property<Font> font;
     private final Property<TextExpression> textExpression;
     private final Property<Boolean> isscript;
@@ -33,7 +35,7 @@ public class TextBehaviorTemplate implements BehaviorTemplate<TextBehavior>, Tex
 
     @Override
     public TextClassInformation getClassInformation() {
-        return TextClassInformation.INSTANCE;
+        return CIINSTANCE;
     }
 
     @Override

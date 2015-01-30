@@ -12,6 +12,8 @@ import java.util.Map;
 
 public class PlayerScoreBehavior implements Behavior, PlayerScore, Reflectable<PlayerScoreClassInformation> {
 
+    private static final PlayerScoreClassInformation CIINSTANCE = new PlayerScoreClassInformation();
+
     static final String TYPE = "PlayerScore";
 
     private final GameObjectInstance objectInstance;
@@ -36,7 +38,7 @@ public class PlayerScoreBehavior implements Behavior, PlayerScore, Reflectable<P
 
     @Override
     public PlayerScoreClassInformation getClassInformation() {
-        return PlayerScoreClassInformation.INSTANCE;
+        return CIINSTANCE;
     }
 
     @Override

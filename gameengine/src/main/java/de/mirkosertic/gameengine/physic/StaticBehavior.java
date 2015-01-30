@@ -8,6 +8,8 @@ import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.type.Reflectable;
 
 public class StaticBehavior implements Behavior, Static, Reflectable<StaticClassInformation> {
+
+    private static final StaticClassInformation CIINSTANCE = new StaticClassInformation();
     
     static final String TYPE = "Static";
 
@@ -24,7 +26,7 @@ public class StaticBehavior implements Behavior, Static, Reflectable<StaticClass
 
     @Override
     public StaticClassInformation getClassInformation() {
-        return StaticClassInformation.INSTANCE;
+        return CIINSTANCE;
     }
 
     @Override

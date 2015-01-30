@@ -14,6 +14,8 @@ import java.util.Map;
 
 public class PlayerScoreBehaviorTemplate implements BehaviorTemplate<PlayerScoreBehavior>, PlayerScore, Reflectable<PlayerScoreClassInformation> {
 
+    private static final PlayerScoreClassInformation CIINSTANCE = new PlayerScoreClassInformation();
+
     private final GameObject owner;
     private final Property<ScoreValue> scoreValue;
 
@@ -24,7 +26,7 @@ public class PlayerScoreBehaviorTemplate implements BehaviorTemplate<PlayerScore
 
     @Override
     public PlayerScoreClassInformation getClassInformation() {
-        return PlayerScoreClassInformation.INSTANCE;
+        return CIINSTANCE;
     }
 
     @Override

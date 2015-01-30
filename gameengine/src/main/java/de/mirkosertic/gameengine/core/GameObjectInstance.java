@@ -17,6 +17,8 @@ import java.util.Map;
 
 public class GameObjectInstance implements Reflectable<GameObjectInstanceClassInformation> {
 
+    private static final GameObjectInstanceClassInformation CIINSTANCE = new GameObjectInstanceClassInformation();
+
     public static final String UUID_PROPERTY = "uuid";
     public static final String NAME_PROPERTY = "name";
     public static final String POSITION_PROPERTY = "position";
@@ -53,7 +55,7 @@ public class GameObjectInstance implements Reflectable<GameObjectInstanceClassIn
 
     @Override
     public GameObjectInstanceClassInformation getClassInformation() {
-        return GameObjectInstanceClassInformation.INSTANCE;
+        return CIINSTANCE;
     }
 
     public boolean contains(Position aPosition) {
@@ -160,7 +162,7 @@ public class GameObjectInstance implements Reflectable<GameObjectInstanceClassIn
     public static GameObjectInstance deserialize(GameRuntime aGameRuntime, GameScene aScene, Map<String, Object> theInstance) {
 
         String theGameObjectUUID = (String) theInstance.get("gameobjectuuid");
-        GameObject theGameObject = aScene.findGameObjectByID(theGameObjectUUID);
+        GameObject theGameObject = aScene.findObjectByID(theGameObjectUUID);
         if (theGameObject == null) {
             throw new RuntimeException("Cannot find gameobject with uuid " + theGameObjectUUID);
         }

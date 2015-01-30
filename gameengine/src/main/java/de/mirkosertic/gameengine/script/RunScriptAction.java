@@ -19,6 +19,7 @@ public class RunScriptAction implements Action {
     private static final String DEFAULT_SCRIPT = "--\n"
             + "-- This is the default method of every action. It is called once for every game loop cycle.\n"
             + "--\n"
+            + "-- event is an object which represents the GameEvent causing this action\n"
             + "-- instance is an optional injected object which is a reference to the GameObjectInstance for \n"
             + "-- which this script is executed.\n"
             + "-- scene is an injected object which is a reference to the GameScene for \n"
@@ -56,14 +57,14 @@ public class RunScriptAction implements Action {
         // Spawn only instance specific script instances if there are not all instances selected...
         if (theInstances.length < aScene.getInstances().length) {
             for (GameObjectInstance theInstance : theInstances) {
-                ScriptProcess theProcess = new ScriptProcess(theInstance, theScriptEngineFactory, theScript);
+                ScriptProcess theProcess = new ScriptProcess(aResult.getEvent(), theInstance, theScriptEngineFactory, theScript);
                 theManager.fire(new StartProcess(theProcess));
                 theNumberOfProcesses++;
             }
         }
         if (theNumberOfProcesses == 0) {
             // No instance specific processes created, so we will spawn a scene based process
-            ScriptProcess theProcess = new ScriptProcess(aScene, theScriptEngineFactory, theScript);
+            ScriptProcess theProcess = new ScriptProcess(aResult.getEvent(), aScene, theScriptEngineFactory, theScript);
             theManager.fire(new StartProcess(theProcess));
         }
     }

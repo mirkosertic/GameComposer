@@ -7,7 +7,6 @@ import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.input.MouseEventCondition;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 
 import java.util.Arrays;
@@ -24,7 +23,7 @@ public class MouseEventConditionController implements Controller {
     ComboBox eventType;
 
     @FXML
-    CheckBox ignoreInstances;
+    ComboBox filterType;
 
     @FXML
     ComboBox objectType;
@@ -45,22 +44,31 @@ public class MouseEventConditionController implements Controller {
         eventType.getItems().addAll(MouseEventCondition.MouseEventType.values());
         eventType.setConverter(stringConverterFactory.createEnumStringConverter());
 
-        ignoreInstances.setSelected(true);
+        filterType.getItems().clear();
+        filterType.getItems().addAll(MouseEventCondition.FilterType.values());
+        filterType.setConverter(stringConverterFactory.createEnumStringConverter());
 
         objectType.getItems().clear();
         objectType.getItems().addAll(theSortedGameObjects);
         objectType.setConverter(stringConverterFactory.createGameObjectStringConverter());
 
+        eventType.getSelectionModel().select(aCondition.eventTypeProperty().get());
+        objectType.getSelectionModel().select(aCondition.objectTypeProperty().get());
+        filterType.getSelectionModel().select(aCondition.filterTypeProperty().get());
+
         return this;
     }
 
     public void setEventType() {
+        condition.eventTypeProperty().set((MouseEventCondition.MouseEventType) eventType.getValue());
     }
 
-    public void setFilterInstances() {
+    public void setFilterType() {
+        condition.filterTypeProperty().set((MouseEventCondition.FilterType) filterType.getValue());
     }
 
     public void setObjectType() {
+        condition.objectTypeProperty().set((GameObject) objectType.getValue());
     }
 
     @Override

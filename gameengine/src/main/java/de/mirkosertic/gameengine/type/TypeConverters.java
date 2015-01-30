@@ -4,9 +4,11 @@ import de.mirkosertic.gameengine.annotations.ReflectiveMethod;
 
 public class TypeConverters implements Reflectable<TypeConvertersClassInformation> {
 
+    private static final TypeConvertersClassInformation CIINSTANCE = new TypeConvertersClassInformation();
+
     @Override
     public TypeConvertersClassInformation getClassInformation() {
-        return TypeConvertersClassInformation.INSTANCE;
+        return CIINSTANCE;
     }
 
     @ReflectiveMethod

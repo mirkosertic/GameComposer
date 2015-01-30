@@ -13,6 +13,8 @@ import de.mirkosertic.gameengine.type.Reflectable;
 
 public class PhysicsBehaviorTemplate implements BehaviorTemplate<PhysicsBehavior>, Physics, Reflectable<PhysicsClassInformation> {
 
+    private static final PhysicsClassInformation CIINSTANCE = new PhysicsClassInformation();
+
     private final GameObject owner;
 
     private final Property<Boolean> active;
@@ -35,7 +37,7 @@ public class PhysicsBehaviorTemplate implements BehaviorTemplate<PhysicsBehavior
 
     @Override
     public PhysicsClassInformation getClassInformation() {
-        return PhysicsClassInformation.INSTANCE;
+        return CIINSTANCE;
     }
 
     @Override

@@ -11,6 +11,8 @@ import java.util.Map;
 
 public class ConstantMovementBehaviorTemplate implements BehaviorTemplate<ConstantMovementBehavior>, ConstantMovement, Reflectable<ConstantMovementClassInformation> {
 
+    private static final ConstantMovementClassInformation CIINSTANCE = new ConstantMovementClassInformation();
+
     private final Property<Speed> speed;
     private final Property<Speed> rotationSpeed;
     private final GameObject owner;
@@ -23,7 +25,7 @@ public class ConstantMovementBehaviorTemplate implements BehaviorTemplate<Consta
 
     @Override
     public ConstantMovementClassInformation getClassInformation() {
-        return ConstantMovementClassInformation.INSTANCE;
+        return CIINSTANCE;
     }
 
     @Override

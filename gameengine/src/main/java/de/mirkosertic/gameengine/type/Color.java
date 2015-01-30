@@ -7,6 +7,8 @@ import java.util.Map;
 
 public class Color implements Reflectable<ColorClassInformation> {
 
+    private static final ColorClassInformation CIINSTANCE = new ColorClassInformation();
+
     public static final Color WHITE = new Color(255, 255, 255);
     public static final Color BLACK = new Color(0, 0, 0);
 
@@ -27,7 +29,7 @@ public class Color implements Reflectable<ColorClassInformation> {
 
     @Override
     public ColorClassInformation getClassInformation() {
-        return ColorClassInformation.INSTANCE;
+        return CIINSTANCE;
     }
 
     public Map<String, Object> serialize() {

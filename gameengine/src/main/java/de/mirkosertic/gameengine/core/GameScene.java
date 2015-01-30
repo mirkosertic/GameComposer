@@ -15,6 +15,8 @@ import java.util.Map;
 
 public class GameScene implements Reflectable<GameSceneClassInformation> {
 
+    private static final GameSceneClassInformation CIINSTANCE = new GameSceneClassInformation();
+
     public static final String NAME_PROPERTY = "name";
     public static final String CAMERA_OBJECT_PROPERTY = "cameraObject";
     public static final String DEFAULT_PLAYER_PROPERTY = "defaultPlayer";
@@ -61,7 +63,7 @@ public class GameScene implements Reflectable<GameSceneClassInformation> {
 
     @Override
     public GameSceneClassInformation getClassInformation() {
-        return GameSceneClassInformation.INSTANCE;
+        return CIINSTANCE;
     }
 
     public GameRuntime getRuntime() {
@@ -116,7 +118,8 @@ public class GameScene implements Reflectable<GameSceneClassInformation> {
         }
     }
 
-    public void addGameObjectInstance(GameObjectInstance aInstance) {
+    @ReflectiveMethod
+    public void addInstance(GameObjectInstance aInstance) {
         List<GameObjectInstance> theInstances = ArrayUtils.asList(instances);
         if (theInstances.add(aInstance)) {
             instances = theInstances.toArray(new GameObjectInstance[theInstances.size()]);
@@ -202,9 +205,19 @@ public class GameScene implements Reflectable<GameSceneClassInformation> {
         return theResult;
     }
 
-    public GameObject findGameObjectByID(String aObjectUUID) {
+    public GameObject findObjectByID(String aObjectUUID) {
         for (GameObject theObject : objects) {
             if (theObject.uuidProperty().get().equals(aObjectUUID)) {
+                return theObject;
+            }
+        }
+        return null;
+    }
+
+    @ReflectiveMethod
+    public GameObject findObjectByName(String aObjectName) {
+        for (GameObject theObject : objects) {
+            if (theObject.nameProperty().get().equals(aObjectName)) {
                 return theObject;
             }
         }
@@ -221,6 +234,7 @@ public class GameScene implements Reflectable<GameSceneClassInformation> {
         return null;
     }
 
+    @ReflectiveMethod
     public GameObjectInstance createFrom(GameObject aGameObject) {
         GameObjectInstance theInstance = new GameObjectInstance(gameRuntime.getEventManager(), aGameObject);
         theInstance.nameProperty().setQuietly(aGameObject.nameProperty().get() + "_" + System.currentTimeMillis());
@@ -330,7 +344,7 @@ public class GameScene implements Reflectable<GameSceneClassInformation> {
         List<Map<String, Object>> theInstances = (List<Map<String, Object>>) aSerializedData.get("instances");
         if (theInstances != null) {
             for (Map<String, Object> theInstance : theInstances) {
-                theScene.addGameObjectInstance(GameObjectInstance.deserialize(aGameRuntime, theScene, theInstance));
+                theScene.addInstance(GameObjectInstance.deserialize(aGameRuntime, theScene, theInstance));
             }
         }
 
@@ -345,11 +359,11 @@ public class GameScene implements Reflectable<GameSceneClassInformation> {
 
         String theCameraObject = (String) aSerializedData.get("cameraobjectid");
         if (theCameraObject != null) {
-            theScene.cameraObject.setQuietly(theScene.findGameObjectByID(theCameraObject));
+            theScene.cameraObject.setQuietly(theScene.findObjectByID(theCameraObject));
         }
         String theDefaultPlayerObject = (String) aSerializedData.get("defaultplayerobjectid");
         if (theDefaultPlayerObject != null) {
-            theScene.defaultPlayer.setQuietly(theScene.findGameObjectByID(theDefaultPlayerObject));
+            theScene.defaultPlayer.setQuietly(theScene.findObjectByID(theDefaultPlayerObject));
         }
         Map<String, Object> theBackgroundColor = (Map<String, Object>) aSerializedData.get("backgroundcolor");
         if (theBackgroundColor != null) {
@@ -385,12 +399,15 @@ public class GameScene implements Reflectable<GameSceneClassInformation> {
         int theMaxX = Integer.MIN_VALUE;
         int theMaxY = Integer.MIN_VALUE;
         for (GameObjectInstance theInstance : instances) {
-            Position thePosition = theInstance.positionProperty().get();
-            Size theSize = theInstance.getOwnerGameObject().sizeProperty().get();
-            theMinX = Math.min(theMinX, (int) thePosition.x);
-            theMinY = Math.min(theMinY, (int) thePosition.y);
-            theMaxX = Math.max(theMaxX, (int) thePosition.x + theSize.width);
-            theMaxY = Math.max(theMaxY, (int) thePosition.y + theSize.height);
+            // Ignore instances with absolute positioning
+            if (!theInstance.absolutePositionProperty().get()) {
+                Position thePosition = theInstance.positionProperty().get();
+                Size theSize = theInstance.getOwnerGameObject().sizeProperty().get();
+                theMinX = Math.min(theMinX, (int) thePosition.x);
+                theMinY = Math.min(theMinY, (int) thePosition.y);
+                theMaxX = Math.max(theMaxX, (int) thePosition.x + theSize.width);
+                theMaxY = Math.max(theMaxY, (int) thePosition.y + theSize.height);
+            }
         }
         return new Position(theMinX + (theMaxX - theMinX) / 2, theMinY + (theMaxY - theMinY) / 2);
     }
