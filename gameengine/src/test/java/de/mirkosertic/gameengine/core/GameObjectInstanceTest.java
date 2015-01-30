@@ -294,7 +294,7 @@ public class GameObjectInstanceTest {
         GameRuntime theRuntime = mock(GameRuntime.class);
         GameScene theScene = mock(GameScene.class);
         GameObject theOwner = mock(GameObject.class);
-        when(theScene.findGameObjectByID(eq("OWNERID"))).thenReturn(theOwner);
+        when(theScene.findObjectByID(eq("OWNERID"))).thenReturn(theOwner);
         Property theVisibleProperty = mock(Property.class);
         when(theVisibleProperty.get()).thenReturn(true);
         when(theOwner.visibleProperty()).thenReturn(theVisibleProperty);

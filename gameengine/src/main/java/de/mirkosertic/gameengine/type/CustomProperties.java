@@ -9,6 +9,8 @@ import java.util.Map;
 
 public class CustomProperties implements Reflectable {
 
+    private static final CustomPropertiesClassInformation CIINSTANCE = new CustomPropertiesClassInformation();
+
     private final Map<String, String> values;
 
     public CustomProperties() {
@@ -17,7 +19,7 @@ public class CustomProperties implements Reflectable {
 
     @Override
     public CustomPropertiesClassInformation getClassInformation() {
-        return CustomPropertiesClassInformation.INSTANCE;
+        return CIINSTANCE;
     }
 
     @ReflectiveMethod

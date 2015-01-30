@@ -8,6 +8,8 @@ import java.util.Map;
 
 public class Position implements Reflectable<PositionClassInformation> {
 
+    private static final PositionClassInformation CIINSTANCE = new PositionClassInformation();
+
     @ReflectiveField
     public final float x;
 
@@ -48,7 +50,7 @@ public class Position implements Reflectable<PositionClassInformation> {
 
     @Override
     public PositionClassInformation getClassInformation() {
-        return PositionClassInformation.INSTANCE;
+        return CIINSTANCE;
     }
 
     @ReflectiveMethod

@@ -8,6 +8,8 @@ import java.util.Map;
 
 public class Size implements Reflectable<SizeClassInformation> {
 
+    private static final SizeClassInformation CIINSTANCE = new SizeClassInformation();
+
     @ReflectiveField
     public final int width;
 
@@ -25,7 +27,7 @@ public class Size implements Reflectable<SizeClassInformation> {
 
     @Override
     public SizeClassInformation getClassInformation() {
-        return SizeClassInformation.INSTANCE;
+        return CIINSTANCE;
     }
 
     @ReflectiveMethod

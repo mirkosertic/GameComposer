@@ -2,6 +2,7 @@ package de.mirkosertic.gameengine.script;
 
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.event.GameEvent;
 import de.mirkosertic.gameengine.process.GameProcess;
 import de.mirkosertic.gameengine.scriptengine.LUAScriptEngine;
 import de.mirkosertic.gameengine.scriptengine.LUAScriptEngineFactory;
@@ -15,17 +16,19 @@ public class ScriptProcess implements GameProcess {
     private GameObjectInstance instance;
     private final LUAScriptEngineFactory scriptEngineFactory;
     private final Script script;
+    private final GameEvent causingEvent;
 
     private LUAScriptEngine scriptEngine;
 
-    public ScriptProcess(GameScene aScene, LUAScriptEngineFactory aScriptEngineFactory, Script aScript) {
+    public ScriptProcess(GameEvent aCausingEvent, GameScene aScene, LUAScriptEngineFactory aScriptEngineFactory, Script aScript) {
+        causingEvent = aCausingEvent;
         scene = aScene;
         scriptEngineFactory = aScriptEngineFactory;
         script = aScript;
     }
 
-    public ScriptProcess(GameObjectInstance aInstance, LUAScriptEngineFactory aScriptEngineFactory, Script aScript) {
-        this(aInstance.getOwnerGameObject().getGameScene(), aScriptEngineFactory, aScript);
+    public ScriptProcess(GameEvent aEvent, GameObjectInstance aInstance, LUAScriptEngineFactory aScriptEngineFactory, Script aScript) {
+        this(aEvent, aInstance.getOwnerGameObject().getGameScene(), aScriptEngineFactory, aScript);
         instance = aInstance;
     }
 
@@ -36,6 +39,9 @@ public class ScriptProcess implements GameProcess {
                 scriptEngine = scriptEngineFactory.createNewEngine(script);
                 if (instance != null) {
                     scriptEngine.registerObject("instance", instance);
+                }
+                if (causingEvent != null) {
+                    scriptEngine.registerObject("event", causingEvent);
                 }
                 scriptEngine.registerObject("scene", scene);
                 scriptEngine.registerObject("game", scene.getGame());

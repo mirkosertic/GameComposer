@@ -14,6 +14,8 @@ import java.util.Map;
 
 public class SpriteBehaviorTemplate implements BehaviorTemplate<SpriteBehavior>, Sprite, Reflectable<SpriteClassInformation> {
 
+    private static final SpriteClassInformation CIINSTANCE = new SpriteClassInformation();
+
     private final Property<Animation> currentAnimation;
     private final Property<Integer> speed;
     private final List<Animation> animations;
@@ -30,7 +32,7 @@ public class SpriteBehaviorTemplate implements BehaviorTemplate<SpriteBehavior>,
 
     @Override
     public SpriteClassInformation getClassInformation() {
-        return SpriteClassInformation.INSTANCE;
+        return CIINSTANCE;
     }
 
     @Override

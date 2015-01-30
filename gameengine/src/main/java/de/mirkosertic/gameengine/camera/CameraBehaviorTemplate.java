@@ -13,6 +13,8 @@ import de.mirkosertic.gameengine.type.Reflectable;
 
 public class CameraBehaviorTemplate implements BehaviorTemplate<CameraBehavior>, Camera, Reflectable<CameraClassInformation> {
 
+    private static final CameraClassInformation CIINSTANCE = new CameraClassInformation();
+
     private final Property<CameraType> type;
     private final GameObject owner;
 
@@ -23,7 +25,7 @@ public class CameraBehaviorTemplate implements BehaviorTemplate<CameraBehavior>,
 
     @Override
     public CameraClassInformation getClassInformation() {
-        return CameraClassInformation.INSTANCE;
+        return CIINSTANCE;
     }
 
     @Override

@@ -99,11 +99,11 @@ public class ObjectCollisionCondition implements Condition {
         ObjectCollisionCondition theCondition = new ObjectCollisionCondition();
         String thePrimaryObject = (String) aSerializedData.get("primaryObjectUuid");
         if (thePrimaryObject != null) {
-            theCondition.primaryObject.setQuietly(aGameScene.findGameObjectByID(thePrimaryObject));
+            theCondition.primaryObject.setQuietly(aGameScene.findObjectByID(thePrimaryObject));
         }
         String theSecondaryObject = (String) aSerializedData.get("secondaryObjectUuid");
         if (theSecondaryObject != null) {
-            theCondition.secondaryObject.setQuietly(aGameScene.findGameObjectByID(theSecondaryObject));
+            theCondition.secondaryObject.setQuietly(aGameScene.findObjectByID(theSecondaryObject));
         }
         String thePositon = (String) aSerializedData.get(POSITION_PROPERTY);
         if (thePositon != null) {

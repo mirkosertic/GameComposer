@@ -73,7 +73,7 @@ public class GameObjectInstanceAddedToSceneConditionTest {
 
         GameScene theScene = mock(GameScene.class);
         GameObject theObject = mock(GameObject.class);
-        when(theScene.findGameObjectByID(eq("UUID"))).thenReturn(theObject);
+        when(theScene.findObjectByID(eq("UUID"))).thenReturn(theObject);
 
         GameObjectInstanceAddedToSceneCondition theCondition2 = GameObjectInstanceAddedToSceneCondition.unmarshall(theScene, theData);
         assertSame(theObject, theCondition2.gameObjectProperty().get());

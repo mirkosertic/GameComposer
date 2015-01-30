@@ -69,7 +69,7 @@ public class GameObjectInstanceRemovedFromSceneConditionTest {
 
         GameScene theScene = mock(GameScene.class);
         GameObject theObject = mock(GameObject.class);
-        when(theScene.findGameObjectByID(eq("UUID"))).thenReturn(theObject);
+        when(theScene.findObjectByID(eq("UUID"))).thenReturn(theObject);
 
         Map<String, Object> theData = new HashMap<>();
         theData.put(GameObjectInstanceRemovedFromSceneCondition.TYPE_ATTRIBUTE, GameObjectInstanceRemovedFromSceneCondition.TYPE_VALUE);
@@ -80,6 +80,6 @@ public class GameObjectInstanceRemovedFromSceneConditionTest {
         GameObjectInstanceRemovedFromSceneCondition theCondition2 = GameObjectInstanceRemovedFromSceneCondition.unmarshall(theScene, theData);
         assertSame(theObject, theCondition2.gameObjectProperty().get());
 
-        verify(theScene, times(1)).findGameObjectByID(eq("UUID"));
+        verify(theScene, times(1)).findObjectByID(eq("UUID"));
     }
 }

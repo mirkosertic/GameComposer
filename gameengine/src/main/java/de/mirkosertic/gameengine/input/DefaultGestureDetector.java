@@ -142,11 +142,11 @@ public class DefaultGestureDetector implements GestureDetector {
 
     @Override
     public void mousePressed(Position aMousePosition) {
-        eventManager.fire(new MousePressed(aMousePosition, cameraBehavior.findInstancesAt(aMousePosition)));
+        eventManager.fire(new MousePressed(cameraBehavior.transformFromScreen(aMousePosition), cameraBehavior.findInstancesAt(aMousePosition)));
     }
 
     @Override
     public void mouseReleased(Position aMousePosition) {
-        eventManager.fire(new MouseReleased(aMousePosition, cameraBehavior.findInstancesAt(aMousePosition)));
+        eventManager.fire(new MouseReleased(cameraBehavior.transformFromScreen(aMousePosition), cameraBehavior.findInstancesAt(aMousePosition)));
     }
 }

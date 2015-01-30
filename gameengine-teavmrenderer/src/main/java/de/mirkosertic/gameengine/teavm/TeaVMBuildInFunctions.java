@@ -8,6 +8,8 @@ import java.util.Date;
 
 public class TeaVMBuildInFunctions extends BuiltInFunctions {
 
+    private static final BuiltInFunctionsClassInformation CIINSTANCE = new BuiltInFunctionsClassInformation();
+
     @Override
     public String formatTime(Number aTimeInMilis, String aPattern) {
         SimpleDateFormat theFormat = new SimpleDateFormat(aPattern);
@@ -16,6 +18,6 @@ public class TeaVMBuildInFunctions extends BuiltInFunctions {
 
     @Override
     public BuiltInFunctionsClassInformation getClassInformation() {
-        return BuiltInFunctionsClassInformation.INSTANCE;
+        return CIINSTANCE;
     }
 }

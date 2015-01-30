@@ -7,6 +7,8 @@ import java.util.Map;
 
 public class ScoreValue implements Reflectable {
 
+    private static final ScoreValueClassInformation CIINSTANCE = new ScoreValueClassInformation();
+
     public final long score;
 
     public ScoreValue() {
@@ -33,7 +35,7 @@ public class ScoreValue implements Reflectable {
 
     @Override
     public ScoreValueClassInformation getClassInformation() {
-        return ScoreValueClassInformation.INSTANCE;
+        return CIINSTANCE;
     }
 
     @Override

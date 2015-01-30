@@ -34,7 +34,8 @@
             </FXCollections>
           </items>
         </ComboBox>
-            <CheckBox fx:id="ignoreInstances" mnemonicParsing="false" onAction="#setFilterInstances" text="Ignore instances" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label text="Filter type" GridPane.rowIndex="1" />
+            <ComboBox fx:id="filterType" onAction="#setFilterType" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
       </children>
       <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="-1.0" />

@@ -7,6 +7,8 @@ import java.util.Map;
 
 public class Speed implements Reflectable {
 
+    private static final SpeedClassInformation CIINSTANCE = new SpeedClassInformation();
+
     public final long speed;
 
     public Speed(long aSpeed) {
@@ -29,7 +31,7 @@ public class Speed implements Reflectable {
 
     @Override
     public SpeedClassInformation getClassInformation() {
-        return SpeedClassInformation.INSTANCE;
+        return CIINSTANCE;
     }
 
     public Map<String, Object> serialize() {

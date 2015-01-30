@@ -15,6 +15,8 @@ import java.util.Set;
 
 public class GameObject implements Reflectable<GameObjectClassInformation> {
 
+    private static final GameObjectClassInformation CIINSTANCE = new GameObjectClassInformation();
+
     public static final String UUID_PROPERTY = "uuid";
     public static final String NAME_PROPERTY = "name";
     public static final String SIZE_PROPERTY = "size";
@@ -100,7 +102,7 @@ public class GameObject implements Reflectable<GameObjectClassInformation> {
 
     @Override
     public GameObjectClassInformation getClassInformation() {
-        return GameObjectClassInformation.INSTANCE;
+        return CIINSTANCE;
     }
 
     public Set<BehaviorTemplate> getBehaviorTemplates() {

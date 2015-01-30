@@ -61,7 +61,7 @@ public class GameObjectInstanceLeftLayoutCondition implements Condition {
         GameObjectInstanceLeftLayoutCondition theResult = new GameObjectInstanceLeftLayoutCondition();
         String theGameObjectUUID = (String) aSerializedData.get("gameObjectUUID");
         if (theGameObjectUUID != null) {
-            theResult.gameObject.setQuietly(aGameScene.findGameObjectByID(theGameObjectUUID));
+            theResult.gameObject.setQuietly(aGameScene.findObjectByID(theGameObjectUUID));
         }
         return theResult;
     }

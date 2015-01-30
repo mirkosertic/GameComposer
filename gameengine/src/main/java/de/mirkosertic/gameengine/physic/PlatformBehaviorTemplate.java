@@ -14,6 +14,8 @@ import java.util.Map;
 
 public class PlatformBehaviorTemplate implements BehaviorTemplate<PlatformBehavior>, Platform, Reflectable<PlatformClassInformation> {
 
+    private static final PlatformClassInformation CIINSTANCE = new PlatformClassInformation();
+
     private final GameObject owner;
 
     private final Property<GameKeyCode> moveLeftKey;
@@ -33,7 +35,7 @@ public class PlatformBehaviorTemplate implements BehaviorTemplate<PlatformBehavi
 
     @Override
     public PlatformClassInformation getClassInformation() {
-        return PlatformClassInformation.INSTANCE;
+        return CIINSTANCE;
     }
 
     @Override

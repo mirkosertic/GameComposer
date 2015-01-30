@@ -20,6 +20,8 @@ import java.util.Map;
 
 public class CameraBehavior implements Behavior, Camera, Reflectable<CameraClassInformation> {
 
+    private static final CameraClassInformation CIINSTANCE = new CameraClassInformation();
+
     static final String TYPE = "Camera";
 
     private final GameObjectInstance objectInstance;
@@ -56,7 +58,7 @@ public class CameraBehavior implements Behavior, Camera, Reflectable<CameraClass
 
     @Override
     public CameraClassInformation getClassInformation() {
-        return CameraClassInformation.INSTANCE;
+        return CIINSTANCE;
     }
 
     public GameObjectInstance getObjectInstance() {

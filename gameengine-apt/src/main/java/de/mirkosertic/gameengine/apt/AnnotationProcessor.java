@@ -25,7 +25,8 @@ import javax.lang.model.type.TypeMirror;
 
 @SupportedAnnotationTypes(
         {"de.mirkosertic.gameengine.annotations.ReflectiveField",
-         "de.mirkosertic.gameengine.annotations.ReflectiveMethod"}
+         "de.mirkosertic.gameengine.annotations.ReflectiveMethod"
+        }
 )
 public class AnnotationProcessor extends AbstractProcessor {
 
@@ -35,6 +36,9 @@ public class AnnotationProcessor extends AbstractProcessor {
         }
         if ("int".equals(aTypeName)) {
             return "Integer";
+        }
+        if ("long".equals(aTypeName)) {
+            return "Long";
         }
         if ("double".equals(aTypeName)) {
             return "Double";
@@ -64,8 +68,9 @@ public class AnnotationProcessor extends AbstractProcessor {
         Map<TypeElement, List<Element>> theAnnotatedClassNames = new HashMap<>();
 
         for (TypeElement theAnnotation : aAnnotations) {
-            for (Element theElement :  aEnvironment.getElementsAnnotatedWith(theAnnotation)) {
-                Element theA = theElement.getEnclosingElement();
+
+                for (Element theElement : aEnvironment.getElementsAnnotatedWith(theAnnotation)) {
+                    Element theA = theElement.getEnclosingElement();
                     TypeElement theType = (TypeElement) theA;
                     List<Element> theAnnotations = theAnnotatedClassNames.get(theType);
                     if (theAnnotations == null) {
@@ -73,7 +78,7 @@ public class AnnotationProcessor extends AbstractProcessor {
                         theAnnotatedClassNames.put(theType, theAnnotations);
                     }
                     theAnnotations.add(theElement);
-            }
+                }
         }
 
         Filer theFiler = processingEnv.getFiler();
@@ -225,13 +230,7 @@ public class AnnotationProcessor extends AbstractProcessor {
                     }
                 }
                 theClassWriter.println();
-                theClassWriter.print("  public static final ");
-                theClassWriter.print(theClassInfoName);
-                theClassWriter.print(" INSTANCE = new ");
-                theClassWriter.print(theClassInfoName);
-                theClassWriter.println("();");
-                theClassWriter.println();
-                theClassWriter.print("  protected ");
+                theClassWriter.print("  public ");
                 theClassWriter.print(theClassInfoName);
                 theClassWriter.println("() {");
 

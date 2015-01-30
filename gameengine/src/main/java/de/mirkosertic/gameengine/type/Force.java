@@ -4,6 +4,8 @@ import de.mirkosertic.gameengine.annotations.ReflectiveField;
 
 public class Force implements Reflectable<ForceClassInformation> {
 
+    private static final ForceClassInformation CIINSTANCE = new ForceClassInformation();
+
     @ReflectiveField
     public final float forceX;
 
@@ -17,6 +19,6 @@ public class Force implements Reflectable<ForceClassInformation> {
 
     @Override
     public ForceClassInformation getClassInformation() {
-        return ForceClassInformation.INSTANCE;
+        return CIINSTANCE;
     }
 }

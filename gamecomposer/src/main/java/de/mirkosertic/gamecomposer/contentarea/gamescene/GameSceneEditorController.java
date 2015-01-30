@@ -170,12 +170,12 @@ public class GameSceneEditorController implements ContentController<GameScene> {
         Dragboard theDragBoard = aEvent.getDragboard();
         if (theDragBoard.hasContent(GameObjectClipboardContent.FORMAT)) {
             GameObjectClipboardContent theContent = (GameObjectClipboardContent) theDragBoard.getContent(GameObjectClipboardContent.FORMAT);
-            GameObject theGameObject = gameScene.findGameObjectByID(theContent.getGameObjectId());
+            GameObject theGameObject = gameScene.findObjectByID(theContent.getGameObjectId());
 
             GameObjectInstance theInstance = gameScene.createFrom(theGameObject);
             theInstance.positionProperty().set(cameraComponent.transformFromScreen(new Position(aEvent.getX(), aEvent.getY())));
 
-            gameScene.addGameObjectInstance(theInstance);
+            gameScene.addInstance(theInstance);
 
             gameScene.getRuntime().getEventManager().fire(new DisableDynamicPhysics(theInstance));
 

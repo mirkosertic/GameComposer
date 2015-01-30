@@ -7,6 +7,8 @@ import java.util.Map;
 
 public class Angle implements Reflectable {
 
+    private static final AngleClassInformation CIINSTANCE = new AngleClassInformation();
+
     public final int angleInDegrees;
 
     public Angle(int aAngleInDegrees) {
@@ -71,7 +73,7 @@ public class Angle implements Reflectable {
 
     @Override
     public AngleClassInformation getClassInformation() {
-        return AngleClassInformation.INSTANCE;
+        return CIINSTANCE;
     }
 
     public Map<String, Object> serialize() {

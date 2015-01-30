@@ -14,6 +14,8 @@ import java.util.Map;
 
 public class TextBehavior implements Behavior, Text, Reflectable<TextClassInformation> {
 
+    private static final TextClassInformation CIINSTANCE = new TextClassInformation();
+
     static final String TYPE = "Text";
 
     private final GameObjectInstance objectInstance;
@@ -45,7 +47,7 @@ public class TextBehavior implements Behavior, Text, Reflectable<TextClassInform
 
     @Override
     public TextClassInformation getClassInformation() {
-        return TextClassInformation.INSTANCE;
+        return CIINSTANCE;
     }
 
     @Override

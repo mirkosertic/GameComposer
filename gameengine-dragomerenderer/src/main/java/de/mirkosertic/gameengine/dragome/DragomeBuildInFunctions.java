@@ -13,6 +13,8 @@ import com.dragome.services.interfaces.AsyncCallback;
 
 public class DragomeBuildInFunctions extends BuiltInFunctions {
 
+    private static BuiltInFunctionsClassInformation CIINSTANCE = new BuiltInFunctionsClassInformation();
+
     @Override
     public String formatTime(Number aTimeInMilis, String aPattern) {
         SimpleDateFormat theFormat = new SimpleDateFormat(aPattern);
@@ -48,6 +50,6 @@ public class DragomeBuildInFunctions extends BuiltInFunctions {
 
     @Override
     public BuiltInFunctionsClassInformation getClassInformation() {
-        return BuiltInFunctionsClassInformation.INSTANCE;
+        return CIINSTANCE;
     }
 }

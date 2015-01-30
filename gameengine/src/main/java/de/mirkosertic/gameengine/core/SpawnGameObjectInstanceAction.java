@@ -45,7 +45,7 @@ public class SpawnGameObjectInstanceAction implements Action {
                     Position theInstancePosition = theInstance.positionProperty().get();
                     GameObjectInstance theNewInstance = aScene.createFrom(theObjectTemplate);
                     theNewInstance.positionProperty().set(theInstancePosition.add(offset.get()));
-                    aScene.addGameObjectInstance(theNewInstance);
+                    aScene.addInstance(theNewInstance);
                 }
             }
         }
@@ -71,11 +71,11 @@ public class SpawnGameObjectInstanceAction implements Action {
         SpawnGameObjectInstanceAction theResult = new SpawnGameObjectInstanceAction();
         String theObjectUUID = (String) aSerializedData.get("objectUuid");
         if (theObjectUUID != null) {
-            theResult.gameObject.setQuietly(aGameScene.findGameObjectByID(theObjectUUID));
+            theResult.gameObject.setQuietly(aGameScene.findObjectByID(theObjectUUID));
         }
         String theOReferemceObjectUUID = (String) aSerializedData.get("referenceObjectUuid");
         if (theOReferemceObjectUUID != null) {
-            theResult.referenceObject.setQuietly(aGameScene.findGameObjectByID(theOReferemceObjectUUID));
+            theResult.referenceObject.setQuietly(aGameScene.findObjectByID(theOReferemceObjectUUID));
         }
 
         Map<String, Object> thePosition = (Map<String, Object>) aSerializedData.get(OFFSET_PROPERTY);

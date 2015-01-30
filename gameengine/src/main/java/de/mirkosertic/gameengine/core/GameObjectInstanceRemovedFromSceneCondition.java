@@ -50,7 +50,7 @@ public class GameObjectInstanceRemovedFromSceneCondition implements Condition {
         GameObjectInstanceRemovedFromSceneCondition theResult = new GameObjectInstanceRemovedFromSceneCondition();
         String theObjectUUID = (String) aSerializedData.get("objectUUID");
         if (theObjectUUID != null) {
-            theResult.gameObject.setQuietly(aGameScene.findGameObjectByID(theObjectUUID));
+            theResult.gameObject.setQuietly(aGameScene.findObjectByID(theObjectUUID));
         }
         return theResult;
     }

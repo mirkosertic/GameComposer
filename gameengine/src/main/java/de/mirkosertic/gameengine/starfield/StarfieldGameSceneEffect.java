@@ -18,6 +18,8 @@ import java.util.*;
 
 public class StarfieldGameSceneEffect implements GameSceneEffect {
 
+    private static final StarfieldGameSceneEffectClassInformation CIINSTANCE = new StarfieldGameSceneEffectClassInformation();
+
     public static final String TYPE_VALUE = "StarfieldGameSceneEffect";
 
     public static final String NUMBER_OF_STARS_PROPERTY = "numberOfStars";
@@ -80,7 +82,7 @@ public class StarfieldGameSceneEffect implements GameSceneEffect {
 
     @Override
     public StarfieldGameSceneEffectClassInformation getClassInformation() {
-        return StarfieldGameSceneEffectClassInformation.INSTANCE;
+        return CIINSTANCE;
     }
 
     @Override

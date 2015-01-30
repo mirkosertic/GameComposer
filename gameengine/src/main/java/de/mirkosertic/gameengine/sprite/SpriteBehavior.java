@@ -14,6 +14,8 @@ import java.util.Map;
 
 public class SpriteBehavior implements Behavior, Sprite, Reflectable<SpriteClassInformation> {
 
+    private static final SpriteClassInformation CIINSTANCE = new SpriteClassInformation();
+
     static final String TYPE = "Sprite";
 
     private final GameObjectInstance objectInstance;
@@ -40,7 +42,7 @@ public class SpriteBehavior implements Behavior, Sprite, Reflectable<SpriteClass
 
     @Override
     public SpriteClassInformation getClassInformation() {
-        return SpriteClassInformation.INSTANCE;
+        return CIINSTANCE;
     }
 
     @Override
