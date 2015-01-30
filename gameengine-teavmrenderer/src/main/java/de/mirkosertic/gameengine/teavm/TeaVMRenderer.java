@@ -18,8 +18,6 @@ import org.teavm.dom.html.HTMLElement;
 import org.teavm.jso.JS;
 import org.teavm.jso.JSArrayReader;
 
-import org.w3c.dom.events.MouseEvent;
-
 public class TeaVMRenderer {
 
     private static final TeaVMWindow window = (TeaVMWindow) JS.getGlobal();
@@ -151,13 +149,13 @@ public class TeaVMRenderer {
         canvasElement.addEventListener("mousedown", new EventListener() {
             @Override
             public void handleEvent(Event aEvent) {
-                mouseDown((MouseEvent) aEvent);
+                mouseDown((TeaVMMouseEvent) aEvent);
             }
         });
         canvasElement.addEventListener("mouseup", new EventListener() {
             @Override
             public void handleEvent(Event aEvent) {
-                mouseUp((MouseEvent) aEvent);
+                mouseUp((TeaVMMouseEvent) aEvent);
             }
         });
         ((EventTarget) window).addEventListener("resize", new EventListener() {
@@ -170,7 +168,7 @@ public class TeaVMRenderer {
         }, true);
     }
 
-    private void mouseDown(MouseEvent aEvent) {
+    private void mouseDown(TeaVMMouseEvent aEvent) {
         if (runSceneStrategy.hasGameLoop()) {
             runSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector().mousePressed(
                     new Position(aEvent.getClientX(), aEvent.getClientY())
@@ -178,7 +176,7 @@ public class TeaVMRenderer {
         }
     }
 
-    private void mouseUp(MouseEvent aEvent) {
+    private void mouseUp(TeaVMMouseEvent aEvent) {
         if (runSceneStrategy.hasGameLoop()) {
             runSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector().mouseReleased(
                     new Position(aEvent.getClientX(), aEvent.getClientY())
