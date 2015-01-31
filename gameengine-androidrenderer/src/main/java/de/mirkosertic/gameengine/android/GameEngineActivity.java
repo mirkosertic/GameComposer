@@ -10,7 +10,7 @@ import android.view.View;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
 import de.mirkosertic.gameengine.core.*;
-import de.mirkosertic.gameengine.type.Position;
+import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.type.Size;
 import de.mirkosertic.gameengine.type.TouchIdentifier;
 import de.mirkosertic.gameengine.type.TouchPosition;
@@ -40,6 +40,9 @@ public class GameEngineActivity extends Activity {
         gameLoopFactory = new GameLoopFactory();
 
         playSceneStrategy = new PlaySceneStrategy(gameRuntimeFactory, gameLoopFactory) {
+
+            private AndroidGameView gameView;
+
             @Override
             protected void loadOtherScene(String aSceneId) {
                 loadScene(aSceneId);
@@ -51,14 +54,28 @@ public class GameEngineActivity extends Activity {
             }
 
             @Override
-            protected GameView getOrCreateCurrentGameView(GameRuntime aGameRuntime, CameraBehavior aCamera, GestureDetector aGestureDetector) {
-                return new AndroidGameView(androidCanvas, aCamera, aGameRuntime, aGestureDetector);
+            protected GestureDetector createGestureDetectorFor(GameEventManager aEventManager, CameraBehavior aCamera) {
+                return new AndroidGestureDetector(aEventManager, aCamera);
+            }
+
+            @Override
+            protected AndroidGameView getOrCreateCurrentGameView(GameRuntime aGameRuntime, CameraBehavior aCamera, GestureDetector aGestureDetector) {
+                if (gameView == null) {
+                    gameView = new AndroidGameView(androidCanvas, aCamera, aGameRuntime, aGestureDetector);
+                } else {
+                    gameView.prepareNewScene(aGameRuntime, aCamera, aGestureDetector);
+                }
+                gameView.setCurrentScreenSize(getScreenSize());
+                return gameView;
             }
 
             @Override
             public void handleResize() {
                 Size theCurrentSize = getScreenSize();
                 getRunningGameLoop().getScene().getRuntime().getEventManager().fire(new SetScreenResolution(theCurrentSize));
+                if (gameView != null) {
+                    gameView.setCurrentScreenSize(theCurrentSize);
+                }
             }
         };
     }

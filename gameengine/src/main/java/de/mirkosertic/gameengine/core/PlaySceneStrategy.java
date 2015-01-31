@@ -40,6 +40,10 @@ public abstract class PlaySceneStrategy {
         runtimeFactory.loadingFinished(aGameScene);
     }
 
+    protected GestureDetector createGestureDetectorFor(GameEventManager aEventManager, CameraBehavior aCamera) {
+        return new DefaultGestureDetector(aEventManager, aCamera);
+    }
+
     public void playScene(GameScene aGameScene) {
         if (runningGameLoop != null) {
             runningGameLoop.shutdown();
@@ -69,7 +73,7 @@ public abstract class PlaySceneStrategy {
             }
         });
 
-        GestureDetector theGestureDetector = new DefaultGestureDetector(theRuntime.getEventManager(), theCameraBehavior);
+        GestureDetector theGestureDetector = createGestureDetectorFor(theRuntime.getEventManager(), theCameraBehavior);
         GameView theGameView = getOrCreateCurrentGameView(theRuntime, theCameraBehavior, theGestureDetector);
 
         GameLoop theLoop = gameLoopFactory.create(aGameScene, theGameView, theRuntime);

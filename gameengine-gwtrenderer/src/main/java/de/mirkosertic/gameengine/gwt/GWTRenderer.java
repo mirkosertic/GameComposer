@@ -225,12 +225,6 @@ public class GWTRenderer implements EntryPoint {
                 handleMouseDown(aEvent);
             }
         }, MouseDownEvent.getType());
-        RootPanel.get().addHandler(new MouseDownHandler() {
-            @Override
-            public void onMouseDown(MouseDownEvent aEvent) {
-                handleMouseDown(aEvent);
-            }
-        }, MouseDownEvent.getType());
         RootPanel.get().addHandler(new MouseUpHandler() {
             @Override
             public void onMouseUp(MouseUpEvent aEvent) {
