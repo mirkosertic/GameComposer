@@ -1,5 +1,6 @@
 package de.mirkosertic.gameengine.dragome;
 
+import de.mirkosertic.gameengine.event.SystemException;
 import org.w3c.dom.Element;
 import org.w3c.dom.events.Event;
 import org.w3c.dom.events.EventListener;
@@ -80,6 +81,12 @@ public class IndexPage extends DefaultVisualActivity {
             }
 
             @Override
+            protected void handleSystemException(SystemException e) {
+                super.handleSystemException(e);
+                DragomeLogger.error(e.toString()+" "+e.exception);
+            }
+
+            @Override
             protected GameView getOrCreateCurrentGameView(GameRuntime aGameRuntime, CameraBehavior aCamera, GestureDetector aGestureDetector) {
                 if (gameView == null) {
                     Element elementBySelector= ServiceLocator.getInstance().getDomHandler().getElementBySelector("#html5canvas");
@@ -107,11 +114,16 @@ public class IndexPage extends DefaultVisualActivity {
         EventListener theGlobalEventListener = new EventListener() {
             @Override
             public void handleEvent(Event aEvent) {
-                if (aEvent instanceof KeyboardEvent) {
-                    handleSingleKeyboardEvent((KeyboardEvent) aEvent);
-                }
-                if (aEvent instanceof MouseEvent) {
-                    handleSingleMouseEvent((MouseEvent) aEvent);
+                switch (aEvent.getType()) {
+                    case "keydown":
+                    case "keypress":
+                    case "keyup":
+                        handleSingleKeyboardEvent((KeyboardEvent) aEvent);
+                        break;
+                    case "mousedown":
+                    case "mouseup":
+                        handleSingleMouseEvent((MouseEvent) aEvent);
+                        break;
                 }
             }
         };

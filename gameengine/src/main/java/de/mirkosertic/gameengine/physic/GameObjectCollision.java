@@ -4,7 +4,6 @@ import de.mirkosertic.gameengine.annotations.InheritedClassInformation;
 import de.mirkosertic.gameengine.annotations.ReflectiveField;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.event.GameEvent;
-import de.mirkosertic.gameengine.event.GameEventClassInformation;
 
 @InheritedClassInformation
 public class GameObjectCollision extends GameEvent {

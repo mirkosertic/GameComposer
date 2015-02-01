@@ -3,7 +3,6 @@ package de.mirkosertic.gameengine.process;
 import de.mirkosertic.gameengine.annotations.InheritedClassInformation;
 import de.mirkosertic.gameengine.annotations.ReflectiveField;
 import de.mirkosertic.gameengine.event.GameEvent;
-import de.mirkosertic.gameengine.event.GameEventClassInformation;
 
 @InheritedClassInformation
 public class StartProcess extends GameEvent {
