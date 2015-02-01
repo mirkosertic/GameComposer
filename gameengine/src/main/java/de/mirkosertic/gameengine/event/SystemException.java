@@ -1,7 +1,5 @@
 package de.mirkosertic.gameengine.event;
 
-import de.mirkosertic.gameengine.annotations.InheritedClassInformation;
-
 public class SystemException extends GameEvent {
 
     public final Exception exception;

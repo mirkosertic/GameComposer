@@ -5,6 +5,7 @@ import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.GameEventManager;
+import de.mirkosertic.gameengine.event.SystemException;
 import de.mirkosertic.gameengine.input.DefaultGestureDetector;
 import de.mirkosertic.gameengine.type.Size;
 
@@ -44,6 +45,9 @@ public abstract class PlaySceneStrategy {
         return new DefaultGestureDetector(aEventManager, aCamera);
     }
 
+    protected void handleSystemException(SystemException e) {
+    }
+
     public void playScene(GameScene aGameScene) {
         if (runningGameLoop != null) {
             runningGameLoop.shutdown();
@@ -51,6 +55,13 @@ public abstract class PlaySceneStrategy {
 
         GameRuntime theRuntime = aGameScene.getRuntime();
         GameEventManager theEventManager = theRuntime.getEventManager();
+
+        theEventManager.register(null, SystemException.class, new GameEventListener<SystemException>() {
+            @Override
+            public void handleGameEvent(SystemException aEvent) {
+                handleSystemException(aEvent);
+            }
+        } );
 
         loadingFinished(aGameScene);
 
