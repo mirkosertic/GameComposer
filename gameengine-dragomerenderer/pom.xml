@@ -76,7 +76,7 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
-            <plugin>
+            <!--<plugin>
               <groupId>com.dragome</groupId>
               <artifactId>dragome-maven-plugin</artifactId>
               <version>${dragome.version}</version>
@@ -103,7 +103,7 @@
                   <version>${project.version}</version>
                 </dependency>
               </dependencies>
-            </plugin>
+            </plugin>-->
 
             <plugin>
                 <groupId>org.eclipse.jetty</groupId>
