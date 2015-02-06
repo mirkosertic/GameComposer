@@ -74,26 +74,42 @@ Example Games
 GWT:
 
 [Bouncing block](http://mirkosertic.github.io/GameComposer/games/gwt/bounce/index.html)
+
 [Camera with Clock](http://mirkosertic.github.io/GameComposer/games/gwt/camera/index.html)
+
 [Gravity and Mouse](http://mirkosertic.github.io/GameComposer/games/gwt/gravity/index.html)
+
 [Duke on the Platform](http://mirkosertic.github.io/GameComposer/games/gwt/platformer/index.html)
+
 [Position test](http://mirkosertic.github.io/GameComposer/games/gwt/positiontest/index.html)
+
 [Rotating actor](http://mirkosertic.github.io/GameComposer/games/gwt/rotatingactor/index.html)
+
 
 Dragome:
 
 [Bouncing block](http://mirkosertic.github.io/GameComposer/games/dragome/bounce/index.html)
+
 [Camera with Clock](http://mirkosertic.github.io/GameComposer/games/dragome/camera/index.html)
+
 [Gravity and Mouse](http://mirkosertic.github.io/GameComposer/games/dragome/gravity/index.html)
+
 [Duke on the Platform](http://mirkosertic.github.io/GameComposer/games/dragome/platformer/index.html)
+
 [Position test](http://mirkosertic.github.io/GameComposer/games/dragome/positiontest/index.html)
+
 [Rotating actor](http://mirkosertic.github.io/GameComposer/games/dragome/rotatingactor/index.html)
 
 TeaVM:
 
 [Bouncing block](http://mirkosertic.github.io/GameComposer/games/teavm/bounce/index.html)
+
 [Camera with Clock](http://mirkosertic.github.io/GameComposer/games/teavm/camera/index.html)
+
 [Gravity and Mouse](http://mirkosertic.github.io/GameComposer/games/teavm/gravity/index.html)
+
 [Duke on the Platform](http://mirkosertic.github.io/GameComposer/games/teavm/platformer/index.html)
+
 [Position test](http://mirkosertic.github.io/GameComposer/games/teavm/positiontest/index.html)
+
 [Rotating actor](http://mirkosertic.github.io/GameComposer/games/teavm/rotatingactor/index.html)
