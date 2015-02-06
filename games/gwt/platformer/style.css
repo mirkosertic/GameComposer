@@ -1,0 +1,31 @@
+body {
+    background: #000;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+.mainCanvas {
+    border: 0;
+    padding: 0;
+    z-index: 99;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+.overlayCanvas {
+    border: 0;
+    padding: 0;
+    z-index: 100;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+#canvasholder {
+    width: 100%;
+    height: 100%;
+    margin: auto;
+}

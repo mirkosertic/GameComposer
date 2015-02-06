@@ -1,0 +1,9 @@
+{
+  "enableDebug" : "true",
+  "customProperties" : {
+    "data" : [ ]
+  },
+  "enablewebgl" : "true",
+  "name" : "Rotating actor example",
+  "defaultscene" : "scene1"
+}

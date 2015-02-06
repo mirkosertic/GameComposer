@@ -1,0 +1,269 @@
+{
+  "cameraobjectid" : "2742438656089077731",
+  "eventsheets" : [ ],
+  "effects" : [ ],
+  "customProperties" : {
+    "data" : [ ]
+  },
+  "layoutBounds" : {
+    "size" : {
+      "width" : "2147483647",
+      "height" : "2147483647"
+    },
+    "position" : {
+      "x" : "0.0",
+      "y" : "0.0"
+    }
+  },
+  "instances" : [ {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
+    "components" : [ {
+      "type" : "Sprite"
+    }, {
+      "textExpression" : {
+        "expression" : "Player"
+      },
+      "color" : {
+        "r" : "0",
+        "b" : "0",
+        "g" : "0"
+      },
+      "isScript" : "false",
+      "type" : "Text",
+      "font" : {
+        "size" : "10",
+        "name" : "ARIAL"
+      }
+    } ],
+    "visible" : "true",
+    "name" : "Player_1420991859716",
+    "gameobjectuuid" : "-3038707001883072200",
+    "position" : {
+      "x" : "336.0",
+      "y" : "294.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "3838138481261565066"
+  }, {
+    "absolutePosition" : "true",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
+    "components" : [ {
+      "type" : "Sprite"
+    }, {
+      "textExpression" : {
+        "expression" : "Bottom left"
+      },
+      "color" : {
+        "r" : "26",
+        "b" : "153",
+        "g" : "51"
+      },
+      "isScript" : "false",
+      "type" : "Text",
+      "font" : {
+        "size" : "10",
+        "name" : "ARIAL"
+      }
+    } ],
+    "visible" : "true",
+    "name" : "block_bottom_left",
+    "gameobjectuuid" : "-6515814118025545913",
+    "position" : {
+      "x" : "0.0",
+      "y" : "64.0"
+    },
+    "absolutePositionAnchor" : "BOTTOM_LEFT",
+    "uuid" : "-4664053117321665069"
+  }, {
+    "absolutePosition" : "true",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
+    "components" : [ {
+      "type" : "Sprite"
+    }, {
+      "textExpression" : {
+        "expression" : "Bottom right"
+      },
+      "color" : {
+        "r" : "26",
+        "b" : "153",
+        "g" : "51"
+      },
+      "isScript" : "false",
+      "type" : "Text",
+      "font" : {
+        "size" : "10",
+        "name" : "ARIAL"
+      }
+    } ],
+    "visible" : "true",
+    "name" : "block_bottom_right",
+    "gameobjectuuid" : "-6515814118025545913",
+    "position" : {
+      "x" : "64.0",
+      "y" : "64.0"
+    },
+    "absolutePositionAnchor" : "BOTTOM_RIGHT",
+    "uuid" : "7223222732154485452"
+  }, {
+    "absolutePosition" : "true",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
+    "components" : [ {
+      "type" : "Sprite"
+    }, {
+      "textExpression" : {
+        "expression" : "Top Left"
+      },
+      "color" : {
+        "r" : "26",
+        "b" : "153",
+        "g" : "51"
+      },
+      "isScript" : "false",
+      "type" : "Text",
+      "font" : {
+        "size" : "10",
+        "name" : "ARIAL"
+      }
+    } ],
+    "visible" : "true",
+    "name" : "block_top_left",
+    "gameobjectuuid" : "-6515814118025545913",
+    "position" : {
+      "x" : "0.0",
+      "y" : "0.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-5744844641251465408"
+  }, {
+    "absolutePosition" : "true",
+    "rotationangle" : {
+      "angleindegrees" : "45"
+    },
+    "components" : [ {
+      "type" : "Sprite"
+    }, {
+      "textExpression" : {
+        "expression" : "Top Right"
+      },
+      "color" : {
+        "r" : "26",
+        "b" : "153",
+        "g" : "51"
+      },
+      "isScript" : "false",
+      "type" : "Text",
+      "font" : {
+        "size" : "10",
+        "name" : "ARIAL"
+      }
+    } ],
+    "visible" : "true",
+    "name" : "block_top_right",
+    "gameobjectuuid" : "-6515814118025545913",
+    "position" : {
+      "x" : "64.0",
+      "y" : "0.0"
+    },
+    "absolutePositionAnchor" : "TOP_RIGHT",
+    "uuid" : "7629191261831562033"
+  } ],
+  "defaultplayerobjectid" : "-3038707001883072200",
+  "objects" : [ {
+    "visible" : "true",
+    "size" : {
+      "width" : "64",
+      "height" : "64"
+    },
+    "templates" : [ {
+      "animations" : [ {
+        "animationSequence" : [ {
+          "name" : "/assets/sprites/block.png"
+        } ],
+        "name" : "Default",
+        "uuid" : "-701674093367370708"
+      } ],
+      "currentAnimation" : "-701674093367370708",
+      "type" : "Sprite",
+      "speed" : "5"
+    }, {
+      "textExpression" : {
+        "expression" : "Block"
+      },
+      "color" : {
+        "r" : "26",
+        "b" : "153",
+        "g" : "51"
+      },
+      "isScript" : "false",
+      "type" : "Text",
+      "font" : {
+        "size" : "10",
+        "name" : "ARIAL"
+      }
+    } ],
+    "name" : "Block",
+    "uuid" : "-6515814118025545913"
+  }, {
+    "visible" : "true",
+    "size" : {
+      "width" : "64",
+      "height" : "64"
+    },
+    "templates" : [ {
+      "type" : "Camera",
+      "cameratype" : "FOLLOWPLAYER"
+    } ],
+    "name" : "Camera",
+    "uuid" : "2742438656089077731"
+  }, {
+    "visible" : "true",
+    "size" : {
+      "width" : "64",
+      "height" : "64"
+    },
+    "templates" : [ {
+      "animations" : [ {
+        "animationSequence" : [ {
+          "name" : "/assets/sprites/block.png"
+        } ],
+        "name" : "Default",
+        "uuid" : "4402980699895932433"
+      } ],
+      "currentAnimation" : "4402980699895932433",
+      "type" : "Sprite",
+      "speed" : "5"
+    }, {
+      "textExpression" : {
+        "expression" : "Player"
+      },
+      "color" : {
+        "r" : "0",
+        "b" : "0",
+        "g" : "0"
+      },
+      "isScript" : "false",
+      "type" : "Text",
+      "font" : {
+        "size" : "10",
+        "name" : "ARIAL"
+      }
+    } ],
+    "name" : "Player",
+    "uuid" : "-3038707001883072200"
+  } ],
+  "name" : "Default scene",
+  "backgroundcolor" : {
+    "r" : "0",
+    "b" : "0",
+    "g" : "0"
+  }
+}
