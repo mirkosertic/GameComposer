@@ -2,6 +2,9 @@
   "cameraobjectid" : "2742438656089077731",
   "eventsheets" : [ ],
   "effects" : [ ],
+  "customProperties" : {
+    "data" : [ ]
+  },
   "layoutBounds" : {
     "size" : {
       "width" : "2147483647",
@@ -18,6 +21,8 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
+      "type" : "Sprite"
+    }, {
       "textExpression" : {
         "expression" : "Player"
       },
@@ -32,8 +37,6 @@
         "size" : "10",
         "name" : "ARIAL"
       }
-    }, {
-      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "Player_1420991859716",
@@ -50,6 +53,8 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
+      "type" : "Sprite"
+    }, {
       "textExpression" : {
         "expression" : "Bottom left"
       },
@@ -64,8 +69,6 @@
         "size" : "10",
         "name" : "ARIAL"
       }
-    }, {
-      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "block_bottom_left",
@@ -82,6 +85,8 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
+      "type" : "Sprite"
+    }, {
       "textExpression" : {
         "expression" : "Bottom right"
       },
@@ -96,8 +101,6 @@
         "size" : "10",
         "name" : "ARIAL"
       }
-    }, {
-      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "block_bottom_right",
@@ -114,6 +117,8 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
+      "type" : "Sprite"
+    }, {
       "textExpression" : {
         "expression" : "Top Left"
       },
@@ -128,8 +133,6 @@
         "size" : "10",
         "name" : "ARIAL"
       }
-    }, {
-      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "block_top_left",
@@ -146,6 +149,8 @@
       "angleindegrees" : "45"
     },
     "components" : [ {
+      "type" : "Sprite"
+    }, {
       "textExpression" : {
         "expression" : "Top Right"
       },
@@ -160,8 +165,6 @@
         "size" : "10",
         "name" : "ARIAL"
       }
-    }, {
-      "type" : "Sprite"
     } ],
     "visible" : "true",
     "name" : "block_top_right",
@@ -181,6 +184,17 @@
       "height" : "64"
     },
     "templates" : [ {
+      "animations" : [ {
+        "animationSequence" : [ {
+          "name" : "/assets/sprites/block.png"
+        } ],
+        "name" : "Default",
+        "uuid" : "-701674093367370708"
+      } ],
+      "currentAnimation" : "-701674093367370708",
+      "type" : "Sprite",
+      "speed" : "5"
+    }, {
       "textExpression" : {
         "expression" : "Block"
       },
@@ -195,17 +209,6 @@
         "size" : "10",
         "name" : "ARIAL"
       }
-    }, {
-      "animations" : [ {
-        "animationSequence" : [ {
-          "name" : "/assets/sprites/block.png"
-        } ],
-        "name" : "Default",
-        "uuid" : "-701674093367370708"
-      } ],
-      "currentAnimation" : "-701674093367370708",
-      "type" : "Sprite",
-      "speed" : "5"
     } ],
     "name" : "Block",
     "uuid" : "-6515814118025545913"
@@ -228,6 +231,17 @@
       "height" : "64"
     },
     "templates" : [ {
+      "animations" : [ {
+        "animationSequence" : [ {
+          "name" : "/assets/sprites/block.png"
+        } ],
+        "name" : "Default",
+        "uuid" : "4402980699895932433"
+      } ],
+      "currentAnimation" : "4402980699895932433",
+      "type" : "Sprite",
+      "speed" : "5"
+    }, {
       "textExpression" : {
         "expression" : "Player"
       },
@@ -242,17 +256,6 @@
         "size" : "10",
         "name" : "ARIAL"
       }
-    }, {
-      "animations" : [ {
-        "animationSequence" : [ {
-          "name" : "/assets/sprites/block.png"
-        } ],
-        "name" : "Default",
-        "uuid" : "4402980699895932433"
-      } ],
-      "currentAnimation" : "4402980699895932433",
-      "type" : "Sprite",
-      "speed" : "5"
     } ],
     "name" : "Player",
     "uuid" : "-3038707001883072200"

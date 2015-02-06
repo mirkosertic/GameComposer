@@ -1,8 +1,9 @@
 {
+  "enableDebug" : "true",
   "customProperties" : {
     "data" : [ ]
   },
-  "enablewebgl" : "true",
+  "enablewebgl" : "false",
   "name" : "Bounce game",
   "defaultscene" : "scene1"
 }

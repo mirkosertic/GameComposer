@@ -71,9 +71,6 @@
       "angleindegrees" : "90"
     },
     "components" : [ {
-      "active" : "true",
-      "type" : "Physics"
-    }, {
       "rotationSpeed" : {
         "speed" : "0"
       },
@@ -81,6 +78,9 @@
       "speed" : {
         "speed" : "120"
       }
+    }, {
+      "active" : "true",
+      "type" : "Physics"
     } ],
     "visible" : "true",
     "name" : "Player_1390419545178",
@@ -153,14 +153,6 @@
       "height" : "64"
     },
     "templates" : [ {
-      "fixedrotation" : "false",
-      "density" : "1.0",
-      "restitution" : "0.0",
-      "gravityScale" : "0.0",
-      "active" : "true",
-      "type" : "Physics",
-      "friction" : "1.8"
-    }, {
       "rotationSpeed" : {
         "speed" : "0"
       },
@@ -168,6 +160,14 @@
       "speed" : {
         "speed" : "10"
       }
+    }, {
+      "fixedrotation" : "false",
+      "density" : "1.0",
+      "restitution" : "0.0",
+      "gravityScale" : "0.0",
+      "active" : "true",
+      "type" : "Physics",
+      "friction" : "1.8"
     } ],
     "name" : "Player",
     "uuid" : "2955937955858173841"

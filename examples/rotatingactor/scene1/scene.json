@@ -57,6 +57,9 @@
     } ]
   } ],
   "effects" : [ ],
+  "customProperties" : {
+    "data" : [ ]
+  },
   "layoutBounds" : {
     "size" : {
       "width" : "2147483647",
@@ -131,6 +134,9 @@
       "height" : "64"
     },
     "templates" : [ {
+      "type" : "Camera",
+      "cameratype" : "CENTERONSCENE"
+    }, {
       "rotationSpeed" : {
         "speed" : "0"
       },
@@ -138,9 +144,6 @@
       "speed" : {
         "speed" : "0"
       }
-    }, {
-      "type" : "Camera",
-      "cameratype" : "CENTERONSCENE"
     } ],
     "name" : "Camera",
     "uuid" : "2900940626662702649"
@@ -151,14 +154,6 @@
       "height" : "64"
     },
     "templates" : [ {
-      "rotationSpeed" : {
-        "speed" : "0"
-      },
-      "type" : "ConstantMovement",
-      "speed" : {
-        "speed" : "0"
-      }
-    }, {
       "animations" : [ {
         "animationSequence" : [ {
           "name" : "/assets/plane.png"
@@ -169,6 +164,14 @@
       "currentAnimation" : "-1128841802190734799",
       "type" : "Sprite",
       "speed" : "5"
+    }, {
+      "rotationSpeed" : {
+        "speed" : "0"
+      },
+      "type" : "ConstantMovement",
+      "speed" : {
+        "speed" : "0"
+      }
     } ],
     "name" : "Plane",
     "uuid" : "4889509885749884898"

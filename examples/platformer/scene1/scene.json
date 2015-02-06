@@ -73,9 +73,9 @@
       "angleindegrees" : "0"
     },
     "components" : [ {
-      "type" : "Platform"
-    }, {
       "type" : "Sprite"
+    }, {
+      "type" : "Platform"
     } ],
     "visible" : "true",
     "name" : "Duke_1384374064987",
@@ -1656,14 +1656,6 @@
       "height" : "81"
     },
     "templates" : [ {
-      "fixedrotation" : "true",
-      "density" : "1.0",
-      "restitution" : "0.0",
-      "gravityScale" : "1.0",
-      "active" : "true",
-      "type" : "Physics",
-      "friction" : "1.8"
-    }, {
       "animations" : [ {
         "animationSequence" : [ {
           "name" : "/assets/objects/duke_small.png"
@@ -1681,6 +1673,14 @@
       "type" : "Platform",
       "moveRightKey" : "RIGHT",
       "jumpKey" : "UP"
+    }, {
+      "fixedrotation" : "true",
+      "density" : "1.0",
+      "restitution" : "0.0",
+      "gravityScale" : "1.0",
+      "active" : "true",
+      "type" : "Physics",
+      "friction" : "1.8"
     } ],
     "name" : "Duke",
     "uuid" : "-279500599772276169"
@@ -1715,14 +1715,6 @@
       "height" : "48"
     },
     "templates" : [ {
-      "fixedrotation" : "false",
-      "density" : "1.0",
-      "restitution" : "0.0",
-      "gravityScale" : "0.0",
-      "active" : "true",
-      "type" : "Physics",
-      "friction" : "1.8"
-    }, {
       "animations" : [ {
         "animationSequence" : [ {
           "name" : "/assets/objects/star.png"
@@ -1733,6 +1725,14 @@
       "currentAnimation" : "2308829684020853259",
       "type" : "Sprite",
       "speed" : "5"
+    }, {
+      "fixedrotation" : "false",
+      "density" : "1.0",
+      "restitution" : "0.0",
+      "gravityScale" : "0.0",
+      "active" : "true",
+      "type" : "Physics",
+      "friction" : "1.8"
     } ],
     "name" : "Star",
     "uuid" : "4343694719606608272"
@@ -1961,14 +1961,6 @@
       "height" : "34"
     },
     "templates" : [ {
-      "fixedrotation" : "false",
-      "density" : "1.0",
-      "restitution" : "0.0",
-      "gravityScale" : "1.0",
-      "active" : "true",
-      "type" : "Physics",
-      "friction" : "1.8"
-    }, {
       "animations" : [ {
         "animationSequence" : [ {
           "name" : "/assets/objects/bean_small.png"
@@ -1979,6 +1971,14 @@
       "currentAnimation" : "4698902611196449120",
       "type" : "Sprite",
       "speed" : "5"
+    }, {
+      "fixedrotation" : "false",
+      "density" : "1.0",
+      "restitution" : "0.0",
+      "gravityScale" : "1.0",
+      "active" : "true",
+      "type" : "Physics",
+      "friction" : "1.8"
     } ],
     "name" : "bean_small",
     "uuid" : "427110152030095327"
