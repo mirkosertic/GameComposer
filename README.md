@@ -65,13 +65,11 @@ GameEngine-TeaVMRenderer
 This is the game presentation logic using the TeaVM Java-to-JavaScript Transpiler Framework. It will render the game view
 using the HTML5 Canvas API.
 
-[Example platform game](http://mirkosertic.github.io/GameComposer/games/dukeplatform_teavm/index.html)
-
 
 Example Games
 -------------
 
-GWT:
+GWT Renderer:
 
 [Bouncing block](http://mirkosertic.github.io/GameComposer/games/gwt/bounce/index.html)
 
@@ -86,7 +84,7 @@ GWT:
 [Rotating actor](http://mirkosertic.github.io/GameComposer/games/gwt/rotatingactor/index.html)
 
 
-Dragome:
+Dragome Renderer:
 
 [Bouncing block](http://mirkosertic.github.io/GameComposer/games/dragome/bounce/index.html)
 
@@ -100,7 +98,7 @@ Dragome:
 
 [Rotating actor](http://mirkosertic.github.io/GameComposer/games/dragome/rotatingactor/index.html)
 
-TeaVM:
+TeaVM Renderer:
 
 [Bouncing block](http://mirkosertic.github.io/GameComposer/games/teavm/bounce/index.html)
 
