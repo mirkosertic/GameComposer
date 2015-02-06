@@ -1,4 +1,5 @@
 {
+  "enableDebug" : "true",
   "customProperties" : {
     "data" : [ ]
   },

@@ -2,6 +2,9 @@
   "cameraobjectid" : "1485398224565066807",
   "eventsheets" : [ ],
   "effects" : [ ],
+  "customProperties" : {
+    "data" : [ ]
+  },
   "layoutBounds" : {
     "size" : {
       "width" : "2147483647",

@@ -1,4 +1,8 @@
 {
+  "enableDebug" : "true",
+  "customProperties" : {
+    "data" : [ ]
+  },
   "enablewebgl" : "true",
   "name" : "Position test",
   "defaultscene" : "scene1"
