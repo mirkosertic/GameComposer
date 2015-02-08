@@ -11,6 +11,12 @@
     <artifactId>gameengine-gwtrenderer</artifactId>
     <name>GameComposer GWT HTML5 Canvas / WebGL Renderer</name>
     <packaging>war</packaging>
+
+    <scm>
+        <url>https://github.com/mirkosertic/GameComposer</url>
+        <connection>scm:git:git://github.com/mirkosertic/GameComposer.git</connection>
+    </scm>
+
     <build>
         <plugins>
             <plugin>
