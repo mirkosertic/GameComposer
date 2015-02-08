@@ -252,11 +252,11 @@
                         <goals>
                             <goal>perform</goal>
                         </goals>
-                        <configuration>
-                            <pushChanges>false</pushChanges>
-                        </configuration>
                     </execution>
                 </executions>
+                <configuration>
+                    <pushChanges>false</pushChanges>
+                </configuration>
             </plugin>
         </plugins>
     </build>
