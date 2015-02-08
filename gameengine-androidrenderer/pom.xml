@@ -13,7 +13,7 @@
 
     <scm>
         <url>https://github.com/mirkosertic/GameComposer</url>
-        <connection>scm:git:git://github.com/mirkosertic/GameComposer.git</connection>
+        <connection>scm:git:https://github.com/mirkosertic/GameComposer.git</connection>
     </scm>
 
 	<properties>
