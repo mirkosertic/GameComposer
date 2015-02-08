@@ -11,6 +11,12 @@
     <artifactId>examples</artifactId>
     <name>GameComposer Example Games</name>
     <packaging>pom</packaging>
+
+    <scm>
+        <url>https://github.com/mirkosertic/GameComposer</url>
+        <connection>scm:git:https://github.com/mirkosertic/GameComposer.git</connection>
+    </scm>
+
     <dependencies>
         <dependency>
         	<groupId>de.mirkosertic</groupId>
