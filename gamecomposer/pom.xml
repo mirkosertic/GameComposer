@@ -219,5 +219,10 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.fxexperience</groupId>
+            <artifactId>scenicview</artifactId>
+            <version>8.0.0</version>
+        </dependency>
     </dependencies>
 </project>

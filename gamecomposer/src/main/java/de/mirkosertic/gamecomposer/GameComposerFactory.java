@@ -7,6 +7,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.scenicview.ScenicView;
 
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Produces;
@@ -44,6 +45,8 @@ public class GameComposerFactory {
 
             aStage.setScene(theUndecoratorScene);
             aStage.show();
+
+//            ScenicView.show(theUndecoratorScene);
         }
     }
 
