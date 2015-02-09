@@ -6,7 +6,7 @@
     <parent>
         <groupId>de.mirkosertic</groupId>
         <artifactId>gamecreator</artifactId>
-        <version>0.3-SNAPSHOT</version>
+        <version>0.3</version>
     </parent>
     <artifactId>gameengine-jbox2d</artifactId>
     <name>GameComposer JBox2D Physics Library Implementation</name>
