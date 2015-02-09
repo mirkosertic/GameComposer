@@ -5,7 +5,7 @@
     <parent>
         <groupId>de.mirkosertic</groupId>
         <artifactId>gamecreator</artifactId>
-        <version>0.3-SNAPSHOT</version>
+        <version>0.4-SNAPSHOT</version>
     </parent>
     <artifactId>gameengine-androidrenderer</artifactId>
     <name>GameComposer Android Renderer</name>
