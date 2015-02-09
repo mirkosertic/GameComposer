@@ -6,7 +6,7 @@
     <parent>
         <groupId>de.mirkosertic</groupId>
         <artifactId>gamecreator</artifactId>
-        <version>0.3-SNAPSHOT</version>
+        <version>0.3</version>
     </parent>
     <artifactId>gameengine-gwtrenderer</artifactId>
     <name>GameComposer GWT HTML5 Canvas / WebGL Renderer</name>
