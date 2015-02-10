@@ -233,7 +233,7 @@
                 </executions>
                 <configuration>
                     <doCheck>false</doCheck>
-                    <doUpdate>true</doUpdate>
+                    <doUpdate>false</doUpdate>
                     <shortRevisionLength>7</shortRevisionLength>
                     <getRevisionOnlyOnce>true</getRevisionOnlyOnce>
                 </configuration>
