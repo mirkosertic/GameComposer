@@ -1,6 +1,8 @@
 package de.mirkosertic.gameengine.scriptengine.luaj;
 
 import de.mirkosertic.gameengine.scriptengine.LUAScriptEngineFactory;
+
+import de.mirkosertic.gameengine.type.KeyValueObjectCache;
 import de.mirkosertic.gameengine.type.Reflectable;
 import de.mirkosertic.gameengine.type.Script;
 import de.mirkosertic.gameengine.type.TextExpression;
@@ -17,7 +19,7 @@ import org.luaj.vm2.compiler.LuaC;
 
 public class LuaJScriptEngineFactory implements LUAScriptEngineFactory {
 
-    private Map<String, Prototype> prototypes;
+    private final Map<String, Prototype> prototypes;
 
     private final Reflectable buildInFunctions;
 
@@ -26,7 +28,7 @@ public class LuaJScriptEngineFactory implements LUAScriptEngineFactory {
         buildInFunctions = aBuildInFunctions;
     }
 
-    private Globals createGlobals() {
+    private Globals createGlobals(KeyValueObjectCache aObjectCache) {
         Globals theGlobals = new Globals();
 //         globals.load(new BaseLib());
 //        globals.load(new PackageLib());
@@ -40,30 +42,30 @@ public class LuaJScriptEngineFactory implements LUAScriptEngineFactory {
 //        LoadState.install(globals);
         LuaC.install(theGlobals);
 
-        LuaJScriptEngine.registerTo(theGlobals, buildInFunctions);
+        LuaJScriptEngine.registerTo(theGlobals, buildInFunctions, aObjectCache);
 
 
         return theGlobals;
     }
 
     @Override
-    public LuaJScriptEngine createNewEngine(Script aScript) throws IOException {
-        return create(aScript.script, "proceedGame");
+    public LuaJScriptEngine createNewEngine(KeyValueObjectCache aScene, Script aScript) throws IOException {
+        return create(aScene, aScript.script, "proceedGame");
     }
 
     @Override
-    public LuaJScriptEngine createNewEngine(TextExpression aExpression) throws IOException {
+    public LuaJScriptEngine createNewEngine(KeyValueObjectCache aScene, TextExpression aExpression) throws IOException {
 
         StringBuilder theScriptCode = new StringBuilder("function process(instance, scene, game) return ");
         theScriptCode.append(aExpression.expression);
         theScriptCode.append(" end");
 
-        return create(theScriptCode.toString(), "process");
+        return create(aScene, theScriptCode.toString(), "process");
     }
 
-    private LuaJScriptEngine create(String aScriptCode, String aMethodName) throws IOException {
+    private LuaJScriptEngine create(KeyValueObjectCache aScene, String aScriptCode, String aMethodName) throws IOException {
 
-        Globals theGlobals = createGlobals();
+        Globals theGlobals = createGlobals(aScene);
 
         Prototype thePrototype = prototypes.get(aScriptCode);
         if (thePrototype == null) {
@@ -71,6 +73,9 @@ public class LuaJScriptEngineFactory implements LUAScriptEngineFactory {
             prototypes.put(aScriptCode, thePrototype);
         }
 
-        return new LuaJScriptEngine(theGlobals, new LuaClosure(thePrototype, theGlobals), aMethodName);
+        // Initialize the globals and the code
+        new LuaClosure(thePrototype, theGlobals).call();
+
+        return new LuaJScriptEngine(aScene, theGlobals, aMethodName);
     }
 }

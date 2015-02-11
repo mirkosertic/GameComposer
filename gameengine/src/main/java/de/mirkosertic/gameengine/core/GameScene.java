@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GameScene implements Reflectable<GameSceneClassInformation> {
+public class GameScene implements Reflectable<GameSceneClassInformation>, KeyValueObjectCache {
 
     private static final GameSceneClassInformation CIINSTANCE = new GameSceneClassInformation();
 
@@ -42,8 +42,11 @@ public class GameScene implements Reflectable<GameSceneClassInformation> {
 
     private final Game game;
 
+    private Map<Object, Object> keyValueStore;
+
     public GameScene(Game aGame, GameRuntime aGameRuntime) {
 
+        keyValueStore = new HashMap<>();
         game = aGame;
         GameEventManager theManager = aGameRuntime.getEventManager();
 
@@ -440,5 +443,15 @@ public class GameScene implements Reflectable<GameSceneClassInformation> {
             }
         }
         aObject.add(aBehaviorTemplate);
+    }
+
+    @Override
+    public <T> T getObjectForKey(Object aKey) {
+        return (T) keyValueStore.get(aKey);
+    }
+
+    @Override
+    public <T> void setObjectForKey(Object aKey, T aValue) {
+        keyValueStore.put(aKey, aValue);
     }
 }

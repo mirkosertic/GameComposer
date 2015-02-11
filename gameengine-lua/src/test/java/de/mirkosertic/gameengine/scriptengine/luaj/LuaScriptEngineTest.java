@@ -22,7 +22,7 @@ public class LuaScriptEngineTest {
     @Test
     public void testShutdown() throws Exception {
         LuaJScriptEngineFactory theFactory = new LuaJScriptEngineFactory(new TestBuildInFunctions());
-        LuaJScriptEngine theEngine = theFactory.createNewEngine(new Script(""));
+        LuaJScriptEngine theEngine = theFactory.createNewEngine(new DummyKeyValueObjectCache(), new Script(""));
         theEngine.shutdown();
     }
 
@@ -30,7 +30,7 @@ public class LuaScriptEngineTest {
     public void testProceedGame1() throws Exception {
         String theScript = "function proceedGame(aGameTime, aElapsedTimeSinceLastLoop) return aGameTime + aElapsedTimeSinceLastLoop + counter end";
         LuaJScriptEngineFactory theFactory = new LuaJScriptEngineFactory(new TestBuildInFunctions());
-        LuaJScriptEngine theEngine = theFactory.createNewEngine(new Script(theScript));
+        LuaJScriptEngine theEngine = theFactory.createNewEngine(new DummyKeyValueObjectCache(), new Script(theScript));
         theEngine.registerPrimitive("counter", 17);
         assertEquals(21, theEngine.proceedGame(1, 3));
     }
@@ -39,7 +39,7 @@ public class LuaScriptEngineTest {
     public void testProceedGame2() throws Exception {
         String theScript = "function proceedGame(aGameTime, aElapsedTimeSinceLastLoop) return color.r() end";
         LuaJScriptEngineFactory theFactory = new LuaJScriptEngineFactory(new TestBuildInFunctions());
-        LuaJScriptEngine theEngine = theFactory.createNewEngine(new Script(theScript));
+        LuaJScriptEngine theEngine = theFactory.createNewEngine(new DummyKeyValueObjectCache(), new Script(theScript));
         theEngine.registerObject("color", new Color(10, 20, 30));
         assertEquals(10, theEngine.proceedGame(1, 3));
     }
@@ -48,7 +48,7 @@ public class LuaScriptEngineTest {
     public void testProceedGame3() throws Exception {
         String theScript = "function proceedGame(aGameTime, aElapsedTimeSinceLastLoop) return position.changeX(10).x() end";
         LuaJScriptEngineFactory theFactory = new LuaJScriptEngineFactory(new TestBuildInFunctions());
-        LuaJScriptEngine theEngine = theFactory.createNewEngine(new Script(theScript));
+        LuaJScriptEngine theEngine = theFactory.createNewEngine(new DummyKeyValueObjectCache(), new Script(theScript));
         theEngine.registerObject("position", new Position());
         assertEquals(10, theEngine.proceedGame(1, 3));
     }
@@ -57,7 +57,7 @@ public class LuaScriptEngineTest {
     public void testProceedGameWithInvalidFieldWrite() throws Exception {
         String theScript = "function proceedGame(aGameTime, aElapsedTimeSinceLastLoop) return position.x(10) end";
         LuaJScriptEngineFactory theFactory = new LuaJScriptEngineFactory(new TestBuildInFunctions());
-        LuaJScriptEngine theEngine = theFactory.createNewEngine(new Script(theScript));
+        LuaJScriptEngine theEngine = theFactory.createNewEngine(new DummyKeyValueObjectCache(), new Script(theScript));
         theEngine.registerObject("position", new Position());
         assertEquals(10L, theEngine.proceedGame(1, 3));
     }
@@ -75,7 +75,7 @@ public class LuaScriptEngineTest {
 
         String theScript = "function proceedGame(aGameTime, aElapsedTimeSinceLastLoop) return go.nameProperty() end";
         LuaJScriptEngineFactory theFactory = new LuaJScriptEngineFactory(new TestBuildInFunctions());
-        LuaJScriptEngine theEngine = theFactory.createNewEngine(new Script(theScript));
+        LuaJScriptEngine theEngine = theFactory.createNewEngine(new DummyKeyValueObjectCache(), new Script(theScript));
         theEngine.registerObject("go", theObject);
         assertEquals("Test", theEngine.proceedGame(1, 3));
     }
@@ -93,7 +93,7 @@ public class LuaScriptEngineTest {
 
         String theScript = "function proceedGame(aGameTime, aElapsedTimeSinceLastLoop) go.nameProperty('hallo'); return go end";
         LuaJScriptEngineFactory theFactory = new LuaJScriptEngineFactory(new TestBuildInFunctions());
-        LuaJScriptEngine theEngine = theFactory.createNewEngine(new Script(theScript));
+        LuaJScriptEngine theEngine = theFactory.createNewEngine(new DummyKeyValueObjectCache(), new Script(theScript));
         theEngine.registerObject("go", theObject);
         theEngine.proceedGame(1, 3);
         assertEquals("hallo", theObject.nameProperty().get());
@@ -114,7 +114,7 @@ public class LuaScriptEngineTest {
 
         TextExpression theExpression = new TextExpression("\"hello\" .. \" world\"");
         LuaJScriptEngineFactory theFactory = new LuaJScriptEngineFactory(new TestBuildInFunctions());
-        LuaJScriptEngine theEngine = theFactory.createNewEngine(theExpression);
+        LuaJScriptEngine theEngine = theFactory.createNewEngine(new DummyKeyValueObjectCache(), theExpression);
 
         assertEquals("hello world", theEngine.evaluateSimpleExpressionFor(theInstance));
     }
