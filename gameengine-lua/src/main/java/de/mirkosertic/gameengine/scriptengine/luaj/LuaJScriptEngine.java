@@ -4,14 +4,9 @@ import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.event.ReadOnlyProperty;
 import de.mirkosertic.gameengine.scriptengine.LUAScriptEngine;
-import de.mirkosertic.gameengine.type.TypeConverters;
-import de.mirkosertic.gameengine.type.ClassInformation;
-import de.mirkosertic.gameengine.type.Field;
-import de.mirkosertic.gameengine.type.Method;
-import de.mirkosertic.gameengine.type.Reflectable;
+import de.mirkosertic.gameengine.type.*;
 
 import org.luaj.vm2.Globals;
-import org.luaj.vm2.LuaClosure;
 import org.luaj.vm2.LuaDouble;
 import org.luaj.vm2.LuaInteger;
 import org.luaj.vm2.LuaString;
@@ -22,12 +17,12 @@ import org.luaj.vm2.lib.VarArgFunction;
 
 public class LuaJScriptEngine implements LUAScriptEngine {
 
-    private static LuaValue toLuaValue(Object aValue) {
+    private static LuaValue toLuaValue(Object aValue, KeyValueObjectCache aCache) {
         if (aValue == null) {
             return LuaValue.NIL;
         }
         if (aValue instanceof Reflectable) {
-            return toLuaValue((Reflectable) aValue);
+            return toLuaValue((Reflectable) aValue, aCache);
         }
         if (aValue instanceof Double) {
             return LuaDouble.valueOf((double) aValue);
@@ -51,20 +46,25 @@ public class LuaJScriptEngine implements LUAScriptEngine {
         return theTable;
     }
 
-    static void registerTo(LuaTable aTable, Reflectable aObject) {
+    static void registerTo(LuaTable aTable, Reflectable aObject, KeyValueObjectCache aCache) {
         ClassInformation theClassInformation = aObject.getClassInformation();
         for (Field theField : theClassInformation.getFields()) {
-            aTable.set(theField.getName(), new FieldAccessFunction(aObject, theField));
+            aTable.set(theField.getName(), new FieldAccessFunction(aCache, aObject, theField));
         }
         for (Method theMethod : theClassInformation.getMethods()) {
-            aTable.set(theMethod.getName(), new MethodInvocationFunction(aObject, theMethod));
+            aTable.set(theMethod.getName(), new MethodInvocationFunction(aCache, aObject, theMethod));
         }
     }
 
-    private static LuaValue toLuaValue(Reflectable aObject) {
-        LuaTable theTable = new LuaTable();
-        theTable.set("javaobject", LuaValue.userdataOf(aObject));
-        registerTo(theTable, aObject);
+    private static LuaValue toLuaValue(Reflectable aObject, KeyValueObjectCache aCache) {
+        LuaTable theTable = aCache.getObjectForKey(aObject);
+        if (theTable == null) {
+            theTable = new LuaTable();
+            theTable.set("javaobject", LuaValue.userdataOf(aObject));
+            registerTo(theTable, aObject, aCache);
+
+            aCache.setObjectForKey(aObject, theTable);
+        }
         return theTable;
     }
 
@@ -143,10 +143,12 @@ public class LuaJScriptEngine implements LUAScriptEngine {
 
         private final Object object;
         private final Field field;
+        private final KeyValueObjectCache cache;
 
-        public FieldAccessFunction(Object aObject, Field aField) {
+        public FieldAccessFunction(KeyValueObjectCache aCache, Object aObject, Field aField) {
             object = aObject;
             field = aField;
+            cache = aCache;
         }
 
         @Override
@@ -155,7 +157,7 @@ public class LuaJScriptEngine implements LUAScriptEngine {
                 ReadOnlyProperty theProperty = (ReadOnlyProperty) field.getValue(object);
                 // If zero arg, it is a property read access
                 if (aArgs.narg() == 0) {
-                    return toLuaValue(theProperty.get());
+                    return toLuaValue(theProperty.get(), cache);
                 }
                 if (aArgs.narg() != 1) {
                     throw new IllegalArgumentException("Only one argument supported to set property value, got " + aArgs.narg()+" arguments");
@@ -171,7 +173,7 @@ public class LuaJScriptEngine implements LUAScriptEngine {
             if (aArgs.narg() != 0) {
                 throw new IllegalArgumentException("Field is read only, but got " + aArgs.narg()+" arguments");
             }
-            return toLuaValue(field.getValue(object));
+            return toLuaValue(field.getValue(object), cache);
         }
     }
 
@@ -179,10 +181,12 @@ public class LuaJScriptEngine implements LUAScriptEngine {
 
         private final Object object;
         private final Method method;
+        private final KeyValueObjectCache cache;
 
-        public MethodInvocationFunction(Object aObject, Method aMethod) {
+        public MethodInvocationFunction(KeyValueObjectCache aCache, Object aObject, Method aMethod) {
             object = aObject;
             method = aMethod;
+            cache = aCache;
         }
 
         @Override
@@ -192,22 +196,19 @@ public class LuaJScriptEngine implements LUAScriptEngine {
                 for (int i = 1; i <= aArguments.narg(); i++) {
                     theArguments[i-1] = toJavaValue(aArguments.arg(i), method.getArgument()[i-1]);
                 }
-                return toLuaValue(method.invoke(object, theArguments));
+                return toLuaValue(method.invoke(object, theArguments), cache);
             }
             throw new IllegalArgumentException(method.getArgument().length+" arguments required for " + method.getName());
         }
     }
 
     private final Globals globals;
-    private final LuaClosure closure;
     private final LuaValue methodToCall;
+    private final KeyValueObjectCache cache;
 
-    public LuaJScriptEngine(Globals aGlobals, LuaClosure aClosure, String aMethodName) {
+    public LuaJScriptEngine(KeyValueObjectCache aCache, Globals aGlobals, String aMethodName) {
         globals = aGlobals;
-        closure = aClosure;
-
-        // Initialize the code
-        closure.call();
+        cache = aCache;
 
         // Retrieve function from globals
         methodToCall = globals.get(aMethodName);
@@ -216,7 +217,7 @@ public class LuaJScriptEngine implements LUAScriptEngine {
         }
 
         // Register generic Type converters
-        registerTo(globals, new TypeConverters());
+        registerTo(globals, new TypeConverters(), cache);
     }
 
     @Override
@@ -226,7 +227,7 @@ public class LuaJScriptEngine implements LUAScriptEngine {
     @Override
     public void registerObject(String aObjectName, Reflectable aObject) {
         if (aObject != null) {
-            globals.set(aObjectName, toLuaValue(aObject));
+            globals.set(aObjectName, toLuaValue(aObject, cache));
         }
     }
 
@@ -253,9 +254,9 @@ public class LuaJScriptEngine implements LUAScriptEngine {
     @Override
     public String evaluateSimpleExpressionFor(GameObjectInstance aObjectInstance) {
         Varargs theArguments = LuaValue.varargsOf(new LuaValue[] {
-                    toLuaValue(aObjectInstance),
-                    toLuaValue(aObjectInstance.getOwnerGameObject().getGameScene()),
-                    toLuaValue(aObjectInstance.getOwnerGameObject().getGameScene().getGame()),
+                    toLuaValue(aObjectInstance, cache),
+                    toLuaValue(aObjectInstance.getOwnerGameObject().getGameScene(), cache),
+                    toLuaValue(aObjectInstance.getOwnerGameObject().getGameScene().getGame(), cache),
             });
         Varargs theResult = methodToCall.invoke(theArguments);
         if (theResult.narg() == 1) {

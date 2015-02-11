@@ -36,7 +36,7 @@ public class ScriptProcess implements GameProcess {
     public void started() {
         if (scriptEngine == null) {
             try {
-                scriptEngine = scriptEngineFactory.createNewEngine(script);
+                scriptEngine = scriptEngineFactory.createNewEngine(scene, script);
                 if (instance != null) {
                     scriptEngine.registerObject("instance", instance);
                 }

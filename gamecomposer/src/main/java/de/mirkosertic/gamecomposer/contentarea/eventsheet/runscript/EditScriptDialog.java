@@ -76,7 +76,7 @@ public class EditScriptDialog {
             // Execute a single run for verification
             GameObject theObject = new GameObject(theClone, "dummy");
             GameObjectInstance theInstance = theClone.createFrom(theObject);
-            theEngine = theClone.getRuntime().getScriptEngineFactory().createNewEngine(aScript);
+            theEngine = theClone.getRuntime().getScriptEngineFactory().createNewEngine(theClone, aScript);
             theEngine.registerObject("instance", theInstance);
             theEngine.registerObject("scene", theClone);
             theEngine.registerObject("game", theClone.getGame());
