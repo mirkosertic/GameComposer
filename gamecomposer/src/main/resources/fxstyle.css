@@ -1,0 +1,29 @@
+.root {
+  -fx-font-size: 0.9em;
+}
+.menu-bar {
+  -fx-background-color: #000000;
+}
+.menu-bar .menu .label {
+  -fx-text-fill: #ffffff;
+}
+.menu-bar .menu:focused {
+  -fx-background-color: #3498db;
+}
+.menu-bar .context-menu {
+  -fx-background-color: #000000;
+}
+.menu-bar .context-menu .menu-item {
+  -fx-background-color: #000000;
+}
+.menu-bar .context-menu .menu-item:focused {
+  -fx-background-color: #3498db;
+}
+.menu-bar .context-menu .menu-item .label {
+  -fx-text-fill: #ffffff;
+}
+.split-pane:horizontal .split-pane-divider {
+  -fx-background-color: #000000;
+  -fx-border-color: #333333;
+  -fx-padding: 0 0.1em 0 0.1em;
+}
