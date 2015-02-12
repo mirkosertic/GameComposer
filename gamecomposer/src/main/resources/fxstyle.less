@@ -1,0 +1,45 @@
+@menubackground: #000000;
+@menutextcolor: white;
+@menufocused: #3498db;
+@splittercolor: #000000;
+
+.root {
+  -fx-font-size: 0.9em;
+}
+
+.menu-bar {
+  -fx-background-color: @menubackground;
+
+  .menu {
+    .label {
+      -fx-text-fill: @menutextcolor;
+    }
+
+    &:focused {
+      -fx-background-color: @menufocused;
+    }
+  }
+
+  .context-menu {
+
+    -fx-background-color: @menubackground;
+
+    .menu-item {
+      -fx-background-color: @menubackground;
+
+      &:focused {
+        -fx-background-color: @menufocused;
+      }
+
+      .label {
+        -fx-text-fill: @menutextcolor;
+      }
+    }
+  }
+}
+
+.split-pane:horizontal .split-pane-divider {
+  -fx-background-color: @splittercolor;
+  -fx-border-color: lighten(@splittercolor, 20%);
+  -fx-padding: 0 0.1em 0 0.1em;
+}
