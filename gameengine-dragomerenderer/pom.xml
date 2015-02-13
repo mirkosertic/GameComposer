@@ -17,7 +17,7 @@
     </scm>
 
     <properties>
-        <dragome.version>0.95.5-beta1</dragome.version>
+        <dragome.version>0.95.5-MSE-SNAPSHOT</dragome.version>
     </properties>
 
     <dependencies>
