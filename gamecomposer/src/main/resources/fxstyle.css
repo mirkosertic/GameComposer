@@ -22,6 +22,15 @@
 .menu-bar .context-menu .menu-item .label {
   -fx-text-fill: #ffffff;
 }
+.titled-pane {
+  -fx-text-fill: #ffffff;
+}
+.titled-pane .title {
+  -fx-border-color: #000000;
+  -fx-border-radius: 0;
+  -fx-border-style: solid;
+  -fx-background-color: #000000;
+}
 .split-pane:horizontal .split-pane-divider {
   -fx-background-color: #000000;
   -fx-border-color: #333333;

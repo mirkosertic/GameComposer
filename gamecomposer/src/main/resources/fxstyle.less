@@ -2,6 +2,14 @@
 @menutextcolor: white;
 @menufocused: #3498db;
 @splittercolor: #000000;
+@groupboxbackgroundcolor: #000000;
+@groupboxtextcolor: white;
+
+.bordered(@color) {
+  -fx-border-color : @color;
+  -fx-border-radius: 0;
+  -fx-border-style: solid;
+}
 
 .root {
   -fx-font-size: 0.9em;
@@ -35,6 +43,15 @@
         -fx-text-fill: @menutextcolor;
       }
     }
+  }
+}
+
+.titled-pane {
+  -fx-text-fill: @groupboxtextcolor;
+  .title {
+    .bordered(@groupboxbackgroundcolor);
+
+    -fx-background-color: @groupboxbackgroundcolor;
   }
 }
 
