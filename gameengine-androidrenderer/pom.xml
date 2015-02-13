@@ -72,6 +72,9 @@
 					<sdk>
 						<platform>10</platform>
 					</sdk>
+                    <androidManifestFile>AndroidManifest.xml</androidManifestFile>
+                    <resourceDirectory>res</resourceDirectory>
+                    <assetsDirectory>assets</assetsDirectory>
                 </configuration>
 			</plugin>
             <plugin>
@@ -81,46 +84,6 @@
                     <source>1.7</source>
                     <target>1.7</target>
                 </configuration>
-            </plugin>
-            <plugin>
-                <!-- Sets the AndroidManifest.xml Version Name to the projects version number -->
-                <groupId>org.codehaus.groovy.maven</groupId>
-                <artifactId>gmaven-plugin</artifactId>
-                <version>1.0</version>
-                <executions>
-                    <execution>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>execute</goal>
-                        </goals>
-                        <configuration>
-                            <source>
-                                project.modules.each {
-                                    try {
-                                        def manifestFile = new File("${it}/AndroidManifest.xml")
-                                        def ns = new groovy.xml.Namespace(
-                                                "http://schemas.android.com/apk/res/android", "ns")
-                                        def parser = new groovy.util.XmlParser(false, true)
-                                        def rootNode = parser.parse(manifestFile)
-                                        def attributes = rootNode.attributes()
-                                        attributes[ns.versionName] = "${project.version}"
-                                        def writer = new groovy.io.GroovyPrintWriter(manifestFile)
-                                        writer.println('&lt;?xml version="1.0" encoding="UTF-8"?&gt;')
-                                        def xmlWriter = new groovy.util.XmlNodePrinter(writer)
-                                        xmlWriter.setPreserveWhitespace(false)
-                                        xmlWriter.setNamespaceAware(true)
-                                        xmlWriter.print(rootNode)
-                                    } catch (FileNotFoundException e)
-                                    {
-                                        println('No AndroidManifest.xml file found. Skipping version update.')
-                                        println('Probably not an Android project, but a library.')
-                                        println('Skipping version update.')
-                                    }
-                                }
-                            </source>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
 		</plugins>
 	</build>
