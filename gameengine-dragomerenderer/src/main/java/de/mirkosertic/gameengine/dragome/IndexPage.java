@@ -1,6 +1,5 @@
 package de.mirkosertic.gameengine.dragome;
 
-import de.mirkosertic.gameengine.event.SystemException;
 import org.w3c.dom.Element;
 import org.w3c.dom.events.Event;
 import org.w3c.dom.events.EventListener;
@@ -14,6 +13,8 @@ import com.dragome.services.ServiceLocator;
 import com.dragome.view.DefaultVisualActivity;
 
 import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.event.SystemException;
+import de.mirkosertic.gameengine.network.NetworkConnector;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
 import de.mirkosertic.gameengine.type.GameKeyCode;
@@ -29,9 +30,12 @@ public class IndexPage extends DefaultVisualActivity {
     private Window window;
     private PlaySceneStrategy playSceneStrategy;
     private Game game;
+    private NetworkConnector networkConnector;
 
     @Override
     public void build() {
+
+        networkConnector = new DragomeNetworkConnector();
 
         window = new Window();
 
@@ -66,7 +70,7 @@ public class IndexPage extends DefaultVisualActivity {
             }
         });
 
-        playSceneStrategy = new PlaySceneStrategy(runtimeFactory, gameLoopFactory) {
+        playSceneStrategy = new PlaySceneStrategy(runtimeFactory, gameLoopFactory, networkConnector) {
 
             private DragomeGameView gameView;
 

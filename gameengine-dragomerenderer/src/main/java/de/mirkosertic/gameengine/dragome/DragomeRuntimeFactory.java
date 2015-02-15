@@ -7,13 +7,8 @@ import de.mirkosertic.gameengine.scriptengine.luaj.LuaJScriptEngineFactory;
 public class DragomeRuntimeFactory extends AbstractGameRuntimeFactory {
 
     @Override
-    protected DragomeBuildInFunctions createBuildInFunctions() {
-        return new DragomeBuildInFunctions();
-    }
-
-    @Override
     protected LuaJScriptEngineFactory createScriptEngine() {
-        return new LuaJScriptEngineFactory(createBuildInFunctions());
+        return new LuaJScriptEngineFactory(new DragomeBuildInFunctions());
     }
 
     @Override

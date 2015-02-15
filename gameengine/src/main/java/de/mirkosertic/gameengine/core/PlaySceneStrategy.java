@@ -7,6 +7,9 @@ import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.SystemException;
 import de.mirkosertic.gameengine.input.DefaultGestureDetector;
+import de.mirkosertic.gameengine.network.NetworkConnector;
+import de.mirkosertic.gameengine.network.NetworkGameView;
+import de.mirkosertic.gameengine.network.NetworkGameViewFactory;
 import de.mirkosertic.gameengine.type.Size;
 
 public abstract class PlaySceneStrategy {
@@ -15,10 +18,12 @@ public abstract class PlaySceneStrategy {
 
     private final AbstractGameRuntimeFactory runtimeFactory;
     private final GameLoopFactory gameLoopFactory;
+    private final NetworkConnector networkConnector;
 
-    protected PlaySceneStrategy(AbstractGameRuntimeFactory aRuntimeFactory, GameLoopFactory aGameLoopFactory) {
+    protected PlaySceneStrategy(AbstractGameRuntimeFactory aRuntimeFactory, GameLoopFactory aGameLoopFactory, NetworkConnector aNetworkConnector) {
         runtimeFactory = aRuntimeFactory;
         gameLoopFactory = aGameLoopFactory;
+        networkConnector = aNetworkConnector;
     }
 
     public boolean hasGameLoop() {
@@ -95,5 +100,11 @@ public abstract class PlaySceneStrategy {
         runningGameLoop = theLoop;
 
         theCameraBehavior.initializeFor(aGameScene, thePlayerInstance);
+
+        // Now initialize the networking
+        NetworkGameViewFactory theNetworkFactory = new NetworkGameViewFactory(networkConnector);
+        NetworkGameView theNetworkGameView = theNetworkFactory.createNetworkViewFor(theEventManager);
+
+        runningGameLoop.addGameView(theNetworkGameView);
     }
 }

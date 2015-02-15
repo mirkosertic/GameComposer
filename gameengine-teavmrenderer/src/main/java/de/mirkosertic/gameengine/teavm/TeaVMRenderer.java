@@ -3,6 +3,7 @@ package de.mirkosertic.gameengine.teavm;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
 import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.network.NetworkConnector;
 import de.mirkosertic.gameengine.type.GameKeyCode;
 import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Size;
@@ -35,6 +36,7 @@ public class TeaVMRenderer {
     private HTMLCanvasElement canvasElement;
     private HTMLElement resourceCache;
     private Game game;
+    private NetworkConnector networkConnector;
 
     private TeaVMRenderer() {
     }
@@ -42,6 +44,8 @@ public class TeaVMRenderer {
     void boot() {
 
         TeaVMLogger.info("Booting game runtime");
+
+        networkConnector = new TeaVMNetworkConnector();
 
         canvasElement = (HTMLCanvasElement) document.getElementById("html5canvas");
         resourceCache = document.getElementById("resourcecache");
@@ -61,7 +65,7 @@ public class TeaVMRenderer {
             }
         }, runtimeFactory, window);
 
-        runSceneStrategy = new PlaySceneStrategy(runtimeFactory, gameLoopFactory) {
+        runSceneStrategy = new PlaySceneStrategy(runtimeFactory, gameLoopFactory, networkConnector) {
 
             private TeaVMGameView gameView;
 

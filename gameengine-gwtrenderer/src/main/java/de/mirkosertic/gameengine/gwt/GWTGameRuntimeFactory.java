@@ -9,16 +9,10 @@ import de.mirkosertic.gameengine.event.SystemException;
 import de.mirkosertic.gameengine.physics.jbox2d.JBox2DGamePhysicsManagerFactory;
 import de.mirkosertic.gameengine.scriptengine.luaj.LuaJScriptEngineFactory;
 import de.mirkosertic.gameengine.sound.GameSoundSystemFactory;
-import de.mirkosertic.gameengine.type.Reflectable;
 
 import com.google.gwt.core.client.GWT;
 
 class GWTGameRuntimeFactory extends AbstractGameRuntimeFactory {
-
-    @Override
-    protected Reflectable createBuildInFunctions() {
-        return new GWTBuiltInFunctions();
-    }
 
     @Override
     public GameRuntime create(GameResourceLoader aResourceLoader, GameSoundSystemFactory aSoundSystemFactory) {
@@ -34,7 +28,7 @@ class GWTGameRuntimeFactory extends AbstractGameRuntimeFactory {
 
     @Override
     protected LuaJScriptEngineFactory createScriptEngine() {
-        return new LuaJScriptEngineFactory(createBuildInFunctions());
+        return new LuaJScriptEngineFactory(new GWTBuiltInFunctions());
     }
 
     @Override
