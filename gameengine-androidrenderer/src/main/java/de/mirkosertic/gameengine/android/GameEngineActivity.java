@@ -11,6 +11,7 @@ import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
 import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.event.GameEventManager;
+import de.mirkosertic.gameengine.network.NetworkConnector;
 import de.mirkosertic.gameengine.type.Size;
 import de.mirkosertic.gameengine.type.TouchIdentifier;
 import de.mirkosertic.gameengine.type.TouchPosition;
@@ -31,15 +32,19 @@ public class GameEngineActivity extends Activity {
     private final AndroidGameRuntimeFactory gameRuntimeFactory;
     private final GameLoopFactory gameLoopFactory;
     private AndroidCanvas androidCanvas;
+    private NetworkConnector networkConnector;
 
     private Game game;
     private PlaySceneStrategy playSceneStrategy;
 
     public GameEngineActivity() {
+
+        networkConnector = new AndroidNetworkConnector();
+
         gameRuntimeFactory = new AndroidGameRuntimeFactory();
         gameLoopFactory = new GameLoopFactory();
 
-        playSceneStrategy = new PlaySceneStrategy(gameRuntimeFactory, gameLoopFactory) {
+        playSceneStrategy = new PlaySceneStrategy(gameRuntimeFactory, gameLoopFactory, networkConnector) {
 
             private AndroidGameView gameView;
 

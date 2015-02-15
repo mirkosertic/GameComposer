@@ -33,6 +33,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.generic.GenericAbstractGameView;
+import de.mirkosertic.gameengine.network.NetworkConnector;
 import de.mirkosertic.gameengine.type.GameKeyCode;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
 import de.mirkosertic.gameengine.type.Position;
@@ -59,9 +60,13 @@ public class GWTRenderer implements EntryPoint {
     private Game game;
     private GameLoopFactory gameLoopFactory;
     private PlaySceneStrategy playSceneStrategy;
+    private NetworkConnector networkConnector;
 
     @Override
     public void onModuleLoad() {
+
+        networkConnector = new GWTNetworkConnector();
+
         canvas = Canvas.createIfSupported();
         if (canvas == null) {
             RootPanel.get(holderId).add(new Label(upgradeMessage));
@@ -107,7 +112,7 @@ public class GWTRenderer implements EntryPoint {
             }
         });
 
-        playSceneStrategy = new PlaySceneStrategy(runtimeFactory, gameLoopFactory) {
+        playSceneStrategy = new PlaySceneStrategy(runtimeFactory, gameLoopFactory, networkConnector) {
 
             private GenericAbstractGameView gameView;
 
