@@ -36,3 +36,7 @@
   -fx-border-color: #333333;
   -fx-padding: 0 0.1em 0 0.1em;
 }
+.gameToolBar {
+  -fx-background-color: #000000;
+  -fx-text-fill: #ffffff;
+}
