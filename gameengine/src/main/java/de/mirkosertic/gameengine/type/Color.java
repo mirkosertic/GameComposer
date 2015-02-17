@@ -5,7 +5,7 @@ import de.mirkosertic.gameengine.annotations.ReflectiveField;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Color implements Reflectable<ColorClassInformation> {
+public class Color implements Reflectable<ColorClassInformation>, Distributable {
 
     private static final ColorClassInformation CIINSTANCE = new ColorClassInformation();
 
@@ -32,6 +32,7 @@ public class Color implements Reflectable<ColorClassInformation> {
         return CIINSTANCE;
     }
 
+    @Override
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<>();
         theResult.put("r", Integer.toString(r));

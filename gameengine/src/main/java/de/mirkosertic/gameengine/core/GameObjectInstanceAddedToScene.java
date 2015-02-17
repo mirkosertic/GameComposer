@@ -2,11 +2,14 @@ package de.mirkosertic.gameengine.core;
 
 import de.mirkosertic.gameengine.annotations.InheritedClassInformation;
 import de.mirkosertic.gameengine.annotations.ReflectiveField;
+import de.mirkosertic.gameengine.event.DistributableEvent;
 import de.mirkosertic.gameengine.event.GameEvent;
-import de.mirkosertic.gameengine.event.RemoteEvent;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @InheritedClassInformation
-public class GameObjectInstanceAddedToScene extends GameEvent implements RemoteEvent {
+public class GameObjectInstanceAddedToScene extends GameEvent implements DistributableEvent {
 
     private static final GameObjectInstanceAddedToSceneClassInformation CIINSTANCE = new GameObjectInstanceAddedToSceneClassInformation();
 
@@ -25,5 +28,14 @@ public class GameObjectInstanceAddedToScene extends GameEvent implements RemoteE
     @Override
     public GameObjectInstanceAddedToSceneClassInformation getClassInformation() {
         return CIINSTANCE;
+    }
+
+    @Override
+    public Map<String, Object> serialize() {
+        Map<String, Object> theResult = new HashMap<>();
+        theResult.put(EVENT_ID_ATTRIBUTE, type);
+        theResult.put("newInstanceID", instance.uuidProperty().get());
+        theResult.put("gameObject", instance.getOwnerGameObject().uuidProperty().get());
+        return theResult;
     }
 }

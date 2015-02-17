@@ -8,6 +8,8 @@ public interface Behavior {
 
     String getType();
 
+    GameObjectInstance getInstance();
+
     Map<String, Object> serialize();
 
     <T extends BehaviorTemplate> T getTemplate();

@@ -6,7 +6,7 @@ import de.mirkosertic.gameengine.annotations.ReflectiveMethod;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Position implements Reflectable<PositionClassInformation> {
+public class Position implements Reflectable<PositionClassInformation>, Distributable {
 
     private static final PositionClassInformation CIINSTANCE = new PositionClassInformation();
 
@@ -73,6 +73,7 @@ public class Position implements Reflectable<PositionClassInformation> {
         return new Position(theSnapX, theSnapY);
     }
 
+    @Override
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<>();
         theResult.put("x", Float.toString(x));

@@ -194,6 +194,11 @@ public class CameraBehavior implements Behavior, Camera, Reflectable<CameraClass
         objectInstance.getOwnerGameObject().getGameScene().removeBehaviorFrom(objectInstance.getOwnerGameObject(), this);
     }
 
+    @Override
+    public GameObjectInstance getInstance() {
+        return objectInstance;
+    }
+
     public GameObjectInstance[] findInstancesAt(Position aScreenPosition) {
         List<GameObjectInstance> theInstances = new ArrayList<>();
         Position thePositionInGame = transformFromScreen(aScreenPosition);

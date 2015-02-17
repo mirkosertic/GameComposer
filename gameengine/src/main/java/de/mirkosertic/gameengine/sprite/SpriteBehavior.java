@@ -73,6 +73,11 @@ public class SpriteBehavior implements Behavior, Sprite, Reflectable<SpriteClass
     }
 
     @Override
+    public GameObjectInstance getInstance() {
+        return objectInstance;
+    }
+
+    @Override
     public GameScene getGameScene() {
         return getTemplate().getGameScene();
     }
