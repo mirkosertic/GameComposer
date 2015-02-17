@@ -224,6 +224,11 @@ public class GameObjectInstanceTest {
             }
 
             @Override
+            public GameObjectInstance getInstance() {
+                return null;
+            }
+
+            @Override
             public <T extends BehaviorTemplate> T getTemplate() {
                 return null;
             }
@@ -264,6 +269,11 @@ public class GameObjectInstanceTest {
 
             @Override
             public <T extends BehaviorTemplate> T getTemplate() {
+                return null;
+            }
+
+            @Override
+            public GameObjectInstance getInstance() {
                 return null;
             }
         };

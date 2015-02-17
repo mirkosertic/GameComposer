@@ -100,7 +100,9 @@ public class GameLoop implements Runnable {
                 }
 
                 // Trigger rerendering of game view
-                humanGameView.renderGame(theGameTime, theElapsedTime, scene, statistics);
+                for (GameView theGameView : gameViews) {
+                    theGameView.renderGame(theGameTime, theElapsedTime, scene, statistics);
+                }
 
                 lastInvocation = theCurrentTime;
             } catch (Exception e) {

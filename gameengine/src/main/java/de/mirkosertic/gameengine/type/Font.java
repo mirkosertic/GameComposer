@@ -3,7 +3,7 @@ package de.mirkosertic.gameengine.type;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Font {
+public class Font implements Distributable {
 
     public static enum FontName {
         ARIAL, VERDANA
@@ -27,6 +27,7 @@ public class Font {
         return new Font(aName, size);
     }
 
+    @Override
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<>();
         theResult.put("name", name.name());

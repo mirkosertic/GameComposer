@@ -3,7 +3,7 @@ package de.mirkosertic.gameengine.type;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ResourceName {
+public class ResourceName implements Distributable {
 
     public final String name;
 
@@ -31,6 +31,7 @@ public class ResourceName {
         return name != null ? name.hashCode() : 0;
     }
 
+    @Override
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<>();
         theResult.put("name", name);

@@ -99,6 +99,11 @@ public class PhysicsBehavior implements Behavior, Physics, Reflectable<PhysicsCl
         objectInstance.getOwnerGameObject().getGameScene().removeBehaviorFrom(objectInstance.getOwnerGameObject(), this);
     }
 
+    @Override
+    public GameObjectInstance getInstance() {
+        return objectInstance;
+    }
+
     public static PhysicsBehavior deserialize(GameObjectInstance aObjectInstance, Map<String, Object> aSerializedData) {
         PhysicsBehavior theResult = new PhysicsBehavior(aObjectInstance);
         String theActiveValue = (String) aSerializedData.get(ACTIVE_PROPERTY);

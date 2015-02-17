@@ -98,6 +98,11 @@ public class ConstantMovementBehavior implements Behavior, ConstantMovement, Ref
         objectInstance.getOwnerGameObject().getGameScene().removeBehaviorFrom(objectInstance.getOwnerGameObject(), this);
     }
 
+    @Override
+    public GameObjectInstance getInstance() {
+        return objectInstance;
+    }
+
     public static ConstantMovementBehavior deserialize(GameRuntime aRuntime, GameObjectInstance aObjectInstance, Map<String, Object> aSerializedData) {
         ConstantMovementBehavior theResult = new ConstantMovementBehavior(aObjectInstance);
         theResult.speed.setQuietly(Speed.deserialize((Map<String, Object>) aSerializedData.get(SPEED_PROPERTY)));
