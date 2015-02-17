@@ -5,10 +5,7 @@ import de.mirkosertic.gamecomposer.contentarea.ContentController;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
 import de.mirkosertic.gameengine.core.*;
-import de.mirkosertic.gameengine.event.GameEventListener;
-import de.mirkosertic.gameengine.event.GameEventManager;
-import de.mirkosertic.gameengine.event.PropertyChanged;
-import de.mirkosertic.gameengine.event.SystemException;
+import de.mirkosertic.gameengine.event.*;
 import de.mirkosertic.gameengine.input.DefaultGestureDetector;
 import de.mirkosertic.gameengine.javafx.JavaFXGameView;
 import de.mirkosertic.gameengine.javafx.JavaFXNetworkConnector;
@@ -366,7 +363,16 @@ public class GameSceneEditorController implements ContentController<GameScene> {
         theMainLoop.addGameView(theFactory.createNetworkViewFor(theEventManager));
 
         // Set defaults, this will be overridden
-        theEventManager.fire(new SetScreenResolution(new Size(200, 200)));
+        Size theInitialSize = new Size(200,200);
+
+        theEventManager.register(null, SetScreenResolution.class, new GameEventListener<SetScreenResolution>() {
+            @Override
+            public void handleGameEvent(SetScreenResolution aEvent) {
+                thePreviewGameView.setCurrentScreenSize(aEvent.screenSize);
+            }
+        });
+
+        theEventManager.fire(new SetScreenResolution(theInitialSize));
 
         final ListView<SystemException> theLoggerView = new ListView<>();
         theLoggerView.getItems().clear();
@@ -386,28 +392,31 @@ public class GameSceneEditorController implements ContentController<GameScene> {
 
         Canvas thePreviewNode = thePreviewGameView.getCanvasNode();
 
+        BorderPane thePaneForCanvas = new BorderPane();
+        thePaneForCanvas.setCenter(thePreviewNode);
+
         BorderPane theBorderPane = new BorderPane();
-        theBorderPane.setCenter(thePreviewNode);
+        theBorderPane.setCenter(thePaneForCanvas);
         theBorderPane.setBottom(theLoggerView);
         theBorderPane.setMinWidth(BorderPane.USE_PREF_SIZE);
         theBorderPane.setMinHeight(BorderPane.USE_PREF_SIZE);
         theBorderPane.setPrefWidth(800);
         theBorderPane.setPrefHeight(600);
 
-        thePreviewNode.widthProperty().addListener(new ChangeListener<Number>() {
+        thePaneForCanvas.widthProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
                 theEventManager.fire(new SetScreenResolution(new Size((int) ((double) number2), theCameraInstanceBehavior.getScreenSize().height)));
             }
         });
-        thePreviewNode.heightProperty().addListener(new ChangeListener<Number>() {
+        thePaneForCanvas.heightProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
-                theEventManager.fire(new SetScreenResolution(new Size(theCameraInstanceBehavior.getScreenSize().width, (int) ((double) number2))));
+                theEventManager.fire(new SetScreenResolution(new Size(theCameraInstanceBehavior.getScreenSize().width, (int) (((double) number2)))));
             }
         });
-        thePreviewGameView.getCanvasNode().widthProperty().bind(theBorderPane.widthProperty());
-        thePreviewGameView.getCanvasNode().heightProperty().bind(theBorderPane.heightProperty());
+        thePreviewGameView.getCanvasNode().widthProperty().bind(thePaneForCanvas.widthProperty());
+        thePreviewGameView.getCanvasNode().heightProperty().bind(thePaneForCanvas.heightProperty());
 
         Stage theStage = new Stage();
         theStage.setTitle("Game Preview");
