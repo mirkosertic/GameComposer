@@ -6,13 +6,14 @@ import de.mirkosertic.gameengine.core.GestureDetector;
 import de.mirkosertic.gameengine.core.RuntimeStatistics;
 import de.mirkosertic.gameengine.event.GameEvent;
 import de.mirkosertic.gameengine.event.GameEventListener;
+import de.mirkosertic.gameengine.event.RemoteEvent;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class NetworkGameView implements GameView, GameEventListener<GameEvent> {
 
-    private final List<GameEvent> eventsDuringLastLoopCycle;
+    private final List<RemoteEvent> eventsDuringLastLoopCycle;
     private final NetworkConnector networkConnector;
 
     NetworkGameView(NetworkConnector aNetworkConnector) {
@@ -22,7 +23,10 @@ public class NetworkGameView implements GameView, GameEventListener<GameEvent> {
 
     @Override
     public void handleGameEvent(GameEvent aEvent) {
-        eventsDuringLastLoopCycle.add(aEvent);
+        if (aEvent instanceof RemoteEvent) {
+            System.out.println("Received event " + aEvent);
+            eventsDuringLastLoopCycle.add((RemoteEvent) aEvent);
+        }
     }
 
     @Override

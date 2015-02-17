@@ -11,6 +11,8 @@ import de.mirkosertic.gameengine.event.PropertyChanged;
 import de.mirkosertic.gameengine.event.SystemException;
 import de.mirkosertic.gameengine.input.DefaultGestureDetector;
 import de.mirkosertic.gameengine.javafx.JavaFXGameView;
+import de.mirkosertic.gameengine.javafx.JavaFXNetworkConnector;
+import de.mirkosertic.gameengine.network.NetworkGameViewFactory;
 import de.mirkosertic.gameengine.physic.DisableDynamicPhysics;
 import de.mirkosertic.gameengine.physic.EnableDynamicPhysics;
 import de.mirkosertic.gameengine.type.GameKeyCode;
@@ -358,6 +360,10 @@ public class GameSceneEditorController implements ContentController<GameScene> {
 
         GameLoopFactory theGameLoopFactory = new GameLoopFactory();
         GameLoop theMainLoop = theGameLoopFactory.create(thePreviewScene, thePreviewGameView, theRuntime);
+
+        // Register a local Network Game View
+        NetworkGameViewFactory theFactory = new NetworkGameViewFactory(new JavaFXNetworkConnector());
+        theMainLoop.addGameView(theFactory.createNetworkViewFor(theEventManager));
 
         // Set defaults, this will be overridden
         theEventManager.fire(new SetScreenResolution(new Size(200, 200)));

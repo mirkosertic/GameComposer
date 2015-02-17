@@ -37,10 +37,8 @@ public class Position implements Reflectable<PositionClassInformation> {
 
         Position position = (Position) o;
 
-        if (Float.compare(position.x, x) != 0) return false;
-        if (Float.compare(position.y, y) != 0) return false;
-
-        return true;
+        return ((int) x) == (int) position.x &&
+                ((int) y) == (int) position.y;
     }
 
     @Override
