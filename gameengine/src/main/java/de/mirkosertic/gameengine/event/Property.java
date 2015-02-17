@@ -25,13 +25,40 @@ public class Property<T> extends ReadOnlyProperty<T> {
     }
 
     public void set(T aValue) {
-        //TODO: maybe we can implement type checking here?
+
+        if (aValue == value) {
+            // Nothing to do
+            return;
+        } else if (value != null) {
+            if (value.equals(aValue)) {
+                // Nothing to do
+                return;
+            }
+        } else if (aValue != null) {
+            if (aValue.equals(value)) {
+                // Nothing to do
+                return;
+            }
+        } else if (value == aValue) {
+            // Nothing to do
+            return;
+        }
+
+        if (value == null && aValue == null) {
+            // Nothing to do
+            return;
+        }
+
         T theOldValue = value;
         value = aValue;
 
-        Set<GameEventListener> theKnownListener = new HashSet<GameEventListener>(changeListener);
-        for (GameEventListener<PropertyChanged> theListener : theKnownListener) {
-            theListener.handleGameEvent(new PropertyChanged(this, theOldValue));
+        if (!changeListener.isEmpty()) {
+            PropertyChanged theEvent = new PropertyChanged(this, theOldValue);
+
+            Set<GameEventListener> theKnownListener = new HashSet<GameEventListener>(changeListener);
+            for (GameEventListener<PropertyChanged> theListener : theKnownListener) {
+                theListener.handleGameEvent(theEvent);
+            }
         }
     }
 

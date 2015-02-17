@@ -50,10 +50,12 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
     private class FixedAngleListener implements GameEventListener<PropertyChanged> {
         @Override
         public void handleGameEvent(PropertyChanged aEvent) {
-            PhysicsBehaviorTemplate thePhysicsComponentTemplate = (PhysicsBehaviorTemplate) aEvent.getOwner();
-            for (Map.Entry<GameObjectInstance, Body> theEntry : dynamicObjects.entrySet()) {
-                if (theEntry.getKey().getOwnerGameObject() == thePhysicsComponentTemplate.getOwner()) {
-                    theEntry.getValue().setFixedRotation(thePhysicsComponentTemplate.fixedRotationProperty().get());
+            if (!insimulation) {
+                PhysicsBehaviorTemplate thePhysicsComponentTemplate = (PhysicsBehaviorTemplate) aEvent.getOwner();
+                for (Map.Entry<GameObjectInstance, Body> theEntry : dynamicObjects.entrySet()) {
+                    if (theEntry.getKey().getOwnerGameObject() == thePhysicsComponentTemplate.getOwner()) {
+                        theEntry.getValue().setFixedRotation(thePhysicsComponentTemplate.fixedRotationProperty().get());
+                    }
                 }
             }
         }
@@ -62,14 +64,17 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
     private class PositionChangeListener implements GameEventListener<PropertyChanged> {
         @Override
         public void handleGameEvent(PropertyChanged aEvent) {
-            synchronized (physicsWorld) {
-                GameObjectInstance theInstance = (GameObjectInstance) aEvent.getOwner();
-                Body theBody = staticObjects.get(theInstance);
-                if (theBody == null) {
-                    theBody = dynamicObjects.get(theInstance);
-                }
-                if (theBody != null) {
-                    theBody.setTransform(computePosition(theInstance), theInstance.rotationAngleProperty().get().invert().toRadians());
+            if (!insimulation) {
+                synchronized (physicsWorld) {
+                    GameObjectInstance theInstance = (GameObjectInstance) aEvent.getOwner();
+                    Body theBody = staticObjects.get(theInstance);
+                    if (theBody == null) {
+                        theBody = dynamicObjects.get(theInstance);
+                    }
+                    if (theBody != null) {
+                        theBody.setTransform(computePosition(theInstance),
+                                theInstance.rotationAngleProperty().get().invert().toRadians());
+                    }
                 }
             }
         }
@@ -363,10 +368,10 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
 
                 if (theSimulatedBody.isActive()) {
                     // Now we have to use the XY coordinates again
-                    theObjectInstance.positionProperty().setQuietly(
+                    theObjectInstance.positionProperty().set(
                             new Position((thePosition.x / SIZE_FACTOR) - theInstanceSize.width / 2,
                                     -(thePosition.y / SIZE_FACTOR) - theInstanceSize.height / 2));
-                    theObjectInstance.rotationAngleProperty().setQuietly(
+                    theObjectInstance.rotationAngleProperty().set(
                             Angle.fromRadians(theSimulatedBody.getAngle()).invert());
                 }
             }

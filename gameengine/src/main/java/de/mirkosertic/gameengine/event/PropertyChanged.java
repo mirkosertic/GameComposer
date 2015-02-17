@@ -5,7 +5,7 @@ import de.mirkosertic.gameengine.annotations.ReflectiveField;
 import de.mirkosertic.gameengine.annotations.ReflectiveMethod;
 
 @InheritedClassInformation
-public class PropertyChanged extends GameEvent {
+public class PropertyChanged extends GameEvent implements RemoteEvent {
 
     private static final PropertyChangedClassInformation CIINSTANCE = new PropertyChangedClassInformation();
 
