@@ -9,10 +9,8 @@ public class GameObjectInstanceAddedToSceneTest {
 
     @Test
     public void testInit() {
-        GameScene theScene = mock(GameScene.class);
         GameObjectInstance theInstance = mock(GameObjectInstance.class);
-        GameObjectInstanceAddedToScene theEvent = new GameObjectInstanceAddedToScene(theScene, theInstance);
-        assertSame(theScene, theEvent.scene);
+        GameObjectInstanceAddedToScene theEvent = new GameObjectInstanceAddedToScene(theInstance);
         assertSame(theInstance, theEvent.instance);
         assertEquals("GameObjectInstanceAddedToScene", theEvent.type);
     }

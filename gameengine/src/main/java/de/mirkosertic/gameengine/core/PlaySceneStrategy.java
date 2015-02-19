@@ -127,7 +127,7 @@ public abstract class PlaySceneStrategy {
         // Finally notify the other game instances that there is a new player on the field
         // This event will we sent to the other game instances
         // And will trigger there a creation of the new remote player
-        theNetworkGameView.handleGameEvent(new NewGameInstance());
+        theNetworkGameView.handleGameEvent(new NewGameInstance(thePlayerInstance));
 
         if (thePlayerInstance != null) {
 
@@ -137,7 +137,7 @@ public abstract class PlaySceneStrategy {
                 @Override
                 public void handleGameEvent(NewGameInstance aEvent) {
                     // Inform the other instances about the current player
-                    theNetworkGameView.handleGameEvent(new GameObjectInstanceAddedToScene(aGameScene, theFinalPlayer));
+                    theNetworkGameView.handleGameEvent(new GameObjectInstanceAddedToScene(theFinalPlayer));
                 }
             });
         }

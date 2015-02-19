@@ -332,6 +332,13 @@ public class GameSceneEditorController implements ContentController<GameScene> {
 
     @FXML
     public void onPreview() {
+
+        final ListView<String> theLoggerView = new ListView<>();
+        theLoggerView.getItems().clear();
+        theLoggerView.setMinHeight(50);
+        theLoggerView.setPrefHeight(50);
+        theLoggerView.setFocusTraversable(false);
+
         GameScene thePreviewScene = persistenceManager.cloneSceneForPreview(gameScene);
 
         GameRuntime theRuntime = thePreviewScene.getRuntime();
@@ -377,7 +384,7 @@ public class GameSceneEditorController implements ContentController<GameScene> {
         // Finally notify the other game instances that there is a new player on the field
         // This event will we sent to the other game instances
         // And will trigger there a creation of the new remote player
-        theNetworkGameView.handleGameEvent(new NewGameInstance());
+        theNetworkGameView.handleGameEvent(new NewGameInstance(thePlayerInstance));
         if (thePlayerInstance != null) {
 
             final GameObjectInstance theFinalPlayer = thePlayerInstance;
@@ -386,7 +393,7 @@ public class GameSceneEditorController implements ContentController<GameScene> {
                 @Override
                 public void handleGameEvent(NewGameInstance aEvent) {
                     // Inform the other instances about the current player
-                    theNetworkGameView.handleGameEvent(new GameObjectInstanceAddedToScene(thePreviewScene, theFinalPlayer));
+                    theNetworkGameView.handleGameEvent(new GameObjectInstanceAddedToScene(theFinalPlayer));
                 }
             });
         }
@@ -403,16 +410,11 @@ public class GameSceneEditorController implements ContentController<GameScene> {
 
         theEventManager.fire(new SetScreenResolution(theInitialSize));
 
-        final ListView<SystemException> theLoggerView = new ListView<>();
-        theLoggerView.getItems().clear();
-        theLoggerView.setMinHeight(50);
-        theLoggerView.setPrefHeight(50);
-        theLoggerView.setFocusTraversable(false);
         theEventManager.register(null, SystemException.class, new GameEventListener<SystemException>() {
             @Override
             public void handleGameEvent(SystemException aEvent) {
-                List<SystemException> theExceptions = theLoggerView.getItems();
-                theExceptions.add(0, aEvent);
+                List<String> theExceptions = theLoggerView.getItems();
+                theExceptions.add(0, aEvent.toString());
                 while (theExceptions.size() > 20) {
                     theExceptions.remove(19);
                 }

@@ -40,6 +40,7 @@ public class NetworkGameView implements GameView, GameEventListener<GameEvent> {
                 theEventsToSend.add(theEvent.serialize());
             }
             networkConnector.send(theEventsToSend);
+            eventsDuringLastLoopCycle.clear();
         }
 
         // Tricky part: the EventInterpreter might also trigger events as
