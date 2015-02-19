@@ -11,6 +11,8 @@ import java.util.Map;
 @InheritedClassInformation
 public class GameObjectInstanceRemovedFromScene extends GameEvent implements DistributableEvent {
 
+    public static final String EVENT_ID = "GameObjectInstanceRemovedFromScene";
+
     private static final GameObjectInstanceRemovedFromSceneClassInformation CIINSTANCE = new GameObjectInstanceRemovedFromSceneClassInformation();
 
     @ReflectiveField
@@ -20,7 +22,7 @@ public class GameObjectInstanceRemovedFromScene extends GameEvent implements Dis
     public final GameObjectInstance instance;
 
     public GameObjectInstanceRemovedFromScene(GameScene aScene, GameObjectInstance aInstance) {
-        super("GameObjectInstanceRemovedFromScene");
+        super(EVENT_ID);
         scene = aScene;
         instance = aInstance;
     }
@@ -36,5 +38,18 @@ public class GameObjectInstanceRemovedFromScene extends GameEvent implements Dis
         theResult.put(EVENT_ID_ATTRIBUTE, type);
         theResult.put("instanceID", instance.uuidProperty().get());
         return theResult;
+    }
+
+    @Override
+    public boolean isForced() {
+        return true;
+    }
+
+    public static void runEventInScene(Map<String, Object> aEventData, GameScene aGameScene) {
+        String theInstanceID = (String) aEventData.get("instanceID");
+        GameObjectInstance theInstance = aGameScene.findInstanceByID(theInstanceID);
+        if (theInstance != null) {
+            aGameScene.removeGameObjectInstance(theInstance);
+        }
     }
 }

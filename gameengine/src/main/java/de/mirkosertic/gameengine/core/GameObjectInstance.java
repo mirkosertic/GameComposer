@@ -136,6 +136,12 @@ public class GameObjectInstance implements Reflectable<GameObjectInstanceClassIn
         return (T) behaviors.get(aComponentClass);
     }
 
+    public void markAsRemoteObject() {
+        for (Behavior theBehavior : behaviors.values()) {
+            theBehavior.markAsRemoteObject();
+        }
+    }
+
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<>();
         if (!uuidProperty().isNull()) {

@@ -8,13 +8,16 @@ import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.event.*;
 import de.mirkosertic.gameengine.input.DefaultGestureDetector;
 import de.mirkosertic.gameengine.javafx.JavaFXGameView;
-import de.mirkosertic.gameengine.javafx.JavaFXNetworkConnector;
+import de.mirkosertic.gameengine.network.DefaultEventInterpreter;
+import de.mirkosertic.gameengine.network.NetworkGameView;
 import de.mirkosertic.gameengine.network.NetworkGameViewFactory;
+import de.mirkosertic.gameengine.network.NewGameInstance;
 import de.mirkosertic.gameengine.physic.DisableDynamicPhysics;
 import de.mirkosertic.gameengine.physic.EnableDynamicPhysics;
 import de.mirkosertic.gameengine.type.GameKeyCode;
 import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Size;
+import de.mirkosertic.gameengine.type.UUID;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
@@ -53,7 +56,7 @@ public class GameSceneEditorController implements ContentController<GameScene> {
     TextField gridsizeHeight;
 
     @Inject
-    private PersistenceManager persistenceManager;
+    PersistenceManager persistenceManager;
 
     private GameScene gameScene;
     private Node view;
@@ -353,14 +356,40 @@ public class GameSceneEditorController implements ContentController<GameScene> {
             }
         }
 
+        // If there is a networked game
+        // we need unique player instance ids
+        // After loading they are the same on every instance
+        if (thePlayerInstance != null) {
+            thePlayerInstance.uuidProperty().set(UUID.randomUID());
+        }
+
         final JavaFXGameView thePreviewGameView = new JavaFXGameView(theRuntime, theCameraInstanceBehavior, new DefaultGestureDetector(theRuntime.getEventManager(), theCameraInstanceBehavior));
 
         GameLoopFactory theGameLoopFactory = new GameLoopFactory();
         GameLoop theMainLoop = theGameLoopFactory.create(thePreviewScene, thePreviewGameView, theRuntime);
 
         // Register a local Network Game View
-        NetworkGameViewFactory theFactory = new NetworkGameViewFactory(new JavaFXNetworkConnector());
-        theMainLoop.addGameView(theFactory.createNetworkViewFor(theEventManager));
+        LocalNetworkConnector theNetworkConnector = new LocalNetworkConnector();
+        NetworkGameViewFactory theFactory = new NetworkGameViewFactory(theNetworkConnector, new DefaultEventInterpreter());
+        NetworkGameView theNetworkGameView = theFactory.createNetworkViewFor(theEventManager);
+        theMainLoop.addGameView(theNetworkGameView);
+
+        // Finally notify the other game instances that there is a new player on the field
+        // This event will we sent to the other game instances
+        // And will trigger there a creation of the new remote player
+        theNetworkGameView.handleGameEvent(new NewGameInstance());
+        if (thePlayerInstance != null) {
+
+            final GameObjectInstance theFinalPlayer = thePlayerInstance;
+
+            theEventManager.register(null, NewGameInstance.class, new GameEventListener<NewGameInstance>() {
+                @Override
+                public void handleGameEvent(NewGameInstance aEvent) {
+                    // Inform the other instances about the current player
+                    theNetworkGameView.handleGameEvent(new GameObjectInstanceAddedToScene(thePreviewScene, theFinalPlayer));
+                }
+            });
+        }
 
         // Set defaults, this will be overridden
         Size theInitialSize = new Size(200,200);
@@ -455,6 +484,7 @@ public class GameSceneEditorController implements ContentController<GameScene> {
             @Override
             public void handle(WindowEvent windowEvent) {
                 thePreviewGameView.stopTimer();
+                theNetworkConnector.shutdown();
             }
         });
         theStage.show();

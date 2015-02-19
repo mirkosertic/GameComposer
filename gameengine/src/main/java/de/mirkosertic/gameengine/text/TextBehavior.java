@@ -87,6 +87,10 @@ public class TextBehavior implements Behavior, Text, Reflectable<TextClassInform
     }
 
     @Override
+    public void markAsRemoteObject() {
+    }
+
+    @Override
     public void delete() {
         objectInstance.getOwnerGameObject().getGameScene().removeBehaviorFrom(objectInstance.getOwnerGameObject(), this);
     }

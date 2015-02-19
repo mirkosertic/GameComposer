@@ -104,6 +104,10 @@ public class PhysicsBehavior implements Behavior, Physics, Reflectable<PhysicsCl
         return objectInstance;
     }
 
+    @Override
+    public void markAsRemoteObject() {
+    }
+
     public static PhysicsBehavior deserialize(GameObjectInstance aObjectInstance, Map<String, Object> aSerializedData) {
         PhysicsBehavior theResult = new PhysicsBehavior(aObjectInstance);
         String theActiveValue = (String) aSerializedData.get(ACTIVE_PROPERTY);

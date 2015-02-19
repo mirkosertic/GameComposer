@@ -87,6 +87,10 @@ public class SpriteBehavior implements Behavior, Sprite, Reflectable<SpriteClass
         return getTemplate().getAnimations();
     }
 
+    @Override
+    public void markAsRemoteObject() {
+    }
+
     public static SpriteBehavior deserialize(GameObjectInstance aObjectInstance) {
         return new SpriteBehavior(aObjectInstance);
     }

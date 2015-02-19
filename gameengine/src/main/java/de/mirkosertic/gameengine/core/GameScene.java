@@ -42,7 +42,7 @@ public class GameScene implements Reflectable<GameSceneClassInformation>, KeyVal
 
     private final Game game;
 
-    private Map<Object, Object> keyValueStore;
+    private final Map<Object, Object> keyValueStore;
 
     public GameScene(Game aGame, GameRuntime aGameRuntime) {
 
@@ -231,6 +231,16 @@ public class GameScene implements Reflectable<GameSceneClassInformation>, KeyVal
     public GameObjectInstance findInstanceByName(String aName) {
         for (GameObjectInstance theInstance : instances) {
             if (aName.equals(theInstance.nameProperty().get())) {
+                return theInstance;
+            }
+        }
+        return null;
+    }
+
+    @ReflectiveMethod
+    public GameObjectInstance findInstanceByID(String aInstanceID) {
+        for (GameObjectInstance theInstance : instances) {
+            if (aInstanceID.equals(theInstance.uuidProperty().get())) {
                 return theInstance;
             }
         }

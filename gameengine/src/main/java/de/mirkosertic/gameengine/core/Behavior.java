@@ -13,4 +13,6 @@ public interface Behavior {
     Map<String, Object> serialize();
 
     <T extends BehaviorTemplate> T getTemplate();
+
+    void markAsRemoteObject();
 }
