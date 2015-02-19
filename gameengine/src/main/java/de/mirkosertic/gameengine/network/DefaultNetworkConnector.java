@@ -9,7 +9,8 @@ public class DefaultNetworkConnector implements NetworkConnector {
     protected final static List<Map<String, Object>> EMPTY = new ArrayList<>();
 
     @Override
-    public void send(List<Map<String, Object>> aEventsToSend) {
+    public int send(List<Map<String, Object>> aEventsToSend) {
+        return 0;
     }
 
     @Override
