@@ -153,6 +153,10 @@ public class CameraBehavior implements Behavior, Camera, Reflectable<CameraClass
         return objectInstance.getOwnerGameObject().getBehaviorTemplate(CameraBehaviorTemplate.class);
     }
 
+    @Override
+    public void markAsRemoteObject() {
+    }
+
     public static CameraBehavior deserialize(GameObjectInstance aObjectInstance) {
         return new CameraBehavior(aObjectInstance);
     }

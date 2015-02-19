@@ -51,6 +51,10 @@ public class StaticBehavior implements Behavior, Static, Reflectable<StaticClass
         return objectInstance;
     }
 
+    @Override
+    public void markAsRemoteObject() {
+    }
+
     public static StaticBehavior deserialize(GameObjectInstance aObjectInstance) {
         return new StaticBehavior(aObjectInstance);
     }

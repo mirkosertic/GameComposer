@@ -25,6 +25,8 @@ public class ConstantMovementBehavior implements Behavior, ConstantMovement, Ref
     private final Property<Speed> speed;
     private final Property<Speed> rotationSpeed;
 
+    private boolean remoteObject;
+
     ConstantMovementBehavior(GameObjectInstance aObjectInstance) {
         this(aObjectInstance, aObjectInstance.getOwnerGameObject().getBehaviorTemplate(ConstantMovementBehaviorTemplate.class));
     }
@@ -47,9 +49,16 @@ public class ConstantMovementBehavior implements Behavior, ConstantMovement, Ref
         aGameRuntime.getEventManager().register(objectInstance, SystemTick.class, new GameEventListener<SystemTick>() {
             @Override
             public void handleGameEvent(SystemTick aEvent) {
-                handleGameLoop(aEvent);
+                if (!remoteObject) {
+                    handleGameLoop(aEvent);
+                }
             }
         });
+    }
+
+    @Override
+    public void markAsRemoteObject() {
+        remoteObject = true;
     }
 
     private void handleGameLoop(SystemTick aTick) {
