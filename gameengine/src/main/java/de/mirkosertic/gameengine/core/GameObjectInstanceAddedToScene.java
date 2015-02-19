@@ -17,14 +17,10 @@ public class GameObjectInstanceAddedToScene extends GameEvent implements Distrib
     private static final GameObjectInstanceAddedToSceneClassInformation CIINSTANCE = new GameObjectInstanceAddedToSceneClassInformation();
 
     @ReflectiveField
-    public final GameScene scene;
-
-    @ReflectiveField
     public final GameObjectInstance instance;
 
-    public GameObjectInstanceAddedToScene(GameScene aScene, GameObjectInstance aInstance) {
+    public GameObjectInstanceAddedToScene(GameObjectInstance aInstance) {
         super(EVENT_ID);
-        scene = aScene;
         instance = aInstance;
     }
 

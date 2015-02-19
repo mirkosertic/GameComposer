@@ -126,7 +126,7 @@ public class GameScene implements Reflectable<GameSceneClassInformation>, KeyVal
         List<GameObjectInstance> theInstances = ArrayUtils.asList(instances);
         if (theInstances.add(aInstance)) {
             instances = theInstances.toArray(new GameObjectInstance[theInstances.size()]);
-            gameRuntime.getEventManager().fire(new GameObjectInstanceAddedToScene(this, aInstance));
+            gameRuntime.getEventManager().fire(new GameObjectInstanceAddedToScene(aInstance));
         }
     }
 

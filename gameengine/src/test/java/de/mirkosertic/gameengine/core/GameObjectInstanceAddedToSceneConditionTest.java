@@ -27,7 +27,7 @@ public class GameObjectInstanceAddedToSceneConditionTest {
         GameObject theObject = mock(GameObject.class);
         GameObjectInstance theInstance = mock(GameObjectInstance.class);
         when(theInstance.getOwnerGameObject()).thenReturn(theObject);
-        GameObjectInstanceAddedToScene theEvent = new GameObjectInstanceAddedToScene(theScene, theInstance);
+        GameObjectInstanceAddedToScene theEvent = new GameObjectInstanceAddedToScene(theInstance);
         assertSame(ConditionResult.NOT_FULFILLED, theCondition.appliesTo(theScene, new SceneShutdown()));
         assertSame(ConditionResult.NOT_FULFILLED, theCondition.appliesTo(theScene, theEvent));
 
