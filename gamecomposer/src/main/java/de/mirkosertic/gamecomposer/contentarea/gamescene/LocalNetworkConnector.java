@@ -34,7 +34,7 @@ public class LocalNetworkConnector extends DefaultNetworkConnector {
     }
 
     @Override
-    public void send(List<Map<String, Object>> aEventsToSend) {
+    public int send(List<Map<String, Object>> aEventsToSend) {
         try {
             ByteArrayOutputStream theData = new ByteArrayOutputStream();
             ObjectOutputStream theOS = new ObjectOutputStream(theData);
@@ -48,9 +48,13 @@ public class LocalNetworkConnector extends DefaultNetworkConnector {
                 theConnector.handle(theEvent);
             }
 
+            return theRawData.length;
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        return 0;
     }
 
     public void shutdown() {
