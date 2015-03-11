@@ -18,5 +18,8 @@ interface TeaVMWindow extends Window {
     @JSProperty(value = "innerHeight")
     int getInnerHeight();
 
+    @JSProperty(value = "location")
+    TeaVMWindowLocation getLocation();
+
     void requestAnimationFrame(RenderFrameHandler aHandler);
 }
