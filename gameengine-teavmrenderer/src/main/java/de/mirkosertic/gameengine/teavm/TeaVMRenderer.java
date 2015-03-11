@@ -3,6 +3,7 @@ package de.mirkosertic.gameengine.teavm;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
 import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.network.DefaultNetworkConnector;
 import de.mirkosertic.gameengine.network.NetworkConnector;
 import de.mirkosertic.gameengine.type.GameKeyCode;
 import de.mirkosertic.gameengine.type.Position;
@@ -45,11 +46,23 @@ public class TeaVMRenderer {
 
         TeaVMLogger.info("Booting game runtime");
 
-        networkConnector = new TeaVMNetworkConnector();
+        String theConnectionID = window.getLocation().getHash();
+        if (theConnectionID == null || theConnectionID.isEmpty()) {
+            // No connection id provided, we will start a new one
+            theConnectionID = "game" + System.currentTimeMillis();
+            window.getLocation().setHash(theConnectionID);
+        } else {
+            // Extract the hash character
+            theConnectionID = theConnectionID.substring(1);
+        }
+
+        //networkConnector = new TeaVMFirebaseNetworkConnector(theConnectionID, window);
+        networkConnector = new DefaultNetworkConnector();
 
         canvasElement = (HTMLCanvasElement) document.getElementById("html5canvas");
         resourceCache = document.getElementById("resourcecache");
 
+        // We have a default network game view with is reused across different gameloop instances
         gameLoopFactory = new GameLoopFactory();
         runtimeFactory = new TeaVMGameRuntimeFactory();
 
