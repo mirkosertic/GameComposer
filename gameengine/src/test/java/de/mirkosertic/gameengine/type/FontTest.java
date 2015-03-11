@@ -9,6 +9,26 @@ import static org.junit.Assert.*;
 public class FontTest {
 
     @Test
+    public void testEquals() {
+        Font theFont1 = new Font(Font.FontName.ARIAL, 22);
+        Font theFont2 = new Font(Font.FontName.ARIAL, 22);
+        assertTrue(theFont1.equals(theFont1));
+        assertTrue(theFont1.equals(theFont2));
+        assertFalse(theFont1.equals(null));
+        assertFalse(theFont1.equals(22));
+        assertFalse(theFont1.equals(new Font(Font.FontName.ARIAL, 23)));
+        assertFalse(theFont1.equals(new Font(Font.FontName.VERDANA, 22)));
+    }
+
+    @Test
+    public void testHashCode() {
+        Font theFont1 = new Font(Font.FontName.ARIAL, 22);
+        Font theFont2 = new Font(Font.FontName.ARIAL, 22);
+        assertEquals(theFont1.hashCode(), theFont2.hashCode());
+        assertFalse(theFont1.hashCode() == new Font(Font.FontName.VERDANA, 22).hashCode());
+    }
+
+    @Test
     public void testInit() {
         Font theFont = new Font(Font.FontName.VERDANA, 22);
         assertEquals(Font.FontName.VERDANA, theFont.name);
