@@ -19,6 +19,24 @@ public class Font implements Distributable {
         size = aSize;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Font font = (Font) o;
+
+        if (size != font.size) return false;
+        if (name != font.name) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
+
     public Font changeSize(int aSize) {
         return new Font(name, aSize);
     }

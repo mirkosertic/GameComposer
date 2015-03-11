@@ -9,6 +9,25 @@ import static org.junit.Assert.*;
 public class ColorTest {
 
     @Test
+    public void testEquals() {
+        Color theColor1 = new Color(1,2,3);
+        Color theColor2 = new Color(1,2,3);
+        assertTrue(theColor1.equals(theColor1));
+        assertTrue(theColor1.equals(theColor2));
+        assertFalse(theColor1.equals(Color.BLACK));
+        assertFalse(theColor1.equals(null));
+        assertFalse(theColor1.equals(1));
+    }
+
+    @Test
+    public void testHashCode() {
+        Color theColor1 = new Color(1,2,3);
+        Color theColor2 = new Color(1,2,4);
+        assertTrue(theColor1.hashCode() == theColor2.hashCode());
+        assertFalse(theColor1.hashCode() == Color.WHITE.hashCode());
+    }
+
+    @Test
     public void testBlack() {
         Color theColor = Color.BLACK;
         assertEquals(0, theColor.r);

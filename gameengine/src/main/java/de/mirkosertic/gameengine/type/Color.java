@@ -28,6 +28,25 @@ public class Color implements Reflectable<ColorClassInformation>, Distributable 
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Color color = (Color) o;
+
+        if (b != color.b) return false;
+        if (g != color.g) return false;
+        if (r != color.r) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return r;
+    }
+
+    @Override
     public ColorClassInformation getClassInformation() {
         return CIINSTANCE;
     }
