@@ -10,4 +10,7 @@ public interface TeaVMWindowLocation extends JSObject {
 
     @JSProperty(value = "hash")
     String getHash();
+
+    @JSProperty(value = "search")
+    String getSearch();
 }

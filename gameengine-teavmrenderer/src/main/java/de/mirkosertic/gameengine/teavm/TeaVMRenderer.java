@@ -49,7 +49,6 @@ public class TeaVMRenderer {
         canvasElement = (HTMLCanvasElement) document.getElementById("html5canvas");
         resourceCache = document.getElementById("resourcecache");
 
-        // We have a default network game view with is reused across different gameloop instances
         gameLoopFactory = new GameLoopFactory();
         runtimeFactory = new TeaVMGameRuntimeFactory();
 
@@ -64,39 +63,6 @@ public class TeaVMRenderer {
                 TeaVMLogger.error("Failed to load scene : " + aError.getMessage());
             }
         }, runtimeFactory, window);
-
-        runSceneStrategy = new PlaySceneStrategy(runtimeFactory, gameLoopFactory, networkConnector) {
-
-            private TeaVMGameView gameView;
-
-            @Override
-            protected void loadOtherScene(String aSceneId) {
-                sceneLoader.loadFromServer(game, aSceneId, new TeaVMGameResourceLoader(aSceneId, document, resourceCache));
-            }
-
-            @Override
-            protected Size getScreenSize() {
-                return new Size(window.getInnerWidth(), window.getInnerHeight());
-            }
-
-            @Override
-            protected GameView getOrCreateCurrentGameView(GameRuntime aGameRuntime, CameraBehavior aCamera, GestureDetector aGestureDetector) {
-                if (gameView == null) {
-                    gameView = new TeaVMGameView(aGameRuntime, aCamera, aGestureDetector, canvasElement);
-                } else {
-                    gameView.prepareNewScene(aGameRuntime, aCamera, aGestureDetector);
-                }
-                gameView.setSize(getScreenSize());
-                return gameView;
-            }
-
-            @Override
-            public void handleResize() {
-                Size theCurrentSize = getScreenSize();
-                getRunningGameLoop().getScene().getRuntime().getEventManager().fire(new SetScreenResolution(theCurrentSize));
-                gameView.setSize(theCurrentSize);
-            }
-        };
 
         new TeaVMGameLoader(new TeaVMGameLoader.GameLoadedListener() {
             @Override
@@ -114,12 +80,47 @@ public class TeaVMRenderer {
                         theConnectionID = theConnectionID.substring(1);
                     }
 
+                    boolean theTruncateDB = "?truncate".equals(window.getLocation().getSearch());
+
                     String theFirebaseURL = aGame.fireBaseURLProperty().get();
-                    TeaVMLogger.info("Enabling Firebase Networking with URL " + theFirebaseURL);
-                    networkConnector = new TeaVMFirebaseNetworkConnector(theFirebaseURL, theConnectionID, window);
+                    TeaVMLogger.info("Enabling Firebase Networking with URL " + theFirebaseURL+", truncate = " + theTruncateDB);
+                    networkConnector = new TeaVMFirebaseNetworkConnector(theFirebaseURL, theConnectionID, window, theTruncateDB);
                 } else {
                     networkConnector = new DefaultNetworkConnector();
                 }
+
+                runSceneStrategy = new PlaySceneStrategy(runtimeFactory, gameLoopFactory, networkConnector) {
+
+                    private TeaVMGameView gameView;
+
+                    @Override
+                    protected void loadOtherScene(String aSceneId) {
+                        sceneLoader.loadFromServer(game, aSceneId, new TeaVMGameResourceLoader(aSceneId, document, resourceCache));
+                    }
+
+                    @Override
+                    protected Size getScreenSize() {
+                        return new Size(window.getInnerWidth(), window.getInnerHeight());
+                    }
+
+                    @Override
+                    protected GameView getOrCreateCurrentGameView(GameRuntime aGameRuntime, CameraBehavior aCamera, GestureDetector aGestureDetector) {
+                        if (gameView == null) {
+                            gameView = new TeaVMGameView(aGameRuntime, aCamera, aGestureDetector, canvasElement);
+                        } else {
+                            gameView.prepareNewScene(aGameRuntime, aCamera, aGestureDetector);
+                        }
+                        gameView.setSize(getScreenSize());
+                        return gameView;
+                    }
+
+                    @Override
+                    public void handleResize() {
+                        Size theCurrentSize = getScreenSize();
+                        getRunningGameLoop().getScene().getRuntime().getEventManager().fire(new SetScreenResolution(theCurrentSize));
+                        gameView.setSize(theCurrentSize);
+                    }
+                };
 
                 String theSceneId = aGame.defaultSceneProperty().get();
                 TeaVMLogger.info("Loading scene " + theSceneId);
