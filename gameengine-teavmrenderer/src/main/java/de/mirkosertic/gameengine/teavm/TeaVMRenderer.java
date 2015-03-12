@@ -46,19 +46,6 @@ public class TeaVMRenderer {
 
         TeaVMLogger.info("Booting game runtime");
 
-        String theConnectionID = window.getLocation().getHash();
-        if (theConnectionID == null || theConnectionID.isEmpty()) {
-            // No connection id provided, we will start a new one
-            theConnectionID = "game" + System.currentTimeMillis();
-            window.getLocation().setHash(theConnectionID);
-        } else {
-            // Extract the hash character
-            theConnectionID = theConnectionID.substring(1);
-        }
-
-        //networkConnector = new TeaVMFirebaseNetworkConnector(theConnectionID, window);
-        networkConnector = new DefaultNetworkConnector();
-
         canvasElement = (HTMLCanvasElement) document.getElementById("html5canvas");
         resourceCache = document.getElementById("resourcecache");
 
@@ -115,6 +102,25 @@ public class TeaVMRenderer {
             @Override
             public void onGameLoaded(Game aGame) {
                 game = aGame;
+
+                if (aGame.enableNetworkingProperty().get()) {
+                    String theConnectionID = window.getLocation().getHash();
+                    if (theConnectionID == null || theConnectionID.isEmpty()) {
+                        // No connection id provided, we will start a new one
+                        theConnectionID = "game" + System.currentTimeMillis();
+                        window.getLocation().setHash(theConnectionID);
+                    } else {
+                        // Extract the hash character
+                        theConnectionID = theConnectionID.substring(1);
+                    }
+
+                    String theFirebaseURL = aGame.fireBaseURLProperty().get();
+                    TeaVMLogger.info("Enabling Firebase Networking with URL " + theFirebaseURL);
+                    networkConnector = new TeaVMFirebaseNetworkConnector(theFirebaseURL, theConnectionID, window);
+                } else {
+                    networkConnector = new DefaultNetworkConnector();
+                }
+
                 String theSceneId = aGame.defaultSceneProperty().get();
                 TeaVMLogger.info("Loading scene " + theSceneId);
                 sceneLoader.loadFromServer(game, theSceneId, new TeaVMGameResourceLoader(theSceneId, document, resourceCache));

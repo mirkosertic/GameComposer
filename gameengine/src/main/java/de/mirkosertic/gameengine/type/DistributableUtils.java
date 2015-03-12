@@ -57,14 +57,16 @@ public final class DistributableUtils {
         return aData;
     }
 
-    public static void setField(Reflectable aInstance, String aPropertyName, Object aValue) {
+    public static void setField(Reflectable aInstance, String aPropertyName, Object aValue, long aEventTimestamp) {
         Field theField = aInstance.getClassInformation().getFieldByName(aPropertyName);
         if (theField == null) {
             theField = aInstance.getClassInformation().getFieldByName(aPropertyName + "Property");
         }
         if (theField != null && (theField.getType() == Property.class) || (theField.getType() == ReadOnlyProperty.class)) {
             Property theProperty = (Property) theField.getValue(aInstance);
-            theProperty.set(convertToType(aValue, theProperty.getType()));
+            if (aEventTimestamp > theProperty.getLastChanged()) {
+                theProperty.set(convertToType(aValue, theProperty.getType()));
+            }
         }
     }
 
