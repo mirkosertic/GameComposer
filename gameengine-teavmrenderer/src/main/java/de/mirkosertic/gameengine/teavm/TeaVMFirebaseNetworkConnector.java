@@ -33,7 +33,7 @@ public class TeaVMFirebaseNetworkConnector extends DefaultNetworkConnector {
             ref = aRef;
         }
 
-        public boolean degreaseTTLAndTestIfAlive() {
+        public boolean decreaseTTLAndTestIfAlive() {
             return ttl-- > 0;
         }
 
@@ -57,7 +57,7 @@ public class TeaVMFirebaseNetworkConnector extends DefaultNetworkConnector {
     private final List<Map<String, Object>> receivedEvents;
     private final List<FrameCounter> garbageCollectionList;
 
-    public TeaVMFirebaseNetworkConnector(String aFirebaseURL, String aUniqueConnectionID, TeaVMWindow aWindow) {
+    public TeaVMFirebaseNetworkConnector(String aFirebaseURL, String aUniqueConnectionID, TeaVMWindow aWindow, boolean aTruncateDB) {
 
         window = aWindow;
         instanceID = UUID.randomUID();
@@ -65,16 +65,19 @@ public class TeaVMFirebaseNetworkConnector extends DefaultNetworkConnector {
         receivedEvents = new ArrayList<>();
         garbageCollectionList = new ArrayList<>();
 
-        FirebaseRef currentRef = ((Firebase) JS.getGlobal()).create(aFirebaseURL);
+        FirebaseRef theBaseRef = ((Firebase) JS.getGlobal()).create(aFirebaseURL);
+        if (aTruncateDB) {
+            theBaseRef.remove();
+        }
 
-        currentRef = currentRef.child(aUniqueConnectionID);
+        theBaseRef = theBaseRef.child(aUniqueConnectionID);
 
-        FirebaseRef theInstances = currentRef.child("instances");
+        FirebaseRef theInstances = theBaseRef.child("instances");
         InstanceID theInstanceID = (InstanceID) window.newObject();
         theInstanceID.setInstanceId(instanceID);
         theInstances.push(theInstanceID);
 
-        eventsRef = currentRef.child("events");
+        eventsRef = theBaseRef.child("events");
         eventsRef.on("child_added", new FirebaseChildAdded() {
             @Override
             public void handleChildAdded(FirebaseDataSnapshot aChildSnapshot, JSObject aPrevChildName) {
@@ -139,7 +142,7 @@ public class TeaVMFirebaseNetworkConnector extends DefaultNetworkConnector {
         // First of all, we do some garbage collection
         List<FrameCounter> theSurvived = new ArrayList<>();
         for (FrameCounter theCounter : garbageCollectionList) {
-            if (theCounter.degreaseTTLAndTestIfAlive()) {
+            if (theCounter.decreaseTTLAndTestIfAlive()) {
                 theSurvived.add(theCounter);
             } else {
                 // Reference should be garbage collected
