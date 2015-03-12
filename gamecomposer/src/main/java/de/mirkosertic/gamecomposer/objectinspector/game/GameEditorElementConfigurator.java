@@ -36,6 +36,8 @@ public class GameEditorElementConfigurator implements ObjectInspectorElementConf
         theResult.add(new PropertyEditorItem<>(CATEGORY_NAME, aObject.enableWebGLProperty(), "WebGL enabled", "Is the WebGL renderer enabled or not", Optional.empty()));
         theResult.add(new PersistentPropertyEditorItem<>(persistenceManager, CATEGORY_NAME, aObject.defaultSceneProperty(), "Default scene", "The default scene of the game", Optional.of(ScenePropertyEditor.class)));
         theResult.add(new PropertyEditorItem<>(CATEGORY_NAME, aObject.enableDebugProperty(), "Debug enabled", "Shall debug information such as frame rates be rendered?", Optional.empty()));
+        theResult.add(new PropertyEditorItem<>(CATEGORY_NAME, aObject.enableNetworkingProperty(), "Networking enabled", "Shall the networking feature be enabled?", Optional.empty()));
+        theResult.add(new PropertyEditorItem<>(CATEGORY_NAME, aObject.fireBaseURLProperty(), "Firebase URL", "The name of the firebase URL", Optional.of(StringPropertyEditor.class)));
 
         ActionPropertyEditorItem theActions = new ActionPropertyEditorItem(CATEGORY_NAME, "", "Available actions");
         theActions.addAction(new ActionPropertyEditorItem.Action("Create new scene", new EventHandler<ActionEvent>() {

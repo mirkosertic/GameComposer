@@ -20,6 +20,8 @@ import java.util.Map;
 public class TeaVMFirebaseNetworkConnector extends DefaultNetworkConnector {
 
     private static final JSObject EVENT_PRODUCER_ID = JS.wrap("epid");
+    private static final JSObject EVENT_TS_ID = JS.wrap("evts");
+    private static final JSObject EVENT_PAYLOAD_SIZE = JS.wrap("payloadsize");
 
     public static class FrameCounter {
 
@@ -55,7 +57,7 @@ public class TeaVMFirebaseNetworkConnector extends DefaultNetworkConnector {
     private final List<Map<String, Object>> receivedEvents;
     private final List<FrameCounter> garbageCollectionList;
 
-    public TeaVMFirebaseNetworkConnector(String aUniqueConnectionID, TeaVMWindow aWindow) {
+    public TeaVMFirebaseNetworkConnector(String aFirebaseURL, String aUniqueConnectionID, TeaVMWindow aWindow) {
 
         window = aWindow;
         instanceID = UUID.randomUID();
@@ -63,7 +65,7 @@ public class TeaVMFirebaseNetworkConnector extends DefaultNetworkConnector {
         receivedEvents = new ArrayList<>();
         garbageCollectionList = new ArrayList<>();
 
-        FirebaseRef currentRef = ((Firebase) JS.getGlobal()).create("https://glowing-heat-2189.firebaseio.com");
+        FirebaseRef currentRef = ((Firebase) JS.getGlobal()).create(aFirebaseURL);
 
         currentRef = currentRef.child(aUniqueConnectionID);
 
@@ -79,9 +81,16 @@ public class TeaVMFirebaseNetworkConnector extends DefaultNetworkConnector {
                 JSObject theEvent = aChildSnapshot.val();
                 String theInstanceID = JS.unwrapString(JS.get(theEvent, EVENT_PRODUCER_ID));
                 if (!instanceID.equals(theInstanceID)) {
+                    String theEventTS = JS.unwrapString(JS.get(theEvent, EVENT_TS_ID));
+
                     // New event from another instance
-                    TeaVMLogger.info("New message : " + aChildSnapshot.key());
-                    receivedEvents.add(new JSONMap(theEvent));
+                    TeaVMLogger.info("New message : " + aChildSnapshot.key()+" @ " + theEventTS);
+
+                    int thePayloadSize = Integer.parseInt(JS.unwrapString(JS.get(theEvent, EVENT_PAYLOAD_SIZE)));
+                    for (int i=0;i<thePayloadSize;i++) {
+                        JSObject theSingleEvent = JS.get(theEvent, JS.wrap("" + i));
+                        receivedEvents.add(new JSONMap(theSingleEvent));
+                    }
                 }
             }
         });
@@ -89,7 +98,6 @@ public class TeaVMFirebaseNetworkConnector extends DefaultNetworkConnector {
 
     private JSObject convert(Map<String, Object> aMap) {
         JSObject theMap = window.newObject();
-        JS.set(theMap, EVENT_PRODUCER_ID, JS.wrap(instanceID));
         for (String theKey: aMap.keySet()) {
             JSObject theWrappedKey = JS.wrap(theKey);
             Object theObject = aMap.get(theKey);
@@ -104,13 +112,24 @@ public class TeaVMFirebaseNetworkConnector extends DefaultNetworkConnector {
 
     @Override
     public int send(List<Map<String, Object>> aEventsToSend) {
+        List<JSObject>  theJSEvents = new ArrayList<>();
         for (Map<String, Object> aEvent : aEventsToSend) {
-            if (!aEvent.isEmpty()) {
-                FirebaseRef theReference = eventsRef.push(convert(aEvent));
-                // Event will be garbage collected after 10 seonds
-                // We are running at 60 Frames / second
-                garbageCollectionList.add(new FrameCounter(60 * 10, theReference));
+            theJSEvents.add(convert(aEvent));
+        }
+        if (!theJSEvents.isEmpty()) {
+
+            JSObject theObject = window.newObject();
+            JS.set(theObject, EVENT_PRODUCER_ID, JS.wrap(instanceID));
+            JS.set(theObject, EVENT_TS_ID, JS.wrap("" + System.currentTimeMillis()));
+            JS.set(theObject, EVENT_PAYLOAD_SIZE, JS.wrap("" + theJSEvents.size()));
+            for (int i=0;i<theJSEvents.size();i++) {
+                JS.set(theObject, JS.wrap("" + i), theJSEvents.get(i));
             }
+
+            FirebaseRef theReference = eventsRef.push(theObject);
+            // Event will be garbage collected after 10 seonds
+            // We are running at 60 Frames / second
+            garbageCollectionList.add(new FrameCounter(60 * 10, theReference));
         }
         return aEventsToSend.size();
     }

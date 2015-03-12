@@ -50,6 +50,7 @@ public class PropertyChanged extends GameEvent implements DistributableEvent {
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<>();
         theResult.put(EVENT_ID_ATTRIBUTE, type);
+        theResult.put("eventts", "" + System.currentTimeMillis());
         theResult.put("propertyName", property.getName());
         theResult.put("newValue", DistributableUtils.convert(property.get()));
 
@@ -70,18 +71,18 @@ public class PropertyChanged extends GameEvent implements DistributableEvent {
     public static void runEventInScene(Map<String, Object> aEventData, GameScene aGameScene) {
         String thePropertyName = (String ) aEventData.get("propertyName");
         String theInstanceID = (String) aEventData.get("instanceID");
-
+        long theEventTS = Long.parseLong((String) aEventData.get("eventts"));
         if (theInstanceID != null) {
             GameObjectInstance theInstance = aGameScene.findInstanceByID(theInstanceID);
             if (theInstance != null) {
                 String theBehaviorType = (String) aEventData.get("behavior");
                 if (theBehaviorType == null) {
-                    DistributableUtils.setField(theInstance, thePropertyName, aEventData.get("newValue"));
+                    DistributableUtils.setField(theInstance, thePropertyName, aEventData.get("newValue"), theEventTS);
                 } else {
                     Object theBehavior = theInstance.findBehaviorByType(theBehaviorType);
                     if (theBehavior != null) {
                         // We KNOW every behavior is Reflectable
-                        DistributableUtils.setField((Reflectable) theBehavior, thePropertyName, aEventData.get("newValue"));
+                        DistributableUtils.setField((Reflectable) theBehavior, thePropertyName, aEventData.get("newValue"), theEventTS);
                     }
                 }
             }

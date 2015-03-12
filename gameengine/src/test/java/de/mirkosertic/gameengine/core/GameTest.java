@@ -52,11 +52,13 @@ public class GameTest {
         theGame.defaultSceneProperty().set("scene1");
         theGame.customPropertiesProperty().get().set("key", "value");
         Map<String, Object> theData = theGame.serialize();
-        assertEquals(5, theData.size());
+        assertEquals(7, theData.size());
         assertEquals("Testgame", theData.get(Game.NAME_PROPERTY));
         assertEquals("scene1", theData.get("defaultscene"));
         assertEquals("true", theData.get("enablewebgl"));
         assertEquals("false", theData.get("enableDebug"));
+        assertEquals("false", theData.get("enableNetworking"));
+        assertEquals("https://glowing-heat-2189.firebaseio.com", theData.get("firebaseURL"));
 
         Map<String, String> theProps = (Map<String, String>) theData.get("customProperties");
         assertEquals(1, theProps.size(), 0);
@@ -67,10 +69,14 @@ public class GameTest {
         Map<String, Object> theData = new HashMap<>();
         theData.put(Game.NAME_PROPERTY, "Testgame");
         theData.put("defaultscene", "scene1");
+        theData.put("enableNetworking", "true");
+        theData.put("firebaseURL", "lala");
         Game theGame = Game.deserialize(theData);
         assertEquals("Testgame", theGame.nameProperty().get());
         assertEquals("scene1", theGame.defaultSceneProperty().get());
         assertTrue(theGame.enableWebGLProperty().get());
+        assertTrue(theGame.enableNetworkingProperty().get());
+        assertEquals("lala", theGame.fireBaseURLProperty().get());
     }
 
     @Test
@@ -86,5 +92,7 @@ public class GameTest {
         assertEquals("scene1", theGame.defaultSceneProperty().get());
         assertFalse(theGame.enableWebGLProperty().get());
         assertTrue(theGame.enableDebugProperty().get());
+        assertFalse(theGame.enableNetworkingProperty().get());
+        assertEquals("https://glowing-heat-2189.firebaseio.com", theGame.fireBaseURLProperty().get());
     }
 }

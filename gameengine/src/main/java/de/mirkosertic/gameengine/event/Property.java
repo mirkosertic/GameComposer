@@ -8,12 +8,15 @@ public class Property<T> extends ReadOnlyProperty<T> {
 
     private final Set<GameEventListener<PropertyChanged>> changeListener;
 
+    private long lastChanged;
+
     public Property(Class<T> aType, Object aOwner, String aName, T aDefaultValue, GameEventListener<PropertyChanged> aListener) {
         super(aType, aOwner, aName, aDefaultValue);
         changeListener = new HashSet<>();
         if (aListener != null) {
             changeListener.add(aListener);
         }
+        lastChanged = System.currentTimeMillis();
     }
 
     public Property(Class<T> aType, Object aOwner, String aName, GameEventListener<PropertyChanged> aListener) {
@@ -52,6 +55,8 @@ public class Property<T> extends ReadOnlyProperty<T> {
         T theOldValue = value;
         value = aValue;
 
+        lastChanged = System.currentTimeMillis();
+
         if (!changeListener.isEmpty()) {
             PropertyChanged theEvent = new PropertyChanged(this, theOldValue);
 
@@ -64,6 +69,10 @@ public class Property<T> extends ReadOnlyProperty<T> {
 
     public void setQuietly(T aValue) {
         value = aValue;
+    }
+
+    public long getLastChanged() {
+        return lastChanged;
     }
 
     public Set<GameEventListener<PropertyChanged>> getChangeListener() {
