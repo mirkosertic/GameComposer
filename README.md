@@ -26,7 +26,7 @@ Core concepts and components of the game engine are:
 | GameView               | A GameView is the presentation of a GameScene to some kind of consumer. This can be a screen renderer or even a remote consumer.
 | GameObject             | A GameObject is a template for visible objects. The behavior of a GameObject is defined by GameComponentTemplates
 | BehaviorTemplate       | A BehaviorTemplate defines some kind of behavior, e.g. if it is static, a sprite or driven by physics.
-| GameObjectInstance     | A GameObjectInstance is an instance of a GameObject. It inherits the defined GameComponentTemplates by copying them into a GameComponent
+| GameObjectInstance     | A GameObjectInstance is an instance of a GameObject. It inherits the defined BehaviorTemplates by copying them into a Behavior
 | Behavior               | A Behavior is the behavior status for a BehaviorTemplate and a GameObjectInstance.
 | Event                  | An Event can be triggered by a consumer by sending it via the GameView to the engine. An Event can also be triggered or consumed by a GameComponent or GameSystem.
 | EventSheet             | An EventSheet is the rule engine. Each rule has a condition and some actions.
@@ -64,6 +64,15 @@ GameEngine-TeaVMRenderer
 
 This is the game presentation logic using the TeaVM Java-to-JavaScript Transpiler Framework. It will render the game view
 using the HTML5 Canvas API.
+
+GameEngine-Networking
+--------------
+
+Networking support is implemented as a RemoteGameView. Local events are sent between game instances to sync the distributed game models.
+
+Networking is implemented in a very early beta state only by the TeaVM Renderer. Events are sent to a FireBase instance, which
+then syncs the events back to other browsers bound to the same Firebase instance. Take a look at the [Networking](http://mirkosertic.github.io/GameComposer/games/teavm/networking/index.html) example
+to see it in action.
 
 
 Example Games
@@ -111,3 +120,5 @@ TeaVM Renderer:
 [Position test](http://mirkosertic.github.io/GameComposer/games/teavm/positiontest/index.html)
 
 [Rotating actor](http://mirkosertic.github.io/GameComposer/games/teavm/rotatingactor/index.html)
+
+[Networking](http://mirkosertic.github.io/GameComposer/games/teavm/networking/index.html)

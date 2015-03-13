@@ -64,9 +64,9 @@ public final class DistributableUtils {
         }
         if (theField != null && (theField.getType() == Property.class) || (theField.getType() == ReadOnlyProperty.class)) {
             Property theProperty = (Property) theField.getValue(aInstance);
-            if (aEventTimestamp > theProperty.getLastChanged()) {
+            //if (aEventTimestamp > theProperty.getLastChanged()) {
                 theProperty.set(convertToType(aValue, theProperty.getType()));
-            }
+            //}
         }
     }
 

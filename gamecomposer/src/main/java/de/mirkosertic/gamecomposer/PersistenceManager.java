@@ -247,4 +247,8 @@ public class PersistenceManager {
         }
         throw new IllegalArgumentException("Unknown scene : "+aGameScene);
     }
+
+    public File getCurrentGameDirectory() {
+        return currentGameDirectory;
+    }
 }
