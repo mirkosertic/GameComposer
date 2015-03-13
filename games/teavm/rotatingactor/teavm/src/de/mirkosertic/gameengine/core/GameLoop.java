@@ -1,6 +1,9 @@
 package de.mirkosertic.gameengine.core;
 
+import de.mirkosertic.gameengine.ArrayUtils;
 import de.mirkosertic.gameengine.event.SystemException;
+
+import java.util.List;
 
 public class GameLoop implements Runnable {
 
@@ -11,13 +14,21 @@ public class GameLoop implements Runnable {
     private long lastInvocation;
 
     private final RuntimeStatistics statistics;
+    private GameView[] gameViews;
 
     GameLoop(GameScene aScene, GameView aHumanGameView, GameRuntime aRuntime) {
         humanGameView = aHumanGameView;
         shutdownSignal = false;
         runtime = aRuntime;
         scene = aScene;
+        gameViews = new GameView[] {aHumanGameView};
         statistics = new RuntimeStatistics();
+    }
+
+    public void addGameView(GameView aNewGameView) {
+        List<GameView> theViews = ArrayUtils.asList(gameViews);
+        theViews.add(aNewGameView);
+        gameViews = theViews.toArray(new GameView[theViews.size()]);
     }
 
     public GameView getHumanGameView() {
@@ -51,8 +62,10 @@ public class GameLoop implements Runnable {
 
                 statistics.beginGameLoop();
 
-                // Trigger rerendering of game view
-                humanGameView.renderGame(theGameTime, theElapsedTime, scene, statistics);
+                for (GameView theView : gameViews) {
+                    // Trigger rerendering of game view
+                    theView.renderGame(theGameTime, theElapsedTime, scene, statistics);
+                }
 
                 lastInvocation = theCurrentTime;
             } catch (Exception e) {
@@ -87,7 +100,9 @@ public class GameLoop implements Runnable {
                 }
 
                 // Trigger rerendering of game view
-                humanGameView.renderGame(theGameTime, theElapsedTime, scene, statistics);
+                for (GameView theGameView : gameViews) {
+                    theGameView.renderGame(theGameTime, theElapsedTime, scene, statistics);
+                }
 
                 lastInvocation = theCurrentTime;
             } catch (Exception e) {

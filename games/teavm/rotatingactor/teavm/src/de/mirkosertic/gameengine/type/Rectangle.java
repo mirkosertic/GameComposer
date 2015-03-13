@@ -3,7 +3,7 @@ package de.mirkosertic.gameengine.type;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Rectangle {
+public class Rectangle implements Distributable {
 
     public final Position position;
     public final Size size;
@@ -32,6 +32,7 @@ public class Rectangle {
         return new Rectangle(position, aNewSize);
     }
 
+    @Override
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<>();
         theResult.put("position", position.serialize());

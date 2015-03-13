@@ -39,6 +39,8 @@ public class GameObjectInstance implements Reflectable<GameObjectInstanceClassIn
     private final Property<Boolean> absolutePosition;
     private final Property<AbsolutePositionAnchor> absolutePositionAnchor;
 
+    private boolean remoteObject;
+
     GameObjectInstance(GameEventManager aEventManager, GameObject aOwnerGameObject) {
 
         uuid = new Property<>(String.class, this, UUID_PROPERTY, de.mirkosertic.gameengine.type.UUID.randomUID(), aEventManager);
@@ -134,6 +136,17 @@ public class GameObjectInstance implements Reflectable<GameObjectInstanceClassIn
 
     public <T extends Behavior> T getBehavior(Class<T> aComponentClass) {
         return (T) behaviors.get(aComponentClass);
+    }
+
+    public void markAsRemoteObject() {
+        for (Behavior theBehavior : behaviors.values()) {
+            theBehavior.markAsRemoteObject();
+        }
+        remoteObject = true;
+    }
+
+    public boolean isRemoteObject() {
+        return remoteObject;
     }
 
     public Map<String, Object> serialize() {

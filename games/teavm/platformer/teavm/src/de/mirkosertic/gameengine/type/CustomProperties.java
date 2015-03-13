@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CustomProperties implements Reflectable {
+public class CustomProperties implements Reflectable, Distributable {
 
     private static final CustomPropertiesClassInformation CIINSTANCE = new CustomPropertiesClassInformation();
 
@@ -46,6 +46,7 @@ public class CustomProperties implements Reflectable {
         return values.containsKey(aKey);
     }
 
+    @Override
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<>();
 

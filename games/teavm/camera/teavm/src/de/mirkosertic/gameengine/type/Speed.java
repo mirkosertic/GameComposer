@@ -5,7 +5,7 @@ import de.mirkosertic.gameengine.annotations.ReflectiveMethod;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Speed implements Reflectable {
+public class Speed implements Reflectable, Distributable {
 
     private static final SpeedClassInformation CIINSTANCE = new SpeedClassInformation();
 
@@ -34,6 +34,7 @@ public class Speed implements Reflectable {
         return CIINSTANCE;
     }
 
+    @Override
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<>();
         theResult.put("speed", Long.toString(speed));

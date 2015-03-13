@@ -5,7 +5,7 @@ import de.mirkosertic.gameengine.annotations.ReflectiveField;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Color implements Reflectable<ColorClassInformation> {
+public class Color implements Reflectable<ColorClassInformation>, Distributable {
 
     private static final ColorClassInformation CIINSTANCE = new ColorClassInformation();
 
@@ -28,10 +28,30 @@ public class Color implements Reflectable<ColorClassInformation> {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Color color = (Color) o;
+
+        if (b != color.b) return false;
+        if (g != color.g) return false;
+        if (r != color.r) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return r;
+    }
+
+    @Override
     public ColorClassInformation getClassInformation() {
         return CIINSTANCE;
     }
 
+    @Override
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<>();
         theResult.put("r", Integer.toString(r));

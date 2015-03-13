@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GameScene implements Reflectable<GameSceneClassInformation> {
+public class GameScene implements Reflectable<GameSceneClassInformation>, KeyValueObjectCache {
 
     private static final GameSceneClassInformation CIINSTANCE = new GameSceneClassInformation();
 
@@ -42,8 +42,11 @@ public class GameScene implements Reflectable<GameSceneClassInformation> {
 
     private final Game game;
 
+    private final Map<Object, Object> keyValueStore;
+
     public GameScene(Game aGame, GameRuntime aGameRuntime) {
 
+        keyValueStore = new HashMap<>();
         game = aGame;
         GameEventManager theManager = aGameRuntime.getEventManager();
 
@@ -123,7 +126,7 @@ public class GameScene implements Reflectable<GameSceneClassInformation> {
         List<GameObjectInstance> theInstances = ArrayUtils.asList(instances);
         if (theInstances.add(aInstance)) {
             instances = theInstances.toArray(new GameObjectInstance[theInstances.size()]);
-            gameRuntime.getEventManager().fire(new GameObjectInstanceAddedToScene(this, aInstance));
+            gameRuntime.getEventManager().fire(new GameObjectInstanceAddedToScene(aInstance));
         }
     }
 
@@ -228,6 +231,16 @@ public class GameScene implements Reflectable<GameSceneClassInformation> {
     public GameObjectInstance findInstanceByName(String aName) {
         for (GameObjectInstance theInstance : instances) {
             if (aName.equals(theInstance.nameProperty().get())) {
+                return theInstance;
+            }
+        }
+        return null;
+    }
+
+    @ReflectiveMethod
+    public GameObjectInstance findInstanceByID(String aInstanceID) {
+        for (GameObjectInstance theInstance : instances) {
+            if (aInstanceID.equals(theInstance.uuidProperty().get())) {
                 return theInstance;
             }
         }
@@ -440,5 +453,15 @@ public class GameScene implements Reflectable<GameSceneClassInformation> {
             }
         }
         aObject.add(aBehaviorTemplate);
+    }
+
+    @Override
+    public <T> T getObjectForKey(Object aKey) {
+        return (T) keyValueStore.get(aKey);
+    }
+
+    @Override
+    public <T> void setObjectForKey(Object aKey, T aValue) {
+        keyValueStore.put(aKey, aValue);
     }
 }

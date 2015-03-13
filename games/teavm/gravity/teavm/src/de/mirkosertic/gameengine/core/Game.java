@@ -17,6 +17,8 @@ public class Game implements Reflectable {
     public static final String ENABLE_WEB_GL_PROPERTY = "enableWebGL";
     public static final String CUSTOM_PROPERTIES_PROPERTY = "customProperties";
     public static final String ENABLE_DEBUG_PROPERTY = "enableDebug";
+    public static final String ENABLE_NETWORKING_PROPERTY = "enableNetworking";
+    public static final String FIREBASE_URL = "firebaseURL";
 
     private final Property<String> name;
     private final Property<String> defaultScene;
@@ -24,12 +26,18 @@ public class Game implements Reflectable {
     private final Property<CustomProperties> customProperties;
     private final Property<Boolean> enableDebug;
 
+    private final Property<Boolean> enableNetworking;
+    private final Property<String> fireBaseURL;
+
     public Game() {
         name = new Property<>(String.class, this, NAME_PROPERTY, (String) null);
         defaultScene = new Property<>(String.class, this, DEFAULT_SCENE_PROPERTY, (String) null);
         enableWebGL = new Property<>(Boolean.class, this, ENABLE_WEB_GL_PROPERTY, Boolean.TRUE);
         enableDebug = new Property<>(Boolean.class, this, ENABLE_DEBUG_PROPERTY, Boolean.FALSE);
         customProperties = new Property<>(CustomProperties.class, this, CUSTOM_PROPERTIES_PROPERTY, new CustomProperties());
+
+        enableNetworking = new Property<>(Boolean.class, this, ENABLE_NETWORKING_PROPERTY, Boolean.FALSE);
+        fireBaseURL = new Property<>(String.class, this, FIREBASE_URL, "https://glowing-heat-2189.firebaseio.com");
     }
 
     @ReflectiveField
@@ -50,6 +58,16 @@ public class Game implements Reflectable {
     @ReflectiveField
     public Property<Boolean> enableDebugProperty() {
         return enableDebug;
+    }
+
+    @ReflectiveField
+    public Property<Boolean> enableNetworkingProperty() {
+        return enableNetworking;
+    }
+
+    @ReflectiveField
+    public Property<String> fireBaseURLProperty() {
+        return fireBaseURL;
     }
 
     public void removeScene(String aSceneName) {
@@ -75,6 +93,8 @@ public class Game implements Reflectable {
         theResult.put("enablewebgl", Boolean.toString(enableWebGL.get()));
         theResult.put("customProperties", customProperties.get().serialize());
         theResult.put("enableDebug", Boolean.toString(enableDebug.get()));
+        theResult.put("enableNetworking", Boolean.toString(enableNetworking.get()));
+        theResult.put("firebaseURL", fireBaseURL.get());
         return theResult;
     }
 
@@ -95,6 +115,16 @@ public class Game implements Reflectable {
         if (theCustomProperties != null) {
             theResult.customProperties.setQuietly(CustomProperties.deserialize(theCustomProperties));
         }
+
+        String theNetworkingEnabled = (String) aSerializedData.get("enableNetworking");
+        if (theNetworkingEnabled != null) {
+            theResult.enableNetworking.setQuietly(Boolean.parseBoolean(theNetworkingEnabled));
+        }
+        String theFirebaseURL = (String) aSerializedData.get("firebaseURL");
+        if (theFirebaseURL != null) {
+            theResult.fireBaseURL.setQuietly(theFirebaseURL);
+        }
+
         return theResult;
     }
 }

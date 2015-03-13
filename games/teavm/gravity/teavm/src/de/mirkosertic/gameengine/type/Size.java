@@ -6,7 +6,7 @@ import de.mirkosertic.gameengine.annotations.ReflectiveMethod;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Size implements Reflectable<SizeClassInformation> {
+public class Size implements Reflectable<SizeClassInformation>, Distributable {
 
     private static final SizeClassInformation CIINSTANCE = new SizeClassInformation();
 
@@ -59,6 +59,7 @@ public class Size implements Reflectable<SizeClassInformation> {
         return result;
     }
 
+    @Override
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<>();
         theResult.put("width", Integer.toString(width));

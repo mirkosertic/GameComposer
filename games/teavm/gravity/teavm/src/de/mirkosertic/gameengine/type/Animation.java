@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Animation {
+public class Animation implements Distributable {
 
     private final String uuid;
     private final String name;
@@ -67,6 +67,7 @@ public class Animation {
         return animationSequence.get(theFrame);
     }
 
+    @Override
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<>();
         theResult.put("uuid", uuid);

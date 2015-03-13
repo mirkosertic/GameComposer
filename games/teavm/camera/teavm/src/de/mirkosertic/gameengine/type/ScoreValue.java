@@ -5,7 +5,7 @@ import de.mirkosertic.gameengine.annotations.ReflectiveMethod;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ScoreValue implements Reflectable {
+public class ScoreValue implements Reflectable, Distributable {
 
     private static final ScoreValueClassInformation CIINSTANCE = new ScoreValueClassInformation();
 
@@ -54,6 +54,7 @@ public class ScoreValue implements Reflectable {
         return (int) (score ^ (score >>> 32));
     }
 
+    @Override
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<>();
         theResult.put("score", Long.toString(score));

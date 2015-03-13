@@ -3,7 +3,7 @@ package de.mirkosertic.gameengine.type;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Script {
+public class Script implements Distributable {
 
     public final String script;
 
@@ -34,6 +34,7 @@ public class Script {
         return script.hashCode();
     }
 
+    @Override
     public Map<String, Object> serialize() {
         Map<String, Object> theData = new HashMap<>();
         theData.put("script", script);

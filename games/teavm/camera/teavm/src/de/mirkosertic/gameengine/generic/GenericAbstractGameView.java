@@ -116,7 +116,7 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
                     // Scripting is enabled, so we have to evaluate the expression
                     try {
                         LUAScriptEngine theEngine = gameRuntime.getScriptEngineFactory()
-                                .createNewEngine(theExpression);
+                                .createNewEngine(aScene, theExpression);
 
                         theTextToDraw = theEngine.evaluateSimpleExpressionFor(theInstance);
                     } catch (Exception e) {

@@ -7,7 +7,14 @@ import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.SystemException;
 import de.mirkosertic.gameengine.input.DefaultGestureDetector;
+import de.mirkosertic.gameengine.network.DefaultEventInterpreter;
+import de.mirkosertic.gameengine.network.EventInterpreter;
+import de.mirkosertic.gameengine.network.NetworkConnector;
+import de.mirkosertic.gameengine.network.NetworkGameView;
+import de.mirkosertic.gameengine.network.NetworkGameViewFactory;
+import de.mirkosertic.gameengine.network.NewGameInstance;
 import de.mirkosertic.gameengine.type.Size;
+import de.mirkosertic.gameengine.type.UUID;
 
 public abstract class PlaySceneStrategy {
 
@@ -15,10 +22,12 @@ public abstract class PlaySceneStrategy {
 
     private final AbstractGameRuntimeFactory runtimeFactory;
     private final GameLoopFactory gameLoopFactory;
+    private final NetworkConnector networkConnector;
 
-    protected PlaySceneStrategy(AbstractGameRuntimeFactory aRuntimeFactory, GameLoopFactory aGameLoopFactory) {
+    protected PlaySceneStrategy(AbstractGameRuntimeFactory aRuntimeFactory, GameLoopFactory aGameLoopFactory, NetworkConnector aNetworkConnector) {
         runtimeFactory = aRuntimeFactory;
         gameLoopFactory = aGameLoopFactory;
+        networkConnector = aNetworkConnector;
     }
 
     public boolean hasGameLoop() {
@@ -45,10 +54,14 @@ public abstract class PlaySceneStrategy {
         return new DefaultGestureDetector(aEventManager, aCamera);
     }
 
+    protected EventInterpreter createEventInterpreter() {
+        return new DefaultEventInterpreter();
+    }
+
     protected void handleSystemException(SystemException e) {
     }
 
-    public void playScene(GameScene aGameScene) {
+    public void playScene(final GameScene aGameScene) {
         if (runningGameLoop != null) {
             runningGameLoop.shutdown();
         }
@@ -76,6 +89,13 @@ public abstract class PlaySceneStrategy {
             }
         }
 
+        // If there is a networked game
+        // we need unique player instance ids
+        // After loading they are the same on every instance
+        if (thePlayerInstance != null) {
+            thePlayerInstance.uuidProperty().set(UUID.randomUID());
+        }
+
         // This is our hook to load new scenes
         theEventManager.register(null, RunScene.class, new GameEventListener<RunScene>() {
             @Override
@@ -95,5 +115,31 @@ public abstract class PlaySceneStrategy {
         runningGameLoop = theLoop;
 
         theCameraBehavior.initializeFor(aGameScene, thePlayerInstance);
+
+        // Now initialize the networking
+        EventInterpreter theInterpreter = createEventInterpreter();
+
+        final NetworkGameViewFactory theNetworkFactory = new NetworkGameViewFactory(networkConnector, theInterpreter);
+        final NetworkGameView theNetworkGameView = theNetworkFactory.createNetworkViewFor(theEventManager);
+
+        runningGameLoop.addGameView(theNetworkGameView);
+
+        // Finally notify the other game instances that there is a new player on the field
+        // This event will we sent to the other game instances
+        // And will trigger there a creation of the new remote player
+        theNetworkGameView.handleGameEvent(new NewGameInstance(thePlayerInstance));
+
+        if (thePlayerInstance != null) {
+
+            final GameObjectInstance theFinalPlayer = thePlayerInstance;
+
+            theEventManager.register(null, NewGameInstance.class, new GameEventListener<NewGameInstance>() {
+                @Override
+                public void handleGameEvent(NewGameInstance aEvent) {
+                    // Inform the other instances about the current player
+                    theNetworkGameView.handleGameEvent(new GameObjectInstanceAddedToScene(theFinalPlayer));
+                }
+            });
+        }
     }
 }

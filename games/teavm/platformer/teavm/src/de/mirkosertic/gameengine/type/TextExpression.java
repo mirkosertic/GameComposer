@@ -3,7 +3,7 @@ package de.mirkosertic.gameengine.type;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TextExpression {
+public class TextExpression implements Distributable {
 
     public final String expression;
 
@@ -31,6 +31,7 @@ public class TextExpression {
         return expression.hashCode();
     }
 
+    @Override
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<>();
         theResult.put("expression", expression);

@@ -26,6 +26,13 @@ public class GameSceneClassInformation extends ClassInformation {
     }
   };
 
+  public static final Method<de.mirkosertic.gameengine.core.GameScene> FINDINSTANCEBYID = new Method<de.mirkosertic.gameengine.core.GameScene>("findInstanceByID", de.mirkosertic.gameengine.core.GameObjectInstance.class, new Class[] {String.class}) {
+    @Override
+    public Object invoke(GameScene aObject, Object[] aArguments) {
+      return aObject.findInstanceByID((String) aArguments[0]);
+    }
+  };
+
   public static final Method<de.mirkosertic.gameengine.core.GameScene> CREATEFROM = new Method<de.mirkosertic.gameengine.core.GameScene>("createFrom", de.mirkosertic.gameengine.core.GameObjectInstance.class, new Class[] {de.mirkosertic.gameengine.core.GameObject.class}) {
     @Override
     public Object invoke(GameScene aObject, Object[] aArguments) {
@@ -87,6 +94,7 @@ public class GameSceneClassInformation extends ClassInformation {
     register(ADDINSTANCE);
     register(FINDOBJECTBYNAME);
     register(FINDINSTANCEBYNAME);
+    register(FINDINSTANCEBYID);
     register(CREATEFROM);
     register(REMOVEGAMEOBJECTINSTANCE);
     register(NAMEPROPERTY);

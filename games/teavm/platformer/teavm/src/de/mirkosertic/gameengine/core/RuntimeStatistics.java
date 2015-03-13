@@ -6,6 +6,8 @@ public class RuntimeStatistics {
     private long numberTicks;
     private long cycleStart;
     private long averageTimePerLoopCycle;
+    private long numberOfNetworkeventsSend;
+    private long numberOfNetworkeventsReceived;
 
     public RuntimeStatistics() {
         startTime = System.currentTimeMillis();
@@ -14,6 +16,16 @@ public class RuntimeStatistics {
     public long incrementTicks() {
         numberTicks++;
         return numberTicks;
+    }
+
+    public long incrementNumberOfNetworkeventsSend() {
+        numberOfNetworkeventsSend++;
+        return numberOfNetworkeventsSend;
+    }
+
+    public long incrementNumberOfNetworkeventsReceived() {
+        numberOfNetworkeventsReceived++;
+        return numberOfNetworkeventsReceived;
     }
 
     public long getStartTime() {

@@ -35,11 +35,8 @@ import de.mirkosertic.gameengine.sprite.SpriteBehaviorUnmarshaller;
 import de.mirkosertic.gameengine.starfield.StarfieldGameSceneEffectUnmarshaller;
 import de.mirkosertic.gameengine.text.TextBehaviorTemplateUnmarshaller;
 import de.mirkosertic.gameengine.text.TextBehaviorUnmarshaller;
-import de.mirkosertic.gameengine.type.Reflectable;
 
 public abstract class AbstractGameRuntimeFactory {
-
-    protected abstract Reflectable createBuildInFunctions();
 
     protected abstract LUAScriptEngineFactory createScriptEngine();
 

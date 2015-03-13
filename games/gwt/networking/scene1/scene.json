@@ -1,0 +1,263 @@
+{
+  "cameraobjectid" : "2900940626662702649",
+  "eventsheets" : [ {
+    "name" : "Events",
+    "rules" : [ {
+      "condition" : {
+        "keyCode" : "LEFT",
+        "eventType" : "PRESSED",
+        "type" : "KeyEventCondition"
+      },
+      "name" : "Rotate left",
+      "actions" : [ {
+        "type" : "RunScriptAction",
+        "script" : {
+          "script" : "--\n-- This is the default method of every action. It is called once for every game loop cycle.\n--\n-- instance is an optional injected object which is a reference to the GameObjectInstance for \n-- which this script is executed.\n-- scene is an injected object which is a reference to the GameScene for \n-- which this script is executed.\n--\nfunction proceedGame(aGameTime, aElapsedTimeSinceLastLoop) \n\n\t-- The method must return either STOPPED or CONTINUE_RUNNING\n\t-- STOPPED will kill the script, it is not invoked the next time\n\t-- CONTINUE_RUNNING will invoke the skript the next game loop cycle.\n\tlocal thePlayer = scene.findInstanceByName(\"Plane_instance\")\n\t\n\tlocal theBehavior = thePlayer.findBehaviorByType(\"ConstantMovement\")\n\tlocal theCurrentSpeed = theBehavior.rotationSpeedProperty()\n\tlocal theNewSpeed = theCurrentSpeed.incrementBy(-10)\n\t\n\ttheBehavior.rotationSpeedProperty(theNewSpeed)\n\t\n\treturn 'STOPPED'\nend"
+        }
+      } ]
+    }, {
+      "condition" : {
+        "keyCode" : "RIGHT",
+        "eventType" : "PRESSED",
+        "type" : "KeyEventCondition"
+      },
+      "name" : "Rotate right",
+      "actions" : [ {
+        "type" : "RunScriptAction",
+        "script" : {
+          "script" : "--\n-- This is the default method of every action. It is called once for every game loop cycle.\n--\n-- instance is an optional injected object which is a reference to the GameObjectInstance for \n-- which this script is executed.\n-- scene is an injected object which is a reference to the GameScene for \n-- which this script is executed.\n--\nfunction proceedGame(aGameTime, aElapsedTimeSinceLastLoop) \n\n    local thePlayer = scene.findInstanceByName(\"Plane_instance\")\n    \n    local theBehavior = thePlayer.findBehaviorByType(\"ConstantMovement\")\n    local theCurrentSpeed = theBehavior.rotationSpeedProperty()\n    local theNewSpeed = theCurrentSpeed.incrementBy(10)\n    \n    theBehavior.rotationSpeedProperty(theNewSpeed)\n\n\treturn 'STOPPED'\nend"
+        }
+      } ]
+    }, {
+      "condition" : {
+        "keyCode" : "ANY",
+        "eventType" : "RELEASED",
+        "type" : "KeyEventCondition"
+      },
+      "name" : "Stop rotation if key released and stop flying",
+      "actions" : [ {
+        "type" : "RunScriptAction",
+        "script" : {
+          "script" : "--\n-- This is the default method of every action. It is called once for every game loop cycle.\n--\n-- instance is an optional injected object which is a reference to the GameObjectInstance for \n-- which this script is executed.\n-- scene is an injected object which is a reference to the GameScene for \n-- which this script is executed.\n--\nfunction proceedGame(aGameTime, aElapsedTimeSinceLastLoop) \n\n    local thePlayer = scene.findInstanceByName(\"Plane_instance\")\n    \n    local theBehavior = thePlayer.findBehaviorByType(\"ConstantMovement\")\n    local theCurrentSpeed = theBehavior.rotationSpeedProperty()\n    local theNewSpeed = theCurrentSpeed.resetToZero()\n    \n    theBehavior.rotationSpeedProperty(theNewSpeed)\n    theBehavior.speedProperty(theNewSpeed)\n\n\treturn 'STOPPED'\nend"
+        }
+      } ]
+    }, {
+      "condition" : {
+        "keyCode" : "UP",
+        "eventType" : "PRESSED",
+        "type" : "KeyEventCondition"
+      },
+      "name" : "Fly",
+      "actions" : [ {
+        "type" : "RunScriptAction",
+        "script" : {
+          "script" : "--\n-- This is the default method of every action. It is called once for every game loop cycle.\n--\n-- instance is an optional injected object which is a reference to the GameObjectInstance for \n-- which this script is executed.\n-- scene is an injected object which is a reference to the GameScene for \n-- which this script is executed.\n--\nfunction proceedGame(aGameTime, aElapsedTimeSinceLastLoop) \n\n    local thePlayer = scene.findInstanceByName(\"Plane_instance\")\n    \n    local theBehavior = thePlayer.findBehaviorByType(\"ConstantMovement\");\n    local theCurrentSpeed = theBehavior.speedProperty()\n    \n    local theNewSpeed = theCurrentSpeed.incrementBy(10);\n    \n    theBehavior.speedProperty(theNewSpeed)\n\n\treturn 'STOPPED'\nend"
+        }
+      } ]
+    } ]
+  } ],
+  "effects" : [ ],
+  "customProperties" : {
+    "data" : [ ]
+  },
+  "layoutBounds" : {
+    "size" : {
+      "width" : "2147483647",
+      "height" : "2147483647"
+    },
+    "position" : {
+      "x" : "0.0",
+      "y" : "0.0"
+    }
+  },
+  "instances" : [ {
+    "absolutePosition" : "true",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
+    "components" : [ {
+      "textExpression" : {
+        "expression" : "Send the Browser URL to a friend and fly together!"
+      },
+      "color" : {
+        "r" : "255",
+        "b" : "255",
+        "g" : "255"
+      },
+      "isScript" : "false",
+      "type" : "Text",
+      "font" : {
+        "size" : "32",
+        "name" : "ARIAL"
+      }
+    } ],
+    "visible" : "true",
+    "name" : "InfoText_1426234959684",
+    "gameobjectuuid" : "-5515898710127314970",
+    "position" : {
+      "x" : "10.0",
+      "y" : "9.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "6826068737588805109"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
+    "components" : [ {
+      "type" : "Sprite"
+    }, {
+      "rotationSpeed" : {
+        "speed" : "0"
+      },
+      "type" : "ConstantMovement",
+      "speed" : {
+        "speed" : "0"
+      }
+    } ],
+    "visible" : "true",
+    "name" : "Plane_instance",
+    "gameobjectuuid" : "4889509885749884898",
+    "position" : {
+      "x" : "372.0",
+      "y" : "235.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "6660086781392999401"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
+    "components" : [ {
+      "textExpression" : {
+        "expression" : "Use the cursor keys to fly around"
+      },
+      "color" : {
+        "r" : "255",
+        "b" : "255",
+        "g" : "255"
+      },
+      "isScript" : "false",
+      "type" : "Text",
+      "font" : {
+        "size" : "32",
+        "name" : "ARIAL"
+      }
+    } ],
+    "visible" : "true",
+    "name" : "Text_1389121317924",
+    "gameobjectuuid" : "-9051172752501502813",
+    "position" : {
+      "x" : "141.0",
+      "y" : "158.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-3176239154114437638"
+  } ],
+  "defaultplayerobjectid" : "4889509885749884898",
+  "objects" : [ {
+    "visible" : "true",
+    "size" : {
+      "width" : "64",
+      "height" : "64"
+    },
+    "templates" : [ {
+      "rotationSpeed" : {
+        "speed" : "0"
+      },
+      "type" : "ConstantMovement",
+      "speed" : {
+        "speed" : "0"
+      }
+    }, {
+      "type" : "Camera",
+      "cameratype" : "CENTERONSCENE"
+    } ],
+    "name" : "Camera",
+    "uuid" : "2900940626662702649"
+  }, {
+    "visible" : "true",
+    "size" : {
+      "width" : "850",
+      "height" : "50"
+    },
+    "templates" : [ {
+      "textExpression" : {
+        "expression" : "Send the Browser URL to a friend and fly together!"
+      },
+      "color" : {
+        "r" : "255",
+        "b" : "255",
+        "g" : "255"
+      },
+      "isScript" : "false",
+      "type" : "Text",
+      "font" : {
+        "size" : "10",
+        "name" : "ARIAL"
+      }
+    } ],
+    "name" : "InfoText",
+    "uuid" : "-5515898710127314970"
+  }, {
+    "visible" : "true",
+    "size" : {
+      "width" : "64",
+      "height" : "64"
+    },
+    "templates" : [ {
+      "rotationSpeed" : {
+        "speed" : "0"
+      },
+      "type" : "ConstantMovement",
+      "speed" : {
+        "speed" : "0"
+      }
+    }, {
+      "animations" : [ {
+        "animationSequence" : [ {
+          "name" : "/assets/plane.png"
+        } ],
+        "name" : "Default",
+        "uuid" : "-1128841802190734799"
+      } ],
+      "currentAnimation" : "-1128841802190734799",
+      "type" : "Sprite",
+      "speed" : "5"
+    } ],
+    "name" : "Plane",
+    "uuid" : "4889509885749884898"
+  }, {
+    "visible" : "true",
+    "size" : {
+      "width" : "550",
+      "height" : "64"
+    },
+    "templates" : [ {
+      "textExpression" : {
+        "expression" : "\"Use the cursor keys to fly around\""
+      },
+      "color" : {
+        "r" : "255",
+        "b" : "255",
+        "g" : "255"
+      },
+      "isScript" : "false",
+      "type" : "Text",
+      "font" : {
+        "size" : "32",
+        "name" : "ARIAL"
+      }
+    } ],
+    "name" : "Text",
+    "uuid" : "-9051172752501502813"
+  } ],
+  "name" : "Example scene",
+  "backgroundcolor" : {
+    "r" : "0",
+    "b" : "0",
+    "g" : "0"
+  }
+}

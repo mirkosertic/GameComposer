@@ -5,7 +5,7 @@ import de.mirkosertic.gameengine.annotations.ReflectiveMethod;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Angle implements Reflectable {
+public class Angle implements Reflectable, Distributable {
 
     private static final AngleClassInformation CIINSTANCE = new AngleClassInformation();
 
@@ -76,6 +76,7 @@ public class Angle implements Reflectable {
         return CIINSTANCE;
     }
 
+    @Override
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<>();
         theResult.put("angleindegrees", Integer.toString(angleInDegrees));

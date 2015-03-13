@@ -8,12 +8,15 @@ public class Property<T> extends ReadOnlyProperty<T> {
 
     private final Set<GameEventListener<PropertyChanged>> changeListener;
 
+    private long lastChanged;
+
     public Property(Class<T> aType, Object aOwner, String aName, T aDefaultValue, GameEventListener<PropertyChanged> aListener) {
         super(aType, aOwner, aName, aDefaultValue);
         changeListener = new HashSet<>();
         if (aListener != null) {
             changeListener.add(aListener);
         }
+        lastChanged = System.currentTimeMillis();
     }
 
     public Property(Class<T> aType, Object aOwner, String aName, GameEventListener<PropertyChanged> aListener) {
@@ -25,18 +28,51 @@ public class Property<T> extends ReadOnlyProperty<T> {
     }
 
     public void set(T aValue) {
-        //TODO: maybe we can implement type checking here?
+
+        if (aValue == value) {
+            // Nothing to do
+            return;
+        } else if (value != null) {
+            if (value.equals(aValue)) {
+                // Nothing to do
+                return;
+            }
+        } else if (aValue != null) {
+            if (aValue.equals(value)) {
+                // Nothing to do
+                return;
+            }
+        } else if (value == aValue) {
+            // Nothing to do
+            return;
+        }
+
+        if (value == null && aValue == null) {
+            // Nothing to do
+            return;
+        }
+
         T theOldValue = value;
         value = aValue;
 
-        Set<GameEventListener> theKnownListener = new HashSet<GameEventListener>(changeListener);
-        for (GameEventListener<PropertyChanged> theListener : theKnownListener) {
-            theListener.handleGameEvent(new PropertyChanged(this, theOldValue));
+        lastChanged = System.currentTimeMillis();
+
+        if (!changeListener.isEmpty()) {
+            PropertyChanged theEvent = new PropertyChanged(this, theOldValue);
+
+            Set<GameEventListener> theKnownListener = new HashSet<GameEventListener>(changeListener);
+            for (GameEventListener<PropertyChanged> theListener : theKnownListener) {
+                theListener.handleGameEvent(theEvent);
+            }
         }
     }
 
     public void setQuietly(T aValue) {
         value = aValue;
+    }
+
+    public long getLastChanged() {
+        return lastChanged;
     }
 
     public Set<GameEventListener<PropertyChanged>> getChangeListener() {

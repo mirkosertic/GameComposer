@@ -3,6 +3,8 @@ package de.mirkosertic.gameengine.teavm;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
 import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.network.DefaultNetworkConnector;
+import de.mirkosertic.gameengine.network.NetworkConnector;
 import de.mirkosertic.gameengine.type.GameKeyCode;
 import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Size;
@@ -35,6 +37,7 @@ public class TeaVMRenderer {
     private HTMLCanvasElement canvasElement;
     private HTMLElement resourceCache;
     private Game game;
+    private NetworkConnector networkConnector;
 
     private TeaVMRenderer() {
     }
@@ -61,43 +64,64 @@ public class TeaVMRenderer {
             }
         }, runtimeFactory, window);
 
-        runSceneStrategy = new PlaySceneStrategy(runtimeFactory, gameLoopFactory) {
-
-            private TeaVMGameView gameView;
-
-            @Override
-            protected void loadOtherScene(String aSceneId) {
-                sceneLoader.loadFromServer(game, aSceneId, new TeaVMGameResourceLoader(aSceneId, document, resourceCache));
-            }
-
-            @Override
-            protected Size getScreenSize() {
-                return new Size(window.getInnerWidth(), window.getInnerHeight());
-            }
-
-            @Override
-            protected GameView getOrCreateCurrentGameView(GameRuntime aGameRuntime, CameraBehavior aCamera, GestureDetector aGestureDetector) {
-                if (gameView == null) {
-                    gameView = new TeaVMGameView(aGameRuntime, aCamera, aGestureDetector, canvasElement);
-                } else {
-                    gameView.prepareNewScene(aGameRuntime, aCamera, aGestureDetector);
-                }
-                gameView.setSize(getScreenSize());
-                return gameView;
-            }
-
-            @Override
-            public void handleResize() {
-                Size theCurrentSize = getScreenSize();
-                getRunningGameLoop().getScene().getRuntime().getEventManager().fire(new SetScreenResolution(theCurrentSize));
-                gameView.setSize(theCurrentSize);
-            }
-        };
-
         new TeaVMGameLoader(new TeaVMGameLoader.GameLoadedListener() {
             @Override
             public void onGameLoaded(Game aGame) {
                 game = aGame;
+
+                if (aGame.enableNetworkingProperty().get()) {
+                    String theConnectionID = window.getLocation().getHash();
+                    if (theConnectionID == null || theConnectionID.isEmpty()) {
+                        // No connection id provided, we will start a new one
+                        theConnectionID = "game" + System.currentTimeMillis();
+                        window.getLocation().setHash(theConnectionID);
+                    } else {
+                        // Extract the hash character
+                        theConnectionID = theConnectionID.substring(1);
+                    }
+
+                    boolean theTruncateDB = "?truncate".equals(window.getLocation().getSearch());
+
+                    String theFirebaseURL = aGame.fireBaseURLProperty().get();
+                    TeaVMLogger.info("Enabling Firebase Networking with URL " + theFirebaseURL+", truncate = " + theTruncateDB);
+                    networkConnector = new TeaVMFirebaseNetworkConnector(theFirebaseURL, theConnectionID, window, theTruncateDB);
+                } else {
+                    networkConnector = new DefaultNetworkConnector();
+                }
+
+                runSceneStrategy = new PlaySceneStrategy(runtimeFactory, gameLoopFactory, networkConnector) {
+
+                    private TeaVMGameView gameView;
+
+                    @Override
+                    protected void loadOtherScene(String aSceneId) {
+                        sceneLoader.loadFromServer(game, aSceneId, new TeaVMGameResourceLoader(aSceneId, document, resourceCache));
+                    }
+
+                    @Override
+                    protected Size getScreenSize() {
+                        return new Size(window.getInnerWidth(), window.getInnerHeight());
+                    }
+
+                    @Override
+                    protected GameView getOrCreateCurrentGameView(GameRuntime aGameRuntime, CameraBehavior aCamera, GestureDetector aGestureDetector) {
+                        if (gameView == null) {
+                            gameView = new TeaVMGameView(aGameRuntime, aCamera, aGestureDetector, canvasElement);
+                        } else {
+                            gameView.prepareNewScene(aGameRuntime, aCamera, aGestureDetector);
+                        }
+                        gameView.setSize(getScreenSize());
+                        return gameView;
+                    }
+
+                    @Override
+                    public void handleResize() {
+                        Size theCurrentSize = getScreenSize();
+                        getRunningGameLoop().getScene().getRuntime().getEventManager().fire(new SetScreenResolution(theCurrentSize));
+                        gameView.setSize(theCurrentSize);
+                    }
+                };
+
                 String theSceneId = aGame.defaultSceneProperty().get();
                 TeaVMLogger.info("Loading scene " + theSceneId);
                 sceneLoader.loadFromServer(game, theSceneId, new TeaVMGameResourceLoader(theSceneId, document, resourceCache));

@@ -73,6 +73,11 @@ public class SpriteBehavior implements Behavior, Sprite, Reflectable<SpriteClass
     }
 
     @Override
+    public GameObjectInstance getInstance() {
+        return objectInstance;
+    }
+
+    @Override
     public GameScene getGameScene() {
         return getTemplate().getGameScene();
     }
@@ -80,6 +85,10 @@ public class SpriteBehavior implements Behavior, Sprite, Reflectable<SpriteClass
     @Override
     public Animation[] getAnimations() {
         return getTemplate().getAnimations();
+    }
+
+    @Override
+    public void markAsRemoteObject() {
     }
 
     public static SpriteBehavior deserialize(GameObjectInstance aObjectInstance) {

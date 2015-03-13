@@ -38,6 +38,8 @@ public class PlatformBehavior implements Behavior, Platform, Reflectable<Platfor
     private boolean rightKeyDown;
     private boolean upKeyDown;
 
+    private boolean remoteObject;
+
     PlatformBehavior(GameObjectInstance aObjectInstance, GameRuntime aGameRuntime) {
         gameRuntime = aGameRuntime;
         objectInstance = aObjectInstance;
@@ -66,25 +68,33 @@ public class PlatformBehavior implements Behavior, Platform, Reflectable<Platfor
         aGameRuntime.getEventManager().register(objectInstance, KeyPressed.class, new GameEventListener<KeyPressed>() {
             @Override
             public void handleGameEvent(KeyPressed aEvent) {
-                handleKeyPressed(aEvent);
+                if (!remoteObject) {
+                    handleKeyPressed(aEvent);
+                }
             }
         });
         aGameRuntime.getEventManager().register(objectInstance, KeyReleased.class, new GameEventListener<KeyReleased>() {
             @Override
             public void handleGameEvent(KeyReleased aEvent) {
-                handleKeyReleased(aEvent);
+                if (!remoteObject) {
+                    handleKeyReleased(aEvent);
+                }
             }
         });
         aGameRuntime.getEventManager().register(objectInstance, GameObjectCollision.class, new GameEventListener<GameObjectCollision>() {
             @Override
             public void handleGameEvent(GameObjectCollision aEvent) {
-                handleCollision(aEvent);
+                if (!remoteObject) {
+                    handleCollision(aEvent);
+                }
             }
         });
         aGameRuntime.getEventManager().register(objectInstance, SystemTick.class, new GameEventListener<SystemTick>() {
             @Override
             public void handleGameEvent(SystemTick aEvent) {
-                handleGameLoop();
+                if (!remoteObject) {
+                    handleGameLoop();
+                }
             }
         });
     }
@@ -195,6 +205,16 @@ public class PlatformBehavior implements Behavior, Platform, Reflectable<Platfor
     @Override
     public void delete() {
         objectInstance.getOwnerGameObject().getGameScene().removeBehaviorFrom(objectInstance.getOwnerGameObject(), this);
+    }
+
+    @Override
+    public GameObjectInstance getInstance() {
+        return objectInstance;
+    }
+
+    @Override
+    public void markAsRemoteObject() {
+        remoteObject = true;
     }
 
     public static PlatformBehavior deserialize(GameObjectInstance aObjectInstance, GameRuntime aGameRuntime) {
