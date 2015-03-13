@@ -32,18 +32,6 @@
                     <include>**/*.*</include>
                 </includes>
             </resource>
-            <resource>
-                <directory>${project.build.directory}/webruntime</directory>
-                <includes>
-                    <include>**/*.war</include>
-                </includes>
-            </resource>
-            <resource>
-                <directory>${project.build.directory}/androidruntime</directory>
-                <includes>
-                    <include>**/*.apk</include>
-                </includes>
-            </resource>
         </resources>
         <plugins>
             <plugin>
@@ -54,36 +42,6 @@
                     <target>1.8</target>
                     <verbose>true</verbose>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>unpack_war</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <includeTypes>war</includeTypes>
-                            <outputDirectory>${project.build.directory}/webruntime</outputDirectory>
-                            <stripVersion>true</stripVersion>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>unpack_apk</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <includeTypes>apk</includeTypes>
-                            <outputDirectory>${project.build.directory}/androidruntime</outputDirectory>
-                            <stripVersion>true</stripVersion>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
             <!--<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -176,43 +134,13 @@
             <version>4.3.1.Final</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.1</version>
-        </dependency>
-        <dependency>
             <groupId>org.controlsfx</groupId>
             <artifactId>controlsfx</artifactId>
             <version>8.20.8</version>
         </dependency>
         <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.4</version>
-        </dependency>
-        <dependency>
             <groupId>de.mirkosertic</groupId>
-            <artifactId>gameengine-gwtrenderer</artifactId>
-            <type>war</type>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>de.mirkosertic</groupId>
-            <artifactId>gameengine-dragomerenderer</artifactId>
-            <type>war</type>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>de.mirkosertic</groupId>
-            <artifactId>gameengine-teavmrenderer</artifactId>
-            <type>war</type>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>de.mirkosertic</groupId>
-            <artifactId>gameengine-androidrenderer</artifactId>
-            <type>apk</type>
-            <scope>provided</scope>
+            <artifactId>gameengine-tools</artifactId>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

@@ -1,0 +1,11 @@
+{
+  "enableDebug" : "true",
+  "customProperties" : {
+    "data" : [ ]
+  },
+  "firebaseURL" : "https://glowing-heat-2189.firebaseio.com",
+  "enableNetworking" : "true",
+  "enablewebgl" : "true",
+  "name" : "Rotating actor example",
+  "defaultscene" : "scene1"
+}
