@@ -70,9 +70,10 @@ GameEngine-Networking
 
 Networking support is implemented as a RemoteGameView. Local events are sent between game instances to sync the distributed game models.
 
-Networking is implemented in a very early beta state only by the TeaVM Renderer. Events are sent to a FireBase instance, which
+Networking is implemented in a very early beta state only by the TeaVM Renderer. Events are sent to a Firebase instance, which
 then syncs the events back to other browsers bound to the same Firebase instance. Take a look at the [Networking](http://mirkosertic.github.io/GameComposer/games/teavm/networking/index.html) example
-to see it in action.
+to see it in action. In this case, Firebase acts as a non-authorative game server. The game models and simulation is still run in the local browser.
+Only the game state is synchronized using events.
 
 
 Example Games
