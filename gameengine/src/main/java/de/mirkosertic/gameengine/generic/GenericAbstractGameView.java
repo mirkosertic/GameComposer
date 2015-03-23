@@ -171,7 +171,7 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
 
         Position thePositionOnScreen = aAnchor.compute(aPosition, getCurrentScreenSize());
 
-        beforeInstance(null, thePositionOnScreen, aCenterOffset, new Angle(0));
+        beforeInstance(null, thePositionOnScreen, aCenterOffset, Angle.ZERO);
         drawText(null, thePositionOnScreen, aCenterOffset, aFont, aColor, aText, aSize);
         afterInstance(null, thePositionOnScreen);
     }

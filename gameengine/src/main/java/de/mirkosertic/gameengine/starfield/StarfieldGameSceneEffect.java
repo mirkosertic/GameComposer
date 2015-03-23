@@ -32,7 +32,7 @@ public class StarfieldGameSceneEffect implements GameSceneEffect {
     private final Property<Color> color;
     private final Property<Float> starSpeed;
 
-    private final Set<Position> stars;
+    private Position[] stars;
 
     private Size currentSize;
 
@@ -40,7 +40,7 @@ public class StarfieldGameSceneEffect implements GameSceneEffect {
 
         scene = aParent;
 
-        stars = new HashSet<>();
+        stars = new Position[0];
 
         numberOfStars = new Property<>(Integer.class, this, NUMBER_OF_STARS_PROPERTY, 30, aEventManager);
         starSpeed = new Property<>(Float.class, this, STAR_SPEED_PROPERTY, 7f, aEventManager);
@@ -104,26 +104,30 @@ public class StarfieldGameSceneEffect implements GameSceneEffect {
     }
 
     public GameProcess.ProceedResult proceedGame(long aGameTime, long aElapsedTimeSinceLastLoop) {
-        Set<Position> theEvolvedPosition = new HashSet<>();
+        Position[] theEvolvedPositions = new Position[stars.length];
 
         float theMovement = starSpeed.get() / 1000 * aElapsedTimeSinceLastLoop;
 
-        for (Position thePosition : stars) {
-            theEvolvedPosition.add(thePosition.changeX((thePosition.x + theMovement) % currentSize.width));
+        for (int i=0;i<stars.length;i++) {
+            Position thePosition = stars[i];
+            theEvolvedPositions[i] = thePosition.changeX((thePosition.x + theMovement) % currentSize.width);
         }
-        stars.clear();
-        stars.addAll(theEvolvedPosition);
+
+        stars = theEvolvedPositions;
+
         return GameProcess.ProceedResult.CONTINUE_RUNNING;
     }
 
     private void setScreenSize(Size aSize) {
+        Position[] theStars = new Position[numberOfStars.get()];
         long theMaximum = aSize.width * aSize.height;
         for (int i=0;i<numberOfStars.get();i++) {
             long theRandonPos = (long)(Math.random() * theMaximum);
             long theY = (int)(theRandonPos / aSize.width);
             long theX = theRandonPos % aSize.width;
-            stars.add(new Position(theX, theY));
+            theStars[i] = new Position(theX, theY);
         }
+        stars = theStars;
         currentSize = aSize;
     }
 
