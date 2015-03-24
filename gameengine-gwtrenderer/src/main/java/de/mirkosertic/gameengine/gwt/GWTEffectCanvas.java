@@ -1,8 +1,8 @@
 package de.mirkosertic.gameengine.gwt;
 
 import com.google.gwt.canvas.dom.client.Context2d;
-
 import com.google.gwt.canvas.dom.client.CssColor;
+
 import de.mirkosertic.gameengine.type.Color;
 import de.mirkosertic.gameengine.type.EffectCanvas;
 import de.mirkosertic.gameengine.type.Position;
@@ -16,10 +16,14 @@ public class GWTEffectCanvas implements EffectCanvas {
     }
 
     @Override
-    public void drawSingleDot(Position aPosition, Color aColor) {
+    public void setPaint(Color aColor) {
         CssColor theColor = CssColor.make(aColor.r, aColor.g, aColor.b);
         context.setFillStyle(theColor);
         context.setStrokeStyle(theColor);
+    }
+
+    @Override
+    public void drawSingleDot(Position aPosition) {
         context.fillRect(aPosition.x, aPosition.y, 1, 1);
     }
 }

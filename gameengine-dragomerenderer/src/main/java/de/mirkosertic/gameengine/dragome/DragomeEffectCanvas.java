@@ -16,9 +16,13 @@ public class DragomeEffectCanvas implements EffectCanvas {
     }
 
     @Override
-    public void drawSingleDot(Position aPosition, Color aColor) {
+    public void setPaint(Color aColor) {
         String theColor = CSSUtils.toColor(aColor);
         renderingContext.setStrokeStyle(theColor);
+    }
+
+    @Override
+    public void drawSingleDot(Position aPosition) {
         renderingContext.strokeRect(aPosition.x, aPosition.y, 1, 1);
     }
 }

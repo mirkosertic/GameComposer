@@ -15,10 +15,14 @@ public class JavaFXEffectCanvas implements EffectCanvas {
     }
 
     @Override
-    public void drawSingleDot(Position aPosition, Color aColor) {
+    public void setPaint(Color aColor) {
         javafx.scene.paint.Color theFXColor = javafx.scene.paint.Color.rgb(aColor.r, aColor.g, aColor.b);
         context.setFill(theFXColor);
         context.setStroke(theFXColor);
+    }
+
+    @Override
+    public void drawSingleDot(Position aPosition) {
         context.fillRect(aPosition.x, aPosition.y, 1, 1);
     }
 }

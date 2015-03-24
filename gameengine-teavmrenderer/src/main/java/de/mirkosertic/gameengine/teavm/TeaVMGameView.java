@@ -5,10 +5,12 @@ import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.core.GestureDetector;
+import de.mirkosertic.gameengine.generic.CSSCache;
 import de.mirkosertic.gameengine.generic.CSSUtils;
 import de.mirkosertic.gameengine.generic.GenericAbstractGameView;
 import de.mirkosertic.gameengine.type.*;
 
+import org.teavm.dom.canvas.CanvasImageSource;
 import org.teavm.dom.canvas.CanvasRenderingContext2D;
 import org.teavm.dom.html.HTMLCanvasElement;
 import org.teavm.dom.html.HTMLElement;
@@ -20,11 +22,15 @@ class TeaVMGameView extends GenericAbstractGameView<TeaVMGameResource> {
 
     private final Map<String, HTMLElement> instanceCache;
     private final HTMLCanvasElement html5Canvas;
+    private final CSSCache cssCache;
+    private final TeaVMPrerenderedTextCache prerenderedTextCache;
 
-    public TeaVMGameView(GameRuntime aGameRuntime, CameraBehavior aCameraBehavior, GestureDetector aGestureDetector, HTMLCanvasElement aHTML5CanvasElement) {
+    public TeaVMGameView(GameRuntime aGameRuntime, CameraBehavior aCameraBehavior, GestureDetector aGestureDetector, HTMLCanvasElement aHTML5CanvasElement, TeaVMPrerenderedTextCache aPrerenderedTextCache) {
         super(aGameRuntime, aCameraBehavior, aGestureDetector);
         html5Canvas = aHTML5CanvasElement;
         instanceCache = new HashMap<>();
+        cssCache = new CSSCache();
+        prerenderedTextCache = aPrerenderedTextCache;
     }
 
     @Override
@@ -68,16 +74,13 @@ class TeaVMGameView extends GenericAbstractGameView<TeaVMGameResource> {
 
     @Override
     protected void drawText(GameObjectInstance aInstance, Position aPosition, Position aCenterOffset, Font aFont, Color aColor, String aText, Size aSize) {
-        String theTextColor = CSSUtils.toColor(aColor);
-        renderingContext2D.setFillStyle(theTextColor);
-        renderingContext2D.setStrokeStyle(theTextColor);
-        renderingContext2D.setFont(CSSUtils.toFont(aFont));
-        renderingContext2D.fillText(aText, -aCenterOffset.x, aFont.size - aCenterOffset.y);
+        CanvasImageSource theImageSource = prerenderedTextCache.getImageSourceFor(cssCache, aSize, aFont, aColor, aText);
+        renderingContext2D.drawImage(theImageSource, -aCenterOffset.x, -aCenterOffset.y);
     }
 
     @Override
     protected void drawRect(GameObjectInstance aInstance, Position aPositionOnScreen, Position aCenterOffset, Color aColor, Size aSize) {
-        String theColor = CSSUtils.toColor(aColor);
+        String theColor = cssCache.getCSS(aColor);
         renderingContext2D.setFillStyle(theColor);
         renderingContext2D.setStrokeStyle(theColor);
         renderingContext2D.setLineWidth(1);
