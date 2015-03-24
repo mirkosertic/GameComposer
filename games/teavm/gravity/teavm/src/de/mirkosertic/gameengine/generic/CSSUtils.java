@@ -8,9 +8,9 @@ public class CSSUtils {
     public static String toFont(Font aFont) {
         switch (aFont.name) {
             case ARIAL:
-                return Integer.toString(aFont.size)+"px arial";
+                return aFont.size + "px arial";
             case VERDANA:
-                return Integer.toString(aFont.size)+"px verdana";
+                return aFont.size +"px verdana";
         }
         throw new IllegalArgumentException("Wrong font name : "+aFont.name);
     }

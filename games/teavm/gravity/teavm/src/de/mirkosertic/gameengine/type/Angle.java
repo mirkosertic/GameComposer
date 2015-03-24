@@ -11,6 +11,8 @@ public class Angle implements Reflectable, Distributable {
 
     public final int angleInDegrees;
 
+    public static final Angle ZERO = new Angle(0);
+
     public Angle(int aAngleInDegrees) {
         while (aAngleInDegrees < 0) {
             aAngleInDegrees += 360;

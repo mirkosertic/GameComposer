@@ -38,6 +38,7 @@ public class TeaVMRenderer {
     private HTMLElement resourceCache;
     private Game game;
     private NetworkConnector networkConnector;
+    private TeaVMPrerenderedTextCache prerenderedTextCache;
 
     private TeaVMRenderer() {
     }
@@ -45,6 +46,8 @@ public class TeaVMRenderer {
     void boot() {
 
         TeaVMLogger.info("Booting game runtime");
+
+        prerenderedTextCache = new TeaVMPrerenderedTextCache(document);
 
         canvasElement = (HTMLCanvasElement) document.getElementById("html5canvas");
         resourceCache = document.getElementById("resourcecache");
@@ -106,8 +109,9 @@ public class TeaVMRenderer {
                     @Override
                     protected GameView getOrCreateCurrentGameView(GameRuntime aGameRuntime, CameraBehavior aCamera, GestureDetector aGestureDetector) {
                         if (gameView == null) {
-                            gameView = new TeaVMGameView(aGameRuntime, aCamera, aGestureDetector, canvasElement);
+                            gameView = new TeaVMGameView(aGameRuntime, aCamera, aGestureDetector, canvasElement, prerenderedTextCache);
                         } else {
+                            prerenderedTextCache.clearCache();
                             gameView.prepareNewScene(aGameRuntime, aCamera, aGestureDetector);
                         }
                         gameView.setSize(getScreenSize());
