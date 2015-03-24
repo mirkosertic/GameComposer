@@ -88,8 +88,9 @@ public class StarfieldGameSceneEffect implements GameSceneEffect {
     @Override
     public void render(EffectCanvas aEffectCanvas, List<GameObjectInstance> aListOfVisibleInstances, CameraBehavior aCameraBehavior) {
         Color theStarColor = color.get();
+        aEffectCanvas.setPaint(theStarColor);
         for (Position thePosition : stars) {
-            aEffectCanvas.drawSingleDot(thePosition, theStarColor);
+            aEffectCanvas.drawSingleDot(thePosition);
         }
     }
 
