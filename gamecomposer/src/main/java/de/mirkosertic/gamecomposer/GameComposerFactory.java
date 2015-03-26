@@ -1,5 +1,6 @@
 package de.mirkosertic.gamecomposer;
 
+import de.mirkosertic.gamecomposer.tools.ExporterFactory;
 import insidefx.undecorator.UndecoratorScene;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -64,5 +65,10 @@ public class GameComposerFactory {
     @Any
     public Application getApplication() {
         return application;
+    }
+
+    @Produces
+    public ExporterFactory newExporterFactory() {
+        return new ExporterFactory();
     }
 }

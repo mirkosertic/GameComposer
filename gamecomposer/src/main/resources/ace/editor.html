@@ -38,6 +38,14 @@
     function getvalue() {
         return editor.getValue();
     }
+
+    function copyselection() {
+        return editor.getCopyText();
+    }
+
+    function pastevalue(aValue) {
+        editor.insert(aValue);
+    }
 </script>
 </body>
 </html>

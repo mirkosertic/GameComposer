@@ -11,10 +11,19 @@ import de.mirkosertic.gameengine.type.Script;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DataFormat;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
+import netscape.javascript.JSObject;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -53,7 +62,42 @@ public class EditScriptDialog {
                 }
             }
         });
+        editorView.setContextMenuEnabled(false);
         editorView.getEngine().load(EditScriptDialog.class.getResource("/ace/editor.html").toExternalForm());
+
+        final KeyCombination theCombinationCopy = new KeyCodeCombination(KeyCode.C, KeyCombination.CONTROL_DOWN);
+        final KeyCombination theCombinationPaste = new KeyCodeCombination(KeyCode.V, KeyCombination.CONTROL_DOWN);
+        aModalStage.getScene().addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent aEvent) {
+                if (theCombinationCopy.match(aEvent)) {
+                    onCopy();
+                }
+                if (theCombinationPaste.match(aEvent)) {
+                    onPaste();
+                }
+            }
+        });
+    }
+
+    private void onCopy() {
+
+        String theContentAsText = (String) editorView.getEngine().executeScript("copyselection()");
+
+        Clipboard theClipboard = Clipboard.getSystemClipboard();
+        ClipboardContent theContent = new ClipboardContent();
+        theContent.putString(theContentAsText);
+        theClipboard.setContent(theContent);
+    }
+
+    private void onPaste() {
+
+        Clipboard theClipboard = Clipboard.getSystemClipboard();
+        String theContent = (String) theClipboard.getContent(DataFormat.PLAIN_TEXT);
+        if (theContent != null) {
+            JSObject theWindow = (JSObject) editorView.getEngine().executeScript("window");
+            theWindow.call("pastevalue", theContent);
+        }
     }
 
     private void initializeHTML() {
