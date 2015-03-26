@@ -35,7 +35,7 @@ public class GameEngineDragomeConfigurator extends DomHandlerApplicationConfigur
 
     @Override
     public boolean filterClassPath(String aClassPathEntry) {
-        if (aClassPathEntry.contains("gameengine-0.4"))
+        if (aClassPathEntry.contains("gameengine-0.5"))
             return true;
         if (aClassPathEntry.contains("gameengine-lua"))
             return true;

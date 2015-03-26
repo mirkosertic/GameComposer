@@ -6,7 +6,7 @@
     <parent>
         <groupId>de.mirkosertic</groupId>
         <artifactId>gamecreator</artifactId>
-        <version>0.4-SNAPSHOT</version>
+        <version>0.5-SNAPSHOT</version>
     </parent>
     <artifactId>examples</artifactId>
     <name>GameComposer Example Games</name>
