@@ -8,10 +8,8 @@ import de.mirkosertic.gameengine.process.GameProcess;
 import de.mirkosertic.gameengine.script.RunScriptAction;
 import de.mirkosertic.gameengine.scriptengine.LUAScriptEngine;
 import de.mirkosertic.gameengine.type.Script;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+
 import javafx.concurrent.Worker;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.Clipboard;
@@ -23,6 +21,7 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
+
 import netscape.javascript.JSObject;
 
 import java.io.PrintWriter;
@@ -53,37 +52,44 @@ public class EditScriptDialog {
         modalStage = aModalStage;
         gameScene = aGameScene;
 
+        // We need JavaScript support
         editorView.getEngine().setJavaScriptEnabled(true);
-        editorView.getEngine().getLoadWorker().stateProperty().addListener(new ChangeListener<Worker.State>() {
-            @Override public void changed(ObservableValue<? extends Worker.State> observable, Worker.State oldValue,
-                    Worker.State newValue) {
-                if (newValue == Worker.State.SUCCEEDED) {
-                    initializeHTML();
-                }
+        editorView.getEngine().getLoadWorker().stateProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == Worker.State.SUCCEEDED) {
+                initializeHTML();
             }
         });
+        // The build in ACE context menu does not work because
+        // JavaScript Clipboard interaction is disabled by security.
+        // We have to do this by ourselfs.
         editorView.setContextMenuEnabled(false);
+
+        // Load the bootstrap html
+        // It will trigger the initializeHTML() method by the above registered state change listener
+        // after the everything was loaded
         editorView.getEngine().load(EditScriptDialog.class.getResource("/ace/editor.html").toExternalForm());
 
+        // Copy & Paste Clipboard support
         final KeyCombination theCombinationCopy = new KeyCodeCombination(KeyCode.C, KeyCombination.CONTROL_DOWN);
         final KeyCombination theCombinationPaste = new KeyCodeCombination(KeyCode.V, KeyCombination.CONTROL_DOWN);
-        aModalStage.getScene().addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent aEvent) {
-                if (theCombinationCopy.match(aEvent)) {
-                    onCopy();
-                }
-                if (theCombinationPaste.match(aEvent)) {
-                    onPaste();
-                }
+        aModalStage.getScene().addEventFilter(KeyEvent.KEY_PRESSED, aEvent -> {
+            if (theCombinationCopy.match(aEvent)) {
+                onCopy();
+            }
+            if (theCombinationPaste.match(aEvent)) {
+                onPaste();
             }
         });
     }
 
     private void onCopy() {
 
+        // Get the selected content from the editor
+        // We to a Java2JavaScript downcall here
+        // For details, take a look at the function declaration in editor.html
         String theContentAsText = (String) editorView.getEngine().executeScript("copyselection()");
 
+        // And put it to the clipboard
         Clipboard theClipboard = Clipboard.getSystemClipboard();
         ClipboardContent theContent = new ClipboardContent();
         theContent.putString(theContentAsText);
@@ -92,15 +98,21 @@ public class EditScriptDialog {
 
     private void onPaste() {
 
+        // Get the content from the clipboard
         Clipboard theClipboard = Clipboard.getSystemClipboard();
         String theContent = (String) theClipboard.getContent(DataFormat.PLAIN_TEXT);
         if (theContent != null) {
+            // And put it in the editor
+            // We do a Java2JavaScript downcall here
+            // For details, take a look at the function declaration in editor.html
             JSObject theWindow = (JSObject) editorView.getEngine().executeScript("window");
             theWindow.call("pastevalue", theContent);
         }
     }
 
     private void initializeHTML() {
+        // Initialize the editor
+        // and fill it with the LUA script taken from our editing action
         Document theDocument = editorView.getEngine().getDocument();
         Element theEditorElement = theDocument.getElementById("editor");
 
@@ -153,14 +165,12 @@ public class EditScriptDialog {
 
     @FXML
     public void onOk() {
+        // We need to sace the edited script to the game model.
         String theContent = (String) editorView.getEngine().executeScript("getvalue()");
         Script theNewScript = new Script(theContent);
 
-        //if (test(theNewScript)) {
-            action.scriptProperty().set(theNewScript);
-
-            modalStage.close();
-        //}
+        action.scriptProperty().set(theNewScript);
+        modalStage.close();
     }
 
     @FXML
