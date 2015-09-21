@@ -21,7 +21,7 @@ import org.teavm.platform.metadata.*;
 
 /**
  *
- * @author Alexey Andreev <konsoletyper@gmail.com>
+ * @author Alexey Andreev
  */
 public class CLDRHelper {
     public static String getCode(String language, String country) {
@@ -31,6 +31,15 @@ public class CLDRHelper {
     public static String getLikelySubtags(String localeCode) {
         ResourceMap<StringResource> map = getLikelySubtagsMap();
         return map.has(localeCode) ? map.get(localeCode).getValue() : localeCode;
+    }
+
+    public static String resolveCountry(String language, String country) {
+        if (country.isEmpty()) {
+            String subtags = getLikelySubtags(language);
+            int index = subtags.lastIndexOf('_');
+            country = index > 0 ? subtags.substring(index + 1) : "";
+        }
+        return country;
     }
 
     @MetadataProvider(LikelySubtagsMetadataGenerator.class)
@@ -90,6 +99,37 @@ public class CLDRHelper {
         return result;
     }
 
+    public static String getTimeZoneName(String language, String country, String id) {
+        String locale = getCode(language, country);
+        if (!getTimeZoneLocalizationMap().has(locale)) {
+            locale = language;
+        }
+        if (!getTimeZoneLocalizationMap().has(locale)) {
+            return null;
+        }
+        TimeZoneLocalization localization = getTimeZoneLocalizationMap().get(locale);
+
+        int separator = id.indexOf('/');
+        if (separator < 0) {
+            return null;
+        }
+
+        String area = id.substring(0, separator);
+        String territory = id.substring(separator + 1);
+        if (!localization.getTimeZones().has(area)) {
+            return null;
+        }
+        ResourceMap<StringResource> timeZones = localization.getTimeZones().get(area);
+
+        if (!timeZones.has(territory)) {
+            return null;
+        }
+        return timeZones.get(territory).getValue();
+    }
+
+    @MetadataProvider(TimeZoneLocalizationGenerator.class)
+    public static native ResourceMap<TimeZoneLocalization> getTimeZoneLocalizationMap();
+
     @MetadataProvider(LanguageMetadataGenerator.class)
     public static native ResourceMap<ResourceMap<StringResource>> getLanguagesMap();
 
@@ -133,19 +173,22 @@ public class CLDRHelper {
         return resolveFormatSymbols(getNumberFormatMap(), language, country);
     }
 
+    @MetadataProvider(NumberFormatMetadataGenerator.class)
     private static native ResourceMap<StringResource> getNumberFormatMap();
-
-    public static String resolveDecimalFormat(String language, String country) {
-        return resolveFormatSymbols(getDecimalFormatMap(), language, country);
-    }
-
-    private static native ResourceMap<StringResource> getDecimalFormatMap();
 
     public static String resolvePercentFormat(String language, String country) {
         return resolveFormatSymbols(getPercentFormatMap(), language, country);
     }
 
+    @MetadataProvider(NumberFormatMetadataGenerator.class)
     private static native ResourceMap<StringResource> getPercentFormatMap();
+
+    public static String resolveCurrencyFormat(String language, String country) {
+        return resolveFormatSymbols(getCurrencyFormatMap(), language, country);
+    }
+
+    @MetadataProvider(NumberFormatMetadataGenerator.class)
+    private static native ResourceMap<StringResource> getCurrencyFormatMap();
 
     private static DateFormatCollection resolveDateFormats(ResourceMap<DateFormatCollection> map,
             String language, String country) {
@@ -160,12 +203,34 @@ public class CLDRHelper {
         return res.getValue();
     }
 
-    public static CLDRDecimalData resolveDecimalData(String language, String country) {
-        ResourceMap<CLDRDecimalData> map = getDecimalDataMap();
+    public static DecimalData resolveDecimalData(String language, String country) {
+        ResourceMap<DecimalData> map = getDecimalDataMap();
         String localeCode = getCode(language, country);
         return map.has(localeCode) ? map.get(localeCode) : map.has(language) ? map.get(language) :
                 map.get("root");
     }
 
-    private static native ResourceMap<CLDRDecimalData> getDecimalDataMap();
+    @MetadataProvider(DecimalMetadataGenerator.class)
+    private static native ResourceMap<DecimalData> getDecimalDataMap();
+
+    public static CurrencyLocalization resolveCurrency(String language, String country, String currency) {
+        String localeCode = getCode(language, country);
+        ResourceMap<ResourceMap<CurrencyLocalization>> map = getCurrencyMap();
+        if (map.has(localeCode)) {
+            ResourceMap<CurrencyLocalization> currencies = map.get(localeCode);
+            if (currencies.has(currency)) {
+                return currencies.get(currency);
+            }
+        }
+        if (map.has(language)) {
+            ResourceMap<CurrencyLocalization> currencies = map.get(language);
+            if (currencies.has(currency)) {
+                return currencies.get(currency);
+            }
+        }
+        return null;
+    }
+
+    @MetadataProvider(CurrencyLocalizationMetadataGenerator.class)
+    private static native ResourceMap<ResourceMap<CurrencyLocalization>> getCurrencyMap();
 }

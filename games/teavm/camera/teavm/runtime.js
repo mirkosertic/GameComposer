@@ -128,106 +128,94 @@ function $rt_arraycls(cls) {
             str += "]";
             return str;
         }
-        arraycls.$meta = { item : cls, supertypes : [$rt_objcls()], primitive : false, superclass : $rt_objcls() };
+        var name = "[" + cls.$meta.binaryName;
+        arraycls.$meta = { item : cls, supertypes : [$rt_objcls()], primitive : false, superclass : $rt_objcls(),
+                name : name, binaryName : name, enum : false };
+        arraycls.classObject = null;
         cls.$array = arraycls;
     }
     return cls.$array;
 }
 function $rt_createcls() {
     return {
+        classObject : null,
         $meta : {
-            supertypes : []
+            supertypes : [],
+            superclass : null
         }
     };
+}
+function $rt_createPrimitiveCls(name, binaryName) {
+    var cls = $rt_createcls();
+    cls.$meta.primitive = true;
+    cls.$meta.name = name;
+    cls.$meta.binaryName = binaryName;
+    cls.$meta.enum = false;
+    cls.$meta.item = null;
+    return cls;
 }
 var $rt_booleanclsCache = null;
 function $rt_booleancls() {
     if ($rt_booleanclsCache === null) {
-        $rt_booleanclsCache = $rt_createcls();
-        $rt_booleanclsCache.primitive = true;
-        $rt_booleanclsCache.name = "boolean";
+        $rt_booleanclsCache = $rt_createPrimitiveCls("boolean", "Z");
     }
     return $rt_booleanclsCache;
 }
 var $rt_charclsCache = null;
 function $rt_charcls() {
     if ($rt_charclsCache === null) {
-        $rt_charclsCache = $rt_createcls();
-        $rt_charclsCache.primitive = true;
-        $rt_charclsCache.name = "char";
+        $rt_charclsCache = $rt_createPrimitiveCls("char", "C");
     }
     return $rt_charclsCache;
 }
 var $rt_byteclsCache = null;
 function $rt_bytecls() {
     if ($rt_byteclsCache === null) {
-        $rt_byteclsCache = $rt_createcls();
-        $rt_byteclsCache.primitive = true;
-        $rt_byteclsCache.name = "byte";
+        $rt_byteclsCache = $rt_createPrimitiveCls("byte", "B");
     }
     return $rt_byteclsCache;
 }
 var $rt_shortclsCache = null;
 function $rt_shortcls() {
     if ($rt_shortclsCache === null) {
-        $rt_shortclsCache = $rt_createcls();
-        $rt_shortclsCache.primitive = true;
-        $rt_shortclsCache.name = "short";
+        $rt_shortclsCache = $rt_createPrimitiveCls("short", "S");
     }
     return $rt_shortclsCache;
 }
 var $rt_intclsCache = null;
 function $rt_intcls() {
     if ($rt_intclsCache === null) {
-        $rt_intclsCache = $rt_createcls();
-        $rt_intclsCache.primitive = true;
-        $rt_intclsCache.name = "int";
+        $rt_intclsCache = $rt_createPrimitiveCls("int", "I");
     }
     return $rt_intclsCache;
 }
 var $rt_longclsCache = null;
 function $rt_longcls() {
     if ($rt_longclsCache === null) {
-        $rt_longclsCache = $rt_createcls();
-        $rt_longclsCache.primitive = true;
-        $rt_longclsCache.name = "long";
+        $rt_longclsCache = $rt_createPrimitiveCls("long", "J");
     }
     return $rt_longclsCache;
 }
 var $rt_floatclsCache = null;
 function $rt_floatcls() {
     if ($rt_floatclsCache === null) {
-        $rt_floatclsCache = $rt_createcls();
-        $rt_floatclsCache.primitive = true;
-        $rt_floatclsCache.name = "float";
+        $rt_floatclsCache = $rt_createPrimitiveCls("float", "F");
     }
     return $rt_floatclsCache;
 }
 var $rt_doubleclsCache = null;
 function $rt_doublecls() {
     if ($rt_doubleclsCache === null) {
-        $rt_doubleclsCache = $rt_createcls();
-        $rt_doubleclsCache.primitive = true;
-        $rt_doubleclsCache.name = "double";
+        $rt_doubleclsCache = $rt_createPrimitiveCls("double", "D");
     }
     return $rt_doubleclsCache;
 }
 var $rt_voidclsCache = null;
 function $rt_voidcls() {
     if ($rt_voidclsCache === null) {
-        $rt_voidclsCache = $rt_createcls();
-        $rt_voidclsCache.primitive = true;
-        $rt_voidclsCache.name = "void";
+        $rt_voidclsCache = $rt_createPrimitiveCls("void", "V");
     }
     return $rt_voidclsCache;
-}
-function $rt_clinit(cls) {
-    if (cls.$clinit) {
-        var f = cls.$clinit;
-        delete cls.$clinit;
-        f();
-    }
-    return cls;
 }
 function $rt_init(cls, constructor, args) {
     var obj = new cls();
@@ -235,13 +223,16 @@ function $rt_init(cls, constructor, args) {
     return obj;
 }
 function $rt_throw(ex) {
+    throw $rt_exception(ex);
+}
+function $rt_exception(ex) {
     var err = ex.$jsException;
     if (!err) {
         var err = new Error("Java exception thrown");
         err.$javaException = ex;
         ex.$jsException = err;
     }
-    throw err;
+    return err;
 }
 function $rt_createMultiArray(cls, dimensions) {
     var arrays = new Array($rt_primitiveArrayCount(dimensions));
@@ -258,6 +249,14 @@ function $rt_createByteMultiArray(dimensions) {
         arrays[i] = $rt_createByteArray(firstDim);
     }
     return $rt_createMultiArrayImpl($rt_bytecls(), arrays, dimensions);
+}
+function $rt_createCharMultiArray(dimensions) {
+    var arrays = new Array($rt_primitiveArrayCount(dimensions));
+    var firstDim = dimensions[0] | 0;
+    for (var i = 0 | 0; i < arrays.length; i = (i + 1) | 0) {
+        arrays[i] = $rt_createCharArray(firstDim);
+    }
+    return $rt_createMultiArrayImpl($rt_charcls(), arrays, dimensions);
 }
 function $rt_createBooleanMultiArray(dimensions) {
     var arrays = new Array($rt_primitiveArrayCount(dimensions));
@@ -340,16 +339,6 @@ function $rt_assertNotNaN(value) {
     }
     return value;
 }
-function $rt_methodStubs(clinit, names) {
-    for (var i = 0; i < names.length; i = (i + 1) | 0) {
-        window[names[i]] = (function(name) {
-            return function() {
-                clinit();
-                return window[name].apply(window, arguments);
-            }
-        })(names[i]);
-    }
-}
 var $rt_stdoutBuffer = "";
 function $rt_putStdout(ch) {
     if (ch == 0xA) {
@@ -372,33 +361,78 @@ function $rt_putStderr(ch) {
         $rt_stderrBuffer += String.fromCharCode(ch);
     }
 }
-function $rt_declClass(cls, data) {
-    cls.$meta = {};
-    cls.$meta.superclass = data.superclass;
-    cls.$meta.supertypes = data.interfaces ? data.interfaces.slice() : [];
-    if (data.superclass) {
-        cls.$meta.supertypes.push(data.superclass);
-        cls.prototype = new data.superclass();
-    } else {
-        cls.prototype = new Object();
-    }
-    cls.$meta.name = data.name;
-    cls.$meta.enum = data.enum;
-    cls.prototype.constructor = cls;
-    cls.$clinit = data.clinit;
-}
-function $rt_virtualMethods(cls) {
-    for (var i = 1; i < arguments.length; i += 2) {
-        var name = arguments[i];
-        var func = arguments[i + 1];
-        if (typeof name === 'string') {
-            cls.prototype[name] = func;
+function $rt_metadata(data) {
+    for (var i = 0; i < data.length; i += 8) {
+        var cls = data[i + 0];
+        cls.$meta = {};
+        var m = cls.$meta;
+        m.name = data[i + 1];
+        m.binaryName = "L" + m.name + ";";
+        var superclass = data[i + 2];
+        m.superclass = superclass !== 0 ? superclass : null;
+        m.supertypes = data[i + 3];
+        if (m.superclass) {
+            m.supertypes.push(m.superclass);
+            cls.prototype = new m.superclass();
         } else {
-            for (var j = 0; j < name.length; ++j) {
-                cls.prototype[name[j]] = func;
+            cls.prototype = new Object();
+        }
+        var flags = data[i + 4];
+        m.enum = (flags & 1) != 0;
+        m.primitive = false;
+        m.item = null;
+        cls.prototype.constructor = cls;
+        cls.classObject = null;
+        var clinit = data[i + 5];
+        cls.$clinit = clinit !== 0 ? clinit : function() {};
+
+        var names = data[i + 6];
+        if (!(names instanceof Array)) {
+            names = [names];
+        }
+        for (var j = 0; j < names.length; j = (j + 1) | 0) {
+            window[names[j]] = (function(cls, name) {
+                return function() {
+                    var clinit = cls.$clinit;
+                    cls.$clinit = function() {};
+                    clinit();
+                    return window[name].apply(window, arguments);
+                }
+            })(cls, names[j]);
+        }
+
+        var virtualMethods = data[i + 7];
+        for (var j = 0; j < virtualMethods.length; j += 2) {
+            var name = virtualMethods[j + 0];
+            var func = virtualMethods[j + 1];
+            if (typeof name === 'string') {
+                name = [name];
+            }
+            for (var k = 0; k < name.length; ++k) {
+                cls.prototype[name[k]] = func;
             }
         }
     }
+}
+function $rt_threadStarter(f) {
+    return function() {
+        var args = Array.prototype.slice.apply(arguments);
+        $rt_startThread(function() {
+            f.apply(this, args);
+        });
+    }
+}
+function $rt_mainStarter(f) {
+    return function(args) {
+        if (!args) {
+            args = [];
+        }
+        var javaArgs = $rt_createArray($rt_objcls(), args.length);
+        for (var i = 0; i < args.length; ++i) {
+            javaArgs.data[i] = $rt_str(args[i]);
+        }
+        $rt_threadStarter(f)(javaArgs);
+    };
 }
 var $rt_stringPool_instance;
 function $rt_stringPool(strings) {
@@ -409,6 +443,99 @@ function $rt_stringPool(strings) {
 }
 function $rt_s(index) {
     return $rt_stringPool_instance[index];
+}
+function TeaVMThread(runner) {
+    this.status = 3;
+    this.stack = [];
+    this.suspendCallback = null;
+    this.runner = runner;
+    this.attribute = null;
+    this.completeCallback = null;
+}
+TeaVMThread.prototype.push = function() {
+    for (var i = 0; i < arguments.length; ++i) {
+        this.stack.push(arguments[i]);
+    }
+    return this;
+}
+TeaVMThread.prototype.s = TeaVMThread.prototype.push;
+TeaVMThread.prototype.pop = function() {
+    return this.stack.pop();
+}
+TeaVMThread.prototype.l = TeaVMThread.prototype.pop;
+TeaVMThread.prototype.isResuming = function() {
+    return this.status == 2;
+}
+TeaVMThread.prototype.isSuspending = function() {
+    return this.status == 1;
+}
+TeaVMThread.prototype.suspend = function(callback) {
+    this.suspendCallback = callback;
+    this.status = 1;
+}
+TeaVMThread.prototype.start = function(callback) {
+    if (this.status != 3) {
+        throw new Error("Thread already started");
+    }
+    if ($rt_currentNativeThread !== null) {
+        throw new Error("Another thread is running");
+    }
+    this.status = 0;
+    this.completeCallback = callback ? callback : function(result) {
+        if (result instanceof Error) {
+            throw result;
+        }
+    };
+    this.run();
+}
+TeaVMThread.prototype.resume = function() {
+    if ($rt_currentNativeThread !== null) {
+        throw new Error("Another thread is running");
+    }
+    this.status = 2;
+    this.run();
+}
+TeaVMThread.prototype.run = function() {
+    $rt_currentNativeThread = this;
+    var result;
+    try {
+        result = this.runner();
+    } catch (e) {
+        result = e;
+    } finally {
+        $rt_currentNativeThread = null;
+    }
+    if (this.suspendCallback !== null) {
+        var self = this;
+        var callback = this.suspendCallback;
+        this.suspendCallback = null;
+        callback(function() {
+            self.resume();
+        });
+    } else if (this.status === 0) {
+        this.completeCallback(result);
+    }
+}
+function $rt_suspending() {
+    var thread = $rt_nativeThread();
+    return thread != null && thread.isSuspending();
+}
+function $rt_resuming() {
+    var thread = $rt_nativeThread();
+    return thread != null && thread.isResuming();
+}
+function $rt_suspend(callback) {
+    return $rt_nativeThread().suspend(callback);
+}
+function $rt_startThread(runner, callback) {
+    new TeaVMThread(runner).start(callback);
+}
+var $rt_currentNativeThread = null;
+function $rt_nativeThread() {
+    return $rt_currentNativeThread;
+}
+function $rt_invalidPointer() {
+    throw new Error("Invalid recorded state");
 }
 
 function $dbg_repr(obj) {
@@ -471,6 +598,7 @@ Long.prototype.toString = function() {
     return positive ? result : "-" + result;
 }
 var Long_ZERO = new Long(0, 0);
+var Long_MAX_NORMAL = 1 << 18;
 function Long_fromInt(val) {
     return val >= 0 ? new Long(val, 0) : new Long(val, -1);
 }
@@ -490,6 +618,11 @@ function Long_toNumber(val) {
     return 0x100000000 * hi + lo;
 }
 function Long_add(a, b) {
+    if (a.hi === (a.lo >> 31) && b.hi === (b.lo >> 31)) {
+        return Long_fromNumber(a.lo + b.lo);
+    } else if (Math.abs(a.hi) < Long_MAX_NORMAL && Math.abs(b.hi) < Long_MAX_NORMAL) {
+        return Long_fromNumber(Long_toNumber(a) + Long_toNumber(b));
+    }
     var a_lolo = a.lo & 0xFFFF;
     var a_lohi = a.lo >>> 16;
     var a_hilo = a.hi & 0xFFFF;
@@ -525,6 +658,9 @@ function Long_neg(a) {
     return Long_inc(new Long(a.lo ^ 0xFFFFFFFF, a.hi ^ 0xFFFFFFFF));
 }
 function Long_sub(a, b) {
+    if (a.hi === (a.lo >> 31) && b.hi === (b.lo >> 31)) {
+        return Long_fromNumber(a.lo - b.lo);
+    }
     var a_lolo = a.lo & 0xFFFF;
     var a_lohi = a.lo >>> 16;
     var a_hilo = a.hi & 0xFFFF;
@@ -596,12 +732,21 @@ function Long_mul(a, b) {
     return positive ? result : Long_neg(result);
 }
 function Long_div(a, b) {
+    if (Math.abs(a.hi) < Long_MAX_NORMAL && Math.abs(b.hi) < Long_MAX_NORMAL) {
+        return Long_fromNumber(Long_toNumber(a) / Long_toNumber(b));
+    }
     return Long_divRem(a, b)[0];
 }
 function Long_rem(a, b) {
+    if (Math.abs(a.hi) < Long_MAX_NORMAL && Math.abs(b.hi) < Long_MAX_NORMAL) {
+        return Long_fromNumber(Long_toNumber(a) % Long_toNumber(b));
+    }
     return Long_divRem(a, b)[1];
 }
 function Long_divRem(a, b) {
+    if (b.lo == 0 && b.hi == 0) {
+        throw new Error("Division by zero");
+    }
     var positive = Long_isNegative(a) === Long_isNegative(b);
     if (Long_isNegative(a)) {
         a = Long_neg(a);

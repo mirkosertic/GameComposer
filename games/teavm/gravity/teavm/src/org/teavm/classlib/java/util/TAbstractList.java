@@ -16,11 +16,12 @@
 package org.teavm.classlib.java.util;
 
 import org.teavm.classlib.java.lang.*;
-import org.teavm.javascript.ni.Rename;
+import org.teavm.javascript.spi.Rename;
 
 /**
  *
- * @author Alexey Andreev <konsoletyper@gmail.com>
+ * @author Alexey Andreev
+ * @param <E>
  */
 public abstract class TAbstractList<E> extends TAbstractCollection<E> implements TList<E> {
     protected transient int modCount;

@@ -18,11 +18,11 @@ package org.teavm.classlib.java.util;
 import org.teavm.classlib.java.io.TSerializable;
 import org.teavm.classlib.java.lang.TMath;
 import org.teavm.classlib.java.lang.TObject;
-import org.teavm.javascript.ni.GeneratedBy;
+import org.teavm.javascript.spi.GeneratedBy;
 
 /**
  *
- * @author Alexey Andreev <konsoletyper@gmail.com>
+ * @author Alexey Andreev
  */
 public class TRandom extends TObject implements TSerializable {
     public TRandom() {
@@ -39,7 +39,7 @@ public class TRandom extends TObject implements TSerializable {
     }
 
     public void nextBytes(byte[] bytes) {
-        for (int i = 0; i < bytes.length; ) {
+        for (int i = 0; i < bytes.length; ++i) {
             bytes[i] = (byte)next(8);
         }
     }

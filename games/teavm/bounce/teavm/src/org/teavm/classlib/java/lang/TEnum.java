@@ -16,11 +16,12 @@
 package org.teavm.classlib.java.lang;
 
 import org.teavm.classlib.java.io.TSerializable;
-import org.teavm.javascript.ni.Rename;
+import org.teavm.javascript.spi.Rename;
 
 /**
  *
- * @author Alexey Andreev <konsoletyper@gmail.com>
+ * @author Alexey Andreev
+ * @param <E> type of enum.
  */
 public abstract class TEnum<E extends TEnum<E>> extends TObject implements TComparable<E>, TSerializable {
     private TString name;
@@ -40,9 +41,8 @@ public abstract class TEnum<E extends TEnum<E>> extends TObject implements TComp
     }
 
     @Override
-    @Rename("toString")
-    public TString toString0() {
-        return name;
+    public String toString() {
+        return name.toString();
     }
 
     @Override
@@ -62,7 +62,7 @@ public abstract class TEnum<E extends TEnum<E>> extends TObject implements TComp
 
     @SuppressWarnings("unchecked")
     public final TClass<E> getDeclaringClass() {
-        return (TClass<E>)TClass.wrapClass(getClass());
+        return (TClass<E>)(Object)getClass();
     }
 
     @Override

@@ -15,11 +15,8 @@
  */
 package org.teavm.classlib.java.lang;
 
-import org.teavm.classlib.impl.charset.UTF16Helper;
 import org.teavm.classlib.java.io.TSerializable;
 import org.teavm.classlib.java.util.TArrays;
-import org.teavm.javascript.ni.Remove;
-import org.teavm.javascript.ni.Rename;
 
 /**
  *
@@ -118,7 +115,7 @@ class TAbstractStringBuilder extends TObject implements TSerializable, TCharSequ
             } else {
                 insertSpace(target, target + 1);
             }
-            buffer[target++] = (char)('0' + value);
+            buffer[target++] = TCharacter.forDigit(value, radix);
         } else {
             int pos = 1;
             int sz = 1;
@@ -251,7 +248,7 @@ class TAbstractStringBuilder extends TObject implements TSerializable, TCharSequ
             exp = 0;
             float digit = 1;
             for (int i = powersOfTen.length - 1; i >= 0; --i) {
-                if ((exp | bit) <= FLOAT_MAX_EXPONENT && powersOfTen[i] * digit  < value) {
+                if ((exp | bit) <= FLOAT_MAX_EXPONENT && powersOfTen[i] * digit <= value) {
                     digit *= powersOfTen[i];
                     exp |= bit;
                 }
@@ -292,7 +289,6 @@ class TAbstractStringBuilder extends TObject implements TSerializable, TCharSequ
                 exp = 0;
             }
         }
-        sz += digits;
 
         // Extend buffer to store exponent
         if (exp != 0) {
@@ -304,6 +300,11 @@ class TAbstractStringBuilder extends TObject implements TSerializable, TCharSequ
                 ++sz;
             }
         }
+
+        if (exp != 0 && digits == intPart) {
+            digits++;
+        }
+        sz += digits;
 
         // Print mantissa
         insertSpace(target, target + sz);
@@ -401,7 +402,7 @@ class TAbstractStringBuilder extends TObject implements TSerializable, TCharSequ
             exp = 0;
             double digit = 1;
             for (int i = doublePowersOfTen.length - 1; i >= 0; --i) {
-                if ((exp | bit) <= DOUBLE_MAX_EXPONENT && doublePowersOfTen[i] * digit  < value) {
+                if ((exp | bit) <= DOUBLE_MAX_EXPONENT && doublePowersOfTen[i] * digit <= value) {
                     digit *= doublePowersOfTen[i];
                     exp |= bit;
                 }
@@ -442,7 +443,6 @@ class TAbstractStringBuilder extends TObject implements TSerializable, TCharSequ
                 exp = 0;
             }
         }
-        sz += digits;
 
         // Extend buffer to store exponent
         if (exp != 0) {
@@ -457,6 +457,11 @@ class TAbstractStringBuilder extends TObject implements TSerializable, TCharSequ
                 ++sz;
             }
         }
+
+        if (exp != 0 && digits == intPart) {
+            digits++;
+        }
+        sz += digits;
 
         // Print mantissa
         insertSpace(target, target + sz);
@@ -547,12 +552,12 @@ class TAbstractStringBuilder extends TObject implements TSerializable, TCharSequ
     }
 
     protected TAbstractStringBuilder appendCodePoint(int codePoint) {
-        if (codePoint < UTF16Helper.SUPPLEMENTARY_PLANE) {
+        if (codePoint < TCharacter.MIN_SUPPLEMENTARY_CODE_POINT) {
             return append((char)codePoint);
         }
         ensureCapacity(length + 2);
-        buffer[length++] = UTF16Helper.highSurrogate(codePoint);
-        buffer[length++] = UTF16Helper.lowSurrogate(codePoint);
+        buffer[length++] = TCharacter.highSurrogate(codePoint);
+        buffer[length++] = TCharacter.lowSurrogate(codePoint);
         return this;
     }
 
@@ -589,13 +594,6 @@ class TAbstractStringBuilder extends TObject implements TSerializable, TCharSequ
         return buffer.length;
     }
 
-    @Override
-    @Rename("toString")
-    public TString toString0() {
-        return new TString(buffer, 0, length);
-    }
-
-    @Remove
     @Override
     public String toString() {
         return new String(buffer, 0, length);
@@ -688,12 +686,11 @@ class TAbstractStringBuilder extends TObject implements TSerializable, TCharSequ
         for (int i = index; i < length; ++i) {
             buffer[i] = buffer[i + 1];
         }
-        --length;
         return this;
     }
 
     public TAbstractStringBuilder delete(int start, int end) {
-        if (start > end || start >= length) {
+        if (start > end || start > length) {
             throw new TStringIndexOutOfBoundsException();
         }
         if (start == end) {
@@ -773,7 +770,7 @@ class TAbstractStringBuilder extends TObject implements TSerializable, TCharSequ
     }
 
     public TString substring(int from, int to) {
-        if (from > to || from < 0 || to >= length) {
+        if (from > to || from < 0 || to > length) {
             throw new TIndexOutOfBoundsException();
         }
         return new TString(buffer, from, to - from);

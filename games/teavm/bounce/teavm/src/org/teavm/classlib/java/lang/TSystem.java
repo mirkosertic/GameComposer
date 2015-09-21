@@ -18,7 +18,7 @@ package org.teavm.classlib.java.lang;
 import org.teavm.classlib.java.io.TPrintStream;
 import org.teavm.classlib.java.lang.reflect.TArray;
 import org.teavm.dependency.PluggableDependency;
-import org.teavm.javascript.ni.GeneratedBy;
+import org.teavm.javascript.spi.GeneratedBy;
 
 /**
  *
@@ -35,12 +35,33 @@ public final class TSystem extends TObject {
         if (src == null || dest == null) {
             throw new TNullPointerException(TString.wrap("Either src or dest is null"));
         }
-        if (src.getClass() != dest.getClass()) {
-            throw new TArrayStoreException();
-        }
         if (srcPos < 0 || destPos < 0 || length < 0 || srcPos + length > TArray.getLength(src) ||
                 destPos + length > TArray.getLength(dest)) {
             throw new TIndexOutOfBoundsException();
+        }
+        if (src != dest) {
+            Class<?> srcType = src.getClass().getComponentType();
+            Class<?> targetType = dest.getClass().getComponentType();
+            if (srcType == null || targetType == null) {
+                throw new TArrayStoreException();
+            }
+            if (srcType != targetType) {
+                if (!srcType.isPrimitive() && !targetType.isPrimitive()) {
+                    Object[] srcArray = (Object[])(Object)src;
+                    int pos = srcPos;
+                    for (int i = 0; i < length; ++i) {
+                        Object elem = srcArray[pos++];
+                        if (!targetType.isInstance(elem)) {
+                            doArrayCopy(src, srcPos, dest, destPos, i);
+                            throw new TArrayStoreException();
+                        }
+                    }
+                    doArrayCopy(src, srcPos, dest, destPos, length);
+                    return;
+                } else if (!srcType.isPrimitive() || !targetType.isPrimitive()) {
+                    throw new TArrayStoreException();
+                }
+            }
         }
         doArrayCopy(src, srcPos, dest, destPos, length);
     }
@@ -81,9 +102,9 @@ public final class TSystem extends TObject {
         return currentTimeMillis() * 10000000;
     }
 
-    @GeneratedBy(SystemNativeGenerator.class)
-    @PluggableDependency(SystemNativeGenerator.class)
-    public static native int identityHashCode(Object x);
+    public static int identityHashCode(Object x) {
+        return ((TObject)x).identity();
+    }
 
     public static TString lineSeparator() {
         return TString.wrap("\n");

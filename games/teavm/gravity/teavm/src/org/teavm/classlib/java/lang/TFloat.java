@@ -15,8 +15,7 @@
  */
 package org.teavm.classlib.java.lang;
 
-import org.teavm.javascript.ni.GeneratedBy;
-import org.teavm.javascript.ni.Rename;
+import org.teavm.javascript.spi.GeneratedBy;
 
 /**
  *
@@ -71,13 +70,12 @@ public class TFloat extends TNumber implements TComparable<TFloat> {
         return new TFloat(d);
     }
 
-    public static TString toString(float d) {
-        return TString.wrap(new TStringBuilder().append(d).toString());
+    public static String toString(float d) {
+        return new TStringBuilder().append(d).toString();
     }
 
     @Override
-    @Rename("toString")
-    public TString toString0() {
+    public String toString() {
         return toString(value);
     }
 
@@ -277,7 +275,7 @@ public class TFloat extends TNumber implements TComparable<TFloat> {
             }
         }
         boolean negative = (bits & (1 << 31)) != 0;
-        int rawExp = ((bits >> 23) & 0x7F8) - 127;
+        int rawExp = (bits >> 23) & 0xFF;
         int mantissa = bits & 0x7FFFFF;
         if (rawExp == 0) {
             mantissa <<= 1;

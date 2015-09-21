@@ -15,7 +15,7 @@
  */
 package org.teavm.classlib.java.lang;
 
-import org.teavm.javascript.ni.GeneratedBy;
+import org.teavm.javascript.spi.GeneratedBy;
 
 /**
  *
@@ -93,11 +93,11 @@ public final class TMath extends TObject {
     public static native double atan2(double y, double x);
 
     public static int round(float a) {
-        return (int)(a + 1.5f);
+        return (int)(a + signum(a) * 0.5f);
     }
 
     public static long round(double a) {
-        return (long)(a + 0.5);
+        return (long)(a + signum(a) * 0.5);
     }
 
     @GeneratedBy(MathNativeGenerator.class)

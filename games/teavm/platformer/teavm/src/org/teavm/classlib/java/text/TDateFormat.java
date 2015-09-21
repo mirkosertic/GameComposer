@@ -48,6 +48,7 @@ public abstract class TDateFormat extends TFormat {
     public final static int TIMEZONE_FIELD = 17;
 
     protected TDateFormat() {
+        calendar = TCalendar.getInstance();
     }
 
     @Override
@@ -94,6 +95,14 @@ public abstract class TDateFormat extends TFormat {
 
     public TCalendar getCalendar() {
         return calendar;
+    }
+
+    public TTimeZone getTimeZone() {
+        return calendar.getTimeZone();
+    }
+
+    public void setTimeZone(TTimeZone timeZone) {
+        calendar.setTimeZone(timeZone);
     }
 
     public static TDateFormat getDateInstance() {
@@ -221,8 +230,8 @@ public abstract class TDateFormat extends TFormat {
     public TDate parse(String string) throws TParseException {
         TParsePosition position = new TParsePosition(0);
         TDate date = parse(string, position);
-        if (position.getIndex() == 0) {
-            throw new TParseException("Unparseable date" + string, position.getErrorIndex());
+        if (position.getErrorIndex() > 0) {
+            throw new TParseException("Unparseable date: " + string, position.getErrorIndex());
         }
         return date;
     }

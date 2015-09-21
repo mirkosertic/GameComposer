@@ -20,11 +20,12 @@ import org.teavm.classlib.java.io.TSerializable;
 import org.teavm.classlib.java.lang.TCloneNotSupportedException;
 import org.teavm.classlib.java.lang.TCloneable;
 import org.teavm.classlib.java.lang.TObject;
-import org.teavm.javascript.ni.Rename;
+import org.teavm.javascript.spi.Rename;
 
 /**
  *
  * @author Alexey Andreev
+ * @param <E>
  */
 public class THashSet<E> extends TAbstractSet<E> implements TCloneable, TSerializable {
     transient THashMap<E, THashSet<E>> backingMap;
@@ -113,7 +114,7 @@ public class THashSet<E> extends TAbstractSet<E> implements TCloneable, TSeriali
     public TObject clone0() {
         try {
             THashSet<E> clone = (THashSet<E>) super.clone();
-            clone.backingMap = (THashMap<E, THashSet<E>>)backingMap.clone0();
+            clone.backingMap = (THashMap<E, THashSet<E>>)backingMap.clone();
             return clone;
         } catch (TCloneNotSupportedException e) {
             return null;

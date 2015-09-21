@@ -146,39 +146,54 @@ public abstract class TCalendar implements TSerializable, TCloneable, TComparabl
             "DAY_OF_MONTH=", "DAY_OF_YEAR=", "DAY_OF_WEEK=", "DAY_OF_WEEK_IN_MONTH=", "AM_PM=", "HOUR=", "HOUR_OF_DAY",
             "MINUTE=", "SECOND=", "MILLISECOND=", "ZONE_OFFSET=", "DST_OFFSET=" };
 
+    private TTimeZone zone;
+
+    private static int firstDayOfWeekCache = -1;
+    private static int minimalDaysInFirstWeekCache = -1;
+    private static TLocale cacheFor;
+
     protected TCalendar() {
-        this(TLocale.getDefault());
+        this(TTimeZone.getDefault(), TLocale.getDefault());
     }
 
-    protected TCalendar(TLocale locale) {
+    TCalendar(TTimeZone timezone) {
+        fields = new int[FIELD_COUNT];
+        isSet = new boolean[FIELD_COUNT];
+        areFieldsSet = isTimeSet = false;
+        setLenient(true);
+        setTimeZone(timezone);
+    }
+
+    protected TCalendar(TTimeZone timezone, TLocale locale) {
+        this(timezone);
         fields = new int[FIELD_COUNT];
         isSet = new boolean[FIELD_COUNT];
         areFieldsSet = isTimeSet = false;
         setLenient(true);
         setFirstDayOfWeek(resolveFirstDayOfWeek(locale));
         setMinimalDaysInFirstWeek(resolveMinimalDaysInFirstWeek(locale));
-    }
-
-    private static String resolveCountry(TLocale locale) {
-        String country = locale.getCountry();
-        if (country.isEmpty()) {
-            String subtags = CLDRHelper.getLikelySubtags(locale.getLanguage());
-            int index = subtags.lastIndexOf('_');
-            country = index > 0 ? subtags.substring(index + 1) : "";
-        }
-        return country;
+        cacheFor = locale;
     }
 
     private static int resolveFirstDayOfWeek(TLocale locale) {
-        String country = resolveCountry(locale);
+        if (locale == cacheFor && firstDayOfWeekCache >= 0) {
+            return firstDayOfWeekCache;
+        }
+        String country = CLDRHelper.resolveCountry(locale.getLanguage(), locale.getCountry());
         ResourceMap<IntResource> dayMap = CLDRHelper.getFirstDayOfWeek();
-        return dayMap.has(country) ? dayMap.get(country).getValue() : dayMap.get("001").getValue();
+        firstDayOfWeekCache = dayMap.has(country) ? dayMap.get(country).getValue() : dayMap.get("001").getValue();
+        return firstDayOfWeekCache;
     }
 
     private static int resolveMinimalDaysInFirstWeek(TLocale locale) {
-        String country = resolveCountry(locale);
+        if (locale == cacheFor && minimalDaysInFirstWeekCache >= 0) {
+            return minimalDaysInFirstWeekCache;
+        }
+        String country = CLDRHelper.resolveCountry(locale.getLanguage(), locale.getCountry());
         ResourceMap<IntResource> dayMap = CLDRHelper.getMinimalDaysInFirstWeek();
-        return dayMap.has(country) ? dayMap.get(country).getValue() : dayMap.get("001").getValue();
+        minimalDaysInFirstWeekCache = dayMap.has(country) ? dayMap.get(country).getValue() :
+                dayMap.get("001").getValue();
+        return minimalDaysInFirstWeekCache;
     }
 
     abstract public void add(int field, int value);
@@ -217,6 +232,7 @@ public abstract class TCalendar implements TSerializable, TCloneable, TComparabl
             TCalendar clone = (TCalendar) super.clone();
             clone.fields = fields.clone();
             clone.isSet = isSet.clone();
+            clone.zone = (TTimeZone)zone.clone();
             return clone;
         } catch (CloneNotSupportedException e) {
             return null;
@@ -249,7 +265,8 @@ public abstract class TCalendar implements TSerializable, TCloneable, TComparabl
         TCalendar cal = (TCalendar) object;
         return getTimeInMillis() == cal.getTimeInMillis() && isLenient() == cal.isLenient() &&
                 getFirstDayOfWeek() == cal.getFirstDayOfWeek() &&
-                getMinimalDaysInFirstWeek() == cal.getMinimalDaysInFirstWeek();
+                getMinimalDaysInFirstWeek() == cal.getMinimalDaysInFirstWeek() &&
+                zone.equals(cal.zone);
     }
 
     public int get(int field) {
@@ -293,7 +310,7 @@ public abstract class TCalendar implements TSerializable, TCloneable, TComparabl
         return value;
     }
 
-    public static synchronized TLocale[] getAvailableLocales() {
+    public static TLocale[] getAvailableLocales() {
         return TLocale.getAvailableLocales();
     }
 
@@ -303,12 +320,20 @@ public abstract class TCalendar implements TSerializable, TCloneable, TComparabl
 
     abstract public int getGreatestMinimum(int field);
 
-    public static synchronized TCalendar getInstance() {
+    public static TCalendar getInstance() {
         return new TGregorianCalendar();
     }
 
-    public static synchronized TCalendar getInstance(TLocale locale) {
+    public static TCalendar getInstance(TLocale locale) {
         return new TGregorianCalendar(locale);
+    }
+
+    public static TCalendar getInstance(TTimeZone zone, TLocale locale) {
+        return new TGregorianCalendar(zone, locale);
+    }
+
+    public static TCalendar getInstance(TTimeZone timezone) {
+        return new TGregorianCalendar(timezone);
     }
 
     abstract public int getLeastMaximum(int field);
@@ -331,6 +356,15 @@ public abstract class TCalendar implements TSerializable, TCloneable, TComparabl
             isTimeSet = true;
         }
         return time;
+    }
+
+    public TTimeZone getTimeZone() {
+        return zone;
+    }
+
+    public void setTimeZone(TTimeZone timezone) {
+        zone = timezone;
+        areFieldsSet = false;
     }
 
     @Override

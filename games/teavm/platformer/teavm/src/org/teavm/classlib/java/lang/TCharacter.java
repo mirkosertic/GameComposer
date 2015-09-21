@@ -15,11 +15,10 @@
  */
 package org.teavm.classlib.java.lang;
 
-import org.teavm.classlib.impl.charset.UTF16Helper;
 import org.teavm.classlib.impl.unicode.UnicodeHelper;
-import org.teavm.dependency.PluggableDependency;
-import org.teavm.javascript.ni.GeneratedBy;
-import org.teavm.javascript.ni.Rename;
+import org.teavm.platform.Platform;
+import org.teavm.platform.metadata.MetadataProvider;
+import org.teavm.platform.metadata.StringResource;
 
 /**
  *
@@ -96,6 +95,13 @@ public class TCharacter extends TObject implements TComparable<TCharacter> {
     private static UnicodeHelper.Range[] classMapping;
     private char value;
     private static TCharacter[] characterCache = new TCharacter[128];
+    private static final int SURROGATE_NEUTRAL_BIT_MASK = 0xF800;
+    private static final int SURROGATE_BITS = 0xD800;
+    private static final int SURROGATE_BIT_MASK = 0xFC00;
+    private static final int SURROGATE_BIT_INV_MASK = 0x03FF;
+    private static final int HIGH_SURROGATE_BITS = 0xD800;
+    private static final int LOW_SURROGATE_BITS = 0xDC00;
+    private static final int MEANINGFUL_SURROGATE_BITS = 10;
 
     public TCharacter(char value) {
         this.value = value;
@@ -118,8 +124,7 @@ public class TCharacter extends TObject implements TComparable<TCharacter> {
     }
 
     @Override
-    @Rename("toString")
-    public TString toString0() {
+    public String toString() {
         return toString(value);
     }
 
@@ -136,8 +141,8 @@ public class TCharacter extends TObject implements TComparable<TCharacter> {
         return value;
     }
 
-    public static TString toString(char c) {
-        return new TString(new char[] { c });
+    public static String toString(char c) {
+        return new String(new char[] { c });
     }
 
     public static boolean isValidCodePoint(int codePoint) {
@@ -153,11 +158,11 @@ public class TCharacter extends TObject implements TComparable<TCharacter> {
     }
 
     public static boolean isHighSurrogate(char ch) {
-        return UTF16Helper.isHighSurrogate(ch);
+        return (ch & SURROGATE_BIT_MASK) == HIGH_SURROGATE_BITS;
     }
 
     public static boolean isLowSurrogate(char ch) {
-        return UTF16Helper.isLowSurrogate(ch);
+        return (ch & SURROGATE_BIT_MASK) == LOW_SURROGATE_BITS;
     }
 
     public static boolean isSurrogate(char ch) {
@@ -173,7 +178,8 @@ public class TCharacter extends TObject implements TComparable<TCharacter> {
     }
 
     public static int toCodePoint(char high, char low) {
-        return UTF16Helper.buildCodePoint(high, low);
+        return (((high & SURROGATE_BIT_INV_MASK) << MEANINGFUL_SURROGATE_BITS) | (low & SURROGATE_BIT_INV_MASK)) +
+                MIN_SUPPLEMENTARY_CODE_POINT;
     }
 
     public static int codePointAt(TCharSequence seq, int index) {
@@ -217,25 +223,29 @@ public class TCharacter extends TObject implements TComparable<TCharacter> {
     }
 
     public static char highSurrogate(int codePoint) {
-        return UTF16Helper.highSurrogate(codePoint);
+        codePoint -= MIN_SUPPLEMENTARY_CODE_POINT;
+        return (char)(HIGH_SURROGATE_BITS | (codePoint >> MEANINGFUL_SURROGATE_BITS) & SURROGATE_BIT_INV_MASK);
     }
 
     public static char lowSurrogate(int codePoint) {
-        return UTF16Helper.lowSurrogate(codePoint);
+        return (char)(LOW_SURROGATE_BITS | codePoint & SURROGATE_BIT_INV_MASK);
     }
 
-    // TODO: implement toLowerCase/toUpperCase/toTitleCase using UnicodeData.txt instead of built-in JS
-    @GeneratedBy(CharacterNativeGenerator.class)
-    public static native char toLowerCase(char ch);
+    public static char toLowerCase(char ch) {
+        return (char)toLowerCase((int)ch);
+    }
 
-    @GeneratedBy(CharacterNativeGenerator.class)
-    public static native int toLowerCase(int ch);
+    public static int toLowerCase(int ch) {
+        return Platform.stringFromCharCode(ch).toLowerCase().charCodeAt(0);
+    }
 
-    @GeneratedBy(CharacterNativeGenerator.class)
-    public static native char toUpperCase(char ch);
+    public static char toUpperCase(char ch) {
+        return (char)toUpperCase((int)ch);
+    }
 
-    @GeneratedBy(CharacterNativeGenerator.class)
-    public static native int toUpperCase(int codePoint);
+    public static int toUpperCase(int codePoint) {
+        return Platform.stringFromCharCode(codePoint).toUpperCase().charCodeAt(0);
+    }
 
     public static int digit(char ch, int radix) {
         return digit((int)ch, radix);
@@ -246,7 +256,7 @@ public class TCharacter extends TObject implements TComparable<TCharacter> {
             return -1;
         }
         int d = getNumericValue(codePoint);
-        return d <= radix ? d : -1;
+        return d < radix ? d : -1;
     }
 
     public static int getNumericValue(char ch) {
@@ -283,35 +293,33 @@ public class TCharacter extends TObject implements TComparable<TCharacter> {
     }
 
     public static boolean isDigit(int codePoint) {
-        return getNumericValue(codePoint) >= 0;
+        return getType(codePoint) == DECIMAL_DIGIT_NUMBER;
     }
 
     private static int[] getDigitMapping() {
         if (digitMapping == null) {
-            digitMapping = UnicodeHelper.decodeIntByte(obtainDigitMapping());
+            digitMapping = UnicodeHelper.decodeIntByte(obtainDigitMapping().getValue());
         }
         return digitMapping;
     }
 
-    @GeneratedBy(CharacterNativeGenerator.class)
-    @PluggableDependency(CharacterNativeGenerator.class)
-    private static native String obtainDigitMapping();
+    @MetadataProvider(CharacterMetadataGenerator.class)
+    private static native StringResource obtainDigitMapping();
 
     private static UnicodeHelper.Range[] getClasses() {
         if (classMapping == null) {
-            classMapping = UnicodeHelper.extractRle(obtainClasses());
+            classMapping = UnicodeHelper.extractRle(obtainClasses().getValue());
         }
         return classMapping;
     }
 
-    @GeneratedBy(CharacterNativeGenerator.class)
-    @PluggableDependency(CharacterNativeGenerator.class)
-    private static native String obtainClasses();
+    @MetadataProvider(CharacterMetadataGenerator.class)
+    private static native StringResource obtainClasses();
 
     public static int toChars(int codePoint, char[] dst, int dstIndex) {
-        if (codePoint >= UTF16Helper.SUPPLEMENTARY_PLANE) {
-            dst[dstIndex] = UTF16Helper.highSurrogate(codePoint);
-            dst[dstIndex + 1] = UTF16Helper.lowSurrogate(codePoint);
+        if (codePoint >= MIN_SUPPLEMENTARY_CODE_POINT) {
+            dst[dstIndex] = highSurrogate(codePoint);
+            dst[dstIndex + 1] = lowSurrogate(codePoint);
             return 2;
         } else {
             dst[dstIndex] = (char)codePoint;
@@ -320,8 +328,8 @@ public class TCharacter extends TObject implements TComparable<TCharacter> {
     }
 
     public static char[] toChars(int codePoint) {
-        if (codePoint >= UTF16Helper.SUPPLEMENTARY_PLANE) {
-            return new char[] { UTF16Helper.highSurrogate(codePoint), UTF16Helper.lowSurrogate(codePoint) };
+        if (codePoint >= MIN_SUPPLEMENTARY_CODE_POINT) {
+            return new char[] { highSurrogate(codePoint), lowSurrogate(codePoint) };
         } else {
             return new char[] { (char)codePoint };
         }
@@ -331,7 +339,7 @@ public class TCharacter extends TObject implements TComparable<TCharacter> {
         int count = endIndex - beginIndex;
         --endIndex;
         for (int i = beginIndex; i < endIndex; ++i) {
-            if (UTF16Helper.isHighSurrogate(seq.charAt(i)) && UTF16Helper.isLowSurrogate(seq.charAt(i + 1))) {
+            if (isHighSurrogate(seq.charAt(i)) && isLowSurrogate(seq.charAt(i + 1))) {
                 --count;
                 ++i;
             }
@@ -343,7 +351,7 @@ public class TCharacter extends TObject implements TComparable<TCharacter> {
         int r = count;
         --count;
         for (int i = 0; i < count; ++i) {
-            if (UTF16Helper.isHighSurrogate(a[offset]) && UTF16Helper.isLowSurrogate(a[offset + i + 1])) {
+            if (isHighSurrogate(a[offset]) && isLowSurrogate(a[offset + i + 1])) {
                 --r;
                 ++i;
             }
@@ -353,8 +361,8 @@ public class TCharacter extends TObject implements TComparable<TCharacter> {
 
     public static int offsetByCodePoints(TCharSequence seq, int index, int codePointOffset) {
         for (int i = 0; i < codePointOffset; ++i) {
-            if (index < seq.length() - 1 && UTF16Helper.isHighSurrogate(seq.charAt(index)) &&
-                    UTF16Helper.isLowSurrogate(seq.charAt(index + 1))) {
+            if (index < seq.length() - 1 && isHighSurrogate(seq.charAt(index)) &&
+                    isLowSurrogate(seq.charAt(index + 1))) {
                 index += 2;
             } else {
                 index++;
@@ -365,8 +373,7 @@ public class TCharacter extends TObject implements TComparable<TCharacter> {
 
     public static int offsetByCodePoints(char[] a, int start, int count, int index, int codePointOffset) {
         for (int i = 0; i < codePointOffset; ++i) {
-            if (index < count - 1 && UTF16Helper.isHighSurrogate(a[index + start]) &&
-                    UTF16Helper.isLowSurrogate(a[index + start + 1])) {
+            if (index < count - 1 && isHighSurrogate(a[index + start]) && isLowSurrogate(a[index + start + 1])) {
                 index += 2;
             } else {
                 index++;
@@ -388,6 +395,9 @@ public class TCharacter extends TObject implements TComparable<TCharacter> {
     }
 
     public static int getType(int codePoint) {
+        if (isBmpCodePoint(codePoint) && isSurrogate((char)codePoint)) {
+            return SURROGATE;
+        }
         UnicodeHelper.Range[] classes = getClasses();
         int l = 0;
         int u = classes.length - 1;
@@ -636,8 +646,12 @@ public class TCharacter extends TObject implements TComparable<TCharacter> {
             case 0x1E:
             case 0x1F:
                 return true;
+            case 0xA0:
+            case 0x2007:
+            case 0x202F:
+                return false;
             default:
-                return isWhitespace(codePoint);
+                return isSpaceChar(codePoint);
         }
     }
 
