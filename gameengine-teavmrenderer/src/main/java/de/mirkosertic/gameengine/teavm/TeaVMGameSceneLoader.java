@@ -44,8 +44,7 @@ public class TeaVMGameSceneLoader {
     }
 
     private GameScene parse(Game aGame, String aResponse, TeaVMGameResourceLoader aResourceLoader) {
-        Object theContent = JSON.parse(aResponse);
-        Map<String, Object> theResult = JSON.parse(aResponse).cast();
+        Map<String, Object> theResult = new TeaVMMap<>((TeaVMMap.JSDelegate) JSON.parse(aResponse).cast());
         return GameScene.deserialize(aGame, runtimeFactory.create(aResourceLoader, new TeaVMGameSoundSystemFactory()), theResult);
     }
 }
