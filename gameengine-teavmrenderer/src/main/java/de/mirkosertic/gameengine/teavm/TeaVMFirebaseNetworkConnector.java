@@ -5,23 +5,22 @@ import de.mirkosertic.gameengine.teavm.firebase.Firebase;
 import de.mirkosertic.gameengine.teavm.firebase.FirebaseChildAdded;
 import de.mirkosertic.gameengine.teavm.firebase.FirebaseDataSnapshot;
 import de.mirkosertic.gameengine.teavm.firebase.FirebaseRef;
-import de.mirkosertic.gameengine.teavm.json.JSONMap;
+import de.mirkosertic.gameengine.teavm.firebase.FirebaseRemoteEvent;
+import de.mirkosertic.gameengine.teavm.firebase.FirebaseRemoteMessage;
 import de.mirkosertic.gameengine.type.UUID;
 
-import org.teavm.dom.browser.Window;
-import org.teavm.jso.JS;
+import org.teavm.jso.JSBody;
 import org.teavm.jso.JSObject;
 import org.teavm.jso.JSProperty;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class TeaVMFirebaseNetworkConnector extends DefaultNetworkConnector {
-
-    private static final JSObject EVENT_PRODUCER_ID = JS.wrap("epid");
-    private static final JSObject EVENT_TS_ID = JS.wrap("evts");
-    private static final JSObject EVENT_PAYLOAD_SIZE = JS.wrap("payloadsize");
 
     public static class FrameCounter {
 
@@ -42,30 +41,34 @@ public class TeaVMFirebaseNetworkConnector extends DefaultNetworkConnector {
         }
     }
 
-    public static interface InstanceID extends JSObject {
+    public abstract static class InstanceID implements JSObject {
 
         @JSProperty("instanceId")
-        String getInstanceId();
+        public abstract String getInstanceId();
 
         @JSProperty("instanceId")
-        void setInstanceId(String aInstanceID);
+        public abstract void setInstanceId(String aInstanceID);
+
+        @JSBody(
+                params = {},
+                script = "return new Object();"
+        )
+        public native static InstanceID create();
     }
 
     private final String instanceID;
-    private final Window window;
     private final FirebaseRef eventsRef;
     private final List<Map<String, Object>> receivedEvents;
     private final List<FrameCounter> garbageCollectionList;
 
-    public TeaVMFirebaseNetworkConnector(String aFirebaseURL, String aUniqueConnectionID, TeaVMWindow aWindow, boolean aTruncateDB) {
+    public TeaVMFirebaseNetworkConnector(String aFirebaseURL, String aUniqueConnectionID, boolean aTruncateDB) {
 
-        window = aWindow;
         instanceID = UUID.randomUID();
 
         receivedEvents = new ArrayList<>();
         garbageCollectionList = new ArrayList<>();
 
-        FirebaseRef theBaseRef = ((Firebase) JS.getGlobal()).create(aFirebaseURL);
+        FirebaseRef theBaseRef = Firebase.create(aFirebaseURL);
         if (aTruncateDB) {
             theBaseRef.remove();
         }
@@ -73,7 +76,7 @@ public class TeaVMFirebaseNetworkConnector extends DefaultNetworkConnector {
         theBaseRef = theBaseRef.child(aUniqueConnectionID);
 
         FirebaseRef theInstances = theBaseRef.child("instances");
-        InstanceID theInstanceID = (InstanceID) window.newObject();
+        InstanceID theInstanceID = InstanceID.create();
         theInstanceID.setInstanceId(instanceID);
         theInstances.push(theInstanceID);
 
@@ -81,55 +84,73 @@ public class TeaVMFirebaseNetworkConnector extends DefaultNetworkConnector {
         eventsRef.on("child_added", new FirebaseChildAdded() {
             @Override
             public void handleChildAdded(FirebaseDataSnapshot aChildSnapshot, JSObject aPrevChildName) {
-                JSObject theEvent = aChildSnapshot.val();
-                String theInstanceID = JS.unwrapString(JS.get(theEvent, EVENT_PRODUCER_ID));
+                FirebaseRemoteEvent theEvent = aChildSnapshot.val();
+                String theInstanceID = theEvent.getEPID();
                 if (!instanceID.equals(theInstanceID)) {
-                    String theEventTS = JS.unwrapString(JS.get(theEvent, EVENT_TS_ID));
+                    String theEventTS = theEvent.getEventTimestamp();
 
                     // New event from another instance
                     TeaVMLogger.info("New message : " + aChildSnapshot.key()+" @ " + theEventTS);
 
-                    int thePayloadSize = Integer.parseInt(JS.unwrapString(JS.get(theEvent, EVENT_PAYLOAD_SIZE)));
-                    for (int i=0;i<thePayloadSize;i++) {
-                        JSObject theSingleEvent = JS.get(theEvent, JS.wrap("" + i));
-                        receivedEvents.add(new JSONMap(theSingleEvent));
+                    for (FirebaseRemoteMessage theMessage : theEvent.getEvents()) {
+                        receivedEvents.add(convert(theMessage));
                     }
                 }
             }
         });
     }
 
-    private JSObject convert(Map<String, Object> aMap) {
-        JSObject theMap = window.newObject();
-        for (String theKey: aMap.keySet()) {
-            JSObject theWrappedKey = JS.wrap(theKey);
-            Object theObject = aMap.get(theKey);
-            if (theObject instanceof Map) {
-                JS.set(theMap, theWrappedKey, convert((Map<String, Object>) theObject));
-            } else if (theObject instanceof String) {
-                JS.set(theMap, theWrappedKey, JS.wrap((String) theObject));
+    private Map<String, Object> convert(FirebaseRemoteMessage aMessage) {
+        HashMap<String, Object> theResult = new HashMap<>();
+        for (String theKey : aMessage.getKeys()) {
+            String theValue = aMessage.getString(theKey);
+            if (theValue != null) {
+                theResult.put(theKey, theValue);
+            } else {
+                theResult.put(theKey, convert(aMessage.getObject(theKey)));
             }
         }
-        return theMap;
+        return theResult;
+    }
+
+    private FirebaseRemoteMessage convert(Map<String, Object> aEvent) {
+        FirebaseRemoteMessage theMessage = FirebaseRemoteMessage.create();
+
+        Set<String> theKeys = new HashSet<>();
+
+        for (Map.Entry<String, Object> theEnty : aEvent.entrySet()) {
+            Object theValue = theEnty.getValue();
+            if (theValue instanceof String) {
+                theMessage.putString(theEnty.getKey(), (String) theValue);
+                theKeys.add(theEnty.getKey());
+            } else if (theValue instanceof Map) {
+                theKeys.add(theEnty.getKey());
+                theMessage.putObject(theEnty.getKey(), convert((Map<String, Object>) theEnty.getValue()));
+            }
+        }
+
+        theMessage.setKeys(theKeys.toArray(new String[theKeys.size()]));
+
+        return theMessage;
     }
 
     @Override
     public int send(List<Map<String, Object>> aEventsToSend) {
-        List<JSObject>  theJSEvents = new ArrayList<>();
-        for (Map<String, Object> aEvent : aEventsToSend) {
-            theJSEvents.add(convert(aEvent));
-        }
-        if (!theJSEvents.isEmpty()) {
+        if (!aEventsToSend.isEmpty()) {
 
-            JSObject theObject = window.newObject();
-            JS.set(theObject, EVENT_PRODUCER_ID, JS.wrap(instanceID));
-            JS.set(theObject, EVENT_TS_ID, JS.wrap("" + System.currentTimeMillis()));
-            JS.set(theObject, EVENT_PAYLOAD_SIZE, JS.wrap("" + theJSEvents.size()));
-            for (int i=0;i<theJSEvents.size();i++) {
-                JS.set(theObject, JS.wrap("" + i), theJSEvents.get(i));
+            List<FirebaseRemoteMessage> theEvents = new ArrayList<>();
+            for (Map<String, Object> theEvent : aEventsToSend) {
+                theEvents.add(convert(theEvent));
             }
 
-            FirebaseRef theReference = eventsRef.push(theObject);
+            FirebaseRemoteEvent theEvent = FirebaseRemoteEvent.create();
+            theEvent.setEPID(instanceID);
+            theEvent.setEventTimestamp("" + System.currentTimeMillis());
+            theEvent.setPayloadSize(aEventsToSend.size());
+            theEvent.setEvents(theEvents.toArray(new FirebaseRemoteMessage[aEventsToSend.size()]));
+
+            FirebaseRef theReference = eventsRef.push(theEvent);
+
             // Event will be garbage collected after 10 seonds
             // We are running at 60 Frames / second
             garbageCollectionList.add(new FrameCounter(60 * 10, theReference));

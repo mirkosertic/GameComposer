@@ -1,6 +1,6 @@
 package de.mirkosertic.gameengine.teavm;
 
-import org.teavm.dom.events.Event;
+import org.teavm.jso.dom.events.Event;
 import org.teavm.jso.JSObject;
 import org.teavm.jso.JSProperty;
 

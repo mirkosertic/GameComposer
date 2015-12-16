@@ -3,36 +3,31 @@ package de.mirkosertic.gameengine.teavm;
 import de.mirkosertic.gameengine.AbstractGameRuntimeFactory;
 import de.mirkosertic.gameengine.core.Game;
 import de.mirkosertic.gameengine.core.GameScene;
-import de.mirkosertic.gameengine.teavm.json.JSONAPI;
-import de.mirkosertic.gameengine.teavm.json.JSONAPIProvider;
-import de.mirkosertic.gameengine.teavm.json.JSONMap;
 
-import org.teavm.dom.ajax.ReadyStateChangeHandler;
-import org.teavm.dom.ajax.XMLHttpRequest;
-import org.teavm.dom.browser.Window;
-import org.teavm.jso.JS;
+import org.teavm.jso.ajax.ReadyStateChangeHandler;
+import org.teavm.jso.ajax.XMLHttpRequest;
+import org.teavm.jso.json.JSON;
 
 import java.util.Map;
 
 public class TeaVMGameSceneLoader {
 
-    public static interface GameSceneLoadedListener {
+    public interface GameSceneLoadedListener {
         void onGameSceneLoaded(GameScene aScene);
         void onGameSceneLoadedError(Throwable aThrowable);
     }
 
     private final GameSceneLoadedListener listener;
     private final AbstractGameRuntimeFactory runtimeFactory;
-    private final Window window;
 
-    public TeaVMGameSceneLoader(GameSceneLoadedListener aListener, AbstractGameRuntimeFactory aRuntimeFactory, Window aWindow) {
+    public TeaVMGameSceneLoader(GameSceneLoadedListener aListener, AbstractGameRuntimeFactory aRuntimeFactory) {
         listener = aListener;
         runtimeFactory = aRuntimeFactory;
-        window = aWindow;
     }
 
     public void loadFromServer(final Game aGame, String aSceneName, final TeaVMGameResourceLoader aResourceLoader) {
-        final XMLHttpRequest theRequest = window.createXMLHttpRequest();
+        final XMLHttpRequest theRequest = XMLHttpRequest.create();
+        theRequest.overrideMimeType("text/plain");
         theRequest.open("GET", aSceneName+"/scene.json");
         theRequest.setOnReadyStateChange(new ReadyStateChangeHandler() {
             @Override
@@ -49,8 +44,8 @@ public class TeaVMGameSceneLoader {
     }
 
     private GameScene parse(Game aGame, String aResponse, TeaVMGameResourceLoader aResourceLoader) {
-        JSONAPI theAPI = ((JSONAPIProvider) JS.getGlobal()).getJSONAPI();
-        Map<String, Object> theResult = new JSONMap(theAPI.parse(aResponse));
+        Object theContent = JSON.parse(aResponse);
+        Map<String, Object> theResult = JSON.parse(aResponse).cast();
         return GameScene.deserialize(aGame, runtimeFactory.create(aResourceLoader, new TeaVMGameSoundSystemFactory()), theResult);
     }
 }
