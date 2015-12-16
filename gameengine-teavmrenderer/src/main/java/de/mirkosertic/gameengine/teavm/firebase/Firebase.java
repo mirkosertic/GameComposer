@@ -1,10 +1,13 @@
 package de.mirkosertic.gameengine.teavm.firebase;
 
-import org.teavm.jso.JSConstructor;
+import org.teavm.jso.JSBody;
 import org.teavm.jso.JSObject;
 
-public interface Firebase extends JSObject {
+public abstract class Firebase implements JSObject {
 
-    @JSConstructor("Firebase")
-    FirebaseRef create(String aFirebaseURL);
+    @JSBody(
+            params = {"aFirebaseURL"},
+            script = "return new Firebase(aFirebaseURL);"
+    )
+    public static native FirebaseRef create(String aFirebaseURL);
 }

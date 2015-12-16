@@ -3,29 +3,29 @@ package de.mirkosertic.gameengine.teavm.firebase;
 import org.teavm.jso.JSMethod;
 import org.teavm.jso.JSObject;
 
-public interface FirebaseRef extends JSObject {
+public abstract class FirebaseRef implements JSObject {
 
     @JSMethod
-    FirebaseRef child(String aValue);
+    public abstract FirebaseRef child(String aValue);
 
     @JSMethod
-    void set(String aJSONValue);
+    public abstract void set(String aJSONValue);
 
     @JSMethod
-    void set(JSObject aObject);
+    public abstract void set(JSObject aObject);
 
     @JSMethod
-    void push(String aJSONValue);
+    public abstract void push(String aJSONValue);
 
     @JSMethod
-    FirebaseRef push(JSObject aObject);
+    public abstract FirebaseRef push(JSObject aObject);
 
     @JSMethod
-    String key();
+    public abstract String key();
 
     @JSMethod
-    void on(String aEvent, FirebaseChildAdded aChildAddedEvent);
+    public abstract void on(String aEvent, FirebaseChildAdded aChildAddedEvent);
 
     @JSMethod
-    void remove();
+    public abstract void remove();
 }

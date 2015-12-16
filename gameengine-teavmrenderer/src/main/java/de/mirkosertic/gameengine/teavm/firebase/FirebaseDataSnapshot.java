@@ -9,5 +9,5 @@ public interface FirebaseDataSnapshot extends JSObject {
     String key();
 
     @JSMethod()
-    JSObject val();
+    FirebaseRemoteEvent val();
 }
