@@ -7,7 +7,9 @@ import org.teavm.jso.core.JSBoolean;
 import org.teavm.jso.core.JSNumber;
 import org.teavm.jso.core.JSString;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -76,9 +78,9 @@ public class TeaVMMap implements Map<String, Object> {
         case "object":
             if (source.isArray(aValue)) {
                 JSArray theArray = (JSArray) aValue;
-                Object[] theResult = new Object[theArray.getLength()];
+                List<Object> theResult = new ArrayList<>();
                 for (int i=0;i<theArray.getLength();i++) {
-                    theResult[0] = unwrap(theArray.get(i));
+                    theResult.add(unwrap(theArray.get(i)));
                 }
                 return theResult;
             } else {
