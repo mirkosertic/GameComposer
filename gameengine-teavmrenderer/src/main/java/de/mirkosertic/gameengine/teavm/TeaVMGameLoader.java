@@ -40,7 +40,7 @@ public class TeaVMGameLoader {
     }
 
     private Game parse(String aResponse) {
-        Map<String, Object> theResult = new TeaVMMap<>((TeaVMMap.JSDelegate) JSON.parse(aResponse).cast());
+        Map<String, Object> theResult = new TeaVMMap((TeaVMMap.JSDelegate) JSON.parse(aResponse).cast());
         return Game.deserialize(theResult);
     }
 }

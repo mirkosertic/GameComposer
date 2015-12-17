@@ -2,20 +2,36 @@ package de.mirkosertic.gameengine.teavm;
 
 import org.teavm.jso.JSBody;
 import org.teavm.jso.JSObject;
+import org.teavm.jso.core.JSArray;
+import org.teavm.jso.core.JSBoolean;
+import org.teavm.jso.core.JSNumber;
+import org.teavm.jso.core.JSString;
 
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
-public class TeaVMMap<V> implements Map<String, V> {
+public class TeaVMMap implements Map<String, Object> {
 
     public abstract class JSDelegate implements JSObject {
 
         @JSBody(
-                params = {"aSource", "aKey"},
-                script = "return aSource[aKey];"
+                params = {"aKey"},
+                script = "return this[aKey];"
         )
-        public abstract JSObject get(JSObject aSource, String aKey);
+        public abstract JSObject get(String aKey);
+
+        @JSBody(
+                params = {"aObject"},
+                script = "return typeof aObject;"
+        )
+        public abstract String getTypeOf(JSObject aObject);
+
+        @JSBody(
+                params = {"aObject"},
+                script = "return Object.prototype.toString.call(aObject) === '[object Array]';"
+        )
+        public abstract boolean isArray(JSObject aObject);
     }
 
     private final JSDelegate source;
@@ -44,23 +60,53 @@ public class TeaVMMap<V> implements Map<String, V> {
         throw new RuntimeException("Not implemented");
     }
 
-    @Override
-    public V get(Object key) {
-        return source.get(source, (String) key).cast();
+    private Object unwrap(JSObject aValue) {
+        if (aValue == null) {
+            return null;
+        }
+        switch (source.getTypeOf(aValue)) {
+        case "string":
+            return ((JSString) aValue).stringValue();
+        case "undefined":
+            return null;
+        case "number":
+            return ((JSNumber) aValue).intValue();
+        case "boolean":
+            return ((JSBoolean) aValue).booleanValue();
+        case "object":
+            if (source.isArray(aValue)) {
+                JSArray theArray = (JSArray) aValue;
+                Object[] theResult = new Object[theArray.getLength()];
+                for (int i=0;i<theArray.getLength();i++) {
+                    theResult[0] = unwrap(theArray.get(i));
+                }
+                return theResult;
+            } else {
+                // Normales Objekt
+                return new TeaVMMap((JSDelegate) aValue.cast());
+            }
+        default:
+            throw new RuntimeException("Not implemented type conversion : " + source.getTypeOf(aValue));
+        }
     }
 
     @Override
-    public V put(String key, V value) {
+    public Object get(Object key) {
+        return unwrap(source.get((String) key));
+    }
+
+    @Override
+    public Object put(String key, Object value) {
         throw new RuntimeException("Not implemented");
     }
 
     @Override
-    public V remove(Object key) {
+    public Object remove(Object key) {
         throw new RuntimeException("Not implemented");
     }
 
     @Override
-    public void putAll(Map<? extends String, ? extends V> m) {
+    public void putAll(Map<? extends String, ?> m) {
         throw new RuntimeException("Not implemented");
     }
 
@@ -75,12 +121,12 @@ public class TeaVMMap<V> implements Map<String, V> {
     }
 
     @Override
-    public Collection<V> values() {
+    public Collection<Object> values() {
         throw new RuntimeException("Not implemented");
     }
 
     @Override
-    public Set<Entry<String, V>> entrySet() {
+    public Set<Entry<String, Object>> entrySet() {
         throw new RuntimeException("Not implemented");
     }
 }
