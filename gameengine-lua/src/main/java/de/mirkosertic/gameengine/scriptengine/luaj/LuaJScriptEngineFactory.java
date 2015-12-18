@@ -19,7 +19,29 @@ import org.luaj.vm2.compiler.LuaC;
 
 public class LuaJScriptEngineFactory implements LUAScriptEngineFactory {
 
-    private final Map<String, Prototype> prototypes;
+    private static class CacheEntry {
+
+        private final Prototype prototype;
+        private final Globals globals;
+        private final Map<String, LuaJScriptEngine> engines;
+
+        public CacheEntry(Prototype aPrototype, Globals aGlobals) {
+            prototype = aPrototype;
+            globals = aGlobals;
+            engines = new HashMap<>();
+        }
+
+        public LuaJScriptEngine getScriptEngineFor(KeyValueObjectCache aCache, String aMethodName) {
+            LuaJScriptEngine theEngine = engines.get(aMethodName);
+            if (theEngine == null) {
+                theEngine = new LuaJScriptEngine(aCache, globals, aMethodName);
+                engines.put(aMethodName, theEngine);
+            }
+            return theEngine;
+        }
+    }
+
+    private final Map<String, CacheEntry> prototypes;
 
     private final Reflectable buildInFunctions;
 
@@ -65,17 +87,19 @@ public class LuaJScriptEngineFactory implements LUAScriptEngineFactory {
 
     private LuaJScriptEngine create(KeyValueObjectCache aScene, String aScriptCode, String aMethodName) throws IOException {
 
-        Globals theGlobals = createGlobals(aScene);
+        CacheEntry theCacheEntry = prototypes.get(aScriptCode);
+        if (theCacheEntry == null) {
 
-        Prototype thePrototype = prototypes.get(aScriptCode);
-        if (thePrototype == null) {
-            thePrototype = theGlobals.compilePrototype(new StringReader(aScriptCode), "script");
-            prototypes.put(aScriptCode, thePrototype);
+            Globals theGlobals = createGlobals(aScene);
+            Prototype thePrototype = theGlobals.compilePrototype(new StringReader(aScriptCode), "script");
+
+            // Initialize the globals and the code
+            new LuaClosure(thePrototype, theGlobals).call();
+
+            theCacheEntry = new CacheEntry(thePrototype, theGlobals);
+            prototypes.put(aScriptCode, theCacheEntry);
         }
 
-        // Initialize the globals and the code
-        new LuaClosure(thePrototype, theGlobals).call();
-
-        return new LuaJScriptEngine(aScene, theGlobals, aMethodName);
+        return theCacheEntry.getScriptEngineFor(aScene, aMethodName);
     }
 }
