@@ -152,7 +152,7 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
         // Shall we print Debug Information to the Screen?
         if (aScene.getGame().enableDebugProperty().get()) {
             Color theDebugColor = new Color(255,0,0);
-            Size theTextSize = new Size(200,10);
+            Size theTextSize = new Size(300,10);
             Position theCenterOffset = new Position(100, 5);
             Font theFont = new Font(Font.FontName.ARIAL, 10);
             // Draw version information
