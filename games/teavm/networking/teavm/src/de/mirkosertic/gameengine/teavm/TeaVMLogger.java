@@ -1,24 +1,23 @@
 package de.mirkosertic.gameengine.teavm;
 
-import org.teavm.dom.core.Element;
-import org.teavm.dom.html.HTMLDocument;
-import org.teavm.jso.JS;
+import org.teavm.jso.dom.html.HTMLElement;
+import org.teavm.jso.dom.html.HTMLDocument;
+import org.teavm.jso.browser.Window;
 
 class TeaVMLogger {
 
-    private static final TeaVMWindow window = (TeaVMWindow) JS.getGlobal();
-    private static final HTMLDocument document = window.getDocument();
+    private static final HTMLDocument document = Window.current().getDocument();
 
     public static void info(String aMessage) {
-        Element theLogger = document.getElementById("logger");
-        Element theDiv = document.createElement("div");
+        HTMLElement theLogger = document.getElementById("logger");
+        HTMLElement theDiv = document.createElement("div");
         theDiv.appendChild(document.createTextNode(aMessage));
         theLogger.appendChild(theDiv);
     }
 
     public static void error(String aMessage) {
-        Element theLogger = document.getElementById("logger");
-        Element theDiv = document.createElement("div");
+        HTMLElement theLogger = document.getElementById("logger");
+        HTMLElement theDiv = document.createElement("div");
         theDiv.setAttribute("style","color: red;");
         theDiv.appendChild(document.createTextNode(aMessage));
         theLogger.appendChild(theDiv);

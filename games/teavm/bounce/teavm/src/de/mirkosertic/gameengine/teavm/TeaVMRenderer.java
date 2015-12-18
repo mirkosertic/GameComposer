@@ -1,3 +1,4 @@
+
 package de.mirkosertic.gameengine.teavm;
 
 import de.mirkosertic.gameengine.camera.CameraBehavior;
@@ -11,18 +12,18 @@ import de.mirkosertic.gameengine.type.Size;
 import de.mirkosertic.gameengine.type.TouchIdentifier;
 import de.mirkosertic.gameengine.type.TouchPosition;
 
-import org.teavm.dom.events.Event;
-import org.teavm.dom.events.EventListener;
-import org.teavm.dom.events.EventTarget;
-import org.teavm.dom.html.HTMLCanvasElement;
-import org.teavm.dom.html.HTMLDocument;
-import org.teavm.dom.html.HTMLElement;
-import org.teavm.jso.JS;
-import org.teavm.jso.JSArrayReader;
+import org.teavm.jso.browser.Window;
+import org.teavm.jso.dom.events.Event;
+import org.teavm.jso.dom.events.EventListener;
+import org.teavm.jso.dom.events.EventTarget;
+import org.teavm.jso.dom.html.HTMLCanvasElement;
+import org.teavm.jso.dom.html.HTMLDocument;
+import org.teavm.jso.dom.html.HTMLElement;
+import org.teavm.jso.core.JSArrayReader;
 
 public class TeaVMRenderer {
 
-    private static final TeaVMWindow window = (TeaVMWindow) JS.getGlobal();
+    private static final Window window = Window.current();
     private static final HTMLDocument document = window.getDocument();
 
     public static void main(String[] args) {
@@ -65,7 +66,7 @@ public class TeaVMRenderer {
             public void onGameSceneLoadedError(Throwable aError) {
                 TeaVMLogger.error("Failed to load scene : " + aError.getMessage());
             }
-        }, runtimeFactory, window);
+        }, runtimeFactory);
 
         new TeaVMGameLoader(new TeaVMGameLoader.GameLoadedListener() {
             @Override
@@ -87,7 +88,7 @@ public class TeaVMRenderer {
 
                     String theFirebaseURL = aGame.fireBaseURLProperty().get();
                     TeaVMLogger.info("Enabling Firebase Networking with URL " + theFirebaseURL+", truncate = " + theTruncateDB);
-                    networkConnector = new TeaVMFirebaseNetworkConnector(theFirebaseURL, theConnectionID, window, theTruncateDB);
+                    networkConnector = new TeaVMFirebaseNetworkConnector(theFirebaseURL, theConnectionID, theTruncateDB);
                 } else {
                     networkConnector = new DefaultNetworkConnector();
                 }
@@ -135,9 +136,9 @@ public class TeaVMRenderer {
             public void onGameLoadedError(Throwable aError) {
                 TeaVMLogger.error("Failed to load scene : " + aError);
             }
-        }, window).loadFromServer();
+        }).loadFromServer();
 
-        EventTarget documentEventTarget = (EventTarget)document;
+        EventTarget documentEventTarget = document;
         documentEventTarget.addEventListener("keydown", new EventListener() {
             @Override
             public void handleEvent(Event aEvent) {
@@ -186,7 +187,7 @@ public class TeaVMRenderer {
                 mouseUp((TeaVMMouseEvent) aEvent);
             }
         });
-        ((EventTarget) window).addEventListener("resize", new EventListener() {
+        window.addEventListener("resize", new EventListener() {
             @Override
             public void handleEvent(Event evt) {
                 if (runSceneStrategy.hasGameLoop()) {
@@ -214,7 +215,7 @@ public class TeaVMRenderer {
 
     private void keyPressed(TeaVMKeyEvent aEvent) {
         if (runSceneStrategy.hasGameLoop()) {
-            int theCode = JS.isUndefined(aEvent.getWhich()) ? JS.unwrapInt(aEvent.getWhich()) : aEvent.getKeyCode();
+            int theCode = aEvent.getKeyCode();
             GameKeyCode theKeyCode = TeaVMKeyCodeTranslator.translate(theCode);
             runSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector().keyPressed(theKeyCode);
             TeaVMLogger.info("KeyEvent keyPressed " + theCode);
@@ -223,7 +224,7 @@ public class TeaVMRenderer {
 
     private void keyReleased(TeaVMKeyEvent aEvent) {
         if (runSceneStrategy.hasGameLoop()) {
-            int theCode = JS.isUndefined(aEvent.getWhich()) ? JS.unwrapInt(aEvent.getWhich()) : aEvent.getKeyCode();
+            int theCode = aEvent.getKeyCode();
             GameKeyCode theKeyCode = TeaVMKeyCodeTranslator.translate(theCode);
             runSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector().keyReleased(theKeyCode);
             TeaVMLogger.info("KeyEvent keyReleased " + theCode);
@@ -270,7 +271,7 @@ public class TeaVMRenderer {
     private void runSingleStep(final GameLoop aGameLoop) {
         if (!aGameLoop.isShutdown()) {
             aGameLoop.singleRun();
-            window.requestAnimationFrame(new TeaVMWindow.RenderFrameHandler() {
+            TeaVMWindow.requestAnimationFrame(new TeaVMWindow.RenderFrameHandler() {
                 @Override
                 public void renderFrame(int aTimeDelta) {
                     runSingleStep(aGameLoop);

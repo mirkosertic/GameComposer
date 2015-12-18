@@ -3,7 +3,7 @@ package de.mirkosertic.gameengine.teavm;
 import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.core.GameResourceType;
 
-import org.teavm.dom.canvas.CanvasImageSource;
+import org.teavm.jso.canvas.CanvasImageSource;
 
 public class TeaVMGameResource implements GameResource {
 

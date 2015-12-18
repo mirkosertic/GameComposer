@@ -13,6 +13,14 @@ import java.util.List;
 
 public abstract class GenericAbstractGameView<S extends GameResource> implements GameView {
 
+    private static final Position THE_DEBUG_CENTER = new Position(100, 5);
+    private static final Size THE_DEBUG_TEXT_SIZE = new Size(300, 10);
+    private static final Color THE_DEBUG_TEXT_COLOR = new Color(255, 0, 0);
+    private static final Font THE_DEBUG_FONT = new Font(Font.FontName.ARIAL, 10);
+    private static final Position THE_DEBUG_POSITION_VERSION = new Position(0, 30);
+    private static final Position THE_DEBUG_FRAME_RATE = new Position(0, 20);
+    private static final Position THE_DEBUG_VIVISBLE_INSTANCES = new Position(0, 10);
+
     private GameRuntime gameRuntime;
     private CameraBehavior cameraBehavior;
     private GestureDetector gestureDetector;
@@ -151,16 +159,12 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
 
         // Shall we print Debug Information to the Screen?
         if (aScene.getGame().enableDebugProperty().get()) {
-            Color theDebugColor = new Color(255,0,0);
-            Size theTextSize = new Size(200,10);
-            Position theCenterOffset = new Position(100, 5);
-            Font theFont = new Font(Font.FontName.ARIAL, 10);
             // Draw version information
             AbsolutePositionAnchor theAnchor = AbsolutePositionAnchor.BOTTOM_LEFT;
-            drawTextAt(theAnchor, new Position(0, 30), theCenterOffset, theTextSize, theFont, theDebugColor, Version.VERSION);
-            drawTextAt(theAnchor, new Position(0, 20), theCenterOffset, theTextSize, theFont, theDebugColor,
+            drawTextAt(theAnchor, THE_DEBUG_POSITION_VERSION, THE_DEBUG_CENTER, THE_DEBUG_TEXT_SIZE, THE_DEBUG_FONT, THE_DEBUG_TEXT_COLOR, Version.VERSION);
+            drawTextAt(theAnchor, THE_DEBUG_FRAME_RATE, THE_DEBUG_CENTER, THE_DEBUG_TEXT_SIZE, THE_DEBUG_FONT, THE_DEBUG_TEXT_COLOR,
                     "Time for every frame : " + aStatistics.getAverageTimePerLoopCycle() + " ms");
-            drawTextAt(theAnchor, new Position(0, 10), theCenterOffset, theTextSize, theFont, theDebugColor,
+            drawTextAt(theAnchor, THE_DEBUG_VIVISBLE_INSTANCES, THE_DEBUG_CENTER, THE_DEBUG_TEXT_SIZE, THE_DEBUG_FONT, THE_DEBUG_TEXT_COLOR,
                     "Number of visible instances : " + theVisibleInstances.size());
         }
 

@@ -15,9 +15,7 @@
  */
 package org.teavm.classlib.java.lang;
 
-import org.teavm.dom.browser.Window;
 import org.teavm.javascript.spi.Async;
-import org.teavm.jso.JS;
 import org.teavm.platform.Platform;
 import org.teavm.platform.PlatformRunnable;
 import org.teavm.platform.async.AsyncCallback;
@@ -27,13 +25,12 @@ import org.teavm.platform.async.AsyncCallback;
  * @author Alexey Andreev
  */
 public class TThread extends TObject implements TRunnable {
-    private static Window window = (Window)JS.getGlobal();
     private static TThread mainThread = new TThread(TString.wrap("main"));
     private static TThread currentThread = mainThread;
     private static long nextId = 1;
     private static int activeCount = 1;
     private long id;
-    private int priority = 0;
+    private int priority;
     private long timeSliceStart;
     private int yieldCount;
     private final Object finishedLock = new Object();
@@ -52,10 +49,10 @@ public class TThread extends TObject implements TRunnable {
     }
 
     public TThread(TRunnable target) {
-        this(target, null );
+        this(target, null);
     }
 
-    public TThread(TRunnable target, TString name ) {
+    public TThread(TRunnable target, TString name) {
         this.name = name;
         this.target = target;
         id = nextId++;
@@ -84,7 +81,7 @@ public class TThread extends TObject implements TRunnable {
         currentThread.timeSliceStart = System.currentTimeMillis();
     }
 
-    static TThread getMainThread(){
+    static TThread getMainThread() {
         return mainThread;
     }
 
@@ -93,7 +90,7 @@ public class TThread extends TObject implements TRunnable {
         if (target != null) {
             target.run();
         }
-        synchronized(finishedLock) {
+        synchronized (finishedLock) {
             finishedLock.notifyAll();
         }
     }
@@ -182,7 +179,7 @@ public class TThread extends TObject implements TRunnable {
 
     private static void sleep(long millis, final AsyncCallback<Void> callback) {
         final TThread current = currentThread();
-        int intMillis = millis < Integer.MAX_VALUE ? (int)millis : Integer.MAX_VALUE;
+        int intMillis = millis < Integer.MAX_VALUE ? (int) millis : Integer.MAX_VALUE;
         SleepHandler handler = new SleepHandler(current, callback);
         handler.scheduleId = Platform.schedule(handler, intMillis);
         current.interruptHandler = handler;
@@ -221,11 +218,11 @@ public class TThread extends TObject implements TRunnable {
         }
     }
 
-    public final void setPriority(int newPriority){
+    public final void setPriority(int newPriority) {
         this.priority = newPriority;
     }
 
-    public final int getPriority(){
+    public final int getPriority() {
         return this.priority;
     }
 

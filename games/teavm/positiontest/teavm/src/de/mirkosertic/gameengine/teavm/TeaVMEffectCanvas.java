@@ -5,7 +5,7 @@ import de.mirkosertic.gameengine.type.Color;
 import de.mirkosertic.gameengine.type.EffectCanvas;
 import de.mirkosertic.gameengine.type.Position;
 
-import org.teavm.dom.canvas.CanvasRenderingContext2D;
+import org.teavm.jso.canvas.CanvasRenderingContext2D;
 
 public class TeaVMEffectCanvas implements EffectCanvas {
 

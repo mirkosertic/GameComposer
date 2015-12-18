@@ -15,11 +15,11 @@
  */
 package org.teavm.classlib.java.lang;
 
-import org.teavm.dom.browser.TimerHandler;
 import org.teavm.javascript.spi.Async;
 import org.teavm.javascript.spi.Rename;
 import org.teavm.javascript.spi.Superclass;
 import org.teavm.javascript.spi.Sync;
+import org.teavm.jso.browser.TimerHandler;
 import org.teavm.platform.Platform;
 import org.teavm.platform.PlatformQueue;
 import org.teavm.platform.PlatformRunnable;
@@ -56,6 +56,8 @@ public class TObject {
         }
         if (o.monitor.owner == null) {
             o.monitor.owner = TThread.currentThread();
+        } else if (o.monitor.owner != TThread.currentThread()) {
+            throw new IllegalStateException("Can't enter monitor from another thread synchronously");
         }
         o.monitor.count++;
     }
@@ -64,7 +66,9 @@ public class TObject {
         if (o.isEmptyMonitor() || o.monitor.owner != TThread.currentThread()) {
             throw new TIllegalMonitorStateException();
         }
-        --o.monitor.count;
+        if (--o.monitor.count == 0) {
+            o.monitor.owner = null;
+        }
         o.isEmptyMonitor();
     }
 
@@ -238,7 +242,7 @@ public class TObject {
     }
 
     @Rename("wait")
-    public final void wait0(long timeout) throws TInterruptedException{
+    public final void wait0(long timeout) throws TInterruptedException {
         try {
             wait(timeout, 0);
         } catch (InterruptedException ex) {
@@ -247,7 +251,7 @@ public class TObject {
     }
 
     @Rename("wait")
-    private final void wait0(long timeout, int nanos) throws TInterruptedException {
+    private void wait0(long timeout, int nanos) throws TInterruptedException {
         if (!holdsLock(this)) {
             throw new TIllegalMonitorStateException();
         }
@@ -255,14 +259,14 @@ public class TObject {
     }
 
     @Async
-    private native final void waitImpl(long timeout, int nanos) throws TInterruptedException;
+    private native void waitImpl(long timeout, int nanos) throws TInterruptedException;
 
     public final void waitImpl(long timeout, int nanos, final AsyncCallback<Void> callback) {
         final NotifyListenerImpl listener = new NotifyListenerImpl(this, callback, monitor.count);
         monitor.notifyListeners.add(listener);
         if (timeout > 0 || nanos > 0) {
-            listener.timerId = Platform.schedule(listener, timeout >= Integer.MAX_VALUE ? Integer.MAX_VALUE :
-                    (int)timeout);
+            listener.timerId = Platform.schedule(listener, timeout >= Integer.MAX_VALUE ? Integer.MAX_VALUE
+                    : (int) timeout);
         }
         monitorExit(this, monitor.count);
     }
@@ -332,7 +336,7 @@ public class TObject {
     @Rename("wait")
     public final void wait0() throws TInterruptedException {
         try {
-            wait(0l);
+            wait(0L);
         } catch (InterruptedException ex) {
             throw new TInterruptedException();
         }
@@ -343,6 +347,6 @@ public class TObject {
     }
 
     public static TObject wrap(Object obj) {
-        return (TObject)obj;
+        return (TObject) obj;
     }
 }

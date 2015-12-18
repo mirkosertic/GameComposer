@@ -1,3 +1,18 @@
+/*
+ *  Copyright 2015 Alexey Andreev.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 package org.teavm.classlib.java.nio;
 
 import org.teavm.classlib.java.lang.TComparable;
@@ -60,8 +75,8 @@ public abstract class TByteBuffer extends TBuffer implements TComparable<TByteBu
             throw new IndexOutOfBoundsException("Offset " + offset + " is outside of range [0;" + dst.length + ")");
         }
         if (offset + length > dst.length) {
-            throw new IndexOutOfBoundsException("The last byte in dst " + (offset + length) + " is outside " +
-                    "of array of size " + dst.length);
+            throw new IndexOutOfBoundsException("The last byte in dst " + (offset + length) + " is outside "
+                    + "of array of size " + dst.length);
         }
         if (remaining() < length) {
             throw new TBufferUnderflowException();
@@ -86,6 +101,9 @@ public abstract class TByteBuffer extends TBuffer implements TComparable<TByteBu
     }
 
     public TByteBuffer put(byte[] src, int offset, int length) {
+        if (length == 0) {
+            return this;
+        }
         if (isReadOnly()) {
             throw new TReadOnlyBufferException();
         }
@@ -96,8 +114,8 @@ public abstract class TByteBuffer extends TBuffer implements TComparable<TByteBu
             throw new IndexOutOfBoundsException("Offset " + offset + " is outside of range [0;" + src.length + ")");
         }
         if (offset + length > src.length) {
-            throw new IndexOutOfBoundsException("The last byte in src " + (offset + length) + " is outside " +
-                    "of array of size " + src.length);
+            throw new IndexOutOfBoundsException("The last byte in src " + (offset + length) + " is outside "
+                    + "of array of size " + src.length);
         }
         if (length < 0) {
             throw new IndexOutOfBoundsException("Length " + length + " must be non-negative");
@@ -136,8 +154,8 @@ public abstract class TByteBuffer extends TBuffer implements TComparable<TByteBu
 
     @Override
     public String toString() {
-        return "[ByteBuffer position=" + position + ", limit=" + limit + ", capacity=" + capacity + ", mark " +
-                (mark >= 0 ? " at " + mark : " is not set") + "]";
+        return "[ByteBuffer position=" + position + ", limit=" + limit + ", capacity=" + capacity + ", mark "
+                + (mark >= 0 ? " at " + mark : " is not set") + "]";
     }
 
     @Override
@@ -158,7 +176,7 @@ public abstract class TByteBuffer extends TBuffer implements TComparable<TByteBu
         if (!(obj instanceof TByteBuffer)) {
             return false;
         }
-        TByteBuffer other = (TByteBuffer)obj;
+        TByteBuffer other = (TByteBuffer) obj;
         int sz = remaining();
         if (sz != other.remaining()) {
             return false;
@@ -228,6 +246,14 @@ public abstract class TByteBuffer extends TBuffer implements TComparable<TByteBu
     public abstract TByteBuffer putInt(int index, int value);
 
     public abstract TIntBuffer asIntBuffer();
+
+    public abstract long getLong();
+
+    public abstract TByteBuffer putLong(long value);
+
+    public abstract long getLong(int index);
+
+    public abstract TByteBuffer putLong(int index, long value);
 
     public abstract TLongBuffer asLongBuffer();
 

@@ -15,8 +15,7 @@
  */
 package org.teavm.classlib.java.lang;
 
-import org.teavm.javascript.spi.GeneratedBy;
-import org.teavm.javascript.spi.InjectedBy;
+import org.teavm.jso.JSBody;
 
 /**
  *
@@ -50,17 +49,17 @@ public class TDouble extends TNumber implements TComparable<TDouble> {
 
     @Override
     public int intValue() {
-        return (int)value;
+        return (int) value;
     }
 
     @Override
     public long longValue() {
-        return (long)value;
+        return (long) value;
     }
 
     @Override
     public float floatValue() {
-        return (float)value;
+        return (float) value;
     }
 
     public static TDouble valueOf(double d) {
@@ -198,13 +197,13 @@ public class TDouble extends TNumber implements TComparable<TDouble> {
         if (this == other) {
             return true;
         }
-        return other instanceof TDouble && ((TDouble)other).value == value;
+        return other instanceof TDouble && ((TDouble) other).value == value;
     }
 
     @Override
     public int hashCode() {
         long h = doubleToLongBits(value);
-        return (int)(h >>> 32) ^ ((int)h | 0);
+        return (int) (h >>> 32) ^ ((int) h | 0);
     }
 
     public static int compare(double a, double b) {
@@ -224,13 +223,13 @@ public class TDouble extends TNumber implements TComparable<TDouble> {
         return isInfinite(value);
     }
 
-    @GeneratedBy(DoubleNativeGenerator.class)
+    @JSBody(params = "v", script = "return isNaN(v);")
     public static native boolean isNaN(double v);
 
-    @InjectedBy(DoubleNativeGenerator.class)
+    @JSBody(params = {}, script = "return NaN;")
     private static native double getNaN();
 
-    @GeneratedBy(DoubleNativeGenerator.class)
+    @JSBody(params = "v", script = "return !isFinite(v);")
     public static native boolean isInfinite(double v);
 
     public static long doubleToRawLongBits(double value) {
@@ -258,7 +257,7 @@ public class TDouble extends TNumber implements TComparable<TDouble> {
         } else {
             doubleMantissa = abs * 0x1p1022 * binaryExponent(negExp - 1022);
         }
-        long mantissa = (long)(doubleMantissa + 0.5) & 0xFFFFFFFFFFFFFL;
+        long mantissa = (long) (doubleMantissa + 0.5) & 0xFFFFFFFFFFFFFL;
         return mantissa | ((exp + 1023L) << 52) | (value < 0 || 1 / value == NEGATIVE_INFINITY ? (1L << 63) : 0);
     }
 
@@ -273,12 +272,12 @@ public class TDouble extends TNumber implements TComparable<TDouble> {
             }
         }
         boolean negative = (bits & (1L << 63)) != 0;
-        int rawExp = (int)((bits >> 52) & 0x7FFL);
+        int rawExp = (int) ((bits >> 52) & 0x7FFL);
         long mantissa = bits & 0xFFFFFFFFFFFFFL;
         if (rawExp == 0) {
             mantissa <<= 1;
         } else {
-            mantissa |= (1L << 52);
+            mantissa |= 1L << 52;
         }
         double value = mantissa * binaryExponent(rawExp - 1023 - 52);
         return !negative ? value : -value;
@@ -294,14 +293,14 @@ public class TDouble extends TNumber implements TComparable<TDouble> {
         int sz = 0;
         long bits = doubleToLongBits(d);
         boolean subNormal = false;
-        int exp = (int)((bits >>> 52) & 0x7FF) - 1023;
+        int exp = (int) ((bits >>> 52) & 0x7FF) - 1023;
         long mantissa = bits & 0xFFFFFFFFFFFFFL;
         if (exp == -1023) {
             ++exp;
             subNormal = true;
         }
         for (int i = 0; i < 13; ++i) {
-            int digit = (int)(mantissa & 0xF);
+            int digit = (int) (mantissa & 0xF);
             if (digit > 0 || sz > 0) {
                 buffer[sz++] = TCharacter.forDigit(digit, 16);
             }

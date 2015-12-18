@@ -8,14 +8,14 @@ import de.mirkosertic.gameengine.type.Size;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.teavm.dom.canvas.CanvasImageSource;
-import org.teavm.dom.canvas.CanvasRenderingContext2D;
-import org.teavm.dom.html.HTMLCanvasElement;
-import org.teavm.dom.html.HTMLDocument;
+import org.teavm.jso.canvas.CanvasImageSource;
+import org.teavm.jso.canvas.CanvasRenderingContext2D;
+import org.teavm.jso.dom.html.HTMLCanvasElement;
+import org.teavm.jso.dom.html.HTMLDocument;
 
 public class TeaVMPrerenderedTextCache {
 
-    private class CacheKey {
+    private static class CacheKey {
         private final Font font;
         private final Color color;
         private final String text;
@@ -65,7 +65,7 @@ public class TeaVMPrerenderedTextCache {
         }
     }
 
-    private class CacheEntry {
+    private static class CacheEntry {
         private final Size size;
         private final HTMLCanvasElement canvasElement;
 

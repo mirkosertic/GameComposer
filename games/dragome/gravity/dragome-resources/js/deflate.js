@@ -1,5 +1,4 @@
 
-﻿
 var base64alphabet="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";function Utf16Reader(base64)
 {this.position=0;this.base64=base64;this.bits=0;this.bitsLength=0;this.readByte=function()
 {if(this.position>this.base64.length*2)

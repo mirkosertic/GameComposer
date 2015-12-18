@@ -5,11 +5,12 @@ import de.mirkosertic.gameengine.core.GameResourceLoader;
 import de.mirkosertic.gameengine.core.GameResourceType;
 import de.mirkosertic.gameengine.type.ResourceName;
 
-import org.teavm.dom.core.Node;
-import org.teavm.dom.core.NodeList;
-import org.teavm.dom.html.HTMLDocument;
-import org.teavm.dom.html.HTMLElement;
-import org.teavm.dom.html.HTMLImageElement;
+import org.teavm.jso.dom.xml.Node;
+import org.teavm.jso.dom.xml.NodeList;
+
+import org.teavm.jso.dom.html.HTMLDocument;
+import org.teavm.jso.dom.html.HTMLElement;
+import org.teavm.jso.dom.html.HTMLImageElement;
 
 import java.io.IOException;
 

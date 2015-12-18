@@ -10,10 +10,10 @@ import de.mirkosertic.gameengine.generic.CSSUtils;
 import de.mirkosertic.gameengine.generic.GenericAbstractGameView;
 import de.mirkosertic.gameengine.type.*;
 
-import org.teavm.dom.canvas.CanvasImageSource;
-import org.teavm.dom.canvas.CanvasRenderingContext2D;
-import org.teavm.dom.html.HTMLCanvasElement;
-import org.teavm.dom.html.HTMLElement;
+import org.teavm.jso.canvas.CanvasImageSource;
+import org.teavm.jso.canvas.CanvasRenderingContext2D;
+import org.teavm.jso.dom.html.HTMLCanvasElement;
+import org.teavm.jso.dom.html.HTMLElement;
 
 import java.util.HashMap;
 import java.util.Map;

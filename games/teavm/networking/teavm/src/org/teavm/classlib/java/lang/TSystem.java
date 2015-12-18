@@ -15,6 +15,8 @@
  */
 package org.teavm.classlib.java.lang;
 
+import org.teavm.classlib.java.io.TConsole;
+import org.teavm.classlib.java.io.TInputStream;
 import org.teavm.classlib.java.io.TPrintStream;
 import org.teavm.classlib.java.lang.reflect.TArray;
 import org.teavm.dependency.PluggableDependency;
@@ -25,18 +27,23 @@ import org.teavm.javascript.spi.GeneratedBy;
  * @author Alexey Andreev
  */
 public final class TSystem extends TObject {
-    public static final TPrintStream out = new TPrintStream(new TConsoleOutputStream_stdout(), false);
-    public static final TPrintStream err = new TPrintStream(new TConsoleOutputStream_stderr(), false);
+    public static final TPrintStream out = new TPrintStream(new TConsoleOutputStreamStdout(), false);
+    public static final TPrintStream err = new TPrintStream(new TConsoleOutputStreamStderr(), false);
+    public static final TInputStream in = new TConsoleInputStream();
 
     private TSystem() {
+    }
+
+    public static TConsole console() {
+        return null;
     }
 
     public static void arraycopy(TObject src, int srcPos, TObject dest, int destPos, int length) {
         if (src == null || dest == null) {
             throw new TNullPointerException(TString.wrap("Either src or dest is null"));
         }
-        if (srcPos < 0 || destPos < 0 || length < 0 || srcPos + length > TArray.getLength(src) ||
-                destPos + length > TArray.getLength(dest)) {
+        if (srcPos < 0 || destPos < 0 || length < 0 || srcPos + length > TArray.getLength(src)
+                || destPos + length > TArray.getLength(dest)) {
             throw new TIndexOutOfBoundsException();
         }
         if (src != dest) {
@@ -47,7 +54,7 @@ public final class TSystem extends TObject {
             }
             if (srcType != targetType) {
                 if (!srcType.isPrimitive() && !targetType.isPrimitive()) {
-                    Object[] srcArray = (Object[])(Object)src;
+                    Object[] srcArray = (Object[]) (Object) src;
                     int pos = srcPos;
                     for (int i = 0; i < length; ++i) {
                         Object elem = srcArray[pos++];
@@ -103,7 +110,7 @@ public final class TSystem extends TObject {
     }
 
     public static int identityHashCode(Object x) {
-        return ((TObject)x).identity();
+        return ((TObject) x).identity();
     }
 
     public static TString lineSeparator() {
