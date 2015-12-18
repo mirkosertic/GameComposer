@@ -12,6 +12,7 @@ import de.mirkosertic.gameengine.type.UUID;
 import org.teavm.jso.JSBody;
 import org.teavm.jso.JSObject;
 import org.teavm.jso.JSProperty;
+import org.teavm.jso.core.JSString;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -103,11 +104,11 @@ public class TeaVMFirebaseNetworkConnector extends DefaultNetworkConnector {
     private Map<String, Object> convert(FirebaseRemoteMessage aMessage) {
         HashMap<String, Object> theResult = new HashMap<>();
         for (String theKey : aMessage.getKeys()) {
-            String theValue = aMessage.getString(theKey);
-            if (theValue != null) {
-                theResult.put(theKey, theValue);
+            JSObject theValue = aMessage.get(theKey);
+            if (JSString.isInstance(theValue)) {
+                theResult.put(theKey, ((JSString) theValue).stringValue());
             } else {
-                theResult.put(theKey, convert(aMessage.getObject(theKey)));
+                theResult.put(theKey, convert((FirebaseRemoteMessage) theValue));
             }
         }
         return theResult;
@@ -121,11 +122,11 @@ public class TeaVMFirebaseNetworkConnector extends DefaultNetworkConnector {
         for (Map.Entry<String, Object> theEnty : aEvent.entrySet()) {
             Object theValue = theEnty.getValue();
             if (theValue instanceof String) {
-                theMessage.putString(theEnty.getKey(), (String) theValue);
+                theMessage.put(theEnty.getKey(), JSString.valueOf((String) theValue));
                 theKeys.add(theEnty.getKey());
             } else if (theValue instanceof Map) {
                 theKeys.add(theEnty.getKey());
-                theMessage.putObject(theEnty.getKey(), convert((Map<String, Object>) theEnty.getValue()));
+                theMessage.put(theEnty.getKey(), convert((Map<String, Object>) theEnty.getValue()));
             }
         }
 

@@ -1,6 +1,7 @@
 package de.mirkosertic.gameengine.teavm;
 
 import org.teavm.jso.JSBody;
+import org.teavm.jso.JSIndexer;
 import org.teavm.jso.JSObject;
 import org.teavm.jso.core.JSArray;
 import org.teavm.jso.core.JSBoolean;
@@ -15,12 +16,9 @@ import java.util.Set;
 
 public class TeaVMMap implements Map<String, Object> {
 
-    public abstract class JSDelegate implements JSObject {
+    public abstract static class JSDelegate implements JSObject {
 
-        @JSBody(
-                params = {"aKey"},
-                script = "return this[aKey];"
-        )
+        @JSIndexer
         public abstract JSObject get(String aKey);
 
         @JSBody(

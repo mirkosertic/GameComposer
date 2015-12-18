@@ -14,16 +14,10 @@ public abstract class FirebaseRemoteMessage implements JSObject {
     public static native FirebaseRemoteMessage create();
 
     @JSIndexer
-    public abstract void putString(String aKey, String aValue);
+    public abstract void put(String aKey, JSObject aValue);
 
     @JSIndexer
-    public abstract void putObject(String aKey, FirebaseRemoteMessage aValue);
-
-    @JSIndexer
-    public abstract String getString(String aKey);
-
-    @JSIndexer
-    public abstract FirebaseRemoteMessage getObject(String aKey);
+    public abstract JSObject get(String aKey);
 
     @JSProperty(value = "keys")
     public abstract void setKeys(String[] aKeys);
