@@ -1,36 +1,14 @@
 package de.mirkosertic.gameengine.dragome;
 
-import java.io.File;
-
+import com.dragome.commons.ChainedInstrumentationDragomeConfigurator;
 import com.dragome.commons.DragomeConfiguratorImplementor;
 import com.dragome.commons.compiler.CompilerMode;
-import com.dragome.config.DomHandlerApplicationConfigurator;
-import com.dragome.helpers.serverside.DefaultClasspathFilter;
 
 @DragomeConfiguratorImplementor
-public class GameEngineDragomeConfigurator extends DomHandlerApplicationConfigurator {
+public class GameEngineDragomeConfigurator extends ChainedInstrumentationDragomeConfigurator {
 
     public GameEngineDragomeConfigurator() {
         System.setProperty("dragome-compile-mode", CompilerMode.Production.toString());
-
-        setClasspathFilter(new DefaultClasspathFilter() {
-            @Override
-            public boolean accept(File pathname) {
-                boolean accept = super.accept(pathname);
-
-                String string = pathname.toString();
-
-                accept &= !string.contains("java/util/concurrent");
-                accept &= !string.contains("java/util/stream");
-                accept &= !string.contains("java/util/function");
-                accept &= !string.contains("java/sql");
-                accept &= !string.contains("org/w3c/dom/html");
-                accept &= !string.contains("java/org/junit");
-                accept &= !string.contains("junit");
-
-                return accept;
-            }
-        });
     }
 
     @Override
@@ -46,6 +24,8 @@ public class GameEngineDragomeConfigurator extends DomHandlerApplicationConfigur
         if (aClassPathEntry.contains("dragome-js-commons"))
             return true;
         if (aClassPathEntry.contains("dragome-core"))
+            return true;
+        if (aClassPathEntry.contains("dragome-web"))
             return true;
 
         return false;

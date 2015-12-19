@@ -1,15 +1,16 @@
 package de.mirkosertic.gameengine.dragome;
 
+import com.dragome.web.html.dom.DomHandler;
+import com.dragome.web.html.dom.w3c.BrowserDomHandler;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
-import com.dragome.services.ServiceLocator;
 
 public class DragomeLogger {
 
     public static void info(String aMessage) {
-        Document theDocument = ServiceLocator.getInstance().getDomHandler().getDocument();
-        Element theLogger = ServiceLocator.getInstance().getDomHandler().getElementBySelector("#logger");
+        DomHandler theDomhandler = new BrowserDomHandler();
+        Document theDocument = theDomhandler.getDocument();
+        Element theLogger = theDomhandler.getElementBySelector("#logger");
 
         Element theDiv = theDocument.createElement("div");
         theDiv.appendChild(theDocument.createTextNode(aMessage));
@@ -17,8 +18,9 @@ public class DragomeLogger {
     }
 
     public static void error(String aMessage) {
-        Document theDocument = ServiceLocator.getInstance().getDomHandler().getDocument();
-        Element theLogger = ServiceLocator.getInstance().getDomHandler().getElementBySelector("#logger");
+        DomHandler theDomhandler = new BrowserDomHandler();
+        Document theDocument = theDomhandler.getDocument();
+        Element theLogger = theDomhandler.getElementBySelector("#logger");
 
         Element theDiv = theDocument.createElement("div");
         theDiv.setAttribute("style","color: red;");

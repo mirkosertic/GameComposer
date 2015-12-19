@@ -1,15 +1,15 @@
 package de.mirkosertic.gameengine.dragome;
 
+import com.dragome.web.html.dom.w3c.BrowserDomHandler;
 import org.w3c.dom.Element;
 import org.w3c.dom.events.Event;
 import org.w3c.dom.events.EventListener;
 import org.w3c.dom.events.KeyboardEvent;
 import org.w3c.dom.events.MouseEvent;
 
-import com.dragome.annotations.PageAlias;
-import com.dragome.enhancers.jsdelegate.JsDelegateFactory;
-import com.dragome.html.dom.html5canvas.HTMLCanvasElement;
-import com.dragome.services.ServiceLocator;
+import com.dragome.web.annotations.PageAlias;
+import com.dragome.web.enhancers.jsdelegate.JsDelegateFactory;
+import com.dragome.web.html.dom.html5canvas.interfaces.HTMLCanvasElement;
 import com.dragome.view.DefaultVisualActivity;
 
 import de.mirkosertic.gameengine.core.*;
@@ -93,7 +93,7 @@ public class IndexPage extends DefaultVisualActivity {
             @Override
             protected GameView getOrCreateCurrentGameView(GameRuntime aGameRuntime, CameraBehavior aCamera, GestureDetector aGestureDetector) {
                 if (gameView == null) {
-                    Element elementBySelector= ServiceLocator.getInstance().getDomHandler().getElementBySelector("#html5canvas");
+                    Element elementBySelector= new BrowserDomHandler().getElementBySelector("#html5canvas");
                     HTMLCanvasElement theCanvas= JsDelegateFactory.createFromNode(elementBySelector, HTMLCanvasElement.class);
 
                     gameView = new DragomeGameView(aGameRuntime, aCamera, aGestureDetector, theCanvas);

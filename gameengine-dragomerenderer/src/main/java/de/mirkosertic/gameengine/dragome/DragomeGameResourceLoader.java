@@ -2,13 +2,13 @@ package de.mirkosertic.gameengine.dragome;
 
 import java.io.IOException;
 
+import com.dragome.web.html.dom.w3c.BrowserDomHandler;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.dragome.html.dom.DomHandler;
-import com.dragome.services.ServiceLocator;
+import com.dragome.web.html.dom.DomHandler;
 
 import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.core.GameResourceLoader;
@@ -24,7 +24,7 @@ public class DragomeGameResourceLoader implements GameResourceLoader {
     public DragomeGameResourceLoader(String aSceneId) {
         sceneId = aSceneId;
 
-        DomHandler theHandler = ServiceLocator.getInstance().getDomHandler();
+        DomHandler theHandler = new BrowserDomHandler();
 
         cacheElement = theHandler.getElementBySelector("#resourcecache");
         document = theHandler.getDocument();
