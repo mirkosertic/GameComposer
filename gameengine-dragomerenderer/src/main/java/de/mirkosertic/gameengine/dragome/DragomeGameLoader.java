@@ -5,13 +5,13 @@ import de.mirkosertic.gameengine.core.Game;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.dragome.services.RequestExecutorImpl;
+import com.dragome.web.services.RequestExecutorImpl;
 import com.dragome.services.ServiceLocator;
 import com.dragome.services.interfaces.AsyncCallback;
 
 class DragomeGameLoader {
 
-    public static interface GameLoadedListener {
+    public interface GameLoadedListener {
         void onGameLoaded(Game aGame);
 
         void onGameLoadedError();

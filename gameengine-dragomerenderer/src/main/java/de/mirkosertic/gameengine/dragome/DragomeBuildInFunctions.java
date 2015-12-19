@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import com.dragome.commons.javascript.ScriptHelper;
 import com.dragome.helpers.DragomeEntityManager;
-import com.dragome.services.RequestExecutorImpl;
+import com.dragome.web.services.RequestExecutorImpl;
 import com.dragome.services.interfaces.AsyncCallback;
 
 public class DragomeBuildInFunctions extends BuiltInFunctions {

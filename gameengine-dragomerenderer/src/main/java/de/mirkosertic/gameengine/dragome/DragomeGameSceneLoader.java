@@ -7,13 +7,13 @@ import de.mirkosertic.gameengine.core.GameScene;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.dragome.services.RequestExecutorImpl;
+import com.dragome.web.services.RequestExecutorImpl;
 import com.dragome.services.ServiceLocator;
 import com.dragome.services.interfaces.AsyncCallback;
 
 class DragomeGameSceneLoader {
 
-    public static interface GameSceneLoadedListener {
+    public interface GameSceneLoadedListener {
         void onGameSceneLoaded(GameScene aScene);
         void onGameSceneLoadedError();
     }

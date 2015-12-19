@@ -17,7 +17,7 @@
     </scm>
 
     <properties>
-        <dragome.version>0.95.5-MSE-SNAPSHOT</dragome.version>
+        <dragome.version>0.96-beta2</dragome.version>
     </properties>
 
     <dependencies>
@@ -35,23 +35,9 @@
         </dependency>
         <dependency>
             <groupId>com.dragome</groupId>
-            <artifactId>dragome-js-commons</artifactId>
+            <artifactId>dragome-sdk</artifactId>
             <version>${dragome.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.dragome</groupId>
-            <artifactId>dragome-js-jre</artifactId>
-            <version>${dragome.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.dragome</groupId>
-            <artifactId>dragome-core</artifactId>
-            <version>${dragome.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.dragome</groupId>
-            <artifactId>dragome-bytecode-js-compiler</artifactId>
-            <version>${dragome.version}</version>
+            <type>pom</type>
         </dependency>
         <dependency>
             <groupId>javax</groupId>
@@ -92,9 +78,6 @@
                 <destinationDirectory>${project.build.directory}/${project.build.finalName}</destinationDirectory>
                 <forceRebuild>true</forceRebuild>
                 <removeCache>false</removeCache>
-                <targetClassName>de.mirkosertic.gameengine.dragome.IndexPage</targetClassName>
-                <compress>true</compress>
-                <processSingle>true</processSingle>
               </configuration>
               <dependencies>
                 <dependency>

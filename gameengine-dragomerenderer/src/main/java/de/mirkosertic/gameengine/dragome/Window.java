@@ -1,11 +1,11 @@
 package de.mirkosertic.gameengine.dragome;
 
+import com.dragome.web.html.dom.w3c.BrowserDomHandler;
 import org.w3c.dom.Element;
 import org.w3c.dom.events.EventListener;
 
 import com.dragome.commons.javascript.ScriptHelper;
-import com.dragome.dispatcher.EventDispatcherImpl;
-import com.dragome.services.ServiceLocator;
+import com.dragome.web.dispatcher.EventDispatcherImpl;
 
 public final class Window {
 
@@ -26,7 +26,7 @@ public final class Window {
     }
 
     public void addEventListener(EventListener aEventListener, String... aEvent) {
-        Element theElement = ServiceLocator.getInstance().getDomHandler().getElementBySelector("body");
+        Element theElement = new BrowserDomHandler().getElementBySelector("body");
         EventDispatcherImpl.setEventListener(theElement, aEventListener, aEvent);
     }
 

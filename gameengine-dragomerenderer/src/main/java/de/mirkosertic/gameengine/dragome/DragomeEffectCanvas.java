@@ -1,6 +1,6 @@
 package de.mirkosertic.gameengine.dragome;
 
-import com.dragome.html.dom.html5canvas.CanvasRenderingContext2D;
+import com.dragome.web.html.dom.html5canvas.interfaces.CanvasRenderingContext2D;
 
 import de.mirkosertic.gameengine.generic.CSSUtils;
 import de.mirkosertic.gameengine.type.Color;
