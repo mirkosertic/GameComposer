@@ -1,11 +1,11 @@
 package de.mirkosertic.gameengine.dragome;
 
-import com.dragome.commons.ChainedInstrumentationDragomeConfigurator;
 import com.dragome.commons.DragomeConfiguratorImplementor;
 import com.dragome.commons.compiler.CompilerMode;
+import com.dragome.web.config.DomHandlerApplicationConfigurator;
 
 @DragomeConfiguratorImplementor
-public class GameEngineDragomeConfigurator extends ChainedInstrumentationDragomeConfigurator {
+public class GameEngineDragomeConfigurator extends DomHandlerApplicationConfigurator {
 
     public GameEngineDragomeConfigurator() {
         System.setProperty("dragome-compile-mode", CompilerMode.Production.toString());
