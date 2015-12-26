@@ -34,7 +34,7 @@ import java.util.HashMap;
  */
 public class IntArray {
 	
-	private final HashMap<Integer, int[]> map = new HashMap<Integer, int[]>();
+	private final HashMap<Integer, int[]> map = new HashMap<>();
 	
 	public int[] get( int argLength){
 		assert(argLength > 0);

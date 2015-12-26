@@ -174,6 +174,7 @@ public class Vec2 implements Serializable {
 
   // @Override // annotation omitted for GWT-compatibility
   /** Return a copy of this vector. */
+  @Override
   public final Vec2 clone() {
     return new Vec2(x, y);
   }

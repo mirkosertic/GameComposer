@@ -31,7 +31,7 @@ import java.util.HashMap;
  */
 public class FloatArray {
 	
-	private final HashMap<Integer, float[]> map = new HashMap<Integer, float[]>();
+	private final HashMap<Integer, float[]> map = new HashMap<>();
 	
 	public float[] get( int argLength){
 		assert(argLength > 0);

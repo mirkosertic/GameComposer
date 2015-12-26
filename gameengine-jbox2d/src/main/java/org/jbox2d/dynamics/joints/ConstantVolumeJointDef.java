@@ -40,7 +40,7 @@ public class ConstantVolumeJointDef extends JointDef {
 
   public ConstantVolumeJointDef() {
     type = JointType.CONSTANT_VOLUME;
-    bodies = new ArrayList<Body>();
+    bodies = new ArrayList<>();
     joints = null;
     collideConnected = false;
     frequencyHz = 0.0f;
@@ -68,7 +68,7 @@ public class ConstantVolumeJointDef extends JointDef {
   public void addBodyAndJoint(Body argBody, DistanceJoint argJoint) {
     addBody(argBody);
     if (joints == null) {
-      joints = new ArrayList<DistanceJoint>();
+      joints = new ArrayList<>();
     }
     joints.add(argJoint);
   }

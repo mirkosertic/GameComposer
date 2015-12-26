@@ -1537,6 +1537,7 @@ public class World {
 
 
 class WorldQueryWrapper implements TreeCallback {
+  @Override
   public boolean treeCallback(int nodeId) {
     FixtureProxy proxy = (FixtureProxy) broadPhase.getUserData(nodeId);
     return callback.reportFixture(proxy.fixture);
@@ -1554,6 +1555,7 @@ class WorldRayCastWrapper implements TreeRayCastCallback {
   private final Vec2 temp = new Vec2();
   private final Vec2 point = new Vec2();
 
+  @Override
   public float raycastCallback(RayCastInput input, int nodeId) {
     Object userData = broadPhase.getUserData(nodeId);
     FixtureProxy proxy = (FixtureProxy) userData;
