@@ -28,6 +28,7 @@ public class CameraBehavior implements Behavior, Camera, Reflectable<CameraClass
     private final Property<CameraType> type;
 
     private Size screenSize;
+    private final GameScene gameScene;
 
     CameraBehavior(GameObjectInstance aObjectInstance) {
         this(aObjectInstance, aObjectInstance.getOwnerGameObject().getBehaviorTemplate(CameraBehaviorTemplate.class));
@@ -37,6 +38,8 @@ public class CameraBehavior implements Behavior, Camera, Reflectable<CameraClass
         objectInstance = aObjectInstance;
 
         GameEventManager theEventManager = aObjectInstance.getOwnerGameObject().getGameScene().getRuntime().getEventManager();
+
+        gameScene = aTemplate.getOwner().getGameScene();
 
         type = new Property<>(CameraType.class, this, TYPE_PROPERTY, aTemplate.typeProperty().get(), theEventManager);
     }
@@ -88,12 +91,10 @@ public class CameraBehavior implements Behavior, Camera, Reflectable<CameraClass
         // TODO: Implement Z-Ordering here
         List<GameObjectInstance> theResult = new ArrayList<>();
 
-        GameScene theScene = getTemplate().getOwner().getGameScene();
-
         Size theScreenSize = getScreenSize();
         if (theScreenSize != null) {
             Position theCameraPosition = objectInstance.positionProperty().get();
-            for (GameObjectInstance theInstance : theScene.getInstances()) {
+            for (GameObjectInstance theInstance : gameScene.getInstances()) {
                 if (theInstance == objectInstance) {
                     // The camera object itself does not need to be drawn
                     continue;

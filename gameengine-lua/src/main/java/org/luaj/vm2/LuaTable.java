@@ -1399,7 +1399,7 @@ public class LuaTable extends LuaValue implements Metatable {
 
 		@Override
         public String toString() {
-			StringBuffer buf = new StringBuffer();
+			StringBuilder buf = new StringBuilder();
 			buf.append("<dead");
 			LuaValue k = key();
 			if (k != null) {

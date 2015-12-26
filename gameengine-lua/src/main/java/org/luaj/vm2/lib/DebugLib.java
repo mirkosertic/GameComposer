@@ -547,7 +547,7 @@ public class DebugLib extends TwoArgFunction {
 		 * @return String containing the traceback.
 		 */
 		String traceback(int level) {
-			StringBuffer sb = new StringBuffer();
+			StringBuilder sb = new StringBuilder();
 			sb.append( "stack traceback:" );
 			for (DebugLib.CallFrame c; (c = getCallFrame(level++)) != null; ) {
 				sb.append("\n\t");

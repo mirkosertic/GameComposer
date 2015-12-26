@@ -61,6 +61,7 @@ public class ContactManager implements PairCallback {
    * @param proxyUserDataA
    * @param proxyUserDataB
    */
+  @Override
   public void addPair(Object proxyUserDataA, Object proxyUserDataB) {
     FixtureProxy proxyA = (FixtureProxy) proxyUserDataA;
     FixtureProxy proxyB = (FixtureProxy) proxyUserDataB;

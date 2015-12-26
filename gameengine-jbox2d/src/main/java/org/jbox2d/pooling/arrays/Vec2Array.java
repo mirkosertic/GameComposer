@@ -34,7 +34,7 @@ import org.jbox2d.common.Vec2;
  */
 public class Vec2Array {
 
-	private final HashMap<Integer, Vec2[]> map = new HashMap<Integer, Vec2[]>();
+	private final HashMap<Integer, Vec2[]> map = new HashMap<>();
 	
 	public Vec2[] get( int argLength){
 		assert(argLength > 0);

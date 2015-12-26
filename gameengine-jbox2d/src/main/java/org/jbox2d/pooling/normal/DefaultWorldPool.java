@@ -64,44 +64,51 @@ public class DefaultWorldPool implements IWorldPool {
   private final OrderedStack<AABB> aabbs;
   private final OrderedStack<Rot> rots;
 
-  private final HashMap<Integer, float[]> afloats = new HashMap<Integer, float[]>();
-  private final HashMap<Integer, int[]> aints = new HashMap<Integer, int[]>();
-  private final HashMap<Integer, Vec2[]> avecs = new HashMap<Integer, Vec2[]>();
+  private final HashMap<Integer, float[]> afloats = new HashMap<>();
+  private final HashMap<Integer, int[]> aints = new HashMap<>();
+  private final HashMap<Integer, Vec2[]> avecs = new HashMap<>();
 
   private final IWorldPool world = this;
 
   private final MutableStack<Contact> pcstack =
     new MutableStack<Contact>(Settings.CONTACT_STACK_INIT_SIZE) {
+      @Override
       protected Contact newInstance () { return new PolygonContact(world); }
     };
 
   private final MutableStack<Contact> ccstack =
     new MutableStack<Contact>(Settings.CONTACT_STACK_INIT_SIZE) {
+      @Override
       protected Contact newInstance () { return new CircleContact(world); }
     };
 
   private final MutableStack<Contact> cpstack =
     new MutableStack<Contact>(Settings.CONTACT_STACK_INIT_SIZE) {
+      @Override
       protected Contact newInstance () { return new PolygonAndCircleContact(world); }
     };
 
   private final MutableStack<Contact> ecstack =
     new MutableStack<Contact>(Settings.CONTACT_STACK_INIT_SIZE) {
+      @Override
       protected Contact newInstance () { return new EdgeAndCircleContact(world); }
     };
 
   private final MutableStack<Contact> epstack =
     new MutableStack<Contact>(Settings.CONTACT_STACK_INIT_SIZE) {
+      @Override
       protected Contact newInstance () { return new EdgeAndPolygonContact(world); }
     };
 
   private final MutableStack<Contact> chcstack =
     new MutableStack<Contact>(Settings.CONTACT_STACK_INIT_SIZE) {
+      @Override
       protected Contact newInstance () { return new ChainAndCircleContact(world); }
     };
 
   private final MutableStack<Contact> chpstack =
     new MutableStack<Contact>(Settings.CONTACT_STACK_INIT_SIZE) {
+      @Override
       protected Contact newInstance () { return new ChainAndPolygonContact(world); }
     };
 
@@ -111,21 +118,27 @@ public class DefaultWorldPool implements IWorldPool {
 
   public DefaultWorldPool(int argSize, int argContainerSize) {
     vecs = new OrderedStack<Vec2>(argSize, argContainerSize) {
+      @Override
       protected Vec2 newInstance() { return new Vec2(); }
     };
     vec3s = new OrderedStack<Vec3>(argSize, argContainerSize) {
+      @Override
       protected Vec3 newInstance() { return new Vec3(); }
     };
     mats = new OrderedStack<Mat22>(argSize, argContainerSize) {
+      @Override
       protected Mat22 newInstance() { return new Mat22(); }
     };
     aabbs = new OrderedStack<AABB>(argSize, argContainerSize) {
+      @Override
       protected AABB newInstance() { return new AABB(); }
     };
     rots = new OrderedStack<Rot>(argSize, argContainerSize) {
+      @Override
       protected Rot newInstance() { return new Rot(); }
     };
     mat33s = new OrderedStack<Mat33>(argSize, argContainerSize) {
+      @Override
       protected Mat33 newInstance() { return new Mat33(); }
     };
 
@@ -134,14 +147,17 @@ public class DefaultWorldPool implements IWorldPool {
     toi = new TimeOfImpact(this);
   }
 
+  @Override
   public final IDynamicStack<Contact> getPolyContactStack() {
     return pcstack;
   }
 
+  @Override
   public final IDynamicStack<Contact> getCircleContactStack() {
     return ccstack;
   }
 
+  @Override
   public final IDynamicStack<Contact> getPolyCircleContactStack() {
     return cpstack;
   }
@@ -166,82 +182,102 @@ public class DefaultWorldPool implements IWorldPool {
     return chpstack;
   }
 
+  @Override
   public final Vec2 popVec2() {
     return vecs.pop();
   }
 
+  @Override
   public final Vec2[] popVec2(int argNum) {
     return vecs.pop(argNum);
   }
 
+  @Override
   public final void pushVec2(int argNum) {
     vecs.push(argNum);
   }
 
+  @Override
   public final Vec3 popVec3() {
     return vec3s.pop();
   }
 
+  @Override
   public final Vec3[] popVec3(int argNum) {
     return vec3s.pop(argNum);
   }
 
+  @Override
   public final void pushVec3(int argNum) {
     vec3s.push(argNum);
   }
 
+  @Override
   public final Mat22 popMat22() {
     return mats.pop();
   }
 
+  @Override
   public final Mat22[] popMat22(int argNum) {
     return mats.pop(argNum);
   }
 
+  @Override
   public final void pushMat22(int argNum) {
     mats.push(argNum);
   }
 
+  @Override
   public final Mat33 popMat33() {
     return mat33s.pop();
   }
 
+  @Override
   public final void pushMat33(int argNum) {
     mat33s.push(argNum);
   }
 
+  @Override
   public final AABB popAABB() {
     return aabbs.pop();
   }
 
+  @Override
   public final AABB[] popAABB(int argNum) {
     return aabbs.pop(argNum);
   }
 
+  @Override
   public final void pushAABB(int argNum) {
     aabbs.push(argNum);
   }
 
+  @Override
   public final Rot popRot() {
     return rots.pop();
   }
 
+  @Override
   public final void pushRot(int num) {
     rots.push(num);
   }
 
+  @Override
   public final Collision getCollision() {
     return collision;
   }
 
+  @Override
   public final TimeOfImpact getTimeOfImpact() {
     return toi;
   }
 
+  @Override
   public final Distance getDistance() {
     return dist;
   }
 
+  @Override
   public final float[] getFloatArray(int argLength) {
     if (!afloats.containsKey(argLength)) {
       afloats.put(argLength, new float[argLength]);
@@ -251,6 +287,7 @@ public class DefaultWorldPool implements IWorldPool {
     return afloats.get(argLength);
   }
 
+  @Override
   public final int[] getIntArray(int argLength) {
     if (!aints.containsKey(argLength)) {
       aints.put(argLength, new int[argLength]);
@@ -260,6 +297,7 @@ public class DefaultWorldPool implements IWorldPool {
     return aints.get(argLength);
   }
 
+  @Override
   public final Vec2[] getVec2Array(int argLength) {
     if (!avecs.containsKey(argLength)) {
       Vec2[] ray = new Vec2[argLength];
