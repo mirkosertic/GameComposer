@@ -1,20 +1,19 @@
 package de.mirkosertic.gameengine.event;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class Property<T> extends ReadOnlyProperty<T> {
 
-    private final Set<GameEventListener<PropertyChanged>> changeListener;
+    private GameEventListener<PropertyChanged> changeListener[];
 
     private long lastChanged;
 
     public Property(Class<T> aType, Object aOwner, String aName, T aDefaultValue, GameEventListener<PropertyChanged> aListener) {
         super(aType, aOwner, aName, aDefaultValue);
-        changeListener = new HashSet<>();
         if (aListener != null) {
-            changeListener.add(aListener);
+            changeListener = new GameEventListener[] {aListener};
+        } else {
+            changeListener = new GameEventListener[0];
         }
         lastChanged = System.currentTimeMillis();
     }
@@ -32,19 +31,18 @@ public class Property<T> extends ReadOnlyProperty<T> {
         if (aValue == value) {
             // Nothing to do
             return;
-        } else if (value != null) {
+        }
+        if (value != null) {
             if (value.equals(aValue)) {
                 // Nothing to do
                 return;
             }
-        } else if (aValue != null) {
+        }
+        if (aValue != null) {
             if (aValue.equals(value)) {
                 // Nothing to do
                 return;
             }
-        } else if (value == aValue) {
-            // Nothing to do
-            return;
         }
 
         if (value == null && aValue == null) {
@@ -57,11 +55,10 @@ public class Property<T> extends ReadOnlyProperty<T> {
 
         lastChanged = System.currentTimeMillis();
 
-        if (!changeListener.isEmpty()) {
+        if (changeListener.length > 0) {
             PropertyChanged theEvent = new PropertyChanged(this, theOldValue);
 
-            Set<GameEventListener> theKnownListener = new HashSet<GameEventListener>(changeListener);
-            for (GameEventListener<PropertyChanged> theListener : theKnownListener) {
+            for (GameEventListener<PropertyChanged> theListener : changeListener) {
                 theListener.handleGameEvent(theEvent);
             }
         }
@@ -75,15 +72,29 @@ public class Property<T> extends ReadOnlyProperty<T> {
         return lastChanged;
     }
 
-    public Set<GameEventListener<PropertyChanged>> getChangeListener() {
-        return Collections.unmodifiableSet(changeListener);
+    public List<GameEventListener<PropertyChanged>> getChangeListener() {
+        List<GameEventListener<PropertyChanged>> theNewListener = new ArrayList<>();
+        for (GameEventListener<PropertyChanged> theListener : changeListener) {
+            theNewListener.add(theListener);
+        }
+        return theNewListener;
     }
 
     public void addChangeListener(GameEventListener<PropertyChanged> aListener) {
-        changeListener.add(aListener);
+        List<GameEventListener<PropertyChanged>> theNewListener = new ArrayList<>();
+        for (GameEventListener<PropertyChanged> theListener : changeListener) {
+            theNewListener.add(theListener);
+        }
+        theNewListener.add(aListener);
+        changeListener = theNewListener.toArray(new GameEventListener[theNewListener.size()]);
     }
 
     public void removeChangeListener(GameEventListener<PropertyChanged> aListener) {
-        changeListener.remove(aListener);
+        List<GameEventListener<PropertyChanged>> theNewListener = new ArrayList<>();
+        for (GameEventListener<PropertyChanged> theListener : changeListener) {
+            theNewListener.add(theListener);
+        }
+        theNewListener.remove(aListener);
+        changeListener = theNewListener.toArray(new GameEventListener[theNewListener.size()]);
     }
 }
