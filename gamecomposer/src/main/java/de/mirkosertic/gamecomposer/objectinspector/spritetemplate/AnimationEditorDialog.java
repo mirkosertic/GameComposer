@@ -7,7 +7,6 @@ import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.javafx.JavaFXBitmapResource;
 import de.mirkosertic.gameengine.type.Animation;
 import de.mirkosertic.gameengine.type.ResourceName;
-
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -20,13 +19,13 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
+import javax.inject.Inject;
 import org.controlsfx.control.GridCell;
 import org.controlsfx.control.GridView;
 import org.controlsfx.control.HiddenSidesPane;
 import org.controlsfx.validation.ValidationSupport;
 import org.controlsfx.validation.Validator;
-
-import javax.inject.Inject;
 
 public class AnimationEditorDialog {
 

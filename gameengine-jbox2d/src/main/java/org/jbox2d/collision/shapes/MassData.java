@@ -86,7 +86,6 @@ public class MassData {
 	}
 	
 	/** Return a copy of this object. */
-	@Override
 	public MassData clone() {
 		return new MassData(this);
 	}

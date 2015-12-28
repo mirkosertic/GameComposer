@@ -4,7 +4,6 @@ import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.type.ClassInformation;
 import de.mirkosertic.gameengine.type.EffectCanvas;
 
-import java.util.List;
 import java.util.Map;
 
 public interface GameSceneEffect {
@@ -17,7 +16,7 @@ public interface GameSceneEffect {
 
     Map<String,Object> serialize();
 
-    void render(EffectCanvas aEffectCanvas, List<GameObjectInstance> aListOfVisibleInstances, CameraBehavior aCameraBehavior);
+    void render(EffectCanvas aEffectCanvas, CameraBehavior aCameraBehavior);
 
     GameScene getScene();
 }

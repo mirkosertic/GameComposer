@@ -1,11 +1,10 @@
 package de.mirkosertic.gameengine.dragome;
 
-import com.dragome.web.html.dom.w3c.BrowserDomHandler;
 import org.w3c.dom.Element;
 import org.w3c.dom.events.EventListener;
-
 import com.dragome.commons.javascript.ScriptHelper;
 import com.dragome.web.dispatcher.EventDispatcherImpl;
+import com.dragome.web.html.dom.w3c.BrowserDomHandler;
 
 public final class Window {
 

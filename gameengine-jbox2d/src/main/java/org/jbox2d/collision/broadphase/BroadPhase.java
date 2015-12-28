@@ -24,7 +24,6 @@
 package org.jbox2d.collision.broadphase;
 
 import java.util.Arrays;
-
 import org.jbox2d.callbacks.DebugDraw;
 import org.jbox2d.callbacks.PairCallback;
 import org.jbox2d.callbacks.TreeCallback;
@@ -276,7 +275,6 @@ public class BroadPhase implements TreeCallback {
   /**
    * This is called from DynamicTree::query when we are gathering pairs.
    */
-  @Override
   public final boolean treeCallback(int proxyId) {
     // A proxy cannot form a pair with itself.
     if (proxyId == m_queryProxyId) {

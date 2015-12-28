@@ -2,9 +2,9 @@ package de.mirkosertic.gamecomposer.contentarea.eventsheet.keyeventcondition;
 
 import de.mirkosertic.gamecomposer.Controller;
 import de.mirkosertic.gamecomposer.StringConverterFactory;
-import de.mirkosertic.gameengine.type.GameKeyCode;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.input.KeyEventCondition;
+import de.mirkosertic.gameengine.type.GameKeyCode;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;

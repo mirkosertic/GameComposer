@@ -3,7 +3,6 @@ package de.mirkosertic.gamecomposer;
 import javafx.application.Platform;
 import javafx.scene.layout.Region;
 
-import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
 

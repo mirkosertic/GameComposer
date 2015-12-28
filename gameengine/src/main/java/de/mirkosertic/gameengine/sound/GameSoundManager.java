@@ -1,9 +1,9 @@
 package de.mirkosertic.gameengine.sound;
 
 import de.mirkosertic.gameengine.core.GameSystem;
-import de.mirkosertic.gameengine.type.ResourceName;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.process.StartProcess;
+import de.mirkosertic.gameengine.type.ResourceName;
 
 public class GameSoundManager implements GameSystem {
 

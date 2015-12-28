@@ -4,7 +4,12 @@ import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.event.ReadOnlyProperty;
 import de.mirkosertic.gameengine.scriptengine.LUAScriptEngine;
-import de.mirkosertic.gameengine.type.*;
+import de.mirkosertic.gameengine.type.ClassInformation;
+import de.mirkosertic.gameengine.type.Field;
+import de.mirkosertic.gameengine.type.KeyValueObjectCache;
+import de.mirkosertic.gameengine.type.Method;
+import de.mirkosertic.gameengine.type.Reflectable;
+import de.mirkosertic.gameengine.type.TypeConverters;
 
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LuaDouble;

@@ -24,7 +24,6 @@ package org.luaj.vm2.compiler;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
-
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LocVars;
 import org.luaj.vm2.Lua;

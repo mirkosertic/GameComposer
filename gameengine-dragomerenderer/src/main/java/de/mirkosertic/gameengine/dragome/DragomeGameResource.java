@@ -1,9 +1,9 @@
 package de.mirkosertic.gameengine.dragome;
 
-import org.w3c.dom.Element;
-
 import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.core.GameResourceType;
+
+import org.w3c.dom.Element;
 
 public class DragomeGameResource implements GameResource {
 

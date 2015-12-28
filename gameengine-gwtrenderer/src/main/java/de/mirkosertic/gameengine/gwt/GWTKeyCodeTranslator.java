@@ -1,8 +1,8 @@
 package de.mirkosertic.gameengine.gwt;
 
-import com.google.gwt.event.dom.client.KeyCodes;
-
 import de.mirkosertic.gameengine.type.GameKeyCode;
+
+import com.google.gwt.event.dom.client.KeyCodes;
 
 class GWTKeyCodeTranslator {
 

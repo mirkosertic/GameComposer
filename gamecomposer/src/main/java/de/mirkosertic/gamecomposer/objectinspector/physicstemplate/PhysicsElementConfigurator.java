@@ -10,12 +10,12 @@ import de.mirkosertic.gameengine.physic.Physics;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
-import org.controlsfx.control.PropertySheet;
 
-import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import javax.inject.Inject;
+import org.controlsfx.control.PropertySheet;
 
 @ObjectInspectorElementConfiguratorType(clazz = Physics.class)
 public class PhysicsElementConfigurator implements ObjectInspectorElementConfigurator<Physics> {

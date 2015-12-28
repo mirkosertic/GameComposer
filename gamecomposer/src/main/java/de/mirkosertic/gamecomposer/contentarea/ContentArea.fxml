@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.paint.*?>
-
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
 <StackPane id="StackPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-1.0" minWidth="-1.0" prefHeight="186.0" prefWidth="275.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="de.mirkosertic.gamecomposer.contentarea.ContentAreaController">
   <children>
     <TabPane id="editorAreaTabbedPane" fx:id="editorTabPane" disable="false" prefHeight="-1.0" prefWidth="-1.0" rotateGraphic="false" side="TOP" tabClosingPolicy="SELECTED_TAB" visible="true">

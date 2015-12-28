@@ -4,14 +4,13 @@ import de.mirkosertic.gamecomposer.FXMLLoaderFactory;
 import de.mirkosertic.gamecomposer.contentarea.ContentAreaFactory;
 import de.mirkosertic.gamecomposer.contentarea.ContentAreaFactoryType;
 import de.mirkosertic.gameengine.core.EventSheet;
-
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.BorderPane;
 
-import javax.inject.Inject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ResourceBundle;
+import javax.inject.Inject;
 
 @ContentAreaFactoryType(clazz = EventSheet.class)
 public class EventSheetEditorControllerFactory implements ContentAreaFactory<EventSheet, EventSheetEditorController> {

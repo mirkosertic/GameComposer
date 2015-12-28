@@ -1,13 +1,16 @@
 package de.mirkosertic.gameengine.javafx;
 
 import de.mirkosertic.gameengine.camera.CameraBehavior;
-import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.core.GameLoop;
+import de.mirkosertic.gameengine.core.GameObjectInstance;
+import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.GestureDetector;
 import de.mirkosertic.gameengine.generic.GenericAbstractGameView;
 import de.mirkosertic.gameengine.type.Angle;
 import de.mirkosertic.gameengine.type.EffectCanvas;
 import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Size;
-
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;

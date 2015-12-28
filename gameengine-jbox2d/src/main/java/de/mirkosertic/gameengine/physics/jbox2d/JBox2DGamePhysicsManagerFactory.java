@@ -5,7 +5,11 @@ import de.mirkosertic.gameengine.core.GameObjectInstanceAddedToScene;
 import de.mirkosertic.gameengine.core.GameObjectInstanceRemovedFromScene;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.GameEventManager;
-import de.mirkosertic.gameengine.physic.*;
+import de.mirkosertic.gameengine.physic.ApplyForceToGameObjectInstance;
+import de.mirkosertic.gameengine.physic.ApplyImpulseToGameObjectInstance;
+import de.mirkosertic.gameengine.physic.DisableDynamicPhysics;
+import de.mirkosertic.gameengine.physic.EnableDynamicPhysics;
+import de.mirkosertic.gameengine.physic.GamePhysicsManagerFactory;
 
 public class JBox2DGamePhysicsManagerFactory implements GamePhysicsManagerFactory {
 

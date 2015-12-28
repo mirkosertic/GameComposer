@@ -1,5 +1,26 @@
 package de.mirkosertic.gameengine.gwt;
 
+import de.mirkosertic.gameengine.camera.CameraBehavior;
+import de.mirkosertic.gameengine.camera.SetScreenResolution;
+import de.mirkosertic.gameengine.core.Game;
+import de.mirkosertic.gameengine.core.GameLoop;
+import de.mirkosertic.gameengine.core.GameLoopFactory;
+import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.GameView;
+import de.mirkosertic.gameengine.core.GestureDetector;
+import de.mirkosertic.gameengine.core.PlaySceneStrategy;
+import de.mirkosertic.gameengine.generic.GenericAbstractGameView;
+import de.mirkosertic.gameengine.network.NetworkConnector;
+import de.mirkosertic.gameengine.type.GameKeyCode;
+import de.mirkosertic.gameengine.type.Position;
+import de.mirkosertic.gameengine.type.Size;
+import de.mirkosertic.gameengine.type.TouchIdentifier;
+import de.mirkosertic.gameengine.type.TouchPosition;
+import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import com.google.gwt.animation.client.AnimationScheduler;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.core.client.EntryPoint;
@@ -29,22 +50,6 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
-
-import de.mirkosertic.gameengine.camera.CameraBehavior;
-import de.mirkosertic.gameengine.core.*;
-import de.mirkosertic.gameengine.generic.GenericAbstractGameView;
-import de.mirkosertic.gameengine.network.NetworkConnector;
-import de.mirkosertic.gameengine.type.GameKeyCode;
-import de.mirkosertic.gameengine.camera.SetScreenResolution;
-import de.mirkosertic.gameengine.type.Position;
-import de.mirkosertic.gameengine.type.TouchIdentifier;
-import de.mirkosertic.gameengine.type.TouchPosition;
-import de.mirkosertic.gameengine.type.Size;
-
-import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class GWTRenderer implements EntryPoint {
 

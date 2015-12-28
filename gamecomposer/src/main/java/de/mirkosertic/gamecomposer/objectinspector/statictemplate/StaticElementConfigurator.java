@@ -8,11 +8,11 @@ import de.mirkosertic.gameengine.physic.Static;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
-import org.controlsfx.control.PropertySheet;
 
-import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import javax.inject.Inject;
+import org.controlsfx.control.PropertySheet;
 
 @ObjectInspectorElementConfiguratorType(clazz = Static.class)
 public class StaticElementConfigurator implements ObjectInspectorElementConfigurator<Static> {

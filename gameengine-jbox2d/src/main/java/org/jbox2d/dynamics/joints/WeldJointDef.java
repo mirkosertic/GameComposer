@@ -22,10 +22,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  ******************************************************************************/
 package org.jbox2d.dynamics.joints;
+
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
-import org.jbox2d.dynamics.joints.JointDef;
-import org.jbox2d.dynamics.joints.JointType;
 
 /**
  * Created at 3:38:52 AM Jan 15, 2011

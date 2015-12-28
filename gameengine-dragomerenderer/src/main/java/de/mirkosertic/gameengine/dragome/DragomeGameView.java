@@ -1,10 +1,5 @@
 package de.mirkosertic.gameengine.dragome;
 
-import com.dragome.web.enhancers.jsdelegate.JsDelegateFactory;
-import com.dragome.web.html.dom.html5canvas.interfaces.CanvasImageSource;
-import com.dragome.web.html.dom.html5canvas.interfaces.CanvasRenderingContext2D;
-import com.dragome.web.html.dom.html5canvas.interfaces.HTMLCanvasElement;
-
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
@@ -18,6 +13,11 @@ import de.mirkosertic.gameengine.type.EffectCanvas;
 import de.mirkosertic.gameengine.type.Font;
 import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Size;
+
+import com.dragome.web.enhancers.jsdelegate.JsDelegateFactory;
+import com.dragome.web.html.dom.html5canvas.interfaces.CanvasImageSource;
+import com.dragome.web.html.dom.html5canvas.interfaces.CanvasRenderingContext2D;
+import com.dragome.web.html.dom.html5canvas.interfaces.HTMLCanvasElement;
 
 class DragomeGameView extends GenericAbstractGameView<DragomeGameResource> {
 

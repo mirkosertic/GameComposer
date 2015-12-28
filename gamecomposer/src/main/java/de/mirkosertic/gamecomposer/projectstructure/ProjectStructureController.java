@@ -1,20 +1,44 @@
 package de.mirkosertic.gamecomposer.projectstructure;
 
-import de.mirkosertic.gamecomposer.*;
-import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gamecomposer.ApplicationStartedEvent;
+import de.mirkosertic.gamecomposer.Controller;
+import de.mirkosertic.gamecomposer.EventSheetSelectedEvent;
+import de.mirkosertic.gamecomposer.GameLoadedEvent;
+import de.mirkosertic.gamecomposer.GameSceneCreatedEvent;
+import de.mirkosertic.gamecomposer.GameSceneDeletedEvent;
+import de.mirkosertic.gamecomposer.GameSceneSelectedEvent;
+import de.mirkosertic.gamecomposer.MessageBox;
+import de.mirkosertic.gamecomposer.NewGameEvent;
+import de.mirkosertic.gamecomposer.NewGameSceneEvent;
+import de.mirkosertic.gamecomposer.ObjectSelectedEvent;
+import de.mirkosertic.gamecomposer.PersistenceManager;
+import de.mirkosertic.gameengine.core.EventSheet;
+import de.mirkosertic.gameengine.core.EventSheetAddedToScene;
+import de.mirkosertic.gameengine.core.EventSheetRemovedFromScene;
+import de.mirkosertic.gameengine.core.Game;
+import de.mirkosertic.gameengine.core.GameObject;
+import de.mirkosertic.gameengine.core.GameObjectAddedToScene;
+import de.mirkosertic.gameengine.core.GameObjectInstance;
+import de.mirkosertic.gameengine.core.GameObjectInstanceAddedToScene;
+import de.mirkosertic.gameengine.core.GameObjectInstanceRemovedFromScene;
+import de.mirkosertic.gameengine.core.GameObjectRemovedFromScene;
+import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.event.PropertyChanged;
-
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.input.MouseEvent;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.*;
 
 @Singleton
 public class ProjectStructureController implements Controller {

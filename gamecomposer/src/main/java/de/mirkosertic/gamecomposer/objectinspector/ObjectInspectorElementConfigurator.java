@@ -1,8 +1,7 @@
 package de.mirkosertic.gamecomposer.objectinspector;
 
-import org.controlsfx.control.PropertySheet;
-
 import java.util.List;
+import org.controlsfx.control.PropertySheet;
 
 public interface ObjectInspectorElementConfigurator<T> {
 

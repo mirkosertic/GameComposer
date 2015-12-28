@@ -1,7 +1,7 @@
 package de.mirkosertic.gamecomposer;
 
-import de.mirkosertic.gameengine.type.ResourceName;
 import de.mirkosertic.gameengine.javafx.JavaFXAbstractGameResourceLoader;
+import de.mirkosertic.gameengine.type.ResourceName;
 
 import java.io.File;
 import java.io.FileInputStream;

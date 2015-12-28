@@ -4,11 +4,10 @@ import de.mirkosertic.gameengine.AbstractGameRuntimeFactory;
 import de.mirkosertic.gameengine.core.Game;
 import de.mirkosertic.gameengine.core.GameScene;
 
+import java.util.Map;
 import org.teavm.jso.ajax.ReadyStateChangeHandler;
 import org.teavm.jso.ajax.XMLHttpRequest;
 import org.teavm.jso.json.JSON;
-
-import java.util.Map;
 
 public class TeaVMGameSceneLoader {
 

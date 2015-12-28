@@ -4,7 +4,6 @@ import de.mirkosertic.gamecomposer.contentarea.eventsheet.ActionController;
 import de.mirkosertic.gameengine.core.GameRule;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.script.RunScriptAction;
-
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 

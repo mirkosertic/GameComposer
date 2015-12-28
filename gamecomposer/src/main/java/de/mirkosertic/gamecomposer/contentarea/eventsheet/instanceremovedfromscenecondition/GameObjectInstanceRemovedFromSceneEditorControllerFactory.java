@@ -8,10 +8,10 @@ import de.mirkosertic.gameengine.core.GameScene;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.BorderPane;
 
-import javax.inject.Inject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ResourceBundle;
+import javax.inject.Inject;
 
 @ConditionEditorType(clazz = GameObjectInstanceRemovedFromSceneCondition.class)
 public class GameObjectInstanceRemovedFromSceneEditorControllerFactory implements ConditionControllerFactory<GameObjectInstanceRemovedFromSceneEditorController, GameObjectInstanceRemovedFromSceneCondition> {

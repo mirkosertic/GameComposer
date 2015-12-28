@@ -1,5 +1,6 @@
 package de.mirkosertic.gameengine.camera;
 
+import de.mirkosertic.gameengine.Callback;
 import de.mirkosertic.gameengine.core.Behavior;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
@@ -26,9 +27,9 @@ public class CameraBehavior implements Behavior, Camera, Reflectable<CameraClass
 
     private final GameObjectInstance objectInstance;
     private final Property<CameraType> type;
+    private final GameScene scene;
 
     private Size screenSize;
-    private final GameScene gameScene;
 
     CameraBehavior(GameObjectInstance aObjectInstance) {
         this(aObjectInstance, aObjectInstance.getOwnerGameObject().getBehaviorTemplate(CameraBehaviorTemplate.class));
@@ -36,10 +37,9 @@ public class CameraBehavior implements Behavior, Camera, Reflectable<CameraClass
 
     CameraBehavior(GameObjectInstance aObjectInstance, CameraBehaviorTemplate aTemplate) {
         objectInstance = aObjectInstance;
+        scene = objectInstance.getOwnerGameObject().getGameScene();
 
         GameEventManager theEventManager = aObjectInstance.getOwnerGameObject().getGameScene().getRuntime().getEventManager();
-
-        gameScene = aTemplate.getOwner().getGameScene();
 
         type = new Property<>(CameraType.class, this, TYPE_PROPERTY, aTemplate.typeProperty().get(), theEventManager);
     }
@@ -87,14 +87,14 @@ public class CameraBehavior implements Behavior, Camera, Reflectable<CameraClass
         }
     }
 
-    public List<GameObjectInstance> getObjectsToDrawInRightOrder() {
-        // TODO: Implement Z-Ordering here
-        List<GameObjectInstance> theResult = new ArrayList<>();
+    public int processVisibleInstances(Callback<GameObjectInstance> aCallback) {
+
+        int theCounter = 0;
 
         Size theScreenSize = getScreenSize();
         if (theScreenSize != null) {
             Position theCameraPosition = objectInstance.positionProperty().get();
-            for (GameObjectInstance theInstance : gameScene.getInstances()) {
+            for (GameObjectInstance theInstance : scene.getInstances()) {
                 if (theInstance == objectInstance) {
                     // The camera object itself does not need to be drawn
                     continue;
@@ -103,7 +103,8 @@ public class CameraBehavior implements Behavior, Camera, Reflectable<CameraClass
                 if (theInstance.visibleProperty().get()) {
                     //TODO: Optimize position handling here
                     if (theInstance.absolutePositionProperty().get()) {
-                        theResult.add(theInstance);
+                        aCallback.process(theInstance);
+                        theCounter++;
                     } else {
                         Position theInstancePosition = theInstance.positionProperty().get();
                         Size theSize = theInstance.getOwnerGameObject().sizeProperty().get();
@@ -111,13 +112,15 @@ public class CameraBehavior implements Behavior, Camera, Reflectable<CameraClass
                                 && theInstancePosition.x <= theCameraPosition.x + theScreenSize.width
                                 && theInstancePosition.y + theSize.height >= theCameraPosition.y
                                 && theInstancePosition.y <= theCameraPosition.y + theScreenSize.height) {
-                            theResult.add(theInstance);
+                            aCallback.process(theInstance);
+                            theCounter++;
                         }
                     }
                 }
             }
         }
-        return theResult;
+
+        return theCounter;
     }
 
     public Position transformToScreenPosition(GameObjectInstance aInstance) {
@@ -205,13 +208,17 @@ public class CameraBehavior implements Behavior, Camera, Reflectable<CameraClass
     }
 
     public GameObjectInstance[] findInstancesAt(Position aScreenPosition) {
-        List<GameObjectInstance> theInstances = new ArrayList<>();
-        Position thePositionInGame = transformFromScreen(aScreenPosition);
-        for (GameObjectInstance theInstance : getObjectsToDrawInRightOrder()) {
-            if (theInstance.contains(thePositionInGame)) {
-                theInstances.add(theInstance);
+        final List<GameObjectInstance> theInstances = new ArrayList<>();
+        final Position thePositionInGame = transformFromScreen(aScreenPosition);
+
+        processVisibleInstances(new Callback<GameObjectInstance>() {
+            @Override
+            public void process(GameObjectInstance aValue) {
+                if (aValue.contains(thePositionInGame)) {
+                    theInstances.add(aValue);
+                }
             }
-        }
+        });
         return theInstances.toArray(new GameObjectInstance[theInstances.size()]);
     }
 }

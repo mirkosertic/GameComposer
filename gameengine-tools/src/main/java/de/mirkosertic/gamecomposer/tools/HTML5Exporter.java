@@ -17,7 +17,6 @@ public class HTML5Exporter implements Exporter {
         resourceName = aResourceName;
     }
 
-    @Override
     public void export(File aGameDirectory, File aTargetDirectory, Callback aStatus) throws IOException {
         InputStream theStream = getClass().getResourceAsStream(resourceName);
         ZipInputStream theZipStream = new ZipInputStream(theStream);

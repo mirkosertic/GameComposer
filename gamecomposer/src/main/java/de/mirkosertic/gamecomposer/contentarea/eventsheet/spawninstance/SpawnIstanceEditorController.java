@@ -13,10 +13,10 @@ import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
-import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import javax.inject.Inject;
 
 public class SpawnIstanceEditorController implements ActionController {
 

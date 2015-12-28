@@ -8,10 +8,10 @@ import de.mirkosertic.gameengine.core.SceneStartedCondition;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.BorderPane;
 
-import javax.inject.Inject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ResourceBundle;
+import javax.inject.Inject;
 
 @ConditionEditorType(clazz = SceneStartedCondition.class)
 public class SceneStartedConditionEditorControllerFactory implements ConditionControllerFactory<SceneStartedConditionEditorController, SceneStartedCondition> {

@@ -26,7 +26,6 @@ package org.jbox2d.collision.shapes;
 import org.jbox2d.collision.AABB;
 import org.jbox2d.collision.RayCastInput;
 import org.jbox2d.collision.RayCastOutput;
-
 import org.jbox2d.common.MathUtils;
 import org.jbox2d.common.Rot;
 import org.jbox2d.common.Settings;
@@ -46,7 +45,6 @@ public class CircleShape extends Shape {
     m_radius = 0;
   }
 
-  @Override
   public final Shape clone() {
     CircleShape shape = new CircleShape();
     shape.m_p.x = m_p.x;
@@ -55,7 +53,6 @@ public class CircleShape extends Shape {
     return shape;
   }
 
-  @Override
   public final int getChildCount() {
     return 1;
   }

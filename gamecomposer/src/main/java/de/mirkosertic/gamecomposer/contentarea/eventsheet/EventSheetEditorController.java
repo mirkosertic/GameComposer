@@ -1,14 +1,5 @@
 package de.mirkosertic.gamecomposer.contentarea.eventsheet;
 
-import javafx.fxml.FXML;
-import javafx.scene.Node;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.Tab;
-import javafx.scene.input.KeyEvent;
-
-import javax.inject.Inject;
-
 import de.mirkosertic.gamecomposer.FlushResourceCacheEvent;
 import de.mirkosertic.gamecomposer.ObjectSelectedEvent;
 import de.mirkosertic.gamecomposer.ShutdownEvent;
@@ -16,10 +7,17 @@ import de.mirkosertic.gamecomposer.contentarea.ContentController;
 import de.mirkosertic.gameengine.core.EventSheet;
 import de.mirkosertic.gameengine.core.GameRule;
 import de.mirkosertic.gameengine.event.PropertyChanged;
+import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.Tab;
+import javafx.scene.input.KeyEvent;
 import javafx.util.Callback;
 
 import java.util.HashMap;
 import java.util.Map;
+import javax.inject.Inject;
 
 public class EventSheetEditorController implements ContentController<EventSheet> {
 

@@ -5,7 +5,6 @@ import de.mirkosertic.gamecomposer.PersistenceManager;
 import de.mirkosertic.gamecomposer.StatusEvent;
 import de.mirkosertic.gamecomposer.tools.Exporter;
 import de.mirkosertic.gamecomposer.tools.ExporterFactory;
-
 import javafx.application.Application;
 
 import java.io.File;

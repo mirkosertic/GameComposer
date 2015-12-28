@@ -4,6 +4,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
+
 import org.controlsfx.control.PropertySheet;
 import org.controlsfx.property.editor.PropertyEditor;
 import org.controlsfx.validation.ValidationSupport;

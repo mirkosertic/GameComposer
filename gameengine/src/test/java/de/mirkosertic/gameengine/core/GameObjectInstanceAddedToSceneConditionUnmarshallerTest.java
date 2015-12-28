@@ -1,12 +1,12 @@
 package de.mirkosertic.gameengine.core;
 
-import org.junit.Test;
-
 import java.util.HashMap;
 import java.util.Map;
+import org.junit.Test;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.mock;
 
 public class GameObjectInstanceAddedToSceneConditionUnmarshallerTest {
 

@@ -3,7 +3,6 @@ package de.mirkosertic.gameengine.javafx;
 import de.mirkosertic.gameengine.type.Color;
 import de.mirkosertic.gameengine.type.EffectCanvas;
 import de.mirkosertic.gameengine.type.Position;
-
 import javafx.scene.canvas.GraphicsContext;
 
 public class JavaFXEffectCanvas implements EffectCanvas {

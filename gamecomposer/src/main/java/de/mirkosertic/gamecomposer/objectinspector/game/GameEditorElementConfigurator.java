@@ -2,20 +2,24 @@ package de.mirkosertic.gamecomposer.objectinspector.game;
 
 import de.mirkosertic.gamecomposer.NewGameSceneEvent;
 import de.mirkosertic.gamecomposer.PersistenceManager;
-import de.mirkosertic.gamecomposer.objectinspector.*;
+import de.mirkosertic.gamecomposer.objectinspector.ActionPropertyEditorItem;
+import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorElementConfigurator;
+import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorElementConfiguratorType;
+import de.mirkosertic.gamecomposer.objectinspector.PersistentPropertyEditorItem;
+import de.mirkosertic.gamecomposer.objectinspector.PropertyEditorItem;
 import de.mirkosertic.gamecomposer.objectinspector.utils.ScenePropertyEditor;
 import de.mirkosertic.gamecomposer.objectinspector.utils.StringPropertyEditor;
 import de.mirkosertic.gameengine.core.Game;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import org.controlsfx.control.PropertySheet;
 
-import javax.enterprise.event.Event;
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import javax.enterprise.event.Event;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import org.controlsfx.control.PropertySheet;
 
 @Singleton
 @ObjectInspectorElementConfiguratorType(clazz = Game.class)

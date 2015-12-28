@@ -21,6 +21,7 @@
 ******************************************************************************/
 package org.luaj.vm2.compiler;
 
+import java.util.HashMap;
 import org.luaj.vm2.LocVars;
 import org.luaj.vm2.Lua;
 import org.luaj.vm2.LuaDouble;
@@ -31,8 +32,6 @@ import org.luaj.vm2.Prototype;
 import org.luaj.vm2.Upvaldesc;
 import org.luaj.vm2.compiler.LexState.ConsControl;
 import org.luaj.vm2.compiler.LexState.expdesc;
-
-import java.util.HashMap;
 
 
 public class FuncState extends LuaC {

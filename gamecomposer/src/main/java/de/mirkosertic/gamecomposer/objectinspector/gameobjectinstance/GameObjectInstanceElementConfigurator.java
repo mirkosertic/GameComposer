@@ -5,17 +5,21 @@ import de.mirkosertic.gamecomposer.objectinspector.ActionPropertyEditorItem;
 import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorElementConfigurator;
 import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorElementConfiguratorType;
 import de.mirkosertic.gamecomposer.objectinspector.PropertyEditorItem;
-import de.mirkosertic.gamecomposer.objectinspector.utils.*;
+import de.mirkosertic.gamecomposer.objectinspector.utils.AbsolutePositionAnchorPropertyEditor;
+import de.mirkosertic.gamecomposer.objectinspector.utils.AnglePropertyEditor;
+import de.mirkosertic.gamecomposer.objectinspector.utils.PositionPropertyEditor;
+import de.mirkosertic.gamecomposer.objectinspector.utils.SizePropertyEditor;
+import de.mirkosertic.gamecomposer.objectinspector.utils.StringPropertyEditor;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
-import org.controlsfx.control.PropertySheet;
 
-import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import javax.inject.Inject;
+import org.controlsfx.control.PropertySheet;
 
 @ObjectInspectorElementConfiguratorType(clazz = GameObjectInstance.class)
 public class GameObjectInstanceElementConfigurator implements ObjectInspectorElementConfigurator<GameObjectInstance> {

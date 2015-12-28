@@ -7,16 +7,15 @@ import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorElementConfigu
 import de.mirkosertic.gamecomposer.objectinspector.PropertyEditorItem;
 import de.mirkosertic.gamecomposer.objectinspector.utils.SpeedPropertyEditor;
 import de.mirkosertic.gameengine.arcade.ConstantMovement;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.Node;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Node;
 import org.controlsfx.control.PropertySheet;
 
 @Singleton

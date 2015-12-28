@@ -12,8 +12,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-import javax.inject.Inject;
 import java.io.InputStream;
+import javax.inject.Inject;
 
 public class AnimationEditorDialogFactory {
 

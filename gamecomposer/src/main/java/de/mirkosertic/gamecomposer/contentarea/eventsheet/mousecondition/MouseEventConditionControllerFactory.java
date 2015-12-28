@@ -5,7 +5,6 @@ import de.mirkosertic.gamecomposer.contentarea.eventsheet.ConditionControllerFac
 import de.mirkosertic.gamecomposer.contentarea.eventsheet.ConditionEditorType;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.input.MouseEventCondition;
-
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.BorderPane;
 

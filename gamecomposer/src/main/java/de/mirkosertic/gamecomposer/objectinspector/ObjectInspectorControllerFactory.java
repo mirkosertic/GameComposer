@@ -5,11 +5,11 @@ import de.mirkosertic.gamecomposer.ObjectInspector;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
-import javax.enterprise.inject.Produces;
-import javax.inject.Inject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ResourceBundle;
+import javax.enterprise.inject.Produces;
+import javax.inject.Inject;
 
 public class ObjectInspectorControllerFactory {
 

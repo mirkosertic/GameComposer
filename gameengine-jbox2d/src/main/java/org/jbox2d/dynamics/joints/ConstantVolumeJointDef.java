@@ -24,7 +24,6 @@
 package org.jbox2d.dynamics.joints;
 
 import java.util.ArrayList;
-
 import org.jbox2d.dynamics.Body;
 
 /**
@@ -40,7 +39,7 @@ public class ConstantVolumeJointDef extends JointDef {
 
   public ConstantVolumeJointDef() {
     type = JointType.CONSTANT_VOLUME;
-    bodies = new ArrayList<>();
+    bodies = new ArrayList<Body>();
     joints = null;
     collideConnected = false;
     frequencyHz = 0.0f;
@@ -68,7 +67,7 @@ public class ConstantVolumeJointDef extends JointDef {
   public void addBodyAndJoint(Body argBody, DistanceJoint argJoint) {
     addBody(argBody);
     if (joints == null) {
-      joints = new ArrayList<>();
+      joints = new ArrayList<DistanceJoint>();
     }
     joints.add(argJoint);
   }

@@ -4,6 +4,7 @@ import de.mirkosertic.gamecomposer.objectinspector.PropertyEditorItem;
 import de.mirkosertic.gameengine.type.Color;
 import javafx.scene.Node;
 import javafx.scene.control.ColorPicker;
+
 import org.controlsfx.control.PropertySheet;
 import org.controlsfx.property.editor.PropertyEditor;
 

@@ -14,13 +14,13 @@ import de.mirkosertic.gameengine.starfield.StarfieldGameSceneEffect;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
-import org.controlsfx.control.PropertySheet;
 
-import javax.enterprise.event.Event;
-import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import javax.enterprise.event.Event;
+import javax.inject.Inject;
+import org.controlsfx.control.PropertySheet;
 
 @ObjectInspectorElementConfiguratorType(clazz = StarfieldGameSceneEffect.class)
 public class StarfieldElementConfigurator implements ObjectInspectorElementConfigurator<StarfieldGameSceneEffect> {

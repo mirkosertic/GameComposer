@@ -1,25 +1,28 @@
 package de.mirkosertic.gamecomposer;
 
+import de.mirkosertic.gameengine.core.Game;
+import de.mirkosertic.gameengine.core.GameResourceLoader;
+import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.event.GameEvent;
+import de.mirkosertic.gameengine.event.GameEventListener;
+import de.mirkosertic.gameengine.javafx.JavaSoundAPISoundSystemFactory;
+import de.mirkosertic.gameengine.type.ResourceName;
+
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
-
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
 import org.apache.commons.io.FileUtils;
-
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.ObjectReader;
 import org.codehaus.jackson.map.ObjectWriter;
-
-import de.mirkosertic.gameengine.core.*;
-import de.mirkosertic.gameengine.type.ResourceName;
-import de.mirkosertic.gameengine.event.GameEvent;
-import de.mirkosertic.gameengine.event.GameEventListener;
-import de.mirkosertic.gameengine.javafx.JavaSoundAPISoundSystemFactory;
 
 @Singleton
 public class PersistenceManager {

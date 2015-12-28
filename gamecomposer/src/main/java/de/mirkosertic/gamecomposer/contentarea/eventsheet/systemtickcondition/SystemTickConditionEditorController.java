@@ -4,7 +4,6 @@ import de.mirkosertic.gamecomposer.Controller;
 import de.mirkosertic.gamecomposer.PropertyBinder;
 import de.mirkosertic.gamecomposer.StringConverterFactory;
 import de.mirkosertic.gameengine.action.SystemTickCondition;
-
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;

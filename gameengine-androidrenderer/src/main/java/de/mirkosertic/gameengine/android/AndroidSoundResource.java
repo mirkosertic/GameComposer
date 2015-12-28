@@ -1,7 +1,6 @@
 package de.mirkosertic.gameengine.android;
 
 import android.content.res.AssetFileDescriptor;
-
 import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.core.GameResourceType;
 import de.mirkosertic.gameengine.type.ResourceName;

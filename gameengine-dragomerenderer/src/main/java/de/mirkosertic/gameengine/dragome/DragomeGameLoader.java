@@ -4,10 +4,9 @@ import de.mirkosertic.gameengine.core.Game;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import com.dragome.web.services.RequestExecutorImpl;
 import com.dragome.services.ServiceLocator;
 import com.dragome.services.interfaces.AsyncCallback;
+import com.dragome.web.services.RequestExecutorImpl;
 
 class DragomeGameLoader {
 

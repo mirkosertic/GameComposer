@@ -1,11 +1,29 @@
 package de.mirkosertic.gameengine.physics.jbox2d;
 
-import java.util.*;
-
+import de.mirkosertic.gameengine.core.GameObject;
+import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.event.GameEvent;
+import de.mirkosertic.gameengine.event.GameEventListener;
+import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.PropertyChanged;
-import de.mirkosertic.gameengine.physic.*;
+import de.mirkosertic.gameengine.physic.GameObjectCollision;
+import de.mirkosertic.gameengine.physic.GamePhysicsManager;
+import de.mirkosertic.gameengine.physic.PhysicsBehavior;
+import de.mirkosertic.gameengine.physic.PhysicsBehaviorTemplate;
+import de.mirkosertic.gameengine.physic.PhysicsDebugCanvas;
+import de.mirkosertic.gameengine.physic.PlatformBehavior;
+import de.mirkosertic.gameengine.physic.StaticBehavior;
+import de.mirkosertic.gameengine.type.Angle;
 import de.mirkosertic.gameengine.type.Force;
+import de.mirkosertic.gameengine.type.Position;
+import de.mirkosertic.gameengine.type.Size;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import org.jbox2d.callbacks.ContactImpulse;
 import org.jbox2d.callbacks.ContactListener;
 import org.jbox2d.collision.Manifold;
@@ -20,14 +38,6 @@ import org.jbox2d.dynamics.Fixture;
 import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
 import org.jbox2d.dynamics.contacts.Contact;
-
-import de.mirkosertic.gameengine.core.GameObject;
-import de.mirkosertic.gameengine.core.GameObjectInstance;
-import de.mirkosertic.gameengine.event.GameEventListener;
-import de.mirkosertic.gameengine.event.GameEventManager;
-import de.mirkosertic.gameengine.type.Angle;
-import de.mirkosertic.gameengine.type.Position;
-import de.mirkosertic.gameengine.type.Size;
 
 public class JBox2DGamePhysicsManager implements GamePhysicsManager {
 

@@ -21,9 +21,7 @@
 ******************************************************************************/
 package org.luaj.vm2;
 
-
 import java.io.PrintStream;
-
 import org.luaj.vm2.lib.MathLib;
 import org.luaj.vm2.lib.StringLib;
 

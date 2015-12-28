@@ -3,22 +3,29 @@ package de.mirkosertic.gamecomposer.objectinspector.gamescene;
 import de.mirkosertic.gamecomposer.GameSceneDeletedEvent;
 import de.mirkosertic.gamecomposer.MessageBox;
 import de.mirkosertic.gamecomposer.PersistenceManager;
-import de.mirkosertic.gamecomposer.objectinspector.*;
+import de.mirkosertic.gamecomposer.objectinspector.ActionPropertyEditorItem;
+import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorElementConfigurator;
+import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorElementConfiguratorType;
+import de.mirkosertic.gamecomposer.objectinspector.PersistentPropertyEditorItem;
+import de.mirkosertic.gamecomposer.objectinspector.PropertyEditorItem;
 import de.mirkosertic.gamecomposer.objectinspector.utils.ColorPropertyEditor;
 import de.mirkosertic.gamecomposer.objectinspector.utils.GameObjectPropertyEditor;
 import de.mirkosertic.gamecomposer.objectinspector.utils.StringPropertyEditor;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.core.GameSceneEffect;
 import de.mirkosertic.gameengine.starfield.StarfieldGameSceneEffect;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
-import org.controlsfx.control.PropertySheet;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
-import java.util.*;
+import org.controlsfx.control.PropertySheet;
 
 @ObjectInspectorElementConfiguratorType(clazz = GameScene.class)
 public class GameSceneElementConfigurator implements ObjectInspectorElementConfigurator<GameScene> {

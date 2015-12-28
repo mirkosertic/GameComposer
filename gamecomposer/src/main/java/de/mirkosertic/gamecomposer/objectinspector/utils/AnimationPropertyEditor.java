@@ -3,7 +3,6 @@ package de.mirkosertic.gamecomposer.objectinspector.utils;
 import de.mirkosertic.gamecomposer.objectinspector.PersistentPropertyEditorItem;
 import de.mirkosertic.gameengine.sprite.Sprite;
 import de.mirkosertic.gameengine.type.Animation;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;

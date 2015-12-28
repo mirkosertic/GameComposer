@@ -8,6 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+
 import org.controlsfx.control.PropertySheet;
 import org.controlsfx.property.editor.PropertyEditor;
 import org.controlsfx.validation.ValidationSupport;

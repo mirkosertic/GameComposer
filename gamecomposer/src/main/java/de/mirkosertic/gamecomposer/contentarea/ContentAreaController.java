@@ -1,24 +1,30 @@
 package de.mirkosertic.gamecomposer.contentarea;
 
-import de.mirkosertic.gamecomposer.*;
+import de.mirkosertic.gamecomposer.ApplicationStartedEvent;
+import de.mirkosertic.gamecomposer.Controller;
+import de.mirkosertic.gamecomposer.EventSheetSelectedEvent;
+import de.mirkosertic.gamecomposer.FlushResourceCacheEvent;
+import de.mirkosertic.gamecomposer.GameSceneSelectedEvent;
+import de.mirkosertic.gamecomposer.NewGameEvent;
+import de.mirkosertic.gamecomposer.ObjectSelectedEvent;
+import de.mirkosertic.gamecomposer.ShutdownEvent;
 import de.mirkosertic.gameengine.core.EventSheet;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.event.PropertyChanged;
-
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
 
+import java.lang.annotation.Annotation;
+import java.util.HashMap;
+import java.util.Map;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.lang.annotation.Annotation;
-import java.util.HashMap;
-import java.util.Map;
 
 @Singleton
 public class ContentAreaController implements Controller {

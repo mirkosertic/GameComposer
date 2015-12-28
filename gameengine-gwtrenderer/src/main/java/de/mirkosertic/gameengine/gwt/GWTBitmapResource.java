@@ -1,11 +1,12 @@
 package de.mirkosertic.gameengine.gwt;
 
+import de.mirkosertic.gameengine.core.GameResource;
+import de.mirkosertic.gameengine.core.GameResourceType;
+
 import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;
 import com.google.gwt.user.client.ui.Image;
-import de.mirkosertic.gameengine.core.GameResource;
-import de.mirkosertic.gameengine.core.GameResourceType;
 
 public class GWTBitmapResource implements GameResource {
 

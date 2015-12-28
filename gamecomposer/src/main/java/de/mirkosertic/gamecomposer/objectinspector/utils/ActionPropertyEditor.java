@@ -5,10 +5,10 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.layout.VBox;
-import org.controlsfx.control.PropertySheet;
-import org.controlsfx.property.editor.PropertyEditor;
 
 import java.util.function.Consumer;
+import org.controlsfx.control.PropertySheet;
+import org.controlsfx.property.editor.PropertyEditor;
 
 public class ActionPropertyEditor implements PropertyEditor<Object> {
 
