@@ -1,9 +1,7 @@
 package de.mirkosertic.gameengine.android;
 
 import android.content.res.AssetManager;
-
 import de.mirkosertic.gameengine.core.GameRuntime;
-
 import de.mirkosertic.gameengine.sound.GameSoundSystem;
 import de.mirkosertic.gameengine.sound.GameSoundSystemFactory;
 

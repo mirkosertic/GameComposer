@@ -1,11 +1,26 @@
 package de.mirkosertic.gamecomposer.contentarea.gamescene;
 
-import de.mirkosertic.gamecomposer.*;
+import de.mirkosertic.gamecomposer.FlushResourceCacheEvent;
+import de.mirkosertic.gamecomposer.GameObjectClipboardContent;
+import de.mirkosertic.gamecomposer.ObjectSelectedEvent;
+import de.mirkosertic.gamecomposer.PersistenceManager;
+import de.mirkosertic.gamecomposer.ShutdownEvent;
 import de.mirkosertic.gamecomposer.contentarea.ContentController;
+import de.mirkosertic.gameengine.Callback;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
-import de.mirkosertic.gameengine.core.*;
-import de.mirkosertic.gameengine.event.*;
+import de.mirkosertic.gameengine.core.GameLoop;
+import de.mirkosertic.gameengine.core.GameLoopFactory;
+import de.mirkosertic.gameengine.core.GameObject;
+import de.mirkosertic.gameengine.core.GameObjectInstance;
+import de.mirkosertic.gameengine.core.GameObjectInstanceAddedToScene;
+import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.SceneShutdown;
+import de.mirkosertic.gameengine.event.GameEventListener;
+import de.mirkosertic.gameengine.event.GameEventManager;
+import de.mirkosertic.gameengine.event.PropertyChanged;
+import de.mirkosertic.gameengine.event.SystemException;
 import de.mirkosertic.gameengine.input.DefaultGestureDetector;
 import de.mirkosertic.gameengine.javafx.JavaFXGameView;
 import de.mirkosertic.gameengine.network.DefaultEventInterpreter;
@@ -29,14 +44,18 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
-import javafx.scene.input.*;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
+import java.util.List;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
-import java.util.List;
 
 public class GameSceneEditorController implements ContentController<GameScene> {
 
@@ -311,11 +330,14 @@ public class GameSceneEditorController implements ContentController<GameScene> {
 
     void onMouseClicked(MouseEvent aEvent) {
         Position theClickPosition = new Position(aEvent.getX(), aEvent.getY());
-        for (GameObjectInstance theInstance : cameraComponent.getObjectsToDrawInRightOrder()) {
-            if (theInstance.contains(theClickPosition)) {
-                objectSelectedEventEvent.fire(new ObjectSelectedEvent(theInstance));
+        cameraComponent.processVisibleInstances(new Callback<GameObjectInstance>() {
+            @Override
+            public void process(GameObjectInstance aValue) {
+                if (aValue.contains(theClickPosition)) {
+                    objectSelectedEventEvent.fire(new ObjectSelectedEvent(aValue));
+                }
             }
-        }
+        });
     }
 
     @Override

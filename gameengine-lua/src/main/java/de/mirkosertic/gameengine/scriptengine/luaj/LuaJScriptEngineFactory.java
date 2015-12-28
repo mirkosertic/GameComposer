@@ -1,7 +1,6 @@
 package de.mirkosertic.gameengine.scriptengine.luaj;
 
 import de.mirkosertic.gameengine.scriptengine.LUAScriptEngineFactory;
-
 import de.mirkosertic.gameengine.type.KeyValueObjectCache;
 import de.mirkosertic.gameengine.type.Reflectable;
 import de.mirkosertic.gameengine.type.Script;
@@ -11,7 +10,6 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LuaClosure;
 import org.luaj.vm2.Prototype;

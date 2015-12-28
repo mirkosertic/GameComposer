@@ -12,12 +12,12 @@ import de.mirkosertic.gameengine.sprite.Sprite;
 import de.mirkosertic.gameengine.sprite.SpriteBehaviorTemplate;
 import de.mirkosertic.gameengine.type.Animation;
 import javafx.scene.Node;
-import org.controlsfx.control.PropertySheet;
 
-import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import javax.inject.Inject;
+import org.controlsfx.control.PropertySheet;
 
 @ObjectInspectorElementConfiguratorType(clazz = Sprite.class)
 public class SpriteElementConfigurator implements ObjectInspectorElementConfigurator<Sprite> {

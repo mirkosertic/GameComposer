@@ -3,7 +3,7 @@ package de.mirkosertic.gameengine;
 import java.util.List;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class ArrayUtilsTest {
 

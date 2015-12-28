@@ -4,7 +4,6 @@ import de.mirkosertic.gameengine.core.GameResourceLoader;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.javafx.JavaFXBitmapResource;
 import de.mirkosertic.gameengine.type.Animation;
-
 import javafx.scene.Node;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.image.ImageView;

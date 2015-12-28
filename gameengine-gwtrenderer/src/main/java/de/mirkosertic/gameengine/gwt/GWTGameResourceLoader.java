@@ -1,14 +1,13 @@
 package de.mirkosertic.gameengine.gwt;
 
-import java.io.IOException;
-
-import com.google.gwt.media.client.Audio;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.RootPanel;
-
 import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.core.GameResourceLoader;
 import de.mirkosertic.gameengine.type.ResourceName;
+
+import java.io.IOException;
+import com.google.gwt.media.client.Audio;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.RootPanel;
 
 public class GWTGameResourceLoader implements GameResourceLoader {
 

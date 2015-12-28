@@ -13,12 +13,12 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.util.prefs.Preferences;
 import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.io.File;
-import java.util.prefs.Preferences;
 
 @Singleton
 public class GameComposerController {

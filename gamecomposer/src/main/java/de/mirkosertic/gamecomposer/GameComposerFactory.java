@@ -8,15 +8,16 @@ import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-//import org.scenicview.ScenicView;
 
-import javax.enterprise.inject.Any;
-import javax.enterprise.inject.Produces;
-import javax.inject.Inject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Produces;
+import javax.inject.Inject;
+
+//import org.scenicview.ScenicView;
 
 public class GameComposerFactory {
 

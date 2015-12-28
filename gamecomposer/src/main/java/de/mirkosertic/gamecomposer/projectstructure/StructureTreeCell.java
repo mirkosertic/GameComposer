@@ -1,8 +1,16 @@
 package de.mirkosertic.gamecomposer.projectstructure;
 
 import de.mirkosertic.gamecomposer.GameObjectClipboardContent;
-import de.mirkosertic.gameengine.core.*;
-import javafx.scene.control.*;
+import de.mirkosertic.gameengine.core.EventSheet;
+import de.mirkosertic.gameengine.core.Game;
+import de.mirkosertic.gameengine.core.GameObject;
+import de.mirkosertic.gameengine.core.GameObjectInstance;
+import de.mirkosertic.gameengine.core.GameScene;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TreeCell;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;

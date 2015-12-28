@@ -2,8 +2,8 @@ package de.mirkosertic.gameengine.physic;
 
 import de.mirkosertic.gameengine.annotations.ReflectiveField;
 import de.mirkosertic.gameengine.annotations.ReflectiveMethod;
-import de.mirkosertic.gameengine.type.GameKeyCode;
 import de.mirkosertic.gameengine.event.Property;
+import de.mirkosertic.gameengine.type.GameKeyCode;
 
 public interface Platform {
 

@@ -5,14 +5,13 @@ import de.mirkosertic.gamecomposer.contentarea.eventsheet.ConditionControllerFac
 import de.mirkosertic.gamecomposer.contentarea.eventsheet.ConditionEditorType;
 import de.mirkosertic.gameengine.core.GameObjectInstanceLeftLayoutCondition;
 import de.mirkosertic.gameengine.core.GameScene;
-
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.BorderPane;
 
-import javax.inject.Inject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ResourceBundle;
+import javax.inject.Inject;
 
 @ConditionEditorType(clazz = GameObjectInstanceLeftLayoutCondition.class)
 public class GameObjectInstanceLeftLayoutEditorControllerFactory implements ConditionControllerFactory<GameObjectInstanceLeftLayoutEditorController, GameObjectInstanceLeftLayoutCondition> {

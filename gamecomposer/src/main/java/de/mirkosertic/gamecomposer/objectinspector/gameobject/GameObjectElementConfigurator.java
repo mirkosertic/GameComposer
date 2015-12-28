@@ -19,12 +19,12 @@ import de.mirkosertic.gameengine.text.TextBehaviorTemplate;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
-import org.controlsfx.control.PropertySheet;
 
-import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import javax.inject.Inject;
+import org.controlsfx.control.PropertySheet;
 
 @ObjectInspectorElementConfiguratorType(clazz = GameObject.class)
 public class GameObjectElementConfigurator implements ObjectInspectorElementConfigurator<GameObject> {

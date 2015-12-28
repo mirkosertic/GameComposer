@@ -6,7 +6,13 @@ import de.mirkosertic.gamecomposer.contentarea.ContentAreaFactory;
 import de.mirkosertic.gamecomposer.contentarea.ContentAreaFactoryType;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
-import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.core.GameLoop;
+import de.mirkosertic.gameengine.core.GameLoopFactory;
+import de.mirkosertic.gameengine.core.GameObject;
+import de.mirkosertic.gameengine.core.GameObjectInstance;
+import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.GameSystem;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.input.DefaultGestureDetector;
 import de.mirkosertic.gameengine.physic.GamePhysicsManager;
@@ -14,11 +20,11 @@ import de.mirkosertic.gameengine.type.Size;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.BorderPane;
 
-import javax.enterprise.event.Event;
-import javax.inject.Inject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ResourceBundle;
+import javax.enterprise.event.Event;
+import javax.inject.Inject;
 
 @ContentAreaFactoryType(clazz = GameScene.class)
 public class GameSceneEditorControllerFactory implements ContentAreaFactory<GameScene, GameSceneEditorController> {

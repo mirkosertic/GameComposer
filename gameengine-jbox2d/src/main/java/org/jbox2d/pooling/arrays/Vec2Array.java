@@ -24,7 +24,6 @@
 package org.jbox2d.pooling.arrays;
 
 import java.util.HashMap;
-
 import org.jbox2d.common.Vec2;
 
 /**
@@ -34,7 +33,7 @@ import org.jbox2d.common.Vec2;
  */
 public class Vec2Array {
 
-	private final HashMap<Integer, Vec2[]> map = new HashMap<>();
+	private final HashMap<Integer, Vec2[]> map = new HashMap<Integer, Vec2[]>();
 	
 	public Vec2[] get( int argLength){
 		assert(argLength > 0);

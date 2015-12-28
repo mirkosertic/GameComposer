@@ -1,8 +1,5 @@
 package java.io;
 
-import java.io.IOException;
-import java.io.Reader;
-
 public class StringReader extends Reader {
 
     private String str;

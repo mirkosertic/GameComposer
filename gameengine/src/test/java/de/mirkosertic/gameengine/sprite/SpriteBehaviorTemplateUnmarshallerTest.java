@@ -4,10 +4,10 @@ import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.type.Animation;
 import de.mirkosertic.gameengine.type.ResourceName;
-import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;

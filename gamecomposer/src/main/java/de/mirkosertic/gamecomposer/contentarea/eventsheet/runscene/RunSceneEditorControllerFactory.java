@@ -4,15 +4,15 @@ import de.mirkosertic.gamecomposer.FXMLLoaderFactory;
 import de.mirkosertic.gamecomposer.contentarea.eventsheet.ActionControllerFactory;
 import de.mirkosertic.gamecomposer.contentarea.eventsheet.ActionEditorType;
 import de.mirkosertic.gameengine.core.GameRule;
-import de.mirkosertic.gameengine.core.RunSceneAction;
 import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.RunSceneAction;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.BorderPane;
 
-import javax.inject.Inject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ResourceBundle;
+import javax.inject.Inject;
 
 @ActionEditorType(clazz = RunSceneAction.class)
 public class RunSceneEditorControllerFactory implements ActionControllerFactory<RunSceneEditorController, RunSceneAction> {

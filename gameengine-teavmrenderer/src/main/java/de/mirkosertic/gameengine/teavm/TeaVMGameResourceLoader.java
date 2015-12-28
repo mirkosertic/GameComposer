@@ -5,14 +5,12 @@ import de.mirkosertic.gameengine.core.GameResourceLoader;
 import de.mirkosertic.gameengine.core.GameResourceType;
 import de.mirkosertic.gameengine.type.ResourceName;
 
-import org.teavm.jso.dom.xml.Node;
-import org.teavm.jso.dom.xml.NodeList;
-
+import java.io.IOException;
 import org.teavm.jso.dom.html.HTMLDocument;
 import org.teavm.jso.dom.html.HTMLElement;
 import org.teavm.jso.dom.html.HTMLImageElement;
-
-import java.io.IOException;
+import org.teavm.jso.dom.xml.Node;
+import org.teavm.jso.dom.xml.NodeList;
 
 public class TeaVMGameResourceLoader implements GameResourceLoader {
 

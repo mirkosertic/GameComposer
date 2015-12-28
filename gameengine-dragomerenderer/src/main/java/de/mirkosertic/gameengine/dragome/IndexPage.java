@@ -1,25 +1,31 @@
 package de.mirkosertic.gameengine.dragome;
 
-import com.dragome.web.html.dom.w3c.BrowserDomHandler;
+import de.mirkosertic.gameengine.camera.CameraBehavior;
+import de.mirkosertic.gameengine.camera.SetScreenResolution;
+import de.mirkosertic.gameengine.core.Game;
+import de.mirkosertic.gameengine.core.GameLoop;
+import de.mirkosertic.gameengine.core.GameLoopFactory;
+import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.GameView;
+import de.mirkosertic.gameengine.core.GestureDetector;
+import de.mirkosertic.gameengine.core.PlaySceneStrategy;
+import de.mirkosertic.gameengine.event.SystemException;
+import de.mirkosertic.gameengine.network.NetworkConnector;
+import de.mirkosertic.gameengine.type.GameKeyCode;
+import de.mirkosertic.gameengine.type.Position;
+import de.mirkosertic.gameengine.type.Size;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.events.Event;
 import org.w3c.dom.events.EventListener;
 import org.w3c.dom.events.KeyboardEvent;
 import org.w3c.dom.events.MouseEvent;
-
+import com.dragome.view.DefaultVisualActivity;
 import com.dragome.web.annotations.PageAlias;
 import com.dragome.web.enhancers.jsdelegate.JsDelegateFactory;
 import com.dragome.web.html.dom.html5canvas.interfaces.HTMLCanvasElement;
-import com.dragome.view.DefaultVisualActivity;
-
-import de.mirkosertic.gameengine.core.*;
-import de.mirkosertic.gameengine.event.SystemException;
-import de.mirkosertic.gameengine.network.NetworkConnector;
-import de.mirkosertic.gameengine.camera.CameraBehavior;
-import de.mirkosertic.gameengine.camera.SetScreenResolution;
-import de.mirkosertic.gameengine.type.GameKeyCode;
-import de.mirkosertic.gameengine.type.Position;
-import de.mirkosertic.gameengine.type.Size;
+import com.dragome.web.html.dom.w3c.BrowserDomHandler;
 
 @PageAlias(alias= "index")
 public class IndexPage extends DefaultVisualActivity {

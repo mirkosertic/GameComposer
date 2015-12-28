@@ -8,17 +8,15 @@ import de.mirkosertic.gamecomposer.objectinspector.PropertyEditorItem;
 import de.mirkosertic.gamecomposer.objectinspector.utils.FloatPropertyEditor;
 import de.mirkosertic.gamecomposer.objectinspector.utils.GameKeyCodePropertyEditor;
 import de.mirkosertic.gameengine.physic.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.Node;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Node;
-import org.controlsfx.control.PropertySheet;
-
 import javax.inject.Inject;
+import org.controlsfx.control.PropertySheet;
 
 @ObjectInspectorElementConfiguratorType(clazz = Platform.class)
 public class PlatformElementConfigurator implements ObjectInspectorElementConfigurator<Platform> {

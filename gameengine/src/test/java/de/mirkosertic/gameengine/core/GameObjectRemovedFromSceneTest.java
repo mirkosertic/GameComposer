@@ -1,9 +1,10 @@
 package de.mirkosertic.gameengine.core;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
-
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+import static org.mockito.Mockito.mock;
 
 public class GameObjectRemovedFromSceneTest {
 

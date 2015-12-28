@@ -1,6 +1,11 @@
 package de.mirkosertic.gameengine.input;
 
-import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.core.Condition;
+import de.mirkosertic.gameengine.core.ConditionResult;
+import de.mirkosertic.gameengine.core.GameObject;
+import de.mirkosertic.gameengine.core.GameObjectInstance;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.UsedByReflection;
 import de.mirkosertic.gameengine.event.GameEvent;
 import de.mirkosertic.gameengine.event.Property;
 

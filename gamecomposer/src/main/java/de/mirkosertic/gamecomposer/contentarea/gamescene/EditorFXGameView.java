@@ -12,7 +12,6 @@ import de.mirkosertic.gameengine.physic.PhysicsDebugCanvas;
 import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Rectangle;
 import de.mirkosertic.gameengine.type.Size;
-
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;

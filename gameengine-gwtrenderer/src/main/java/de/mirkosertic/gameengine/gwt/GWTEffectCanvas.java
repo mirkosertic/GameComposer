@@ -1,11 +1,11 @@
 package de.mirkosertic.gameengine.gwt;
 
-import com.google.gwt.canvas.dom.client.Context2d;
-import com.google.gwt.canvas.dom.client.CssColor;
-
 import de.mirkosertic.gameengine.type.Color;
 import de.mirkosertic.gameengine.type.EffectCanvas;
 import de.mirkosertic.gameengine.type.Position;
+
+import com.google.gwt.canvas.dom.client.Context2d;
+import com.google.gwt.canvas.dom.client.CssColor;
 
 public class GWTEffectCanvas implements EffectCanvas {
 

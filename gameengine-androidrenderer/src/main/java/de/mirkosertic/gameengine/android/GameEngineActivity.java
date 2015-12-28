@@ -6,25 +6,29 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
-
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
-import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.core.Game;
+import de.mirkosertic.gameengine.core.GameLoop;
+import de.mirkosertic.gameengine.core.GameLoopFactory;
+import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.GestureDetector;
+import de.mirkosertic.gameengine.core.PlaySceneStrategy;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.network.NetworkConnector;
 import de.mirkosertic.gameengine.type.Size;
 import de.mirkosertic.gameengine.type.TouchIdentifier;
 import de.mirkosertic.gameengine.type.TouchPosition;
 
-import org.apache.commons.io.IOUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+import org.apache.commons.io.IOUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class GameEngineActivity extends Activity {
 

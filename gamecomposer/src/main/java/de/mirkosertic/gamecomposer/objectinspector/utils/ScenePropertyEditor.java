@@ -5,6 +5,7 @@ import de.mirkosertic.gameengine.core.GameScene;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.util.StringConverter;
+
 import org.controlsfx.control.PropertySheet;
 import org.controlsfx.property.editor.PropertyEditor;
 

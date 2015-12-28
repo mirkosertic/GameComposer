@@ -6,7 +6,12 @@ import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.core.GestureDetector;
 import de.mirkosertic.gameengine.generic.GenericAbstractGameView;
-import de.mirkosertic.gameengine.type.*;
+import de.mirkosertic.gameengine.type.Angle;
+import de.mirkosertic.gameengine.type.Color;
+import de.mirkosertic.gameengine.type.EffectCanvas;
+import de.mirkosertic.gameengine.type.Font;
+import de.mirkosertic.gameengine.type.Position;
+import de.mirkosertic.gameengine.type.Size;
 
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;

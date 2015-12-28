@@ -22,7 +22,6 @@
 package org.luaj.vm2.lib;
 
 import java.util.Random;
-
 import org.luaj.vm2.LuaDouble;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;

@@ -3,16 +3,15 @@ package de.mirkosertic.gamecomposer.contentarea.eventsheet.systemtickcondition;
 import de.mirkosertic.gamecomposer.FXMLLoaderFactory;
 import de.mirkosertic.gamecomposer.contentarea.eventsheet.ConditionControllerFactory;
 import de.mirkosertic.gamecomposer.contentarea.eventsheet.ConditionEditorType;
-import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.action.SystemTickCondition;
-
+import de.mirkosertic.gameengine.core.GameScene;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.BorderPane;
 
-import javax.inject.Inject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ResourceBundle;
+import javax.inject.Inject;
 
 @ConditionEditorType(clazz = SystemTickCondition.class)
 public class SystemTickConditionEditorControllerFactory implements ConditionControllerFactory<SystemTickConditionEditorController, SystemTickCondition> {

@@ -1,6 +1,5 @@
 package de.mirkosertic.gamecomposer.objectinspector;
 
-import com.sun.javafx.collections.ObservableListWrapper;
 import de.mirkosertic.gamecomposer.Controller;
 import de.mirkosertic.gamecomposer.GameSceneCreatedEvent;
 import de.mirkosertic.gamecomposer.GameSceneDeletedEvent;
@@ -11,8 +10,24 @@ import de.mirkosertic.gameengine.arcade.ConstantMovementBehaviorTemplate;
 import de.mirkosertic.gameengine.camera.Camera;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.CameraBehaviorTemplate;
-import de.mirkosertic.gameengine.core.*;
-import de.mirkosertic.gameengine.physic.*;
+import de.mirkosertic.gameengine.core.Behavior;
+import de.mirkosertic.gameengine.core.BehaviorTemplate;
+import de.mirkosertic.gameengine.core.GameObject;
+import de.mirkosertic.gameengine.core.GameObjectConfigurationChanged;
+import de.mirkosertic.gameengine.core.GameObjectInstance;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.GameSceneEffect;
+import de.mirkosertic.gameengine.core.GameSceneEffectAddedToScene;
+import de.mirkosertic.gameengine.core.GameSceneEffectRemovedFromScene;
+import de.mirkosertic.gameengine.physic.Physics;
+import de.mirkosertic.gameengine.physic.PhysicsBehavior;
+import de.mirkosertic.gameengine.physic.PhysicsBehaviorTemplate;
+import de.mirkosertic.gameengine.physic.Platform;
+import de.mirkosertic.gameengine.physic.PlatformBehavior;
+import de.mirkosertic.gameengine.physic.PlatformBehaviorTemplate;
+import de.mirkosertic.gameengine.physic.Static;
+import de.mirkosertic.gameengine.physic.StaticBehavior;
+import de.mirkosertic.gameengine.physic.StaticBehaviorTemplate;
 import de.mirkosertic.gameengine.playerscore.PlayerScore;
 import de.mirkosertic.gameengine.playerscore.PlayerScoreBehavior;
 import de.mirkosertic.gameengine.playerscore.PlayerScoreBehaviorTemplate;
@@ -26,17 +41,18 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
-import org.controlsfx.control.PropertySheet;
 
+import java.lang.annotation.Annotation;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import org.controlsfx.control.PropertySheet;
+import com.sun.javafx.collections.ObservableListWrapper;
 
 @Singleton
 public class ObjectInspectorController implements Controller {

@@ -7,17 +7,15 @@ import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorElementConfigu
 import de.mirkosertic.gamecomposer.objectinspector.PropertyEditorItem;
 import de.mirkosertic.gamecomposer.objectinspector.utils.ScoreValuePropertyEditor;
 import de.mirkosertic.gameengine.playerscore.PlayerScore;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.Node;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Node;
-import org.controlsfx.control.PropertySheet;
-
 import javax.inject.Inject;
+import org.controlsfx.control.PropertySheet;
 
 @ObjectInspectorElementConfiguratorType(clazz = PlayerScore.class)
 public class PlayerScoreElementConfigurator implements ObjectInspectorElementConfigurator<PlayerScore> {

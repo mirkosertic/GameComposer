@@ -1,9 +1,9 @@
 package de.mirkosertic.gameengine.dragome;
 
-import com.dragome.web.html.dom.DomHandler;
-import com.dragome.web.html.dom.w3c.BrowserDomHandler;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import com.dragome.web.html.dom.DomHandler;
+import com.dragome.web.html.dom.w3c.BrowserDomHandler;
 
 public class DragomeLogger {
 

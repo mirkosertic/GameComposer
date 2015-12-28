@@ -1,12 +1,12 @@
 package de.mirkosertic.gameengine.javafx;
 
-import javax.sound.sampled.Clip;
-
 import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.core.GameResourceCache;
 import de.mirkosertic.gameengine.core.GameResourceType;
-import de.mirkosertic.gameengine.type.ResourceName;
 import de.mirkosertic.gameengine.sound.GameSoundSystem;
+import de.mirkosertic.gameengine.type.ResourceName;
+
+import javax.sound.sampled.Clip;
 
 public class JavaSoundAPISoundSystem implements GameSoundSystem<Clip> {
 

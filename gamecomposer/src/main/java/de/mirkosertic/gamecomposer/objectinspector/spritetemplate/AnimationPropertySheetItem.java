@@ -3,12 +3,11 @@ package de.mirkosertic.gamecomposer.objectinspector.spritetemplate;
 import de.mirkosertic.gamecomposer.PersistenceManager;
 import de.mirkosertic.gameengine.sprite.SpriteBehaviorTemplate;
 import de.mirkosertic.gameengine.type.Animation;
-
 import javafx.scene.Node;
-import org.controlsfx.control.PropertySheet;
-import org.controlsfx.property.editor.PropertyEditor;
 
 import java.util.Optional;
+import org.controlsfx.control.PropertySheet;
+import org.controlsfx.property.editor.PropertyEditor;
 
 public class AnimationPropertySheetItem implements PropertySheet.Item {
 

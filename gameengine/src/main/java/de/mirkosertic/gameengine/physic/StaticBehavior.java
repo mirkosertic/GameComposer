@@ -1,11 +1,11 @@
 package de.mirkosertic.gameengine.physic;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import de.mirkosertic.gameengine.core.Behavior;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.type.Reflectable;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class StaticBehavior implements Behavior, Static, Reflectable<StaticClassInformation> {
 

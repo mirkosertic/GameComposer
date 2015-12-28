@@ -62,7 +62,7 @@ public class PropertyBinder {
     }
 
     public static void unbind(Property aProperty) {
-        Set<GameEventListener<PropertyChanged>> theRegistered = new HashSet<>(aProperty.getChangeListener());
+        Set<GameEventListener<PropertyChanged>> theRegistered = new HashSet<GameEventListener<PropertyChanged>>(aProperty.getChangeListener());
         for (GameEventListener<PropertyChanged> theListener : theRegistered) {
             if (theListener instanceof JavaFXPropertyChangeListener) {
                 aProperty.removeChangeListener(theListener);

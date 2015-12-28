@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.net.*?>
-<?import java.util.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.effect.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.paint.*?>
-
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import java.net.URL?>
 <AnchorPane id="AnchorPane" maxHeight="-1.0" maxWidth="-1.0" minHeight="-1.0" minWidth="-1.0" pickOnBounds="false" prefHeight="400.0" prefWidth="600.0" snapToPixel="true" xmlns:fx="http://javafx.com/fxml">
   <children>
     <Label fx:id="title" layoutY="7.0" mouseTransparent="true" prefHeight="21.0" prefWidth="546.0" styleClass="undecorator-label-titlebar" text="title bar" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="26.0">

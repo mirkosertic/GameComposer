@@ -1,9 +1,9 @@
 package de.mirkosertic.gameengine.gwt;
 
-import com.google.gwt.media.client.Audio;
-
 import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.core.GameResourceType;
+
+import com.google.gwt.media.client.Audio;
 
 public class GWTAudioResource implements GameResource {
 

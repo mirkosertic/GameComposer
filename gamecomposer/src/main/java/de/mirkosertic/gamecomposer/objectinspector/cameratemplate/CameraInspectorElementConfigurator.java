@@ -7,17 +7,15 @@ import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorElementConfigu
 import de.mirkosertic.gamecomposer.objectinspector.PropertyEditorItem;
 import de.mirkosertic.gamecomposer.objectinspector.utils.CameraTypePropertyEditor;
 import de.mirkosertic.gameengine.camera.Camera;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.Node;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Node;
-import org.controlsfx.control.PropertySheet;
-
 import javax.inject.Inject;
+import org.controlsfx.control.PropertySheet;
 
 @ObjectInspectorElementConfiguratorType(clazz = Camera.class)
 public class CameraInspectorElementConfigurator implements ObjectInspectorElementConfigurator<Camera> {

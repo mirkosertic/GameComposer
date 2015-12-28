@@ -9,15 +9,14 @@ import de.mirkosertic.gamecomposer.objectinspector.utils.ColorPropertyEditor;
 import de.mirkosertic.gamecomposer.objectinspector.utils.FontPropertyEditor;
 import de.mirkosertic.gamecomposer.objectinspector.utils.TextExpressionPropertyEditor;
 import de.mirkosertic.gameengine.text.Text;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.Node;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import javax.inject.Inject;
-
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Node;
 import org.controlsfx.control.PropertySheet;
 
 @ObjectInspectorElementConfiguratorType(clazz = Text.class)

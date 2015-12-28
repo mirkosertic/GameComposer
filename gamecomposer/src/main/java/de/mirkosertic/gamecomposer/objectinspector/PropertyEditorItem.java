@@ -1,10 +1,10 @@
 package de.mirkosertic.gamecomposer.objectinspector;
 
 import de.mirkosertic.gameengine.event.Property;
-import org.controlsfx.control.PropertySheet;
-import org.controlsfx.property.editor.PropertyEditor;
 
 import java.util.Optional;
+import org.controlsfx.control.PropertySheet;
+import org.controlsfx.property.editor.PropertyEditor;
 
 public class PropertyEditorItem<T> implements PropertySheet.Item {
 

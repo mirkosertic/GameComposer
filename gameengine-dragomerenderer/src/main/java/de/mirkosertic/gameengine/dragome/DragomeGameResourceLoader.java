@@ -1,19 +1,17 @@
 package de.mirkosertic.gameengine.dragome;
 
-import java.io.IOException;
-
-import com.dragome.web.html.dom.w3c.BrowserDomHandler;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
-import com.dragome.web.html.dom.DomHandler;
-
 import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.core.GameResourceLoader;
 import de.mirkosertic.gameengine.core.GameResourceType;
 import de.mirkosertic.gameengine.type.ResourceName;
+
+import java.io.IOException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import com.dragome.web.html.dom.DomHandler;
+import com.dragome.web.html.dom.w3c.BrowserDomHandler;
 
 public class DragomeGameResourceLoader implements GameResourceLoader {
 

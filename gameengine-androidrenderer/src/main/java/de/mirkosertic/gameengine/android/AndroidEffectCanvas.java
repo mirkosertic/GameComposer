@@ -2,7 +2,6 @@ package de.mirkosertic.gameengine.android;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
-
 import de.mirkosertic.gameengine.type.Color;
 import de.mirkosertic.gameengine.type.EffectCanvas;
 import de.mirkosertic.gameengine.type.Position;

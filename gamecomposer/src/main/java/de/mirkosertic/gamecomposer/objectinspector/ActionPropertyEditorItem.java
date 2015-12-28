@@ -3,13 +3,13 @@ package de.mirkosertic.gamecomposer.objectinspector;
 import de.mirkosertic.gamecomposer.objectinspector.utils.ActionPropertyEditor;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import org.controlsfx.control.PropertySheet;
-import org.controlsfx.property.editor.PropertyEditor;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
+import org.controlsfx.control.PropertySheet;
+import org.controlsfx.property.editor.PropertyEditor;
 
 public class ActionPropertyEditorItem implements PropertySheet.Item {
 

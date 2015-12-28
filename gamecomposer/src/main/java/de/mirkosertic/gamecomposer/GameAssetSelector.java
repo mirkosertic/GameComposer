@@ -5,8 +5,8 @@ import de.mirkosertic.gameengine.type.ResourceName;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 
-import javax.inject.Inject;
 import java.io.File;
+import javax.inject.Inject;
 
 public class GameAssetSelector {
 

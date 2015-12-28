@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.io.Reader;
-
 import org.luaj.vm2.lib.BaseLib;
 import org.luaj.vm2.lib.DebugLib;
 import org.luaj.vm2.lib.ResourceFinder;
@@ -195,18 +194,16 @@ public class Globals extends LuaTable {
 
 		abstract protected int avail() throws IOException;
 
-        @Override
-		public int read() throws IOException {
+        public int read() throws IOException {
 			int a = avail();
 			return (a <= 0 ? -1 : 0xff & b[i++]);
 		}
 
-		public int read(byte[] b) throws IOException {
+        public int read(byte[] b) throws IOException {
 			return read(b, 0, b.length);
 		}
 
-        @Override
-		public int read(byte[] b, int i0, int n) throws IOException {
+        public int read(byte[] b, int i0, int n) throws IOException {
 			int a = avail();
 			if (a <= 0) return -1;
 			final int n_read = Math.min(a, n);
@@ -215,13 +212,13 @@ public class Globals extends LuaTable {
 			return n_read;
 		}
 
-		public long skip(long n) throws IOException {
+        public long skip(long n) throws IOException {
 			final long k = Math.min(n, j - i);
 			i += k;
 			return k;
 		}		
 
-		public int available() throws IOException {
+        public int available() throws IOException {
 			return j - i;
 		}
 	}
@@ -238,8 +235,7 @@ public class Globals extends LuaTable {
 			this.r = r;
 		}
 
-        @Override
-		protected int avail() throws IOException {
+        protected int avail() throws IOException {
 			if (i < j) return j - i;
 			int n = r.read(c);
 			if (n < 0)
@@ -255,8 +251,7 @@ public class Globals extends LuaTable {
 			return j;
 		}
 
-        @Override
-		public void close() throws IOException {
+        public void close() throws IOException {
 			r.close();
 		}
 	}
