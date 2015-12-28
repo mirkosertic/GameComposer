@@ -1,8 +1,5 @@
 package de.mirkosertic.gameengine.camera;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import de.mirkosertic.gameengine.core.BehaviorTemplate;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
@@ -10,6 +7,9 @@ import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.type.Reflectable;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class CameraBehaviorTemplate implements BehaviorTemplate<CameraBehavior>, Camera, Reflectable<CameraClassInformation> {
 

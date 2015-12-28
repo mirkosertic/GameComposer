@@ -1,15 +1,15 @@
 package de.mirkosertic.gameengine.input;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import de.mirkosertic.gameengine.core.Condition;
 import de.mirkosertic.gameengine.core.ConditionResult;
-import de.mirkosertic.gameengine.type.GameKeyCode;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.core.UsedByReflection;
 import de.mirkosertic.gameengine.event.GameEvent;
 import de.mirkosertic.gameengine.event.Property;
+import de.mirkosertic.gameengine.type.GameKeyCode;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class KeyEventCondition implements Condition {
 

@@ -1,13 +1,13 @@
 package de.mirkosertic.gameengine.physic;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import de.mirkosertic.gameengine.core.Behavior;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.type.Reflectable;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class PhysicsBehavior implements Behavior, Physics, Reflectable<PhysicsClassInformation> {
 

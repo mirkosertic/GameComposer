@@ -1,15 +1,30 @@
 package de.mirkosertic.gameengine.generic;
 
+import de.mirkosertic.gameengine.Callback;
 import de.mirkosertic.gameengine.Version;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
-import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.core.GameObjectInstance;
+import de.mirkosertic.gameengine.core.GameResource;
+import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.GameSceneEffect;
+import de.mirkosertic.gameengine.core.GameView;
+import de.mirkosertic.gameengine.core.GestureDetector;
+import de.mirkosertic.gameengine.core.RuntimeStatistics;
 import de.mirkosertic.gameengine.scriptengine.LUAScriptEngine;
 import de.mirkosertic.gameengine.sprite.SpriteBehavior;
 import de.mirkosertic.gameengine.text.TextBehavior;
-import de.mirkosertic.gameengine.type.*;
+import de.mirkosertic.gameengine.type.AbsolutePositionAnchor;
+import de.mirkosertic.gameengine.type.Angle;
+import de.mirkosertic.gameengine.type.Color;
+import de.mirkosertic.gameengine.type.EffectCanvas;
+import de.mirkosertic.gameengine.type.Font;
+import de.mirkosertic.gameengine.type.Position;
+import de.mirkosertic.gameengine.type.ResourceName;
+import de.mirkosertic.gameengine.type.Size;
+import de.mirkosertic.gameengine.type.TextExpression;
 
 import java.io.IOException;
-import java.util.List;
 
 public abstract class GenericAbstractGameView<S extends GameResource> implements GameView {
 
@@ -66,95 +81,95 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
     protected abstract EffectCanvas createEffectCanvas();
 
     @Override
-    public void renderGame(long aGameTime, long aElapsedTimeSinceLastLoop, GameScene aScene, RuntimeStatistics aStatistics) {
+    public void renderGame(final long aGameTime, long aElapsedTimeSinceLastLoop, final GameScene aScene, RuntimeStatistics aStatistics) {
 
         if (!beginFrame(aScene)) {
             return;
         }
 
-        List<GameObjectInstance> theVisibleInstances = cameraBehavior.getObjectsToDrawInRightOrder();
-
         EffectCanvas theEffectCanvas = createEffectCanvas();
 
         // Run the preprocessors
         for (GameSceneEffect theEffect : aScene.getPreprocessorEffects()) {
-            theEffect.render(theEffectCanvas, theVisibleInstances, cameraBehavior);
+            theEffect.render(theEffectCanvas, cameraBehavior);
         }
 
-        for (GameObjectInstance theInstance : theVisibleInstances) {
+        int theNumberOfInstances = cameraBehavior.processVisibleInstances(new Callback<GameObjectInstance>() {
+            @Override
+            public void process(GameObjectInstance aValue) {
+                Position thePositionOnScreen = cameraBehavior.transformToScreenPosition(aValue);
 
-            Position thePositionOnScreen = cameraBehavior.transformToScreenPosition(theInstance);
+                Size theSize = aValue.getOwnerGameObject().sizeProperty().get();
 
-            Size theSize = theInstance.getOwnerGameObject().sizeProperty().get();
+                float theHalfWidth = theSize.width / 2;
+                float theHalfHeight = theSize.height / 2;
 
-            float theHalfWidth = theSize.width / 2;
-            float theHalfHeight = theSize.height / 2;
+                Position theCenterOffset = new Position(theHalfWidth, theHalfHeight);
 
-            Position theCenterOffset = new Position(theHalfWidth, theHalfHeight);
+                Angle theAngle = aValue.rotationAngleProperty().get();
 
-            Angle theAngle = theInstance.rotationAngleProperty().get();
+                beforeInstance(aValue, thePositionOnScreen, theCenterOffset, theAngle);
 
-            beforeInstance(theInstance, thePositionOnScreen, theCenterOffset, theAngle);
+                boolean theSomethingRendered = false;
 
-            boolean theSomethingRendered = false;
+                SpriteBehavior theSpriteBehavior = aValue.getBehavior(SpriteBehavior.class);
+                if (theSpriteBehavior != null) {
 
-            SpriteBehavior theSpriteBehavior = theInstance.getBehavior(SpriteBehavior.class);
-            if (theSpriteBehavior != null) {
+                    ResourceName theSpriteResource = theSpriteBehavior.computeCurrentFrame(aGameTime);
+                    if (theSpriteResource != null) {
+                        try {
+                            S theGameResource = gameRuntime.getResourceCache()
+                                    .getResourceFor(theSpriteResource);
 
-                ResourceName theSpriteResource = theSpriteBehavior.computeCurrentFrame(aGameTime);
-                if (theSpriteResource != null) {
-                    try {
-                        S theGameResource = gameRuntime.getResourceCache()
-                                .getResourceFor(theSpriteResource);
+                            drawImage(aValue, thePositionOnScreen, theCenterOffset, theGameResource);
 
-                        drawImage(theInstance, thePositionOnScreen, theCenterOffset, theGameResource);
+                            theSomethingRendered = true;
 
-                        theSomethingRendered = true;
-
-                    } catch (IOException e) {
-                        logError("Error while rendering sprite " + theSpriteResource.name);
+                        } catch (IOException e) {
+                            logError("Error while rendering sprite " + theSpriteResource.name);
+                        }
                     }
                 }
-            }
-            TextBehavior theTextBehavior = theInstance.getBehavior(TextBehavior.class);
-            if (theTextBehavior != null) {
-                TextExpression theExpression = theTextBehavior.textExpressionProperty().get();
-                String theTextToDraw;
-                if (theTextBehavior.isScriptProperty().get()) {
-                    // Scripting is enabled, so we have to evaluate the expression
-                    try {
-                        LUAScriptEngine theEngine = gameRuntime.getScriptEngineFactory()
-                                .createNewEngine(aScene, theExpression);
+                TextBehavior theTextBehavior = aValue.getBehavior(TextBehavior.class);
+                if (theTextBehavior != null) {
+                    TextExpression theExpression = theTextBehavior.textExpressionProperty().get();
+                    String theTextToDraw;
+                    if (theTextBehavior.isScriptProperty().get()) {
+                        // Scripting is enabled, so we have to evaluate the expression
+                        try {
+                            LUAScriptEngine theEngine = gameRuntime.getScriptEngineFactory()
+                                    .createNewEngine(aScene, theExpression);
 
-                        theTextToDraw = theEngine.evaluateSimpleExpressionFor(theInstance);
-                    } catch (Exception e) {
-                        // Failed to process the script
-                        // can be IOException
-                        // or more likely compile errors
-                        theTextToDraw = "Processing error : " + e.getMessage();
+                            theTextToDraw = theEngine.evaluateSimpleExpressionFor(aValue);
+                        } catch (Exception e) {
+                            // Failed to process the script
+                            // can be IOException
+                            // or more likely compile errors
+                            theTextToDraw = "Processing error : " + e.getMessage();
+                        }
+                    } else {
+                        theTextToDraw = theExpression.expression;
                     }
-                } else {
-                    theTextToDraw = theExpression.expression;
+
+                    drawText(aValue, thePositionOnScreen, theCenterOffset, theTextBehavior.fontProperty().get(),
+                            theTextBehavior.colorProperty().get(), theTextToDraw, theSize);
+
+
+                    theSomethingRendered = true;
                 }
 
-                drawText(theInstance, thePositionOnScreen, theCenterOffset, theTextBehavior.fontProperty().get(),
-                        theTextBehavior.colorProperty().get(), theTextToDraw, theSize);
+                if (!theSomethingRendered) {
+                    // Nothing was rendered.
+                    drawRect(aValue, thePositionOnScreen, theCenterOffset, Color.WHITE, theSize);
+                }
 
-
-                theSomethingRendered = true;
+                afterInstance(aValue, thePositionOnScreen);
             }
-
-            if (!theSomethingRendered) {
-                // Nothing was rendered.
-                drawRect(theInstance, thePositionOnScreen, theCenterOffset, Color.WHITE, theSize);
-            }
-
-            afterInstance(theInstance, thePositionOnScreen);
-        }
+        });
 
         // Run the postprocessors
         for (GameSceneEffect theEffect : aScene.getPostprocessorEffects()) {
-            theEffect.render(theEffectCanvas, theVisibleInstances, cameraBehavior);
+            theEffect.render(theEffectCanvas, cameraBehavior);
         }
 
         // Shall we print Debug Information to the Screen?
@@ -165,7 +180,7 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
             drawTextAt(theAnchor, THE_DEBUG_FRAME_RATE, THE_DEBUG_CENTER, THE_DEBUG_TEXT_SIZE, THE_DEBUG_FONT, THE_DEBUG_TEXT_COLOR,
                     "Time for every frame : " + aStatistics.getAverageTimePerLoopCycle() + " ms");
             drawTextAt(theAnchor, THE_DEBUG_VIVISBLE_INSTANCES, THE_DEBUG_CENTER, THE_DEBUG_TEXT_SIZE, THE_DEBUG_FONT, THE_DEBUG_TEXT_COLOR,
-                    "Number of visible instances : " + theVisibleInstances.size());
+                    "Number of visible instances : " + theNumberOfInstances);
         }
 
         framefinished();

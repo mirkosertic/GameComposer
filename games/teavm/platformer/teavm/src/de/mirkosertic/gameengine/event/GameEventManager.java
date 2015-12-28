@@ -1,10 +1,10 @@
 package de.mirkosertic.gameengine.event;
 
+import de.mirkosertic.gameengine.ArrayUtils;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import de.mirkosertic.gameengine.ArrayUtils;
 
 public class GameEventManager implements GameEventListener {
 

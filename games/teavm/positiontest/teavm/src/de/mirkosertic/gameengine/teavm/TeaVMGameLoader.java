@@ -2,11 +2,10 @@ package de.mirkosertic.gameengine.teavm;
 
 import de.mirkosertic.gameengine.core.Game;
 
+import java.util.Map;
 import org.teavm.jso.ajax.ReadyStateChangeHandler;
 import org.teavm.jso.ajax.XMLHttpRequest;
 import org.teavm.jso.json.JSON;
-
-import java.util.Map;
 
 public class TeaVMGameLoader {
 

@@ -3,7 +3,10 @@ package de.mirkosertic.gameengine.starfield;
 import de.mirkosertic.gameengine.annotations.ReflectiveField;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
-import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.GameSceneEffect;
+import de.mirkosertic.gameengine.core.GameSceneEffectType;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
@@ -14,7 +17,8 @@ import de.mirkosertic.gameengine.type.EffectCanvas;
 import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Size;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class StarfieldGameSceneEffect implements GameSceneEffect {
 
@@ -86,7 +90,7 @@ public class StarfieldGameSceneEffect implements GameSceneEffect {
     }
 
     @Override
-    public void render(EffectCanvas aEffectCanvas, List<GameObjectInstance> aListOfVisibleInstances, CameraBehavior aCameraBehavior) {
+    public void render(EffectCanvas aEffectCanvas, CameraBehavior aCameraBehavior) {
         Color theStarColor = color.get();
         aEffectCanvas.setPaint(theStarColor);
         for (Position thePosition : stars) {

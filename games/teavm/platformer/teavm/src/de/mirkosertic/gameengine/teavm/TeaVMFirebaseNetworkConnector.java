@@ -9,17 +9,16 @@ import de.mirkosertic.gameengine.teavm.firebase.FirebaseRemoteEvent;
 import de.mirkosertic.gameengine.teavm.firebase.FirebaseRemoteMessage;
 import de.mirkosertic.gameengine.type.UUID;
 
-import org.teavm.jso.JSBody;
-import org.teavm.jso.JSObject;
-import org.teavm.jso.JSProperty;
-import org.teavm.jso.core.JSString;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.teavm.jso.JSBody;
+import org.teavm.jso.JSObject;
+import org.teavm.jso.JSProperty;
+import org.teavm.jso.core.JSString;
 
 public class TeaVMFirebaseNetworkConnector extends DefaultNetworkConnector {
 

@@ -7,7 +7,6 @@ import de.mirkosertic.gameengine.type.Size;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import org.teavm.jso.canvas.CanvasImageSource;
 import org.teavm.jso.canvas.CanvasRenderingContext2D;
 import org.teavm.jso.dom.html.HTMLCanvasElement;

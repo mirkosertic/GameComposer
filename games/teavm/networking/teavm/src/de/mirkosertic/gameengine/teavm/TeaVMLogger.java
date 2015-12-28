@@ -1,8 +1,8 @@
 package de.mirkosertic.gameengine.teavm;
 
-import org.teavm.jso.dom.html.HTMLElement;
-import org.teavm.jso.dom.html.HTMLDocument;
 import org.teavm.jso.browser.Window;
+import org.teavm.jso.dom.html.HTMLDocument;
+import org.teavm.jso.dom.html.HTMLElement;
 
 class TeaVMLogger {
 

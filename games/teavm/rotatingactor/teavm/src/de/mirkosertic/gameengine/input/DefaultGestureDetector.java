@@ -2,8 +2,8 @@ package de.mirkosertic.gameengine.input;
 
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.core.GestureDetector;
-import de.mirkosertic.gameengine.type.GameKeyCode;
 import de.mirkosertic.gameengine.event.GameEventManager;
+import de.mirkosertic.gameengine.type.GameKeyCode;
 import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.TouchIdentifier;
 import de.mirkosertic.gameengine.type.TouchPosition;

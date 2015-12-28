@@ -6,7 +6,13 @@ import de.mirkosertic.gameengine.annotations.ReflectiveMethod;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.starfield.StarfieldGameSceneEffect;
-import de.mirkosertic.gameengine.type.*;
+import de.mirkosertic.gameengine.type.Color;
+import de.mirkosertic.gameengine.type.CustomProperties;
+import de.mirkosertic.gameengine.type.KeyValueObjectCache;
+import de.mirkosertic.gameengine.type.Position;
+import de.mirkosertic.gameengine.type.Rectangle;
+import de.mirkosertic.gameengine.type.Reflectable;
+import de.mirkosertic.gameengine.type.Size;
 
 import java.util.ArrayList;
 import java.util.HashMap;

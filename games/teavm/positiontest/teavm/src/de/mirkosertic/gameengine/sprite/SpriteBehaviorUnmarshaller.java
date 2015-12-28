@@ -1,10 +1,10 @@
 package de.mirkosertic.gameengine.sprite;
 
-import java.util.Map;
-
 import de.mirkosertic.gameengine.core.BehaviorUnmarshaller;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
+
+import java.util.Map;
 
 public class SpriteBehaviorUnmarshaller implements BehaviorUnmarshaller<SpriteBehavior> {
 

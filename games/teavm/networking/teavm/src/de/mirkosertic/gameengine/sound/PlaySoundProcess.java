@@ -1,7 +1,7 @@
 package de.mirkosertic.gameengine.sound;
 
-import de.mirkosertic.gameengine.type.ResourceName;
 import de.mirkosertic.gameengine.process.AbstractGameProcess;
+import de.mirkosertic.gameengine.type.ResourceName;
 
 //TODO: Add notifier to platform specific sound system to remove processes for already played sounds
 public class PlaySoundProcess extends AbstractGameProcess {
