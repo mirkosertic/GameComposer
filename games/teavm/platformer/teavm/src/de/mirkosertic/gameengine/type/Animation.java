@@ -1,5 +1,7 @@
 package de.mirkosertic.gameengine.type;
 
+import de.mirkosertic.gameengine.ArrayUtils;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,13 +11,13 @@ public class Animation implements Distributable {
 
     private final String uuid;
     private final String name;
-    private final List<ResourceName> animationSequence;
+    private final ResourceName[] animationSequence;
 
     public Animation(String aName) {
-        this(UUID.randomUID(), aName, new ArrayList<ResourceName>());
+        this(UUID.randomUID(), aName, new ResourceName[0]);
     }
 
-    private Animation(String aUUID, String aName, List<ResourceName> aAnimationSequence) {
+    private Animation(String aUUID, String aName, ResourceName[] aAnimationSequence) {
         name = aName;
         uuid = aUUID;
         animationSequence = aAnimationSequence;
@@ -30,41 +32,41 @@ public class Animation implements Distributable {
     }
 
     public Animation changeName(String aName) {
-        return new Animation(uuid, aName, new ArrayList<>(animationSequence));
+        return new Animation(uuid, aName, animationSequence);
     }
 
     public Animation addToAnimationSequence(ResourceName aName) {
-        List<ResourceName> theNewSequence = new ArrayList<>(animationSequence);
+        List<ResourceName> theNewSequence = ArrayUtils.asList(animationSequence);
         theNewSequence.add(aName);
-        return new Animation(uuid, name, theNewSequence);
+        return new Animation(uuid, name, theNewSequence.toArray(new ResourceName[theNewSequence.size()]));
     }
 
     public Animation removeFromAnimationSequence(ResourceName aName) {
-        List<ResourceName> theNewSequence = new ArrayList<>(animationSequence);
+        List<ResourceName> theNewSequence = ArrayUtils.asList(animationSequence);
         theNewSequence.remove(aName);
-        return new Animation(uuid, name, theNewSequence);
+        return new Animation(uuid, name, theNewSequence.toArray(new ResourceName[theNewSequence.size()]));
     }
 
     public Animation removeFromAnimationSequence(int aIndex) {
-        List<ResourceName> theNewSequence = new ArrayList<>(animationSequence);
+        List<ResourceName> theNewSequence = ArrayUtils.asList(animationSequence);
         theNewSequence.remove(aIndex);
-        return new Animation(uuid, name, theNewSequence);
+        return new Animation(uuid, name, theNewSequence.toArray(new ResourceName[theNewSequence.size()]));
     }
 
     public int getSequenceSize() {
-        return animationSequence.size();
+        return animationSequence.length;
     }
 
     public ResourceName getResourceByIndex(int aIndex) {
-        return animationSequence.get(aIndex);
+        return animationSequence[aIndex];
     }
 
     public ResourceName computeCurrentFrame(long aGameTime, Integer aSpeed) {
-        if (animationSequence.isEmpty()) {
+        if (animationSequence.length == 0) {
             return null;
         }
-        int theFrame = (int)((aGameTime / 1000d * aSpeed) % animationSequence.size());
-        return animationSequence.get(theFrame);
+        int theFrame = (int)((aGameTime / 1000d * aSpeed) % animationSequence.length);
+        return animationSequence[theFrame];
     }
 
     @Override
@@ -87,6 +89,6 @@ public class Animation implements Distributable {
         for (Map<String, Object> theEntry : (List<Map<String, Object>>) aData.get("animationSequence")) {
             theAnimationSequence.add(ResourceName.deserialize(theEntry));
         }
-        return new Animation(theUUID, theName, theAnimationSequence);
+        return new Animation(theUUID, theName, theAnimationSequence.toArray(new ResourceName[theAnimationSequence.size()]));
     }
 }

@@ -4744,13 +4744,13 @@ function jl_Object2_clone10($this) {
     return a;
 }
 function jl_Object2_monitorEnterWait13(a_o, b_count, c_callback) {
-    var d, e;
+    var d;
     d = jl_Thread4_currentThread6();
     if (a_o.monitor5 === null) {
         a_o.monitor5 = jl_Object$Monitor855_$init4();
         jl_Thread4_setCurrentThread7(d);
-        e = a_o.monitor5;
-        e.count858 = e.count858 + b_count | 0;
+        a_o = a_o.monitor5;
+        a_o.count858 = a_o.count858 + b_count | 0;
         otpp_AsyncCallbackWrapper2883_complete14(c_callback, null);
         return;
     }
@@ -4760,8 +4760,8 @@ function jl_Object2_monitorEnterWait13(a_o, b_count, c_callback) {
     }
     a_o.monitor5.owner856 = d;
     jl_Thread4_setCurrentThread7(d);
-    e = a_o.monitor5;
-    e.count858 = e.count858 + b_count | 0;
+    a_o = a_o.monitor5;
+    a_o.count858 = a_o.count858 + b_count | 0;
     otpp_AsyncCallbackWrapper2883_complete14(c_callback, null);
     return;
 }
@@ -5007,13 +5007,13 @@ function dmgc_DeleteGameObjectInstanceAction12_$init4() {
     return $r;
 }
 function dmgc_DeleteGameObjectInstanceAction12_invoke55($this, a_aScene, b_aResult) {
-    var c, d;
-    b_aResult = dmgc_ConditionResult2128_getAffectedInstances56(b_aResult).data;
-    c = b_aResult.length;
-    d = 0;
-    while (d < c) {
-        dmgc_GameScene2107_removeGameObjectInstance57(a_aScene, b_aResult[d]);
-        d = d + 1 | 0;
+    var c, d, e;
+    c = dmgc_ConditionResult2128_getAffectedInstances56(b_aResult).data;
+    d = c.length;
+    e = 0;
+    while (e < d) {
+        dmgc_GameScene2107_removeGameObjectInstance57(a_aScene, c[e]);
+        e = e + 1 | 0;
     }
     return;
 }
@@ -5487,9 +5487,9 @@ function dmge_Property43_$init119($this, a_aType, b_aOwner, c_aName, d_aDefaultV
     if (e_aListener === null) {
         $this.changeListener44 = $rt_createArray(dmge_GameEventListener514, 0);
     } else {
-        d_aDefaultValue = $rt_createArray(dmge_GameEventListener514, 1);
-        d_aDefaultValue.data[0] = e_aListener;
-        $this.changeListener44 = d_aDefaultValue;
+        c_aName = $rt_createArray(dmge_GameEventListener514, 1);
+        c_aName.data[0] = e_aListener;
+        $this.changeListener44 = c_aName;
     }
     $this.lastChanged45 = jl_System2747_currentTimeMillis121();
     return;
@@ -5639,7 +5639,7 @@ function ojdc_PositionSolverManifold57_$init4() {
     return $r;
 }
 function ojdc_PositionSolverManifold57_initialize146($this, a_pc, b_xfA, c_xfB, d_index) {
-    var e, f, g, h, i, j, k, m, n, o, p;
+    var e, f, g, h, i, j, k, m, n, o, p, q;
     if (ojdc_PositionSolverManifold57.$assertionsDisabled61 == 0 && a_pc.pointCount187 <= 0) {
         $rt_throw(jl_AssertionError746_$init4());
     }
@@ -5665,17 +5665,17 @@ function ojdc_PositionSolverManifold57_initialize146($this, a_pc, b_xfA, c_xfB, 
                 $this.point60.y2018 = n;
                 break $ba;
             case 3:
-                h = a_pc.localNormal191;
-                d_index = a_pc.localPoint190;
-                $this.normal58.x2017 = f.c2781 * h.x2017 - f.s2780 * h.y2018;
-                $this.normal58.y2018 = f.s2780 * h.x2017 + f.c2781 * h.y2018;
-                o = f.c2781 * d_index.x2017 - f.s2780 * d_index.y2018 + c_xfB.p2028.x2017;
-                n = f.s2780 * d_index.x2017 + f.c2781 * d_index.y2018 + c_xfB.p2028.y2018;
-                m = e.c2781 * g.x2017 - e.s2780 * g.y2018 + b_xfA.p2028.x2017;
-                j = e.s2780 * g.x2017 + e.c2781 * g.y2018 + b_xfA.p2028.y2018;
-                $this.separation59 = (m - o) * $this.normal58.x2017 + (j - n) * $this.normal58.y2018 - a_pc.radiusA183 - a_pc.radiusB182;
-                $this.point60.x2017 = m;
-                $this.point60.y2018 = j;
+                o = a_pc.localNormal191;
+                i = a_pc.localPoint190;
+                $this.normal58.x2017 = f.c2781 * o.x2017 - f.s2780 * o.y2018;
+                $this.normal58.y2018 = f.s2780 * o.x2017 + f.c2781 * o.y2018;
+                m = f.c2781 * i.x2017 - f.s2780 * i.y2018 + c_xfB.p2028.x2017;
+                n = f.s2780 * i.x2017 + f.c2781 * i.y2018 + c_xfB.p2028.y2018;
+                j = e.c2781 * g.x2017 - e.s2780 * g.y2018 + b_xfA.p2028.x2017;
+                d_index = e.s2780 * g.x2017 + e.c2781 * g.y2018 + b_xfA.p2028.y2018;
+                $this.separation59 = (j - m) * $this.normal58.x2017 + (d_index - n) * $this.normal58.y2018 - a_pc.radiusA183 - a_pc.radiusB182;
+                $this.point60.x2017 = j;
+                $this.point60.y2018 = d_index;
                 b_xfA = $this.normal58;
                 b_xfA.x2017 = b_xfA.x2017 *  -1.0;
                 b_xfA = $this.normal58;
@@ -5684,22 +5684,22 @@ function ojdc_PositionSolverManifold57_initialize146($this, a_pc, b_xfA, c_xfB, 
             default:
                 break $ba;
         }
-        d_index = a_pc.localPoint190;
-        g = a_pc.localPoints177.data[0];
-        j = e.c2781 * d_index.x2017 - e.s2780 * d_index.y2018 + b_xfA.p2028.x2017;
-        p = e.s2780 * d_index.x2017 + e.c2781 * d_index.y2018 + b_xfA.p2028.y2018;
-        k = f.c2781 * g.x2017 - f.s2780 * g.y2018 + c_xfB.p2028.x2017;
-        c_xfB = f.s2780 * g.x2017 + f.c2781 * g.y2018 + c_xfB.p2028.y2018;
+        i = a_pc.localPoint190;
+        p = a_pc.localPoints177.data[0];
+        m = e.c2781 * i.x2017 - e.s2780 * i.y2018 + b_xfA.p2028.x2017;
+        d_index = e.s2780 * i.x2017 + e.c2781 * i.y2018 + b_xfA.p2028.y2018;
+        n = f.c2781 * p.x2017 - f.s2780 * p.y2018 + c_xfB.p2028.x2017;
+        j = f.s2780 * p.x2017 + f.c2781 * p.y2018 + c_xfB.p2028.y2018;
         b_xfA = $this.normal58;
-        n = k - j;
-        b_xfA.x2017 = n;
+        q = n - m;
+        b_xfA.x2017 = q;
         b_xfA = $this.normal58;
-        m = c_xfB - p;
-        b_xfA.y2018 = m;
+        k = j - d_index;
+        b_xfA.y2018 = k;
         ojc_Vec22016_normalize148($this.normal58);
-        $this.point60.x2017 = (j + k) * 0.5;
-        $this.point60.y2018 = (p + c_xfB) * 0.5;
-        $this.separation59 = n * $this.normal58.x2017 + m * $this.normal58.y2018 - a_pc.radiusA183 - a_pc.radiusB182;
+        $this.point60.x2017 = (m + n) * 0.5;
+        $this.point60.y2018 = (d_index + j) * 0.5;
+        $this.separation59 = q * $this.normal58.x2017 + k * $this.normal58.y2018 - a_pc.radiusA183 - a_pc.radiusB182;
     }
     return;
 }
@@ -6013,7 +6013,7 @@ function ojd_World83_$init185(a) {
     return $r;
 }
 function ojd_World83_solve186($this, a_step) {
-    var b, c, d, e, f, g, h, i, j, k, m, n, o, p;
+    var b, c, d, e, f, g, h, i, j, k, m, n;
     $this.m_profile95.solveInit1470 = 0.0;
     $this.m_profile95.solveVelocity1471 = 0.0;
     $this.m_profile95.solvePosition1476 = 0.0;
@@ -6037,10 +6037,10 @@ function ojd_World83_solve186($this, a_step) {
     if ($this.stack87.data.length < d) {
         $this.stack87 = $rt_createArray(ojd_Body1436, d);
     }
-    c = $this.m_bodyList116;
-    e = 0 + 1 | 0;
+    e = $this.m_bodyList116;
+    f = 0 + 1 | 0;
     $ba: while (true) {
-        if (c === null) {
+        if (e === null) {
             ojc_Timer2156_reset188($this.broadphaseTimer88);
             b = $this.m_bodyList116;
             while (b !== null) {
@@ -6057,18 +6057,18 @@ function ojd_World83_solve186($this, a_step) {
             $this.m_profile95.broadphase1477 = ojc_Timer2156_getMilliseconds193($this.broadphaseTimer88);
             return;
         }
-        if ((c.m_flags1437 & 1) != 1 && ojd_Body1436_isAwake194(c) != 0 && ojd_Body1436_isActive195(c) != 0) {
-            f = ojd_Body1436_getType189(c);
+        if ((e.m_flags1437 & 1) != 1 && ojd_Body1436_isAwake194(e) != 0 && ojd_Body1436_isActive195(e) != 0) {
+            g = ojd_Body1436_getType189(e);
             ojd_BodyType2123_$clinit();
-            if (f !== ojd_BodyType2123.STATIC2125) {
+            if (g !== ojd_BodyType2123.STATIC2125) {
                 ojd_Island980_clear196($this.island99);
-                $this.stack87.data[0] = c;
-                c.m_flags1437 = c.m_flags1437 | 1;
-                g = e;
-                while (g > 0) {
+                $this.stack87.data[0] = e;
+                e.m_flags1437 = e.m_flags1437 | 1;
+                c = f;
+                while (c > 0) {
                     h = $this.stack87.data;
-                    g = g +  -1 | 0;
-                    i = h[g];
+                    c = c +  -1 | 0;
+                    i = h[c];
                     if (ojd_World83.$assertionsDisabled137 == 0 && ojd_Body1436_isActive195(i) != 1) {
                         $rt_throw(jl_AssertionError746_$init4());
                     }
@@ -6088,63 +6088,63 @@ function ojd_World83_solve186($this, a_step) {
                             if (m == 0 && h == 0) {
                                 ojd_Island980_add201($this.island99, k);
                                 k.m_flags646 = k.m_flags646 | 1;
-                                n = j.other1611;
-                                if ((n.m_flags1437 & 1) != 1) {
-                                    if (ojd_World83.$assertionsDisabled137 == 0 && g >= d) {
+                                m = j.other1611;
+                                if ((m.m_flags1437 & 1) != 1) {
+                                    if (ojd_World83.$assertionsDisabled137 == 0 && c >= d) {
                                         break $ba;
                                     }
-                                    b = $this.stack87.data;
-                                    k = g + 1 | 0;
-                                    b[g] = n;
-                                    n.m_flags1437 = n.m_flags1437 | 1;
-                                    g = k;
+                                    k = $this.stack87.data;
+                                    b = c + 1 | 0;
+                                    k[c] = m;
+                                    m.m_flags1437 = m.m_flags1437 | 1;
+                                    c = b;
                                 }
                             }
                         }
                         j = j.next1610;
                     }
-                    k = i.m_jointList1459;
-                    while (k !== null) {
-                        if (k.joint1935.m_islandFlag866 != 1) {
-                            m = k.other1934;
+                    b = i.m_jointList1459;
+                    while (b !== null) {
+                        if (b.joint1935.m_islandFlag866 != 1) {
+                            m = b.other1934;
                             if (m.isActive195() != 0) {
-                                ojd_Island980_add202($this.island99, k.joint1935);
-                                k.joint1935.m_islandFlag866 = 1;
+                                ojd_Island980_add202($this.island99, b.joint1935);
+                                b.joint1935.m_islandFlag866 = 1;
                                 if ((m.m_flags1437 & 1) != 1) {
-                                    if (ojd_World83.$assertionsDisabled137 == 0 && g >= d) {
+                                    if (ojd_World83.$assertionsDisabled137 == 0 && c >= d) {
                                         $rt_throw(jl_AssertionError746_$init4());
                                     }
-                                    o = $this.stack87.data;
-                                    b = g + 1 | 0;
-                                    o[g] = m;
+                                    n = $this.stack87.data;
+                                    k = c + 1 | 0;
+                                    n[c] = m;
                                     m.m_flags1437 = m.m_flags1437 | 1;
-                                    g = b;
+                                    c = k;
                                 }
                             }
                         }
-                        k = k.next1933;
+                        b = b.next1933;
                     }
                 }
                 ojd_Island980_solve203($this.island99, $this.islandProfile103, a_step, $this.m_gravity96, $this.m_allowSleep133);
-                b = $this.m_profile95;
-                b.solveInit1470 = b.solveInit1470 + $this.islandProfile103.solveInit1470;
-                f = $this.m_profile95;
-                f.solveVelocity1471 = f.solveVelocity1471 + $this.islandProfile103.solveVelocity1471;
-                p = $this.m_profile95;
-                p.solvePosition1476 = p.solvePosition1476 + $this.islandProfile103.solvePosition1476;
-                g = 0;
-                while (g < $this.island99.m_bodyCount994) {
-                    b = $this.island99.m_bodies983.data[g];
-                    h = ojd_Body1436_getType189(b);
+                c = $this.m_profile95;
+                c.solveInit1470 = c.solveInit1470 + $this.islandProfile103.solveInit1470;
+                g = $this.m_profile95;
+                g.solveVelocity1471 = g.solveVelocity1471 + $this.islandProfile103.solveVelocity1471;
+                h = $this.m_profile95;
+                h.solvePosition1476 = h.solvePosition1476 + $this.islandProfile103.solvePosition1476;
+                b = 0;
+                while (b < $this.island99.m_bodyCount994) {
+                    c = $this.island99.m_bodies983.data[b];
+                    h = ojd_Body1436_getType189(c);
                     ojd_BodyType2123_$clinit();
                     if (h === ojd_BodyType2123.STATIC2125) {
-                        b.m_flags1437 = b.m_flags1437 &  -2;
+                        c.m_flags1437 = c.m_flags1437 &  -2;
                     }
-                    g = g + 1 | 0;
+                    b = b + 1 | 0;
                 }
             }
         }
-        c = c.m_next1450;
+        e = e.m_next1450;
     }
     $rt_throw(jl_AssertionError746_$init4());
 }
@@ -6209,36 +6209,36 @@ function ojd_World83_initializeRegisters179($this) {
     b = ojcs_ShapeType738.CIRCLE743;
     ojcs_ShapeType738_$clinit();
     ojd_World83_addType217($this, a, b, ojcs_ShapeType738.CIRCLE743);
-    b = ojpn_DefaultWorldPool253_getPolyCircleContactStack218($this.pool101);
+    c = ojpn_DefaultWorldPool253_getPolyCircleContactStack218($this.pool101);
+    ojcs_ShapeType738_$clinit();
+    a = ojcs_ShapeType738.POLYGON740;
+    ojcs_ShapeType738_$clinit();
+    ojd_World83_addType217($this, c, a, ojcs_ShapeType738.CIRCLE743);
+    a = ojpn_DefaultWorldPool253_getPolyContactStack219($this.pool101);
     ojcs_ShapeType738_$clinit();
     c = ojcs_ShapeType738.POLYGON740;
     ojcs_ShapeType738_$clinit();
-    ojd_World83_addType217($this, b, c, ojcs_ShapeType738.CIRCLE743);
-    a = ojpn_DefaultWorldPool253_getPolyContactStack219($this.pool101);
-    ojcs_ShapeType738_$clinit();
-    b = ojcs_ShapeType738.POLYGON740;
-    ojcs_ShapeType738_$clinit();
-    ojd_World83_addType217($this, a, b, ojcs_ShapeType738.POLYGON740);
+    ojd_World83_addType217($this, a, c, ojcs_ShapeType738.POLYGON740);
     c = ojpn_DefaultWorldPool253_getEdgeCircleContactStack220($this.pool101);
     ojcs_ShapeType738_$clinit();
-    a = ojcs_ShapeType738.EDGE741;
+    b = ojcs_ShapeType738.EDGE741;
     ojcs_ShapeType738_$clinit();
-    ojd_World83_addType217($this, c, a, ojcs_ShapeType738.CIRCLE743);
-    b = ojpn_DefaultWorldPool253_getEdgePolyContactStack221($this.pool101);
+    ojd_World83_addType217($this, c, b, ojcs_ShapeType738.CIRCLE743);
+    a = ojpn_DefaultWorldPool253_getEdgePolyContactStack221($this.pool101);
     ojcs_ShapeType738_$clinit();
-    a = ojcs_ShapeType738.EDGE741;
+    c = ojcs_ShapeType738.EDGE741;
     ojcs_ShapeType738_$clinit();
-    ojd_World83_addType217($this, b, a, ojcs_ShapeType738.POLYGON740);
-    b = ojpn_DefaultWorldPool253_getChainCircleContactStack222($this.pool101);
+    ojd_World83_addType217($this, a, c, ojcs_ShapeType738.POLYGON740);
+    a = ojpn_DefaultWorldPool253_getChainCircleContactStack222($this.pool101);
+    ojcs_ShapeType738_$clinit();
+    b = ojcs_ShapeType738.CHAIN739;
+    ojcs_ShapeType738_$clinit();
+    ojd_World83_addType217($this, a, b, ojcs_ShapeType738.CIRCLE743);
+    b = ojpn_DefaultWorldPool253_getChainPolyContactStack223($this.pool101);
     ojcs_ShapeType738_$clinit();
     a = ojcs_ShapeType738.CHAIN739;
     ojcs_ShapeType738_$clinit();
-    ojd_World83_addType217($this, b, a, ojcs_ShapeType738.CIRCLE743);
-    b = ojpn_DefaultWorldPool253_getChainPolyContactStack223($this.pool101);
-    ojcs_ShapeType738_$clinit();
-    c = ojcs_ShapeType738.CHAIN739;
-    ojcs_ShapeType738_$clinit();
-    ojd_World83_addType217($this, b, c, ojcs_ShapeType738.POLYGON740);
+    ojd_World83_addType217($this, b, a, ojcs_ShapeType738.POLYGON740);
     return;
 }
 function ojd_World83_createBody224($this, a_def) {
@@ -6297,7 +6297,7 @@ function ojd_World83_clearForces207($this) {
     return;
 }
 function ojd_World83_solveTOI206($this, a_step) {
-    var b, c, d, e, f, g, h, i, j, k, m, n, o, p, q, r, s, t;
+    var b, c, d, e, f, g, h, i, j, k, m, n, o, p, q, r, s, t, u;
     b = $this.toiIsland102;
     ojd_Island980_init187(b, 64, 32, 0, $this.m_contactManager97.m_contactListener1895);
     if ($this.m_stepComplete105 != 0) {
@@ -6320,25 +6320,25 @@ function ojd_World83_solveTOI206($this, a_step) {
             $bc: while (true) {
                 e = null;
                 f = 1.0;
-                g = $this.m_contactManager97.m_contactList1893;
-                while (g !== null) {
+                d = $this.m_contactManager97.m_contactList1893;
+                while (d !== null) {
                     $bd: {
-                        if (ojdc_Contact642_isEnabled199(g) != 0 && g.m_toiCount644 <= 8.0) {
-                            if ((g.m_flags646 & 32) != 0) {
-                                c = g.m_toi653;
+                        if (ojdc_Contact642_isEnabled199(d) != 0 && d.m_toiCount644 <= 8.0) {
+                            if ((d.m_flags646 & 32) != 0) {
+                                c = d.m_toi653;
                             } else {
-                                h = ojdc_Contact642_getFixtureA209(g);
-                                i = ojdc_Contact642_getFixtureB210(g);
+                                g = ojdc_Contact642_getFixtureA209(d);
+                                h = ojdc_Contact642_getFixtureB210(d);
+                                if (ojd_Fixture421_isSensor211(g) != 0) {
+                                    break $bd;
+                                }
                                 if (ojd_Fixture421_isSensor211(h) != 0) {
                                     break $bd;
                                 }
-                                if (ojd_Fixture421_isSensor211(i) != 0) {
-                                    break $bd;
-                                }
+                                i = ojd_Fixture421_getBody212(g);
                                 j = ojd_Fixture421_getBody212(h);
-                                d = ojd_Fixture421_getBody212(i);
-                                k = j.m_type1462;
-                                m = d.m_type1462;
+                                k = i.m_type1462;
+                                m = j.m_type1462;
                                 if (ojd_World83.$assertionsDisabled137 == 0) {
                                     ojd_BodyType2123_$clinit();
                                     if (k !== ojd_BodyType2123.DYNAMIC2127) {
@@ -6349,30 +6349,30 @@ function ojd_World83_solveTOI206($this, a_step) {
                                     }
                                 }
                                 $be: {
-                                    if (ojd_Body1436_isAwake194(j) != 0) {
+                                    if (ojd_Body1436_isAwake194(i) != 0) {
                                         ojd_BodyType2123_$clinit();
                                         if (k !== ojd_BodyType2123.STATIC2125) {
-                                            c = 1;
-                                            break $be;
-                                        }
-                                    }
-                                    c = 0;
-                                }
-                                $bf: {
-                                    if (ojd_Body1436_isAwake194(d) != 0) {
-                                        ojd_BodyType2123_$clinit();
-                                        if (m !== ojd_BodyType2123.STATIC2125) {
                                             n = 1;
-                                            break $bf;
+                                            break $be;
                                         }
                                     }
                                     n = 0;
                                 }
-                                if (c == 0 && n == 0) {
+                                $bf: {
+                                    if (ojd_Body1436_isAwake194(j) != 0) {
+                                        ojd_BodyType2123_$clinit();
+                                        if (m !== ojd_BodyType2123.STATIC2125) {
+                                            c = 1;
+                                            break $bf;
+                                        }
+                                    }
+                                    c = 0;
+                                }
+                                if (n == 0 && c == 0) {
                                     break $bd;
                                 }
                                 $bg: {
-                                    if (ojd_Body1436_isBullet230(j) == 0) {
+                                    if (ojd_Body1436_isBullet230(i) == 0) {
                                         ojd_BodyType2123_$clinit();
                                         if (k === ojd_BodyType2123.DYNAMIC2127) {
                                             n = 0;
@@ -6382,7 +6382,7 @@ function ojd_World83_solveTOI206($this, a_step) {
                                     n = 1;
                                 }
                                 $bh: {
-                                    if (ojd_Body1436_isBullet230(d) == 0) {
+                                    if (ojd_Body1436_isBullet230(j) == 0) {
                                         ojd_BodyType2123_$clinit();
                                         if (m === ojd_BodyType2123.DYNAMIC2127) {
                                             c = 0;
@@ -6394,44 +6394,44 @@ function ojd_World83_solveTOI206($this, a_step) {
                                 if (n == 0 && c == 0) {
                                     break $bd;
                                 }
-                                n = j.m_sweep1458.alpha02389;
-                                if (j.m_sweep1458.alpha02389 < d.m_sweep1458.alpha02389) {
-                                    n = d.m_sweep1458.alpha02389;
-                                    ojc_Sweep2384_advance231(j.m_sweep1458, n);
-                                } else if (d.m_sweep1458.alpha02389 < j.m_sweep1458.alpha02389) {
-                                    n = j.m_sweep1458.alpha02389;
-                                    ojc_Sweep2384_advance231(d.m_sweep1458, n);
+                                o = i.m_sweep1458.alpha02389;
+                                if (i.m_sweep1458.alpha02389 < j.m_sweep1458.alpha02389) {
+                                    o = j.m_sweep1458.alpha02389;
+                                    ojc_Sweep2384_advance231(i.m_sweep1458, o);
+                                } else if (j.m_sweep1458.alpha02389 < i.m_sweep1458.alpha02389) {
+                                    o = i.m_sweep1458.alpha02389;
+                                    ojc_Sweep2384_advance231(j.m_sweep1458, o);
                                 }
-                                if (ojd_World83.$assertionsDisabled137 == 0 && n >= 1.0) {
+                                if (ojd_World83.$assertionsDisabled137 == 0 && o >= 1.0) {
                                     break $bc;
                                 }
-                                c = ojdc_Contact642_getChildIndexA232(g);
-                                o = ojdc_Contact642_getChildIndexB233(g);
-                                p = $this.toiInput119;
-                                ojc_Distance$DistanceProxy2836_set234(p.proxyA2705, ojd_Fixture421_getShape235(h), c);
-                                ojc_Distance$DistanceProxy2836_set234(p.proxyB2707, ojd_Fixture421_getShape235(i), o);
-                                ojc_Sweep2384_set236(p.sweepA2706, j.m_sweep1458);
-                                ojc_Sweep2384_set236(p.sweepB2708, d.m_sweep1458);
-                                p.tMax2704 = 1.0;
-                                ojc_TimeOfImpact531_timeOfImpact237(ojpn_DefaultWorldPool253_getTimeOfImpact238($this.pool101), $this.toiOutput123, p);
-                                o = $this.toiOutput123.t1046;
-                                q = $this.toiOutput123.state1047;
+                                c = ojdc_Contact642_getChildIndexA232(d);
+                                p = ojdc_Contact642_getChildIndexB233(d);
+                                q = $this.toiInput119;
+                                ojc_Distance$DistanceProxy2836_set234(q.proxyA2705, ojd_Fixture421_getShape235(g), c);
+                                ojc_Distance$DistanceProxy2836_set234(q.proxyB2707, ojd_Fixture421_getShape235(h), p);
+                                ojc_Sweep2384_set236(q.sweepA2706, i.m_sweep1458);
+                                ojc_Sweep2384_set236(q.sweepB2708, j.m_sweep1458);
+                                q.tMax2704 = 1.0;
+                                ojc_TimeOfImpact531_timeOfImpact237(ojpn_DefaultWorldPool253_getTimeOfImpact238($this.pool101), $this.toiOutput123, q);
+                                p = $this.toiOutput123.t1046;
+                                r = $this.toiOutput123.state1047;
                                 ojc_TimeOfImpact$TOIOutputState169_$clinit();
-                                if (q !== ojc_TimeOfImpact$TOIOutputState169.TOUCHING175) {
+                                if (r !== ojc_TimeOfImpact$TOIOutputState169.TOUCHING175) {
                                     c = 1.0;
                                 } else {
-                                    c = ojc_MathUtils1593_min239(n + (1.0 - n) * o, 1.0);
+                                    c = ojc_MathUtils1593_min239(o + (1.0 - o) * p, 1.0);
                                 }
-                                g.m_toi653 = c;
-                                g.m_flags646 = g.m_flags646 | 32;
+                                d.m_toi653 = c;
+                                d.m_flags646 = d.m_flags646 | 32;
                             }
                             if (c < f) {
-                                e = g;
+                                e = d;
                                 f = c;
                             }
                         }
                     }
-                    g = g.m_next650;
+                    d = d.m_next650;
                 }
                 if (e === null) {
                     break $bb;
@@ -6439,39 +6439,39 @@ function ojd_World83_solveTOI206($this, a_step) {
                 if (0.9999988 < f) {
                     break $bb;
                 }
-                r = ojdc_Contact642_getFixtureA209(e);
+                k = ojdc_Contact642_getFixtureA209(e);
                 m = ojdc_Contact642_getFixtureB210(e);
-                k = ojd_Fixture421_getBody212(r);
-                r = ojd_Fixture421_getBody212(m);
-                ojc_Sweep2384_set236($this.backup1122, k.m_sweep1458);
-                ojc_Sweep2384_set236($this.backup2135, r.m_sweep1458);
-                ojd_Body1436_advance231(k, f);
-                ojd_Body1436_advance231(r, f);
+                s = ojd_Fixture421_getBody212(k);
+                m = ojd_Fixture421_getBody212(m);
+                ojc_Sweep2384_set236($this.backup1122, s.m_sweep1458);
+                ojc_Sweep2384_set236($this.backup2135, m.m_sweep1458);
+                ojd_Body1436_advance231(s, f);
+                ojd_Body1436_advance231(m, f);
                 ojdc_Contact642_update240(e, $this.m_contactManager97.m_contactListener1895);
                 e.m_flags646 = e.m_flags646 &  -33;
                 e.m_toiCount644 = e.m_toiCount644 + 1.0;
                 if (ojdc_Contact642_isEnabled199(e) != 0 && ojdc_Contact642_isTouching200(e) != 0) {
-                    ojd_Body1436_setAwake198(k, 1);
-                    ojd_Body1436_setAwake198(r, 1);
+                    ojd_Body1436_setAwake198(s, 1);
+                    ojd_Body1436_setAwake198(m, 1);
                     ojd_Island980_clear196(b);
-                    ojd_Island980_add197(b, k);
-                    ojd_Island980_add197(b, r);
+                    ojd_Island980_add197(b, s);
+                    ojd_Island980_add197(b, m);
                     ojd_Island980_add201(b, e);
-                    k.m_flags1437 = k.m_flags1437 | 1;
-                    r.m_flags1437 = r.m_flags1437 | 1;
+                    s.m_flags1437 = s.m_flags1437 | 1;
+                    m.m_flags1437 = m.m_flags1437 | 1;
                     e.m_flags646 = e.m_flags646 | 1;
-                    $this.tempBodies130.data[0] = k;
-                    $this.tempBodies130.data[1] = r;
-                    d = 0;
-                    while (d < 2) {
+                    $this.tempBodies130.data[0] = s;
+                    $this.tempBodies130.data[1] = m;
+                    n = 0;
+                    while (n < 2) {
                         $bi: {
-                            i = $this.tempBodies130.data[d];
-                            h = i.m_type1462;
+                            j = $this.tempBodies130.data[n];
+                            t = j.m_type1462;
                             ojd_BodyType2123_$clinit();
-                            if (h === ojd_BodyType2123.DYNAMIC2127) {
-                                n = i.m_contactList1454;
+                            if (t === ojd_BodyType2123.DYNAMIC2127) {
+                                d = j.m_contactList1454;
                                 while (true) {
-                                    if (n === null) {
+                                    if (d === null) {
                                         break $bi;
                                     }
                                     if (b.m_bodyCount994 == b.m_bodyCapacity998) {
@@ -6480,47 +6480,47 @@ function ojd_World83_solveTOI206($this, a_step) {
                                     if (b.m_contactCount985 == b.m_contactCapacity986) {
                                         break $bi;
                                     }
-                                    c = n.contact1612;
-                                    if ((c.m_flags646 & 1) == 0) {
-                                        s = n.other1611;
-                                        j = s.m_type1462;
+                                    o = d.contact1612;
+                                    if ((o.m_flags646 & 1) == 0) {
+                                        i = d.other1611;
+                                        u = i.m_type1462;
                                         ojd_BodyType2123_$clinit();
-                                        if (!(j === ojd_BodyType2123.DYNAMIC2127 && ojd_Body1436_isBullet230(i) == 0 && ojd_Body1436_isBullet230(s) == 0)) {
-                                            m = c.m_fixtureA645.m_isSensor422;
-                                            t = c.m_fixtureB643.m_isSensor422;
-                                            if (m == 0 && t == 0) {
-                                                ojc_Sweep2384_set236($this.backup1122, s.m_sweep1458);
-                                                if ((s.m_flags1437 & 1) == 0) {
-                                                    ojd_Body1436_advance231(s, f);
+                                        if (!(u === ojd_BodyType2123.DYNAMIC2127 && ojd_Body1436_isBullet230(j) == 0 && ojd_Body1436_isBullet230(i) == 0)) {
+                                            u = o.m_fixtureA645.m_isSensor422;
+                                            t = o.m_fixtureB643.m_isSensor422;
+                                            if (u == 0 && t == 0) {
+                                                ojc_Sweep2384_set236($this.backup1122, i.m_sweep1458);
+                                                if ((i.m_flags1437 & 1) == 0) {
+                                                    ojd_Body1436_advance231(i, f);
                                                 }
-                                                ojdc_Contact642_update240(c, $this.m_contactManager97.m_contactListener1895);
-                                                if (ojdc_Contact642_isEnabled199(c) == 0) {
-                                                    ojc_Sweep2384_set236(s.m_sweep1458, $this.backup1122);
-                                                    ojd_Body1436_synchronizeTransform241(s);
-                                                } else if (ojdc_Contact642_isTouching200(c) == 0) {
-                                                    ojc_Sweep2384_set236(s.m_sweep1458, $this.backup1122);
-                                                    ojd_Body1436_synchronizeTransform241(s);
+                                                ojdc_Contact642_update240(o, $this.m_contactManager97.m_contactListener1895);
+                                                if (ojdc_Contact642_isEnabled199(o) == 0) {
+                                                    ojc_Sweep2384_set236(i.m_sweep1458, $this.backup1122);
+                                                    ojd_Body1436_synchronizeTransform241(i);
+                                                } else if (ojdc_Contact642_isTouching200(o) == 0) {
+                                                    ojc_Sweep2384_set236(i.m_sweep1458, $this.backup1122);
+                                                    ojd_Body1436_synchronizeTransform241(i);
                                                 } else {
-                                                    c.m_flags646 = c.m_flags646 | 1;
-                                                    ojd_Island980_add201(b, c);
-                                                    if ((s.m_flags1437 & 1) == 0) {
-                                                        s.m_flags1437 = s.m_flags1437 | 1;
-                                                        t = s.m_type1462;
+                                                    o.m_flags646 = o.m_flags646 | 1;
+                                                    ojd_Island980_add201(b, o);
+                                                    if ((i.m_flags1437 & 1) == 0) {
+                                                        i.m_flags1437 = i.m_flags1437 | 1;
+                                                        t = i.m_type1462;
                                                         ojd_BodyType2123_$clinit();
                                                         if (t !== ojd_BodyType2123.STATIC2125) {
-                                                            ojd_Body1436_setAwake198(s, 1);
+                                                            ojd_Body1436_setAwake198(i, 1);
                                                         }
-                                                        ojd_Island980_add197(b, s);
+                                                        ojd_Island980_add197(b, i);
                                                     }
                                                 }
                                             }
                                         }
                                     }
-                                    n = n.next1610;
+                                    d = d.next1610;
                                 }
                             }
                         }
-                        d = d + 1 | 0;
+                        n = n + 1 | 0;
                     }
                     $this.subStep89.dt1586 = (1.0 - f) * a_step.dt1586;
                     $this.subStep89.inv_dt1589 = 1.0 / $this.subStep89.dt1586;
@@ -6528,19 +6528,19 @@ function ojd_World83_solveTOI206($this, a_step) {
                     $this.subStep89.positionIterations1590 = 20;
                     $this.subStep89.velocityIterations1587 = a_step.velocityIterations1587;
                     $this.subStep89.warmStarting1591 = 0;
-                    ojd_Island980_solveTOI242(b, $this.subStep89, k.m_islandIndex1442, r.m_islandIndex1442);
+                    ojd_Island980_solveTOI242(b, $this.subStep89, s.m_islandIndex1442, m.m_islandIndex1442);
                     d = 0;
                     while (d < b.m_bodyCount994) {
-                        n = b.m_bodies983.data[d];
-                        n.m_flags1437 = n.m_flags1437 &  -2;
-                        c = n.m_type1462;
+                        j = b.m_bodies983.data[d];
+                        j.m_flags1437 = j.m_flags1437 &  -2;
+                        f = j.m_type1462;
                         ojd_BodyType2123_$clinit();
-                        if (c === ojd_BodyType2123.DYNAMIC2127) {
-                            ojd_Body1436_synchronizeFixtures190(n);
-                            c = n.m_contactList1454;
+                        if (f === ojd_BodyType2123.DYNAMIC2127) {
+                            ojd_Body1436_synchronizeFixtures190(j);
+                            c = j.m_contactList1454;
                             while (c !== null) {
-                                i = c.contact1612;
-                                i.m_flags646 = i.m_flags646 &  -34;
+                                f = c.contact1612;
+                                f.m_flags646 = f.m_flags646 &  -34;
                                 c = c.next1610;
                             }
                         }
@@ -6554,10 +6554,10 @@ function ojd_World83_solveTOI206($this, a_step) {
                     continue;
                 }
                 ojdc_Contact642_setEnabled243(e, 0);
-                ojc_Sweep2384_set236(k.m_sweep1458, $this.backup1122);
-                ojc_Sweep2384_set236(r.m_sweep1458, $this.backup2135);
-                ojd_Body1436_synchronizeTransform241(k);
-                ojd_Body1436_synchronizeTransform241(r);
+                ojc_Sweep2384_set236(s.m_sweep1458, $this.backup1122);
+                ojc_Sweep2384_set236(m.m_sweep1458, $this.backup2135);
+                ojd_Body1436_synchronizeTransform241(s);
+                ojd_Body1436_synchronizeTransform241(m);
             }
             $rt_throw(jl_AssertionError746_$init4());
         }
@@ -6603,24 +6603,24 @@ function ojd_World83_destroyBody247($this, a_body) {
         b = c;
     }
     a_body.m_jointList1459 = null;
-    c = a_body.m_contactList1454;
-    while (c !== null) {
-        d = c.next1610;
-        ojd_ContactManager1889_destroy250($this.m_contactManager97, c.contact1612);
-        c = d;
+    b = a_body.m_contactList1454;
+    while (b !== null) {
+        d = b.next1610;
+        ojd_ContactManager1889_destroy250($this.m_contactManager97, b.contact1612);
+        b = d;
     }
     a_body.m_contactList1454 = null;
-    c = a_body.m_fixtureList1457;
-    while (c !== null) {
-        b = c.m_next427;
+    b = a_body.m_fixtureList1457;
+    while (b !== null) {
+        c = b.m_next427;
         if ($this.m_destructionListener100 !== null) {
-            $this.m_destructionListener100.sayGoodbye251(c);
+            $this.m_destructionListener100.sayGoodbye251(b);
         }
-        ojd_Fixture421_destroyProxies252(c, $this.m_contactManager97.m_broadPhase1894);
-        ojd_Fixture421_destroy253(c);
-        a_body.m_fixtureList1457 = b;
+        ojd_Fixture421_destroyProxies252(b, $this.m_contactManager97.m_broadPhase1894);
+        ojd_Fixture421_destroy253(b);
+        a_body.m_fixtureList1457 = c;
         a_body.m_fixtureCount1443 = a_body.m_fixtureCount1443 - 1 | 0;
-        c = b;
+        b = c;
     }
     a_body.m_fixtureList1457 = null;
     a_body.m_fixtureCount1443 = 0;
@@ -6954,40 +6954,40 @@ function dmgc_GameSceneClassInformation156_$clinit() {
         dmgc_GameSceneClassInformation$12084_$init302(a, b, c, d);
         dmgc_GameSceneClassInformation156.ADDINSTANCE166 = a;
         a = new dmgc_GameSceneClassInformation$22088;
-        b = $rt_s(26);
+        c = $rt_s(26);
         e = $rt_cls(dmgc_GameObject1845);
         d = $rt_createArray(jl_Class0, 1);
         d.data[0] = $rt_cls(jl_String1);
-        dmgc_GameSceneClassInformation$22088_$init302(a, b, e, d);
+        dmgc_GameSceneClassInformation$22088_$init302(a, c, e, d);
         dmgc_GameSceneClassInformation156.FINDOBJECTBYNAME159 = a;
         a = new dmgc_GameSceneClassInformation$32085;
-        b = $rt_s(27);
-        c = $rt_cls(dmgc_GameObjectInstance2906);
-        f = $rt_createArray(jl_Class0, 1);
-        f.data[0] = $rt_cls(jl_String1);
-        dmgc_GameSceneClassInformation$32085_$init302(a, b, c, f);
+        c = $rt_s(27);
+        b = $rt_cls(dmgc_GameObjectInstance2906);
+        d = $rt_createArray(jl_Class0, 1);
+        d.data[0] = $rt_cls(jl_String1);
+        dmgc_GameSceneClassInformation$32085_$init302(a, c, b, d);
         dmgc_GameSceneClassInformation156.FINDINSTANCEBYNAME157 = a;
         a = new dmgc_GameSceneClassInformation$42093;
-        c = $rt_s(28);
+        b = $rt_s(28);
         e = $rt_cls(dmgc_GameObjectInstance2906);
         f = $rt_createArray(jl_Class0, 1);
         f.data[0] = $rt_cls(jl_String1);
-        dmgc_GameSceneClassInformation$42093_$init302(a, c, e, f);
+        dmgc_GameSceneClassInformation$42093_$init302(a, b, e, f);
         dmgc_GameSceneClassInformation156.FINDINSTANCEBYID158 = a;
         a = new dmgc_GameSceneClassInformation$52092;
-        e = $rt_s(29);
-        b = $rt_cls(dmgc_GameObjectInstance2906);
-        f = $rt_createArray(jl_Class0, 1);
-        f.data[0] = $rt_cls(dmgc_GameObject1845);
-        dmgc_GameSceneClassInformation$52092_$init302(a, e, b, f);
+        c = $rt_s(29);
+        e = $rt_cls(dmgc_GameObjectInstance2906);
+        d = $rt_createArray(jl_Class0, 1);
+        d.data[0] = $rt_cls(dmgc_GameObject1845);
+        dmgc_GameSceneClassInformation$52092_$init302(a, c, e, d);
         dmgc_GameSceneClassInformation156.CREATEFROM162 = a;
         a = new dmgc_GameSceneClassInformation$62096;
-        e = $rt_s(30);
+        b = $rt_s(30);
         jl_Void1430_$clinit();
-        c = jl_Void1430.TYPE1431;
-        d = $rt_createArray(jl_Class0, 1);
-        d.data[0] = $rt_cls(dmgc_GameObjectInstance2906);
-        dmgc_GameSceneClassInformation$62096_$init302(a, e, c, d);
+        e = jl_Void1430.TYPE1431;
+        f = $rt_createArray(jl_Class0, 1);
+        f.data[0] = $rt_cls(dmgc_GameObjectInstance2906);
+        dmgc_GameSceneClassInformation$62096_$init302(a, b, e, f);
         dmgc_GameSceneClassInformation156.REMOVEGAMEOBJECTINSTANCE165 = a;
         dmgc_GameSceneClassInformation156.NAMEPROPERTY167 = dmgc_GameSceneClassInformation$72095_$init91($rt_s(31), $rt_cls(dmge_Property43));
         dmgc_GameSceneClassInformation156.CAMERAOBJECTPROPERTY161 = dmgc_GameSceneClassInformation$82098_$init91($rt_s(32), $rt_cls(dmge_Property43));
@@ -7158,7 +7158,7 @@ function ojcs_ChainShape199_$clinit() {
 function dmgt_AngleClassInformation204_$clinit() {
     dmgt_AngleClassInformation204_$clinit = function(){};
     dmgt_AngleClassInformation204_$clinit43 = function() {
-        var a, b, c, d, e;
+        var a, b, c, d;
         a = new dmgt_AngleClassInformation$11858;
         b = $rt_s(43);
         c = $rt_cls(dmgt_Angle1361);
@@ -7169,10 +7169,10 @@ function dmgt_AngleClassInformation204_$clinit() {
         dmgt_AngleClassInformation204.INVERT207 = dmgt_AngleClassInformation$21885_$init313($rt_s(44), $rt_cls(dmgt_Angle1361), $rt_createArray(jl_Class0, 0));
         a = new dmgt_AngleClassInformation$31884;
         c = $rt_s(45);
-        e = $rt_cls(dmgt_Angle1361);
+        b = $rt_cls(dmgt_Angle1361);
         d = $rt_createArray(jl_Class0, 1);
         d.data[0] = $rt_cls(jl_Integer21);
-        dmgt_AngleClassInformation$31884_$init302(a, c, e, d);
+        dmgt_AngleClassInformation$31884_$init302(a, c, b, d);
         dmgt_AngleClassInformation204.SNAPTO208 = a;
         dmgt_AngleClassInformation204.RESETTOZERO206 = dmgt_AngleClassInformation$41883_$init313($rt_s(46), $rt_cls(dmgt_Angle1361), $rt_createArray(jl_Class0, 0));
         return;
@@ -7402,16 +7402,16 @@ function ojpn_MutableStack227_extendStack342($this, a_argSize) {
     }
     c = 0;
     while (true) {
-        a_argSize = b.data;
-        d = a_argSize.length;
-        if (c >= d) {
+        d = b.data;
+        a_argSize = d.length;
+        if (c >= a_argSize) {
             break;
         }
-        a_argSize[c] = $this.newInstance344();
+        d[c] = $this.newInstance344();
         c = c + 1 | 0;
     }
     $this.stack228 = b;
-    $this.size229 = d;
+    $this.size229 = a_argSize;
     return;
 }
 function ojpn_MutableStack227_push213($this, a_argObject) {
@@ -7737,7 +7737,7 @@ function jl_AbstractStringBuilder232_insert364($this, a_index, b_b) {
     return jl_StringBuilder2321_insert365($this, a_index, c);
 }
 function jl_AbstractStringBuilder232_insert361($this, a_target, b_value, c_radix) {
-    var d, e, f, g, h, i;
+    var d, e, f, g, h;
     d = 1;
     if (b_value < 0) {
         d = 0;
@@ -7755,41 +7755,41 @@ function jl_AbstractStringBuilder232_insert361($this, a_target, b_value, c_radix
         }
         $this.buffer234.data[a_target] = jl_Character2057_forDigit359(b_value, c_radix);
     } else {
-        f = 1;
         g = 1;
-        h = 2147483647 / c_radix | 0;
+        f = 1;
+        e = 2147483647 / c_radix | 0;
         $ba: {
             while (true) {
-                i = f * c_radix | 0;
-                if (i > b_value) {
-                    i = f;
+                h = g * c_radix | 0;
+                if (h > b_value) {
+                    h = g;
                     break $ba;
                 }
-                g = g + 1 | 0;
-                if (i > h) {
+                f = f + 1 | 0;
+                if (h > e) {
                     break;
                 }
-                f = i;
+                g = h;
             }
         }
         if (d == 0) {
-            g = g + 1 | 0;
+            f = f + 1 | 0;
         }
-        jl_AbstractStringBuilder232_insertSpace358($this, a_target, a_target + g | 0);
+        jl_AbstractStringBuilder232_insertSpace358($this, a_target, a_target + f | 0);
         if (d != 0) {
-            f = a_target;
+            g = a_target;
         } else {
-            g = $this.buffer234.data;
-            f = a_target + 1 | 0;
-            g[a_target] = 45;
-        }
-        while (i > 0) {
             d = $this.buffer234.data;
-            g = f + 1 | 0;
-            d[f] = jl_Character2057_forDigit359(b_value / i | 0, c_radix);
-            b_value = b_value % i;
-            i = i / c_radix | 0;
-            f = g;
+            g = a_target + 1 | 0;
+            d[a_target] = 45;
+        }
+        while (h > 0) {
+            a_target = $this.buffer234.data;
+            d = g + 1 | 0;
+            a_target[g] = jl_Character2057_forDigit359(b_value / h | 0, c_radix);
+            b_value = b_value % h;
+            h = h / c_radix | 0;
+            g = d;
         }
     }
     return $this;
@@ -7825,248 +7825,40 @@ function jl_AbstractStringBuilder232_insert365($this, a_index_j, b_string) {
     $rt_throw(jl_StringIndexOutOfBoundsException1832_$init4());
 }
 function jl_AbstractStringBuilder232_insert353($this, a_target, b_value) {
-    var c, d, e, f, g, h, i, j, k, m, n, o, p, q, r, s;
+    var c, d, e, f, g, h, i, j, k, m, n, o, p, q, r, s, t;
     if (b_value == 0.0) {
         jl_AbstractStringBuilder232_insertSpace358($this, a_target, a_target + 3 | 0);
         c = $this.buffer234.data;
-        d = a_target + 1 | 0;
+        b_value = a_target + 1 | 0;
         c[a_target] = 48;
         c = $this.buffer234.data;
-        e = d + 1 | 0;
-        c[d] = 46;
-        $this.buffer234.data[e] = 48;
+        a_target = b_value + 1 | 0;
+        c[b_value] = 46;
+        $this.buffer234.data[a_target] = 48;
         return $this;
     }
     if (b_value == 0.0) {
         jl_AbstractStringBuilder232_insertSpace358($this, a_target, a_target + 4 | 0);
         c = $this.buffer234.data;
-        d = a_target + 1 | 0;
+        b_value = a_target + 1 | 0;
         c[a_target] = 45;
         c = $this.buffer234.data;
-        e = d + 1 | 0;
-        c[d] = 48;
+        d = b_value + 1 | 0;
+        c[b_value] = 48;
         c = $this.buffer234.data;
-        a_target = e + 1 | 0;
-        c[e] = 46;
+        a_target = d + 1 | 0;
+        c[d] = 46;
         $this.buffer234.data[a_target] = 48;
         return $this;
     }
     if ((isNaN(b_value) ? 1 : 0) != 0) {
         jl_AbstractStringBuilder232_insertSpace358($this, a_target, a_target + 3 | 0);
         c = $this.buffer234.data;
-        e = a_target + 1 | 0;
-        c[a_target] = 78;
-        c = $this.buffer234.data;
-        d = e + 1 | 0;
-        c[e] = 97;
-        $this.buffer234.data[d] = 78;
-        return $this;
-    }
-    if ((!isFinite(b_value) ? 1 : 0) != 0) {
-        if (b_value > 0.0) {
-            jl_AbstractStringBuilder232_insertSpace358($this, a_target, a_target + 8 | 0);
-            b_value = a_target;
-        } else {
-            jl_AbstractStringBuilder232_insertSpace358($this, a_target, a_target + 9 | 0);
-            e = $this.buffer234.data;
-            b_value = a_target + 1 | 0;
-            e[a_target] = 45;
-        }
-        c = $this.buffer234.data;
-        e = b_value + 1 | 0;
-        c[b_value] = 73;
-        c = $this.buffer234.data;
-        a_target = e + 1 | 0;
-        c[e] = 110;
-        c = $this.buffer234.data;
-        d = a_target + 1 | 0;
-        c[a_target] = 102;
-        c = $this.buffer234.data;
-        a_target = d + 1 | 0;
-        c[d] = 105;
-        c = $this.buffer234.data;
-        e = a_target + 1 | 0;
-        c[a_target] = 110;
-        c = $this.buffer234.data;
-        d = e + 1 | 0;
-        c[e] = 105;
-        c = $this.buffer234.data;
-        e = d + 1 | 0;
-        c[d] = 116;
-        $this.buffer234.data[e] = 121;
-        return $this;
-    }
-    f = 0;
-    g = 1;
-    if (b_value < 0.0) {
-        f = 1;
-        b_value =  -b_value;
-        g = g + 1 | 0;
-    }
-    h = 1;
-    if (b_value >= 1.0) {
-        i = 256;
-        j = 0;
-        k = 1.0;
-        m = jl_AbstractStringBuilder232.doublePowersOfTen236.data.length - 1 | 0;
-        while (m >= 0) {
-            n = j | i;
-            if (n <= 308 && jl_AbstractStringBuilder232.doublePowersOfTen236.data[m] * k <= b_value) {
-                k = k * jl_AbstractStringBuilder232.doublePowersOfTen236.data[m];
-                j = n;
-            }
-            i = i >> 1;
-            m = m +  -1 | 0;
-        }
-        m = Long_fromNumber(b_value / k * 1.0E15 + 0.5);
-    } else {
-        j = 256;
-        o = 0;
-        i = 1.0;
-        n = jl_AbstractStringBuilder232.negDoublePowersOfTen239.data.length - 1 | 0;
-        while (n >= 0) {
-            m = o | j;
-            if (m <= 308 && jl_AbstractStringBuilder232.negDoublePowersOfTen239.data[n] * i * 10.0 > b_value) {
-                i = i * jl_AbstractStringBuilder232.negDoublePowersOfTen239.data[n];
-                o = m;
-            }
-            j = j >> 1;
-            n = n +  -1 | 0;
-        }
-        j =  -o | 0;
-        m = Long_fromNumber(b_value * 1.0E15 / i + 0.5);
-    }
-    o = 16;
-    e = jl_AbstractStringBuilder232_trailingDecimalZeros345(m);
-    if (e > 0) {
-        o = o - e | 0;
-    }
-    if (j < 7 && j >=  -3) {
-        if (j >= 0) {
-            h = j + 1 | 0;
-            o = jl_Math2210_max367(o, h + 1 | 0);
-            j = 0;
-        } else if (j < 0) {
-            m = Long_div(m, jl_AbstractStringBuilder232.longPowersOfTen240.data[ -j | 0]);
-            o = o - j | 0;
-            j = 0;
-        }
-    }
-    if (j != 0) {
-        g = g + 2 | 0;
-        if (!(j >  -10 && j < 10)) {
-            g = g + 1 | 0;
-        }
-        if (!(j >  -100 && j < 100)) {
-            g = g + 1 | 0;
-        }
-        if (j < 0) {
-            g = g + 1 | 0;
-        }
-    }
-    if (j != 0 && o == h) {
-        o = o + 1 | 0;
-    }
-    jl_AbstractStringBuilder232_insertSpace358($this, a_target, a_target + (g + o | 0) | 0);
-    if (f == 0) {
-        b_value = a_target;
-    } else {
-        c = $this.buffer234.data;
-        b_value = a_target + 1 | 0;
-        c[a_target] = 45;
-    }
-    n = new Long(2764472320, 232830);
-    p = 0;
-    while (p < o) {
-        if (Long_compare(n, Long_ZERO) <= 0) {
-            i = 0;
-        } else {
-            i = Long_div(m, n).lo;
-            m = Long_rem(m, n);
-        }
-        g = $this.buffer234.data;
-        f = b_value + 1 | 0;
-        g[b_value] = (48 + i | 0) & 65535;
-        h = h +  -1 | 0;
-        if (h != 0) {
-            b_value = f;
-        } else {
-            c = $this.buffer234.data;
-            b_value = f + 1 | 0;
-            c[f] = 46;
-        }
-        n = Long_div(n, Long_fromInt(10));
-        p = p + 1 | 0;
-    }
-    if (j != 0) {
-        c = $this.buffer234.data;
-        i = b_value + 1 | 0;
-        c[b_value] = 69;
-        if (j >= 0) {
-            o = i;
-        } else {
-            j =  -j | 0;
-            a_target = $this.buffer234.data;
-            o = i + 1 | 0;
-            a_target[i] = 45;
-        }
-        if (j >= 100) {
-            q = $this.buffer234.data;
-            r = o + 1 | 0;
-            q[o] = (48 + (j / 100 | 0) | 0) & 65535;
-            j = j % 100;
-            s = $this.buffer234.data;
-            i = r + 1 | 0;
-            s[r] = (48 + (j / 10 | 0) | 0) & 65535;
-        } else if (j < 10) {
-            i = o;
-        } else {
-            b_value = $this.buffer234.data;
-            i = o + 1 | 0;
-            b_value[o] = (48 + (j / 10 | 0) | 0) & 65535;
-        }
-        $this.buffer234.data[i] = (48 + j % 10 | 0) & 65535;
-    }
-    return $this;
-}
-function jl_AbstractStringBuilder232_append368($this, a_value) {
-    return jl_StringBuilder2321_insert366($this, $this.length233, a_value);
-}
-function jl_AbstractStringBuilder232_insert369($this, a_target, b_value) {
-    var c, d, e, f, g, h, i, j, k, m, n, o, p;
-    if (b_value == 0.0) {
-        jl_AbstractStringBuilder232_insertSpace358($this, a_target, a_target + 3 | 0);
-        c = $this.buffer234.data;
-        b_value = a_target + 1 | 0;
-        c[a_target] = 48;
-        a_target = $this.buffer234.data;
-        d = b_value + 1 | 0;
-        a_target[b_value] = 46;
-        $this.buffer234.data[d] = 48;
-        return $this;
-    }
-    if (b_value == 0.0) {
-        jl_AbstractStringBuilder232_insertSpace358($this, a_target, a_target + 4 | 0);
-        c = $this.buffer234.data;
-        b_value = a_target + 1 | 0;
-        c[a_target] = 45;
-        a_target = $this.buffer234.data;
-        d = b_value + 1 | 0;
-        a_target[b_value] = 48;
-        a_target = $this.buffer234.data;
-        b_value = d + 1 | 0;
-        a_target[d] = 46;
-        $this.buffer234.data[b_value] = 48;
-        return $this;
-    }
-    if ((isNaN(b_value) ? 1 : 0) != 0) {
-        jl_AbstractStringBuilder232_insertSpace358($this, a_target, a_target + 3 | 0);
-        c = $this.buffer234.data;
         b_value = a_target + 1 | 0;
         c[a_target] = 78;
-        a_target = $this.buffer234.data;
+        c = $this.buffer234.data;
         d = b_value + 1 | 0;
-        a_target[b_value] = 97;
+        c[b_value] = 97;
         $this.buffer234.data[d] = 78;
         return $this;
     }
@@ -8076,32 +7868,240 @@ function jl_AbstractStringBuilder232_insert369($this, a_target, b_value) {
             e = a_target;
         } else {
             jl_AbstractStringBuilder232_insertSpace358($this, a_target, a_target + 9 | 0);
-            b_value = $this.buffer234.data;
+            d = $this.buffer234.data;
             e = a_target + 1 | 0;
-            b_value[a_target] = 45;
+            d[a_target] = 45;
         }
+        c = $this.buffer234.data;
+        d = e + 1 | 0;
+        c[e] = 73;
+        c = $this.buffer234.data;
+        b_value = d + 1 | 0;
+        c[d] = 110;
+        c = $this.buffer234.data;
+        d = b_value + 1 | 0;
+        c[b_value] = 102;
+        c = $this.buffer234.data;
+        f = d + 1 | 0;
+        c[d] = 105;
+        c = $this.buffer234.data;
+        b_value = f + 1 | 0;
+        c[f] = 110;
+        c = $this.buffer234.data;
+        d = b_value + 1 | 0;
+        c[b_value] = 105;
+        c = $this.buffer234.data;
+        b_value = d + 1 | 0;
+        c[d] = 116;
+        $this.buffer234.data[b_value] = 121;
+        return $this;
+    }
+    g = 0;
+    h = 1;
+    if (b_value < 0.0) {
+        g = 1;
+        b_value =  -b_value;
+        h = h + 1 | 0;
+    }
+    i = 1;
+    if (b_value >= 1.0) {
+        e = 256;
+        j = 0;
+        k = 1.0;
+        m = jl_AbstractStringBuilder232.doublePowersOfTen236.data.length - 1 | 0;
+        while (m >= 0) {
+            n = j | e;
+            if (n <= 308 && jl_AbstractStringBuilder232.doublePowersOfTen236.data[m] * k <= b_value) {
+                k = k * jl_AbstractStringBuilder232.doublePowersOfTen236.data[m];
+                j = n;
+            }
+            e = e >> 1;
+            m = m +  -1 | 0;
+        }
+        o = Long_fromNumber(b_value / k * 1.0E15 + 0.5);
+    } else {
+        m = 256;
+        e = 0;
+        p = 1.0;
+        j = jl_AbstractStringBuilder232.negDoublePowersOfTen239.data.length - 1 | 0;
+        while (j >= 0) {
+            k = e | m;
+            if (k <= 308 && jl_AbstractStringBuilder232.negDoublePowersOfTen239.data[j] * p * 10.0 > b_value) {
+                p = p * jl_AbstractStringBuilder232.negDoublePowersOfTen239.data[j];
+                e = k;
+            }
+            m = m >> 1;
+            j = j +  -1 | 0;
+        }
+        j =  -e | 0;
+        o = Long_fromNumber(b_value * 1.0E15 / p + 0.5);
+    }
+    k = 16;
+    b_value = jl_AbstractStringBuilder232_trailingDecimalZeros345(o);
+    if (b_value > 0) {
+        k = k - b_value | 0;
+    }
+    if (j < 7 && j >=  -3) {
+        if (j >= 0) {
+            i = j + 1 | 0;
+            k = jl_Math2210_max367(k, i + 1 | 0);
+            j = 0;
+        } else if (j < 0) {
+            o = Long_div(o, jl_AbstractStringBuilder232.longPowersOfTen240.data[ -j | 0]);
+            k = k - j | 0;
+            j = 0;
+        }
+    }
+    if (j != 0) {
+        h = h + 2 | 0;
+        if (!(j >  -10 && j < 10)) {
+            h = h + 1 | 0;
+        }
+        if (!(j >  -100 && j < 100)) {
+            h = h + 1 | 0;
+        }
+        if (j < 0) {
+            h = h + 1 | 0;
+        }
+    }
+    if (j != 0 && k == i) {
+        k = k + 1 | 0;
+    }
+    jl_AbstractStringBuilder232_insertSpace358($this, a_target, a_target + (h + k | 0) | 0);
+    if (g == 0) {
+        h = a_target;
+    } else {
+        c = $this.buffer234.data;
+        h = a_target + 1 | 0;
+        c[a_target] = 45;
+    }
+    p = new Long(2764472320, 232830);
+    q = 0;
+    while (q < k) {
+        if (Long_compare(p, Long_ZERO) <= 0) {
+            m = 0;
+        } else {
+            m = Long_div(o, p).lo;
+            o = Long_rem(o, p);
+        }
+        n = $this.buffer234.data;
+        g = h + 1 | 0;
+        n[h] = (48 + m | 0) & 65535;
+        i = i +  -1 | 0;
+        if (i != 0) {
+            h = g;
+        } else {
+            c = $this.buffer234.data;
+            h = g + 1 | 0;
+            c[g] = 46;
+        }
+        p = Long_div(p, Long_fromInt(10));
+        q = q + 1 | 0;
+    }
+    if (j != 0) {
+        c = $this.buffer234.data;
+        e = h + 1 | 0;
+        c[h] = 69;
+        if (j >= 0) {
+            h = e;
+        } else {
+            j =  -j | 0;
+            a_target = $this.buffer234.data;
+            h = e + 1 | 0;
+            a_target[e] = 45;
+        }
+        if (j >= 100) {
+            r = $this.buffer234.data;
+            s = h + 1 | 0;
+            r[h] = (48 + (j / 100 | 0) | 0) & 65535;
+            j = j % 100;
+            t = $this.buffer234.data;
+            g = s + 1 | 0;
+            t[s] = (48 + (j / 10 | 0) | 0) & 65535;
+        } else if (j < 10) {
+            g = h;
+        } else {
+            e = $this.buffer234.data;
+            g = h + 1 | 0;
+            e[h] = (48 + (j / 10 | 0) | 0) & 65535;
+        }
+        $this.buffer234.data[g] = (48 + j % 10 | 0) & 65535;
+    }
+    return $this;
+}
+function jl_AbstractStringBuilder232_append368($this, a_value) {
+    return jl_StringBuilder2321_insert366($this, $this.length233, a_value);
+}
+function jl_AbstractStringBuilder232_insert369($this, a_target, b_value) {
+    var c, d, e, f, g, h, i, j, k, m, n, o, p, q;
+    if (b_value == 0.0) {
+        jl_AbstractStringBuilder232_insertSpace358($this, a_target, a_target + 3 | 0);
+        c = $this.buffer234.data;
+        d = a_target + 1 | 0;
+        c[a_target] = 48;
+        a_target = $this.buffer234.data;
+        e = d + 1 | 0;
+        a_target[d] = 46;
+        $this.buffer234.data[e] = 48;
+        return $this;
+    }
+    if (b_value == 0.0) {
+        jl_AbstractStringBuilder232_insertSpace358($this, a_target, a_target + 4 | 0);
+        c = $this.buffer234.data;
+        e = a_target + 1 | 0;
+        c[a_target] = 45;
         a_target = $this.buffer234.data;
         f = e + 1 | 0;
-        a_target[e] = 73;
+        a_target[e] = 48;
         a_target = $this.buffer234.data;
-        d = f + 1 | 0;
+        e = f + 1 | 0;
+        a_target[f] = 46;
+        $this.buffer234.data[e] = 48;
+        return $this;
+    }
+    if ((isNaN(b_value) ? 1 : 0) != 0) {
+        jl_AbstractStringBuilder232_insertSpace358($this, a_target, a_target + 3 | 0);
+        c = $this.buffer234.data;
+        e = a_target + 1 | 0;
+        c[a_target] = 78;
+        a_target = $this.buffer234.data;
+        d = e + 1 | 0;
+        a_target[e] = 97;
+        $this.buffer234.data[d] = 78;
+        return $this;
+    }
+    if ((!isFinite(b_value) ? 1 : 0) != 0) {
+        if (b_value > 0.0) {
+            jl_AbstractStringBuilder232_insertSpace358($this, a_target, a_target + 8 | 0);
+            b_value = a_target;
+        } else {
+            jl_AbstractStringBuilder232_insertSpace358($this, a_target, a_target + 9 | 0);
+            d = $this.buffer234.data;
+            b_value = a_target + 1 | 0;
+            d[a_target] = 45;
+        }
+        a_target = $this.buffer234.data;
+        f = b_value + 1 | 0;
+        a_target[b_value] = 73;
+        a_target = $this.buffer234.data;
+        e = f + 1 | 0;
         a_target[f] = 110;
         a_target = $this.buffer234.data;
-        f = d + 1 | 0;
-        a_target[d] = 102;
+        d = e + 1 | 0;
+        a_target[e] = 102;
         a_target = $this.buffer234.data;
-        d = f + 1 | 0;
+        e = d + 1 | 0;
+        a_target[d] = 105;
+        a_target = $this.buffer234.data;
+        f = e + 1 | 0;
+        a_target[e] = 110;
+        a_target = $this.buffer234.data;
+        e = f + 1 | 0;
         a_target[f] = 105;
         a_target = $this.buffer234.data;
-        b_value = d + 1 | 0;
-        a_target[d] = 110;
-        a_target = $this.buffer234.data;
-        d = b_value + 1 | 0;
-        a_target[b_value] = 105;
-        a_target = $this.buffer234.data;
-        f = d + 1 | 0;
-        a_target[d] = 116;
-        $this.buffer234.data[f] = 121;
+        d = e + 1 | 0;
+        a_target[e] = 116;
+        $this.buffer234.data[d] = 121;
         return $this;
     }
     g = 0;
@@ -8114,115 +8114,115 @@ function jl_AbstractStringBuilder232_insert369($this, a_target, b_value) {
     i = 1;
     if (b_value >= 1.0) {
         j = 32;
-        e = 0;
-        k = 1.0;
-        m = jl_AbstractStringBuilder232.powersOfTen235.data.length - 1 | 0;
-        while (m >= 0) {
-            n = e | j;
-            if (n <= 38 && jl_AbstractStringBuilder232.powersOfTen235.data[m] * k <= b_value) {
-                k = k * jl_AbstractStringBuilder232.powersOfTen235.data[m];
-                e = n;
+        k = 0;
+        m = 1.0;
+        n = jl_AbstractStringBuilder232.powersOfTen235.data.length - 1 | 0;
+        while (n >= 0) {
+            o = k | j;
+            if (o <= 38 && jl_AbstractStringBuilder232.powersOfTen235.data[n] * m <= b_value) {
+                m = m * jl_AbstractStringBuilder232.powersOfTen235.data[n];
+                k = o;
             }
             j = j >> 1;
-            m = m +  -1 | 0;
+            n = n +  -1 | 0;
         }
-        n = b_value / (k / 1000000.0) + 0.5 | 0;
+        n = b_value / (m / 1000000.0) + 0.5 | 0;
     } else {
-        k = 32;
-        o = 0;
-        n = 1.0;
-        m = jl_AbstractStringBuilder232.negPowersOfTen238.data.length - 1 | 0;
-        while (m >= 0) {
-            j = o | k;
-            if (j <= 38 && jl_AbstractStringBuilder232.negPowersOfTen238.data[m] * n * 10.0 > b_value) {
-                n = n * jl_AbstractStringBuilder232.negPowersOfTen238.data[m];
-                o = j;
+        j = 32;
+        p = 0;
+        o = 1.0;
+        q = jl_AbstractStringBuilder232.negPowersOfTen238.data.length - 1 | 0;
+        while (q >= 0) {
+            n = p | j;
+            if (n <= 38 && jl_AbstractStringBuilder232.negPowersOfTen238.data[q] * o * 10.0 > b_value) {
+                o = o * jl_AbstractStringBuilder232.negPowersOfTen238.data[q];
+                p = n;
             }
-            k = k >> 1;
-            m = m +  -1 | 0;
+            j = j >> 1;
+            q = q +  -1 | 0;
         }
-        e =  -o | 0;
-        n = b_value * 1000000.0 / n + 0.5 | 0;
+        k =  -p | 0;
+        n = b_value * 1000000.0 / o + 0.5 | 0;
     }
-    m = 7;
-    b_value = jl_AbstractStringBuilder232_trailingDecimalZeros347(n);
-    if (b_value > 0) {
-        m = m - b_value | 0;
+    o = 7;
+    d = jl_AbstractStringBuilder232_trailingDecimalZeros347(n);
+    if (d > 0) {
+        o = o - d | 0;
     }
-    if (e < 7 && e >=  -3) {
-        if (e >= 0) {
-            i = e + 1 | 0;
-            m = jl_Math2210_max367(m, i + 1 | 0);
-            e = 0;
-        } else if (e < 0) {
-            n = n / jl_AbstractStringBuilder232.intPowersOfTen237.data[ -e | 0] | 0;
-            m = m - e | 0;
-            e = 0;
+    if (k < 7 && k >=  -3) {
+        if (k >= 0) {
+            i = k + 1 | 0;
+            o = jl_Math2210_max367(o, i + 1 | 0);
+            k = 0;
+        } else if (k < 0) {
+            n = n / jl_AbstractStringBuilder232.intPowersOfTen237.data[ -k | 0] | 0;
+            o = o - k | 0;
+            k = 0;
         }
     }
-    if (e != 0) {
+    if (k != 0) {
         h = h + 2 | 0;
-        if (!(e >  -10 && e < 10)) {
+        if (!(k >  -10 && k < 10)) {
             h = h + 1 | 0;
         }
-        if (e < 0) {
+        if (k < 0) {
             h = h + 1 | 0;
         }
     }
-    if (e != 0 && m == i) {
-        m = m + 1 | 0;
+    if (k != 0 && o == i) {
+        o = o + 1 | 0;
     }
-    jl_AbstractStringBuilder232_insertSpace358($this, a_target, a_target + (h + m | 0) | 0);
+    jl_AbstractStringBuilder232_insertSpace358($this, a_target, a_target + (h + o | 0) | 0);
     if (g == 0) {
-        h = a_target;
+        j = a_target;
     } else {
         c = $this.buffer234.data;
-        h = a_target + 1 | 0;
+        j = a_target + 1 | 0;
         c[a_target] = 45;
     }
-    g = 1000000;
-    p = 0;
-    while (p < m) {
-        if (g <= 0) {
-            j = 0;
+    m = 1000000;
+    g = 0;
+    while (g < o) {
+        if (m <= 0) {
+            b_value = 0;
         } else {
-            j = n / g | 0;
-            n = n % g;
+            b_value = n / m | 0;
+            n = n % m;
         }
-        f = $this.buffer234.data;
-        k = h + 1 | 0;
-        f[h] = (48 + j | 0) & 65535;
+        e = $this.buffer234.data;
+        h = j + 1 | 0;
+        e[j] = (48 + b_value | 0) & 65535;
         i = i +  -1 | 0;
         if (i != 0) {
-            h = k;
+            j = h;
         } else {
             a_target = $this.buffer234.data;
-            h = k + 1 | 0;
-            a_target[k] = 46;
+            j = h + 1 | 0;
+            a_target[h] = 46;
         }
-        g = g / 10 | 0;
-        p = p + 1 | 0;
+        m = m / 10 | 0;
+        g = g + 1 | 0;
     }
-    if (e != 0) {
-        b_value = $this.buffer234.data;
-        k = h + 1 | 0;
-        b_value[h] = 69;
-        if (e >= 0) {
-            i = k;
+    if (k != 0) {
+        d = $this.buffer234.data;
+        m = j + 1 | 0;
+        d[j] = 69;
+        if (k >= 0) {
+            j = m;
         } else {
-            e =  -e | 0;
-            f = $this.buffer234.data;
-            i = k + 1 | 0;
-            f[k] = 45;
+            k =  -k | 0;
+            d = $this.buffer234.data;
+            j = m + 1 | 0;
+            d[m] = 45;
         }
-        if (e < 10) {
-            k = i;
+        if (k < 10) {
+            b_value = j;
         } else {
-            g = $this.buffer234.data;
-            k = i + 1 | 0;
-            g[i] = (48 + (e / 10 | 0) | 0) & 65535;
+            m = $this.buffer234.data;
+            b_value = j + 1 | 0;
+            m[j] = (48 + (k / 10 | 0) | 0) & 65535;
         }
-        $this.buffer234.data[k] = (48 + e % 10 | 0) & 65535;
+        $this.buffer234.data[b_value] = (48 + k % 10 | 0) & 65535;
     }
     return $this;
 }
@@ -8342,15 +8342,15 @@ function ojc_Collision$ClipVertex249_$init4() {
     return $r;
 }
 function ojc_Collision$ClipVertex249_set380($this, a_cv) {
-    var b;
+    var b, c;
     b = a_cv.v250;
     $this.v250.x2017 = b.x2017;
     $this.v250.y2018 = b.y2018;
-    b = a_cv.id251;
-    $this.id251.indexA48 = b.indexA48;
-    $this.id251.indexB49 = b.indexB49;
-    $this.id251.typeA50 = b.typeA50;
-    $this.id251.typeB47 = b.typeB47;
+    c = a_cv.id251;
+    $this.id251.indexA48 = c.indexA48;
+    $this.id251.indexB49 = c.indexB49;
+    $this.id251.typeA50 = c.typeA50;
+    $this.id251.typeB47 = c.typeB47;
     return;
 }
 function ojc_Collision$ClipVertex249_$init8($this) {
@@ -8536,10 +8536,10 @@ function olv_Globals$UTF8Stream283_avail394($this) {
         a = 1;
     }
     c = $this.c285;
-    d = $this.b280;
-    b = 0;
-    $this.i281 = b;
-    $this.j282 = olv_LuaString860_encodeToUtf8398(c, a, d, b);
+    b = $this.b280;
+    d = 0;
+    $this.i281 = d;
+    $this.j282 = olv_LuaString860_encodeToUtf8398(c, a, b, d);
     return $this.j282;
 }
 function olv_Globals$UTF8Stream283_$init396($this, a_r) {
@@ -8731,14 +8731,15 @@ function olv_LuaValue297_$clinit() {
         return olv_LuaValue297.NONE310;
     };
     olv_LuaValue297_varargsOf418 = function(a_v, b_offset, c_length) {
+        var d;
         switch (c_length) {
             case 0:
                 break;
             case 1:
                 return a_v.data[b_offset];
             case 2:
-                c_length = a_v.data;
-                return olv_Varargs$PairVarargs33_$init104(c_length[b_offset], c_length[b_offset + 1 | 0]);
+                d = a_v.data;
+                return olv_Varargs$PairVarargs33_$init104(d[b_offset], d[b_offset + 1 | 0]);
             default:
                 return olv_Varargs$ArrayPartVarargs2719_$init420(a_v, b_offset, c_length);
         }
@@ -9040,9 +9041,10 @@ function olv_LuaValue297_get450($this, a_key) {
     return olv_LuaValue297_gettable427($this, a_key);
 }
 function olv_LuaValue297_checkmetatag462($this, a_tag, b_reason) {
-    a_tag = olv_LuaValue297_metatag403($this, a_tag);
-    if (olv_LuaNil440_isnil402(a_tag) == 0) {
-        return a_tag;
+    var c;
+    c = olv_LuaValue297_metatag403($this, a_tag);
+    if (olv_LuaNil440_isnil402(c) == 0) {
+        return c;
     }
     $rt_throw(olv_LuaError718_$init29(jl_StringBuilder2321_toString35(jl_StringBuilder2321_append36(jl_StringBuilder2321_append36(jl_StringBuilder2321_$init4(), b_reason), $this.typename441()))));
 }
@@ -9342,8 +9344,8 @@ function dmgs_StarfieldGameSceneEffect340_$clinit() {
         d = dmgs_StarfieldGameSceneEffect340_$init545(b_aScene, dmgc_GameRuntime1097_getEventManager264(a_aGameRuntime));
         dmge_Property43_setQuietly132(d.numberOfStars341, jl_Integer21_valueOf82(c_aObjectData.get47($rt_s(130))));
         dmge_Property43_setQuietly132(d.starSpeed343, jl_Float558_valueOf546(c_aObjectData.get47($rt_s(132))));
-        a_aGameRuntime = c_aObjectData.get47($rt_s(133));
-        dmge_Property43_setQuietly132(d.color342, dmgt_Color1596_deserialize547(a_aGameRuntime));
+        b_aScene = c_aObjectData.get47($rt_s(133));
+        dmge_Property43_setQuietly132(d.color342, dmgt_Color1596_deserialize547(b_aScene));
         return d;
     };
     dmgs_StarfieldGameSceneEffect340_$clinit43 = function() {
@@ -9364,15 +9366,15 @@ function dmgs_StarfieldGameSceneEffect340_color549($this) {
     return $this.color342;
 }
 function dmgs_StarfieldGameSceneEffect340_proceedGame550($this, a, b_aElapsedTimeSinceLastLoop) {
-    var c, d, e, f;
+    var c, d, e, f, g;
     c = $rt_createArray(dmgt_Position636, $this.stars344.data.length);
-    b_aElapsedTimeSinceLastLoop = jl_Float558_floatValue551(dmge_ReadOnlyProperty38_get113($this.starSpeed343)) / 1000.0 * Long_toNumber(b_aElapsedTimeSinceLastLoop);
-    d = 0;
-    while (d < $this.stars344.data.length) {
-        e = c.data;
-        f = $this.stars344.data[d];
-        e[d] = dmgt_Position636_changeX552(f, jl_Float558_valueOf537((f.x637 + b_aElapsedTimeSinceLastLoop) % $this.currentSize346.width1983));
-        d = d + 1 | 0;
+    d = jl_Float558_floatValue551(dmge_ReadOnlyProperty38_get113($this.starSpeed343)) / 1000.0 * Long_toNumber(b_aElapsedTimeSinceLastLoop);
+    e = 0;
+    while (e < $this.stars344.data.length) {
+        f = c.data;
+        g = $this.stars344.data[e];
+        f[e] = dmgt_Position636_changeX552(g, jl_Float558_valueOf537((g.x637 + d) % $this.currentSize346.width1983));
+        e = e + 1 | 0;
     }
     $this.stars344 = c;
     dmgp_GameProcess$ProceedResult2842_$clinit();
@@ -9491,12 +9493,12 @@ function dmgc_GameObjectInstanceLeftLayoutCondition356_appliesTo567($this, a_aSc
             if (d instanceof dmgc_GameObjectInstance2906 != 0) {
                 e = d;
                 if (dmgc_GameObjectInstance2906_getOwnerGameObject568(e) === dmge_ReadOnlyProperty38_get113($this.gameObject357) && dmgt_Rectangle832_contains569(dmge_ReadOnlyProperty38_get113(dmgc_GameScene2107_layoutBoundsProperty570(a_aScene)), dmge_ReadOnlyProperty38_get113(c.property1433)) == 0) {
-                    d = new dmgc_ConditionResult2128;
+                    a_aScene = new dmgc_ConditionResult2128;
                     f = 1;
                     g = $rt_createArray(dmgc_GameObjectInstance2906, 1);
                     g.data[0] = e;
-                    dmgc_ConditionResult2128_$init571(d, f, b_aEvent, g);
-                    return d;
+                    dmgc_ConditionResult2128_$init571(a_aScene, f, b_aEvent, g);
+                    return a_aScene;
                 }
             }
         }
@@ -9781,7 +9783,7 @@ function dmgt_ResourceName373_hashCode22($this) {
     return a;
 }
 function dmgt_ResourceName373_equals18($this, a_o) {
-    var b, c;
+    var b;
     if ($this === a_o) {
         return 1;
     }
@@ -9789,24 +9791,24 @@ function dmgt_ResourceName373_equals18($this, a_o) {
         $ba: {
             $bb: {
                 $bc: {
-                    b = a_o;
+                    a_o = a_o;
                     if ($this.name374 === null) {
-                        if (b.name374 !== null) {
+                        if (a_o.name374 !== null) {
                             break $bb;
                         } else {
                             break $bc;
                         }
                     }
-                    if (jl_String1_equals18($this.name374, b.name374) == 0) {
+                    if (jl_String1_equals18($this.name374, a_o.name374) == 0) {
                         break $bb;
                     }
                 }
-                c = 1;
+                b = 1;
                 break $ba;
             }
-            c = 0;
+            b = 0;
         }
-        return c;
+        return b;
     }
     return 0;
 }
@@ -9890,19 +9892,19 @@ function ojc_Mat22379_setZero229($this) {
     return;
 }
 function ojc_Mat22379_invertToOut590($this, a_out) {
-    var b, c, d, e, f, g;
+    var b, c, d, e, f, g, h;
     b = $this.ex380.x2017;
     c = $this.ey381.x2017;
     d = $this.ex380.y2018;
     e = $this.ey381.y2018;
     f = b * e - c * d;
-    f = 1.0 / f;
-    a_out.ex380.x2017 = f * e;
-    g = a_out.ey381;
-    e =  -f;
-    g.x2017 = e * c;
+    g = 1.0 / f;
+    a_out.ex380.x2017 = g * e;
+    h = a_out.ey381;
+    e =  -g;
+    h.x2017 = e * c;
     a_out.ex380.y2018 = e * d;
-    a_out.ey381.y2018 = f * b;
+    a_out.ey381.y2018 = g * b;
     return;
 }
 function jl_IncompatibleClassChangeError383_$init29(a_out) {
@@ -10006,29 +10008,29 @@ function otji_JS391_unwrapStringArray596(a_array) {
     return b;
 }
 function otji_JS391_unwrapArray598(a_type, b_array) {
-    var c, d, e;
+    var c, d;
     c = jlr_Array365_newInstance573(a_type, b_array.length);
     d = 0;
     while (true) {
-        e = c.data;
-        if (d >= e.length) {
+        a_type = c.data;
+        if (d >= a_type.length) {
             break;
         }
-        e[d] = b_array[d];
+        a_type[d] = b_array[d];
         d = d + 1 | 0;
     }
     return c;
 }
 function otji_JS391_wrap599(a_array) {
-    var b, c, d, e, f;
+    var b, c, d, e;
     b = a_array.data;
     c = b.length;
     d = new Array(c) ;
-    e = 0;
-    while (e < c) {
-        f = b[e];
-        d[e] = f;
-        e = e + 1 | 0;
+    a_array = 0;
+    while (a_array < c) {
+        e = b[a_array];
+        d[a_array] = e;
+        a_array = a_array + 1 | 0;
     }
     return d;
 }
@@ -10088,36 +10090,36 @@ function otciu_UnicodeHelper392_extractRle602(a_encoded) {
         }
         if (h == 0 && i >= 128) {
             if (d > 0) {
-                k = b.data;
-                h = e + 1 | 0;
-                k[e] = otciu_UnicodeHelper$Range910_$init605(f, f + d | 0, ju_Arrays2037_copyOf606(c, d));
-                e = h;
+                j = b.data;
+                k = e + 1 | 0;
+                j[e] = otciu_UnicodeHelper$Range910_$init605(f, f + d | 0, ju_Arrays2037_copyOf606(c, d));
+                e = k;
             }
             f = f + (d + i | 0) | 0;
             d = 0;
         } else {
-            m = c.data;
+            k = c.data;
             j = d + i | 0;
-            if (j < m.length) {
-                k = e;
+            if (j < k.length) {
+                m = e;
             } else {
                 n = b.data;
-                k = e + 1 | 0;
+                m = e + 1 | 0;
                 n[e] = otciu_UnicodeHelper$Range910_$init605(f, f + d | 0, ju_Arrays2037_copyOf606(c, d));
                 f = f + j | 0;
                 d = 0;
             }
             while (true) {
-                o = i +  -1 | 0;
+                j = i +  -1 | 0;
                 if (i <= 0) {
                     break;
                 }
-                j = d + 1 | 0;
-                m[d] = h;
-                i = o;
-                d = j;
+                o = d + 1 | 0;
+                k[d] = h;
+                i = j;
+                d = o;
             }
-            e = k;
+            e = m;
         }
         g = g + 1 | 0;
     }
@@ -10201,10 +10203,10 @@ function ojcb_DynamicTree394_$clinit() {
         }
         $this.m_freeList400 = 0;
         $this.m_insertionCount395 = 0;
-        a = 0;
-        while (a < $this.drawVecs404.data.length) {
-            $this.drawVecs404.data[a] = ojc_Vec22016_$init4();
-            a = a + 1 | 0;
+        c = 0;
+        while (c < $this.drawVecs404.data.length) {
+            $this.drawVecs404.data[c] = ojc_Vec22016_$init4();
+            c = c + 1 | 0;
         }
         return;
     };
@@ -10216,15 +10218,16 @@ function ojcb_DynamicTree394_$init4() {
     return $r;
 }
 function ojcb_DynamicTree394_destroyProxy614($this, a_proxyId) {
+    var b;
     if (ojcb_DynamicTree394.$assertionsDisabled409 == 0 && !(0 <= a_proxyId && a_proxyId < $this.m_nodeCapacity396)) {
         $rt_throw(jl_AssertionError746_$init4());
     }
-    a_proxyId = $this.m_nodes406.data[a_proxyId];
-    if (ojcb_DynamicTree394.$assertionsDisabled409 == 0 && ojcb_DynamicTreeNode1987_isLeaf615(a_proxyId) == 0) {
+    b = $this.m_nodes406.data[a_proxyId];
+    if (ojcb_DynamicTree394.$assertionsDisabled409 == 0 && ojcb_DynamicTreeNode1987_isLeaf615(b) == 0) {
         $rt_throw(jl_AssertionError746_$init4());
     }
-    ojcb_DynamicTree394_removeLeaf616($this, a_proxyId);
-    ojcb_DynamicTree394_freeNode617($this, a_proxyId);
+    ojcb_DynamicTree394_removeLeaf616($this, b);
+    ojcb_DynamicTree394_freeNode617($this, b);
     return;
 }
 function ojcb_DynamicTree394_query618($this, a_callback, b_aabb) {
@@ -10251,7 +10254,7 @@ function ojcb_DynamicTree394_query618($this, a_callback, b_aabb) {
     return;
 }
 function ojcb_DynamicTree394_insertLeaf624($this, a_leaf_index) {
-    var b, c, d, e, f, g, h, i, j, k, m, n;
+    var b, c, d, e, f, g, h, i, j, k, m;
     $this.m_insertionCount395 = $this.m_insertionCount395 + 1 | 0;
     b = $this.m_nodes406.data[a_leaf_index];
     if ($this.m_root398 === null) {
@@ -10268,11 +10271,11 @@ function ojcb_DynamicTree394_insertLeaf624($this, a_leaf_index) {
             }
             e = d.child11993;
             f = d.child21991;
-            g = ojc_AABB2760_getPerimeter625(d.aabb1992);
+            a_leaf_index = ojc_AABB2760_getPerimeter625(d.aabb1992);
             ojc_AABB2760_combine626($this.combinedAABB403, d.aabb1992, c);
-            h = ojc_AABB2760_getPerimeter625($this.combinedAABB403);
-            a_leaf_index = 2.0 * h;
-            i = 2.0 * (h - g);
+            g = ojc_AABB2760_getPerimeter625($this.combinedAABB403);
+            h = 2.0 * g;
+            i = 2.0 * (g - a_leaf_index);
             if (ojcb_DynamicTreeNode1987_isLeaf615(e) != 0) {
                 ojc_AABB2760_combine626($this.combinedAABB403, c, e.aabb1992);
                 j = ojc_AABB2760_getPerimeter625($this.combinedAABB403) + i;
@@ -10287,7 +10290,7 @@ function ojcb_DynamicTree394_insertLeaf624($this, a_leaf_index) {
                 ojc_AABB2760_combine626($this.combinedAABB403, c, f.aabb1992);
                 k = ojc_AABB2760_getPerimeter625($this.combinedAABB403) - ojc_AABB2760_getPerimeter625(f.aabb1992) + i;
             }
-            if (a_leaf_index < j && a_leaf_index < k) {
+            if (h < j && h < k) {
                 break;
             }
             if (j < k) {
@@ -10296,43 +10299,43 @@ function ojcb_DynamicTree394_insertLeaf624($this, a_leaf_index) {
             d = f;
         }
     }
-    m = $this.m_nodes406.data[d.id1990].parent1988;
-    i = ojcb_DynamicTree394_allocateNode627($this);
-    i.parent1988 = m;
-    i.userData1989 = null;
-    ojc_AABB2760_combine626(i.aabb1992, c, d.aabb1992);
-    i.height1994 = d.height1994 + 1 | 0;
-    if (m === null) {
-        i.child11993 = d;
-        i.child21991 = b;
-        d.parent1988 = i;
-        b.parent1988 = i;
-        $this.m_root398 = i;
+    i = $this.m_nodes406.data[d.id1990].parent1988;
+    m = ojcb_DynamicTree394_allocateNode627($this);
+    m.parent1988 = i;
+    m.userData1989 = null;
+    ojc_AABB2760_combine626(m.aabb1992, c, d.aabb1992);
+    m.height1994 = d.height1994 + 1 | 0;
+    if (i === null) {
+        m.child11993 = d;
+        m.child21991 = b;
+        d.parent1988 = m;
+        b.parent1988 = m;
+        $this.m_root398 = m;
     } else {
-        if (m.child11993 !== d) {
-            m.child21991 = i;
+        if (i.child11993 !== d) {
+            i.child21991 = m;
         } else {
-            m.child11993 = i;
+            i.child11993 = m;
         }
-        i.child11993 = d;
-        i.child21991 = b;
-        d.parent1988 = i;
-        b.parent1988 = i;
+        m.child11993 = d;
+        m.child21991 = b;
+        d.parent1988 = m;
+        b.parent1988 = m;
     }
-    k = b.parent1988;
-    while (k !== null) {
-        n = ojcb_DynamicTree394_balance628($this, k);
-        d = n.child11993;
-        m = n.child21991;
-        if (ojcb_DynamicTree394.$assertionsDisabled409 == 0 && d === null) {
+    j = b.parent1988;
+    while (j !== null) {
+        c = ojcb_DynamicTree394_balance628($this, j);
+        f = c.child11993;
+        m = c.child21991;
+        if (ojcb_DynamicTree394.$assertionsDisabled409 == 0 && f === null) {
             $rt_throw(jl_AssertionError746_$init4());
         }
         if (ojcb_DynamicTree394.$assertionsDisabled409 == 0 && m === null) {
             $rt_throw(jl_AssertionError746_$init4());
         }
-        n.height1994 = 1 + ojc_MathUtils1593_max367(d.height1994, m.height1994) | 0;
-        ojc_AABB2760_combine626(n.aabb1992, d.aabb1992, m.aabb1992);
-        k = n.parent1988;
+        c.height1994 = 1 + ojc_MathUtils1593_max367(f.height1994, m.height1994) | 0;
+        ojc_AABB2760_combine626(c.aabb1992, f.aabb1992, m.aabb1992);
+        j = c.parent1988;
     }
     return;
 }
@@ -10438,7 +10441,7 @@ function ojcb_DynamicTree394_moveProxy632($this, a_proxyId, b_aabb, c_displaceme
     return 1;
 }
 function ojcb_DynamicTree394_balance628($this, a_A_iA) {
-    var b, c, d, e, f, g;
+    var b, c, d, e, f, g, h;
     if (ojcb_DynamicTree394.$assertionsDisabled409 == 0 && a_A_iA === null) {
         $rt_throw(jl_AssertionError746_$init4());
     }
@@ -10497,17 +10500,17 @@ function ojcb_DynamicTree394_balance628($this, a_A_iA) {
             return b;
         }
         g = c.child11993;
-        e = c.child21991;
+        h = c.child21991;
         if (ojcb_DynamicTree394.$assertionsDisabled409 == 0 && g === null) {
             $rt_throw(jl_AssertionError746_$init4());
         }
-        if (ojcb_DynamicTree394.$assertionsDisabled409 == 0 && e === null) {
+        if (ojcb_DynamicTree394.$assertionsDisabled409 == 0 && h === null) {
             $rt_throw(jl_AssertionError746_$init4());
         }
         if (ojcb_DynamicTree394.$assertionsDisabled409 == 0 && !(0 <= g.id1990 && g.id1990 < $this.m_nodeCapacity396)) {
             $rt_throw(jl_AssertionError746_$init4());
         }
-        if (ojcb_DynamicTree394.$assertionsDisabled409 == 0 && !(0 <= e.id1990 && e.id1990 < $this.m_nodeCapacity396)) {
+        if (ojcb_DynamicTree394.$assertionsDisabled409 == 0 && !(0 <= h.id1990 && h.id1990 < $this.m_nodeCapacity396)) {
             $rt_throw(jl_AssertionError746_$init4());
         }
         c.child11993 = a_A_iA;
@@ -10523,21 +10526,21 @@ function ojcb_DynamicTree394_balance628($this, a_A_iA) {
             }
             c.parent1988.child21991 = c;
         }
-        if (g.height1994 <= e.height1994) {
-            c.child21991 = e;
+        if (g.height1994 <= h.height1994) {
+            c.child21991 = h;
             a_A_iA.child21991 = g;
             g.parent1988 = a_A_iA;
             ojc_AABB2760_combine626(a_A_iA.aabb1992, b.aabb1992, g.aabb1992);
-            ojc_AABB2760_combine626(c.aabb1992, a_A_iA.aabb1992, e.aabb1992);
+            ojc_AABB2760_combine626(c.aabb1992, a_A_iA.aabb1992, h.aabb1992);
             a_A_iA.height1994 = 1 + ojc_MathUtils1593_max367(b.height1994, g.height1994) | 0;
-            c.height1994 = 1 + ojc_MathUtils1593_max367(a_A_iA.height1994, e.height1994) | 0;
+            c.height1994 = 1 + ojc_MathUtils1593_max367(a_A_iA.height1994, h.height1994) | 0;
         } else {
             c.child21991 = g;
-            a_A_iA.child21991 = e;
-            e.parent1988 = a_A_iA;
-            ojc_AABB2760_combine626(a_A_iA.aabb1992, b.aabb1992, e.aabb1992);
+            a_A_iA.child21991 = h;
+            h.parent1988 = a_A_iA;
+            ojc_AABB2760_combine626(a_A_iA.aabb1992, b.aabb1992, h.aabb1992);
             ojc_AABB2760_combine626(c.aabb1992, a_A_iA.aabb1992, g.aabb1992);
-            a_A_iA.height1994 = 1 + ojc_MathUtils1593_max367(b.height1994, e.height1994) | 0;
+            a_A_iA.height1994 = 1 + ojc_MathUtils1593_max367(b.height1994, h.height1994) | 0;
             c.height1994 = 1 + ojc_MathUtils1593_max367(a_A_iA.height1994, g.height1994) | 0;
         }
         return c;
@@ -10589,12 +10592,12 @@ function ojcb_DynamicTree394_removeLeaf616($this, a_leaf) {
         d.parent1988 = c;
         ojcb_DynamicTree394_freeNode617($this, b);
         while (c !== null) {
-            b = ojcb_DynamicTree394_balance628($this, c);
-            e = b.child11993;
-            f = b.child21991;
-            ojc_AABB2760_combine626(b.aabb1992, e.aabb1992, f.aabb1992);
-            b.height1994 = 1 + ojc_MathUtils1593_max367(e.height1994, f.height1994) | 0;
-            c = b.parent1988;
+            e = ojcb_DynamicTree394_balance628($this, c);
+            f = e.child11993;
+            a_leaf = e.child21991;
+            ojc_AABB2760_combine626(e.aabb1992, f.aabb1992, a_leaf.aabb1992);
+            e.height1994 = 1 + ojc_MathUtils1593_max367(f.height1994, a_leaf.height1994) | 0;
+            c = e.parent1988;
         }
     }
     return;
@@ -10610,10 +10613,9 @@ function jnc_CharsetEncoder410_$init635(a_leaf, b, c, d) {
     return $r;
 }
 function jnc_CharsetEncoder410_checkReplacement637($this, a_replacement) {
-    var b;
     if (a_replacement !== null) {
-        b = a_replacement.data.length;
-        if (b != 0 && b >= $this.maxBytesPerChar414) {
+        a_replacement = a_replacement.data.length;
+        if (a_replacement != 0 && a_replacement >= $this.maxBytesPerChar414) {
             return;
         }
     }
@@ -10734,15 +10736,16 @@ function jnc_CharsetEncoder410_implOnUnmappableCharacter639($this, a) {
     return;
 }
 function jnc_CharsetEncoder410_flush650($this, a_out) {
+    var b;
     if ($this.status417 != 2 && $this.status417 != 4) {
         $rt_throw(jl_IllegalStateException1614_$init4());
     }
-    a_out = jnc_CharsetEncoder410_implFlush649($this, a_out);
+    b = jnc_CharsetEncoder410_implFlush649($this, a_out);
     jnc_CoderResult1698_$clinit();
-    if (a_out === jnc_CoderResult1698.UNDERFLOW1702) {
+    if (b === jnc_CoderResult1698.UNDERFLOW1702) {
         $this.status417 = 3;
     }
-    return a_out;
+    return b;
 }
 function dmgp_KillProcessesForInstance418_$clinit() {
     dmgp_KillProcessesForInstance418_$clinit = function(){};
@@ -10850,13 +10853,13 @@ function ojd_Fixture421_synchronize657($this, a_broadPhase, b_transform1, c_tran
             i = f.lowerBound2762.y2018;
         }
         h.y2018 = i;
-        h = e.aabb890.upperBound2761;
+        j = e.aabb890.upperBound2761;
         if (f.upperBound2761.x2017 <= g.upperBound2761.x2017) {
             i = g.upperBound2761.x2017;
         } else {
             i = f.upperBound2761.x2017;
         }
-        h.x2017 = i;
+        j.x2017 = i;
         j = e.aabb890.upperBound2761;
         if (f.upperBound2761.y2018 <= g.upperBound2761.y2018) {
             i = g.upperBound2761.y2018;
@@ -11075,19 +11078,19 @@ function dmgp_ObjectCollisionCondition449_$init4() {
     return $r;
 }
 function dmgp_ObjectCollisionCondition449_unmarshall670(a_aGameScene, b_aSerializedData) {
-    var c, d;
+    var c, d, e;
     c = dmgp_ObjectCollisionCondition449_$init4();
     d = b_aSerializedData.get47($rt_s(142));
     if (d !== null) {
         dmge_Property43_setQuietly132(c.primaryObject452, dmgc_GameScene2107_findObjectByID566(a_aGameScene, d));
     }
-    d = b_aSerializedData.get47($rt_s(143));
-    if (d !== null) {
-        dmge_Property43_setQuietly132(c.secondaryObject450, dmgc_GameScene2107_findObjectByID566(a_aGameScene, d));
+    e = b_aSerializedData.get47($rt_s(143));
+    if (e !== null) {
+        dmge_Property43_setQuietly132(c.secondaryObject450, dmgc_GameScene2107_findObjectByID566(a_aGameScene, e));
     }
-    a_aGameScene = b_aSerializedData.get47($rt_s(135));
-    if (a_aGameScene !== null) {
-        dmge_Property43_setQuietly132(c.position451, dmgt_CollisionPosition551_valueOf671(a_aGameScene));
+    b_aSerializedData = b_aSerializedData.get47($rt_s(135));
+    if (b_aSerializedData !== null) {
+        dmge_Property43_setQuietly132(c.position451, dmgt_CollisionPosition551_valueOf671(b_aSerializedData));
     }
     return c;
 }
@@ -11095,28 +11098,28 @@ function dmgp_ObjectCollisionCondition449_appliesTo567($this, a, b_aEvent) {
     var c, d, e, f, g, h, i, j;
     if (b_aEvent instanceof dmgp_GameObjectCollision2184 != 0 && dmge_ReadOnlyProperty38_isNull114($this.primaryObject452) == 0 && dmge_ReadOnlyProperty38_isNull114($this.secondaryObject450) == 0) {
         c = dmge_ReadOnlyProperty38_get113($this.primaryObject452);
-        a = dmge_ReadOnlyProperty38_get113($this.secondaryObject450);
-        d = b_aEvent;
-        e = dmgc_GameObjectInstance2906_getOwnerGameObject568(d.instance12186);
-        f = dmgc_GameObjectInstance2906_getOwnerGameObject568(d.instance22185);
+        d = dmge_ReadOnlyProperty38_get113($this.secondaryObject450);
+        e = b_aEvent;
+        f = dmgc_GameObjectInstance2906_getOwnerGameObject568(e.instance12186);
+        a = dmgc_GameObjectInstance2906_getOwnerGameObject568(e.instance22185);
         g = dmge_ReadOnlyProperty38_get113($this.position451);
-        if (jl_String1_equals18(dmge_ReadOnlyProperty38_get113(dmgc_GameObject1845_uuidProperty672(c)), dmge_ReadOnlyProperty38_get113(dmgc_GameObject1845_uuidProperty672(e))) != 0 && jl_String1_equals18(dmge_ReadOnlyProperty38_get113(dmgc_GameObject1845_uuidProperty672(a)), dmge_ReadOnlyProperty38_get113(dmgc_GameObject1845_uuidProperty672(f))) != 0 && g.detect673(dmge_ReadOnlyProperty38_get113(dmgc_GameObjectInstance2906_positionProperty674(d.instance12186)), dmge_ReadOnlyProperty38_get113(dmgc_GameObjectInstance2906_positionProperty674(d.instance22185)))
+        if (jl_String1_equals18(dmge_ReadOnlyProperty38_get113(dmgc_GameObject1845_uuidProperty672(c)), dmge_ReadOnlyProperty38_get113(dmgc_GameObject1845_uuidProperty672(f))) != 0 && jl_String1_equals18(dmge_ReadOnlyProperty38_get113(dmgc_GameObject1845_uuidProperty672(d)), dmge_ReadOnlyProperty38_get113(dmgc_GameObject1845_uuidProperty672(a))) != 0 && g.detect673(dmge_ReadOnlyProperty38_get113(dmgc_GameObjectInstance2906_positionProperty674(e.instance12186)), dmge_ReadOnlyProperty38_get113(dmgc_GameObjectInstance2906_positionProperty674(e.instance22185)))
         != 0) {
             a = new dmgc_ConditionResult2128;
             h = 1;
             i = $rt_createArray(dmgc_GameObjectInstance2906, 1);
-            i.data[0] = d.instance12186;
+            i.data[0] = e.instance12186;
             dmgc_ConditionResult2128_$init571(a, h, b_aEvent, i);
             return a;
         }
-        if (jl_String1_equals18(dmge_ReadOnlyProperty38_get113(dmgc_GameObject1845_uuidProperty672(a)), dmge_ReadOnlyProperty38_get113(dmgc_GameObject1845_uuidProperty672(e))) != 0 && jl_String1_equals18(dmge_ReadOnlyProperty38_get113(dmgc_GameObject1845_uuidProperty672(c)), dmge_ReadOnlyProperty38_get113(dmgc_GameObject1845_uuidProperty672(f))) != 0 && g.detect673(dmge_ReadOnlyProperty38_get113(dmgc_GameObjectInstance2906_positionProperty674(d.instance22185)), dmge_ReadOnlyProperty38_get113(dmgc_GameObjectInstance2906_positionProperty674(d.instance12186)))
+        if (jl_String1_equals18(dmge_ReadOnlyProperty38_get113(dmgc_GameObject1845_uuidProperty672(d)), dmge_ReadOnlyProperty38_get113(dmgc_GameObject1845_uuidProperty672(f))) != 0 && jl_String1_equals18(dmge_ReadOnlyProperty38_get113(dmgc_GameObject1845_uuidProperty672(c)), dmge_ReadOnlyProperty38_get113(dmgc_GameObject1845_uuidProperty672(a))) != 0 && g.detect673(dmge_ReadOnlyProperty38_get113(dmgc_GameObjectInstance2906_positionProperty674(e.instance22185)), dmge_ReadOnlyProperty38_get113(dmgc_GameObjectInstance2906_positionProperty674(e.instance12186)))
         != 0) {
-            a = new dmgc_ConditionResult2128;
-            j = 1;
-            i = $rt_createArray(dmgc_GameObjectInstance2906, 1);
-            i.data[0] = d.instance22185;
-            dmgc_ConditionResult2128_$init571(a, j, b_aEvent, i);
-            return a;
+            c = new dmgc_ConditionResult2128;
+            h = 1;
+            j = $rt_createArray(dmgc_GameObjectInstance2906, 1);
+            j.data[0] = e.instance22185;
+            dmgc_ConditionResult2128_$init571(c, h, b_aEvent, j);
+            return c;
         }
     }
     dmgc_ConditionResult2128_$clinit();
@@ -11654,12 +11657,12 @@ function dmgsl_LuaJScriptEngine494_registerTo707(a_aTable, b_aObject, c_aCache) 
         g = g + 1 | 0;
     }
     i = dmgt_ClassInformation153_getMethods299(d).data;
-    g = i.length;
-    j = 0;
-    while (j < g) {
-        f = i[j];
+    j = i.length;
+    g = 0;
+    while (g < j) {
+        f = i[g];
         olv_LuaValue297_set446(a_aTable, dmgt_Method697_getName37(f), dmgsl_LuaJScriptEngine$MethodInvocationFunction764_$init720(c_aCache, b_aObject, f));
-        j = j + 1 | 0;
+        g = g + 1 | 0;
     }
     return;
 }
@@ -11705,27 +11708,27 @@ function ji_PrintStream502_$init726(a_out, b) {
 function ji_PrintStream502_print728($this, a_s, b_begin, c_end) {
     var d, e, f, g, h;
     d = a_s.data;
-    e = jn_CharBuffer663_wrap729(a_s, b_begin, c_end - b_begin | 0);
-    c_end = $rt_createByteArray(jl_Math2210_max367(16, jl_Math2210_min730(d.length, 1024)));
-    f = jn_ByteBuffer1629_wrap731(c_end);
+    c_end = jn_CharBuffer663_wrap729(a_s, b_begin, c_end - b_begin | 0);
+    e = $rt_createByteArray(jl_Math2210_max367(16, jl_Math2210_min730(d.length, 1024)));
+    f = jn_ByteBuffer1629_wrap731(e);
     g = jnci_UTF8Charset817_newEncoder732($this.charset503);
     jnc_CodingErrorAction1996_$clinit();
     b_begin = jnc_CharsetEncoder410_onMalformedInput648(g, jnc_CodingErrorAction1996.REPLACE2000);
     jnc_CodingErrorAction1996_$clinit();
-    g = jnc_CharsetEncoder410_onUnmappableCharacter638(b_begin, jnc_CodingErrorAction1996.REPLACE2000);
+    b_begin = jnc_CharsetEncoder410_onUnmappableCharacter638(b_begin, jnc_CodingErrorAction1996.REPLACE2000);
     while (true) {
-        h = jnc_CoderResult1698_isOverflow644(jnc_CharsetEncoder410_encode640(g, e, f, 1));
-        ji_PrintStream502_write722($this, c_end, 0, jn_Buffer244_position378(f));
+        h = jnc_CoderResult1698_isOverflow644(jnc_CharsetEncoder410_encode640(b_begin, c_end, f, 1));
+        ji_PrintStream502_write722($this, e, 0, jn_Buffer244_position378(f));
         jn_Buffer244_clear377(f);
         if (h == 0) {
             break;
         }
     }
     while (true) {
-        a_s = jnc_CoderResult1698_isOverflow644(jnc_CharsetEncoder410_flush650(g, f));
-        ji_PrintStream502_write722($this, c_end, 0, jn_Buffer244_position378(f));
+        h = jnc_CoderResult1698_isOverflow644(jnc_CharsetEncoder410_flush650(b_begin, f));
+        ji_PrintStream502_write722($this, e, 0, jn_Buffer244_position378(f));
         jn_Buffer244_clear377(f);
-        if (a_s == 0) {
+        if (h == 0) {
             break;
         }
     }
@@ -11768,7 +11771,7 @@ function ji_PrintStream502_write722($this, a_b, b_off, c_len) {
             } catch ($e) {
                 $je = $e.$javaException;
                 if ($je && $je instanceof ji_IOException1172) {
-                    b_off = $je;
+                    a_b = $je;
                     break $bb;
                 } else {
                     throw $e;
@@ -11841,7 +11844,7 @@ function olv_TailcallVarargs510_subargs107($this, a_start) {
     return $this.result512.subargs107(a_start);
 }
 function olv_TailcallVarargs510_eval98($this) {
-    var a, b;
+    var a;
     while ($this.result512 === null) {
         a = $this.func513.onInvoke484($this.args511);
         if (a.isTailcall103() == 0) {
@@ -11849,9 +11852,9 @@ function olv_TailcallVarargs510_eval98($this) {
             $this.func513 = null;
             $this.args511 = null;
         } else {
-            b = a;
-            $this.func513 = b.func513;
-            $this.args511 = b.args511;
+            a = a;
+            $this.func513 = a.func513;
+            $this.args511 = a.args511;
         }
     }
     return $this.result512;
@@ -11945,11 +11948,11 @@ function dmgc_GameObjectInstanceAddedToSceneCondition518_appliesTo567($this, a, 
     return dmgc_ConditionResult2128.NOT_FULFILLED2132;
 }
 function dmgc_GameObjectInstanceAddedToSceneCondition518_unmarshall754(a_aGameScene, b_aSerializedData) {
-    var c, d;
+    var c;
     c = dmgc_GameObjectInstanceAddedToSceneCondition518_$init4();
-    d = b_aSerializedData.get47($rt_s(159));
-    if (d !== null) {
-        dmge_Property43_setQuietly132(c.gameObject519, dmgc_GameScene2107_findObjectByID566(a_aGameScene, d));
+    b_aSerializedData = b_aSerializedData.get47($rt_s(159));
+    if (b_aSerializedData !== null) {
+        dmge_Property43_setQuietly132(c.gameObject519, dmgc_GameScene2107_findObjectByID566(a_aGameScene, b_aSerializedData));
     }
     return c;
 }
@@ -12119,7 +12122,7 @@ function ojc_TimeOfImpact531_$init385(a_argPool) {
     return $r;
 }
 function ojc_TimeOfImpact531_timeOfImpact237($this, a_output, b_input) {
-    var c, d, e, f, g, h, i, j, k, m, n, o, p, q, r, s, t, u, v;
+    var c, d, e, f, g, h, i, j, k, m, n, o, p, q, r, s, t, u;
     ojc_TimeOfImpact531.toiCalls542 = ojc_TimeOfImpact531.toiCalls542 + 1 | 0;
     ojc_TimeOfImpact$TOIOutputState169_$clinit();
     a_output.state1047 = ojc_TimeOfImpact$TOIOutputState169.UNKNOWN173;
@@ -12164,79 +12167,79 @@ function ojc_TimeOfImpact531_timeOfImpact237($this, a_output, b_input) {
                 break $ba;
             }
             ojc_SeparationFunction1112_initialize776($this.fcn537, $this.cache532, c, $this.sweepA535, d, $this.sweepB536, h);
+            b_input = 0;
             m = 0;
-            n = 0;
-            o = e;
+            n = e;
             $bb: {
                 while (true) {
-                    p = ojc_SeparationFunction1112_findMinSeparation777($this.fcn537, $this.indexes539, o);
-                    if (p > j) {
+                    o = ojc_SeparationFunction1112_findMinSeparation777($this.fcn537, $this.indexes539, n);
+                    if (o > j) {
                         ojc_TimeOfImpact$TOIOutputState169_$clinit();
                         a_output.state1047 = ojc_TimeOfImpact$TOIOutputState169.SEPARATED170;
                         a_output.t1046 = e;
-                        m = 1;
+                        b_input = 1;
                         break $bb;
                     }
-                    if (p > k) {
-                        h = o;
+                    if (o > k) {
+                        h = n;
                         break $bb;
                     }
-                    q = ojc_SeparationFunction1112_evaluate778($this.fcn537, $this.indexes539.data[0], $this.indexes539.data[1], h);
-                    if (q < k) {
+                    p = ojc_SeparationFunction1112_evaluate778($this.fcn537, $this.indexes539.data[0], $this.indexes539.data[1], h);
+                    if (p < k) {
                         ojc_TimeOfImpact$TOIOutputState169_$clinit();
                         a_output.state1047 = ojc_TimeOfImpact$TOIOutputState169.FAILED171;
                         a_output.t1046 = h;
-                        m = 1;
+                        b_input = 1;
                         break $bb;
                     }
-                    if (q <= j) {
+                    if (p <= j) {
                         ojc_TimeOfImpact$TOIOutputState169_$clinit();
                         a_output.state1047 = ojc_TimeOfImpact$TOIOutputState169.TOUCHING175;
                         a_output.t1046 = h;
-                        m = 1;
+                        b_input = 1;
                         break $bb;
                     }
-                    r = 0;
-                    s = o;
-                    t = h;
+                    q = 0;
+                    r = n;
+                    s = h;
                     $bc: {
                         while (true) {
-                            if ((r & 1) != 1) {
-                                u = 0.5 * (t + s);
+                            if ((q & 1) != 1) {
+                                t = 0.5 * (s + r);
                             } else {
-                                u = t + (f - q) * (s - t) / (p - q);
+                                t = s + (f - p) * (r - s) / (o - p);
                             }
-                            v = ojc_SeparationFunction1112_evaluate778($this.fcn537, $this.indexes539.data[0], $this.indexes539.data[1], u);
-                            if (ojc_MathUtils1593_abs779(v - f) < g) {
+                            u = ojc_SeparationFunction1112_evaluate778($this.fcn537, $this.indexes539.data[0], $this.indexes539.data[1], t);
+                            if (ojc_MathUtils1593_abs779(u - f) < g) {
                                 break $bc;
                             }
-                            if (v > f) {
-                                t = u;
-                                q = v;
-                                u = s;
-                                v = p;
+                            if (u > f) {
+                                s = t;
+                                p = u;
+                                t = r;
+                                u = o;
                             }
-                            r = r + 1 | 0;
+                            q = q + 1 | 0;
                             ojc_TimeOfImpact531.toiRootIters547 = ojc_TimeOfImpact531.toiRootIters547 + 1 | 0;
-                            if (r == 50) {
+                            if (q == 50) {
                                 break;
                             }
-                            s = u;
-                            p = v;
+                            r = t;
+                            o = u;
                         }
-                        u = o;
+                        t = n;
                     }
-                    ojc_TimeOfImpact531.toiMaxRootIters543 = ojc_MathUtils1593_max367(ojc_TimeOfImpact531.toiMaxRootIters543, r);
-                    n = n + 1 | 0;
-                    if (n == 8) {
+                    ojc_TimeOfImpact531.toiMaxRootIters543 = ojc_MathUtils1593_max367(ojc_TimeOfImpact531.toiMaxRootIters543, q);
+                    m = m + 1 | 0;
+                    if (m == 8) {
                         break;
                     }
-                    o = u;
+                    n = t;
                 }
             }
             i = i + 1 | 0;
             ojc_TimeOfImpact531.toiIters546 = ojc_TimeOfImpact531.toiIters546 + 1 | 0;
-            if (m != 0) {
+            if (b_input != 0) {
                 break;
             }
             if (i == 1000) {
@@ -12347,7 +12350,7 @@ function jl_Float558_$clinit() {
         return b;
     };
     jl_Float558_parseFloat784 = function(a_string) {
-        var b, c, d, e, f, g, h, i, j, k, m;
+        var b, c, d, e, f, g, h, i, j, k;
         b = jl_String1_trim785(a_string);
         c = 0;
         d = 0;
@@ -12415,40 +12418,40 @@ function jl_Float558_$clinit() {
                         if (k != 101 && k != 69) {
                             $rt_throw(jl_NumberFormatException2835_$init4());
                         }
-                        d = d + 1 | 0;
-                        i = 0;
-                        if (jl_String1_charAt72(b, d) == 45) {
-                            d = d + 1 | 0;
-                            i = 1;
-                        } else if (jl_String1_charAt72(b, d) == 43) {
-                            d = d + 1 | 0;
+                        j = d + 1 | 0;
+                        d = 0;
+                        if (jl_String1_charAt72(b, j) == 45) {
+                            j = j + 1 | 0;
+                            d = 1;
+                        } else if (jl_String1_charAt72(b, j) == 43) {
+                            j = j + 1 | 0;
                         }
-                        j = 0;
-                        m = 0;
+                        a_string = 0;
+                        i = 0;
                         $bc: {
                             while (true) {
-                                if (d >= jl_String1_length2(b)) {
+                                if (j >= jl_String1_length2(b)) {
                                     break $bc;
                                 }
-                                e = jl_String1_charAt72(b, d);
-                                if (e < 48) {
+                                k = jl_String1_charAt72(b, j);
+                                if (k < 48) {
                                     break $bc;
                                 }
-                                if (e > 57) {
+                                if (k > 57) {
                                     break;
                                 }
-                                j = (10 * j | 0) + (e - 48 | 0) | 0;
-                                m = 1;
-                                d = d + 1 | 0;
+                                a_string = (10 * a_string | 0) + (k - 48 | 0) | 0;
+                                i = 1;
+                                j = j + 1 | 0;
                             }
                         }
-                        if (m == 0) {
+                        if (i == 0) {
                             $rt_throw(jl_NumberFormatException2835_$init4());
                         }
-                        if (i != 0) {
-                            j =  -j | 0;
+                        if (d != 0) {
+                            a_string =  -a_string | 0;
                         }
-                        g = g + j | 0;
+                        g = g + a_string | 0;
                     }
                     $bd: {
                         if (g <= 38) {
@@ -12490,7 +12493,7 @@ function jl_Float558_$clinit() {
         return jl_Float558_$init790(a_d);
     };
     jl_Float558_floatToIntBits791 = function(a_value) {
-        var b, c, d;
+        var b, c, d, e;
         if (a_value == Infinity) {
             return 2139095040;
         }
@@ -12508,17 +12511,17 @@ function jl_Float558_$clinit() {
             d = 149;
         }
         if (d <= 126) {
-            d = b * jl_Float558_binaryExponent783(d);
+            e = b * jl_Float558_binaryExponent783(d);
         } else {
-            d = b * 8.507059E37 * jl_Float558_binaryExponent783(d - 126 | 0);
+            e = b * 8.507059E37 * jl_Float558_binaryExponent783(d - 126 | 0);
         }
-        d = (d + 0.5 | 0) & 8388607 | (c + 127 | 0) << 23;
+        c = (e + 0.5 | 0) & 8388607 | (c + 127 | 0) << 23;
         if (a_value >= 0.0 && 1.0 / a_value !=  -Infinity) {
             a_value = 0;
         } else {
             a_value =  -2147483648;
         }
-        return d | a_value;
+        return c | a_value;
     };
     jl_Float558_$clinit43 = function() {
         jl_Float558.NaN560 = NaN;
@@ -12725,39 +12728,39 @@ function ojc_Collision601_$clinit() {
         i = f[1];
         j = h.v250;
         k = i.v250;
-        m = ojc_Vec22016_dot798(c_normal, j) - d_offset;
-        n = ojc_Vec22016_dot798(c_normal, k) - d_offset;
-        if (m > 0.0) {
-            o = g;
+        b_vIn = ojc_Vec22016_dot798(c_normal, j) - d_offset;
+        m = ojc_Vec22016_dot798(c_normal, k) - d_offset;
+        if (b_vIn > 0.0) {
+            n = g;
         } else {
             f = a_vOut.data;
-            o = g + 1 | 0;
+            n = g + 1 | 0;
             ojc_Collision$ClipVertex249_set380(f[g], h);
         }
-        if (n > 0.0) {
-            g = o;
+        if (m > 0.0) {
+            o = n;
         } else {
-            c_normal = a_vOut.data;
-            g = o + 1 | 0;
-            ojc_Collision$ClipVertex249_set380(c_normal[o], i);
+            g = a_vOut.data;
+            o = n + 1 | 0;
+            ojc_Collision$ClipVertex249_set380(g[n], i);
         }
-        if (m * n < 0.0) {
-            a_vOut = a_vOut.data;
-            c_normal = m / (m - n);
-            p = a_vOut[g];
-            p.v250.x2017 = j.x2017 + c_normal * (k.x2017 - j.x2017);
-            p.v250.y2018 = j.y2018 + c_normal * (k.y2018 - j.y2018);
-            p.id251.indexA48 = e_vertexIndexA << 24 >> 24;
-            p.id251.indexB49 = h.id251.indexB49;
-            q = p.id251;
+        if (b_vIn * m < 0.0) {
+            p = a_vOut.data;
+            g = b_vIn / (b_vIn - m);
+            m = p[o];
+            m.v250.x2017 = j.x2017 + g * (k.x2017 - j.x2017);
+            m.v250.y2018 = j.y2018 + g * (k.y2018 - j.y2018);
+            m.id251.indexA48 = e_vertexIndexA << 24 >> 24;
+            m.id251.indexB49 = h.id251.indexB49;
+            d_offset = m.id251;
             ojc_ContactID$Type597_$clinit();
-            q.typeA50 = jl_Enum140_ordinal147(ojc_ContactID$Type597.VERTEX598) << 24 >> 24;
-            q = p.id251;
+            d_offset.typeA50 = jl_Enum140_ordinal147(ojc_ContactID$Type597.VERTEX598) << 24 >> 24;
+            q = m.id251;
             ojc_ContactID$Type597_$clinit();
             q.typeB47 = jl_Enum140_ordinal147(ojc_ContactID$Type597.FACE599) << 24 >> 24;
-            g = g + 1 | 0;
+            o = o + 1 | 0;
         }
-        return g;
+        return o;
     };
     ojc_Collision601_$init384 = function($this, a_argPool) {
         jl_Object2_$init8($this);
@@ -12809,14 +12812,14 @@ function ojc_Collision601_collideEdgeAndCircle801($this, a_manifold, b_edgeA, c_
     ojc_Vec22016_subLocal804(ojc_Vec22016_set176($this.e617, g), f);
     h = ojc_Vec22016_dot798($this.e617, ojc_Vec22016_subLocal804(ojc_Vec22016_set176($this.temp613, g), $this.Q606));
     i = ojc_Vec22016_dot798($this.e617, ojc_Vec22016_subLocal804(ojc_Vec22016_set176($this.temp613, $this.Q606), f));
-    c_xfA = b_edgeA.m_radius197 + d_circleB.m_radius197;
+    j = b_edgeA.m_radius197 + d_circleB.m_radius197;
     $this.cf615.indexB49 = 0;
-    e_xfB = $this.cf615;
+    c_xfA = $this.cf615;
     ojc_ContactID$Type597_$clinit();
-    e_xfB.typeB47 = jl_Enum140_ordinal147(ojc_ContactID$Type597.VERTEX598) << 24 >> 24;
+    c_xfA.typeB47 = jl_Enum140_ordinal147(ojc_ContactID$Type597.VERTEX598) << 24 >> 24;
     if (i <= 0.0) {
         ojc_Vec22016_subLocal804(ojc_Vec22016_set176(ojc_Collision601.d625, $this.Q606), f);
-        if (ojc_Vec22016_dot798(ojc_Collision601.d625, ojc_Collision601.d625) > c_xfA * c_xfA) {
+        if (ojc_Vec22016_dot798(ojc_Collision601.d625, ojc_Collision601.d625) > j * j) {
             return;
         }
         if (b_edgeA.m_hasVertex02266 != 0) {
@@ -12826,9 +12829,9 @@ function ojc_Collision601_collideEdgeAndCircle801($this, a_manifold, b_edgeA, c_
             }
         }
         $this.cf615.indexA48 = 0;
-        e_xfB = $this.cf615;
+        b_edgeA = $this.cf615;
         ojc_ContactID$Type597_$clinit();
-        e_xfB.typeA50 = jl_Enum140_ordinal147(ojc_ContactID$Type597.VERTEX598) << 24 >> 24;
+        b_edgeA.typeA50 = jl_Enum140_ordinal147(ojc_ContactID$Type597.VERTEX598) << 24 >> 24;
         a_manifold.pointCount823 = 1;
         ojc_Manifold$ManifoldType2245_$clinit();
         a_manifold.type826 = ojc_Manifold$ManifoldType2245.CIRCLES2246;
@@ -12840,21 +12843,21 @@ function ojc_Collision601_collideEdgeAndCircle801($this, a_manifold, b_edgeA, c_
     }
     if (h <= 0.0) {
         ojc_Vec22016_subLocal804(ojc_Vec22016_set176(ojc_Collision601.d625, $this.Q606), g);
-        if (ojc_Vec22016_dot798(ojc_Collision601.d625, ojc_Collision601.d625) > c_xfA * c_xfA) {
+        if (ojc_Vec22016_dot798(ojc_Collision601.d625, ojc_Collision601.d625) > j * j) {
             return;
         }
         if (b_edgeA.m_hasVertex32265 != 0) {
-            e_xfB = b_edgeA.m_vertex32264;
-            j = $this.e1621;
-            ojc_Vec22016_subLocal804(ojc_Vec22016_set176(j, e_xfB), g);
-            if (ojc_Vec22016_dot798(j, ojc_Vec22016_subLocal804(ojc_Vec22016_set176($this.temp613, $this.Q606), g)) > 0.0) {
+            b_edgeA = b_edgeA.m_vertex32264;
+            f = $this.e1621;
+            ojc_Vec22016_subLocal804(ojc_Vec22016_set176(f, b_edgeA), g);
+            if (ojc_Vec22016_dot798(f, ojc_Vec22016_subLocal804(ojc_Vec22016_set176($this.temp613, $this.Q606), g)) > 0.0) {
                 return;
             }
         }
         $this.cf615.indexA48 = 1;
-        j = $this.cf615;
+        c_xfA = $this.cf615;
         ojc_ContactID$Type597_$clinit();
-        j.typeA50 = jl_Enum140_ordinal147(ojc_ContactID$Type597.VERTEX598) << 24 >> 24;
+        c_xfA.typeA50 = jl_Enum140_ordinal147(ojc_ContactID$Type597.VERTEX598) << 24 >> 24;
         a_manifold.pointCount823 = 1;
         ojc_Manifold$ManifoldType2245_$clinit();
         a_manifold.type826 = ojc_Manifold$ManifoldType2245.CIRCLES2246;
@@ -12871,7 +12874,7 @@ function ojc_Collision601_collideEdgeAndCircle801($this, a_manifold, b_edgeA, c_
     ojc_Vec22016_addLocal805(ojc_Vec22016_mulLocal806(ojc_Vec22016_set176($this.P605, f), h), ojc_Vec22016_mulLocal806(ojc_Vec22016_set176($this.temp613, g), i));
     ojc_Vec22016_mulLocal806($this.P605, 1.0 / k);
     ojc_Vec22016_subLocal804(ojc_Vec22016_set176(ojc_Collision601.d625, $this.Q606), $this.P605);
-    if (ojc_Vec22016_dot798(ojc_Collision601.d625, ojc_Collision601.d625) > c_xfA * c_xfA) {
+    if (ojc_Vec22016_dot798(ojc_Collision601.d625, ojc_Collision601.d625) > j * j) {
         return;
     }
     $this.n622.x2017 =  -$this.e617.y2018;
@@ -12881,9 +12884,9 @@ function ojc_Collision601_collideEdgeAndCircle801($this, a_manifold, b_edgeA, c_
     }
     ojc_Vec22016_normalize148($this.n622);
     $this.cf615.indexA48 = 0;
-    j = $this.cf615;
+    b_edgeA = $this.cf615;
     ojc_ContactID$Type597_$clinit();
-    j.typeA50 = jl_Enum140_ordinal147(ojc_ContactID$Type597.FACE599) << 24 >> 24;
+    b_edgeA.typeA50 = jl_Enum140_ordinal147(ojc_ContactID$Type597.FACE599) << 24 >> 24;
     a_manifold.pointCount823 = 1;
     ojc_Manifold$ManifoldType2245_$clinit();
     a_manifold.type826 = ojc_Manifold$ManifoldType2245.FACE_A2248;
@@ -12909,7 +12912,7 @@ function ojc_Collision601_testOverlap808($this, a_shapeA, b_indexA, c_shapeB, d_
     return f_xfB;
 }
 function ojc_Collision601_collidePolygons810($this, a_manifold, b_polyA, c_xfA, d_polyB, e_xfB) {
-    var f, g, h, i, j, k, m, n, o, p, q, r, s, t, u, v, w;
+    var f, g, h, i, j, k, m, n, o, p, q, r, s, t, u, v;
     a_manifold.pointCount823 = 0;
     f = b_polyA.m_radius197 + d_polyB.m_radius197;
     ojc_Collision601_findMaxSeparation811($this, $this.results1603, b_polyA, c_xfA, d_polyB, e_xfB);
@@ -12940,15 +12943,15 @@ function ojc_Collision601_collidePolygons810($this, a_manifold, b_polyA, c_xfA, 
     k = c_xfA.q2029;
     ojc_Collision601_findIncidentEdge812($this, $this.incidentEdge624, b_polyA, c_xfA, g, d_polyB, e_xfB);
     m = b_polyA.m_count1496;
-    n = b_polyA.m_vertices1501;
+    b_polyA = b_polyA.m_vertices1501;
     if ((g + 1 | 0) >= m) {
-        j = 0;
+        i = 0;
     } else {
-        j = g + 1 | 0;
+        i = g + 1 | 0;
     }
-    o = n.data;
-    ojc_Vec22016_set176($this.v11609, o[g]);
-    ojc_Vec22016_set176($this.v12608, o[j]);
+    n = b_polyA.data;
+    ojc_Vec22016_set176($this.v11609, n[g]);
+    ojc_Vec22016_set176($this.v12608, n[i]);
     $this.localTangent616.x2017 = $this.v12608.x2017 - $this.v11609.x2017;
     $this.localTangent616.y2018 = $this.v12608.y2018 - $this.v11609.y2018;
     ojc_Vec22016_normalize148($this.localTangent616);
@@ -12958,47 +12961,47 @@ function ojc_Collision601_collidePolygons810($this, a_manifold, b_polyA, c_xfA, 
     $this.planePoint611.y2018 = ($this.v11609.y2018 + $this.v12608.y2018) * 0.5;
     $this.tangent607.x2017 = k.c2781 * $this.localTangent616.x2017 - k.s2780 * $this.localTangent616.y2018;
     $this.tangent607.y2018 = k.s2780 * $this.localTangent616.x2017 + k.c2781 * $this.localTangent616.y2018;
-    p = 1.0 * $this.tangent607.y2018;
-    q =  -1.0 * $this.tangent607.x2017;
+    o = 1.0 * $this.tangent607.y2018;
+    p =  -1.0 * $this.tangent607.x2017;
     ojc_Transform2027_mulToOut813(c_xfA, $this.v11609, $this.v11609);
     ojc_Transform2027_mulToOut813(c_xfA, $this.v12608, $this.v12608);
-    r = p * $this.v11609.x2017 + q * $this.v11609.y2018;
-    s =  -($this.tangent607.x2017 * $this.v11609.x2017 + $this.tangent607.y2018 * $this.v11609.y2018) + f;
-    t = $this.tangent607.x2017 * $this.v12608.x2017 + $this.tangent607.y2018 * $this.v12608.y2018 + f;
+    q = o * $this.v11609.x2017 + p * $this.v11609.y2018;
+    r =  -($this.tangent607.x2017 * $this.v11609.x2017 + $this.tangent607.y2018 * $this.v11609.y2018) + f;
+    s = $this.tangent607.x2017 * $this.v12608.x2017 + $this.tangent607.y2018 * $this.v12608.y2018 + f;
     ojc_Vec22016_negateLocal814($this.tangent607);
-    c_xfA = ojc_Collision601_clipSegmentToLine797($this.clipPoints1619, $this.incidentEdge624, $this.tangent607, s, g);
+    b_polyA = ojc_Collision601_clipSegmentToLine797($this.clipPoints1619, $this.incidentEdge624, $this.tangent607, r, g);
     ojc_Vec22016_negateLocal814($this.tangent607);
-    if (c_xfA < 2) {
+    if (b_polyA < 2) {
         return;
     }
-    if (ojc_Collision601_clipSegmentToLine797($this.clipPoints2618, $this.clipPoints1619, $this.tangent607, t, j) < 2) {
+    if (ojc_Collision601_clipSegmentToLine797($this.clipPoints2618, $this.clipPoints1619, $this.tangent607, s, i) < 2) {
         return;
     }
     ojc_Vec22016_set176(a_manifold.localNormal825, $this.localNormal610);
     ojc_Vec22016_set176(a_manifold.localPoint824, $this.planePoint611);
+    j = 0;
     g = 0;
-    o = 0;
-    while (o < 2) {
-        if (p * $this.clipPoints2618.data[o].v250.x2017 + q * $this.clipPoints2618.data[o].v250.y2018 - r <= f) {
-            u = a_manifold.points827.data[g];
-            v = u.localPoint2332;
-            w = $this.clipPoints2618.data[o].v250.x2017 - e_xfB.p2028.x2017;
-            s = $this.clipPoints2618.data[o].v250.y2018 - e_xfB.p2028.y2018;
-            v.x2017 = e_xfB.q2029.c2781 * w + e_xfB.q2029.s2780 * s;
-            v.y2018 =  -e_xfB.q2029.s2780 * w + e_xfB.q2029.c2781 * s;
-            ojc_ContactID46_set136(u.id2334, $this.clipPoints2618.data[o].id251);
+    while (g < 2) {
+        if (o * $this.clipPoints2618.data[g].v250.x2017 + p * $this.clipPoints2618.data[g].v250.y2018 - q <= f) {
+            t = a_manifold.points827.data[j];
+            u = t.localPoint2332;
+            v = $this.clipPoints2618.data[g].v250.x2017 - e_xfB.p2028.x2017;
+            c_xfA = $this.clipPoints2618.data[g].v250.y2018 - e_xfB.p2028.y2018;
+            u.x2017 = e_xfB.q2029.c2781 * v + e_xfB.q2029.s2780 * c_xfA;
+            u.y2018 =  -e_xfB.q2029.s2780 * v + e_xfB.q2029.c2781 * c_xfA;
+            ojc_ContactID46_set136(t.id2334, $this.clipPoints2618.data[g].id251);
             if (h != 0) {
-                ojc_ContactID46_flip134(u.id2334);
+                ojc_ContactID46_flip134(t.id2334);
             }
-            g = g + 1 | 0;
+            j = j + 1 | 0;
         }
-        o = o + 1 | 0;
+        g = g + 1 | 0;
     }
-    a_manifold.pointCount823 = g;
+    a_manifold.pointCount823 = j;
     return;
 }
 function ojc_Collision601_findMaxSeparation811($this, a_results, b_poly1, c_xf1, d_poly2, e_xf2) {
-    var f, g, h, i, j, k, m, n, o, p, q, r, s, t, u, v, w, x;
+    var f, g, h, i, j, k, m, n, o, p, q, r, s, t, u, v, w, x, y, z;
     f = b_poly1.m_count1496;
     g = b_poly1.m_normals1498;
     h = b_poly1.m_centroid1493;
@@ -13010,66 +13013,66 @@ function ojc_Collision601_findMaxSeparation811($this, a_results, b_poly1, c_xf1,
     o = m - (k.c2781 * h.x2017 - k.s2780 * h.y2018 + c_xf1.p2028.x2017);
     n = n - (k.s2780 * h.x2017 + k.c2781 * h.y2018 + c_xf1.p2028.y2018);
     p = k.c2781 * o + k.s2780 * n;
-    n =  -k.s2780 * o + k.c2781 * n;
-    q = 0;
-    r =  -3.4028235E38;
-    s = 0;
-    while (s < f) {
-        t = g.data[s];
-        u = t.x2017 * p + t.y2018 * n;
-        if (u > r) {
-            q = s;
-            r = u;
+    q =  -k.s2780 * o + k.c2781 * n;
+    r = 0;
+    s =  -3.4028235E38;
+    t = 0;
+    while (t < f) {
+        o = g.data[t];
+        u = o.x2017 * p + o.y2018 * q;
+        if (u > s) {
+            r = t;
+            s = u;
         }
-        s = s + 1 | 0;
+        t = t + 1 | 0;
     }
-    v = ojc_Collision601_edgeSeparation815($this, b_poly1, c_xf1, q, d_poly2, e_xf2);
-    if ((q - 1 | 0) < 0) {
+    v = ojc_Collision601_edgeSeparation815($this, b_poly1, c_xf1, r, d_poly2, e_xf2);
+    if ((r - 1 | 0) < 0) {
         w = f - 1 | 0;
     } else {
-        w = q - 1 | 0;
+        w = r - 1 | 0;
     }
-    r = ojc_Collision601_edgeSeparation815($this, b_poly1, c_xf1, w, d_poly2, e_xf2);
-    if ((q + 1 | 0) >= f) {
+    t = ojc_Collision601_edgeSeparation815($this, b_poly1, c_xf1, w, d_poly2, e_xf2);
+    if ((r + 1 | 0) >= f) {
         s = 0;
     } else {
-        s = q + 1 | 0;
+        s = r + 1 | 0;
     }
     x = ojc_Collision601_edgeSeparation815($this, b_poly1, c_xf1, s, d_poly2, e_xf2);
-    if (r > v && r > x) {
-        q =  -1;
+    if (t > v && t > x) {
+        y =  -1;
     } else {
         if (x <= v) {
-            a_results.edgeIndex2408 = q;
+            a_results.edgeIndex2408 = r;
             a_results.separation2407 = v;
             return;
         }
-        q = 1;
+        y = 1;
         w = s;
-        r = x;
+        t = x;
     }
-    v = f - 1 | 0;
+    z = f - 1 | 0;
     while (true) {
-        if (q ==  -1) {
+        if (y ==  -1) {
             if ((w - 1 | 0) < 0) {
-                s = v;
+                u = z;
             } else {
-                s = w - 1 | 0;
+                u = w - 1 | 0;
             }
         } else if ((w + 1 | 0) >= f) {
-            s = 0;
+            u = 0;
         } else {
-            s = w + 1 | 0;
+            u = w + 1 | 0;
         }
-        u = ojc_Collision601_edgeSeparation815($this, b_poly1, c_xf1, s, d_poly2, e_xf2);
-        if (u <= r) {
+        r = ojc_Collision601_edgeSeparation815($this, b_poly1, c_xf1, u, d_poly2, e_xf2);
+        if (r <= t) {
             break;
         }
-        w = s;
-        r = u;
+        w = u;
+        t = r;
     }
     a_results.edgeIndex2408 = w;
-    a_results.separation2407 = r;
+    a_results.separation2407 = t;
     return;
 }
 function ojc_Collision601_collideCircles816($this, a_manifold, b_circle1, c_xfA, d_circle2, e_xfB) {
@@ -13081,11 +13084,11 @@ function ojc_Collision601_collideCircles816($this, a_manifold, b_circle1, c_xfA,
     i = c_xfA.q2029.s2780 * f.x2017 + c_xfA.q2029.c2781 * f.y2018 + c_xfA.p2028.y2018;
     j = e_xfB.q2029.c2781 * g.x2017 - e_xfB.q2029.s2780 * g.y2018 + e_xfB.p2028.x2017;
     c_xfA = e_xfB.q2029.s2780 * g.x2017 + e_xfB.q2029.c2781 * g.y2018 + e_xfB.p2028.y2018;
-    j = j - h;
-    h = c_xfA - i;
-    j = j * j + h * h;
-    c_xfA = b_circle1.m_radius197 + d_circle2.m_radius197;
-    if (j > c_xfA * c_xfA) {
+    e_xfB = j - h;
+    c_xfA = c_xfA - i;
+    c_xfA = e_xfB * e_xfB + c_xfA * c_xfA;
+    b_circle1 = b_circle1.m_radius197 + d_circle2.m_radius197;
+    if (c_xfA > b_circle1 * b_circle1) {
         return;
     }
     ojc_Manifold$ManifoldType2245_$clinit();
@@ -13105,42 +13108,42 @@ function ojc_Collision601_edgeSeparation815($this, a_poly1, b_xf1, c_edge1, d_po
     var f, g, h, i, j, k, m, n, o, p, q, r, s, t, u;
     f = a_poly1.m_count1496;
     g = a_poly1.m_vertices1501;
-    a_poly1 = a_poly1.m_normals1498;
-    h = d_poly2.m_count1496;
-    i = d_poly2.m_vertices1501;
+    h = a_poly1.m_normals1498;
+    i = d_poly2.m_count1496;
+    j = d_poly2.m_vertices1501;
     if (ojc_Collision601.$assertionsDisabled626 == 0 && !(0 <= c_edge1 && c_edge1 < f)) {
         $rt_throw(jl_AssertionError746_$init4());
     }
-    a_poly1 = a_poly1.data;
-    j = b_xf1.q2029;
-    k = e_xf2.q2029;
-    m = a_poly1[c_edge1];
-    n = j.c2781 * m.x2017 - j.s2780 * m.y2018;
-    o = j.s2780 * m.x2017 + j.c2781 * m.y2018;
-    p = k.c2781 * n + k.s2780 * o;
-    q =  -k.s2780 * n + k.c2781 * o;
+    h = h.data;
+    k = b_xf1.q2029;
+    m = e_xf2.q2029;
+    a_poly1 = h[c_edge1];
+    n = k.c2781 * a_poly1.x2017 - k.s2780 * a_poly1.y2018;
+    o = k.s2780 * a_poly1.x2017 + k.c2781 * a_poly1.y2018;
+    p = m.c2781 * n + m.s2780 * o;
+    q =  -m.s2780 * n + m.c2781 * o;
     r = 0;
-    m = 3.4028235E38;
-    s = 0;
-    while (s < h) {
-        t = i.data[s];
-        u = t.x2017 * p + t.y2018 * q;
-        if (u < m) {
-            r = s;
-            m = u;
+    s = 3.4028235E38;
+    t = 0;
+    while (t < i) {
+        u = j.data[t];
+        a_poly1 = u.x2017 * p + u.y2018 * q;
+        if (a_poly1 < s) {
+            r = t;
+            s = a_poly1;
         }
-        s = s + 1 | 0;
+        t = t + 1 | 0;
     }
     d_poly2 = g.data;
-    p = i.data;
-    t = d_poly2[c_edge1];
-    q = j.c2781 * t.x2017 - j.s2780 * t.y2018 + b_xf1.p2028.x2017;
-    b_xf1 = j.s2780 * t.x2017 + j.c2781 * t.y2018 + b_xf1.p2028.y2018;
-    p = p[r];
-    return (k.c2781 * p.x2017 - k.s2780 * p.y2018 + e_xf2.p2028.x2017 - q) * n + (k.s2780 * p.x2017 + k.c2781 * p.y2018 + e_xf2.p2028.y2018 - b_xf1) * o;
+    u = j.data;
+    p = d_poly2[c_edge1];
+    d_poly2 = k.c2781 * p.x2017 - k.s2780 * p.y2018 + b_xf1.p2028.x2017;
+    c_edge1 = k.s2780 * p.x2017 + k.c2781 * p.y2018 + b_xf1.p2028.y2018;
+    p = u[r];
+    return (m.c2781 * p.x2017 - m.s2780 * p.y2018 + e_xf2.p2028.x2017 - d_poly2) * n + (m.s2780 * p.x2017 + m.c2781 * p.y2018 + e_xf2.p2028.y2018 - c_edge1) * o;
 }
 function ojc_Collision601_collidePolygonAndCircle819($this, a_manifold, b_polygon, c_xfA, d_circle, e_xfB) {
-    var f, g, h, i, j, k, m, n, o, p, q, r, s, t, u;
+    var f, g, h, i, j, k, m, n, o, p, q, r, s, t, u, v, w;
     a_manifold.pointCount823 = 0;
     f = d_circle.m_p2302;
     g = e_xfB.q2029;
@@ -13148,99 +13151,99 @@ function ojc_Collision601_collidePolygonAndCircle819($this, a_manifold, b_polygo
     i = g.c2781 * f.x2017 - g.s2780 * f.y2018 + e_xfB.p2028.x2017;
     j = g.s2780 * f.x2017 + g.c2781 * f.y2018 + e_xfB.p2028.y2018;
     k = i - c_xfA.p2028.x2017;
-    j = j - c_xfA.p2028.y2018;
-    m = h.c2781 * k + h.s2780 * j;
-    j =  -h.s2780 * k + h.c2781 * j;
+    i = j - c_xfA.p2028.y2018;
+    c_xfA = h.c2781 * k + h.s2780 * i;
+    m =  -h.s2780 * k + h.c2781 * i;
     n = 0;
     o =  -3.4028235E38;
     i = b_polygon.m_radius197 + d_circle.m_radius197;
     p = b_polygon.m_count1496;
-    q = b_polygon.m_vertices1501;
-    b_polygon = b_polygon.m_normals1498;
+    d_circle = b_polygon.m_vertices1501;
+    q = b_polygon.m_normals1498;
     r = 0;
     while (true) {
         if (r >= p) {
             if ((n + 1 | 0) >= p) {
-                r = 0;
+                s = 0;
             } else {
-                r = n + 1 | 0;
+                s = n + 1 | 0;
             }
-            c_xfA = q.data;
-            q = c_xfA[n];
-            s = c_xfA[r];
+            e_xfB = d_circle.data;
+            t = e_xfB[n];
+            u = e_xfB[s];
             if (o < 1.1920929E-7) {
-                c_xfA = b_polygon.data;
+                e_xfB = q.data;
                 a_manifold.pointCount823 = 1;
                 ojc_Manifold$ManifoldType2245_$clinit();
                 a_manifold.type826 = ojc_Manifold$ManifoldType2245.FACE_A2248;
-                k = c_xfA[n];
-                a_manifold.localNormal825.x2017 = k.x2017;
-                a_manifold.localNormal825.y2018 = k.y2018;
-                a_manifold.localPoint824.x2017 = (q.x2017 + s.x2017) * 0.5;
-                a_manifold.localPoint824.y2018 = (q.y2018 + s.y2018) * 0.5;
-                d_circle = a_manifold.points827.data[0];
-                d_circle.localPoint2332.x2017 = f.x2017;
-                d_circle.localPoint2332.y2018 = f.y2018;
-                ojc_ContactID46_zero133(d_circle.id2334);
+                v = e_xfB[n];
+                a_manifold.localNormal825.x2017 = v.x2017;
+                a_manifold.localNormal825.y2018 = v.y2018;
+                a_manifold.localPoint824.x2017 = (t.x2017 + u.x2017) * 0.5;
+                a_manifold.localPoint824.y2018 = (t.y2018 + u.y2018) * 0.5;
+                c_xfA = a_manifold.points827.data[0];
+                c_xfA.localPoint2332.x2017 = f.x2017;
+                c_xfA.localPoint2332.y2018 = f.y2018;
+                ojc_ContactID46_zero133(c_xfA.id2334);
                 return;
             }
-            d_circle = (m - q.x2017) * (s.x2017 - q.x2017) + (j - q.y2018) * (s.y2018 - q.y2018);
-            r = (m - s.x2017) * (q.x2017 - s.x2017) + (j - s.y2018) * (q.y2018 - s.y2018);
-            if (d_circle <= 0.0) {
-                d_circle = m - q.x2017;
-                p = j - q.y2018;
-                if (d_circle * d_circle + p * p > i * i) {
+            j = (c_xfA - t.x2017) * (u.x2017 - t.x2017) + (m - t.y2018) * (u.y2018 - t.y2018);
+            r = (c_xfA - u.x2017) * (t.x2017 - u.x2017) + (m - u.y2018) * (t.y2018 - u.y2018);
+            if (j <= 0.0) {
+                v = c_xfA - t.x2017;
+                w = m - t.y2018;
+                if (v * v + w * w > i * i) {
                     return;
                 }
                 a_manifold.pointCount823 = 1;
                 ojc_Manifold$ManifoldType2245_$clinit();
                 a_manifold.type826 = ojc_Manifold$ManifoldType2245.FACE_A2248;
-                a_manifold.localNormal825.x2017 = m - q.x2017;
-                a_manifold.localNormal825.y2018 = j - q.y2018;
+                a_manifold.localNormal825.x2017 = c_xfA - t.x2017;
+                a_manifold.localNormal825.y2018 = m - t.y2018;
                 ojc_Vec22016_normalize148(a_manifold.localNormal825);
-                ojc_Vec22016_set176(a_manifold.localPoint824, q);
+                ojc_Vec22016_set176(a_manifold.localPoint824, t);
                 ojc_Vec22016_set176(a_manifold.points827.data[0].localPoint2332, f);
                 ojc_ContactID46_zero133(a_manifold.points827.data[0].id2334);
             } else if (r <= 0.0) {
-                d_circle = m - s.x2017;
-                p = j - s.y2018;
-                if (d_circle * d_circle + p * p > i * i) {
+                b_polygon = c_xfA - u.x2017;
+                w = m - u.y2018;
+                if (b_polygon * b_polygon + w * w > i * i) {
                     return;
                 }
                 a_manifold.pointCount823 = 1;
                 ojc_Manifold$ManifoldType2245_$clinit();
                 a_manifold.type826 = ojc_Manifold$ManifoldType2245.FACE_A2248;
-                a_manifold.localNormal825.x2017 = m - s.x2017;
-                a_manifold.localNormal825.y2018 = j - s.y2018;
+                a_manifold.localNormal825.x2017 = c_xfA - u.x2017;
+                a_manifold.localNormal825.y2018 = m - u.y2018;
                 ojc_Vec22016_normalize148(a_manifold.localNormal825);
-                ojc_Vec22016_set176(a_manifold.localPoint824, s);
+                ojc_Vec22016_set176(a_manifold.localPoint824, u);
                 ojc_Vec22016_set176(a_manifold.points827.data[0].localPoint2332, f);
                 ojc_ContactID46_zero133(a_manifold.points827.data[0].id2334);
             } else {
-                t = b_polygon.data;
-                k = (q.x2017 + s.x2017) * 0.5;
-                u = (q.y2018 + s.y2018) * 0.5;
-                m = m - k;
-                j = j - u;
-                d_circle = t[n];
-                if (m * d_circle.x2017 + j * d_circle.y2018 > i) {
+                b_polygon = q.data;
+                j = (t.x2017 + u.x2017) * 0.5;
+                v = (t.y2018 + u.y2018) * 0.5;
+                k = c_xfA - j;
+                m = m - v;
+                c_xfA = b_polygon[n];
+                if (k * c_xfA.x2017 + m * c_xfA.y2018 > i) {
                     return;
                 }
                 a_manifold.pointCount823 = 1;
                 ojc_Manifold$ManifoldType2245_$clinit();
                 a_manifold.type826 = ojc_Manifold$ManifoldType2245.FACE_A2248;
-                ojc_Vec22016_set176(a_manifold.localNormal825, t[n]);
-                a_manifold.localPoint824.x2017 = k;
-                a_manifold.localPoint824.y2018 = u;
+                ojc_Vec22016_set176(a_manifold.localNormal825, b_polygon[n]);
+                a_manifold.localPoint824.x2017 = j;
+                a_manifold.localPoint824.y2018 = v;
                 ojc_Vec22016_set176(a_manifold.points827.data[0].localPoint2332, f);
                 ojc_ContactID46_zero133(a_manifold.points827.data[0].id2334);
             }
             return;
         }
-        d_circle = q.data;
-        t = b_polygon.data;
-        k = d_circle[r];
-        s = t[r].x2017 * (m - k.x2017) + t[r].y2018 * (j - k.y2018);
+        b_polygon = d_circle.data;
+        j = q.data;
+        v = b_polygon[r];
+        s = j[r].x2017 * (c_xfA - v.x2017) + j[r].y2018 * (m - v.y2018);
         if (s > i) {
             break;
         }
@@ -13258,65 +13261,65 @@ function ojc_Collision601_findIncidentEdge812($this, a_c, b_poly1, c_xf1, d_edge
     h = b_poly1.m_normals1498;
     i = e_poly2.m_count1496;
     j = e_poly2.m_vertices1501;
-    e_poly2 = e_poly2.m_normals1498;
+    k = e_poly2.m_normals1498;
     if (ojc_Collision601.$assertionsDisabled626 == 0 && !(0 <= d_edge1 && d_edge1 < g)) {
         $rt_throw(jl_AssertionError746_$init4());
     }
-    k = a_c.data;
-    h = h.data;
-    m = k[0];
-    n = k[1];
-    b_poly1 = c_xf1.q2029;
-    o = f_xf2.q2029;
-    p = h[d_edge1];
-    q = b_poly1.c2781 * p.x2017 - b_poly1.s2780 * p.y2018;
-    r = b_poly1.s2780 * p.x2017 + b_poly1.c2781 * p.y2018;
-    s = o.c2781 * q + o.s2780 * r;
-    q =  -o.s2780 * q + o.c2781 * r;
+    m = a_c.data;
+    a_c = h.data;
+    n = m[0];
+    o = m[1];
+    p = c_xf1.q2029;
+    q = f_xf2.q2029;
+    c_xf1 = a_c[d_edge1];
+    b_poly1 = p.c2781 * c_xf1.x2017 - p.s2780 * c_xf1.y2018;
+    r = p.s2780 * c_xf1.x2017 + p.c2781 * c_xf1.y2018;
+    s = q.c2781 * b_poly1 + q.s2780 * r;
+    r =  -q.s2780 * b_poly1 + q.c2781 * r;
     t = 0;
     u = 3.4028235E38;
     v = 0;
     while (v < i) {
-        r = e_poly2.data[v];
-        p = s * r.x2017 + q * r.y2018;
-        if (p < u) {
+        e_poly2 = k.data[v];
+        c_xf1 = s * e_poly2.x2017 + r * e_poly2.y2018;
+        if (c_xf1 < u) {
             t = v;
-            u = p;
+            u = c_xf1;
         }
         v = v + 1 | 0;
     }
     if ((t + 1 | 0) >= i) {
-        p = 0;
+        c_xf1 = 0;
     } else {
-        p = t + 1 | 0;
+        c_xf1 = t + 1 | 0;
     }
     w = j.data;
-    s = w[t];
-    x = m.v250;
-    x.x2017 = o.c2781 * s.x2017 - o.s2780 * s.y2018 + f_xf2.p2028.x2017;
-    x.y2018 = o.s2780 * s.x2017 + o.c2781 * s.y2018 + f_xf2.p2028.y2018;
-    c_xf1 = m.id251;
-    g = d_edge1 << 24 >> 24;
-    c_xf1.indexA48 = g;
-    m.id251.indexB49 = t << 24 >> 24;
-    c_xf1 = m.id251;
+    b_poly1 = w[t];
+    s = n.v250;
+    s.x2017 = q.c2781 * b_poly1.x2017 - q.s2780 * b_poly1.y2018 + f_xf2.p2028.x2017;
+    s.y2018 = q.s2780 * b_poly1.x2017 + q.c2781 * b_poly1.y2018 + f_xf2.p2028.y2018;
+    x = n.id251;
+    i = d_edge1 << 24 >> 24;
+    x.indexA48 = i;
+    n.id251.indexB49 = t << 24 >> 24;
+    g = n.id251;
     ojc_ContactID$Type597_$clinit();
-    c_xf1.typeA50 = jl_Enum140_ordinal147(ojc_ContactID$Type597.FACE599) << 24 >> 24;
-    a_c = m.id251;
+    g.typeA50 = jl_Enum140_ordinal147(ojc_ContactID$Type597.FACE599) << 24 >> 24;
+    b_poly1 = n.id251;
     ojc_ContactID$Type597_$clinit();
-    a_c.typeB47 = jl_Enum140_ordinal147(ojc_ContactID$Type597.VERTEX598) << 24 >> 24;
-    r = w[p];
-    w = n.v250;
-    w.x2017 = o.c2781 * r.x2017 - o.s2780 * r.y2018 + f_xf2.p2028.x2017;
-    w.y2018 = o.s2780 * r.x2017 + o.c2781 * r.y2018 + f_xf2.p2028.y2018;
-    n.id251.indexA48 = g;
-    n.id251.indexB49 = p << 24 >> 24;
-    c_xf1 = n.id251;
+    b_poly1.typeB47 = jl_Enum140_ordinal147(ojc_ContactID$Type597.VERTEX598) << 24 >> 24;
+    s = w[c_xf1];
+    b_poly1 = o.v250;
+    b_poly1.x2017 = q.c2781 * s.x2017 - q.s2780 * s.y2018 + f_xf2.p2028.x2017;
+    b_poly1.y2018 = q.s2780 * s.x2017 + q.c2781 * s.y2018 + f_xf2.p2028.y2018;
+    o.id251.indexA48 = i;
+    o.id251.indexB49 = c_xf1 << 24 >> 24;
+    f_xf2 = o.id251;
     ojc_ContactID$Type597_$clinit();
-    c_xf1.typeA50 = jl_Enum140_ordinal147(ojc_ContactID$Type597.FACE599) << 24 >> 24;
-    d_edge1 = n.id251;
+    f_xf2.typeA50 = jl_Enum140_ordinal147(ojc_ContactID$Type597.FACE599) << 24 >> 24;
+    c_xf1 = o.id251;
     ojc_ContactID$Type597_$clinit();
-    d_edge1.typeB47 = jl_Enum140_ordinal147(ojc_ContactID$Type597.VERTEX598) << 24 >> 24;
+    c_xf1.typeB47 = jl_Enum140_ordinal147(ojc_ContactID$Type597.VERTEX598) << 24 >> 24;
     return;
 }
 function dmgc_GameResourceType627_$clinit() {
@@ -13696,9 +13699,9 @@ function jn_CharBuffer663_get847($this, a_dst, b_offset, c_length) {
         d = a_dst.data;
         e = d.length;
         if (b_offset < e) {
-            a_dst = b_offset + c_length | 0;
-            if (a_dst > e) {
-                $rt_throw(jl_IndexOutOfBoundsException1831_$init29(jl_StringBuilder2321_toString35(jl_StringBuilder2321_append76(jl_StringBuilder2321_append36(jl_StringBuilder2321_append36(jl_StringBuilder2321_append76(jl_StringBuilder2321_append36(jl_StringBuilder2321_$init4(), $rt_s(195)), a_dst), $rt_s(196)), $rt_s(197)), e))));
+            f = b_offset + c_length | 0;
+            if (f > e) {
+                $rt_throw(jl_IndexOutOfBoundsException1831_$init29(jl_StringBuilder2321_toString35(jl_StringBuilder2321_append76(jl_StringBuilder2321_append36(jl_StringBuilder2321_append36(jl_StringBuilder2321_append76(jl_StringBuilder2321_append36(jl_StringBuilder2321_$init4(), $rt_s(195)), f), $rt_s(196)), $rt_s(197)), e))));
             }
             if (jn_Buffer244_remaining62($this) < c_length) {
                 $rt_throw(jn_BufferUnderflowException963_$init4());
@@ -13706,15 +13709,15 @@ function jn_CharBuffer663_get847($this, a_dst, b_offset, c_length) {
             if (c_length < 0) {
                 $rt_throw(jl_IndexOutOfBoundsException1831_$init29(jl_StringBuilder2321_toString35(jl_StringBuilder2321_append36(jl_StringBuilder2321_append76(jl_StringBuilder2321_append36(jl_StringBuilder2321_$init4(), $rt_s(198)), c_length), $rt_s(199)))));
             }
-            f = $this.position246;
-            g = 0;
-            while (g < c_length) {
-                h = b_offset + 1 | 0;
-                i = f + 1 | 0;
-                d[b_offset] = jn_CharBufferOverArray665_getChar848($this, f);
-                g = g + 1 | 0;
-                b_offset = h;
-                f = i;
+            g = $this.position246;
+            h = 0;
+            while (h < c_length) {
+                i = b_offset + 1 | 0;
+                a_dst = g + 1 | 0;
+                d[b_offset] = jn_CharBufferOverArray665_getChar848($this, g);
+                h = h + 1 | 0;
+                b_offset = i;
+                g = a_dst;
             }
             $this.position246 = $this.position246 + c_length | 0;
             return $this;
@@ -13802,16 +13805,16 @@ function dmgt_TeaVMPrerenderedTextCache$CacheEntry674_drawText855($this, a_aCach
     i = $this.size675.width1983;
     j = $this.size675.height1984;
     e.fillRect(g, h, i, j);
-    f = dmgg_CSSCache1163_getCSS856(a_aCache, c_aColor);
-    k = $rt_ustr(f);
-    e.fillStyle = k;
-    k = $rt_ustr(f);
+    k = dmgg_CSSCache1163_getCSS856(a_aCache, c_aColor);
+    f = $rt_ustr(k);
+    e.fillStyle = f;
+    k = $rt_ustr(k);
     e.strokeStyle = k;
     c_aColor = $rt_ustr(dmgg_CSSCache1163_getCSS857(a_aCache, b_aFont));
     e.font = c_aColor;
-    g = 0.0;
-    b_aFont = b_aFont.size388;
-    e.fillText($rt_ustr(d_aText), g, b_aFont);
+    h = 0.0;
+    a_aCache = b_aFont.size388;
+    e.fillText($rt_ustr(d_aText), h, a_aCache);
     return;
 }
 function dmgt_TeaVMPrerenderedTextCache$CacheEntry674_$init851($this, a_x0, b_x1, c) {
@@ -13865,33 +13868,33 @@ function dmgg_GenericAbstractGameView678_setCurrentScreenSize862($this, a_aCurre
     return;
 }
 function dmgg_GenericAbstractGameView678_renderGame863($this, a_aGameTime, b, c_aScene, d_aStatistics) {
-    var e, f, g, h, i, j;
+    var e, f, g, h, i;
     if (dmgt_TeaVMGameView690_beginFrame864($this, c_aScene) == 0) {
         return;
     }
-    e = dmgt_TeaVMGameView690_createEffectCanvas865($this);
-    f = dmgc_GameScene2107_getPreprocessorEffects866(c_aScene).data;
-    g = f.length;
-    b = 0;
-    while (b < g) {
-        dmgs_StarfieldGameSceneEffect340_render558(f[b], e, $this.cameraBehavior679);
-        b = b + 1 | 0;
+    b = dmgt_TeaVMGameView690_createEffectCanvas865($this);
+    e = dmgc_GameScene2107_getPreprocessorEffects866(c_aScene).data;
+    f = e.length;
+    g = 0;
+    while (g < f) {
+        dmgs_StarfieldGameSceneEffect340_render558(e[g], b, $this.cameraBehavior679);
+        g = g + 1 | 0;
     }
-    f = dmgc_CameraBehavior2829_processVisibleInstances867($this.cameraBehavior679, dmgg_GenericAbstractGameView$12865_$init869($this, a_aGameTime, c_aScene));
-    h = dmgc_GameScene2107_getPostprocessorEffects870(c_aScene).data;
-    b = h.length;
-    i = 0;
-    while (i < b) {
-        dmgs_StarfieldGameSceneEffect340_render558(h[i], e, $this.cameraBehavior679);
-        i = i + 1 | 0;
+    e = dmgc_CameraBehavior2829_processVisibleInstances867($this.cameraBehavior679, dmgg_GenericAbstractGameView$12865_$init869($this, a_aGameTime, c_aScene));
+    f = dmgc_GameScene2107_getPostprocessorEffects870(c_aScene).data;
+    h = f.length;
+    g = 0;
+    while (g < h) {
+        dmgs_StarfieldGameSceneEffect340_render558(f[g], b, $this.cameraBehavior679);
+        g = g + 1 | 0;
     }
     if (jl_Boolean2001_booleanValue751(dmge_ReadOnlyProperty38_get113(dmgc_Game2189_enableDebugProperty138(dmgc_GameScene2107_getGame716(c_aScene)))) != 0) {
         dmgt_AbsolutePositionAnchor1633_$clinit();
-        j = dmgt_AbsolutePositionAnchor1633.BOTTOM_LEFT1638;
-        dmgg_GenericAbstractGameView678_drawTextAt871($this, j, dmgg_GenericAbstractGameView678.THE_DEBUG_POSITION_VERSION685, dmgg_GenericAbstractGameView678.THE_DEBUG_CENTER683, dmgg_GenericAbstractGameView678.THE_DEBUG_TEXT_SIZE686, dmgg_GenericAbstractGameView678.THE_DEBUG_FONT689, dmgg_GenericAbstractGameView678.THE_DEBUG_TEXT_COLOR687, $rt_s(201));
-        dmgg_GenericAbstractGameView678_drawTextAt871($this, j, dmgg_GenericAbstractGameView678.THE_DEBUG_FRAME_RATE688, dmgg_GenericAbstractGameView678.THE_DEBUG_CENTER683, dmgg_GenericAbstractGameView678.THE_DEBUG_TEXT_SIZE686, dmgg_GenericAbstractGameView678.THE_DEBUG_FONT689, dmgg_GenericAbstractGameView678.THE_DEBUG_TEXT_COLOR687, jl_StringBuilder2321_toString35(jl_StringBuilder2321_append36(jl_StringBuilder2321_append872(jl_StringBuilder2321_append36(jl_StringBuilder2321_$init4(), $rt_s(202)), dmgc_RuntimeStatistics1222_getAverageTimePerLoopCycle873(d_aStatistics)),
+        i = dmgt_AbsolutePositionAnchor1633.BOTTOM_LEFT1638;
+        dmgg_GenericAbstractGameView678_drawTextAt871($this, i, dmgg_GenericAbstractGameView678.THE_DEBUG_POSITION_VERSION685, dmgg_GenericAbstractGameView678.THE_DEBUG_CENTER683, dmgg_GenericAbstractGameView678.THE_DEBUG_TEXT_SIZE686, dmgg_GenericAbstractGameView678.THE_DEBUG_FONT689, dmgg_GenericAbstractGameView678.THE_DEBUG_TEXT_COLOR687, $rt_s(201));
+        dmgg_GenericAbstractGameView678_drawTextAt871($this, i, dmgg_GenericAbstractGameView678.THE_DEBUG_FRAME_RATE688, dmgg_GenericAbstractGameView678.THE_DEBUG_CENTER683, dmgg_GenericAbstractGameView678.THE_DEBUG_TEXT_SIZE686, dmgg_GenericAbstractGameView678.THE_DEBUG_FONT689, dmgg_GenericAbstractGameView678.THE_DEBUG_TEXT_COLOR687, jl_StringBuilder2321_toString35(jl_StringBuilder2321_append36(jl_StringBuilder2321_append872(jl_StringBuilder2321_append36(jl_StringBuilder2321_$init4(), $rt_s(202)), dmgc_RuntimeStatistics1222_getAverageTimePerLoopCycle873(d_aStatistics)),
         $rt_s(203))));
-        dmgg_GenericAbstractGameView678_drawTextAt871($this, j, dmgg_GenericAbstractGameView678.THE_DEBUG_VIVISBLE_INSTANCES684, dmgg_GenericAbstractGameView678.THE_DEBUG_CENTER683, dmgg_GenericAbstractGameView678.THE_DEBUG_TEXT_SIZE686, dmgg_GenericAbstractGameView678.THE_DEBUG_FONT689, dmgg_GenericAbstractGameView678.THE_DEBUG_TEXT_COLOR687, jl_StringBuilder2321_toString35(jl_StringBuilder2321_append76(jl_StringBuilder2321_append36(jl_StringBuilder2321_$init4(), $rt_s(204)), f)));
+        dmgg_GenericAbstractGameView678_drawTextAt871($this, i, dmgg_GenericAbstractGameView678.THE_DEBUG_VIVISBLE_INSTANCES684, dmgg_GenericAbstractGameView678.THE_DEBUG_CENTER683, dmgg_GenericAbstractGameView678.THE_DEBUG_TEXT_SIZE686, dmgg_GenericAbstractGameView678.THE_DEBUG_FONT689, dmgg_GenericAbstractGameView678.THE_DEBUG_TEXT_COLOR687, jl_StringBuilder2321_toString35(jl_StringBuilder2321_append76(jl_StringBuilder2321_append36(jl_StringBuilder2321_$init4(), $rt_s(204)), e)));
     }
     dmgg_GenericAbstractGameView678_framefinished874($this);
     return;
@@ -13926,14 +13929,14 @@ function dmgt_TeaVMGameView690_$init882(a, b, c, d, e) {
     return $r;
 }
 function dmgt_TeaVMGameView690_prepareNewScene881($this, a_aGameRuntime, b_aCameraBehavior, c_aGestureDetector) {
-    var d, e;
+    var d;
     dmgg_GenericAbstractGameView678_prepareNewScene881($this, a_aGameRuntime, b_aCameraBehavior, c_aGestureDetector);
-    c_aGestureDetector = ju_HashMap$HashMapEntrySet1640_iterator742(ju_HashMap1688_entrySet743($this.instanceCache692));
-    while (ju_HashMap$AbstractMapIterator835_hasNext745(c_aGestureDetector) != 0) {
-        d = ju_HashMap$EntryIterator1765_next746(c_aGestureDetector);
-        e = ju_MapEntry1309_getValue750(d).parentNode;
-        d = ju_MapEntry1309_getValue750(d);
-        e.removeChild(d);
+    d = ju_HashMap$HashMapEntrySet1640_iterator742(ju_HashMap1688_entrySet743($this.instanceCache692));
+    while (ju_HashMap$AbstractMapIterator835_hasNext745(d) != 0) {
+        b_aCameraBehavior = ju_HashMap$EntryIterator1765_next746(d);
+        c_aGestureDetector = ju_MapEntry1309_getValue750(b_aCameraBehavior).parentNode;
+        b_aCameraBehavior = ju_MapEntry1309_getValue750(b_aCameraBehavior);
+        c_aGestureDetector.removeChild(b_aCameraBehavior);
     }
     ju_HashMap1688_clear196($this.instanceCache692);
     return;
@@ -13943,23 +13946,23 @@ function dmgt_TeaVMGameView690_drawImage884($this, a, b, c, d) {
     return;
 }
 function dmgt_TeaVMGameView690_drawRect886($this, a, b, c_aCenterOffset, d_aColor, e_aSize) {
-    var f, g, h, i, j;
-    d_aColor = dmgg_CSSCache1163_getCSS856($this.cssCache691, d_aColor);
+    var f, g, h;
+    b = dmgg_CSSCache1163_getCSS856($this.cssCache691, d_aColor);
     f = $this.renderingContext2D695;
-    b = $rt_ustr(d_aColor);
-    f.fillStyle = b;
+    d_aColor = $rt_ustr(b);
+    f.fillStyle = d_aColor;
+    a = $this.renderingContext2D695;
+    d_aColor = $rt_ustr(b);
+    a.strokeStyle = d_aColor;
     b = $this.renderingContext2D695;
-    a = $rt_ustr(d_aColor);
-    b.strokeStyle = a;
-    d_aColor = $this.renderingContext2D695;
-    a = 1.0;
-    d_aColor.lineWidth = a;
+    d_aColor = 1.0;
+    b.lineWidth = d_aColor;
     a = $this.renderingContext2D695;
     g =  -c_aCenterOffset.x637;
-    h =  -c_aCenterOffset.y638;
-    i = e_aSize.width1983;
-    j = e_aSize.height1984;
-    a.strokeRect(g, h, i, j);
+    c_aCenterOffset =  -c_aCenterOffset.y638;
+    h = e_aSize.width1983;
+    e_aSize = e_aSize.height1984;
+    a.strokeRect(g, c_aCenterOffset, h, e_aSize);
     return;
 }
 function dmgt_TeaVMGameView690_$init883($this, a_aGameRuntime, b_aCameraBehavior, c_aGestureDetector, d_aHTML5CanvasElement, e_aPrerenderedTextCache) {
@@ -13972,11 +13975,11 @@ function dmgt_TeaVMGameView690_$init883($this, a_aGameRuntime, b_aCameraBehavior
 }
 function dmgt_TeaVMGameView690_drawImage885($this, a, b, c_aCenterOffset, d_aResource) {
     var e, f;
-    a = $this.renderingContext2D695;
-    e = dmgt_TeaVMGameResource2374_getElement887(d_aResource);
-    d_aResource =  -c_aCenterOffset.x637;
+    e = $this.renderingContext2D695;
+    b = dmgt_TeaVMGameResource2374_getElement887(d_aResource);
+    a =  -c_aCenterOffset.x637;
     f =  -c_aCenterOffset.y638;
-    a.drawImage(e, d_aResource, f);
+    e.drawImage(b, a, f);
     return;
 }
 function dmgt_TeaVMGameView690_logError888($this, a_aMessage) {
@@ -13990,10 +13993,10 @@ function dmgt_TeaVMGameView690_beginFrame864($this, a_aScene) {
     var b, c, d, e, f, g;
     $this.renderingContext2D695 = $this.html5Canvas693.getContext("2d");
     b = dmgg_GenericAbstractGameView678_getCurrentScreenSize875($this);
-    c = dmge_ReadOnlyProperty38_get113(dmgc_GameScene2107_backgroundColorProperty892(a_aScene));
-    a_aScene = $this.renderingContext2D695;
-    c = $rt_ustr(dmgg_CSSUtils2675_toColor893(c));
-    a_aScene.fillStyle = c;
+    a_aScene = dmge_ReadOnlyProperty38_get113(dmgc_GameScene2107_backgroundColorProperty892(a_aScene));
+    c = $this.renderingContext2D695;
+    a_aScene = $rt_ustr(dmgg_CSSUtils2675_toColor893(a_aScene));
+    c.fillStyle = a_aScene;
     a_aScene = $this.renderingContext2D695;
     d = 0.0;
     e = 0.0;
@@ -14013,9 +14016,9 @@ function dmgt_TeaVMGameView690_beforeInstance877($this, a, b_aPositionOnScreen, 
     f = b_aPositionOnScreen.x637 + c_aCenterOffset.x637;
     g = b_aPositionOnScreen.y638 + c_aCenterOffset.y638;
     e.translate(f, g);
-    a = $this.renderingContext2D695;
+    b_aPositionOnScreen = $this.renderingContext2D695;
     f = dmgt_Angle1361_toRadians829(d_aRotation);
-    a.rotate(f);
+    b_aPositionOnScreen.rotate(f);
     return;
 }
 function dmgt_TeaVMGameView690_setSize894($this, a_aSize) {
@@ -14025,16 +14028,17 @@ function dmgt_TeaVMGameView690_setSize894($this, a_aSize) {
     c = a_aSize.width1983;
     b.width = c;
     d = $this.html5Canvas693;
-    c = a_aSize.height1984;
-    d.height = c;
+    a_aSize = a_aSize.height1984;
+    d.height = a_aSize;
     return;
 }
 function dmgt_TeaVMGameView690_drawText878($this, a, b, c_aCenterOffset, d_aFont, e_aColor, f_aText, g_aSize) {
+    var h;
     a = dmgt_TeaVMPrerenderedTextCache1747_getImageSourceFor895($this.prerenderedTextCache694, $this.cssCache691, g_aSize, d_aFont, e_aColor, f_aText);
     b = $this.renderingContext2D695;
     e_aColor =  -c_aCenterOffset.x637;
-    g_aSize =  -c_aCenterOffset.y638;
-    b.drawImage(a, e_aColor, g_aSize);
+    h =  -c_aCenterOffset.y638;
+    b.drawImage(a, e_aColor, h);
     return;
 }
 function dmgc_SceneStartedConditionUnmarshaller696_$init4() {
@@ -14340,12 +14344,12 @@ function dmgt_TextBehaviorTemplate724_$clinit() {
         dmge_Property43_$init119(c, d, $this, e, dmgt_Font387.DEFAULT_FONT390, a_aEventManager);
         $this.font729 = c;
         $this.textExpression726 = dmge_Property43_$init118($rt_cls(dmgt_TextExpression1405), $this, $rt_s(210), dmgt_TextExpression1405_$init29($rt_s(107)), a_aEventManager);
-        d = new dmge_Property43;
+        c = new dmge_Property43;
         e = $rt_cls(dmgt_Color1596);
         f = $rt_s(133);
         dmgt_Color1596_$clinit();
-        dmge_Property43_$init119(d, e, $this, f, dmgt_Color1596.WHITE1600, a_aEventManager);
-        $this.color727 = d;
+        dmge_Property43_$init119(c, e, $this, f, dmgt_Color1596.WHITE1600, a_aEventManager);
+        $this.color727 = c;
         $this.isscript728 = dmge_Property43_$init118($rt_cls(jl_Boolean2001), $this, $rt_s(211), jl_Boolean2001_valueOf913(0), a_aEventManager);
         $this.owner725 = b_aOwner;
         return;
@@ -14356,9 +14360,9 @@ function dmgt_TextBehaviorTemplate724_$clinit() {
         dmge_Property43_setQuietly132(d.font729, dmgt_Font387_deserialize592(c_aSerializedData.get47($rt_s(209))));
         dmge_Property43_setQuietly132(d.textExpression726, dmgt_TextExpression1405_deserialize918(c_aSerializedData.get47($rt_s(210))));
         dmge_Property43_setQuietly132(d.color727, dmgt_Color1596_deserialize547(c_aSerializedData.get47($rt_s(133))));
-        a_aEventManager = c_aSerializedData.get47($rt_s(211));
-        if (a_aEventManager !== null) {
-            dmge_Property43_setQuietly132(d.isscript728, jl_Boolean2001_valueOf919(a_aEventManager));
+        b_aOwner = c_aSerializedData.get47($rt_s(211));
+        if (b_aOwner !== null) {
+            dmge_Property43_setQuietly132(d.isscript728, jl_Boolean2001_valueOf919(b_aOwner));
         }
         return d;
     };
@@ -14730,20 +14734,20 @@ function jl_String1_$clinit() {
             g = b_offset + 1 | 0;
             h = f[b_offset];
             if (h < 65536) {
-                i = $this.characters759.data;
-                j = d + 1 | 0;
-                i[d] = h & 65535;
+                b_offset = $this.characters759.data;
+                i = d + 1 | 0;
+                b_offset[d] = h & 65535;
             } else {
-                i = $this.characters759.data;
+                b_offset = $this.characters759.data;
                 f = d + 1 | 0;
-                i[d] = jl_Character2057_highSurrogate943(h);
-                i = $this.characters759.data;
-                j = f + 1 | 0;
-                i[f] = jl_Character2057_lowSurrogate944(h);
+                b_offset[d] = jl_Character2057_highSurrogate943(h);
+                j = $this.characters759.data;
+                i = f + 1 | 0;
+                j[f] = jl_Character2057_lowSurrogate944(h);
             }
             e = e + 1 | 0;
             b_offset = g;
-            d = j;
+            d = i;
         }
         if (d < $this.characters759.data.length) {
             $this.characters759 = ju_Arrays2037_copyOf371($this.characters759, d);
@@ -14794,21 +14798,21 @@ function jl_String1_$init1(a) {
     return $r;
 }
 function jl_String1_indexOf946($this, a_ch, b_fromIndex_i) {
-    var c, d;
+    var c, d, e;
     if (a_ch < 65536) {
-        a_ch = a_ch & 65535;
+        c = a_ch & 65535;
         while (b_fromIndex_i < $this.characters759.data.length) {
-            if ($this.characters759.data[b_fromIndex_i] == a_ch) {
+            if ($this.characters759.data[b_fromIndex_i] == c) {
                 return b_fromIndex_i;
             }
             b_fromIndex_i = b_fromIndex_i + 1 | 0;
         }
         return  -1;
     }
-    c = jl_Character2057_highSurrogate943(a_ch);
-    d = jl_Character2057_lowSurrogate944(a_ch);
+    d = jl_Character2057_highSurrogate943(a_ch);
+    e = jl_Character2057_lowSurrogate944(a_ch);
     while (b_fromIndex_i < ($this.characters759.data.length - 1 | 0)) {
-        if ($this.characters759.data[b_fromIndex_i] == c && $this.characters759.data[b_fromIndex_i + 1 | 0] == d) {
+        if ($this.characters759.data[b_fromIndex_i] == d && $this.characters759.data[b_fromIndex_i + 1 | 0] == e) {
             return b_fromIndex_i;
         }
         b_fromIndex_i = b_fromIndex_i + 1 | 0;
@@ -15183,7 +15187,7 @@ function jnci_BufferedEncoder781_$init633(a, b, c) {
     return $r;
 }
 function jnci_BufferedEncoder781_encodeLoop641($this, a_in, b_out) {
-    var c, d, e, f, g, h, i, j, k, m;
+    var c, d, e, f, g, h, i, j, k;
     c = $rt_createCharArray(jl_Math2210_min730(jn_Buffer244_remaining62(a_in), 512));
     d = 0;
     e = 0;
@@ -15215,15 +15219,15 @@ function jnci_BufferedEncoder781_encodeLoop641($this, a_in, b_out) {
             }
             g = f.data;
             k = 0;
-            g = jl_Math2210_min730(jn_Buffer244_remaining62(b_out), g.length);
-            m = jnci_BufferedEncoder$Controller13_$init59(a_in, b_out);
-            j = jnci_UTF8Encoder782_arrayEncode963($this, c, d, e, f, k, g, m);
-            d = m.inPosition15;
-            if (j === null && k == m.outPosition16) {
+            j = jl_Math2210_min730(jn_Buffer244_remaining62(b_out), g.length);
+            g = jnci_BufferedEncoder$Controller13_$init59(a_in, b_out);
+            j = jnci_UTF8Encoder782_arrayEncode963($this, c, d, e, f, k, j, g);
+            d = g.inPosition15;
+            if (j === null && k == g.outPosition16) {
                 jnc_CoderResult1698_$clinit();
                 j = jnc_CoderResult1698.UNDERFLOW1702;
             }
-            jn_ByteBuffer1629_put964(b_out, f, 0, m.outPosition16);
+            jn_ByteBuffer1629_put964(b_out, f, 0, g.outPosition16);
             if (j !== null) {
                 break;
             }
@@ -15274,11 +15278,11 @@ function jnci_UTF8Encoder782_arrayEncode963($this, a_inArray, b_inPos, c_inSize,
                     h = jnc_CoderResult1698.OVERFLOW1701;
                     break $ba;
                 }
-                n = d_outArray.data;
-                o = e_outPos + 1 | 0;
-                n[e_outPos] = (192 | k >> 6) << 24 >> 24;
-                m = o + 1 | 0;
-                n[o] = (128 | k & 63) << 24 >> 24;
+                b_inPos = d_outArray.data;
+                n = e_outPos + 1 | 0;
+                b_inPos[e_outPos] = (192 | k >> 6) << 24 >> 24;
+                m = n + 1 | 0;
+                b_inPos[n] = (128 | k & 63) << 24 >> 24;
             } else if (jl_Character2057_isSurrogate967(k) == 0) {
                 if ((e_outPos + 3 | 0) > f_outSize) {
                     i = i +  -1 | 0;
@@ -15289,13 +15293,13 @@ function jnci_UTF8Encoder782_arrayEncode963($this, a_inArray, b_inPos, c_inSize,
                     h = jnc_CoderResult1698.OVERFLOW1701;
                     break $ba;
                 }
-                p = d_outArray.data;
-                n = e_outPos + 1 | 0;
-                p[e_outPos] = (224 | k >> 12) << 24 >> 24;
-                j = n + 1 | 0;
-                p[n] = (128 | k >> 6 & 63) << 24 >> 24;
-                m = j + 1 | 0;
-                p[j] = (128 | k & 63) << 24 >> 24;
+                o = d_outArray.data;
+                p = e_outPos + 1 | 0;
+                o[e_outPos] = (224 | k >> 12) << 24 >> 24;
+                q = p + 1 | 0;
+                o[p] = (128 | k >> 6 & 63) << 24 >> 24;
+                m = q + 1 | 0;
+                o[q] = (128 | k & 63) << 24 >> 24;
             } else {
                 if (jl_Character2057_isHighSurrogate959(k) == 0) {
                     h = jnc_CoderResult1698_malformedForLength643(1);
@@ -15309,15 +15313,15 @@ function jnci_UTF8Encoder782_arrayEncode963($this, a_inArray, b_inPos, c_inSize,
                     h = jnc_CoderResult1698.UNDERFLOW1702;
                     break $ba;
                 }
-                q = i + 1 | 0;
-                n = j[i];
-                if (jl_Character2057_isLowSurrogate960(n) == 0) {
-                    i = q +  -2 | 0;
+                r = i + 1 | 0;
+                b_inPos = j[i];
+                if (jl_Character2057_isLowSurrogate960(b_inPos) == 0) {
+                    i = r +  -2 | 0;
                     h = jnc_CoderResult1698_malformedForLength643(1);
                     break $ba;
                 }
                 if ((e_outPos + 4 | 0) > f_outSize) {
-                    i = q +  -2 | 0;
+                    i = r +  -2 | 0;
                     if (jnci_BufferedEncoder$Controller13_hasMoreOutput61(g_controller, 4) != 0) {
                         break $ba;
                     }
@@ -15325,17 +15329,17 @@ function jnci_UTF8Encoder782_arrayEncode963($this, a_inArray, b_inPos, c_inSize,
                     h = jnc_CoderResult1698.OVERFLOW1701;
                     break $ba;
                 }
-                j = d_outArray.data;
-                k = jl_Character2057_toCodePoint962(k, n);
-                p = e_outPos + 1 | 0;
-                j[e_outPos] = (240 | k >> 18) << 24 >> 24;
-                r = p + 1 | 0;
-                j[p] = (128 | k >> 12 & 63) << 24 >> 24;
-                s = r + 1 | 0;
-                j[r] = (128 | k >> 6 & 63) << 24 >> 24;
+                o = d_outArray.data;
+                p = jl_Character2057_toCodePoint962(k, b_inPos);
+                k = e_outPos + 1 | 0;
+                o[e_outPos] = (240 | p >> 18) << 24 >> 24;
+                b_inPos = k + 1 | 0;
+                o[k] = (128 | p >> 12 & 63) << 24 >> 24;
+                s = b_inPos + 1 | 0;
+                o[b_inPos] = (128 | p >> 6 & 63) << 24 >> 24;
                 m = s + 1 | 0;
-                j[s] = (128 | k & 63) << 24 >> 24;
-                i = q;
+                o[s] = (128 | p & 63) << 24 >> 24;
+                i = r;
             }
             b_inPos = i;
             e_outPos = m;
@@ -15425,7 +15429,7 @@ function dmgt_TeaVMFirebaseNetworkConnector790_receive974($this) {
             } catch ($e) {
                 $je = $e.$javaException;
                 if ($je) {
-                    b = $je;
+                    a = $je;
                     break $ba;
                 } else {
                     throw $e;
@@ -15439,7 +15443,7 @@ function dmgt_TeaVMFirebaseNetworkConnector790_receive974($this) {
         } catch ($e) {
             $je = $e.$javaException;
             if ($je) {
-                b = $je;
+                a = $je;
                 break $ba;
             } else {
                 throw $e;
@@ -15449,29 +15453,29 @@ function dmgt_TeaVMFirebaseNetworkConnector790_receive974($this) {
         return d;
     }
     ju_ArrayList2151_clear196($this.receivedEvents793);
-    $rt_throw(b);
+    $rt_throw(a);
 }
 function dmgt_TeaVMFirebaseNetworkConnector790_access$000984(a_x0) {
     return a_x0.instanceID791;
 }
 function dmgt_TeaVMFirebaseNetworkConnector790_convert985($this, a_aEvent) {
-    var b, c, d, e, f;
+    var b, c, d, e;
     b = new Object() ;
     c = ju_HashSet1342_$init4();
     d = ju_HashMap$HashMapEntrySet1640_iterator742(a_aEvent.entrySet743());
     while (ju_HashMap$AbstractMapIterator835_hasNext745(d) != 0) {
         e = ju_HashMap$EntryIterator1765_next746(d);
-        f = ju_MapEntry1309_getValue750(e);
-        if (f instanceof jl_String1 != 0) {
-            b[$rt_ustr(ju_MapEntry1309_getKey747(e))] = $rt_ustr(f);
+        a_aEvent = ju_MapEntry1309_getValue750(e);
+        if (a_aEvent instanceof jl_String1 != 0) {
+            b[$rt_ustr(ju_MapEntry1309_getKey747(e))] = $rt_ustr(a_aEvent);
             ju_HashSet1342_add131(c, ju_MapEntry1309_getKey747(e));
-        } else if ($rt_isInstance(f, ju_Map1684) != 0) {
+        } else if ($rt_isInstance(a_aEvent, ju_Map1684) != 0) {
             ju_HashSet1342_add131(c, ju_MapEntry1309_getKey747(e));
             b[$rt_ustr(ju_MapEntry1309_getKey747(e))] = dmgt_TeaVMFirebaseNetworkConnector790_convert985($this, ju_MapEntry1309_getValue750(e));
         }
     }
-    a_aEvent = otji_JS391_wrap600(ju_AbstractCollection906_toArray128(c, $rt_createArray(jl_String1, ju_HashSet1342_size129(c))));
-    b.keys = a_aEvent;
+    d = otji_JS391_wrap600(ju_AbstractCollection906_toArray128(c, $rt_createArray(jl_String1, ju_HashSet1342_size129(c))));
+    b.keys = d;
     return b;
 }
 function dmgt_TeaVMFirebaseNetworkConnector790_send975($this, a_aEventsToSend) {
@@ -15504,17 +15508,17 @@ function dmgt_TeaVMFirebaseNetworkConnector790_$init977($this, a_aFirebaseURL, b
     if (c_aTruncateDB != 0) {
         d.remove();
     }
-    b_aUniqueConnectionID = d.child($rt_ustr(b_aUniqueConnectionID));
-    e = b_aUniqueConnectionID.child("instances");
-    d = new Object() ;
-    a_aFirebaseURL = $rt_ustr($this.instanceID791);
-    d.instanceId = a_aFirebaseURL;
-    e.push(d);
-    $this.eventsRef792 = b_aUniqueConnectionID.child("events");
-    c_aTruncateDB = $this.eventsRef792;
-    a_aFirebaseURL = $rt_s(220);
+    e = d.child($rt_ustr(b_aUniqueConnectionID));
+    d = e.child("instances");
+    c_aTruncateDB = new Object() ;
+    b_aUniqueConnectionID = $rt_ustr($this.instanceID791);
+    c_aTruncateDB.instanceId = b_aUniqueConnectionID;
+    d.push(c_aTruncateDB);
+    $this.eventsRef792 = e.child("events");
+    a_aFirebaseURL = $this.eventsRef792;
+    c_aTruncateDB = $rt_s(220);
     b_aUniqueConnectionID = dmgt_TeaVMFirebaseNetworkConnector$12404_$init992($this);
-    c_aTruncateDB.on($rt_ustr(a_aFirebaseURL), otji_JS391_function601(b_aUniqueConnectionID, "handleChildAdded"));
+    a_aFirebaseURL.on($rt_ustr(c_aTruncateDB), otji_JS391_function601(b_aUniqueConnectionID, "handleChildAdded"));
     return;
 }
 function dmgt_TeaVMFirebaseNetworkConnector790_convert989($this, a_aMessage) {
@@ -15964,7 +15968,7 @@ function dmgi_MouseEventCondition842_appliesTo567($this, a, b_aEvent) {
     return dmgc_ConditionResult2128.NOT_FULFILLED2132;
 }
 function dmgi_MouseEventCondition842_$init8($this) {
-    var a, b, c;
+    var a, b, c, d;
     jl_Object2_$init8($this);
     a = new dmge_Property43;
     b = $rt_cls(dmgi_MouseEventCondition$MouseEventType1543);
@@ -15972,12 +15976,12 @@ function dmgi_MouseEventCondition842_$init8($this) {
     dmgi_MouseEventCondition$MouseEventType1543_$clinit();
     dmge_Property43_$init112(a, b, $this, c, dmgi_MouseEventCondition$MouseEventType1543.PRESSED1544);
     $this.eventType843 = a;
-    c = new dmge_Property43;
-    a = $rt_cls(dmgi_MouseEventCondition$FilterType526);
-    b = $rt_s(231);
+    a = new dmge_Property43;
+    c = $rt_cls(dmgi_MouseEventCondition$FilterType526);
+    d = $rt_s(231);
     dmgi_MouseEventCondition$FilterType526_$clinit();
-    dmge_Property43_$init112(c, a, $this, b, dmgi_MouseEventCondition$FilterType526.FILTER_BY_OBJECT_TYPE527);
-    $this.filterType844 = c;
+    dmge_Property43_$init112(a, c, $this, d, dmgi_MouseEventCondition$FilterType526.FILTER_BY_OBJECT_TYPE527);
+    $this.filterType844 = a;
     $this.objectType845 = dmge_Property43_$init111($rt_cls(dmgc_GameObject1845), $this, $rt_s(232), null);
     return;
 }
@@ -16234,17 +16238,17 @@ function olv_LuaString860_lteq_b455($this, a_rhs) {
     return a_rhs;
 }
 function olv_LuaString860_decodeAsUtf81021(a_bytes, b_i_offset, c_length) {
-    var d, e, f, g, h, i, j, k, m, n;
+    var d, e, f, g, h, i, j, k, m, n, o;
     d = b_i_offset + c_length | 0;
-    c_length = 0;
-    e = b_i_offset;
-    while (e < d) {
+    e = 0;
+    f = b_i_offset;
+    while (f < d) {
         $ba: {
             $bb: {
-                f = a_bytes.data;
+                c_length = a_bytes.data;
                 g = 224;
-                h = e + 1 | 0;
-                switch (g & f[e]) {
+                h = f + 1 | 0;
+                switch (g & c_length[f]) {
                     case 224:
                         h = h + 1 | 0;
                         break $bb;
@@ -16252,37 +16256,37 @@ function olv_LuaString860_decodeAsUtf81021(a_bytes, b_i_offset, c_length) {
                         break $bb;
                     default:
                 }
-                e = h;
+                f = h;
                 break $ba;
             }
-            e = h + 1 | 0;
+            f = h + 1 | 0;
         }
-        c_length = c_length + 1 | 0;
+        e = e + 1 | 0;
     }
-    h = $rt_createCharArray(c_length);
-    e = 0;
+    h = $rt_createCharArray(e);
+    f = 0;
     while (b_i_offset < d) {
         i = a_bytes.data;
-        j = e + 1 | 0;
-        k = b_i_offset + 1 | 0;
-        c_length = i[b_i_offset];
-        if (c_length < 0 && k < d) {
-            if (c_length >=  -32 && (k + 1 | 0) < d) {
-                g = (c_length & 15) << 12;
-                m = k + 1 | 0;
-                g = g | (i[k] & 63) << 6;
-                k = m + 1 | 0;
-                c_length = g | i[m] & 63;
+        c_length = f + 1 | 0;
+        j = b_i_offset + 1 | 0;
+        e = i[b_i_offset];
+        if (e < 0 && j < d) {
+            if (e >=  -32 && (j + 1 | 0) < d) {
+                k = (e & 15) << 12;
+                m = j + 1 | 0;
+                k = k | (i[j] & 63) << 6;
+                j = m + 1 | 0;
+                e = k | i[m] & 63;
             } else {
-                c_length = (c_length & 63) << 6;
-                n = k + 1 | 0;
-                c_length = c_length | i[k] & 63;
-                k = n;
+                n = (e & 63) << 6;
+                o = j + 1 | 0;
+                e = n | i[j] & 63;
+                j = o;
             }
         }
-        h.data[e] = c_length & 65535;
-        e = j;
-        b_i_offset = k;
+        h.data[f] = e & 65535;
+        f = c_length;
+        b_i_offset = j;
     }
     return jl_String1_$init1(h);
 }
@@ -16309,15 +16313,15 @@ function olv_LuaString860_scandouble1024($this, a_start, b_end) {
     c = a_start;
     $ba: while (true) {
         if (c >= b_end) {
-            d = $rt_createCharArray(b_end - a_start | 0);
-            c = a_start;
-            while (c < b_end) {
-                d.data[c - a_start | 0] = $this.m_bytes863.data[c] & 65535;
-                c = c + 1 | 0;
+            c = $rt_createCharArray(b_end - a_start | 0);
+            d = a_start;
+            while (d < b_end) {
+                c.data[d - a_start | 0] = $this.m_bytes863.data[d] & 65535;
+                d = d + 1 | 0;
             }
             $bb: {
                 try {
-                    a_start = jl_Double2802_parseDouble1025(jl_String1_$init1(d));
+                    a_start = jl_Double2802_parseDouble1025(jl_String1_$init1(c));
                 } catch ($e) {
                     $je = $e.$javaException;
                     if ($je && $je instanceof jl_Exception361) {
@@ -16509,19 +16513,19 @@ function olv_LuaString860_encodeToUtf8398(a_chars, b_nchars, c_bytes, d_off) {
             i = f + 1 | 0;
             h[f] = g << 24 >> 24;
         } else if (g < 2048) {
-            h = c_bytes.data;
-            j = f + 1 | 0;
-            h[f] = (192 | g >> 6 & 31) << 24 >> 24;
-            i = j + 1 | 0;
-            h[j] = (128 | g & 63) << 24 >> 24;
+            j = c_bytes.data;
+            k = f + 1 | 0;
+            j[f] = (192 | g >> 6 & 31) << 24 >> 24;
+            i = k + 1 | 0;
+            j[k] = (128 | g & 63) << 24 >> 24;
         } else {
-            k = c_bytes.data;
-            j = f + 1 | 0;
-            k[f] = (224 | g >> 12 & 15) << 24 >> 24;
-            m = j + 1 | 0;
-            k[j] = (128 | g >> 6 & 63) << 24 >> 24;
+            j = c_bytes.data;
+            h = f + 1 | 0;
+            j[f] = (224 | g >> 12 & 15) << 24 >> 24;
+            m = h + 1 | 0;
+            j[h] = (128 | g >> 6 & 63) << 24 >> 24;
             i = m + 1 | 0;
-            k[m] = (128 | g & 63) << 24 >> 24;
+            j[m] = (128 | g & 63) << 24 >> 24;
         }
         e = e + 1 | 0;
         f = i;
@@ -16550,22 +16554,22 @@ function olv_LuaString860_lengthAsUtf81028(a_chars) {
     var b, c, d, e;
     b = a_chars.data;
     c = b.length;
-    d = c;
+    a_chars = c;
     while (true) {
-        d = d +  -1 | 0;
-        if (d < 0) {
+        a_chars = a_chars +  -1 | 0;
+        if (a_chars < 0) {
             break;
         }
-        e = b[d];
-        if (e < 128) {
+        d = b[a_chars];
+        if (d < 128) {
             continue;
         }
-        if (e < 2048) {
-            a_chars = 1;
+        if (d < 2048) {
+            e = 1;
         } else {
-            a_chars = 2;
+            e = 2;
         }
-        c = c + a_chars | 0;
+        c = c + e | 0;
     }
     return c;
 }
@@ -16868,16 +16872,16 @@ function ojdc_ChainAndPolygonContact884_$init385(a_argPool) {
 function ojdc_ChainAndPolygonContact884_init246($this, a_fA, b_indexA, c_fB, d_indexB) {
     ojdc_Contact642_init246($this, a_fA, b_indexA, c_fB, d_indexB);
     if (ojdc_ChainAndPolygonContact884.$assertionsDisabled886 == 0) {
-        c_fB = ojd_Fixture421_getType214($this.m_fixtureA645);
+        b_indexA = ojd_Fixture421_getType214($this.m_fixtureA645);
         ojcs_ShapeType738_$clinit();
-        if (c_fB !== ojcs_ShapeType738.CHAIN739) {
+        if (b_indexA !== ojcs_ShapeType738.CHAIN739) {
             $rt_throw(jl_AssertionError746_$init4());
         }
     }
     if (ojdc_ChainAndPolygonContact884.$assertionsDisabled886 == 0) {
-        b_indexA = ojd_Fixture421_getType214($this.m_fixtureB643);
+        a_fA = ojd_Fixture421_getType214($this.m_fixtureB643);
         ojcs_ShapeType738_$clinit();
-        if (b_indexA !== ojcs_ShapeType738.POLYGON740) {
+        if (a_fA !== ojcs_ShapeType738.POLYGON740) {
             $rt_throw(jl_AssertionError746_$init4());
         }
     }
@@ -16920,30 +16924,30 @@ function otcit_DateTimeZoneBuilder$OfYear893_previous1034($this, a_instant, b_of
         b_offset_standardOffset = 0;
     }
     d = Long_fromInt(b_offset_standardOffset);
-    b_offset_standardOffset = Long_add(a_instant, d);
-    e = ju_GregorianCalendar1048_$init328(otcit_DateTimeZoneBuilder2734_access$0001043());
-    ju_Calendar210_setTimeInMillis331(e, b_offset_standardOffset);
-    ju_Calendar210_set335(e, 2, $this.iMonthOfYear896 - 1 | 0);
-    ju_Calendar210_set335(e, 5, 1);
-    ju_Calendar210_set335(e, 11, 0);
-    ju_Calendar210_set335(e, 12, 0);
-    ju_Calendar210_set335(e, 13, 0);
-    ju_Calendar210_set335(e, 14, 0);
-    ju_GregorianCalendar1048_add1044(e, 14, $this.iMillisOfDay899);
-    otcit_DateTimeZoneBuilder$OfYear893_setDayOfMonthPrevious1045($this, e);
+    e = Long_add(a_instant, d);
+    c_saveMillis = ju_GregorianCalendar1048_$init328(otcit_DateTimeZoneBuilder2734_access$0001043());
+    ju_Calendar210_setTimeInMillis331(c_saveMillis, e);
+    ju_Calendar210_set335(c_saveMillis, 2, $this.iMonthOfYear896 - 1 | 0);
+    ju_Calendar210_set335(c_saveMillis, 5, 1);
+    ju_Calendar210_set335(c_saveMillis, 11, 0);
+    ju_Calendar210_set335(c_saveMillis, 12, 0);
+    ju_Calendar210_set335(c_saveMillis, 13, 0);
+    ju_Calendar210_set335(c_saveMillis, 14, 0);
+    ju_GregorianCalendar1048_add1044(c_saveMillis, 14, $this.iMillisOfDay899);
+    otcit_DateTimeZoneBuilder$OfYear893_setDayOfMonthPrevious1045($this, c_saveMillis);
     if ($this.iDayOfWeek897 != 0) {
-        otcit_DateTimeZoneBuilder$OfYear893_setDayOfWeek1046($this, e);
-        if (Long_compare(ju_Calendar210_getTimeInMillis336(e), b_offset_standardOffset) >= 0) {
-            ju_GregorianCalendar1048_add1044(e, 1,  -1);
-            ju_Calendar210_set335(e, 2, $this.iMonthOfYear896 - 1 | 0);
-            otcit_DateTimeZoneBuilder$OfYear893_setDayOfMonthPrevious1045($this, e);
-            otcit_DateTimeZoneBuilder$OfYear893_setDayOfWeek1046($this, e);
+        otcit_DateTimeZoneBuilder$OfYear893_setDayOfWeek1046($this, c_saveMillis);
+        if (Long_compare(ju_Calendar210_getTimeInMillis336(c_saveMillis), e) >= 0) {
+            ju_GregorianCalendar1048_add1044(c_saveMillis, 1,  -1);
+            ju_Calendar210_set335(c_saveMillis, 2, $this.iMonthOfYear896 - 1 | 0);
+            otcit_DateTimeZoneBuilder$OfYear893_setDayOfMonthPrevious1045($this, c_saveMillis);
+            otcit_DateTimeZoneBuilder$OfYear893_setDayOfWeek1046($this, c_saveMillis);
         }
-    } else if (Long_compare(ju_Calendar210_getTimeInMillis336(e), b_offset_standardOffset) >= 0) {
-        ju_GregorianCalendar1048_add1044(e, 1,  -1);
-        otcit_DateTimeZoneBuilder$OfYear893_setDayOfMonthPrevious1045($this, e);
+    } else if (Long_compare(ju_Calendar210_getTimeInMillis336(c_saveMillis), e) >= 0) {
+        ju_GregorianCalendar1048_add1044(c_saveMillis, 1,  -1);
+        otcit_DateTimeZoneBuilder$OfYear893_setDayOfMonthPrevious1045($this, c_saveMillis);
     }
-    return Long_sub(ju_Calendar210_getTimeInMillis336(e), d);
+    return Long_sub(ju_Calendar210_getTimeInMillis336(c_saveMillis), d);
 }
 function otcit_DateTimeZoneBuilder$OfYear893_next1038($this, a_instant, b_offset_standardOffset, c_saveMillis) {
     var d, e, f;
@@ -17041,7 +17045,7 @@ function otcit_DateTimeZoneBuilder$OfYear893_setDayOfMonthNext1047($this, a_cale
     return;
 }
 function otcit_DateTimeZoneBuilder$OfYear893_read1036(a_flow) {
-    var b, c, d, e, f, g, h, i;
+    var b, c, d, e, f, g, h;
     b = a_flow.characters948.data;
     c = a_flow.pointer949;
     a_flow.pointer949 = c + 1 | 0;
@@ -17050,14 +17054,14 @@ function otcit_DateTimeZoneBuilder$OfYear893_read1036(a_flow) {
     f = otci_Base461094_decodeUnsigned1050(a_flow);
     g = otci_Base461094_decode611(a_flow);
     b = a_flow.characters948.data;
-    h = a_flow.pointer949;
-    a_flow.pointer949 = h + 1 | 0;
-    if (b[h] != 121) {
-        i = 0;
+    c = a_flow.pointer949;
+    a_flow.pointer949 = c + 1 | 0;
+    if (b[c] != 121) {
+        h = 0;
     } else {
-        i = 1;
+        h = 1;
     }
-    return otcit_DateTimeZoneBuilder$OfYear893_$init1041(d, e, f, g, i, otcit_StorableDateTimeZone1389_readUnsignedTime1051(a_flow).lo);
+    return otcit_DateTimeZoneBuilder$OfYear893_$init1041(d, e, f, g, h, otcit_StorableDateTimeZone1389_readUnsignedTime1051(a_flow).lo);
 }
 function ojc_WorldManifold900_$init4() {
     var $r = new ojc_WorldManifold900();
@@ -17099,30 +17103,30 @@ function ojc_WorldManifold900_initialize1052($this, a_manifold, b_xfA, c_radiusA
                     ojc_Vec22016_normalize148($this.normal901);
                 }
                 h = $this.normal901.x2017 * c_radiusA + f.x2017;
-                a_manifold = $this.normal901.y2018 * c_radiusA + f.y2018;
-                b_xfA =  -$this.normal901.x2017 * e_radiusB + g.x2017;
-                c_radiusA =  -$this.normal901.y2018 * e_radiusB + g.y2018;
-                $this.points904.data[0].x2017 = (h + b_xfA) * 0.5;
-                $this.points904.data[0].y2018 = (a_manifold + c_radiusA) * 0.5;
+                b_xfA = $this.normal901.y2018 * c_radiusA + f.y2018;
+                d_xfB =  -$this.normal901.x2017 * e_radiusB + g.x2017;
+                i =  -$this.normal901.y2018 * e_radiusB + g.y2018;
+                $this.points904.data[0].x2017 = (h + d_xfB) * 0.5;
+                $this.points904.data[0].y2018 = (b_xfA + i) * 0.5;
                 break $ba;
             case 2:
                 break;
             case 3:
-                i = $this.pool3903;
+                f = $this.pool3903;
                 ojc_Rot2779_mulToOutUnsafe1054(d_xfB.q2029, a_manifold.localNormal825, $this.normal901);
-                ojc_Transform2027_mulToOut813(d_xfB, a_manifold.localPoint824, i);
+                ojc_Transform2027_mulToOut813(d_xfB, a_manifold.localPoint824, f);
                 j = $this.pool4902;
-                k = 0;
-                while (k < a_manifold.pointCount823) {
-                    ojc_Transform2027_mulToOut813(b_xfA, a_manifold.points827.data[k].localPoint2332, j);
-                    m = e_radiusB - ((j.x2017 - i.x2017) * $this.normal901.x2017 + (j.y2018 - i.y2018) * $this.normal901.y2018);
-                    f = $this.normal901.x2017 * m + j.x2017;
-                    n = $this.normal901.y2018 * m + j.y2018;
-                    m =  -$this.normal901.x2017 * c_radiusA + j.x2017;
+                i = 0;
+                while (i < a_manifold.pointCount823) {
+                    ojc_Transform2027_mulToOut813(b_xfA, a_manifold.points827.data[i].localPoint2332, j);
+                    k = e_radiusB - ((j.x2017 - f.x2017) * $this.normal901.x2017 + (j.y2018 - f.y2018) * $this.normal901.y2018);
+                    m = $this.normal901.x2017 * k + j.x2017;
+                    k = $this.normal901.y2018 * k + j.y2018;
+                    n =  -$this.normal901.x2017 * c_radiusA + j.x2017;
                     o =  -$this.normal901.y2018 * c_radiusA + j.y2018;
-                    $this.points904.data[k].x2017 = (m + f) * 0.5;
-                    $this.points904.data[k].y2018 = (o + n) * 0.5;
-                    k = k + 1 | 0;
+                    $this.points904.data[i].x2017 = (n + m) * 0.5;
+                    $this.points904.data[i].y2018 = (o + k) * 0.5;
+                    i = i + 1 | 0;
                 }
                 $this.normal901.x2017 =  -$this.normal901.x2017;
                 $this.normal901.y2018 =  -$this.normal901.y2018;
@@ -17130,21 +17134,21 @@ function ojc_WorldManifold900_initialize1052($this, a_manifold, b_xfA, c_radiusA
             default:
                 break $ba;
         }
-        n = $this.pool3903;
+        f = $this.pool3903;
         ojc_Rot2779_mulToOutUnsafe1054(b_xfA.q2029, a_manifold.localNormal825, $this.normal901);
-        ojc_Transform2027_mulToOut813(b_xfA, a_manifold.localPoint824, n);
-        p = $this.pool4902;
-        q = 0;
-        while (q < a_manifold.pointCount823) {
-            ojc_Transform2027_mulToOut813(d_xfB, a_manifold.points827.data[q].localPoint2332, p);
-            g = c_radiusA - ((p.x2017 - n.x2017) * $this.normal901.x2017 + (p.y2018 - n.y2018) * $this.normal901.y2018);
-            b_xfA = $this.normal901.x2017 * g + p.x2017;
-            h = $this.normal901.y2018 * g + p.y2018;
-            r =  -$this.normal901.x2017 * e_radiusB + p.x2017;
-            k =  -$this.normal901.y2018 * e_radiusB + p.y2018;
-            $this.points904.data[q].x2017 = (b_xfA + r) * 0.5;
-            $this.points904.data[q].y2018 = (h + k) * 0.5;
-            q = q + 1 | 0;
+        ojc_Transform2027_mulToOut813(b_xfA, a_manifold.localPoint824, f);
+        i = $this.pool4902;
+        p = 0;
+        while (p < a_manifold.pointCount823) {
+            ojc_Transform2027_mulToOut813(d_xfB, a_manifold.points827.data[p].localPoint2332, i);
+            b_xfA = c_radiusA - ((i.x2017 - f.x2017) * $this.normal901.x2017 + (i.y2018 - f.y2018) * $this.normal901.y2018);
+            h = $this.normal901.x2017 * b_xfA + i.x2017;
+            q = $this.normal901.y2018 * b_xfA + i.y2018;
+            b_xfA =  -$this.normal901.x2017 * e_radiusB + i.x2017;
+            r =  -$this.normal901.y2018 * e_radiusB + i.y2018;
+            $this.points904.data[p].x2017 = (h + b_xfA) * 0.5;
+            $this.points904.data[p].y2018 = (q + r) * 0.5;
+            p = p + 1 | 0;
         }
     }
     return;
@@ -17222,11 +17226,11 @@ function ju_AbstractCollection906_toString35($this) {
     return jl_StringBuilder2321_toString35(a);
 }
 function ju_AbstractCollection906_addAll981($this, a_c) {
-    var b;
+    var b, c;
     b = 0;
-    a_c = a_c.iterator742();
-    while (a_c.hasNext745() != 0) {
-        if ($this.add131(a_c.next746()) == 0) {
+    c = a_c.iterator742();
+    while (c.hasNext745() != 0) {
+        if ($this.add131(c.next746()) == 0) {
             continue;
         }
         b = 1;
@@ -17348,7 +17352,7 @@ function ojdc_ContactSolver914_warmStart1058($this) {
     return;
 }
 function ojdc_ContactSolver914_solveVelocityConstraints1059($this) {
-    var a, b, c, d, e, f, g, h, i, j, k, m, n, o, p, q, r, s, t, u, v, w, x, y, z, a1;
+    var a, b, c, d, e, f, g, h, i, j, k, m, n, o, p, q, r, s, t, u, v, w, x, y, z;
     a = 0;
     $ba: {
         while (a < $this.m_count937) {
@@ -17375,42 +17379,42 @@ function ojdc_ContactSolver914_solveVelocityConstraints1059($this) {
             while (q < i) {
                 r = b.points1376.data[q];
                 s = r.rA2811;
-                t = r.tangentMass2810 *  -(( -n * r.rB2807.y2018 + m.x2017 - j.x2017 + k * s.y2018) * $this.tangent922.x2017 + (n * r.rB2807.x2017 + m.y2018 - j.y2018 - k * s.x2017) * $this.tangent922.y2018 - b.tangentSpeed1383);
-                u = p * r.normalImpulse2809;
-                t = ojc_MathUtils1593_clamp1060(r.tangentImpulse2812 + t,  -u, u);
-                v = t - r.tangentImpulse2812;
+                s = r.tangentMass2810 *  -(( -n * r.rB2807.y2018 + m.x2017 - j.x2017 + k * s.y2018) * $this.tangent922.x2017 + (n * r.rB2807.x2017 + m.y2018 - j.y2018 - k * s.x2017) * $this.tangent922.y2018 - b.tangentSpeed1383);
+                t = p * r.normalImpulse2809;
+                t = ojc_MathUtils1593_clamp1060(r.tangentImpulse2812 + s,  -t, t);
+                u = t - r.tangentImpulse2812;
                 r.tangentImpulse2812 = t;
-                w = $this.tangent922.x2017 * v;
-                s = $this.tangent922.y2018 * v;
-                j.x2017 = j.x2017 - w * e;
-                j.y2018 = j.y2018 - s * e;
-                k = k - g * (r.rA2811.x2017 * s - r.rA2811.y2018 * w);
-                m.x2017 = m.x2017 + w * f;
-                m.y2018 = m.y2018 + s * f;
-                n = n + h * (r.rB2807.x2017 * s - r.rB2807.y2018 * w);
+                v = $this.tangent922.x2017 * u;
+                w = $this.tangent922.y2018 * u;
+                j.x2017 = j.x2017 - v * e;
+                j.y2018 = j.y2018 - w * e;
+                k = k - g * (r.rA2811.x2017 * w - r.rA2811.y2018 * v);
+                m.x2017 = m.x2017 + v * f;
+                m.y2018 = m.y2018 + w * f;
+                n = n + h * (r.rB2807.x2017 * w - r.rB2807.y2018 * v);
                 q = q + 1 | 0;
             }
             if (b.pointCount1380 == 1) {
-                r = b.points1376.data[0];
-                q = r.normalImpulse2809 +  -r.normalMass2813 * (( -n * r.rB2807.y2018 + m.x2017 - j.x2017 + k * r.rA2811.y2018) * o.x2017 + (n * r.rB2807.x2017 + m.y2018 - j.y2018 - k * r.rA2811.x2017) * o.y2018 - r.velocityBias2808);
-                if (q <= 0.0) {
-                    q = 0.0;
+                w = b.points1376.data[0];
+                x = w.normalImpulse2809 +  -w.normalMass2813 * (( -n * w.rB2807.y2018 + m.x2017 - j.x2017 + k * w.rA2811.y2018) * o.x2017 + (n * w.rB2807.x2017 + m.y2018 - j.y2018 - k * w.rA2811.x2017) * o.y2018 - w.velocityBias2808);
+                if (x <= 0.0) {
+                    x = 0.0;
                 }
-                x = q - r.normalImpulse2809;
-                r.normalImpulse2809 = q;
-                w = o.x2017 * x;
-                u = o.y2018 * x;
-                j.x2017 = j.x2017 - w * e;
-                j.y2018 = j.y2018 - u * e;
-                k = k - g * (r.rA2811.x2017 * u - r.rA2811.y2018 * w);
-                m.x2017 = m.x2017 + w * f;
-                m.y2018 = m.y2018 + u * f;
-                n = n + h * (r.rB2807.x2017 * u - r.rB2807.y2018 * w);
+                u = x - w.normalImpulse2809;
+                w.normalImpulse2809 = x;
+                v = o.x2017 * u;
+                t = o.y2018 * u;
+                j.x2017 = j.x2017 - v * e;
+                j.y2018 = j.y2018 - t * e;
+                k = k - g * (w.rA2811.x2017 * t - w.rA2811.y2018 * v);
+                m.x2017 = m.x2017 + v * f;
+                m.y2018 = m.y2018 + t * f;
+                n = n + h * (w.rB2807.x2017 * t - w.rB2807.y2018 * v);
             } else {
                 y = b.points1376.data[0];
-                z = b.points1376.data[1];
+                q = b.points1376.data[1];
                 $this.a926.x2017 = y.normalImpulse2809;
-                $this.a926.y2018 = z.normalImpulse2809;
+                $this.a926.y2018 = q.normalImpulse2809;
                 if (ojdc_ContactSolver914.$assertionsDisabled941 == 0) {
                     if ($this.a926.x2017 < 0.0) {
                         break $ba;
@@ -17419,26 +17423,26 @@ function ojdc_ContactSolver914_solveVelocityConstraints1059($this) {
                         break $ba;
                     }
                 }
-                x = $this.dv1925;
-                u =  -n;
-                x.x2017 = u * y.rB2807.y2018 + m.x2017 - j.x2017 + k * y.rA2811.y2018;
+                z = $this.dv1925;
+                w =  -n;
+                z.x2017 = w * y.rB2807.y2018 + m.x2017 - j.x2017 + k * y.rA2811.y2018;
                 $this.dv1925.y2018 = n * y.rB2807.x2017 + m.y2018 - j.y2018 - k * y.rA2811.x2017;
-                $this.dv2927.x2017 = u * z.rB2807.y2018 + m.x2017 - j.x2017 + k * z.rA2811.y2018;
-                $this.dv2927.y2018 = n * z.rB2807.x2017 + m.y2018 - j.y2018 - k * z.rA2811.x2017;
-                w = $this.dv1925.x2017 * o.x2017 + $this.dv1925.y2018 * o.y2018;
-                u = $this.dv2927.x2017 * o.x2017 + $this.dv2927.y2018 * o.y2018;
-                $this.b930.x2017 = w - y.velocityBias2808;
-                $this.b930.y2018 = u - z.velocityBias2808;
-                u = b.K1374;
-                x = $this.b930;
-                x.x2017 = x.x2017 - (u.ex380.x2017 * $this.a926.x2017 + u.ey381.x2017 * $this.a926.y2018);
-                a1 = $this.b930;
-                a1.y2018 = a1.y2018 - (u.ex380.y2018 * $this.a926.x2017 + u.ey381.y2018 * $this.a926.y2018);
+                $this.dv2927.x2017 = w * q.rB2807.y2018 + m.x2017 - j.x2017 + k * q.rA2811.y2018;
+                $this.dv2927.y2018 = n * q.rB2807.x2017 + m.y2018 - j.y2018 - k * q.rA2811.x2017;
+                s = $this.dv1925.x2017 * o.x2017 + $this.dv1925.y2018 * o.y2018;
+                t = $this.dv2927.x2017 * o.x2017 + $this.dv2927.y2018 * o.y2018;
+                $this.b930.x2017 = s - y.velocityBias2808;
+                $this.b930.y2018 = t - q.velocityBias2808;
+                v = b.K1374;
+                z = $this.b930;
+                z.x2017 = z.x2017 - (v.ex380.x2017 * $this.a926.x2017 + v.ey381.x2017 * $this.a926.y2018);
+                u = $this.b930;
+                u.y2018 = u.y2018 - (v.ex380.y2018 * $this.a926.x2017 + v.ey381.y2018 * $this.a926.y2018);
                 ojc_Mat22379_mulToOutUnsafe589(b.normalMass1385, $this.b930, $this.x938);
-                t = $this.x938;
-                t.x2017 = t.x2017 *  -1.0;
-                x = $this.x938;
-                x.y2018 = x.y2018 *  -1.0;
+                v = $this.x938;
+                v.x2017 = v.x2017 *  -1.0;
+                z = $this.x938;
+                z.y2018 = z.y2018 *  -1.0;
                 if ($this.x938.x2017 >= 0.0 && $this.x938.y2018 >= 0.0) {
                     ojc_Vec22016_subLocal804(ojc_Vec22016_set176($this.d933, $this.x938), $this.a926);
                     ojc_Vec22016_mulLocal806(ojc_Vec22016_set176($this.P1928, o), $this.d933.x2017);
@@ -17448,15 +17452,15 @@ function ojdc_ContactSolver914_solveVelocityConstraints1059($this) {
                     ojc_Vec22016_subLocal804(j, $this.temp2916);
                     ojc_Vec22016_mulLocal806(ojc_Vec22016_set176($this.temp2916, $this.temp1917), f);
                     ojc_Vec22016_addLocal805(m, $this.temp2916);
-                    k = k - g * (ojc_Vec22016_cross1061(y.rA2811, $this.P1928) + ojc_Vec22016_cross1061(z.rA2811, $this.P2931));
-                    n = n + h * (ojc_Vec22016_cross1061(y.rB2807, $this.P1928) + ojc_Vec22016_cross1061(z.rB2807, $this.P2931));
+                    k = k - g * (ojc_Vec22016_cross1061(y.rA2811, $this.P1928) + ojc_Vec22016_cross1061(q.rA2811, $this.P2931));
+                    n = n + h * (ojc_Vec22016_cross1061(y.rB2807, $this.P1928) + ojc_Vec22016_cross1061(q.rB2807, $this.P2931));
                     y.normalImpulse2809 = $this.x938.x2017;
-                    z.normalImpulse2809 = $this.x938.y2018;
+                    q.normalImpulse2809 = $this.x938.y2018;
                 } else {
                     $this.x938.x2017 =  -y.normalMass2813 * $this.b930.x2017;
                     $this.x938.y2018 = 0.0;
-                    q = b.K1374.ex380.y2018 * $this.x938.x2017 + $this.b930.y2018;
-                    if ($this.x938.x2017 >= 0.0 && q >= 0.0) {
+                    x = b.K1374.ex380.y2018 * $this.x938.x2017 + $this.b930.y2018;
+                    if ($this.x938.x2017 >= 0.0 && x >= 0.0) {
                         ojc_Vec22016_subLocal804(ojc_Vec22016_set176($this.d933, $this.x938), $this.a926);
                         ojc_Vec22016_mulLocal806(ojc_Vec22016_set176($this.P1928, o), $this.d933.x2017);
                         ojc_Vec22016_mulLocal806(ojc_Vec22016_set176($this.P2931, o), $this.d933.y2018);
@@ -17465,15 +17469,15 @@ function ojdc_ContactSolver914_solveVelocityConstraints1059($this) {
                         ojc_Vec22016_subLocal804(j, $this.temp2916);
                         ojc_Vec22016_mulLocal806(ojc_Vec22016_set176($this.temp2916, $this.temp1917), f);
                         ojc_Vec22016_addLocal805(m, $this.temp2916);
-                        k = k - g * (ojc_Vec22016_cross1061(y.rA2811, $this.P1928) + ojc_Vec22016_cross1061(z.rA2811, $this.P2931));
-                        n = n + h * (ojc_Vec22016_cross1061(y.rB2807, $this.P1928) + ojc_Vec22016_cross1061(z.rB2807, $this.P2931));
+                        k = k - g * (ojc_Vec22016_cross1061(y.rA2811, $this.P1928) + ojc_Vec22016_cross1061(q.rA2811, $this.P2931));
+                        n = n + h * (ojc_Vec22016_cross1061(y.rB2807, $this.P1928) + ojc_Vec22016_cross1061(q.rB2807, $this.P2931));
                         y.normalImpulse2809 = $this.x938.x2017;
-                        z.normalImpulse2809 = $this.x938.y2018;
+                        q.normalImpulse2809 = $this.x938.y2018;
                     } else {
                         $this.x938.x2017 = 0.0;
-                        $this.x938.y2018 =  -z.normalMass2813 * $this.b930.y2018;
-                        x = b.K1374.ey381.x2017 * $this.x938.y2018 + $this.b930.x2017;
-                        if ($this.x938.y2018 >= 0.0 && x >= 0.0) {
+                        $this.x938.y2018 =  -q.normalMass2813 * $this.b930.y2018;
+                        u = b.K1374.ey381.x2017 * $this.x938.y2018 + $this.b930.x2017;
+                        if ($this.x938.y2018 >= 0.0 && u >= 0.0) {
                             ojc_Vec22016_subLocal804(ojc_Vec22016_set176($this.d933, $this.x938), $this.a926);
                             ojc_Vec22016_mulLocal806(ojc_Vec22016_set176($this.P1928, o), $this.d933.x2017);
                             ojc_Vec22016_mulLocal806(ojc_Vec22016_set176($this.P2931, o), $this.d933.y2018);
@@ -17482,16 +17486,16 @@ function ojdc_ContactSolver914_solveVelocityConstraints1059($this) {
                             ojc_Vec22016_subLocal804(j, $this.temp2916);
                             ojc_Vec22016_mulLocal806(ojc_Vec22016_set176($this.temp2916, $this.temp1917), f);
                             ojc_Vec22016_addLocal805(m, $this.temp2916);
-                            k = k - g * (ojc_Vec22016_cross1061(y.rA2811, $this.P1928) + ojc_Vec22016_cross1061(z.rA2811, $this.P2931));
-                            n = n + h * (ojc_Vec22016_cross1061(y.rB2807, $this.P1928) + ojc_Vec22016_cross1061(z.rB2807, $this.P2931));
+                            k = k - g * (ojc_Vec22016_cross1061(y.rA2811, $this.P1928) + ojc_Vec22016_cross1061(q.rA2811, $this.P2931));
+                            n = n + h * (ojc_Vec22016_cross1061(y.rB2807, $this.P1928) + ojc_Vec22016_cross1061(q.rB2807, $this.P2931));
                             y.normalImpulse2809 = $this.x938.x2017;
-                            z.normalImpulse2809 = $this.x938.y2018;
+                            q.normalImpulse2809 = $this.x938.y2018;
                         } else {
                             $this.x938.x2017 = 0.0;
                             $this.x938.y2018 = 0.0;
-                            t = $this.b930.x2017;
-                            x = $this.b930.y2018;
-                            if (t >= 0.0 && x >= 0.0) {
+                            v = $this.b930.x2017;
+                            u = $this.b930.y2018;
+                            if (v >= 0.0 && u >= 0.0) {
                                 ojc_Vec22016_subLocal804(ojc_Vec22016_set176($this.d933, $this.x938), $this.a926);
                                 ojc_Vec22016_mulLocal806(ojc_Vec22016_set176($this.P1928, o), $this.d933.x2017);
                                 ojc_Vec22016_mulLocal806(ojc_Vec22016_set176($this.P2931, o), $this.d933.y2018);
@@ -17500,10 +17504,10 @@ function ojdc_ContactSolver914_solveVelocityConstraints1059($this) {
                                 ojc_Vec22016_subLocal804(j, $this.temp2916);
                                 ojc_Vec22016_mulLocal806(ojc_Vec22016_set176($this.temp2916, $this.temp1917), f);
                                 ojc_Vec22016_addLocal805(m, $this.temp2916);
-                                k = k - g * (ojc_Vec22016_cross1061(y.rA2811, $this.P1928) + ojc_Vec22016_cross1061(z.rA2811, $this.P2931));
-                                n = n + h * (ojc_Vec22016_cross1061(y.rB2807, $this.P1928) + ojc_Vec22016_cross1061(z.rB2807, $this.P2931));
+                                k = k - g * (ojc_Vec22016_cross1061(y.rA2811, $this.P1928) + ojc_Vec22016_cross1061(q.rA2811, $this.P2931));
+                                n = n + h * (ojc_Vec22016_cross1061(y.rB2807, $this.P1928) + ojc_Vec22016_cross1061(q.rB2807, $this.P2931));
                                 y.normalImpulse2809 = $this.x938.x2017;
-                                z.normalImpulse2809 = $this.x938.y2018;
+                                q.normalImpulse2809 = $this.x938.y2018;
                             }
                         }
                     }
@@ -17574,11 +17578,11 @@ function ojdc_ContactSolver914_solvePositionConstraints1062($this) {
         b = b + 1 | 0;
     }
     if (a <  -0.015) {
-        w = 0;
+        r = 0;
     } else {
-        w = 1;
+        r = 1;
     }
-    return w;
+    return r;
 }
 function ojdc_ContactSolver914_storeImpulses1064($this) {
     var a, b, c, d;
@@ -17597,7 +17601,7 @@ function ojdc_ContactSolver914_storeImpulses1064($this) {
     return;
 }
 function ojdc_ContactSolver914_solveTOIPositionConstraints1065($this, a_toiIndexA, b_toiIndexB) {
-    var c, d, e, f, g, h, i, j, k, m, n, o, p, q, r, s, t, u, v, w, x, y, z, a1;
+    var c, d, e, f, g, h, i, j, k, m, n, o, p, q, r, s, t, u, v, w, x, y, z;
     c = 0.0;
     d = 0;
     while (d < $this.m_count937) {
@@ -17639,16 +17643,16 @@ function ojdc_ContactSolver914_solveTOIPositionConstraints1065($this, a_toiIndex
             ojc_Vec22016_subLocal804(ojc_Vec22016_set176($this.rA918, w), p);
             ojc_Vec22016_subLocal804(ojc_Vec22016_set176($this.rB920, w), r);
             c = ojc_MathUtils1593_min239(c, x);
-            y = ojc_MathUtils1593_clamp1060(0.75 * (x + 0.005),  -0.2, 0.0);
+            x = ojc_MathUtils1593_clamp1060(0.75 * (x + 0.005),  -0.2, 0.0);
             w = ojc_Vec22016_cross1061($this.rA918, v);
-            z = ojc_Vec22016_cross1061($this.rB920, v);
-            a1 = k + n + m * w * w + o * z * z;
-            if (a1 <= 0.0) {
-                z = 0.0;
+            y = ojc_Vec22016_cross1061($this.rB920, v);
+            z = k + n + m * w * w + o * y * y;
+            if (z <= 0.0) {
+                y = 0.0;
             } else {
-                z =  -y / a1;
+                y =  -x / z;
             }
-            ojc_Vec22016_mulLocal806(ojc_Vec22016_set176($this.P919, v), z);
+            ojc_Vec22016_mulLocal806(ojc_Vec22016_set176($this.P919, v), y);
             ojc_Vec22016_subLocal804(p, ojc_Vec22016_mulLocal806(ojc_Vec22016_set176($this.temp929, $this.P919), k));
             q = q - m * ojc_Vec22016_cross1061($this.rA918, $this.P919);
             ojc_Vec22016_addLocal805(r, ojc_Vec22016_mulLocal806(ojc_Vec22016_set176($this.temp929, $this.P919), n));
@@ -17702,60 +17706,60 @@ function ojdc_ContactSolver914_initializeVelocityConstraints1066($this) {
         $this.xfB924.p2028.y2018 = t.y2018 - ($this.xfB924.q2029.s2780 * o.x2017 + $this.xfB924.q2029.c2781 * o.y2018);
         ojc_WorldManifold900_initialize1052($this.worldManifold932, f, $this.xfA923, d, $this.xfB924, e);
         ojc_Vec22016_set176(b.normal1372, $this.worldManifold932.normal901);
-        g = b.pointCount1380;
+        f = b.pointCount1380;
         x = 0;
-        d = i + j;
-        j =  -w;
-        h =  -s;
-        while (x < g) {
-            y = b.points1376.data[x];
-            ojc_Vec22016_subLocal804(ojc_Vec22016_set176(y.rA2811, $this.worldManifold932.points904.data[x]), p);
-            ojc_Vec22016_subLocal804(ojc_Vec22016_set176(y.rB2807, $this.worldManifold932.points904.data[x]), t);
-            i = y.rA2811.x2017 * b.normal1372.y2018 - y.rA2811.y2018 * b.normal1372.x2017;
-            z = y.rB2807.x2017 * b.normal1372.y2018 - y.rB2807.y2018 * b.normal1372.x2017;
-            z = d + k * i * i + m * z * z;
-            if (z <= 0.0) {
-                a1 = 0.0;
-            } else {
-                a1 = 1.0 / z;
-            }
-            y.normalMass2813 = a1;
-            b1 = 1.0 * b.normal1372.y2018;
-            z =  -1.0 * b.normal1372.x2017;
-            i = y.rA2811.x2017 * z - y.rA2811.y2018 * b1;
-            z = y.rB2807.x2017 * z - y.rB2807.y2018 * b1;
-            c = d + k * i * i + m * z * z;
+        i = i + j;
+        y =  -w;
+        d =  -s;
+        while (x < f) {
+            z = b.points1376.data[x];
+            ojc_Vec22016_subLocal804(ojc_Vec22016_set176(z.rA2811, $this.worldManifold932.points904.data[x]), p);
+            ojc_Vec22016_subLocal804(ojc_Vec22016_set176(z.rB2807, $this.worldManifold932.points904.data[x]), t);
+            j = z.rA2811.x2017 * b.normal1372.y2018 - z.rA2811.y2018 * b.normal1372.x2017;
+            h = z.rB2807.x2017 * b.normal1372.y2018 - z.rB2807.y2018 * b.normal1372.x2017;
+            c = i + k * j * j + m * h * h;
             if (c <= 0.0) {
                 a1 = 0.0;
             } else {
                 a1 = 1.0 / c;
             }
-            y.tangentMass2810 = a1;
-            y.velocityBias2808 = 0.0;
-            z = b.normal1372.x2017 * (v.x2017 + j * y.rB2807.y2018 - r.x2017 - h * y.rA2811.y2018) + b.normal1372.y2018 * (v.y2018 + w * y.rB2807.x2017 - r.y2018 - s * y.rA2811.x2017);
-            if (z <  -1.0) {
-                y.velocityBias2808 =  -b.restitution1382 * z;
+            z.normalMass2813 = a1;
+            n = 1.0 * b.normal1372.y2018;
+            c =  -1.0 * b.normal1372.x2017;
+            h = z.rA2811.x2017 * c - z.rA2811.y2018 * n;
+            j = z.rB2807.x2017 * c - z.rB2807.y2018 * n;
+            c = i + k * h * h + m * j * j;
+            if (c <= 0.0) {
+                a1 = 0.0;
+            } else {
+                a1 = 1.0 / c;
+            }
+            z.tangentMass2810 = a1;
+            z.velocityBias2808 = 0.0;
+            j = b.normal1372.x2017 * (v.x2017 + y * z.rB2807.y2018 - r.x2017 - d * z.rA2811.y2018) + b.normal1372.y2018 * (v.y2018 + w * z.rB2807.x2017 - r.y2018 - s * z.rA2811.x2017);
+            if (j <  -1.0) {
+                z.velocityBias2808 =  -b.restitution1382 * j;
             }
             x = x + 1 | 0;
         }
         if (b.pointCount1380 == 2) {
             c = b.points1376.data[0];
             b1 = b.points1376.data[1];
-            c1 = ojc_Vec22016_cross1061(c.rA2811, b.normal1372);
-            j = ojc_Vec22016_cross1061(c.rB2807, b.normal1372);
-            d1 = ojc_Vec22016_cross1061(b1.rA2811, b.normal1372);
-            z = ojc_Vec22016_cross1061(b1.rB2807, b.normal1372);
-            h = k * c1;
-            c = d + h * c1;
-            i = m * j;
-            j = c + i * j;
-            k = d + k * d1 * d1 + m * z * z;
-            c = d + h * d1 + i * z;
-            if (j * j >= 100.0 * (j * k - c * c)) {
+            z = ojc_Vec22016_cross1061(c.rA2811, b.normal1372);
+            c1 = ojc_Vec22016_cross1061(c.rB2807, b.normal1372);
+            d = ojc_Vec22016_cross1061(b1.rA2811, b.normal1372);
+            d1 = ojc_Vec22016_cross1061(b1.rB2807, b.normal1372);
+            j = k * z;
+            h = i + j * z;
+            y = m * c1;
+            h = h + y * c1;
+            c1 = i + k * d * d + m * d1 * d1;
+            c = i + j * d + y * d1;
+            if (h * h >= 100.0 * (h * c1 - c * c)) {
                 b.pointCount1380 = 1;
             } else {
-                ojc_Vec22016_set807(b.K1374.ex380, j, c);
-                ojc_Vec22016_set807(b.K1374.ey381, c, k);
+                ojc_Vec22016_set807(b.K1374.ex380, h, c);
+                ojc_Vec22016_set807(b.K1374.ey381, c, c1);
                 ojc_Mat22379_invertToOut590(b.K1374, b.normalMass1385);
             }
         }
@@ -17764,7 +17768,7 @@ function ojdc_ContactSolver914_initializeVelocityConstraints1066($this) {
     return;
 }
 function ojdc_ContactSolver914_init1067($this, a_def) {
-    var b, c, d, e, f, g, h, i, j, k, m, n, o, p;
+    var b, c, d, e, f, g, h, i, j, k, m, n, o;
     $this.m_step934 = a_def.step2283;
     $this.m_count937 = a_def.count2282;
     if ($this.m_positionConstraints935.data.length < $this.m_count937) {
@@ -17790,72 +17794,72 @@ function ojdc_ContactSolver914_init1067($this, a_def) {
     $this.m_positions939 = a_def.positions2284;
     $this.m_velocities921 = a_def.velocities2281;
     $this.m_contacts936 = a_def.contacts2285;
-    f = 0;
-    while (f < $this.m_count937) {
-        g = $this.m_contacts936.data[f];
-        h = g.m_fixtureA645;
-        i = g.m_fixtureB643;
+    e = 0;
+    while (e < $this.m_count937) {
+        f = $this.m_contacts936.data[e];
+        g = f.m_fixtureA645;
+        h = f.m_fixtureB643;
+        i = ojd_Fixture421_getShape235(g);
         j = ojd_Fixture421_getShape235(h);
-        k = ojd_Fixture421_getShape235(i);
-        m = j.m_radius197;
-        n = k.m_radius197;
-        k = ojd_Fixture421_getBody212(h);
-        e = ojd_Fixture421_getBody212(i);
-        o = ojdc_Contact642_getManifold842(g);
-        b = o.pointCount823;
+        k = i.m_radius197;
+        d = j.m_radius197;
+        j = ojd_Fixture421_getBody212(g);
+        m = ojd_Fixture421_getBody212(h);
+        n = ojdc_Contact642_getManifold842(f);
+        b = n.pointCount823;
         if (ojdc_ContactSolver914.$assertionsDisabled941 == 0 && b <= 0) {
             $rt_throw(jl_AssertionError746_$init4());
         }
-        d = $this.m_velocityConstraints940.data[f];
-        d.friction1375 = g.m_friction655;
-        d.restitution1382 = g.m_restitution652;
-        d.tangentSpeed1383 = g.m_tangentSpeed659;
-        d.indexA1373 = k.m_islandIndex1442;
-        d.indexB1384 = e.m_islandIndex1442;
-        d.invMassA1381 = k.m_invMass1440;
-        d.invMassB1378 = e.m_invMass1440;
-        d.invIA1379 = k.m_invI1446;
-        d.invIB1377 = e.m_invI1446;
-        d.contactIndex1371 = f;
-        d.pointCount1380 = b;
-        ojc_Mat22379_setZero229(d.K1374);
-        ojc_Mat22379_setZero229(d.normalMass1385);
-        i = $this.m_positionConstraints935.data[f];
-        i.indexA178 = k.m_islandIndex1442;
-        i.indexB189 = e.m_islandIndex1442;
-        i.invMassA188 = k.m_invMass1440;
-        i.invMassB185 = e.m_invMass1440;
-        ojc_Vec22016_set176(i.localCenterA181, k.m_sweep1458.localCenter2387);
-        ojc_Vec22016_set176(i.localCenterB179, e.m_sweep1458.localCenter2387);
-        i.invIA186 = k.m_invI1446;
-        i.invIB184 = e.m_invI1446;
-        ojc_Vec22016_set176(i.localNormal191, o.localNormal825);
-        ojc_Vec22016_set176(i.localPoint190, o.localPoint824);
+        o = $this.m_velocityConstraints940.data[e];
+        o.friction1375 = f.m_friction655;
+        o.restitution1382 = f.m_restitution652;
+        o.tangentSpeed1383 = f.m_tangentSpeed659;
+        o.indexA1373 = j.m_islandIndex1442;
+        o.indexB1384 = m.m_islandIndex1442;
+        o.invMassA1381 = j.m_invMass1440;
+        o.invMassB1378 = m.m_invMass1440;
+        o.invIA1379 = j.m_invI1446;
+        o.invIB1377 = m.m_invI1446;
+        o.contactIndex1371 = e;
+        o.pointCount1380 = b;
+        ojc_Mat22379_setZero229(o.K1374);
+        ojc_Mat22379_setZero229(o.normalMass1385);
+        i = $this.m_positionConstraints935.data[e];
+        i.indexA178 = j.m_islandIndex1442;
+        i.indexB189 = m.m_islandIndex1442;
+        i.invMassA188 = j.m_invMass1440;
+        i.invMassB185 = m.m_invMass1440;
+        ojc_Vec22016_set176(i.localCenterA181, j.m_sweep1458.localCenter2387);
+        ojc_Vec22016_set176(i.localCenterB179, m.m_sweep1458.localCenter2387);
+        i.invIA186 = j.m_invI1446;
+        i.invIB184 = m.m_invI1446;
+        ojc_Vec22016_set176(i.localNormal191, n.localNormal825);
+        ojc_Vec22016_set176(i.localPoint190, n.localPoint824);
         i.pointCount187 = b;
-        i.radiusA183 = m;
-        i.radiusB182 = n;
-        i.type180 = o.type826;
-        e = 0;
-        while (e < b) {
-            p = o.points827.data[e];
-            k = d.points1376.data[e];
+        i.radiusA183 = k;
+        i.radiusB182 = d;
+        i.type180 = n.type826;
+        m = 0;
+        while (m < b) {
+            c = n.points827.data[m];
+            j = o.points1376.data[m];
             if ($this.m_step934.warmStarting1591 == 0) {
-                k.normalImpulse2809 = 0.0;
-                k.tangentImpulse2812 = 0.0;
+                j.normalImpulse2809 = 0.0;
+                j.tangentImpulse2812 = 0.0;
             } else {
-                k.normalImpulse2809 = $this.m_step934.dtRatio1588 * p.normalImpulse2333;
-                k.tangentImpulse2812 = $this.m_step934.dtRatio1588 * p.tangentImpulse2335;
+                j.normalImpulse2809 = $this.m_step934.dtRatio1588 * c.normalImpulse2333;
+                j.tangentImpulse2812 = $this.m_step934.dtRatio1588 * c.tangentImpulse2335;
             }
-            ojc_Vec22016_setZero229(k.rA2811);
-            ojc_Vec22016_setZero229(k.rB2807);
-            k.normalMass2813 = 0.0;
-            k.tangentMass2810 = 0.0;
-            k.velocityBias2808 = 0.0;
-            i.localPoints177.data[e].x2017 = p.localPoint2332.x2017;
-            i.localPoints177.data[e].y2018 = p.localPoint2332.y2018;
-            e = e + 1 | 0;
+            ojc_Vec22016_setZero229(j.rA2811);
+            ojc_Vec22016_setZero229(j.rB2807);
+            j.normalMass2813 = 0.0;
+            j.tangentMass2810 = 0.0;
+            j.velocityBias2808 = 0.0;
+            i.localPoints177.data[m].x2017 = c.localPoint2332.x2017;
+            i.localPoints177.data[m].y2018 = c.localPoint2332.y2018;
+            m = m + 1 | 0;
         }
-        f = f + 1 | 0;
+        e = e + 1 | 0;
     }
     return;
 }
@@ -18034,13 +18038,13 @@ function dmgt_TeaVMGameSceneLoader959_parse1073($this, a_aGame, b_aResponse, c_a
     return dmgc_GameScene2107_deserialize1074(a_aGame, dmg_AbstractGameRuntimeFactory138_create265($this.runtimeFactory961, c_aResourceLoader, dmgt_TeaVMGameSoundSystemFactory745_$init4()), dmgt_TeaVMMap2946_$init1076(otj_JSObject490_cast$static697(JSON.parse($rt_ustr(b_aResponse)))));
 }
 function dmgt_TeaVMGameSceneLoader959_loadFromServer1077($this, a_aGame, b_aSceneName, c_aResourceLoader) {
-    var d, e, f, g;
+    var d, e;
     d = new XMLHttpRequest() ;
     e = $rt_s(247);
     d.overrideMimeType($rt_ustr(e));
-    f = $rt_s(248);
-    g = jl_StringBuilder2321_toString35(jl_StringBuilder2321_append36(jl_StringBuilder2321_append36(jl_StringBuilder2321_$init4(), b_aSceneName), $rt_s(249)));
-    d.open($rt_ustr(f), $rt_ustr(g));
+    e = $rt_s(248);
+    b_aSceneName = jl_StringBuilder2321_toString35(jl_StringBuilder2321_append36(jl_StringBuilder2321_append36(jl_StringBuilder2321_$init4(), b_aSceneName), $rt_s(249)));
+    d.open($rt_ustr(e), $rt_ustr(b_aSceneName));
     a_aGame = otji_JS391_function601(dmgt_TeaVMGameSceneLoader$1783_$init968($this, d, a_aGame, c_aResourceLoader), "stateChanged");
     d.onreadystatechange = a_aGame;
     d.send();
@@ -18212,11 +18216,11 @@ function dmgc_PlaySceneStrategy970_playScene1091($this, a_aGameScene) {
     dmge_GameEventManager1550_fire541(c, dmgc_SetScreenResolution1063_$init1101(dmgt_TeaVMRenderer$2$1975_getScreenSize1102($this)));
     $this.runningGameLoop972 = j;
     dmgc_CameraBehavior2829_initializeFor1103(d, a_aGameScene, e);
-    a_aGameScene = dmgn_NetworkGameViewFactory2895_createNetworkViewFor1104(dmgn_NetworkGameViewFactory2895_$init1106($this.networkConnector974, dmgc_PlaySceneStrategy970_createEventInterpreter1090($this)), c);
-    dmgc_GameLoop1621_addGameView1107($this.runningGameLoop972, a_aGameScene);
-    dmgn_NetworkGameView2898_handleGameEvent124(a_aGameScene, dmgn_NewGameInstance2854_$init652(e));
+    d = dmgn_NetworkGameViewFactory2895_createNetworkViewFor1104(dmgn_NetworkGameViewFactory2895_$init1106($this.networkConnector974, dmgc_PlaySceneStrategy970_createEventInterpreter1090($this)), c);
+    dmgc_GameLoop1621_addGameView1107($this.runningGameLoop972, d);
+    dmgn_NetworkGameView2898_handleGameEvent124(d, dmgn_NewGameInstance2854_$init652(e));
     if (e !== null) {
-        dmge_GameEventManager1550_register538(c, null, $rt_cls(dmgn_NewGameInstance2854), dmgc_PlaySceneStrategy$31647_$init1109($this, a_aGameScene, e));
+        dmge_GameEventManager1550_register538(c, null, $rt_cls(dmgn_NewGameInstance2854), dmgc_PlaySceneStrategy$31647_$init1109($this, d, e));
     }
     return;
 }
@@ -18324,38 +18328,38 @@ function ojd_Island980_init187($this, a_bodyCapacity, b_contactCapacity, c_joint
     }
     if (!($this.m_velocities987 !== null && $this.m_bodyCapacity998 <= $this.m_velocities987.data.length)) {
         if ($this.m_velocities987 !== null) {
-            c_jointCapacity = $this.m_velocities987;
+            e = $this.m_velocities987;
         } else {
-            c_jointCapacity = $rt_createArray(ojdc_Velocity1556, 0);
+            e = $rt_createArray(ojdc_Velocity1556, 0);
         }
-        e = c_jointCapacity.data;
+        f = e.data;
         $this.m_velocities987 = $rt_createArray(ojdc_Velocity1556, $this.m_bodyCapacity998);
-        a_bodyCapacity = 0;
-        f = $this.m_velocities987;
+        c_jointCapacity = 0;
+        b_contactCapacity = $this.m_velocities987;
         g = 0;
-        e = e.length;
-        jl_System2747_arraycopy343(c_jointCapacity, a_bodyCapacity, f, g, e);
-        while (e < $this.m_velocities987.data.length) {
-            $this.m_velocities987.data[e] = ojdc_Velocity1556_$init4();
-            e = e + 1 | 0;
+        f = f.length;
+        jl_System2747_arraycopy343(e, c_jointCapacity, b_contactCapacity, g, f);
+        while (f < $this.m_velocities987.data.length) {
+            $this.m_velocities987.data[f] = ojdc_Velocity1556_$init4();
+            f = f + 1 | 0;
         }
     }
     if (!($this.m_positions995 !== null && $this.m_bodyCapacity998 <= $this.m_positions995.data.length)) {
         if ($this.m_positions995 !== null) {
-            e = $this.m_positions995;
+            b_contactCapacity = $this.m_positions995;
         } else {
-            e = $rt_createArray(ojdc_Position2277, 0);
+            b_contactCapacity = $rt_createArray(ojdc_Position2277, 0);
         }
-        d_listener = e.data;
+        d_listener = b_contactCapacity.data;
         $this.m_positions995 = $rt_createArray(ojdc_Position2277, $this.m_bodyCapacity998);
-        a_bodyCapacity = 0;
-        b_contactCapacity = $this.m_positions995;
+        c_jointCapacity = 0;
+        a_bodyCapacity = $this.m_positions995;
         h = 0;
-        c_jointCapacity = d_listener.length;
-        jl_System2747_arraycopy343(e, a_bodyCapacity, b_contactCapacity, h, c_jointCapacity);
-        while (c_jointCapacity < $this.m_positions995.data.length) {
-            $this.m_positions995.data[c_jointCapacity] = ojdc_Position2277_$init4();
-            c_jointCapacity = c_jointCapacity + 1 | 0;
+        e = d_listener.length;
+        jl_System2747_arraycopy343(b_contactCapacity, c_jointCapacity, a_bodyCapacity, h, e);
+        while (e < $this.m_positions995.data.length) {
+            $this.m_positions995.data[e] = ojdc_Position2277_$init4();
+            e = e + 1 | 0;
         }
     }
     return;
@@ -18384,16 +18388,16 @@ function ojd_Island980_solveTOI242($this, a_subStep, b_toiIndexA, c_toiIndexB) {
     $this.toiSolverDef999.positions2284 = $this.m_positions995;
     $this.toiSolverDef999.velocities2281 = $this.m_velocities987;
     ojdc_ContactSolver914_init1067($this.toiContactSolver990, $this.toiSolverDef999);
-    d = 0;
+    e = 0;
     $ba: {
         while (true) {
-            if (d >= a_subStep.positionIterations1590) {
+            if (e >= a_subStep.positionIterations1590) {
                 break $ba;
             }
             if (ojdc_ContactSolver914_solveTOIPositionConstraints1065($this.toiContactSolver990, b_toiIndexA, c_toiIndexB) != 0) {
                 break;
             }
-            d = d + 1 | 0;
+            e = e + 1 | 0;
         }
     }
     $this.m_bodies983.data[b_toiIndexA].m_sweep1458.c02388.x2017 = $this.m_positions995.data[b_toiIndexA].c2279.x2017;
@@ -18402,48 +18406,48 @@ function ojd_Island980_solveTOI242($this, a_subStep, b_toiIndexA, c_toiIndexB) {
     ojc_Vec22016_set176($this.m_bodies983.data[c_toiIndexB].m_sweep1458.c02388, $this.m_positions995.data[c_toiIndexB].c2279);
     $this.m_bodies983.data[c_toiIndexB].m_sweep1458.a02390 = $this.m_positions995.data[c_toiIndexB].a2278;
     ojdc_ContactSolver914_initializeVelocityConstraints1066($this.toiContactSolver990);
-    e = 0;
-    while (e < a_subStep.velocityIterations1587) {
+    d = 0;
+    while (d < a_subStep.velocityIterations1587) {
         ojdc_ContactSolver914_solveVelocityConstraints1059($this.toiContactSolver990);
-        e = e + 1 | 0;
+        d = d + 1 | 0;
     }
-    b_toiIndexA = a_subStep.dt1586;
-    e = 0;
-    while (e < $this.m_bodyCount994) {
-        d = $this.m_positions995.data[e].c2279;
-        f = $this.m_positions995.data[e].a2278;
-        g = $this.m_velocities987.data[e].v1557;
-        h = $this.m_velocities987.data[e].w1558;
-        i = g.x2017 * b_toiIndexA;
-        j = g.y2018 * b_toiIndexA;
-        k = i * i + j * j;
-        if (k > 4.0) {
-            ojc_Vec22016_mulLocal806(g, 2.0 / ojc_MathUtils1593_sqrt839(k));
+    f = a_subStep.dt1586;
+    g = 0;
+    while (g < $this.m_bodyCount994) {
+        h = $this.m_positions995.data[g].c2279;
+        i = $this.m_positions995.data[g].a2278;
+        j = $this.m_velocities987.data[g].v1557;
+        k = $this.m_velocities987.data[g].w1558;
+        m = j.x2017 * f;
+        a_subStep = j.y2018 * f;
+        d = m * m + a_subStep * a_subStep;
+        if (d > 4.0) {
+            ojc_Vec22016_mulLocal806(j, 2.0 / ojc_MathUtils1593_sqrt839(d));
         }
-        m = b_toiIndexA * h;
-        k = m * m;
+        d = f * k;
+        e = d * d;
         ojc_Settings1318_$clinit();
-        if (k > ojc_Settings1318.maxRotationSquared1319) {
-            h = h * 1.5707964 / ojc_MathUtils1593_abs779(m);
+        if (e > ojc_Settings1318.maxRotationSquared1319) {
+            k = k * 1.5707964 / ojc_MathUtils1593_abs779(d);
         }
-        d.x2017 = d.x2017 + g.x2017 * b_toiIndexA;
-        d.y2018 = d.y2018 + g.y2018 * b_toiIndexA;
-        n = f + b_toiIndexA * h;
-        $this.m_positions995.data[e].c2279.x2017 = d.x2017;
-        $this.m_positions995.data[e].c2279.y2018 = d.y2018;
-        $this.m_positions995.data[e].a2278 = n;
-        $this.m_velocities987.data[e].v1557.x2017 = g.x2017;
-        $this.m_velocities987.data[e].v1557.y2018 = g.y2018;
-        $this.m_velocities987.data[e].w1558 = h;
-        i = $this.m_bodies983.data[e];
-        i.m_sweep1458.c2386.x2017 = d.x2017;
-        i.m_sweep1458.c2386.y2018 = d.y2018;
-        i.m_sweep1458.a2385 = n;
-        i.m_linearVelocity1455.x2017 = g.x2017;
-        i.m_linearVelocity1455.y2018 = g.y2018;
-        i.m_angularVelocity1449 = h;
-        ojd_Body1436_synchronizeTransform241(i);
-        e = e + 1 | 0;
+        h.x2017 = h.x2017 + j.x2017 * f;
+        h.y2018 = h.y2018 + j.y2018 * f;
+        n = i + f * k;
+        $this.m_positions995.data[g].c2279.x2017 = h.x2017;
+        $this.m_positions995.data[g].c2279.y2018 = h.y2018;
+        $this.m_positions995.data[g].a2278 = n;
+        $this.m_velocities987.data[g].v1557.x2017 = j.x2017;
+        $this.m_velocities987.data[g].v1557.y2018 = j.y2018;
+        $this.m_velocities987.data[g].w1558 = k;
+        m = $this.m_bodies983.data[g];
+        m.m_sweep1458.c2386.x2017 = h.x2017;
+        m.m_sweep1458.c2386.y2018 = h.y2018;
+        m.m_sweep1458.a2385 = n;
+        m.m_linearVelocity1455.x2017 = j.x2017;
+        m.m_linearVelocity1455.y2018 = j.y2018;
+        m.m_angularVelocity1449 = k;
+        ojd_Body1436_synchronizeTransform241(m);
+        g = g + 1 | 0;
     }
     ojd_Island980_report1128($this, $this.toiContactSolver990.m_velocityConstraints940);
     return;
@@ -18553,42 +18557,42 @@ function ojd_Island980_solve203($this, a_profile, b_step, c_gravity, d_allowSlee
     }
     a_profile.solveInit1470 = ojc_Timer2156_getMilliseconds193($this.timer988);
     ojc_Timer2156_reset188($this.timer988);
-    p = 0;
-    while (p < b_step.velocityIterations1587) {
-        f = 0;
-        while (f < $this.m_jointCount982) {
-            $this.m_joints984.data[f].solveVelocityConstraints1131($this.solverData992);
-            f = f + 1 | 0;
+    f = 0;
+    while (f < b_step.velocityIterations1587) {
+        k = 0;
+        while (k < $this.m_jointCount982) {
+            $this.m_joints984.data[k].solveVelocityConstraints1131($this.solverData992);
+            k = k + 1 | 0;
         }
         ojdc_ContactSolver914_solveVelocityConstraints1059($this.contactSolver993);
-        p = p + 1 | 0;
+        f = f + 1 | 0;
     }
     ojdc_ContactSolver914_storeImpulses1064($this.contactSolver993);
     a_profile.solveVelocity1471 = ojc_Timer2156_getMilliseconds193($this.timer988);
     q = 0;
     while (q < $this.m_bodyCount994) {
         r = $this.m_positions995.data[q].c2279;
-        s = $this.m_positions995.data[q].a2278;
-        n = $this.m_velocities987.data[q].v1557;
+        j = $this.m_positions995.data[q].a2278;
+        o = $this.m_velocities987.data[q].v1557;
         k = $this.m_velocities987.data[q].w1558;
-        t = n.x2017 * e;
-        o = n.y2018 * e;
-        f = t * t + o * o;
-        if (f > 4.0) {
-            o = 2.0 / ojc_MathUtils1593_sqrt839(f);
-            n.x2017 = n.x2017 * o;
-            n.y2018 = n.y2018 * o;
+        s = o.x2017 * e;
+        n = o.y2018 * e;
+        p = s * s + n * n;
+        if (p > 4.0) {
+            n = 2.0 / ojc_MathUtils1593_sqrt839(p);
+            o.x2017 = o.x2017 * n;
+            o.y2018 = o.y2018 * n;
         }
-        o = e * k;
-        j = o * o;
+        n = e * k;
+        t = n * n;
         ojc_Settings1318_$clinit();
-        if (j > ojc_Settings1318.maxRotationSquared1319) {
-            k = k * 1.5707964 / ojc_MathUtils1593_abs779(o);
+        if (t > ojc_Settings1318.maxRotationSquared1319) {
+            k = k * 1.5707964 / ojc_MathUtils1593_abs779(n);
         }
-        r.x2017 = r.x2017 + e * n.x2017;
-        r.y2018 = r.y2018 + e * n.y2018;
-        f = s + e * k;
-        $this.m_positions995.data[q].a2278 = f;
+        r.x2017 = r.x2017 + e * o.x2017;
+        r.y2018 = r.y2018 + e * o.y2018;
+        p = j + e * k;
+        $this.m_positions995.data[q].a2278 = p;
         $this.m_velocities987.data[q].w1558 = k;
         q = q + 1 | 0;
     }
@@ -18597,19 +18601,19 @@ function ojd_Island980_solve203($this, a_profile, b_step, c_gravity, d_allowSlee
     q = 0;
     $ba: {
         while (q < b_step.positionIterations1590) {
-            u = ojdc_ContactSolver914_solvePositionConstraints1062($this.contactSolver993);
-            k = 1;
-            r = 0;
-            while (r < $this.m_jointCount982) {
-                c_gravity = $this.m_joints984.data[r].solvePositionConstraints1132($this.solverData992);
-                if (k != 0 && c_gravity != 0) {
-                    k = 1;
+            k = ojdc_ContactSolver914_solvePositionConstraints1062($this.contactSolver993);
+            r = 1;
+            u = 0;
+            while (u < $this.m_jointCount982) {
+                v = $this.m_joints984.data[u].solvePositionConstraints1132($this.solverData992);
+                if (r != 0 && v != 0) {
+                    r = 1;
                 } else {
-                    k = 0;
+                    r = 0;
                 }
-                r = r + 1 | 0;
+                u = u + 1 | 0;
             }
-            if (u != 0 && k != 0) {
+            if (k != 0 && r != 0) {
                 f = 1;
                 break $ba;
             }
@@ -18618,41 +18622,41 @@ function ojd_Island980_solve203($this, a_profile, b_step, c_gravity, d_allowSlee
     }
     k = 0;
     while (k < $this.m_bodyCount994) {
-        t = $this.m_bodies983.data[k];
-        t.m_sweep1458.c2386.x2017 = $this.m_positions995.data[k].c2279.x2017;
-        t.m_sweep1458.c2386.y2018 = $this.m_positions995.data[k].c2279.y2018;
-        t.m_sweep1458.a2385 = $this.m_positions995.data[k].a2278;
-        t.m_linearVelocity1455.x2017 = $this.m_velocities987.data[k].v1557.x2017;
-        t.m_linearVelocity1455.y2018 = $this.m_velocities987.data[k].v1557.y2018;
-        t.m_angularVelocity1449 = $this.m_velocities987.data[k].w1558;
-        ojd_Body1436_synchronizeTransform241(t);
+        n = $this.m_bodies983.data[k];
+        n.m_sweep1458.c2386.x2017 = $this.m_positions995.data[k].c2279.x2017;
+        n.m_sweep1458.c2386.y2018 = $this.m_positions995.data[k].c2279.y2018;
+        n.m_sweep1458.a2385 = $this.m_positions995.data[k].a2278;
+        n.m_linearVelocity1455.x2017 = $this.m_velocities987.data[k].v1557.x2017;
+        n.m_linearVelocity1455.y2018 = $this.m_velocities987.data[k].v1557.y2018;
+        n.m_angularVelocity1449 = $this.m_velocities987.data[k].w1558;
+        ojd_Body1436_synchronizeTransform241(n);
         k = k + 1 | 0;
     }
     a_profile.solvePosition1476 = ojc_Timer2156_getMilliseconds193($this.timer988);
     ojd_Island980_report1128($this, $this.contactSolver993.m_velocityConstraints940);
     if (d_allowSleep != 0) {
-        b_step = 3.4028235E38;
-        k = 0;
-        while (k < $this.m_bodyCount994) {
-            v = $this.m_bodies983.data[k];
-            a_profile = ojd_Body1436_getType189(v);
+        k = 3.4028235E38;
+        r = 0;
+        while (r < $this.m_bodyCount994) {
+            v = $this.m_bodies983.data[r];
+            b_step = ojd_Body1436_getType189(v);
             ojd_BodyType2123_$clinit();
-            if (a_profile !== ojd_BodyType2123.STATIC2125) {
+            if (b_step !== ojd_BodyType2123.STATIC2125) {
                 if ((v.m_flags1437 & 4) != 0 && v.m_angularVelocity1449 * v.m_angularVelocity1449 <= 0.0012184699 && ojc_Vec22016_dot798(v.m_linearVelocity1455, v.m_linearVelocity1455) <= 1.0E-4) {
                     v.m_sleepTime1453 = v.m_sleepTime1453 + e;
-                    b_step = ojc_MathUtils1593_min239(b_step, v.m_sleepTime1453);
+                    k = ojc_MathUtils1593_min239(k, v.m_sleepTime1453);
                 } else {
                     v.m_sleepTime1453 = 0.0;
-                    b_step = 0.0;
+                    k = 0.0;
                 }
             }
-            k = k + 1 | 0;
+            r = r + 1 | 0;
         }
-        if (b_step >= 0.5 && f != 0) {
-            a_profile = 0;
-            while (a_profile < $this.m_bodyCount994) {
-                ojd_Body1436_setAwake198($this.m_bodies983.data[a_profile], 0);
-                a_profile = a_profile + 1 | 0;
+        if (k >= 0.5 && f != 0) {
+            b_step = 0;
+            while (b_step < $this.m_bodyCount994) {
+                ojd_Body1436_setAwake198($this.m_bodies983.data[b_step], 0);
+                b_step = b_step + 1 | 0;
             }
         }
     }
@@ -19095,24 +19099,24 @@ function ju_GregorianCalendar1048_$clinit() {
         return;
     };
     ju_GregorianCalendar1048_$init317 = function($this, a_timezone, b_locale) {
-        var c;
+        var c, d;
         ju_Calendar210_$init317($this, a_timezone, b_locale);
         $this.gregorianCutover1057 = new Long(4184124416, 4294964450);
         $this.changeYear1050 = 1582;
         $this.julianSkew1052 = ((($this.changeYear1050 - 2000 | 0) / 400 | 0) + ju_GregorianCalendar1048_julianError1162($this) | 0) - (($this.changeYear1050 - 2000 | 0) / 100 | 0) | 0;
-        b_locale = $rt_createIntArray(10);
-        c = b_locale.data;
-        c[0] = 0;
-        c[1] = 0;
-        c[2] = 0;
-        c[3] = 0;
-        c[4] = 0;
-        c[5] = 0;
-        c[6] = 0;
-        c[7] = 0;
-        c[8] = 0;
-        c[9] = 0;
-        $this.cachedFields1051 = b_locale;
+        c = $rt_createIntArray(10);
+        d = c.data;
+        d[0] = 0;
+        d[1] = 0;
+        d[2] = 0;
+        d[3] = 0;
+        d[4] = 0;
+        d[5] = 0;
+        d[6] = 0;
+        d[7] = 0;
+        d[8] = 0;
+        d[9] = 0;
+        $this.cachedFields1051 = c;
         $this.currentYearSkew1053 = 10;
         ju_Calendar210_setTimeInMillis331($this, jl_System2747_currentTimeMillis121());
         return;
@@ -19238,7 +19242,7 @@ function ju_GregorianCalendar1048_$init4() {
     return $r;
 }
 function ju_GregorianCalendar1048_computeTime337($this) {
-    var a, b, c, d, e, f, g, h, i, j, k, m, n;
+    var a, b, c, d, e, f, g, h, i, j, k;
     $ba: {
         if (ju_Calendar210_isLenient339($this) == 0) {
             $bb: {
@@ -19364,36 +19368,36 @@ function ju_GregorianCalendar1048_computeTime337($this) {
         d = 1;
     }
     if (!($this.isSet212.data[5] == 0 && $this.isSet212.data[2] == 0 && d == 0) && $this.lastDateFieldSet216 != 6) {
-        e = 1;
+        a = 1;
     } else {
-        e = 0;
+        a = 0;
     }
-    if (e != 0 && !($this.lastDateFieldSet216 != 7 && $this.lastDateFieldSet216 != 3)) {
+    if (a != 0 && !($this.lastDateFieldSet216 != 7 && $this.lastDateFieldSet216 != 3)) {
         if ($this.isSet212.data[3] != 0 && $this.isSet212.data[7] != 0) {
             if ($this.lastDateFieldSet216 != 3 && d != 0 && $this.isSet212.data[7] != 0) {
-                e = 1;
+                a = 1;
             } else {
-                e = 0;
+                a = 0;
             }
         } else if ($this.isSet212.data[6] != 0) {
             if ($this.isSet212.data[5] != 0 && $this.isSet212.data[2] != 0) {
-                e = 1;
+                a = 1;
             } else {
-                e = 0;
+                a = 0;
             }
         }
     }
-    if (e == 0) {
+    if (a == 0) {
         if ($this.isSet212.data[3] != 0 && $this.lastDateFieldSet216 != 6) {
-            d = 1;
+            e = 1;
         } else {
-            d = 0;
+            e = 0;
         }
-        if (d != 0 && $this.isSet212.data[6] != 0) {
-            d = $this.isSet212.data[7];
+        if (e != 0 && $this.isSet212.data[6] != 0) {
+            e = $this.isSet212.data[7];
         }
         f = ju_GregorianCalendar1048_daysFromBaseYear1164($this, c);
-        if (d != 0) {
+        if (e != 0) {
             if ($this.isSet212.data[7] == 0) {
                 a = ju_Calendar210_getFirstDayOfWeek338($this) - 1 | 0;
             } else {
@@ -19408,14 +19412,14 @@ function ju_GregorianCalendar1048_computeTime337($this) {
             $bg: {
                 if (ju_Calendar210_isLenient339($this) == 0) {
                     if ($this.fields215.data[6] >= 1) {
-                        a = $this.fields215.data[6];
+                        e = $this.fields215.data[6];
                         h = 365;
                         if (ju_GregorianCalendar1048_isLeapYear1049($this, c) == 0) {
-                            d = 0;
+                            a = 0;
                         } else {
-                            d = 1;
+                            a = 1;
                         }
-                        if (a <= (h + d | 0)) {
+                        if (e <= (h + a | 0)) {
                             break $bg;
                         }
                     }
@@ -19434,18 +19438,18 @@ function ju_GregorianCalendar1048_computeTime337($this) {
             c = c +  -1 | 0;
             j = j + 12 | 0;
         }
-        k = ju_GregorianCalendar1048_isLeapYear1049($this, c);
-        f = Long_add(ju_GregorianCalendar1048_daysFromBaseYear1164($this, c), Long_fromInt(ju_GregorianCalendar1048_daysInYear1166($this, k, j)));
-        m = $this.isSet212.data[5];
-        if (m != 0 && !($this.lastDateFieldSet216 != 7 && $this.lastDateFieldSet216 != 4 && $this.lastDateFieldSet216 != 8)) {
+        i = ju_GregorianCalendar1048_isLeapYear1049($this, c);
+        f = Long_add(ju_GregorianCalendar1048_daysFromBaseYear1164($this, c), Long_fromInt(ju_GregorianCalendar1048_daysInYear1166($this, i, j)));
+        e = $this.isSet212.data[5];
+        if (e != 0 && !($this.lastDateFieldSet216 != 7 && $this.lastDateFieldSet216 != 4 && $this.lastDateFieldSet216 != 8)) {
             if ($this.isSet212.data[7] != 0 && d != 0) {
-                m = 0;
+                e = 0;
             } else {
-                m = 1;
+                e = 1;
             }
         }
-        if (m != 0) {
-            if (ju_Calendar210_isLenient339($this) == 0 && !($this.fields215.data[5] >= 1 && $this.fields215.data[5] <= ju_GregorianCalendar1048_daysInMonth1167($this, k, j))) {
+        if (e != 0) {
+            if (ju_Calendar210_isLenient339($this) == 0 && !($this.fields215.data[5] >= 1 && $this.fields215.data[5] <= ju_GregorianCalendar1048_daysInMonth1167($this, i, j))) {
                 $rt_throw(jl_IllegalArgumentException480_$init4());
             }
             f = Long_add(f, Long_fromInt($this.fields215.data[5] - 1 | 0));
@@ -19456,26 +19460,26 @@ function ju_GregorianCalendar1048_computeTime337($this) {
                 a = $this.fields215.data[7] - 1 | 0;
             }
             if ($this.isSet212.data[4] != 0 && $this.lastDateFieldSet216 != 8) {
-                n = ju_GregorianCalendar1048_mod71165($this, Long_sub(Long_sub(f, Long_fromInt(3)), Long_fromInt(ju_Calendar210_getFirstDayOfWeek338($this) - 1 | 0)));
-                f = Long_add(f, Long_fromInt(((($this.fields215.data[4] - 1 | 0) * 7 | 0) + ju_GregorianCalendar1048_mod71165($this, Long_sub(Long_fromInt(n + a | 0), Long_sub(f, Long_fromInt(2)))) | 0) - n | 0));
+                k = ju_GregorianCalendar1048_mod71165($this, Long_sub(Long_sub(f, Long_fromInt(3)), Long_fromInt(ju_Calendar210_getFirstDayOfWeek338($this) - 1 | 0)));
+                f = Long_add(f, Long_fromInt(((($this.fields215.data[4] - 1 | 0) * 7 | 0) + ju_GregorianCalendar1048_mod71165($this, Long_sub(Long_fromInt(k + a | 0), Long_sub(f, Long_fromInt(2)))) | 0) - k | 0));
             } else if ($this.isSet212.data[8] == 0) {
                 if ($this.isSet212.data[7] != 0) {
-                    d = ju_GregorianCalendar1048_mod71165($this, Long_sub(Long_sub(f, Long_fromInt(3)), Long_fromInt(ju_Calendar210_getFirstDayOfWeek338($this) - 1 | 0)));
-                    f = Long_add(f, Long_fromInt(ju_GregorianCalendar1048_mod71165($this, Long_fromInt(ju_GregorianCalendar1048_mod71165($this, Long_sub(Long_fromInt(d + a | 0), Long_sub(f, Long_fromInt(3)))) - d | 0))));
+                    j = ju_GregorianCalendar1048_mod71165($this, Long_sub(Long_sub(f, Long_fromInt(3)), Long_fromInt(ju_Calendar210_getFirstDayOfWeek338($this) - 1 | 0)));
+                    f = Long_add(f, Long_fromInt(ju_GregorianCalendar1048_mod71165($this, Long_fromInt(ju_GregorianCalendar1048_mod71165($this, Long_sub(Long_fromInt(j + a | 0), Long_sub(f, Long_fromInt(3)))) - j | 0))));
                 }
             } else if ($this.fields215.data[8] >= 0) {
                 f = Long_add(f, Long_fromInt(ju_GregorianCalendar1048_mod71165($this, Long_sub(Long_fromInt(a), Long_sub(f, Long_fromInt(3)))) + (($this.fields215.data[8] - 1 | 0) * 7 | 0) | 0));
             } else {
-                f = Long_add(f, Long_fromInt((ju_GregorianCalendar1048_daysInMonth1167($this, k, j) + ju_GregorianCalendar1048_mod71165($this, Long_sub(Long_fromInt(a), Long_sub(Long_add(f, Long_fromInt(ju_GregorianCalendar1048_daysInMonth1167($this, k, j))), Long_fromInt(3)))) | 0) + ($this.fields215.data[8] * 7 | 0) | 0));
+                f = Long_add(f, Long_fromInt((ju_GregorianCalendar1048_daysInMonth1167($this, i, j) + ju_GregorianCalendar1048_mod71165($this, Long_sub(Long_fromInt(a), Long_sub(Long_add(f, Long_fromInt(ju_GregorianCalendar1048_daysInMonth1167($this, i, j))), Long_fromInt(3)))) | 0) + ($this.fields215.data[8] * 7 | 0) | 0));
             }
         }
     }
     $this.lastDateFieldSet216 = 0;
-    a = Long_add(b, Long_mul(f, Long_fromInt(86400000)));
-    if (c == $this.changeYear1050 && Long_compare(a, Long_add($this.gregorianCutover1057, Long_mul(Long_fromInt(ju_GregorianCalendar1048_julianError1162($this)), Long_fromInt(86400000)))) >= 0) {
-        a = Long_sub(a, Long_mul(Long_fromInt(ju_GregorianCalendar1048_julianError1162($this)), Long_fromInt(86400000)));
+    e = Long_add(b, Long_mul(f, Long_fromInt(86400000)));
+    if (c == $this.changeYear1050 && Long_compare(e, Long_add($this.gregorianCutover1057, Long_mul(Long_fromInt(ju_GregorianCalendar1048_julianError1162($this)), Long_fromInt(86400000)))) >= 0) {
+        e = Long_sub(e, Long_mul(Long_fromInt(ju_GregorianCalendar1048_julianError1162($this)), Long_fromInt(86400000)));
     }
-    $this.time220 = Long_sub(a, Long_fromInt(ju_GregorianCalendar1048_getTimeZoneOffset1168($this, a)));
+    $this.time220 = Long_sub(e, Long_fromInt(ju_GregorianCalendar1048_getTimeZoneOffset1168($this, e)));
     return;
 }
 function ju_GregorianCalendar1048_daysInYear1169($this, a_year) {
@@ -19555,55 +19559,55 @@ function ju_GregorianCalendar1048_fullFieldsCalc1170($this, a_timeVal, b_millis,
         i = i + 1 | 0;
     }
     $this.fields215.data[7] = ju_GregorianCalendar1048_mod71165($this, Long_sub(d, Long_fromInt(3))) + 1 | 0;
-    m = ju_GregorianCalendar1048_getTimeZoneOffset1168($this, a_timeVal);
+    b_millis = ju_GregorianCalendar1048_getTimeZoneOffset1168($this, a_timeVal);
     if ($this.fields215.data[1] > 0) {
-        m = m - c_millis_zoneOffset | 0;
+        b_millis = b_millis - c_millis_zoneOffset | 0;
     }
-    $this.fields215.data[16] = m;
-    if (m == 0) {
-        h = d;
+    $this.fields215.data[16] = b_millis;
+    if (b_millis == 0) {
+        m = d;
     } else {
-        e = e + m | 0;
+        e = e + b_millis | 0;
         if (e < 0) {
             e = e + 86400000 | 0;
-            h = Long_sub(d, Long_fromInt(1));
+            m = Long_sub(d, Long_fromInt(1));
         } else if (e < 86400000) {
-            h = d;
+            m = d;
         } else {
             e = e - 86400000 | 0;
-            h = Long_add(d, Long_fromInt(1));
+            m = Long_add(d, Long_fromInt(1));
         }
-        if (Long_compare(d, h) != 0) {
-            k = Long_add(Long_sub(a_timeVal, f), Long_fromInt(m));
-            m = ju_GregorianCalendar1048_computeYearAndDay1171($this, h, k);
-            $this.fields215.data[6] = m;
-            if ($this.fields215.data[1] == $this.changeYear1050 && Long_compare($this.gregorianCutover1057, k) <= 0) {
-                m = m + $this.currentYearSkew1053 | 0;
+        if (Long_compare(d, m) != 0) {
+            b_millis = Long_add(Long_sub(a_timeVal, f), Long_fromInt(b_millis));
+            d = ju_GregorianCalendar1048_computeYearAndDay1171($this, m, b_millis);
+            $this.fields215.data[6] = d;
+            if ($this.fields215.data[1] == $this.changeYear1050 && Long_compare($this.gregorianCutover1057, b_millis) <= 0) {
+                d = d + $this.currentYearSkew1053 | 0;
             }
-            i = m / 32 | 0;
+            i = d / 32 | 0;
             j = ju_GregorianCalendar1048_isLeapYear1049($this, $this.fields215.data[1]);
-            k = m - ju_GregorianCalendar1048_daysInYear1166($this, j, i) | 0;
+            k = d - ju_GregorianCalendar1048_daysInYear1166($this, j, i) | 0;
             if (k > ju_GregorianCalendar1048_daysInMonth1167($this, j, i)) {
                 k = k - ju_GregorianCalendar1048_daysInMonth1167($this, j, i) | 0;
                 i = i + 1 | 0;
             }
-            $this.fields215.data[7] = ju_GregorianCalendar1048_mod71165($this, Long_sub(h, Long_fromInt(3))) + 1 | 0;
+            $this.fields215.data[7] = ju_GregorianCalendar1048_mod71165($this, Long_sub(m, Long_fromInt(3))) + 1 | 0;
         }
     }
     $this.fields215.data[14] = e % 1000;
-    b_millis = e / 1000 | 0;
-    $this.fields215.data[13] = b_millis % 60;
-    n = b_millis / 60 | 0;
-    $this.fields215.data[12] = n % 60;
-    $this.fields215.data[11] = (n / 60 | 0) % 24;
-    o = $this.fields215;
-    p = 9;
+    a_timeVal = e / 1000 | 0;
+    $this.fields215.data[13] = a_timeVal % 60;
+    c_millis_zoneOffset = a_timeVal / 60 | 0;
+    $this.fields215.data[12] = c_millis_zoneOffset % 60;
+    $this.fields215.data[11] = (c_millis_zoneOffset / 60 | 0) % 24;
+    n = $this.fields215;
+    o = 9;
     if ($this.fields215.data[11] <= 11) {
-        a_timeVal = 0;
+        b_millis = 0;
     } else {
-        a_timeVal = 1;
+        b_millis = 1;
     }
-    o.data[p] = a_timeVal;
+    n.data[o] = b_millis;
     $this.fields215.data[10] = $this.fields215.data[11] % 12;
     if ($this.fields215.data[1] > 0) {
         $this.fields215.data[0] = 1;
@@ -19614,57 +19618,57 @@ function ju_GregorianCalendar1048_fullFieldsCalc1170($this, a_timeVal, b_millis,
     $this.fields215.data[2] = i;
     $this.fields215.data[5] = k;
     $this.fields215.data[8] = ((k - 1 | 0) / 7 | 0) + 1 | 0;
-    $this.fields215.data[4] = (((k - 1 | 0) + ju_GregorianCalendar1048_mod71165($this, Long_sub(Long_sub(Long_sub(h, Long_fromInt(k)), Long_fromInt(2)), Long_fromInt(ju_Calendar210_getFirstDayOfWeek338($this) - 1 | 0))) | 0) / 7 | 0) + 1 | 0;
-    q = ju_GregorianCalendar1048_mod71165($this, Long_sub(Long_sub(Long_sub(h, Long_fromInt(3)), Long_fromInt($this.fields215.data[6] - 1 | 0)), Long_fromInt(ju_Calendar210_getFirstDayOfWeek338($this) - 1 | 0)));
-    r = (($this.fields215.data[6] - 1 | 0) + q | 0) / 7 | 0;
-    if ((7 - q | 0) < ju_Calendar210_getMinimalDaysInFirstWeek341($this)) {
-        a_timeVal = 0;
+    $this.fields215.data[4] = (((k - 1 | 0) + ju_GregorianCalendar1048_mod71165($this, Long_sub(Long_sub(Long_sub(m, Long_fromInt(k)), Long_fromInt(2)), Long_fromInt(ju_Calendar210_getFirstDayOfWeek338($this) - 1 | 0))) | 0) / 7 | 0) + 1 | 0;
+    n = ju_GregorianCalendar1048_mod71165($this, Long_sub(Long_sub(Long_sub(m, Long_fromInt(3)), Long_fromInt($this.fields215.data[6] - 1 | 0)), Long_fromInt(ju_Calendar210_getFirstDayOfWeek338($this) - 1 | 0)));
+    p = (($this.fields215.data[6] - 1 | 0) + n | 0) / 7 | 0;
+    if ((7 - n | 0) < ju_Calendar210_getMinimalDaysInFirstWeek341($this)) {
+        b_millis = 0;
     } else {
-        a_timeVal = 1;
+        b_millis = 1;
     }
-    h = r + a_timeVal | 0;
-    if (h == 0) {
-        n = $this.fields215;
-        p = 3;
-        o = 7;
+    e = p + b_millis | 0;
+    if (e == 0) {
+        c_millis_zoneOffset = $this.fields215;
+        q = 3;
+        r = 7;
         if (ju_GregorianCalendar1048_isLeapYear1049($this, $this.fields215.data[1] - 1 | 0) == 0) {
-            a_timeVal = 1;
+            b_millis = 1;
         } else {
-            a_timeVal = 2;
+            b_millis = 2;
         }
-        if ((o - ju_GregorianCalendar1048_mod71165($this, Long_fromInt(q - a_timeVal | 0)) | 0) < ju_Calendar210_getMinimalDaysInFirstWeek341($this)) {
-            a_timeVal = 52;
+        if ((r - ju_GregorianCalendar1048_mod71165($this, Long_fromInt(n - b_millis | 0)) | 0) < ju_Calendar210_getMinimalDaysInFirstWeek341($this)) {
+            b_millis = 52;
         } else {
-            a_timeVal = 53;
+            b_millis = 53;
         }
-        n.data[p] = a_timeVal;
+        c_millis_zoneOffset.data[q] = b_millis;
     } else {
-        e = $this.fields215.data[6];
+        i = $this.fields215.data[6];
         if (j == 0) {
-            a_timeVal = 366;
+            h = 366;
         } else {
-            a_timeVal = 367;
+            h = 367;
         }
         if (j == 0) {
-            m = 1;
+            b_millis = 1;
         } else {
-            m = 2;
+            b_millis = 2;
         }
-        if (e < (a_timeVal - ju_GregorianCalendar1048_mod71165($this, Long_fromInt(q + m | 0)) | 0)) {
-            $this.fields215.data[3] = h;
+        if (i < (h - ju_GregorianCalendar1048_mod71165($this, Long_fromInt(n + b_millis | 0)) | 0)) {
+            $this.fields215.data[3] = e;
         } else {
-            k = $this.fields215;
-            m = 3;
-            e = 7;
+            i = $this.fields215;
+            d = 3;
+            h = 7;
             if (j == 0) {
-                a_timeVal = 1;
+                b_millis = 1;
             } else {
-                a_timeVal = 2;
+                b_millis = 2;
             }
-            if ((e - ju_GregorianCalendar1048_mod71165($this, Long_fromInt(q + a_timeVal | 0)) | 0) >= ju_Calendar210_getMinimalDaysInFirstWeek341($this)) {
-                h = 1;
+            if ((h - ju_GregorianCalendar1048_mod71165($this, Long_fromInt(n + b_millis | 0)) | 0) >= ju_Calendar210_getMinimalDaysInFirstWeek341($this)) {
+                e = 1;
             }
-            k.data[m] = h;
+            i.data[d] = e;
         }
     }
     return;
@@ -19691,7 +19695,7 @@ function ju_GregorianCalendar1048_daysFromBaseYear1164($this, a_iyear) {
     return d;
 }
 function ju_GregorianCalendar1048_computeFields340($this) {
-    var a, b, c, d, e, f, g, h, i, j, k;
+    var a, b, c, d, e, f, g, h, i;
     a = ju_GregorianCalendar1048_getTimeZoneOffset1168($this, $this.time220);
     if ($this.isSet212.data[15] == 0) {
         $this.fields215.data[15] = a;
@@ -19722,17 +19726,17 @@ function ju_GregorianCalendar1048_computeFields340($this) {
         $this.fields215.data[14] = f % 1000;
         g = f / 1000 | 0;
         $this.fields215.data[13] = g % 60;
-        h = g / 60 | 0;
-        $this.fields215.data[12] = h % 60;
-        $this.fields215.data[11] = (h / 60 | 0) % 24;
-        i = $this.fields215;
-        j = 9;
+        g = g / 60 | 0;
+        $this.fields215.data[12] = g % 60;
+        $this.fields215.data[11] = (g / 60 | 0) % 24;
+        h = $this.fields215;
+        d = 9;
         if ($this.fields215.data[11] <= 11) {
             f = 0;
         } else {
             f = 1;
         }
-        i.data[j] = f;
+        h.data[d] = f;
         $this.fields215.data[10] = $this.fields215.data[11] % 12;
         if (Long_compare(e, Long_ZERO) > 0 && Long_compare(e, Long_ZERO) < 0 && c == 0) {
             f = new Long(4294967295, 2147483647);
@@ -19753,7 +19757,7 @@ function ju_GregorianCalendar1048_computeFields340($this) {
         f = f + 1 | 0;
     }
     if ($this.isCached1054 == 0 && Long_compare(e, new Long(4294967295, 2147483647)) != 0 && Long_compare(e, new Long(0, 2147483648)) != 0) {
-        k = 0;
+        i = 0;
         $this.cachedFields1051.data[0] = $this.fields215.data[1];
         $this.cachedFields1051.data[1] = $this.fields215.data[2];
         $this.cachedFields1051.data[2] = $this.fields215.data[5];
@@ -19764,7 +19768,7 @@ function ju_GregorianCalendar1048_computeFields340($this) {
         $this.cachedFields1051.data[7] = $this.fields215.data[4];
         $this.cachedFields1051.data[8] = $this.fields215.data[6];
         $this.cachedFields1051.data[9] = $this.fields215.data[8];
-        $this.nextMidnightMillis1056 = Long_add(e, Long_fromInt(((k + ((((23 - $this.fields215.data[11] | 0) * 60 | 0) * 60 | 0) * 1000 | 0) | 0) + (((59 - $this.fields215.data[12] | 0) * 60 | 0) * 1000 | 0) | 0) + ((59 - $this.fields215.data[13] | 0) * 1000 | 0) | 0));
+        $this.nextMidnightMillis1056 = Long_add(e, Long_fromInt(((i + ((((23 - $this.fields215.data[11] | 0) * 60 | 0) * 60 | 0) * 1000 | 0) | 0) + (((59 - $this.fields215.data[12] | 0) * 60 | 0) * 1000 | 0) | 0) + ((59 - $this.fields215.data[13] | 0) * 1000 | 0) | 0));
         $this.lastMidnightMillis1049 = Long_sub(e, Long_fromInt((((($this.fields215.data[11] * 60 | 0) * 60 | 0) * 1000 | 0) + (($this.fields215.data[12] * 60 | 0) * 1000 | 0) | 0) + ($this.fields215.data[13] * 1000 | 0) | 0));
         $this.isCached1054 = 1;
     }
@@ -19846,9 +19850,9 @@ function ju_GregorianCalendar1048_add1044($this, a_field, b_value) {
             if (Long_compare(c, Long_ZERO) > 0) {
                 d = ju_GregorianCalendar1048_getTimeZoneOffset1168($this, $this.time220);
                 $this.time220 = Long_add($this.time220, Long_mul(Long_fromInt(b_value), c));
-                b_value = ju_GregorianCalendar1048_getTimeZoneOffset1168($this, $this.time220);
-                if (b_value != d) {
-                    $this.time220 = Long_add($this.time220, Long_fromInt(d - b_value | 0));
+                e = ju_GregorianCalendar1048_getTimeZoneOffset1168($this, $this.time220);
+                if (e != d) {
+                    $this.time220 = Long_add($this.time220, Long_fromInt(d - e | 0));
                 }
             }
             $this.areFieldsSet221 = 0;
@@ -19857,14 +19861,14 @@ function ju_GregorianCalendar1048_add1044($this, a_field, b_value) {
         }
         ju_Calendar210_complete333($this);
         if (a_field == 2) {
-            e = $this.fields215.data[2] + b_value | 0;
-            if (e >= 0) {
-                b_value = e / 12 | 0;
+            a_field = $this.fields215.data[2] + b_value | 0;
+            if (a_field >= 0) {
+                b_value = a_field / 12 | 0;
             } else {
-                b_value = (e - 11 | 0) / 12 | 0;
-                e = 12 + e % 12 | 0;
+                b_value = (a_field - 11 | 0) / 12 | 0;
+                a_field = 12 + a_field % 12 | 0;
             }
-            ju_Calendar210_set335($this, 2, e % 12);
+            ju_Calendar210_set335($this, 2, a_field % 12);
         }
         ju_Calendar210_set335($this, 1, $this.fields215.data[1] + b_value | 0);
         c = ju_GregorianCalendar1048_daysInMonth1167($this, ju_GregorianCalendar1048_isLeapYear1049($this, $this.fields215.data[1]), $this.fields215.data[2]);
@@ -19921,7 +19925,7 @@ function ju_GregorianCalendar1048_daysInYear1166($this, a_leapYear, b_month) {
     return ju_GregorianCalendar1048.daysInYear1061.data[b_month];
 }
 function ju_GregorianCalendar1048_computeYearAndDay1171($this, a_dayCount_days, b_localTime) {
-    var c, d, e;
+    var c, d;
     c = 1970;
     if (Long_compare(b_localTime, $this.gregorianCutover1057) >= 0) {
         d = a_dayCount_days;
@@ -19929,11 +19933,11 @@ function ju_GregorianCalendar1048_computeYearAndDay1171($this, a_dayCount_days, 
         d = Long_sub(a_dayCount_days, Long_fromInt($this.julianSkew1052));
     }
     while (true) {
-        e = Long_div(d, Long_fromInt(365)).lo;
-        if (e == 0) {
+        b_localTime = Long_div(d, Long_fromInt(365)).lo;
+        if (b_localTime == 0) {
             break;
         }
-        c = c + e | 0;
+        c = c + b_localTime | 0;
         d = Long_sub(a_dayCount_days, ju_GregorianCalendar1048_daysFromBaseYear1164($this, c));
     }
     if (Long_compare(d, Long_ZERO) < 0) {
@@ -20012,12 +20016,12 @@ function jt_DateFormatElement$Numeric1072_processBeforeFormat1178($this, a_num) 
     return a_num;
 }
 function jt_DateFormatElement$Numeric1072_format140($this, a_date, b_buffer) {
-    var c, d;
+    var c;
     c = jl_Integer21_toString83($this.processBeforeFormat1178(ju_Calendar210_get141(a_date, $this.field1073)));
-    d = jl_String1_length2(c);
-    while (d < $this.length1074) {
+    a_date = jl_String1_length2(c);
+    while (a_date < $this.length1074) {
         jl_StringBuffer243_append143(b_buffer, 48);
-        d = d + 1 | 0;
+        a_date = a_date + 1 | 0;
     }
     jl_StringBuffer243_append374(b_buffer, c);
     return;
@@ -20194,11 +20198,11 @@ function olv_LuaTable1080_$clinit() {
         return b;
     };
     olv_LuaTable1080_resize1187 = function(a_old, b_n) {
-        var c;
+        var c, d;
         c = a_old.data;
-        b_n = $rt_createArray(olv_LuaValue297, b_n);
-        jl_System2747_arraycopy343(a_old, 0, b_n, 0, c.length);
-        return b_n;
+        d = $rt_createArray(olv_LuaValue297, b_n);
+        jl_System2747_arraycopy343(a_old, 0, d, 0, c.length);
+        return d;
     };
     olv_LuaTable1080_$clinit43 = function() {
         olv_LuaTable1080.N1086 = olv_LuaValue297_valueOf414($rt_s(257));
@@ -20265,7 +20269,7 @@ function olv_LuaTable1080_len460($this) {
     return olv_LuaInteger2310_valueOf413(olv_LuaTable1080_length2($this));
 }
 function olv_LuaTable1080_rehash1196($this, a_newKey) {
-    var b, c, d, e, f, g, h, i, j, k, m, n, o, p, q, r, s, t, u;
+    var b, c, d, e, f, g, h, i, j, k, m, n, o, p, q, r, s, t;
     if ($this.m_metatable1081 !== null && !($this.m_metatable1081.useWeakKeys1197() == 0 && $this.m_metatable1081.useWeakValues1198() == 0)) {
         $this.hashEntries1083 = olv_LuaTable1080_countHashKeys1199($this);
         if ($this.m_metatable1081.useWeakValues1198() != 0) {
@@ -20300,100 +20304,100 @@ function olv_LuaTable1080_rehash1196($this, a_newKey) {
         }
     }
     j = $this.array1082;
-    k = $this.hash1084;
-    m = 0;
+    c = $this.hash1084;
+    i = 0;
     if (a_newKey > 0 && a_newKey <= h) {
-        m = m +  -1 | 0;
+        i = i +  -1 | 0;
     }
-    n = j.data;
-    o = n.length;
-    p = $rt_compare(h, o);
-    if (p == 0) {
-        q = $this.array1082;
+    d = j.data;
+    k = d.length;
+    m = $rt_compare(h, k);
+    if (m == 0) {
+        n = $this.array1082;
     } else {
-        q = $rt_createArray(olv_LuaValue297, h);
-        if (p > 0) {
-            i = olv_LuaTable1080_log21186(o + 1 | 0);
-            g = olv_LuaTable1080_log21186(h) + 1 | 0;
-            while (i < g) {
-                m = m + f[i] | 0;
-                i = i + 1 | 0;
+        n = $rt_createArray(olv_LuaValue297, h);
+        if (m > 0) {
+            o = olv_LuaTable1080_log21186(k + 1 | 0);
+            p = olv_LuaTable1080_log21186(h) + 1 | 0;
+            while (o < p) {
+                i = i + f[o] | 0;
+                o = o + 1 | 0;
             }
-        } else if (o > h) {
-            i = olv_LuaTable1080_log21186(h + 1 | 0);
-            g = olv_LuaTable1080_log21186(o) + 1 | 0;
-            while (i < g) {
-                m = m - f[i] | 0;
-                i = i + 1 | 0;
+        } else if (k > h) {
+            p = olv_LuaTable1080_log21186(h + 1 | 0);
+            o = olv_LuaTable1080_log21186(k) + 1 | 0;
+            while (p < o) {
+                i = i - f[p] | 0;
+                p = p + 1 | 0;
             }
         }
-        jl_System2747_arraycopy343(j, 0, q, 0, jl_Math2210_min730(o, h));
+        jl_System2747_arraycopy343(j, 0, n, 0, jl_Math2210_min730(k, h));
     }
-    d = $this.hashEntries1083 - m | 0;
+    g = $this.hashEntries1083 - i | 0;
     if (a_newKey >= 0 && a_newKey <= h) {
         a_newKey = 0;
     } else {
         a_newKey = 1;
     }
-    c = k.data;
-    a_newKey = d + a_newKey | 0;
-    d = c.length;
+    p = c.data;
+    a_newKey = g + a_newKey | 0;
+    q = p.length;
     if (a_newKey <= 0) {
         r = 0;
-        g = olv_LuaTable1080.NOBUCKETS1085;
+        s = olv_LuaTable1080.NOBUCKETS1085;
     } else {
         if (a_newKey < 2) {
-            a_newKey = 2;
+            g = 2;
         } else {
-            a_newKey = 1 << olv_LuaTable1080_log21186(a_newKey);
+            g = 1 << olv_LuaTable1080_log21186(a_newKey);
         }
-        r = a_newKey - 1 | 0;
-        g = $rt_createArray(olv_LuaTable$Slot333, a_newKey);
+        r = g - 1 | 0;
+        s = $rt_createArray(olv_LuaTable$Slot333, g);
     }
-    s = 0;
-    while (s < d) {
-        t = c[s];
-        while (t !== null) {
-            u = t.arraykey516(h);
-            if (u <= 0) {
-                f = g.data;
-                a_newKey = t.keyindex534(r);
-                f[a_newKey] = t.relink520(f[a_newKey]);
+    o = 0;
+    while (o < q) {
+        g = p[o];
+        while (g !== null) {
+            t = g.arraykey516(h);
+            if (t <= 0) {
+                m = s.data;
+                a_newKey = g.keyindex534(r);
+                m[a_newKey] = g.relink520(m[a_newKey]);
             } else {
-                k = t.first527();
-                if (k !== null) {
-                    q.data[u - 1 | 0] = k.value531();
+                a_newKey = g.first527();
+                if (a_newKey !== null) {
+                    n.data[t - 1 | 0] = a_newKey.value531();
                 }
             }
-            t = t.rest519();
+            g = g.rest519();
         }
-        s = s + 1 | 0;
+        o = o + 1 | 0;
     }
-    while (h < o) {
-        a_newKey = h + 1 | 0;
-        d = n[h];
-        if (d !== null) {
-            h = olv_LuaTable1080_hashmod695(olv_LuaInteger2310_hashCode696(a_newKey), r);
+    while (h < k) {
+        c = h + 1 | 0;
+        p = d[h];
+        if (p !== null) {
+            a_newKey = olv_LuaTable1080_hashmod695(olv_LuaInteger2310_hashCode696(c), r);
             if ($this.m_metatable1081 === null) {
-                i = olv_LuaTable1080_defaultEntry1182(olv_LuaValue297_valueOf413(a_newKey), d);
+                g = olv_LuaTable1080_defaultEntry1182(olv_LuaValue297_valueOf413(c), p);
             } else {
-                i = $this.m_metatable1081.entry1201(olv_LuaValue297_valueOf413(a_newKey), d);
-                if (i === null) {
-                    h = a_newKey;
+                g = $this.m_metatable1081.entry1201(olv_LuaValue297_valueOf413(c), p);
+                if (g === null) {
+                    h = c;
                     continue;
                 }
             }
-            p = g.data;
-            if (p[h] !== null) {
-                i = p[h].add528(i);
+            j = s.data;
+            if (j[a_newKey] !== null) {
+                g = j[a_newKey].add528(g);
             }
-            p[h] = i;
+            j[a_newKey] = g;
         }
-        h = a_newKey;
+        h = c;
     }
-    $this.hash1084 = g;
-    $this.array1082 = q;
-    $this.hashEntries1083 = $this.hashEntries1083 - m | 0;
+    $this.hash1084 = s;
+    $this.array1082 = n;
+    $this.hashEntries1083 = $this.hashEntries1083 - i | 0;
     return;
 }
 function olv_LuaTable1080_hashset1193($this, a_key, b_value) {
@@ -20480,20 +20484,20 @@ function olv_LuaTable1080_countIntKeys1200($this, a_nums) {
             d = d + 1 | 0;
         }
     }
-    e = 0;
-    while (e < $this.hash1084.data.length) {
-        g = $this.hash1084.data[e];
-        while (g !== null) {
-            h = g.arraykey516(2147483647);
+    d = 0;
+    while (d < $this.hash1084.data.length) {
+        c = $this.hash1084.data[d];
+        while (c !== null) {
+            h = c.arraykey516(2147483647);
             if (h > 0) {
-                c = a_nums.data;
+                g = a_nums.data;
                 f = olv_LuaTable1080_log21186(h);
-                c[f] = c[f] + 1 | 0;
+                g[f] = g[f] + 1 | 0;
                 b = b + 1 | 0;
             }
-            g = g.rest519();
+            c = c.rest519();
         }
-        e = e + 1 | 0;
+        d = d + 1 | 0;
     }
     return b;
 }
@@ -20658,22 +20662,21 @@ function olv_LuaTable1080_presize488($this, a_narray) {
     return;
 }
 function olv_LuaTable1080_presize1183($this, a_narray, b_nhash) {
-    var c;
     if (b_nhash > 0 && b_nhash < 2) {
         b_nhash = 2;
     }
     if (a_narray <= 0) {
-        c = olv_LuaValue297.NOVALS316;
+        a_narray = olv_LuaValue297.NOVALS316;
     } else {
-        c = $rt_createArray(olv_LuaValue297, 1 << olv_LuaTable1080_log21186(a_narray));
+        a_narray = $rt_createArray(olv_LuaValue297, 1 << olv_LuaTable1080_log21186(a_narray));
     }
-    $this.array1082 = c;
+    $this.array1082 = a_narray;
     if (b_nhash <= 0) {
-        c = olv_LuaTable1080.NOBUCKETS1085;
+        a_narray = olv_LuaTable1080.NOBUCKETS1085;
     } else {
-        c = $rt_createArray(olv_LuaTable$Slot333, 1 << olv_LuaTable1080_log21186(b_nhash));
+        a_narray = $rt_createArray(olv_LuaTable$Slot333, 1 << olv_LuaTable1080_log21186(b_nhash));
     }
-    $this.hash1084 = c;
+    $this.hash1084 = a_narray;
     $this.hashEntries1083 = 0;
     return;
 }
@@ -20704,17 +20707,17 @@ function dmgs_SpriteBehaviorTemplate1087_$clinit() {
         return;
     };
     dmgs_SpriteBehaviorTemplate1087_deserialize1208 = function(a_aEventManager, b_aOwner, c_aSerializedData) {
-        var d;
+        var d, e;
         d = dmgs_SpriteBehaviorTemplate1087_$init917(a_aEventManager, b_aOwner);
         a_aEventManager = c_aSerializedData.get47($rt_s(261));
         if (a_aEventManager !== null) {
-            b_aOwner = dmgt_Animation2935_addToAnimationSequence1209(dmgt_Animation2935_$init29($rt_s(262)), dmgt_ResourceName373_deserialize587(a_aEventManager));
-            ju_AbstractList1487_add131(d.animations1090, b_aOwner);
-            dmge_Property43_setQuietly132(dmgs_SpriteBehaviorTemplate1087_currentAnimationProperty1210(d), b_aOwner);
+            c_aSerializedData = dmgt_Animation2935_addToAnimationSequence1209(dmgt_Animation2935_$init29($rt_s(262)), dmgt_ResourceName373_deserialize587(a_aEventManager));
+            ju_AbstractList1487_add131(d.animations1090, c_aSerializedData);
+            dmge_Property43_setQuietly132(dmgs_SpriteBehaviorTemplate1087_currentAnimationProperty1210(d), c_aSerializedData);
         } else {
-            a_aEventManager = ju_AbstractList1487_iterator742(c_aSerializedData.get47($rt_s(263)));
-            while (ju_AbstractList$11185_hasNext745(a_aEventManager) != 0) {
-                ju_AbstractList1487_add131(d.animations1090, dmgt_Animation2935_deserialize1211(ju_AbstractList$11185_next746(a_aEventManager)));
+            e = ju_AbstractList1487_iterator742(c_aSerializedData.get47($rt_s(263)));
+            while (ju_AbstractList$11185_hasNext745(e) != 0) {
+                ju_AbstractList1487_add131(d.animations1090, dmgt_Animation2935_deserialize1211(ju_AbstractList$11185_next746(e)));
             }
             a_aEventManager = c_aSerializedData.get47($rt_s(259));
             if (a_aEventManager !== null) {
@@ -20772,44 +20775,44 @@ function dmgs_SpriteBehaviorTemplate1087_currentAnimationProperty1210($this) {
     return $this.currentAnimation1089;
 }
 function otci_Base461094_decodeUnsigned1050(a_seq) {
-    var b, c, d, e, f;
+    var b, c, d, e, f, g;
     b = 0;
     c = 1;
     while (true) {
         d = a_seq.characters948.data;
         e = a_seq.pointer949;
         a_seq.pointer949 = e + 1 | 0;
-        d = otci_Base461094_decodeDigit1218(d[e]);
-        if (d % 2 != 1) {
-            f = 0;
+        f = otci_Base461094_decodeDigit1218(d[e]);
+        if (f % 2 != 1) {
+            g = 0;
         } else {
-            f = 1;
+            g = 1;
         }
-        b = b + (c * (d / 2 | 0) | 0) | 0;
+        b = b + (c * (f / 2 | 0) | 0) | 0;
         c = c * 46 | 0;
-        if (f == 0) {
+        if (g == 0) {
             break;
         }
     }
     return b;
 }
 function otci_Base461094_decodeUnsignedLong1219(a_seq) {
-    var b, c, d, e, f;
+    var b, c, d, e, f, g;
     b = Long_ZERO;
     c = Long_fromInt(1);
     while (true) {
         d = a_seq.characters948.data;
         e = a_seq.pointer949;
         a_seq.pointer949 = e + 1 | 0;
-        e = otci_Base461094_decodeDigit1218(d[e]);
-        if (e % 2 != 1) {
-            f = 0;
+        f = otci_Base461094_decodeDigit1218(d[e]);
+        if (f % 2 != 1) {
+            g = 0;
         } else {
-            f = 1;
+            g = 1;
         }
-        b = Long_add(b, Long_mul(c, Long_fromInt(e / 2 | 0)));
+        b = Long_add(b, Long_mul(c, Long_fromInt(f / 2 | 0)));
         c = Long_mul(c, Long_fromInt(46));
-        if (f == 0) {
+        if (g == 0) {
             break;
         }
     }
@@ -21047,42 +21050,43 @@ function ojc_SeparationFunction1112_$init4() {
     return $r;
 }
 function ojc_SeparationFunction1112_findMinSeparation777($this, a_indexes, b_t) {
+    var c;
     ojc_Sweep2384_getTransform774($this.m_sweepA1117, $this.xfa1124, b_t);
     ojc_Sweep2384_getTransform774($this.m_sweepB1113, $this.xfb1128, b_t);
     ojc_SeparationFunction$11302_$clinit();
     switch (ojc_SeparationFunction$11302.$SwitchMap$org$jbox2d$collision$Type1303.data[jl_Enum140_ordinal147($this.m_type1131)]) {
         case 1:
-            b_t = a_indexes.data;
+            c = a_indexes.data;
             ojc_Rot2779_mulTransUnsafe1234($this.xfa1124.q2029, $this.m_axis1130, $this.axisA1120);
             ojc_Rot2779_mulTransUnsafe1234($this.xfb1128.q2029, ojc_Vec22016_negateLocal814($this.m_axis1130), $this.axisB1118);
             ojc_Vec22016_negateLocal814($this.m_axis1130);
-            b_t[0] = ojc_Distance$DistanceProxy2836_getSupport1235($this.m_proxyA1116, $this.axisA1120);
-            b_t[1] = ojc_Distance$DistanceProxy2836_getSupport1235($this.m_proxyB1119, $this.axisB1118);
-            ojc_Vec22016_set176($this.localPointA1122, ojc_Distance$DistanceProxy2836_getVertex1236($this.m_proxyA1116, b_t[0]));
-            ojc_Vec22016_set176($this.localPointB1125, ojc_Distance$DistanceProxy2836_getVertex1236($this.m_proxyB1119, b_t[1]));
+            c[0] = ojc_Distance$DistanceProxy2836_getSupport1235($this.m_proxyA1116, $this.axisA1120);
+            c[1] = ojc_Distance$DistanceProxy2836_getSupport1235($this.m_proxyB1119, $this.axisB1118);
+            ojc_Vec22016_set176($this.localPointA1122, ojc_Distance$DistanceProxy2836_getVertex1236($this.m_proxyA1116, c[0]));
+            ojc_Vec22016_set176($this.localPointB1125, ojc_Distance$DistanceProxy2836_getVertex1236($this.m_proxyB1119, c[1]));
             ojc_Transform2027_mulToOutUnsafe802($this.xfa1124, $this.localPointA1122, $this.pointA1132);
             ojc_Transform2027_mulToOutUnsafe802($this.xfb1128, $this.localPointB1125, $this.pointB1133);
             return ojc_Vec22016_dot798(ojc_Vec22016_subLocal804($this.pointB1133, $this.pointA1132), $this.m_axis1130);
         case 2:
-            b_t = a_indexes.data;
+            c = a_indexes.data;
             ojc_Rot2779_mulToOutUnsafe1054($this.xfa1124.q2029, $this.m_axis1130, $this.normal1114);
             ojc_Transform2027_mulToOutUnsafe802($this.xfa1124, $this.m_localPoint1129, $this.pointA1132);
             ojc_Rot2779_mulTransUnsafe1234($this.xfb1128.q2029, ojc_Vec22016_negateLocal814($this.normal1114), $this.axisB1118);
             ojc_Vec22016_negateLocal814($this.normal1114);
-            b_t[0] =  -1;
-            b_t[1] = ojc_Distance$DistanceProxy2836_getSupport1235($this.m_proxyB1119, $this.axisB1118);
-            ojc_Vec22016_set176($this.localPointB1125, ojc_Distance$DistanceProxy2836_getVertex1236($this.m_proxyB1119, b_t[1]));
+            c[0] =  -1;
+            c[1] = ojc_Distance$DistanceProxy2836_getSupport1235($this.m_proxyB1119, $this.axisB1118);
+            ojc_Vec22016_set176($this.localPointB1125, ojc_Distance$DistanceProxy2836_getVertex1236($this.m_proxyB1119, c[1]));
             ojc_Transform2027_mulToOutUnsafe802($this.xfb1128, $this.localPointB1125, $this.pointB1133);
             return ojc_Vec22016_dot798(ojc_Vec22016_subLocal804($this.pointB1133, $this.pointA1132), $this.normal1114);
         case 3:
-            b_t = a_indexes.data;
+            c = a_indexes.data;
             ojc_Rot2779_mulToOutUnsafe1054($this.xfb1128.q2029, $this.m_axis1130, $this.normal1114);
             ojc_Transform2027_mulToOutUnsafe802($this.xfb1128, $this.m_localPoint1129, $this.pointB1133);
             ojc_Rot2779_mulTransUnsafe1234($this.xfa1124.q2029, ojc_Vec22016_negateLocal814($this.normal1114), $this.axisA1120);
             ojc_Vec22016_negateLocal814($this.normal1114);
-            b_t[1] =  -1;
-            b_t[0] = ojc_Distance$DistanceProxy2836_getSupport1235($this.m_proxyA1116, $this.axisA1120);
-            ojc_Vec22016_set176($this.localPointA1122, ojc_Distance$DistanceProxy2836_getVertex1236($this.m_proxyA1116, b_t[0]));
+            c[1] =  -1;
+            c[0] = ojc_Distance$DistanceProxy2836_getSupport1235($this.m_proxyA1116, $this.axisA1120);
+            ojc_Vec22016_set176($this.localPointA1122, ojc_Distance$DistanceProxy2836_getVertex1236($this.m_proxyA1116, c[0]));
             ojc_Transform2027_mulToOutUnsafe802($this.xfa1124, $this.localPointA1122, $this.pointA1132);
             return ojc_Vec22016_dot798(ojc_Vec22016_subLocal804($this.pointA1132, $this.pointB1133), $this.normal1114);
         default:
@@ -21090,9 +21094,9 @@ function ojc_SeparationFunction1112_findMinSeparation777($this, a_indexes, b_t) 
     if (ojc_SeparationFunction1112.$assertionsDisabled1134 == 0) {
         $rt_throw(jl_AssertionError746_$init4());
     }
-    b_t = a_indexes.data;
-    b_t[0] =  -1;
-    b_t[1] =  -1;
+    c = a_indexes.data;
+    c[0] =  -1;
+    c[1] =  -1;
     return 0.0;
 }
 function ojc_SeparationFunction1112_evaluate778($this, a_indexA, b_indexB, c_t) {
@@ -21133,7 +21137,7 @@ function ojc_SeparationFunction1112_evaluate778($this, a_indexA, b_indexB, c_t) 
     $rt_throw(jl_AssertionError746_$init4());
 }
 function ojc_SeparationFunction1112_initialize776($this, a_cache, b_proxyA, c_sweepA, d_proxyB, e_sweepB, f_t1) {
-    var g, h;
+    var g;
     $this.m_proxyA1116 = b_proxyA;
     $this.m_proxyB1119 = d_proxyB;
     g = a_cache.count2821;
@@ -21168,12 +21172,12 @@ function ojc_SeparationFunction1112_initialize776($this, a_cache, b_proxyA, c_sw
         ojc_Vec22016_set176($this.localPointA1122, ojc_Distance$DistanceProxy2836_getVertex1236(b_proxyA, a_cache.indexA2820.data[0]));
         ojc_Transform2027_mulToOutUnsafe802($this.xfa1124, $this.localPointA1122, $this.pointA1132);
         ojc_Vec22016_subLocal804(ojc_Vec22016_set176($this.temp1115, $this.pointA1132), $this.pointB1133);
-        a_cache = ojc_Vec22016_dot798($this.temp1115, $this.normal1114);
-        if (a_cache < 0.0) {
+        e_sweepB = ojc_Vec22016_dot798($this.temp1115, $this.normal1114);
+        if (e_sweepB < 0.0) {
             ojc_Vec22016_negateLocal814($this.m_axis1130);
-            a_cache =  -a_cache;
+            e_sweepB =  -e_sweepB;
         }
-        return a_cache;
+        return e_sweepB;
     }
     ojc_Type143_$clinit();
     $this.m_type1131 = ojc_Type143.FACE_A145;
@@ -21188,12 +21192,12 @@ function ojc_SeparationFunction1112_initialize776($this, a_cache, b_proxyA, c_sw
     ojc_Vec22016_set176($this.localPointB1125, ojc_Distance$DistanceProxy2836_getVertex1236($this.m_proxyB1119, a_cache.indexB2822.data[0]));
     ojc_Transform2027_mulToOutUnsafe802($this.xfb1128, $this.localPointB1125, $this.pointB1133);
     ojc_Vec22016_subLocal804(ojc_Vec22016_set176($this.temp1115, $this.pointB1133), $this.pointA1132);
-    h = ojc_Vec22016_dot798($this.temp1115, $this.normal1114);
-    if (h < 0.0) {
+    e_sweepB = ojc_Vec22016_dot798($this.temp1115, $this.normal1114);
+    if (e_sweepB < 0.0) {
         ojc_Vec22016_negateLocal814($this.m_axis1130);
-        h =  -h;
+        e_sweepB =  -e_sweepB;
     }
-    return h;
+    return e_sweepB;
 }
 function jt_DateFormatElement$MonthText1135_$init1238(a_cache, b_proxyA) {
     var $r = new jt_DateFormatElement$MonthText1135();
@@ -21208,14 +21212,14 @@ function jt_DateFormatElement$MonthText1135_$init1239($this, a_symbols, b_abbrev
     return;
 }
 function jt_DateFormatElement$MonthText1135_format140($this, a_date, b_buffer) {
-    var c;
-    a_date = ju_Calendar210_get141(a_date, 2);
+    var c, d;
+    c = ju_Calendar210_get141(a_date, 2);
     if ($this.abbreviated1138 == 0) {
-        c = $this.months1136.data[a_date];
+        d = $this.months1136.data[c];
     } else {
-        c = $this.shortMonths1137.data[a_date];
+        d = $this.shortMonths1137.data[c];
     }
-    jl_StringBuffer243_append374(b_buffer, c);
+    jl_StringBuffer243_append374(b_buffer, d);
     return;
 }
 function dmgc_GameObjectConfigurationChanged1139_$clinit() {
@@ -21298,10 +21302,10 @@ function dmgs_RunScriptAction1145_invoke55($this, a_aScene, b_aResult) {
     return;
 }
 function dmgs_RunScriptAction1145_unmarshall150(a_aSerializedData) {
-    var b;
+    var b, c;
     b = dmgs_RunScriptAction1145_$init4();
-    a_aSerializedData = dmgt_Script1415_deserialize1246(a_aSerializedData.get47($rt_s(268)));
-    dmge_Property43_setQuietly132(b.script1146, a_aSerializedData);
+    c = dmgt_Script1415_deserialize1246(a_aSerializedData.get47($rt_s(268)));
+    dmge_Property43_setQuietly132(b.script1146, c);
     return b;
 }
 function dmgs_RunScriptAction1145_$init8($this) {
@@ -21597,15 +21601,15 @@ function dmgt_TeaVMGameLoader1176_access$0001264(a_x0, b_x1) {
     return dmgt_TeaVMGameLoader1176_parse1262(a_x0, b_x1);
 }
 function dmgt_TeaVMGameLoader1176_loadFromServer1265($this) {
-    var a, b, c;
+    var a, b, c, d;
     a = new XMLHttpRequest() ;
     b = $rt_s(247);
     a.overrideMimeType($rt_ustr(b));
-    b = $rt_s(248);
-    c = $rt_s(271);
-    a.open($rt_ustr(b), $rt_ustr(c));
-    b = otji_JS391_function601(dmgt_TeaVMGameLoader$11466_$init1267($this, a), "stateChanged");
-    a.onreadystatechange = b;
+    c = $rt_s(248);
+    d = $rt_s(271);
+    a.open($rt_ustr(c), $rt_ustr(d));
+    d = otji_JS391_function601(dmgt_TeaVMGameLoader$11466_$init1267($this, a), "stateChanged");
+    a.onreadystatechange = d;
     a.send();
     return;
 }
@@ -22153,45 +22157,45 @@ function ojc_Collision$EPCollider1266_collide818($this, a_manifold, b_edgeA, c_x
     $this.m_v21290 = b_edgeA.m_vertex22263;
     $this.m_v31291 = b_edgeA.m_vertex32264;
     f = b_edgeA.m_hasVertex02266;
-    g = b_edgeA.m_hasVertex32265;
+    c_xfA = b_edgeA.m_hasVertex32265;
     ojc_Vec22016_subLocal804(ojc_Vec22016_set176($this.edge11280, $this.m_v21290), $this.m_v11293);
     ojc_Vec22016_normalize148($this.edge11280);
     ojc_Vec22016_set807($this.m_normal11273, $this.edge11280.y2018,  -$this.edge11280.x2017);
-    h = ojc_Vec22016_dot798($this.m_normal11273, ojc_Vec22016_subLocal804(ojc_Vec22016_set176($this.temp1277, $this.m_centroidB1287), $this.m_v11293));
-    i = 0.0;
-    b_edgeA = 0.0;
+    g = ojc_Vec22016_dot798($this.m_normal11273, ojc_Vec22016_subLocal804(ojc_Vec22016_set176($this.temp1277, $this.m_centroidB1287), $this.m_v11293));
+    h = 0.0;
+    e_xfB = 0.0;
+    i = 0;
     j = 0;
-    k = 0;
     if (f != 0) {
         ojc_Vec22016_subLocal804(ojc_Vec22016_set176($this.edge01282, $this.m_v11293), $this.m_v01292);
         ojc_Vec22016_normalize148($this.edge01282);
         ojc_Vec22016_set807($this.m_normal01270, $this.edge01282.y2018,  -$this.edge01282.x2017);
         if (ojc_Vec22016_cross1061($this.edge01282, $this.edge11280) < 0.0) {
-            j = 0;
+            i = 0;
         } else {
-            j = 1;
+            i = 1;
         }
-        i = ojc_Vec22016_dot798($this.m_normal01270, ojc_Vec22016_subLocal804(ojc_Vec22016_set176($this.temp1277, $this.m_centroidB1287), $this.m_v01292));
+        h = ojc_Vec22016_dot798($this.m_normal01270, ojc_Vec22016_subLocal804(ojc_Vec22016_set176($this.temp1277, $this.m_centroidB1287), $this.m_v01292));
     }
-    if (g != 0) {
+    if (c_xfA != 0) {
         ojc_Vec22016_subLocal804(ojc_Vec22016_set176($this.edge21281, $this.m_v31291), $this.m_v21290);
         ojc_Vec22016_normalize148($this.edge21281);
         ojc_Vec22016_set807($this.m_normal21272, $this.edge21281.y2018,  -$this.edge21281.x2017);
         if (ojc_Vec22016_cross1061($this.edge11280, $this.edge21281) <= 0.0) {
-            k = 0;
+            j = 0;
         } else {
-            k = 1;
+            j = 1;
         }
-        b_edgeA = ojc_Vec22016_dot798($this.m_normal21272, ojc_Vec22016_subLocal804(ojc_Vec22016_set176($this.temp1277, $this.m_centroidB1287), $this.m_v21290));
+        e_xfB = ojc_Vec22016_dot798($this.m_normal21272, ojc_Vec22016_subLocal804(ojc_Vec22016_set176($this.temp1277, $this.m_centroidB1287), $this.m_v21290));
     }
-    if (f != 0 && g != 0) {
-        if (j != 0 && k != 0) {
-            if (i < 0.0 && h < 0.0 && b_edgeA < 0.0) {
-                b_edgeA = 0;
+    if (f != 0 && c_xfA != 0) {
+        if (i != 0 && j != 0) {
+            if (h < 0.0 && g < 0.0 && e_xfB < 0.0) {
+                e_xfB = 0;
             } else {
-                b_edgeA = 1;
+                e_xfB = 1;
             }
-            $this.m_front1276 = b_edgeA;
+            $this.m_front1276 = e_xfB;
             if ($this.m_front1276 != 0) {
                 $this.m_normal1284.x2017 = $this.m_normal11273.x2017;
                 $this.m_normal1284.y2018 = $this.m_normal11273.y2018;
@@ -22207,23 +22211,23 @@ function ojc_Collision$EPCollider1266_collide818($this, a_manifold, b_edgeA, c_x
                 $this.m_upperLimit1269.x2017 =  -$this.m_normal11273.x2017;
                 $this.m_upperLimit1269.y2018 =  -$this.m_normal11273.y2018;
             }
-        } else if (j != 0) {
+        } else if (i != 0) {
             $ba: {
                 $bb: {
-                    if (i < 0.0) {
-                        if (h < 0.0) {
+                    if (h < 0.0) {
+                        if (g < 0.0) {
                             break $bb;
                         }
-                        if (b_edgeA < 0.0) {
+                        if (e_xfB < 0.0) {
                             break $bb;
                         }
                     }
-                    b_edgeA = 1;
+                    e_xfB = 1;
                     break $ba;
                 }
-                b_edgeA = 0;
+                e_xfB = 0;
             }
-            $this.m_front1276 = b_edgeA;
+            $this.m_front1276 = e_xfB;
             if ($this.m_front1276 != 0) {
                 $this.m_normal1284.x2017 = $this.m_normal11273.x2017;
                 $this.m_normal1284.y2018 = $this.m_normal11273.y2018;
@@ -22239,13 +22243,13 @@ function ojc_Collision$EPCollider1266_collide818($this, a_manifold, b_edgeA, c_x
                 $this.m_upperLimit1269.x2017 =  -$this.m_normal11273.x2017;
                 $this.m_upperLimit1269.y2018 =  -$this.m_normal11273.y2018;
             }
-        } else if (k == 0) {
-            if (i >= 0.0 && h >= 0.0 && b_edgeA >= 0.0) {
-                b_edgeA = 1;
+        } else if (j == 0) {
+            if (h >= 0.0 && g >= 0.0 && e_xfB >= 0.0) {
+                e_xfB = 1;
             } else {
-                b_edgeA = 0;
+                e_xfB = 0;
             }
-            $this.m_front1276 = b_edgeA;
+            $this.m_front1276 = e_xfB;
             if ($this.m_front1276 != 0) {
                 $this.m_normal1284.x2017 = $this.m_normal11273.x2017;
                 $this.m_normal1284.y2018 = $this.m_normal11273.y2018;
@@ -22264,20 +22268,20 @@ function ojc_Collision$EPCollider1266_collide818($this, a_manifold, b_edgeA, c_x
         } else {
             $bc: {
                 $bd: {
-                    if (b_edgeA < 0.0) {
-                        if (i < 0.0) {
-                            break $bd;
-                        }
+                    if (e_xfB < 0.0) {
                         if (h < 0.0) {
                             break $bd;
                         }
+                        if (g < 0.0) {
+                            break $bd;
+                        }
                     }
-                    b_edgeA = 1;
+                    e_xfB = 1;
                     break $bc;
                 }
-                b_edgeA = 0;
+                e_xfB = 0;
             }
-            $this.m_front1276 = b_edgeA;
+            $this.m_front1276 = e_xfB;
             if ($this.m_front1276 != 0) {
                 $this.m_normal1284.x2017 = $this.m_normal11273.x2017;
                 $this.m_normal1284.y2018 = $this.m_normal11273.y2018;
@@ -22295,13 +22299,13 @@ function ojc_Collision$EPCollider1266_collide818($this, a_manifold, b_edgeA, c_x
             }
         }
     } else if (f != 0) {
-        if (j == 0) {
-            if (i >= 0.0 && h >= 0.0) {
-                b_edgeA = 1;
+        if (i == 0) {
+            if (h >= 0.0 && g >= 0.0) {
+                e_xfB = 1;
             } else {
-                b_edgeA = 0;
+                e_xfB = 0;
             }
-            $this.m_front1276 = b_edgeA;
+            $this.m_front1276 = e_xfB;
             if ($this.m_front1276 != 0) {
                 $this.m_normal1284.x2017 = $this.m_normal11273.x2017;
                 $this.m_normal1284.y2018 = $this.m_normal11273.y2018;
@@ -22318,12 +22322,12 @@ function ojc_Collision$EPCollider1266_collide818($this, a_manifold, b_edgeA, c_x
                 $this.m_upperLimit1269.y2018 =  -$this.m_normal01270.y2018;
             }
         } else {
-            if (i < 0.0 && h < 0.0) {
-                b_edgeA = 0;
+            if (h < 0.0 && g < 0.0) {
+                e_xfB = 0;
             } else {
-                b_edgeA = 1;
+                e_xfB = 1;
             }
-            $this.m_front1276 = b_edgeA;
+            $this.m_front1276 = e_xfB;
             if ($this.m_front1276 != 0) {
                 $this.m_normal1284.x2017 = $this.m_normal11273.x2017;
                 $this.m_normal1284.y2018 = $this.m_normal11273.y2018;
@@ -22340,13 +22344,13 @@ function ojc_Collision$EPCollider1266_collide818($this, a_manifold, b_edgeA, c_x
                 $this.m_upperLimit1269.y2018 =  -$this.m_normal11273.y2018;
             }
         }
-    } else if (g == 0) {
-        if (h < 0.0) {
-            b_edgeA = 0;
+    } else if (c_xfA == 0) {
+        if (g < 0.0) {
+            e_xfB = 0;
         } else {
-            b_edgeA = 1;
+            e_xfB = 1;
         }
-        $this.m_front1276 = b_edgeA;
+        $this.m_front1276 = e_xfB;
         if ($this.m_front1276 == 0) {
             $this.m_normal1284.x2017 =  -$this.m_normal11273.x2017;
             $this.m_normal1284.y2018 =  -$this.m_normal11273.y2018;
@@ -22362,13 +22366,13 @@ function ojc_Collision$EPCollider1266_collide818($this, a_manifold, b_edgeA, c_x
             $this.m_upperLimit1269.x2017 =  -$this.m_normal11273.x2017;
             $this.m_upperLimit1269.y2018 =  -$this.m_normal11273.y2018;
         }
-    } else if (k == 0) {
-        if (h >= 0.0 && b_edgeA >= 0.0) {
-            b_edgeA = 1;
+    } else if (j == 0) {
+        if (g >= 0.0 && e_xfB >= 0.0) {
+            e_xfB = 1;
         } else {
-            b_edgeA = 0;
+            e_xfB = 0;
         }
-        $this.m_front1276 = b_edgeA;
+        $this.m_front1276 = e_xfB;
         if ($this.m_front1276 != 0) {
             $this.m_normal1284.x2017 = $this.m_normal11273.x2017;
             $this.m_normal1284.y2018 = $this.m_normal11273.y2018;
@@ -22385,12 +22389,12 @@ function ojc_Collision$EPCollider1266_collide818($this, a_manifold, b_edgeA, c_x
             $this.m_upperLimit1269.y2018 = $this.m_normal11273.y2018;
         }
     } else {
-        if (h < 0.0 && b_edgeA < 0.0) {
-            b_edgeA = 0;
+        if (g < 0.0 && e_xfB < 0.0) {
+            e_xfB = 0;
         } else {
-            b_edgeA = 1;
+            e_xfB = 1;
         }
-        $this.m_front1276 = b_edgeA;
+        $this.m_front1276 = e_xfB;
         if ($this.m_front1276 != 0) {
             $this.m_normal1284.x2017 = $this.m_normal11273.x2017;
             $this.m_normal1284.y2018 = $this.m_normal11273.y2018;
@@ -22408,71 +22412,71 @@ function ojc_Collision$EPCollider1266_collide818($this, a_manifold, b_edgeA, c_x
         }
     }
     $this.m_polygonB1289.count2730 = d_polygonB.m_count1496;
-    j = 0;
-    while (j < d_polygonB.m_count1496) {
-        ojc_Transform2027_mulToOutUnsafe802($this.m_xf1285, d_polygonB.m_vertices1501.data[j], $this.m_polygonB1289.vertices2729.data[j]);
-        ojc_Rot2779_mulToOutUnsafe1054($this.m_xf1285.q2029, d_polygonB.m_normals1498.data[j], $this.m_polygonB1289.normals2731.data[j]);
-        j = j + 1 | 0;
+    e_xfB = 0;
+    while (e_xfB < d_polygonB.m_count1496) {
+        ojc_Transform2027_mulToOutUnsafe802($this.m_xf1285, d_polygonB.m_vertices1501.data[e_xfB], $this.m_polygonB1289.vertices2729.data[e_xfB]);
+        ojc_Rot2779_mulToOutUnsafe1054($this.m_xf1285.q2029, d_polygonB.m_normals1498.data[e_xfB], $this.m_polygonB1289.normals2731.data[e_xfB]);
+        e_xfB = e_xfB + 1 | 0;
     }
     $this.m_radius1288 = 0.02;
     a_manifold.pointCount823 = 0;
     ojc_Collision$EPCollider1266_computeEdgeSeparation1311($this, $this.edgeAxis1268);
-    b_edgeA = $this.edgeAxis1268.type2318;
+    e_xfB = $this.edgeAxis1268.type2318;
     ojc_Collision$EPAxis$Type2846_$clinit();
-    if (b_edgeA === ojc_Collision$EPAxis$Type2846.UNKNOWN2848) {
+    if (e_xfB === ojc_Collision$EPAxis$Type2846.UNKNOWN2848) {
         return;
     }
     if ($this.edgeAxis1268.separation2316 > $this.m_radius1288) {
         return;
     }
     ojc_Collision$EPCollider1266_computePolygonSeparation1312($this, $this.polygonAxis1271);
-    b_edgeA = $this.polygonAxis1271.type2318;
+    e_xfB = $this.polygonAxis1271.type2318;
     ojc_Collision$EPAxis$Type2846_$clinit();
-    if (b_edgeA !== ojc_Collision$EPAxis$Type2846.UNKNOWN2848 && $this.polygonAxis1271.separation2316 > $this.m_radius1288) {
+    if (e_xfB !== ojc_Collision$EPAxis$Type2846.UNKNOWN2848 && $this.polygonAxis1271.separation2316 > $this.m_radius1288) {
         return;
     }
-    m = $this.polygonAxis1271.type2318;
+    k = $this.polygonAxis1271.type2318;
     ojc_Collision$EPAxis$Type2846_$clinit();
-    if (m === ojc_Collision$EPAxis$Type2846.UNKNOWN2848) {
-        n = $this.edgeAxis1268;
+    if (k === ojc_Collision$EPAxis$Type2846.UNKNOWN2848) {
+        m = $this.edgeAxis1268;
     } else if ($this.polygonAxis1271.separation2316 <= 0.98 * $this.edgeAxis1268.separation2316 + 0.001) {
-        n = $this.edgeAxis1268;
+        m = $this.edgeAxis1268;
     } else {
-        n = $this.polygonAxis1271;
+        m = $this.polygonAxis1271;
     }
-    m = $this.ie1274.data[0];
-    h = $this.ie1274.data[1];
-    c_xfA = n.type2318;
+    k = $this.ie1274.data[0];
+    n = $this.ie1274.data[1];
+    b_edgeA = m.type2318;
     ojc_Collision$EPAxis$Type2846_$clinit();
-    if (c_xfA !== ojc_Collision$EPAxis$Type2846.EDGE_A2847) {
+    if (b_edgeA !== ojc_Collision$EPAxis$Type2846.EDGE_A2847) {
         ojc_Manifold$ManifoldType2245_$clinit();
         a_manifold.type826 = ojc_Manifold$ManifoldType2245.FACE_B2247;
-        ojc_Vec22016_set176(m.v250, $this.m_v11293);
-        m.id251.indexA48 = 0;
-        m.id251.indexB49 = n.index2317 << 24 >> 24;
-        c_xfA = m.id251;
+        ojc_Vec22016_set176(k.v250, $this.m_v11293);
+        k.id251.indexA48 = 0;
+        k.id251.indexB49 = m.index2317 << 24 >> 24;
+        b_edgeA = k.id251;
         ojc_ContactID$Type597_$clinit();
-        c_xfA.typeA50 = jl_Enum140_ordinal147(ojc_ContactID$Type597.VERTEX598) << 24 >> 24;
-        c_xfA = m.id251;
+        b_edgeA.typeA50 = jl_Enum140_ordinal147(ojc_ContactID$Type597.VERTEX598) << 24 >> 24;
+        b_edgeA = k.id251;
         ojc_ContactID$Type597_$clinit();
-        c_xfA.typeB47 = jl_Enum140_ordinal147(ojc_ContactID$Type597.FACE599) << 24 >> 24;
-        ojc_Vec22016_set176(h.v250, $this.m_v21290);
-        h.id251.indexA48 = 0;
-        h.id251.indexB49 = n.index2317 << 24 >> 24;
-        j = h.id251;
+        b_edgeA.typeB47 = jl_Enum140_ordinal147(ojc_ContactID$Type597.FACE599) << 24 >> 24;
+        ojc_Vec22016_set176(n.v250, $this.m_v21290);
+        n.id251.indexA48 = 0;
+        n.id251.indexB49 = m.index2317 << 24 >> 24;
+        e_xfB = n.id251;
         ojc_ContactID$Type597_$clinit();
-        j.typeA50 = jl_Enum140_ordinal147(ojc_ContactID$Type597.VERTEX598) << 24 >> 24;
-        c_xfA = h.id251;
+        e_xfB.typeA50 = jl_Enum140_ordinal147(ojc_ContactID$Type597.VERTEX598) << 24 >> 24;
+        k = n.id251;
         ojc_ContactID$Type597_$clinit();
-        c_xfA.typeB47 = jl_Enum140_ordinal147(ojc_ContactID$Type597.FACE599) << 24 >> 24;
-        $this.rf1286.i1568 = n.index2317;
-        b_edgeA = $this.rf1286;
+        k.typeB47 = jl_Enum140_ordinal147(ojc_ContactID$Type597.FACE599) << 24 >> 24;
+        $this.rf1286.i1568 = m.index2317;
+        e_xfB = $this.rf1286;
         if (($this.rf1286.i1568 + 1 | 0) >= $this.m_polygonB1289.count2730) {
-            j = 0;
+            h = 0;
         } else {
-            j = $this.rf1286.i1568 + 1 | 0;
+            h = $this.rf1286.i1568 + 1 | 0;
         }
-        b_edgeA.i2569 = j;
+        e_xfB.i2569 = h;
         ojc_Vec22016_set176($this.rf1286.v1570, $this.m_polygonB1289.vertices2729.data[$this.rf1286.i1568]);
         ojc_Vec22016_set176($this.rf1286.v2571, $this.m_polygonB1289.vertices2729.data[$this.rf1286.i2569]);
         ojc_Vec22016_set176($this.rf1286.normal564, $this.m_polygonB1289.normals2731.data[$this.rf1286.i1568]);
@@ -22480,39 +22484,39 @@ function ojc_Collision$EPCollider1266_collide818($this, a_manifold, b_edgeA, c_x
         ojc_Manifold$ManifoldType2245_$clinit();
         a_manifold.type826 = ojc_Manifold$ManifoldType2245.FACE_A2248;
         o = 0;
-        b_edgeA = ojc_Vec22016_dot798($this.m_normal1284, $this.m_polygonB1289.normals2731.data[0]);
-        j = 1;
-        while (j < $this.m_polygonB1289.count2730) {
-            k = ojc_Vec22016_dot798($this.m_normal1284, $this.m_polygonB1289.normals2731.data[j]);
-            if (k < b_edgeA) {
-                o = j;
-                b_edgeA = k;
+        j = ojc_Vec22016_dot798($this.m_normal1284, $this.m_polygonB1289.normals2731.data[0]);
+        h = 1;
+        while (h < $this.m_polygonB1289.count2730) {
+            e_xfB = ojc_Vec22016_dot798($this.m_normal1284, $this.m_polygonB1289.normals2731.data[h]);
+            if (e_xfB < j) {
+                o = h;
+                j = e_xfB;
             }
-            j = j + 1 | 0;
+            h = h + 1 | 0;
         }
         if ((o + 1 | 0) >= $this.m_polygonB1289.count2730) {
-            j = 0;
+            h = 0;
         } else {
-            j = o + 1 | 0;
+            h = o + 1 | 0;
         }
-        ojc_Vec22016_set176(m.v250, $this.m_polygonB1289.vertices2729.data[o]);
-        m.id251.indexA48 = 0;
-        m.id251.indexB49 = o << 24 >> 24;
-        g = m.id251;
-        ojc_ContactID$Type597_$clinit();
-        g.typeA50 = jl_Enum140_ordinal147(ojc_ContactID$Type597.FACE599) << 24 >> 24;
-        c_xfA = m.id251;
-        ojc_ContactID$Type597_$clinit();
-        c_xfA.typeB47 = jl_Enum140_ordinal147(ojc_ContactID$Type597.VERTEX598) << 24 >> 24;
-        ojc_Vec22016_set176(h.v250, $this.m_polygonB1289.vertices2729.data[j]);
-        h.id251.indexA48 = 0;
-        h.id251.indexB49 = j << 24 >> 24;
-        c_xfA = h.id251;
+        ojc_Vec22016_set176(k.v250, $this.m_polygonB1289.vertices2729.data[o]);
+        k.id251.indexA48 = 0;
+        k.id251.indexB49 = o << 24 >> 24;
+        c_xfA = k.id251;
         ojc_ContactID$Type597_$clinit();
         c_xfA.typeA50 = jl_Enum140_ordinal147(ojc_ContactID$Type597.FACE599) << 24 >> 24;
-        m = h.id251;
+        b_edgeA = k.id251;
         ojc_ContactID$Type597_$clinit();
-        m.typeB47 = jl_Enum140_ordinal147(ojc_ContactID$Type597.VERTEX598) << 24 >> 24;
+        b_edgeA.typeB47 = jl_Enum140_ordinal147(ojc_ContactID$Type597.VERTEX598) << 24 >> 24;
+        ojc_Vec22016_set176(n.v250, $this.m_polygonB1289.vertices2729.data[h]);
+        n.id251.indexA48 = 0;
+        n.id251.indexB49 = h << 24 >> 24;
+        b_edgeA = n.id251;
+        ojc_ContactID$Type597_$clinit();
+        b_edgeA.typeA50 = jl_Enum140_ordinal147(ojc_ContactID$Type597.FACE599) << 24 >> 24;
+        b_edgeA = n.id251;
+        ojc_ContactID$Type597_$clinit();
+        b_edgeA.typeB47 = jl_Enum140_ordinal147(ojc_ContactID$Type597.VERTEX598) << 24 >> 24;
         if ($this.m_front1276 != 0) {
             $this.rf1286.i1568 = 0;
             $this.rf1286.i2569 = 1;
@@ -22537,37 +22541,37 @@ function ojc_Collision$EPCollider1266_collide818($this, a_manifold, b_edgeA, c_x
     if (ojc_Collision601_clipSegmentToLine797($this.clipPoints21278, $this.clipPoints11279, $this.rf1286.sideNormal2565, $this.rf1286.sideOffset2566, $this.rf1286.i2569) < 2) {
         return;
     }
-    f = n.type2318;
+    c_xfA = m.type2318;
     ojc_Collision$EPAxis$Type2846_$clinit();
-    if (f === ojc_Collision$EPAxis$Type2846.EDGE_A2847) {
+    if (c_xfA === ojc_Collision$EPAxis$Type2846.EDGE_A2847) {
         ojc_Vec22016_set176(a_manifold.localNormal825, $this.rf1286.normal564);
         ojc_Vec22016_set176(a_manifold.localPoint824, $this.rf1286.v1570);
     } else {
         ojc_Vec22016_set176(a_manifold.localNormal825, d_polygonB.m_normals1498.data[$this.rf1286.i1568]);
         ojc_Vec22016_set176(a_manifold.localPoint824, d_polygonB.m_vertices1501.data[$this.rf1286.i1568]);
     }
-    k = 0;
-    o = 0;
-    while (o < 2) {
-        if (ojc_Vec22016_dot798($this.rf1286.normal564, ojc_Vec22016_subLocal804(ojc_Vec22016_set176($this.temp1277, $this.clipPoints21278.data[o].v250), $this.rf1286.v1570)) <= $this.m_radius1288) {
-            b_edgeA = a_manifold.points827.data[k];
-            c_xfA = n.type2318;
+    e_xfB = 0;
+    h = 0;
+    while (h < 2) {
+        if (ojc_Vec22016_dot798($this.rf1286.normal564, ojc_Vec22016_subLocal804(ojc_Vec22016_set176($this.temp1277, $this.clipPoints21278.data[h].v250), $this.rf1286.v1570)) <= $this.m_radius1288) {
+            j = a_manifold.points827.data[e_xfB];
+            k = m.type2318;
             ojc_Collision$EPAxis$Type2846_$clinit();
-            if (c_xfA === ojc_Collision$EPAxis$Type2846.EDGE_A2847) {
-                ojc_Transform2027_mulTransToOutUnsafe803($this.m_xf1285, $this.clipPoints21278.data[o].v250, b_edgeA.localPoint2332);
-                ojc_ContactID46_set136(b_edgeA.id2334, $this.clipPoints21278.data[o].id251);
+            if (k === ojc_Collision$EPAxis$Type2846.EDGE_A2847) {
+                ojc_Transform2027_mulTransToOutUnsafe803($this.m_xf1285, $this.clipPoints21278.data[h].v250, j.localPoint2332);
+                ojc_ContactID46_set136(j.id2334, $this.clipPoints21278.data[h].id251);
             } else {
-                ojc_Vec22016_set176(b_edgeA.localPoint2332, $this.clipPoints21278.data[o].v250);
-                b_edgeA.id2334.typeA50 = $this.clipPoints21278.data[o].id251.typeB47;
-                b_edgeA.id2334.typeB47 = $this.clipPoints21278.data[o].id251.typeA50;
-                b_edgeA.id2334.indexA48 = $this.clipPoints21278.data[o].id251.indexB49;
-                b_edgeA.id2334.indexB49 = $this.clipPoints21278.data[o].id251.indexA48;
+                ojc_Vec22016_set176(j.localPoint2332, $this.clipPoints21278.data[h].v250);
+                j.id2334.typeA50 = $this.clipPoints21278.data[h].id251.typeB47;
+                j.id2334.typeB47 = $this.clipPoints21278.data[h].id251.typeA50;
+                j.id2334.indexA48 = $this.clipPoints21278.data[h].id251.indexB49;
+                j.id2334.indexB49 = $this.clipPoints21278.data[h].id251.indexA48;
             }
-            k = k + 1 | 0;
+            e_xfB = e_xfB + 1 | 0;
         }
-        o = o + 1 | 0;
+        h = h + 1 | 0;
     }
-    a_manifold.pointCount823 = k;
+    a_manifold.pointCount823 = e_xfB;
     return;
 }
 function ojc_Collision$EPCollider1266_computePolygonSeparation1312($this, a_axis) {
@@ -22714,32 +22718,32 @@ function ju_TimeZone1294_$clinit() {
                 c = jl_String1_charAt72(a_name, 3);
                 if (!(c != 43 && c != 45)) {
                     d = $rt_createIntArray(1);
-                    a_name = ju_TimeZone1294_formatTimeZoneName1313(a_name, 4);
-                    e = ju_TimeZone1294_parseNumber1320(a_name, 4, d);
-                    if (e >= 0 && e <= 23) {
-                        f = d.data;
-                        g = f[0];
-                        if (g ==  -1) {
+                    e = ju_TimeZone1294_formatTimeZoneName1313(a_name, 4);
+                    f = ju_TimeZone1294_parseNumber1320(e, 4, d);
+                    if (f >= 0 && f <= 23) {
+                        g = d.data;
+                        h = g[0];
+                        if (h ==  -1) {
                             break $ba;
                         } else {
                             $bb: {
-                                h = e * 3600000 | 0;
-                                if (g < jl_String1_length2(a_name) && jl_String1_charAt72(a_name, g) == 58) {
-                                    i = ju_TimeZone1294_parseNumber1320(a_name, g + 1 | 0, d);
-                                    if (f[0] !=  -1 && i >= 0 && i <= 59) {
-                                        h = h + (i * 60000 | 0) | 0;
+                                i = f * 3600000 | 0;
+                                if (h < jl_String1_length2(e) && jl_String1_charAt72(e, h) == 58) {
+                                    f = ju_TimeZone1294_parseNumber1320(e, h + 1 | 0, d);
+                                    if (g[0] !=  -1 && f >= 0 && f <= 59) {
+                                        i = i + (f * 60000 | 0) | 0;
                                         break $bb;
                                     }
                                     return ju_IANATimeZone1298_clone10(ju_TimeZone1294.GMT1297);
                                 }
-                                if (!(e < 30 && g <= 6)) {
-                                    h = ((e / 100 | 0) * 3600000 | 0) + (e % 100 * 60000 | 0) | 0;
+                                if (!(f < 30 && h <= 6)) {
+                                    i = ((f / 100 | 0) * 3600000 | 0) + (f % 100 * 60000 | 0) | 0;
                                 }
                             }
                             if (c == 45) {
-                                h =  -h | 0;
+                                i =  -i | 0;
                             }
-                            return ju_IANATimeZone1298_$init1319(otcit_FixedDateTimeZone1417_$init1322(a_name, h, h));
+                            return ju_IANATimeZone1298_$init1319(otcit_FixedDateTimeZone1417_$init1322(e, i, i));
                         }
                     }
                     return ju_IANATimeZone1298_clone10(ju_TimeZone1294.GMT1297);
@@ -23074,31 +23078,31 @@ function dmgt_BuiltInFunctionsClassInformation1329_$clinit() {
         dmgt_BuiltInFunctionsClassInformation$21541_$init302(a, b, c, d);
         dmgt_BuiltInFunctionsClassInformation1329.FORMATTIME1330 = a;
         a = new dmgt_BuiltInFunctionsClassInformation$31505;
-        f = $rt_s(298);
-        c = $rt_cls(jl_Number19);
+        c = $rt_s(298);
+        b = $rt_cls(jl_Number19);
         e = $rt_createArray(jl_Class0, 2);
         d = e.data;
         d[0] = $rt_cls(jl_Number19);
         d[1] = $rt_cls(jl_Number19);
-        dmgt_BuiltInFunctionsClassInformation$31505_$init302(a, f, c, e);
+        dmgt_BuiltInFunctionsClassInformation$31505_$init302(a, c, b, e);
         dmgt_BuiltInFunctionsClassInformation1329.MAX1332 = a;
         a = new dmgt_BuiltInFunctionsClassInformation$41504;
-        c = $rt_s(299);
+        f = $rt_s(299);
         b = $rt_cls(jl_Number19);
-        d = $rt_createArray(jl_Class0, 2);
-        e = d.data;
-        e[0] = $rt_cls(jl_Number19);
-        e[1] = $rt_cls(jl_Number19);
-        dmgt_BuiltInFunctionsClassInformation$41504_$init302(a, c, b, d);
+        e = $rt_createArray(jl_Class0, 2);
+        d = e.data;
+        d[0] = $rt_cls(jl_Number19);
+        d[1] = $rt_cls(jl_Number19);
+        dmgt_BuiltInFunctionsClassInformation$41504_$init302(a, f, b, e);
         dmgt_BuiltInFunctionsClassInformation1329.MIN1331 = a;
         a = new dmgt_BuiltInFunctionsClassInformation$51503;
-        c = $rt_s(300);
-        f = $rt_cls(jl_Object2);
+        f = $rt_s(300);
+        b = $rt_cls(jl_Object2);
         d = $rt_createArray(jl_Class0, 2);
         e = d.data;
         e[0] = $rt_cls(jl_Object2);
         e[1] = $rt_cls(jl_Object2);
-        dmgt_BuiltInFunctionsClassInformation$51503_$init302(a, c, f, d);
+        dmgt_BuiltInFunctionsClassInformation$51503_$init302(a, f, b, d);
         dmgt_BuiltInFunctionsClassInformation1329.NVL1333 = a;
         return;
     };
@@ -23429,14 +23433,14 @@ function olv_LuaTable$DeadSlot1358_arraykey516($this, a) {
 }
 function olv_LuaTable$DeadSlot1358_set517($this, a_target, b_value) {
     if ($this.next1359 === null) {
-        a_target = null;
+        b_value = null;
     } else {
-        a_target = $this.next1359.set517(a_target, b_value);
+        b_value = $this.next1359.set517(a_target, b_value);
     }
     if (olv_LuaTable$DeadSlot1358_key526($this) === null) {
-        return a_target;
+        return b_value;
     }
-    $this.next1359 = a_target;
+    $this.next1359 = b_value;
     return $this;
 }
 function olv_LuaTable$DeadSlot1358_rest519($this) {
@@ -23680,7 +23684,7 @@ function otcit_StorableDateTimeZone1389_readUnsignedTime1051(a_flow) {
     return Long_mul(Long_shru(b, 1), Long_fromInt(1800000));
 }
 function otcit_StorableDateTimeZone1389_readTimeArray1364(a_flow, b_array) {
-    var c, d, e, f, g, h;
+    var c, d, e, f, g;
     c = 0;
     while (true) {
         d = b_array.data;
@@ -23691,26 +23695,26 @@ function otcit_StorableDateTimeZone1389_readTimeArray1364(a_flow, b_array) {
         if (e < 0) {
             f = e ^  -1;
             while (true) {
-                e = f +  -1 | 0;
+                g = f +  -1 | 0;
                 if (f <= 0) {
                     break;
                 }
-                f = c + 1 | 0;
+                e = c + 1 | 0;
                 d[c] = otcit_StorableDateTimeZone1389_readTime1037(a_flow).lo;
-                c = f;
-                f = e;
+                c = e;
+                f = g;
             }
         } else {
-            g = otcit_StorableDateTimeZone1389_readTime1037(a_flow).lo;
+            f = otcit_StorableDateTimeZone1389_readTime1037(a_flow).lo;
             while (true) {
-                f = e +  -1 | 0;
+                g = e +  -1 | 0;
                 if (e <= 0) {
                     break;
                 }
-                h = c + 1 | 0;
-                d[c] = g;
-                c = h;
-                e = f;
+                e = c + 1 | 0;
+                d[c] = f;
+                c = e;
+                e = g;
             }
         }
     }
@@ -23789,24 +23793,24 @@ function otcit_DateTimeZoneBuilder$PrecalculatedZone1390_previousTransition1368(
     return Long_sub(e, Long_fromInt(1));
 }
 function otcit_DateTimeZoneBuilder$PrecalculatedZone1390_getOffset1173($this, a_instant) {
-    var b, c, d, e;
+    var b, c, d;
     b = $this.iTransitions1392;
     c = ju_Arrays2037_binarySearch1369(b, a_instant);
     if (c >= 0) {
         return $this.iWallOffsets1391.data[c];
     }
     d = b.data;
-    e = c ^  -1;
-    if (e < d.length) {
-        if (e <= 0) {
+    c = c ^  -1;
+    if (c < d.length) {
+        if (c <= 0) {
             return 0;
         }
-        return $this.iWallOffsets1391.data[e - 1 | 0];
+        return $this.iWallOffsets1391.data[c - 1 | 0];
     }
     if ($this.iTailZone1394 !== null) {
         return otcit_DateTimeZoneBuilder$DSTZone2078_getOffset1173($this.iTailZone1394, a_instant);
     }
-    return $this.iWallOffsets1391.data[e - 1 | 0];
+    return $this.iWallOffsets1391.data[c - 1 | 0];
 }
 function otcit_DateTimeZoneBuilder$PrecalculatedZone1390_readZone1363(a_id, b_flow) {
     var c, d, e, f, g, h, i;
@@ -23823,10 +23827,10 @@ function otcit_DateTimeZoneBuilder$PrecalculatedZone1390_readZone1363(a_id, b_fl
     }
     otcit_StorableDateTimeZone1389_readTimeArray1364(b_flow, f);
     otcit_StorableDateTimeZone1389_readTimeArray1364(b_flow, g);
-    c = b_flow.characters948.data;
-    i = b_flow.pointer949;
-    b_flow.pointer949 = i + 1 | 0;
-    if (c[i] != 121) {
+    i = b_flow.characters948.data;
+    c = b_flow.pointer949;
+    b_flow.pointer949 = c + 1 | 0;
+    if (i[c] != 121) {
         h = null;
     } else {
         b_flow.pointer949 = b_flow.pointer949 + 1 | 0;
@@ -23859,7 +23863,7 @@ function otcit_DateTimeZoneBuilder$PrecalculatedZone1390_getStandardOffset1328($
     return $this.iStandardOffsets1393.data[e - 1 | 0];
 }
 function otcit_DateTimeZoneBuilder$PrecalculatedZone1390_nextTransition1371($this, a_instant) {
-    var b, c, d, e;
+    var b, c, d, e, f;
     b = $this.iTransitions1392;
     c = ju_Arrays2037_binarySearch1369(b, a_instant);
     if (c < 0) {
@@ -23868,14 +23872,14 @@ function otcit_DateTimeZoneBuilder$PrecalculatedZone1390_nextTransition1371($thi
         d = c + 1 | 0;
     }
     e = b.data;
-    c = e.length;
-    if (d < c) {
+    f = e.length;
+    if (d < f) {
         return e[d];
     }
     if ($this.iTailZone1394 === null) {
         return a_instant;
     }
-    d = e[c - 1 | 0];
+    d = e[f - 1 | 0];
     if (Long_compare(a_instant, d) >= 0) {
         d = a_instant;
     }
@@ -24126,7 +24130,7 @@ function dmgc_SpawnGameObjectInstanceAction1424_$init4() {
     return $r;
 }
 function dmgc_SpawnGameObjectInstanceAction1424_invoke55($this, a_aScene, b_aResult) {
-    var c, d, e, f, g, h;
+    var c, d, e, f, g;
     c = dmge_ReadOnlyProperty38_get113($this.gameObject1426);
     if (c !== null) {
         d = dmgc_ConditionResult2128_getAffectedInstances56(b_aResult).data;
@@ -24135,10 +24139,10 @@ function dmgc_SpawnGameObjectInstanceAction1424_invoke55($this, a_aScene, b_aRes
         while (f < e) {
             g = d[f];
             if (dmgc_GameObjectInstance2906_getOwnerGameObject568(g) === dmge_ReadOnlyProperty38_get113($this.referenceObject1425)) {
-                h = dmge_ReadOnlyProperty38_get113(dmgc_GameObjectInstance2906_positionProperty674(g));
-                g = dmgc_GameScene2107_createFrom1095(a_aScene, c);
-                dmge_Property43_set120(dmgc_GameObjectInstance2906_positionProperty674(g), dmgt_Position636_add824(h, dmge_ReadOnlyProperty38_get113($this.offset1427)));
-                dmgc_GameScene2107_addInstance1341(a_aScene, g);
+                g = dmge_ReadOnlyProperty38_get113(dmgc_GameObjectInstance2906_positionProperty674(g));
+                b_aResult = dmgc_GameScene2107_createFrom1095(a_aScene, c);
+                dmge_Property43_set120(dmgc_GameObjectInstance2906_positionProperty674(b_aResult), dmgt_Position636_add824(g, dmge_ReadOnlyProperty38_get113($this.offset1427)));
+                dmgc_GameScene2107_addInstance1341(a_aScene, b_aResult);
             }
             f = f + 1 | 0;
         }
@@ -24156,9 +24160,9 @@ function dmgc_SpawnGameObjectInstanceAction1424_unmarshall1393(a_aSerializedData
     if (e !== null) {
         dmge_Property43_setQuietly132(c.referenceObject1425, dmgc_GameScene2107_findObjectByID566(b_aGameScene, e));
     }
-    a_aSerializedData = a_aSerializedData.get47($rt_s(322));
-    if (a_aSerializedData !== null) {
-        dmge_Property43_setQuietly132(c.offset1427, dmgt_Position636_deserialize821(a_aSerializedData));
+    b_aGameScene = a_aSerializedData.get47($rt_s(322));
+    if (b_aGameScene !== null) {
+        dmge_Property43_setQuietly132(c.offset1427, dmgt_Position636_deserialize821(b_aGameScene));
     }
     return c;
 }
@@ -24211,13 +24215,13 @@ function dmge_PropertyChanged1432_$clinit() {
         d = a_aEventData.get47($rt_s(326));
         e = jl_Long2305_parseLong46(a_aEventData.get47($rt_s(327)));
         if (d !== null) {
-            b_aGameScene = dmgc_GameScene2107_findInstanceByID1339(b_aGameScene, d);
-            if (b_aGameScene !== null) {
-                d = a_aEventData.get47($rt_s(328));
-                if (d === null) {
-                    dmgt_DistributableUtils2346_setField1396(b_aGameScene, c, a_aEventData.get47($rt_s(329)), e);
+            d = dmgc_GameScene2107_findInstanceByID1339(b_aGameScene, d);
+            if (d !== null) {
+                b_aGameScene = a_aEventData.get47($rt_s(328));
+                if (b_aGameScene === null) {
+                    dmgt_DistributableUtils2346_setField1396(d, c, a_aEventData.get47($rt_s(329)), e);
                 } else {
-                    b_aGameScene = dmgc_GameObjectInstance2906_findBehaviorByType1397(b_aGameScene, d);
+                    b_aGameScene = dmgc_GameObjectInstance2906_findBehaviorByType1397(d, b_aGameScene);
                     if (b_aGameScene !== null) {
                         dmgt_DistributableUtils2346_setField1396(b_aGameScene, c, a_aEventData.get47($rt_s(329)), e);
                     }
@@ -24435,17 +24439,17 @@ function ojd_Body1436_setActive1407($this, a_flag) {
         }
     } else {
         $this.m_flags1437 = $this.m_flags1437 &  -33;
-        a_flag = $this.m_world1445.m_contactManager97.m_broadPhase1894;
-        c = $this.m_fixtureList1457;
-        while (c !== null) {
-            ojd_Fixture421_destroyProxies252(c, a_flag);
-            c = c.m_next427;
-        }
-        a_flag = $this.m_contactList1454;
+        c = $this.m_world1445.m_contactManager97.m_broadPhase1894;
+        a_flag = $this.m_fixtureList1457;
         while (a_flag !== null) {
-            d = a_flag.next1610;
-            ojd_ContactManager1889_destroy250($this.m_world1445.m_contactManager97, a_flag.contact1612);
-            a_flag = d;
+            ojd_Fixture421_destroyProxies252(a_flag, c);
+            a_flag = a_flag.m_next427;
+        }
+        d = $this.m_contactList1454;
+        while (d !== null) {
+            c = d.next1610;
+            ojd_ContactManager1889_destroy250($this.m_world1445.m_contactManager97, d.contact1612);
+            d = c;
         }
         $this.m_contactList1454 = null;
     }
@@ -24471,25 +24475,25 @@ function ojd_Body1436_synchronizeTransform241($this) {
     return;
 }
 function ojd_Body1436_shouldCollide1410($this, a_other) {
-    var b, c, d;
+    var b, c;
     b = $this.m_type1462;
     ojd_BodyType2123_$clinit();
     if (b !== ojd_BodyType2123.DYNAMIC2127) {
-        c = a_other.m_type1462;
+        b = a_other.m_type1462;
         ojd_BodyType2123_$clinit();
-        if (c !== ojd_BodyType2123.DYNAMIC2127) {
+        if (b !== ojd_BodyType2123.DYNAMIC2127) {
             return 0;
         }
     }
-    d = $this.m_jointList1459;
+    c = $this.m_jointList1459;
     while (true) {
-        if (d === null) {
+        if (c === null) {
             return 1;
         }
-        if (d.other1934 === a_other && d.joint1935.getCollideConnected254() == 0) {
+        if (c.other1934 === a_other && c.joint1935.getCollideConnected254() == 0) {
             break;
         }
-        d = d.next1933;
+        c = c.next1933;
     }
     return 0;
 }
@@ -24526,7 +24530,7 @@ function ojd_Body1436_isAwake194($this) {
     return a;
 }
 function ojd_Body1436_applyLinearImpulse1413($this, a_impulse, b_point) {
-    var c, d;
+    var c;
     c = $this.m_type1462;
     ojd_BodyType2123_$clinit();
     if (c !== ojd_BodyType2123.DYNAMIC2127) {
@@ -24535,10 +24539,10 @@ function ojd_Body1436_applyLinearImpulse1413($this, a_impulse, b_point) {
     if (ojd_Body1436_isAwake194($this) == 0) {
         ojd_Body1436_setAwake198($this, 1);
     }
-    d = $this.m_linearVelocity1455;
-    d.x2017 = d.x2017 + a_impulse.x2017 * $this.m_invMass1440;
-    d = $this.m_linearVelocity1455;
-    d.y2018 = d.y2018 + a_impulse.y2018 * $this.m_invMass1440;
+    c = $this.m_linearVelocity1455;
+    c.x2017 = c.x2017 + a_impulse.x2017 * $this.m_invMass1440;
+    c = $this.m_linearVelocity1455;
+    c.y2018 = c.y2018 + a_impulse.y2018 * $this.m_invMass1440;
     $this.m_angularVelocity1449 = $this.m_angularVelocity1449 + $this.m_invI1446 * ((b_point.x2017 - $this.m_sweep1458.c2386.x2017) * a_impulse.y2018 - (b_point.y2018 - $this.m_sweep1458.c2386.y2018) * a_impulse.x2017);
     return;
 }
@@ -24557,7 +24561,7 @@ function ojd_Body1436_synchronizeFixtures190($this) {
     return;
 }
 function ojd_Body1436_resetMassData1404($this) {
-    var a, b, c, d, e;
+    var a, b, c, d, e, f;
     $this.m_mass1451 = 0.0;
     $this.m_invMass1440 = 0.0;
     $this.m_I1460 = 0.0;
@@ -24579,17 +24583,17 @@ function ojd_Body1436_resetMassData1404($this) {
             b = ojpn_DefaultWorldPool253_popVec2389(ojd_World83_getPool215($this.m_world1445));
             ojc_Vec22016_setZero229(b);
             c = ojpn_DefaultWorldPool253_popVec2389(ojd_World83_getPool215($this.m_world1445));
-            a = $this.pmd1438;
-            d = $this.m_fixtureList1457;
-            while (d !== null) {
-                if (d.m_density426 != 0.0) {
-                    ojd_Fixture421_getMassData660(d, a);
-                    $this.m_mass1451 = $this.m_mass1451 + a.mass2891;
-                    ojc_Vec22016_mulLocal806(ojc_Vec22016_set176(c, a.center2892), a.mass2891);
+            d = $this.pmd1438;
+            e = $this.m_fixtureList1457;
+            while (e !== null) {
+                if (e.m_density426 != 0.0) {
+                    ojd_Fixture421_getMassData660(e, d);
+                    $this.m_mass1451 = $this.m_mass1451 + d.mass2891;
+                    ojc_Vec22016_mulLocal806(ojc_Vec22016_set176(c, d.center2892), d.mass2891);
                     ojc_Vec22016_addLocal805(b, c);
-                    $this.m_I1460 = $this.m_I1460 + a.I2893;
+                    $this.m_I1460 = $this.m_I1460 + d.I2893;
                 }
-                d = d.m_next427;
+                e = e.m_next427;
             }
             if ($this.m_mass1451 <= 0.0) {
                 $this.m_mass1451 = 1.0;
@@ -24608,14 +24612,14 @@ function ojd_Body1436_resetMassData1404($this) {
                 $this.m_I1460 = 0.0;
                 $this.m_invI1446 = 0.0;
             }
-            e = ojpn_DefaultWorldPool253_popVec2389(ojd_World83_getPool215($this.m_world1445));
-            ojc_Vec22016_set176(e, $this.m_sweep1458.c2386);
+            f = ojpn_DefaultWorldPool253_popVec2389(ojd_World83_getPool215($this.m_world1445));
+            ojc_Vec22016_set176(f, $this.m_sweep1458.c2386);
             ojc_Vec22016_set176($this.m_sweep1458.localCenter2387, b);
             ojc_Transform2027_mulToOutUnsafe802($this.m_xf1456, $this.m_sweep1458.localCenter2387, $this.m_sweep1458.c02388);
             ojc_Vec22016_set176($this.m_sweep1458.c2386, $this.m_sweep1458.c02388);
-            ojc_Vec22016_subLocal804(ojc_Vec22016_set176(c, $this.m_sweep1458.c2386), e);
-            ojc_Vec22016_crossToOutUnsafe1414($this.m_angularVelocity1449, c, e);
-            ojc_Vec22016_addLocal805($this.m_linearVelocity1455, e);
+            ojc_Vec22016_subLocal804(ojc_Vec22016_set176(c, $this.m_sweep1458.c2386), f);
+            ojc_Vec22016_crossToOutUnsafe1414($this.m_angularVelocity1449, c, f);
+            ojc_Vec22016_addLocal805($this.m_linearVelocity1455, f);
             ojpn_DefaultWorldPool253_pushVec2387(ojd_World83_getPool215($this.m_world1445), 3);
             return;
         }
@@ -24930,42 +24934,42 @@ function ojcs_PolygonShape1492_clone664($this) {
     return a;
 }
 function ojcs_PolygonShape1492_computeAABB656($this, a_aabb, b_xf, c) {
-    var d, e, f, g, h, i, j;
+    var d, e, f, g, h, i, j, k;
     d = a_aabb.lowerBound2762;
     e = a_aabb.upperBound2761;
-    f = $this.m_vertices1501.data[0];
-    c = b_xf.q2029;
+    a_aabb = $this.m_vertices1501.data[0];
+    f = b_xf.q2029;
     g = b_xf.p2028;
-    d.x2017 = c.c2781 * f.x2017 - c.s2780 * f.y2018 + g.x2017;
-    d.y2018 = c.s2780 * f.x2017 + c.c2781 * f.y2018 + g.y2018;
+    d.x2017 = f.c2781 * a_aabb.x2017 - f.s2780 * a_aabb.y2018 + g.x2017;
+    d.y2018 = f.s2780 * a_aabb.x2017 + f.c2781 * a_aabb.y2018 + g.y2018;
     e.x2017 = d.x2017;
     e.y2018 = d.y2018;
-    b_xf = 1;
-    while (b_xf < $this.m_count1496) {
-        h = $this.m_vertices1501.data[b_xf];
-        i = c.c2781 * h.x2017 - c.s2780 * h.y2018 + g.x2017;
-        j = c.s2780 * h.x2017 + c.c2781 * h.y2018 + g.y2018;
-        if (d.x2017 >= i) {
-            f = i;
+    h = 1;
+    while (h < $this.m_count1496) {
+        i = $this.m_vertices1501.data[h];
+        j = f.c2781 * i.x2017 - f.s2780 * i.y2018 + g.x2017;
+        a_aabb = f.s2780 * i.x2017 + f.c2781 * i.y2018 + g.y2018;
+        if (d.x2017 >= j) {
+            k = j;
         } else {
-            f = d.x2017;
+            k = d.x2017;
         }
-        d.x2017 = f;
-        if (d.y2018 >= j) {
-            f = j;
+        d.x2017 = k;
+        if (d.y2018 >= a_aabb) {
+            k = a_aabb;
         } else {
-            f = d.y2018;
+            k = d.y2018;
         }
-        d.y2018 = f;
-        if (e.x2017 > i) {
-            i = e.x2017;
+        d.y2018 = k;
+        if (e.x2017 > j) {
+            j = e.x2017;
         }
-        e.x2017 = i;
-        if (e.y2018 > j) {
-            j = e.y2018;
+        e.x2017 = j;
+        if (e.y2018 > a_aabb) {
+            a_aabb = e.y2018;
         }
-        e.y2018 = j;
-        b_xf = b_xf + 1 | 0;
+        e.y2018 = a_aabb;
+        h = h + 1 | 0;
     }
     d.x2017 = d.x2017 - $this.m_radius197;
     d.y2018 = d.y2018 - $this.m_radius197;
@@ -24998,23 +25002,23 @@ function ojcs_PolygonShape1492_computeMass661($this, a_massData, b_density) {
     j = 0;
     while (j < $this.m_count1496) {
         ojc_Vec22016_subLocal804(ojc_Vec22016_set176(h, $this.m_vertices1501.data[j]), f);
-        g = ojc_Vec22016_negateLocal814(ojc_Vec22016_set176(i, f));
+        k = ojc_Vec22016_negateLocal814(ojc_Vec22016_set176(i, f));
         if ((j + 1 | 0) >= $this.m_count1496) {
-            k = $this.m_vertices1501.data[0];
+            g = $this.m_vertices1501.data[0];
         } else {
-            k = $this.m_vertices1501.data[j + 1 | 0];
+            g = $this.m_vertices1501.data[j + 1 | 0];
         }
-        ojc_Vec22016_addLocal805(g, k);
+        ojc_Vec22016_addLocal805(k, g);
         m = ojc_Vec22016_cross1061(h, i);
         n = 0.5 * m;
         d = d + n;
         c.x2017 = c.x2017 + n * 0.33333334 * (h.x2017 + i.x2017);
         c.y2018 = c.y2018 + n * 0.33333334 * (h.y2018 + i.y2018);
         o = h.x2017;
-        p = h.y2018;
-        n = i.x2017;
+        n = h.y2018;
+        p = i.x2017;
         q = i.y2018;
-        e = e + 0.083333336 * m * (o * o + n * o + n * n + p * p + q * p + q * q);
+        e = e + 0.083333336 * m * (o * o + p * o + p * p + n * n + q * n + q * q);
         j = j + 1 | 0;
     }
     a_massData.mass2891 = b_density * d;
@@ -25057,8 +25061,9 @@ function dmgt_BuiltInFunctionsClassInformation$41504_$init302($this, a_aName, b_
     return;
 }
 function dmgt_BuiltInFunctionsClassInformation$41504_invoke1427($this, a_aObject, b_aArguments) {
-    b_aArguments = b_aArguments.data;
-    return dmgt_BuiltInFunctions2006_min1429(a_aObject, b_aArguments[0], b_aArguments[1]);
+    var c;
+    c = b_aArguments.data;
+    return dmgt_BuiltInFunctions2006_min1429(a_aObject, c[0], c[1]);
 }
 function dmgt_BuiltInFunctionsClassInformation$31505_$init313(a_aObject, b_aArguments, c) {
     var $r = new dmgt_BuiltInFunctionsClassInformation$31505();
@@ -25136,7 +25141,7 @@ function olvc_LexState1510_$clinit() {
         return jl_StringBuilder2321_toString35(jl_StringBuilder2321_append36(jl_StringBuilder2321_append36(jl_StringBuilder2321_append36(jl_StringBuilder2321_$init4(), $rt_s(121)), a_s), $rt_s(121)));
     };
     olvc_LexState1510_$clinit43 = function() {
-        var a, b, c, d, e, f, g, h;
+        var a, b, c, d, e, f, g;
         a = $rt_createArray(jl_String1, 6);
         b = a.data;
         b[0] = $rt_s(330);
@@ -25199,24 +25204,24 @@ function olvc_LexState1510_$clinit() {
             ju_HashMap1688_put52(olvc_LexState1510.RESERVED1528, f, jl_Integer21_valueOf69(257 + c | 0));
             c = c + 1 | 0;
         }
-        g = $rt_createArray(olvc_LexState$Priority1569, 15);
-        h = g.data;
-        h[0] = olvc_LexState$Priority1569_$init182(6, 6);
-        h[1] = olvc_LexState$Priority1569_$init182(6, 6);
-        h[2] = olvc_LexState$Priority1569_$init182(7, 7);
-        h[3] = olvc_LexState$Priority1569_$init182(7, 7);
-        h[4] = olvc_LexState$Priority1569_$init182(7, 7);
-        h[5] = olvc_LexState$Priority1569_$init182(10, 9);
-        h[6] = olvc_LexState$Priority1569_$init182(5, 4);
-        h[7] = olvc_LexState$Priority1569_$init182(3, 3);
-        h[8] = olvc_LexState$Priority1569_$init182(3, 3);
-        h[9] = olvc_LexState$Priority1569_$init182(3, 3);
-        h[10] = olvc_LexState$Priority1569_$init182(3, 3);
-        h[11] = olvc_LexState$Priority1569_$init182(3, 3);
-        h[12] = olvc_LexState$Priority1569_$init182(3, 3);
-        h[13] = olvc_LexState$Priority1569_$init182(2, 2);
-        h[14] = olvc_LexState$Priority1569_$init182(1, 1);
-        olvc_LexState1510.priority1525 = g;
+        f = $rt_createArray(olvc_LexState$Priority1569, 15);
+        g = f.data;
+        g[0] = olvc_LexState$Priority1569_$init182(6, 6);
+        g[1] = olvc_LexState$Priority1569_$init182(6, 6);
+        g[2] = olvc_LexState$Priority1569_$init182(7, 7);
+        g[3] = olvc_LexState$Priority1569_$init182(7, 7);
+        g[4] = olvc_LexState$Priority1569_$init182(7, 7);
+        g[5] = olvc_LexState$Priority1569_$init182(10, 9);
+        g[6] = olvc_LexState$Priority1569_$init182(5, 4);
+        g[7] = olvc_LexState$Priority1569_$init182(3, 3);
+        g[8] = olvc_LexState$Priority1569_$init182(3, 3);
+        g[9] = olvc_LexState$Priority1569_$init182(3, 3);
+        g[10] = olvc_LexState$Priority1569_$init182(3, 3);
+        g[11] = olvc_LexState$Priority1569_$init182(3, 3);
+        g[12] = olvc_LexState$Priority1569_$init182(3, 3);
+        g[13] = olvc_LexState$Priority1569_$init182(2, 2);
+        g[14] = olvc_LexState$Priority1569_$init182(1, 1);
+        olvc_LexState1510.priority1525 = f;
         return;
     };
     olvc_LexState1510_luaO_int2fb1436 = function(a_x) {
@@ -25274,7 +25279,7 @@ function olvc_LexState1510_singlevar1444($this, a_var) {
     return;
 }
 function olvc_LexState1510_strx2number1450($this, a_str, b) {
-    var c, d, e, f, g, h, i, j, k, m, n;
+    var c, d, e, f, g, h, i, j, k, m;
     c = jl_String1_toCharArray610(a_str);
     d = 0;
     while (true) {
@@ -25298,66 +25303,66 @@ function olvc_LexState1510_strx2number1450($this, a_str, b) {
         olv_LuaValue297_$clinit();
         return olv_LuaValue297.ZERO298;
     }
-    b = d + 1 | 0;
+    h = d + 1 | 0;
     if (e[d] != 48) {
         olv_LuaValue297_$clinit();
         return olv_LuaValue297.ZERO298;
     }
-    if (e[b] != 120 && e[b] != 88) {
+    if (e[h] != 120 && e[h] != 88) {
         olv_LuaValue297_$clinit();
         return olv_LuaValue297.ZERO298;
     }
-    h = b + 1 | 0;
-    i = 0.0;
-    j = 0;
+    i = h + 1 | 0;
+    j = 0.0;
+    d = 0;
     while (true) {
-        b = $rt_compare(h, f);
+        b = $rt_compare(i, f);
         if (b >= 0) {
             break;
         }
-        if (olvc_LexState1510_isxdigit1452($this, e[h]) == 0) {
+        if (olvc_LexState1510_isxdigit1452($this, e[i]) == 0) {
             break;
         }
-        d = i * 16.0;
-        b = h + 1 | 0;
-        i = d + olvc_LexState1510_hexvalue1453($this, e[h]);
-        h = b;
+        b = j * 16.0;
+        h = i + 1 | 0;
+        j = b + olvc_LexState1510_hexvalue1453($this, e[i]);
+        i = h;
     }
     $ba: {
-        if (b < 0 && e[h] == 46) {
-            h = h + 1 | 0;
-            while (h < f) {
-                if (olvc_LexState1510_isxdigit1452($this, e[h]) == 0) {
+        if (b < 0 && e[i] == 46) {
+            i = i + 1 | 0;
+            while (i < f) {
+                if (olvc_LexState1510_isxdigit1452($this, e[i]) == 0) {
                     break $ba;
                 }
-                i = i * 16.0;
-                b = h + 1 | 0;
-                i = i + olvc_LexState1510_hexvalue1453($this, e[h]);
-                j = j +  -4 | 0;
-                h = b;
+                b = j * 16.0;
+                k = i + 1 | 0;
+                j = b + olvc_LexState1510_hexvalue1453($this, e[i]);
+                d = d +  -4 | 0;
+                i = k;
             }
         }
     }
-    if (h < f && !(e[h] != 112 && e[h] != 80)) {
-        d = h + 1 | 0;
-        k = 0;
-        m = 0;
-        if (d < f && e[d] == 45) {
-            m = 1;
-            d = d + 1 | 0;
+    if (i < f && !(e[i] != 112 && e[i] != 80)) {
+        k = i + 1 | 0;
+        b = 0;
+        h = 0;
+        if (k < f && e[k] == 45) {
+            h = 1;
+            k = k + 1 | 0;
         }
-        while (d < f && olvc_LexState1510_isdigit1454($this, e[d]) != 0) {
-            n = k * 10 | 0;
-            h = d + 1 | 0;
-            k = (n + e[d] | 0) - 48 | 0;
-            d = h;
+        while (k < f && olvc_LexState1510_isdigit1454($this, e[k]) != 0) {
+            m = b * 10 | 0;
+            i = k + 1 | 0;
+            b = (m + e[k] | 0) - 48 | 0;
+            k = i;
         }
-        if (m != 0) {
-            k =  -k | 0;
+        if (h != 0) {
+            b =  -b | 0;
         }
-        j = j + k | 0;
+        d = d + b | 0;
     }
-    return olv_LuaValue297_valueOf409(g * i * olvl_MathLib438_dpow_d669(2.0, j));
+    return olv_LuaValue297_valueOf409(g * j * olvl_MathLib438_dpow_d669(2.0, d));
 }
 function olvc_LexState1510_close_func1455($this) {
     var a, b, c;
@@ -25466,15 +25471,15 @@ function olvc_LexState1510_semerror1486($this, a_msg) {
     return;
 }
 function olvc_LexState1510_breaklabel1488($this) {
-    var a, b, c, d, e;
+    var a, b, c, d;
     a = olv_LuaString860_valueOf414($rt_s(337));
     b = $this.dyd1514;
     c = olvc_LuaC1862_grow1489($this.dyd1514.label2146, $this.dyd1514.n_label2145 + 1 | 0);
     b.label2146 = c;
-    d = $this.dyd1514;
-    e = d.n_label2145;
-    d.n_label2145 = e + 1 | 0;
-    olvc_LexState1510_findgotos1490($this, $this.dyd1514.label2146.data[olvc_LexState1510_newlabelentry1491($this, c, e, a, 0, $this.fs1521.pc1878)]);
+    b = $this.dyd1514;
+    d = b.n_label2145;
+    b.n_label2145 = d + 1 | 0;
+    olvc_LexState1510_findgotos1490($this, $this.dyd1514.label2146.data[olvc_LexState1510_newlabelentry1491($this, c, d, a, 0, $this.fs1521.pc1878)]);
     return;
 }
 function olvc_LexState1510_listfield1492($this, a_cc) {
@@ -25842,11 +25847,11 @@ function olvc_LexState1510_retstat1477($this) {
             if (b.k2220 == 12 && c == 1) {
                 olvc_LuaC1862_SET_OPCODE1533(olvc_FuncState1866_getcodePtr1534(a, b), 30);
                 if (olv_Lua1859_GETARG_A1535(olvc_FuncState1866_getcode1536(a, b)) != a.nactvar1882) {
-                    d = 0;
+                    e = 0;
                 } else {
-                    d = 1;
+                    e = 1;
                 }
-                olvc_LuaC1862__assert1447(d);
+                olvc_LuaC1862__assert1447(e);
             }
             d = a.nactvar1882;
             c =  -1;
@@ -26009,7 +26014,7 @@ function olvc_LexState1510_open_func1551($this, a_fs, b_bl) {
     return;
 }
 function olvc_LexState1510_labelstat1479($this, a_label, b_line) {
-    var c, d, e, f;
+    var c, d, e, f, g;
     olvc_FuncState1866_checkrepeated1552($this.fs1521, $this.dyd1514.label2146, $this.dyd1514.n_label2145, a_label);
     olvc_LexState1510_checknext1537($this, 285);
     c = $this.dyd1514;
@@ -26018,12 +26023,12 @@ function olvc_LexState1510_labelstat1479($this, a_label, b_line) {
     e = $this.dyd1514;
     f = e.n_label2145;
     e.n_label2145 = f + 1 | 0;
-    b_line = olvc_LexState1510_newlabelentry1491($this, d, f, a_label, b_line, $this.fs1521.pc1878);
+    g = olvc_LexState1510_newlabelentry1491($this, d, f, a_label, b_line, $this.fs1521.pc1878);
     olvc_LexState1510_skipnoopstat1541($this);
     if (olvc_LexState1510_block_follow1528($this, 0) != 0) {
-        $this.dyd1514.label2146.data[b_line].nactvar2396 = $this.fs1521.bl1875.nactvar1803;
+        $this.dyd1514.label2146.data[g].nactvar2396 = $this.fs1521.bl1875.nactvar1803;
     }
-    olvc_LexState1510_findgotos1490($this, $this.dyd1514.label2146.data[b_line]);
+    olvc_LexState1510_findgotos1490($this, $this.dyd1514.label2146.data[g]);
     return;
 }
 function olvc_LexState1510_check_next1497($this, a_set) {
@@ -26039,16 +26044,16 @@ function olvc_LexState1510_save_and_next1496($this) {
     return;
 }
 function olvc_LexState1510_inclinenumber1503($this) {
-    var a;
+    var a, b;
     a = $this.current1513;
     olvc_LuaC1862__assert1447(olvc_LexState1510_currIsNewline1504($this));
     olvc_LexState1510_nextChar1499($this);
     if (olvc_LexState1510_currIsNewline1504($this) != 0 && $this.current1513 != a) {
         olvc_LexState1510_nextChar1499($this);
     }
-    a = $this.linenumber1520 + 1 | 0;
-    $this.linenumber1520 = a;
-    if (a >= 2147483645) {
+    b = $this.linenumber1520 + 1 | 0;
+    $this.linenumber1520 = b;
+    if (b >= 2147483645) {
         olvc_LexState1510_syntaxerror1487($this, $rt_s(372));
     }
     return;
@@ -26345,11 +26350,11 @@ function olvc_LexState1510_new_localvar1511($this, a_name) {
     if (!($this.dyd1514.actvar2144 !== null && ($this.dyd1514.n_actvar2143 + 1 | 0) <= $this.dyd1514.actvar2144.data.length)) {
         $this.dyd1514.actvar2144 = olvc_LuaC1862_realloc1574($this.dyd1514.actvar2144, jl_Math2210_max367(1, $this.dyd1514.n_actvar2143 * 2 | 0));
     }
-    a_name = $this.dyd1514.actvar2144.data;
-    c = $this.dyd1514;
-    d = c.n_actvar2143;
-    c.n_actvar2143 = d + 1 | 0;
-    a_name[d] = olvc_LexState$Vardesc1913_$init80(b);
+    c = $this.dyd1514.actvar2144.data;
+    d = $this.dyd1514;
+    a_name = d.n_actvar2143;
+    d.n_actvar2143 = a_name + 1 | 0;
+    c[a_name] = olvc_LexState$Vardesc1913_$init80(b);
     return;
 }
 function olvc_LexState1510_localstat1474($this) {
@@ -26374,16 +26379,16 @@ function olvc_LexState1510_localstat1474($this) {
     return;
 }
 function olvc_LexState1510_registerlocalvar1573($this, a_varname) {
-    var b, c;
+    var b, c, d;
     b = $this.fs1521;
     c = b.f1870;
     if (!(c.locvars776 !== null && (b.nlocvars1874 + 1 | 0) <= c.locvars776.data.length)) {
         c.locvars776 = olvc_LuaC1862_realloc1461(c.locvars776, (b.nlocvars1874 * 2 | 0) + 1 | 0);
     }
     c.locvars776.data[b.nlocvars1874] = olv_LocVars2293_$init1576(a_varname, 0, 0);
-    a_varname = b.nlocvars1874;
-    b.nlocvars1874 = (a_varname + 1 | 0) << 16 >> 16;
-    return a_varname;
+    d = b.nlocvars1874;
+    b.nlocvars1874 = (d + 1 | 0) << 16 >> 16;
+    return d;
 }
 function olvc_LexState1510_funcstat1471($this, a_line) {
     var b, c;
@@ -26550,15 +26555,16 @@ function olvc_LexState1510_check1547($this, a_c) {
     return;
 }
 function olvc_LexState1510_token2str1439($this, a_token) {
+    var b;
     if (a_token >= 257) {
         return olvc_LexState1510.luaX_tokens1526.data[a_token - 257 | 0];
     }
     if (olvc_LexState1510_iscntrl1435(a_token) == 0) {
-        a_token = olvc_LuaC1862_pushfstring1556($this.L1512, jl_String1_valueOf941(a_token & 65535));
+        b = olvc_LuaC1862_pushfstring1556($this.L1512, jl_String1_valueOf941(a_token & 65535));
     } else {
-        a_token = olvc_LuaC1862_pushfstring1556($this.L1512, jl_StringBuilder2321_toString35(jl_StringBuilder2321_append36(jl_StringBuilder2321_append76(jl_StringBuilder2321_append36(jl_StringBuilder2321_$init4(), $rt_s(386)), a_token), $rt_s(11))));
+        b = olvc_LuaC1862_pushfstring1556($this.L1512, jl_StringBuilder2321_toString35(jl_StringBuilder2321_append36(jl_StringBuilder2321_append76(jl_StringBuilder2321_append36(jl_StringBuilder2321_$init4(), $rt_s(386)), a_token), $rt_s(11))));
     }
-    return a_token;
+    return b;
 }
 function olvc_LexState1510_cond1578($this) {
     var a;
@@ -26571,7 +26577,7 @@ function olvc_LexState1510_cond1578($this) {
     return a.f2219.i873;
 }
 function olvc_LexState1510_repeatstat1476($this, a_line) {
-    var b, c, d, e, f;
+    var b, c, d, e;
     b = $this.fs1521;
     c = olvc_FuncState1866_getlabel1579(b);
     d = olvc_FuncState$BlockCnt1797_$init4();
@@ -26581,12 +26587,12 @@ function olvc_LexState1510_repeatstat1476($this, a_line) {
     olvc_LexState1510_next1467($this);
     olvc_LexState1510_statlist1542($this);
     olvc_LexState1510_check_match1469($this, 277, 273, a_line);
-    f = olvc_LexState1510_cond1578($this);
+    a_line = olvc_LexState1510_cond1578($this);
     if (e.upval1798 != 0) {
-        olvc_FuncState1866_patchclose1508(b, f, e.nactvar1803);
+        olvc_FuncState1866_patchclose1508(b, a_line, e.nactvar1803);
     }
     olvc_FuncState1866_leaveblock1457(b);
-    olvc_FuncState1866_patchlist1580(b, f, c);
+    olvc_FuncState1866_patchlist1580(b, a_line, c);
     olvc_FuncState1866_leaveblock1457(b);
     return;
 }
@@ -26795,12 +26801,12 @@ function olvc_LexState1510_subexpr1483($this, a_v, b_limit) {
     }
     e = olvc_LexState1510_getbinopr1590($this, $this.t1515.token1175);
     while (e != 15 && olvc_LexState1510.priority1525.data[e].left1570 > b_limit) {
-        d = olvc_LexState$expdesc2216_$init4();
+        c = olvc_LexState$expdesc2216_$init4();
         f = $this.linenumber1520;
         olvc_LexState1510_next1467($this);
         olvc_FuncState1866_infix1591($this.fs1521, e, a_v);
-        g = olvc_LexState1510_subexpr1483($this, d, olvc_LexState1510.priority1525.data[e].right1571);
-        olvc_FuncState1866_posfix1592($this.fs1521, e, a_v, d, f);
+        g = olvc_LexState1510_subexpr1483($this, c, olvc_LexState1510.priority1525.data[e].right1571);
+        olvc_FuncState1866_posfix1592($this.fs1521, e, a_v, c, f);
         e = g;
     }
     olvc_LexState1510_leavelevel1481($this);
@@ -26907,9 +26913,9 @@ function olvc_LexState1510_closegoto1509($this, a_g, b_label) {
     olvc_FuncState1866_patchlist1580(c, f.pc2393, b_label.pc2393);
     jl_System2747_arraycopy343(d, a_g + 1 | 0, d, a_g, ($this.dyd1514.n_gt2148 - a_g | 0) - 1 | 0);
     g = $this.dyd1514;
-    a_g = g.n_gt2148 - 1 | 0;
-    g.n_gt2148 = a_g;
-    e[a_g] = null;
+    b_label = g.n_gt2148 - 1 | 0;
+    g.n_gt2148 = b_label;
+    e[b_label] = null;
     return;
 }
 function olvc_LexState1510_newlabelentry1491($this, a_l, b_index, c_name, d_line, e_pc) {
@@ -26933,7 +26939,7 @@ function olvc_LexState1510_whilestat1478($this, a_line) {
     return;
 }
 function olvc_LexState1510_constructor1553($this, a_t) {
-    var b, c, d, e, f, g;
+    var b, c, d, e, f, g, h;
     b = $this.fs1521;
     c = $this.linenumber1520;
     d = olvc_FuncState1866_codeABC1549(b, 11, 0, 0, 0);
@@ -26989,9 +26995,9 @@ function olvc_LexState1510_constructor1553($this, a_t) {
     }
     olvc_LexState1510_check_match1469($this, 125, 123, c);
     olvc_FuncState1866_lastlistfield1600(b, e);
-    a_t = olvc_InstructionPtr1042_$init1155(b.f1870.code772, d);
-    olvc_LuaC1862_SETARG_B1601(a_t, olvc_LexState1510_luaO_int2fb1436(e.na2050));
-    olvc_LuaC1862_SETARG_C1593(a_t, olvc_LexState1510_luaO_int2fb1436(e.nh2053));
+    h = olvc_InstructionPtr1042_$init1155(b.f1870.code772, d);
+    olvc_LuaC1862_SETARG_B1601(h, olvc_LexState1510_luaO_int2fb1436(e.na2050));
+    olvc_LuaC1862_SETARG_C1593(h, olvc_LexState1510_luaO_int2fb1436(e.nh2053));
     return;
 }
 function olvc_LexState1510_leavelevel1481($this) {
@@ -27001,14 +27007,14 @@ function olvc_LexState1510_leavelevel1481($this) {
     return;
 }
 function olvc_LexState1510_undefgoto1602($this, a_gt) {
-    var b, c;
+    var b;
     b = $this.L1512;
     if (olvc_LexState1510_isReservedKeyword1432(olv_LuaString860_tojstring99(a_gt.name2395)) == 0) {
-        c = jl_StringBuilder2321_toString35(jl_StringBuilder2321_append76(jl_StringBuilder2321_append36(jl_StringBuilder2321_append75(jl_StringBuilder2321_append36(jl_StringBuilder2321_$init4(), $rt_s(396)), a_gt.name2395), $rt_s(397)), a_gt.line2394));
+        a_gt = jl_StringBuilder2321_toString35(jl_StringBuilder2321_append76(jl_StringBuilder2321_append36(jl_StringBuilder2321_append75(jl_StringBuilder2321_append36(jl_StringBuilder2321_$init4(), $rt_s(396)), a_gt.name2395), $rt_s(397)), a_gt.line2394));
     } else {
-        c = jl_StringBuilder2321_toString35(jl_StringBuilder2321_append36(jl_StringBuilder2321_append76(jl_StringBuilder2321_append36(jl_StringBuilder2321_append75(jl_StringBuilder2321_append36(jl_StringBuilder2321_$init4(), $rt_s(398)), a_gt.name2395), $rt_s(394)), a_gt.line2394), $rt_s(399)));
+        a_gt = jl_StringBuilder2321_toString35(jl_StringBuilder2321_append36(jl_StringBuilder2321_append76(jl_StringBuilder2321_append36(jl_StringBuilder2321_append75(jl_StringBuilder2321_append36(jl_StringBuilder2321_$init4(), $rt_s(398)), a_gt.name2395), $rt_s(394)), a_gt.line2394), $rt_s(399)));
     }
-    olvc_LexState1510_semerror1486($this, olvc_LuaC1862_pushfstring1556(b, c));
+    olvc_LexState1510_semerror1486($this, olvc_LuaC1862_pushfstring1556(b, a_gt));
     return;
 }
 function olvc_LexState1510_exp11565($this) {
@@ -27228,16 +27234,16 @@ function jt_SimpleDateFormat1533_$init28($this, a_pattern) {
     return;
 }
 function jt_SimpleDateFormat1533_format1607($this, a_date, b_buffer, c) {
-    var d, e, f, g;
-    d = ju_GregorianCalendar1048_$init1163($this.locale1537);
-    ju_Calendar210_setTime330(d, a_date);
-    ju_Calendar210_setTimeZone316(d, ju_Calendar210_getTimeZone334($this.calendar1532));
-    e = $this.elements1535.data;
-    f = e.length;
-    g = 0;
-    while (g < f) {
-        e[g].format140(d, b_buffer);
-        g = g + 1 | 0;
+    var d, e, f;
+    c = ju_GregorianCalendar1048_$init1163($this.locale1537);
+    ju_Calendar210_setTime330(c, a_date);
+    ju_Calendar210_setTimeZone316(c, ju_Calendar210_getTimeZone334($this.calendar1532));
+    d = $this.elements1535.data;
+    e = d.length;
+    f = 0;
+    while (f < e) {
+        d[f].format140(c, b_buffer);
+        f = f + 1 | 0;
     }
     return b_buffer;
 }
@@ -27396,7 +27402,7 @@ function dmge_GameEventManager1550_$init4() {
     return $r;
 }
 function dmge_GameEventManager1550_register538($this, a, b_aEvent, c_aEventListener) {
-    var d;
+    var d, e;
     d = ju_HashMap1688_get47($this.registeredListeners1552, b_aEvent);
     if (d !== null) {
         a = dmg_ArrayUtils2172_asList126(d);
@@ -27408,13 +27414,13 @@ function dmge_GameEventManager1550_register538($this, a, b_aEvent, c_aEventListe
         }
         return;
     }
-    d = $rt_createArray(dmge_GameEventListener514, 1);
-    d.data[0] = c_aEventListener;
-    ju_HashMap1688_put52($this.registeredListeners1552, b_aEvent, d);
+    e = $rt_createArray(dmge_GameEventListener514, 1);
+    e.data[0] = c_aEventListener;
+    ju_HashMap1688_put52($this.registeredListeners1552, b_aEvent, e);
     if (b_aEvent === $rt_cls(dmge_GameEvent73)) {
-        d = $rt_createArray(dmge_GameEventListener514, 1);
-        d.data[0] = c_aEventListener;
-        $this.catchAllEventListener1551 = d;
+        e = $rt_createArray(dmge_GameEventListener514, 1);
+        e.data[0] = c_aEventListener;
+        $this.catchAllEventListener1551 = e;
     }
     return;
 }
@@ -27503,12 +27509,12 @@ function otcit_DateTimeZoneProvider1553_$clinit() {
         if (b === null) {
             return null;
         }
-        b = (b.data !== null ? $rt_str(b.data) : null);
-        c = otci_CharFlow947_$init1(jl_String1_toCharArray610(b));
-        if (otci_Base461094_decodeUnsigned1050(c) != 4) {
-            return otcit_StorableDateTimeZone1389_read1360(a_id, b);
+        c = (b.data !== null ? $rt_str(b.data) : null);
+        b = otci_CharFlow947_$init1(jl_String1_toCharArray610(c));
+        if (otci_Base461094_decodeUnsigned1050(b) != 4) {
+            return otcit_StorableDateTimeZone1389_read1360(a_id, c);
         }
-        return otcit_AliasDateTimeZone2709_$init1624(a_id, otcit_DateTimeZoneProvider1553_getTimeZone1317(jl_String1_substring511(b, c.pointer949)));
+        return otcit_AliasDateTimeZone2709_$init1624(a_id, otcit_DateTimeZoneProvider1553_getTimeZone1317(jl_String1_substring511(c, b.pointer949)));
     };
     otcit_DateTimeZoneProvider1553_getIds1625 = function() {
         var a, b, c, d, e, f, g, h, i;
@@ -27680,53 +27686,53 @@ function otcit_DateTimeZoneProvider1553_$clinit() {
         }
         h = ju_ArrayList2151_$init4();
         ju_AbstractCollection906_addAll981(h, a);
-        i = ju_HashMap1688_$init4();
-        j = ju_PriorityQueue1926_$init1632(ju_ArrayList2151_size129(a), otcit_DateTimeZoneProvider$180_$init4());
-        k = ju_HashSet1342_$init4();
-        ju_AbstractQueue1410_add131(j, jl_Long2305_valueOf710(b));
-        ju_HashMap1688_put52(i, jl_Long2305_valueOf710(b), ju_ArrayList2151_$init983(a));
+        c = ju_HashMap1688_$init4();
+        i = ju_PriorityQueue1926_$init1632(ju_ArrayList2151_size129(a), otcit_DateTimeZoneProvider$180_$init4());
+        j = ju_HashSet1342_$init4();
+        ju_AbstractQueue1410_add131(i, jl_Long2305_valueOf710(b));
+        ju_HashMap1688_put52(c, jl_Long2305_valueOf710(b), ju_ArrayList2151_$init983(a));
         $ba: {
             $bb: {
                 $bc: while (true) {
-                    if (ju_AbstractCollection906_isEmpty71(j) != 0) {
+                    if (ju_AbstractCollection906_isEmpty71(i) != 0) {
                         break $ba;
                     }
                     if (ju_ArrayList2151_size129(h) <= 1) {
                         break $ba;
                     }
-                    m = jl_Long2305_longValue86(ju_AbstractQueue1410_remove1384(j));
-                    ju_HashSet1342_remove127(k, jl_Long2305_valueOf710(m));
-                    a = ju_HashMap1688_remove1337(i, jl_Long2305_valueOf710(m));
-                    n =  -(new Date(Long_toNumber(m)) ).getTimezoneOffset() | 0;
-                    f = ju_AbstractList1487_iterator742(a);
-                    while (ju_AbstractList$11185_hasNext745(f) != 0) {
-                        o = ju_AbstractList$11185_next746(f);
-                        p = o.tz1723.previousTransition1368(m);
-                        if (Long_compare(p, m) == 0) {
+                    k = jl_Long2305_longValue86(ju_AbstractQueue1410_remove1384(i));
+                    ju_HashSet1342_remove127(j, jl_Long2305_valueOf710(k));
+                    a = ju_HashMap1688_remove1337(c, jl_Long2305_valueOf710(k));
+                    m =  -(new Date(Long_toNumber(k)) ).getTimezoneOffset() | 0;
+                    n = ju_AbstractList1487_iterator742(a);
+                    while (ju_AbstractList$11185_hasNext745(n) != 0) {
+                        o = ju_AbstractList$11185_next746(n);
+                        p = o.tz1723.previousTransition1368(k);
+                        if (Long_compare(p, k) == 0) {
                             if (ju_ArrayList2151_get1275(h, 0) === o) {
                                 break $bc;
                             }
                             ju_ArrayList2151_remove127(h, o);
                         } else {
-                            if (jl_Math2210_abs1630((o.tz1723.getOffset1173(m) / 60000 | 0) - n | 0) > 120) {
+                            if (jl_Math2210_abs1630((o.tz1723.getOffset1173(k) / 60000 | 0) - m | 0) > 120) {
                                 ju_ArrayList2151_remove127(h, o);
                                 continue;
                             }
-                            q = ju_HashMap1688_get47(i, jl_Long2305_valueOf710(p));
-                            if (q === null) {
-                                q = ju_ArrayList2151_$init4();
-                                ju_HashMap1688_put52(i, jl_Long2305_valueOf710(p), q);
+                            f = ju_HashMap1688_get47(c, jl_Long2305_valueOf710(p));
+                            if (f === null) {
+                                f = ju_ArrayList2151_$init4();
+                                ju_HashMap1688_put52(c, jl_Long2305_valueOf710(p), f);
                             }
-                            ju_AbstractList1487_add131(q, o);
-                            if (ju_HashSet1342_add131(k, jl_Long2305_valueOf710(p)) != 0) {
-                                ju_AbstractQueue1410_add131(j, jl_Long2305_valueOf710(p));
+                            ju_AbstractList1487_add131(f, o);
+                            if (ju_HashSet1342_add131(j, jl_Long2305_valueOf710(p)) != 0) {
+                                ju_AbstractQueue1410_add131(i, jl_Long2305_valueOf710(p));
                             }
                         }
                     }
                     if (ju_ArrayList2151_size129(h) == 1) {
                         break $bb;
                     }
-                    if (Long_compare(ju_ArrayList2151_get1275(h, 0).tz1723.previousTransition1368(m), m) == 0) {
+                    if (Long_compare(ju_ArrayList2151_get1275(h, 0).tz1723.previousTransition1368(k), k) == 0) {
                         break $bb;
                     }
                     if (ju_ArrayList2151_size129(h) > 1 && (ju_ArrayList2151_get1275(h, 0).value1724 + 2880 | 0) < ju_ArrayList2151_get1275(h, 1).value1724) {
@@ -27734,20 +27740,20 @@ function otcit_DateTimeZoneProvider1553_$clinit() {
                     }
                     p = ju_ArrayList2151_size129(h) - 1 | 0;
                     while (p >= 0) {
-                        c = ju_ArrayList2151_get1275(h, p);
-                        r = c.tz1723.getOffset1173(m) / 60000 | 0;
-                        if (r != n) {
-                            c.value1724 = c.value1724 + ((Long_div(Long_sub(b, m), Long_fromInt(60000)).lo * jl_Math2210_abs1630(r - n | 0) | 0) / 30 | 0) | 0;
+                        q = ju_ArrayList2151_get1275(h, p);
+                        r = q.tz1723.getOffset1173(k) / 60000 | 0;
+                        if (r != m) {
+                            q.value1724 = q.value1724 + ((Long_div(Long_sub(b, k), Long_fromInt(60000)).lo * jl_Math2210_abs1630(r - m | 0) | 0) / 30 | 0) | 0;
                         }
                         f = p + 1 | 0;
-                        while (f < ju_ArrayList2151_size129(h) && c.value1724 > ju_ArrayList2151_get1275(h, f).value1724) {
+                        while (f < ju_ArrayList2151_size129(h) && q.value1724 > ju_ArrayList2151_get1275(h, f).value1724) {
                             ju_ArrayList2151_set1633(h, f - 1 | 0, ju_ArrayList2151_get1275(h, f));
                             f = f + 1 | 0;
                         }
-                        ju_ArrayList2151_set1633(h, f - 1 | 0, c);
+                        ju_ArrayList2151_set1633(h, f - 1 | 0, q);
                         p = p +  -1 | 0;
                     }
-                    b = m;
+                    b = k;
                 }
                 return o.tz1723;
             }
@@ -27841,9 +27847,9 @@ function dmgt_TextBehavior1573_$clinit() {
         dmge_Property43_setQuietly132(c.font1578, dmgt_Font387_deserialize592(b_aSerializedData.get47($rt_s(209))));
         dmge_Property43_setQuietly132(c.textExpression1575, dmgt_TextExpression1405_deserialize918(b_aSerializedData.get47($rt_s(210))));
         dmge_Property43_setQuietly132(c.color1576, dmgt_Color1596_deserialize547(b_aSerializedData.get47($rt_s(133))));
-        a_aObjectInstance = b_aSerializedData.get47($rt_s(211));
-        if (a_aObjectInstance !== null) {
-            dmge_Property43_setQuietly132(c.isScript1577, jl_Boolean2001_valueOf919(a_aObjectInstance));
+        b_aSerializedData = b_aSerializedData.get47($rt_s(211));
+        if (b_aSerializedData !== null) {
+            dmge_Property43_setQuietly132(c.isScript1577, jl_Boolean2001_valueOf919(b_aSerializedData));
         }
         return c;
     };
@@ -27912,11 +27918,11 @@ function dmgt_SizeClassInformation1580_$clinit() {
         dmgt_SizeClassInformation$12638_$init302(a, b, c, d);
         dmgt_SizeClassInformation1580.CHANGEWIDTH1581 = a;
         a = new dmgt_SizeClassInformation$22659;
-        e = $rt_s(415);
-        c = $rt_cls(dmgt_Size1982);
-        d = $rt_createArray(jl_Class0, 1);
-        d.data[0] = $rt_cls(jl_Integer21);
-        dmgt_SizeClassInformation$22659_$init302(a, e, c, d);
+        c = $rt_s(415);
+        b = $rt_cls(dmgt_Size1982);
+        e = $rt_createArray(jl_Class0, 1);
+        e.data[0] = $rt_cls(jl_Integer21);
+        dmgt_SizeClassInformation$22659_$init302(a, c, b, e);
         dmgt_SizeClassInformation1580.CHANGEHEIGHT1582 = a;
         dmgt_SizeClassInformation1580.WIDTH1583 = dmgt_SizeClassInformation$32661_$init91($rt_s(416), $rt_cls(jl_Integer21));
         dmgt_SizeClassInformation1580.HEIGHT1584 = dmgt_SizeClassInformation$42651_$init91($rt_s(417), $rt_cls(jl_Integer21));
@@ -28265,14 +28271,15 @@ function dmgc_GameLoop1621_$init1147(a, b, c) {
     return $r;
 }
 function dmgc_GameLoop1621_$init1146($this, a_aScene, b_aHumanGameView, c_aRuntime) {
+    var d;
     jl_Object2_$init8($this);
     $this.humanGameView1625 = b_aHumanGameView;
     $this.shutdownSignal1622 = 0;
     $this.runtime1624 = c_aRuntime;
     $this.scene1626 = a_aScene;
-    c_aRuntime = $rt_createArray(dmgc_GameView677, 1);
-    c_aRuntime.data[0] = b_aHumanGameView;
-    $this.gameViews1623 = c_aRuntime;
+    d = $rt_createArray(dmgc_GameView677, 1);
+    d.data[0] = b_aHumanGameView;
+    $this.gameViews1623 = d;
     $this.statistics1628 = dmgc_RuntimeStatistics1222_$init4();
     return;
 }
@@ -28437,7 +28444,7 @@ function jn_ByteBuffer1629_put646($this, a_src) {
     return jn_ByteBuffer1629_put964($this, a_src, 0, a_src.data.length);
 }
 function jn_ByteBuffer1629_put964($this, a_src, b_offset, c_length) {
-    var d, e, f, g, h, i, j, k;
+    var d, e, f, g, h, i;
     if (c_length == 0) {
         return $this;
     }
@@ -28451,23 +28458,23 @@ function jn_ByteBuffer1629_put964($this, a_src, b_offset, c_length) {
         d = a_src.data;
         e = d.length;
         if (b_offset < e) {
-            f = b_offset + c_length | 0;
-            if (f > e) {
-                $rt_throw(jl_IndexOutOfBoundsException1831_$init29(jl_StringBuilder2321_toString35(jl_StringBuilder2321_append76(jl_StringBuilder2321_append36(jl_StringBuilder2321_append36(jl_StringBuilder2321_append76(jl_StringBuilder2321_append36(jl_StringBuilder2321_$init4(), $rt_s(424)), f), $rt_s(196)), $rt_s(197)), e))));
+            a_src = b_offset + c_length | 0;
+            if (a_src > e) {
+                $rt_throw(jl_IndexOutOfBoundsException1831_$init29(jl_StringBuilder2321_toString35(jl_StringBuilder2321_append76(jl_StringBuilder2321_append36(jl_StringBuilder2321_append36(jl_StringBuilder2321_append76(jl_StringBuilder2321_append36(jl_StringBuilder2321_$init4(), $rt_s(424)), a_src), $rt_s(196)), $rt_s(197)), e))));
             }
             if (c_length < 0) {
                 $rt_throw(jl_IndexOutOfBoundsException1831_$init29(jl_StringBuilder2321_toString35(jl_StringBuilder2321_append36(jl_StringBuilder2321_append76(jl_StringBuilder2321_append36(jl_StringBuilder2321_$init4(), $rt_s(198)), c_length), $rt_s(199)))));
             }
-            g = $this.position246 + $this.start1631 | 0;
-            h = 0;
-            while (h < c_length) {
-                i = $this.array1630.data;
-                j = g + 1 | 0;
-                k = b_offset + 1 | 0;
-                i[g] = d[b_offset];
-                h = h + 1 | 0;
-                g = j;
-                b_offset = k;
+            f = $this.position246 + $this.start1631 | 0;
+            g = 0;
+            while (g < c_length) {
+                e = $this.array1630.data;
+                h = f + 1 | 0;
+                i = b_offset + 1 | 0;
+                e[f] = d[b_offset];
+                g = g + 1 | 0;
+                f = h;
+                b_offset = i;
             }
             $this.position246 = $this.position246 + c_length | 0;
             return $this;
@@ -28554,15 +28561,15 @@ function dmgc_EventSheet1642_$init1665(a) {
     return $r;
 }
 function dmgc_EventSheet1642_unmarshall1667(a_aIORegistry, b_aGameScene, c_aSerializedData) {
-    var d, e;
+    var d, e, f;
     d = dmgc_EventSheet1642_$init1665(b_aGameScene);
     dmge_Property43_setQuietly132(d.nameProperty1644, c_aSerializedData.get47($rt_s(137)));
-    b_aGameScene = c_aSerializedData.get47($rt_s(430));
+    c_aSerializedData = c_aSerializedData.get47($rt_s(430));
     e = ju_ArrayList2151_$init4();
-    if (b_aGameScene !== null) {
-        b_aGameScene = ju_AbstractList1487_iterator742(b_aGameScene);
-        while (ju_AbstractList$11185_hasNext745(b_aGameScene) != 0) {
-            ju_AbstractList1487_add131(e, dmgc_GameRule1717_deserialize1668(a_aIORegistry, d, ju_AbstractList$11185_next746(b_aGameScene)));
+    if (c_aSerializedData !== null) {
+        f = ju_AbstractList1487_iterator742(c_aSerializedData);
+        while (ju_AbstractList$11185_hasNext745(f) != 0) {
+            ju_AbstractList1487_add131(e, dmgc_GameRule1717_deserialize1668(a_aIORegistry, d, ju_AbstractList$11185_next746(f)));
         }
     }
     d.rules1645 = ju_AbstractCollection906_toArray128(e, $rt_createArray(dmgc_GameRule1717, ju_ArrayList2151_size129(e)));
@@ -28696,51 +28703,51 @@ function dmgi_DefaultGestureDetector1658_mousePressed1674($this, a_aMousePositio
     return;
 }
 function dmgi_DefaultGestureDetector1658_touchMoved1677($this, a_aTouchPositions) {
-    var b, c, d, e, f;
+    var b, c, d, e, f, g;
     $ba: {
         b = a_aTouchPositions.data;
         if (b.length == 1) {
             c = b[0];
-            a_aTouchPositions = ju_HashMap1688_get47($this.currentTouchPositions1662, c.identifier1069);
-            if (c !== null && a_aTouchPositions !== null) {
-                d = c.x1070 - a_aTouchPositions.x1070 | 0;
-                if ((c.y1071 - a_aTouchPositions.y1071 | 0) <  -40 && $this.upKeyDown1663 == 0) {
-                    a_aTouchPositions = $this.eventManager1664;
-                    e = new dmgi_KeyPressed1107;
+            d = ju_HashMap1688_get47($this.currentTouchPositions1662, c.identifier1069);
+            if (c !== null && d !== null) {
+                e = c.x1070 - d.x1070 | 0;
+                if ((c.y1071 - d.y1071 | 0) <  -40 && $this.upKeyDown1663 == 0) {
+                    f = $this.eventManager1664;
+                    g = new dmgi_KeyPressed1107;
                     dmgt_GameKeyCode2409_$clinit();
-                    dmgi_KeyPressed1107_$init1230(e, dmgt_GameKeyCode2409.UP2479);
-                    dmge_GameEventManager1550_fire541(a_aTouchPositions, e);
+                    dmgi_KeyPressed1107_$init1230(g, dmgt_GameKeyCode2409.UP2479);
+                    dmge_GameEventManager1550_fire541(f, g);
                     $this.upKeyDown1663 = 1;
                 }
-                if (d > 40) {
+                if (e > 40) {
                     if ($this.rightKeyDown1661 == 0) {
                         dmgi_DefaultGestureDetector1658_clearLeftKeyDown1678($this);
                         f = $this.eventManager1664;
-                        a_aTouchPositions = new dmgi_KeyPressed1107;
+                        d = new dmgi_KeyPressed1107;
                         dmgt_GameKeyCode2409_$clinit();
-                        dmgi_KeyPressed1107_$init1230(a_aTouchPositions, dmgt_GameKeyCode2409.RIGHT2581);
-                        dmge_GameEventManager1550_fire541(f, a_aTouchPositions);
+                        dmgi_KeyPressed1107_$init1230(d, dmgt_GameKeyCode2409.RIGHT2581);
+                        dmge_GameEventManager1550_fire541(f, d);
                         $this.rightKeyDown1661 = 1;
                     }
                     return;
                 }
-                if (d > 0) {
+                if (e > 0) {
                     dmgi_DefaultGestureDetector1658_clearRightKeyDown1679($this);
                     return;
                 }
-                if (d <  -40) {
+                if (e <  -40) {
                     if ($this.leftKeyDown1659 == 0) {
                         dmgi_DefaultGestureDetector1658_clearRightKeyDown1679($this);
-                        a_aTouchPositions = $this.eventManager1664;
+                        g = $this.eventManager1664;
                         f = new dmgi_KeyPressed1107;
                         dmgt_GameKeyCode2409_$clinit();
                         dmgi_KeyPressed1107_$init1230(f, dmgt_GameKeyCode2409.LEFT2420);
-                        dmge_GameEventManager1550_fire541(a_aTouchPositions, f);
+                        dmge_GameEventManager1550_fire541(g, f);
                         $this.leftKeyDown1659 = 1;
                     }
                     return;
                 }
-                if (d >= 0) {
+                if (e >= 0) {
                     break $ba;
                 } else {
                     dmgi_DefaultGestureDetector1658_clearLeftKeyDown1678($this);
@@ -28786,14 +28793,14 @@ function dmgi_DefaultGestureDetector1658_mouseReleased1683($this, a_aMousePositi
     return;
 }
 function dmgi_DefaultGestureDetector1658_touchEnded1684($this, a_aTouchPositions) {
-    var b, c, d;
+    var b, c, d, e;
     b = a_aTouchPositions.data;
     c = b.length;
-    a_aTouchPositions = 0;
-    while (a_aTouchPositions < c) {
-        d = b[a_aTouchPositions];
-        ju_HashMap1688_remove1337($this.currentTouchPositions1662, d.identifier1069);
-        a_aTouchPositions = a_aTouchPositions + 1 | 0;
+    d = 0;
+    while (d < c) {
+        e = b[d];
+        ju_HashMap1688_remove1337($this.currentTouchPositions1662, e.identifier1069);
+        d = d + 1 | 0;
     }
     dmgi_DefaultGestureDetector1658_clearUpKeyDown1681($this);
     dmgi_DefaultGestureDetector1658_clearLeftKeyDown1678($this);
@@ -28829,18 +28836,18 @@ function dmgi_DefaultGestureDetector1658_clearRightKeyDown1679($this) {
     return;
 }
 function dmgi_DefaultGestureDetector1658_touchStarted1686($this, a_aTouchPositions) {
-    var b, c, d, e;
+    var b, c, d;
     b = a_aTouchPositions.data;
     ju_HashMap1688_clear196($this.currentTouchPositions1662);
     dmgi_DefaultGestureDetector1658_clearLeftKeyDown1678($this);
     dmgi_DefaultGestureDetector1658_clearRightKeyDown1679($this);
     dmgi_DefaultGestureDetector1658_clearUpKeyDown1681($this);
     c = b.length;
-    d = 0;
-    while (d < c) {
-        e = b[d];
-        ju_HashMap1688_put52($this.currentTouchPositions1662, e.identifier1069, e);
-        d = d + 1 | 0;
+    a_aTouchPositions = 0;
+    while (a_aTouchPositions < c) {
+        d = b[a_aTouchPositions];
+        ju_HashMap1688_put52($this.currentTouchPositions1662, d.identifier1069, d);
+        a_aTouchPositions = a_aTouchPositions + 1 | 0;
     }
     return;
 }
@@ -28853,17 +28860,17 @@ function dmgp_PlatformBehavior1667_$clinit() {
         return c;
     };
     dmgp_PlatformBehavior1667_$init1688 = function($this, a_aObjectInstance, b_aGameRuntime) {
-        var c;
+        var c, d;
         jl_Object2_$init8($this);
         $this.gameRuntime1677 = b_aGameRuntime;
         $this.objectInstance1668 = a_aObjectInstance;
-        b_aGameRuntime = dmgc_GameObject1845_getBehaviorTemplate1636(dmgc_GameObjectInstance2906_getOwnerGameObject568(a_aObjectInstance), $rt_cls(dmgp_PlatformBehaviorTemplate2794));
-        c = dmgc_GameRuntime1097_getEventManager264(dmgc_GameScene2107_getRuntime262(dmgc_GameObject1845_getGameScene715(dmgc_GameObjectInstance2906_getOwnerGameObject568(a_aObjectInstance))));
-        $this.moveLeftKey1673 = dmge_Property43_$init118($rt_cls(dmgt_GameKeyCode2409), $this, $rt_s(431), dmge_ReadOnlyProperty38_get113(dmgp_PlatformBehaviorTemplate2794_moveLeftKeyProperty1690(b_aGameRuntime)), c);
-        $this.moveRightKey1678 = dmge_Property43_$init118($rt_cls(dmgt_GameKeyCode2409), $this, $rt_s(432), dmge_ReadOnlyProperty38_get113(dmgp_PlatformBehaviorTemplate2794_moveRightKeyProperty1691(b_aGameRuntime)), c);
-        $this.jumpKey1679 = dmge_Property43_$init118($rt_cls(dmgt_GameKeyCode2409), $this, $rt_s(433), dmge_ReadOnlyProperty38_get113(dmgp_PlatformBehaviorTemplate2794_jumpKeyProperty1692(b_aGameRuntime)), c);
-        $this.leftRightImpulse1675 = dmge_Property43_$init118($rt_cls(jl_Float558), $this, $rt_s(434), dmge_ReadOnlyProperty38_get113(dmgp_PlatformBehaviorTemplate2794_leftRightImpulseProperty1693(b_aGameRuntime)), c);
-        $this.jumpImpulse1676 = dmge_Property43_$init118($rt_cls(jl_Float558), $this, $rt_s(435), dmge_ReadOnlyProperty38_get113(dmgp_PlatformBehaviorTemplate2794_jumpImpulseProperty1694(b_aGameRuntime)), c);
+        c = dmgc_GameObject1845_getBehaviorTemplate1636(dmgc_GameObjectInstance2906_getOwnerGameObject568(a_aObjectInstance), $rt_cls(dmgp_PlatformBehaviorTemplate2794));
+        d = dmgc_GameRuntime1097_getEventManager264(dmgc_GameScene2107_getRuntime262(dmgc_GameObject1845_getGameScene715(dmgc_GameObjectInstance2906_getOwnerGameObject568(a_aObjectInstance))));
+        $this.moveLeftKey1673 = dmge_Property43_$init118($rt_cls(dmgt_GameKeyCode2409), $this, $rt_s(431), dmge_ReadOnlyProperty38_get113(dmgp_PlatformBehaviorTemplate2794_moveLeftKeyProperty1690(c)), d);
+        $this.moveRightKey1678 = dmge_Property43_$init118($rt_cls(dmgt_GameKeyCode2409), $this, $rt_s(432), dmge_ReadOnlyProperty38_get113(dmgp_PlatformBehaviorTemplate2794_moveRightKeyProperty1691(c)), d);
+        $this.jumpKey1679 = dmge_Property43_$init118($rt_cls(dmgt_GameKeyCode2409), $this, $rt_s(433), dmge_ReadOnlyProperty38_get113(dmgp_PlatformBehaviorTemplate2794_jumpKeyProperty1692(c)), d);
+        $this.leftRightImpulse1675 = dmge_Property43_$init118($rt_cls(jl_Float558), $this, $rt_s(434), dmge_ReadOnlyProperty38_get113(dmgp_PlatformBehaviorTemplate2794_leftRightImpulseProperty1693(c)), d);
+        $this.jumpImpulse1676 = dmge_Property43_$init118($rt_cls(jl_Float558), $this, $rt_s(435), dmge_ReadOnlyProperty38_get113(dmgp_PlatformBehaviorTemplate2794_jumpImpulseProperty1694(c)), d);
         return;
     };
     dmgp_PlatformBehavior1667_$clinit43 = function() {
@@ -29162,12 +29169,11 @@ function ju_HashMap1688_calculateCapacity1709(a_x) {
     return (b | b >> 16) + 1 | 0;
 }
 function ju_HashMap1688_$init1703($this, a_capacity, b_loadFactor) {
-    var c;
     ju_AbstractMap1685_$init8($this);
     if (a_capacity >= 0 && b_loadFactor > 0.0) {
-        c = ju_HashMap1688_calculateCapacity1709(a_capacity);
+        a_capacity = ju_HashMap1688_calculateCapacity1709(a_capacity);
         $this.elementCount1692 = 0;
-        $this.elementData1691 = ju_HashMap1688_newElementArray1710($this, c);
+        $this.elementData1691 = ju_HashMap1688_newElementArray1710($this, a_capacity);
         $this.loadFactor1690 = b_loadFactor;
         ju_HashMap1688_computeThreshold1711($this);
         return;
@@ -29238,7 +29244,7 @@ function ju_HashMap1688_newElementArray1710($this, a_s) {
     return $rt_createArray(ju_HashMap$HashEntry1312, a_s);
 }
 function ju_HashMap1688_rehash1196($this, a_capacity) {
-    var b, c, d, e, f, g, h, i;
+    var b, c, d, e, f, g, h;
     if (a_capacity == 0) {
         b = 1;
     } else {
@@ -29253,10 +29259,10 @@ function ju_HashMap1688_rehash1196($this, a_capacity) {
         $this.elementData1691.data[e] = null;
         while (g !== null) {
             h = d.data;
-            i = g.origKeyHash1314 & f;
+            a_capacity = g.origKeyHash1314 & f;
             b = g.next1313;
-            g.next1313 = h[i];
-            h[i] = g;
+            g.next1313 = h[a_capacity];
+            h[a_capacity] = g;
             g = b;
         }
         e = e + 1 | 0;
@@ -29314,18 +29320,18 @@ function ju_HashMap1688_removeEntry1719($this, a_key) {
                 if (d.key1311 === null) {
                     break $ba;
                 }
-                e = d.next1313;
+                a_key = d.next1313;
                 c = d;
-                d = e;
+                d = a_key;
             }
         } else {
-            f = ju_HashMap1688_computeHashCode1716(a_key);
-            b = f & ($this.elementData1691.data.length - 1 | 0);
+            e = ju_HashMap1688_computeHashCode1716(a_key);
+            b = e & ($this.elementData1691.data.length - 1 | 0);
             d = $this.elementData1691.data[b];
-            while (d !== null && !(d.origKeyHash1314 == f && ju_HashMap1688_areEqualKeys1706(a_key, d.key1311) != 0)) {
-                e = d.next1313;
+            while (d !== null && !(d.origKeyHash1314 == e && ju_HashMap1688_areEqualKeys1706(a_key, d.key1311) != 0)) {
+                f = d.next1313;
                 c = d;
-                d = e;
+                d = f;
             }
         }
     }
@@ -29553,7 +29559,7 @@ function dmgc_GameRule1717_getActions1729($this) {
     return $this.actions1720;
 }
 function dmgc_GameRule1717_deserialize1668(a_aIORegistry, b_aEventSheet, c_aSerializedData) {
-    var d, e, f;
+    var d, e, f, g, h;
     d = dmgc_GameRule1717_$init4();
     e = c_aSerializedData.get47($rt_s(137));
     if (e !== null) {
@@ -29564,15 +29570,15 @@ function dmgc_GameRule1717_deserialize1668(a_aIORegistry, b_aEventSheet, c_aSeri
         dmge_Property43_setQuietly132(d.condition1718, dmgc_IORegistry2741_getConditionUnmarshallerFor1730(a_aIORegistry, e.get47($rt_s(72))).unmarshall681(dmgc_EventSheet1642_getGameScene715(b_aEventSheet), e));
     }
     c_aSerializedData = c_aSerializedData.get47($rt_s(440));
-    e = ju_ArrayList2151_$init4();
+    f = ju_ArrayList2151_$init4();
     if (c_aSerializedData !== null) {
-        c_aSerializedData = ju_AbstractList1487_iterator742(c_aSerializedData);
-        while (ju_AbstractList$11185_hasNext745(c_aSerializedData) != 0) {
-            f = ju_AbstractList$11185_next746(c_aSerializedData);
-            ju_AbstractList1487_add131(e, dmgc_IORegistry2741_getActionUnmarshallerFor1731(a_aIORegistry, f.get47($rt_s(72))).unmarshall152(f, dmgc_EventSheet1642_getGameScene715(b_aEventSheet)));
+        g = ju_AbstractList1487_iterator742(c_aSerializedData);
+        while (ju_AbstractList$11185_hasNext745(g) != 0) {
+            h = ju_AbstractList$11185_next746(g);
+            ju_AbstractList1487_add131(f, dmgc_IORegistry2741_getActionUnmarshallerFor1731(a_aIORegistry, h.get47($rt_s(72))).unmarshall152(h, dmgc_EventSheet1642_getGameScene715(b_aEventSheet)));
         }
     }
-    d.actions1720 = ju_AbstractCollection906_toArray128(e, $rt_createArray(dmgc_Action11, ju_ArrayList2151_size129(e)));
+    d.actions1720 = ju_AbstractCollection906_toArray128(f, $rt_createArray(dmgc_Action11, ju_ArrayList2151_size129(f)));
     return d;
 }
 function dmgc_GameRule1717_conditionProperty1732($this) {
@@ -29652,7 +29658,7 @@ function dmgpj_JBox2DGamePhysicsManager1726_access$200741(a_x0) {
     return a_x0.insimulation1732;
 }
 function dmgpj_JBox2DGamePhysicsManager1726_gameObjectInstanceAddedToScene1359($this, a_aInstance) {
-    var b, c, d, e, f, g, h, i, j, k, $je;
+    var b, c, d, e, f, g, h, i, $je;
     b = $this.physicsWorld1738;
     jl_Object2_monitorEnterSync27(b);
     $ba: {
@@ -29690,12 +29696,12 @@ function dmgpj_JBox2DGamePhysicsManager1726_gameObjectInstanceAddedToScene1359($
                     }
                     f = ojcs_PolygonShape1492_$init4();
                     ojcs_PolygonShape1492_setAsBox1426(f, 0.01 * e.width1983 / 2.0, 0.01 * e.height1984 / 2.0);
-                    g = dmgpj_JBox2DGamePhysicsManager1726_createFixtureDefFor1733($this, a_aInstance, f);
+                    c = dmgpj_JBox2DGamePhysicsManager1726_createFixtureDefFor1733($this, a_aInstance, f);
                     ojd_BodyType2123_$clinit();
-                    h = dmgpj_JBox2DGamePhysicsManager1726_createBodyDefFor1736($this, a_aInstance, ojd_BodyType2123.STATIC2125);
-                    i = ojd_World83_createBody224($this.physicsWorld1738, h);
-                    ojd_Body1436_createFixture1403(i, g);
-                    ju_HashMap1688_put52($this.staticObjects1737, a_aInstance, i);
+                    f = dmgpj_JBox2DGamePhysicsManager1726_createBodyDefFor1736($this, a_aInstance, ojd_BodyType2123.STATIC2125);
+                    f = ojd_World83_createBody224($this.physicsWorld1738, f);
+                    ojd_Body1436_createFixture1403(f, c);
+                    ju_HashMap1688_put52($this.staticObjects1737, a_aInstance, f);
                     jl_Object2_monitorExitSync26(b);
                 } catch ($e) {
                     $je = $e.$javaException;
@@ -29706,7 +29712,7 @@ function dmgpj_JBox2DGamePhysicsManager1726_gameObjectInstanceAddedToScene1359($
                         throw $e;
                     }
                 }
-                return i;
+                return f;
             }
         } catch ($e) {
             $je = $e.$javaException;
@@ -29722,14 +29728,14 @@ function dmgpj_JBox2DGamePhysicsManager1726_gameObjectInstanceAddedToScene1359($
                 if (dmgc_GameObjectInstance2906_getBehavior1094(a_aInstance, $rt_cls(dmgp_PlatformBehavior1667)) === null) {
                     break $bd;
                 }
-                f = ojcs_PolygonShape1492_$init4();
-                ojcs_PolygonShape1492_setAsBox1426(f, 0.01 * e.width1983 / 2.0, 0.01 * e.height1984 / 2.0);
-                c = dmgpj_JBox2DGamePhysicsManager1726_createFixtureDefFor1733($this, a_aInstance, f);
+                g = ojcs_PolygonShape1492_$init4();
+                ojcs_PolygonShape1492_setAsBox1426(g, 0.01 * e.width1983 / 2.0, 0.01 * e.height1984 / 2.0);
+                c = dmgpj_JBox2DGamePhysicsManager1726_createFixtureDefFor1733($this, a_aInstance, g);
                 ojd_BodyType2123_$clinit();
-                h = dmgpj_JBox2DGamePhysicsManager1726_createBodyDefFor1736($this, a_aInstance, ojd_BodyType2123.DYNAMIC2127);
-                h = ojd_World83_createBody224($this.physicsWorld1738, h);
-                ju_HashMap1688_put52($this.dynamicObjects1733, a_aInstance, h);
-                ojd_Body1436_createFixture1403(h, c);
+                f = dmgpj_JBox2DGamePhysicsManager1726_createBodyDefFor1736($this, a_aInstance, ojd_BodyType2123.DYNAMIC2127);
+                g = ojd_World83_createBody224($this.physicsWorld1738, f);
+                ju_HashMap1688_put52($this.dynamicObjects1733, a_aInstance, g);
+                ojd_Body1436_createFixture1403(g, c);
                 jl_Object2_monitorExitSync26(b);
             } catch ($e) {
                 $je = $e.$javaException;
@@ -29740,7 +29746,7 @@ function dmgpj_JBox2DGamePhysicsManager1726_gameObjectInstanceAddedToScene1359($
                     throw $e;
                 }
             }
-            return h;
+            return g;
         }
         $be: {
             try {
@@ -29760,14 +29766,14 @@ function dmgpj_JBox2DGamePhysicsManager1726_gameObjectInstanceAddedToScene1359($
             return null;
         }
         try {
-            i = ojcs_PolygonShape1492_$init4();
-            ojcs_PolygonShape1492_setAsBox1426(i, 0.01 * e.width1983 / 2.0, 0.01 * e.height1984 / 2.0);
-            j = dmgpj_JBox2DGamePhysicsManager1726_createFixtureDefFor1733($this, a_aInstance, i);
+            f = ojcs_PolygonShape1492_$init4();
+            ojcs_PolygonShape1492_setAsBox1426(f, 0.01 * e.width1983 / 2.0, 0.01 * e.height1984 / 2.0);
+            h = dmgpj_JBox2DGamePhysicsManager1726_createFixtureDefFor1733($this, a_aInstance, f);
             ojd_BodyType2123_$clinit();
-            k = dmgpj_JBox2DGamePhysicsManager1726_createBodyDefFor1736($this, a_aInstance, ojd_BodyType2123.DYNAMIC2127);
-            k = ojd_World83_createBody224($this.physicsWorld1738, k);
-            ju_HashMap1688_put52($this.dynamicObjects1733, a_aInstance, k);
-            ojd_Body1436_createFixture1403(k, j);
+            d = dmgpj_JBox2DGamePhysicsManager1726_createBodyDefFor1736($this, a_aInstance, ojd_BodyType2123.DYNAMIC2127);
+            i = ojd_World83_createBody224($this.physicsWorld1738, d);
+            ju_HashMap1688_put52($this.dynamicObjects1733, a_aInstance, i);
+            ojd_Body1436_createFixture1403(i, h);
             jl_Object2_monitorExitSync26(b);
         } catch ($e) {
             $je = $e.$javaException;
@@ -29778,34 +29784,34 @@ function dmgpj_JBox2DGamePhysicsManager1726_gameObjectInstanceAddedToScene1359($
                 throw $e;
             }
         }
-        return k;
+        return i;
     }
     jl_Object2_monitorExitSync26(b);
     $rt_throw(d);
 }
 function dmgpj_JBox2DGamePhysicsManager1726_proceedGame995($this, a, b, c_aElapsedTime) {
-    var d, e, f, g, h, i;
+    var d, e, f, g, h, i, j, k;
     $this.insimulation1732 = 1;
     $this.physicsAmountOfTime1728 = Long_add($this.physicsAmountOfTime1728, c_aElapsedTime);
     if (Long_compare($this.physicsAmountOfTime1728, Long_fromInt(32)) >= 0) {
-        a = 6;
-        d = 2;
-        ojd_World83_step204($this.physicsWorld1738, 0.033333335, a, d);
-        e = ju_AbstractList1487_iterator742($this.queuedEventsOfLastLoop1730);
-        while (ju_AbstractList$11185_hasNext745(e) != 0) {
-            dmge_GameEventManager1550_fire541($this.eventManager1735, ju_AbstractList$11185_next746(e));
+        d = 6;
+        e = 2;
+        ojd_World83_step204($this.physicsWorld1738, 0.033333335, d, e);
+        a = ju_AbstractList1487_iterator742($this.queuedEventsOfLastLoop1730);
+        while (ju_AbstractList$11185_hasNext745(a) != 0) {
+            dmge_GameEventManager1550_fire541($this.eventManager1735, ju_AbstractList$11185_next746(a));
         }
         ju_ArrayList2151_clear196($this.queuedEventsOfLastLoop1730);
         f = ju_HashMap$HashMapEntrySet1640_iterator742(ju_HashMap1688_entrySet743($this.dynamicObjects1733));
         while (ju_HashMap$AbstractMapIterator835_hasNext745(f) != 0) {
             g = ju_HashMap$EntryIterator1765_next746(f);
             h = ju_MapEntry1309_getKey747(g);
-            e = dmge_ReadOnlyProperty38_get113(dmgc_GameObject1845_sizeProperty939(dmgc_GameObjectInstance2906_getOwnerGameObject568(h)));
-            i = ju_MapEntry1309_getValue750(g);
-            b = ojd_Body1436_getPosition1405(i);
-            if (ojd_Body1436_isActive195(i) != 0) {
-                dmge_Property43_set120(dmgc_GameObjectInstance2906_positionProperty674(h), dmgt_Position636_$init555(b.x2017 / 0.01 - (e.width1983 / 2 | 0),  -(b.y2018 / 0.01) - (e.height1984 / 2 | 0)));
-                dmge_Property43_set120(dmgc_GameObjectInstance2906_rotationAngleProperty1735(h), dmgt_Angle1361_invert1355(dmgt_Angle1361_fromRadians1347(ojd_Body1436_getAngle1415(i))));
+            i = dmge_ReadOnlyProperty38_get113(dmgc_GameObject1845_sizeProperty939(dmgc_GameObjectInstance2906_getOwnerGameObject568(h)));
+            j = ju_MapEntry1309_getValue750(g);
+            k = ojd_Body1436_getPosition1405(j);
+            if (ojd_Body1436_isActive195(j) != 0) {
+                dmge_Property43_set120(dmgc_GameObjectInstance2906_positionProperty674(h), dmgt_Position636_$init555(k.x2017 / 0.01 - (i.width1983 / 2 | 0),  -(k.y2018 / 0.01) - (i.height1984 / 2 | 0)));
+                dmge_Property43_set120(dmgc_GameObjectInstance2906_rotationAngleProperty1735(h), dmgt_Angle1361_invert1355(dmgt_Angle1361_fromRadians1347(ojd_Body1436_getAngle1415(j))));
             }
         }
         $this.physicsAmountOfTime1728 = Long_ZERO;
@@ -29841,10 +29847,9 @@ function dmgpj_JBox2DGamePhysicsManager1726_access$0001737(a_x0) {
     return a_x0.staticObjects1737;
 }
 function dmgpj_JBox2DGamePhysicsManager1726_applyImpulse1300($this, a_aInstance, b_aForce) {
-    var c;
-    c = ju_HashMap1688_get47($this.dynamicObjects1733, a_aInstance);
-    if (c !== null) {
-        ojd_Body1436_applyLinearImpulse1413(c, ojc_Vec22016_$init555(b_aForce.forceX377, b_aForce.forceY376), ojd_Body1436_getWorldCenter1406(c));
+    a_aInstance = ju_HashMap1688_get47($this.dynamicObjects1733, a_aInstance);
+    if (a_aInstance !== null) {
+        ojd_Body1436_applyLinearImpulse1413(a_aInstance, ojc_Vec22016_$init555(b_aForce.forceX377, b_aForce.forceY376), ojd_Body1436_getWorldCenter1406(a_aInstance));
     }
     return;
 }
@@ -30054,15 +30059,15 @@ function jt_SimpleDatePatternParser1739_parsePattern1615($this, a_pattern) {
                         case 99:
                             c = jt_SimpleDatePatternParser1739_parseRepetitions1739($this);
                             d = $this.elements1740;
-                            e = new jt_DateFormatElement$WeekdayText2671;
-                            f = $this.symbols1744;
+                            b = new jt_DateFormatElement$WeekdayText2671;
+                            e = $this.symbols1744;
                             if (c > 3) {
-                                g = 0;
+                                f = 0;
                             } else {
-                                g = 1;
+                                f = 1;
                             }
-                            jt_DateFormatElement$WeekdayText2671_$init1239(e, f, g);
-                            ju_AbstractList1487_add131(d, e);
+                            jt_DateFormatElement$WeekdayText2671_$init1239(b, e, f);
+                            ju_AbstractList1487_add131(d, b);
                             break $ba;
                         case 70:
                             ju_AbstractList1487_add131($this.elements1740, jt_DateFormatElement$Numeric1072_$init182(8, jt_SimpleDatePatternParser1739_parseRepetitions1739($this)));
@@ -30079,21 +30084,21 @@ function jt_SimpleDatePatternParser1739_parsePattern1615($this, a_pattern) {
                             break $ba;
                         case 76:
                         case 77:
-                            b = jt_SimpleDatePatternParser1739_parseRepetitions1739($this);
-                            if (b <= 2) {
-                                ju_AbstractList1487_add131($this.elements1740, jt_DateFormatElement$NumericMonth1075_$init80(b));
+                            g = jt_SimpleDatePatternParser1739_parseRepetitions1739($this);
+                            if (g <= 2) {
+                                ju_AbstractList1487_add131($this.elements1740, jt_DateFormatElement$NumericMonth1075_$init80(g));
                                 break $ba;
                             }
                             c = $this.elements1740;
-                            d = new jt_DateFormatElement$MonthText1135;
-                            h = $this.symbols1744;
-                            if (b != 3) {
-                                g = 0;
+                            h = new jt_DateFormatElement$MonthText1135;
+                            d = $this.symbols1744;
+                            if (g != 3) {
+                                f = 0;
                             } else {
-                                g = 1;
+                                f = 1;
                             }
-                            jt_DateFormatElement$MonthText1135_$init1239(d, h, g);
-                            ju_AbstractList1487_add131(c, d);
+                            jt_DateFormatElement$MonthText1135_$init1239(h, d, f);
+                            ju_AbstractList1487_add131(c, h);
                             break $ba;
                         case 83:
                             ju_AbstractList1487_add131($this.elements1740, jt_DateFormatElement$Numeric1072_$init182(14, jt_SimpleDatePatternParser1739_parseRepetitions1739($this)));
@@ -30102,11 +30107,11 @@ function jt_SimpleDatePatternParser1739_parsePattern1615($this, a_pattern) {
                             ju_AbstractList1487_add131($this.elements1740, jt_DateFormatElement$Numeric1072_$init182(4, jt_SimpleDatePatternParser1739_parseRepetitions1739($this)));
                             break $ba;
                         case 88:
-                            e = jt_SimpleDatePatternParser1739_parseRepetitions1739($this);
-                            if (e > 3) {
+                            g = jt_SimpleDatePatternParser1739_parseRepetitions1739($this);
+                            if (g > 3) {
                                 $rt_throw(jl_IllegalArgumentException480_$init29(jl_StringBuilder2321_toString35(jl_StringBuilder2321_append76(jl_StringBuilder2321_append36(jl_StringBuilder2321_$init4(), $rt_s(442)), $this.index1742))));
                             }
-                            ju_AbstractList1487_add131($this.elements1740, jt_DateFormatElement$Iso8601Timezone1651_$init80(e));
+                            ju_AbstractList1487_add131($this.elements1740, jt_DateFormatElement$Iso8601Timezone1651_$init80(g));
                             break $ba;
                         case 89:
                         case 121:
@@ -30151,24 +30156,24 @@ function jt_SimpleDatePatternParser1739_parsePattern1615($this, a_pattern) {
                     jt_SimpleDatePatternParser1739_parseQuoted1740($this);
                     break $ba;
                 }
-                b = jt_SimpleDatePatternParser1739_parseRepetitions1739($this);
-                if (b == 2) {
+                g = jt_SimpleDatePatternParser1739_parseRepetitions1739($this);
+                if (g == 2) {
                     ju_AbstractList1487_add131($this.elements1740, jt_DateFormatElement$Year54_$init80(1));
                     break $ba;
                 }
-                ju_AbstractList1487_add131($this.elements1740, jt_DateFormatElement$Numeric1072_$init182(1, b));
+                ju_AbstractList1487_add131($this.elements1740, jt_DateFormatElement$Numeric1072_$init182(1, g));
                 break $ba;
             }
             if (jt_SimpleDatePatternParser1739_isControl1741($this, b) != 0) {
                 jt_SimpleDatePatternParser1739_parseRepetitions1739($this);
             } else {
-                i = jl_StringBuilder2321_$init4();
+                f = jl_StringBuilder2321_$init4();
                 while ($this.index1742 < jl_String1_length2(a_pattern) && jt_SimpleDatePatternParser1739_isControl1741($this, jl_String1_charAt72(a_pattern, $this.index1742)) == 0) {
-                    g = $this.index1742;
-                    $this.index1742 = g + 1 | 0;
-                    jl_StringBuilder2321_append734(i, jl_String1_charAt72(a_pattern, g));
+                    i = $this.index1742;
+                    $this.index1742 = i + 1 | 0;
+                    jl_StringBuilder2321_append734(f, jl_String1_charAt72(a_pattern, i));
                 }
-                ju_AbstractList1487_add131($this.elements1740, jt_DateFormatElement$ConstantText2313_$init29(jl_StringBuilder2321_toString35(i)));
+                ju_AbstractList1487_add131($this.elements1740, jt_DateFormatElement$ConstantText2313_$init29(jl_StringBuilder2321_toString35(f)));
             }
         }
     }
@@ -30350,27 +30355,27 @@ function dmgt_CustomPropertiesClassInformation1774_$clinit() {
         dmgt_CustomPropertiesClassInformation$1716_$init302(a, b, c, d);
         dmgt_CustomPropertiesClassInformation1774.SET1775 = a;
         a = new dmgt_CustomPropertiesClassInformation$2701;
-        b = $rt_s(444);
-        f = $rt_cls(jl_String1);
-        d = $rt_createArray(jl_Class0, 1);
-        d.data[0] = $rt_cls(jl_String1);
-        dmgt_CustomPropertiesClassInformation$2701_$init302(a, b, f, d);
+        f = $rt_s(444);
+        c = $rt_cls(jl_String1);
+        e = $rt_createArray(jl_Class0, 1);
+        e.data[0] = $rt_cls(jl_String1);
+        dmgt_CustomPropertiesClassInformation$2701_$init302(a, f, c, e);
         dmgt_CustomPropertiesClassInformation1774.GET1776 = a;
         a = new dmgt_CustomPropertiesClassInformation$3731;
-        c = $rt_s(445);
+        f = $rt_s(445);
         jl_Void1430_$clinit();
-        f = jl_Void1430.TYPE1431;
+        b = jl_Void1430.TYPE1431;
         d = $rt_createArray(jl_Class0, 1);
         d.data[0] = $rt_cls(jl_String1);
-        dmgt_CustomPropertiesClassInformation$3731_$init302(a, c, f, d);
+        dmgt_CustomPropertiesClassInformation$3731_$init302(a, f, b, d);
         dmgt_CustomPropertiesClassInformation1774.REMOVE1777 = a;
         a = new dmgt_CustomPropertiesClassInformation$4717;
-        c = $rt_s(446);
+        b = $rt_s(446);
         jl_Boolean2001_$clinit();
-        b = jl_Boolean2001.TYPE2005;
-        d = $rt_createArray(jl_Class0, 1);
-        d.data[0] = $rt_cls(jl_String1);
-        dmgt_CustomPropertiesClassInformation$4717_$init302(a, c, b, d);
+        f = jl_Boolean2001.TYPE2005;
+        e = $rt_createArray(jl_Class0, 1);
+        e.data[0] = $rt_cls(jl_String1);
+        dmgt_CustomPropertiesClassInformation$4717_$init302(a, b, f, e);
         dmgt_CustomPropertiesClassInformation1774.HAS1778 = a;
         return;
     };
@@ -30495,14 +30500,14 @@ function dmgc_GameObjectInstanceRemovedFromSceneCondition1795_unmarshall1762(a_a
 function dmgc_GameObjectInstanceRemovedFromSceneCondition1795_appliesTo567($this, a, b_aEvent) {
     var c, d, e;
     if (b_aEvent instanceof dmgc_GameObjectInstanceRemovedFromScene1966 != 0) {
-        c = b_aEvent.instance1967;
-        if (dmgc_GameObjectInstance2906_getOwnerGameObject568(c) === dmge_ReadOnlyProperty38_get113($this.gameObject1796)) {
-            d = new dmgc_ConditionResult2128;
-            a = 1;
+        a = b_aEvent.instance1967;
+        if (dmgc_GameObjectInstance2906_getOwnerGameObject568(a) === dmge_ReadOnlyProperty38_get113($this.gameObject1796)) {
+            c = new dmgc_ConditionResult2128;
+            d = 1;
             e = $rt_createArray(dmgc_GameObjectInstance2906, 1);
-            e.data[0] = c;
-            dmgc_ConditionResult2128_$init571(d, a, b_aEvent, e);
-            return d;
+            e.data[0] = a;
+            dmgc_ConditionResult2128_$init571(c, d, b_aEvent, e);
+            return c;
         }
     }
     dmgc_ConditionResult2128_$clinit();
@@ -30535,9 +30540,9 @@ function jl_Thread4_$clinit() {
         $this.finishedLock1808 = jl_Object2_$init4();
         $this.name1806 = b_name;
         $this.target1804 = a_target;
-        b_name = jl_Thread4.nextId1812;
-        jl_Thread4.nextId1812 = Long_add(b_name, Long_fromInt(1));
-        $this.id1807 = b_name;
+        a_target = jl_Thread4.nextId1812;
+        jl_Thread4.nextId1812 = Long_add(a_target, Long_fromInt(1));
+        $this.id1807 = a_target;
         return;
     };
     jl_Thread4_setCurrentThread7 = function(a_thread) {
@@ -30714,14 +30719,14 @@ function otciu_CLDRHelper1814_resolveDateFormatSymbols1770(a_map, b_language, c_
         a_map = a_map[$rt_ustr(b_language)];
     }
     e = $rt_createArray(jl_String1, a_map.length);
-    b_language = 0;
+    f = 0;
     while (true) {
-        f = e.data;
-        if (b_language >= f.length) {
+        c_country = e.data;
+        if (f >= c_country.length) {
             break;
         }
-        f[b_language] = (a_map[b_language].value !== null ? $rt_str(a_map[b_language].value) : null);
-        b_language = b_language + 1 | 0;
+        c_country[f] = (a_map[f].value !== null ? $rt_str(a_map[f].value) : null);
+        f = f + 1 | 0;
     }
     return e;
 }
@@ -30729,7 +30734,7 @@ function otciu_CLDRHelper1814_resolveShortMonths1783(a_language, b_country) {
     return otciu_CLDRHelper1814_resolveDateFormatSymbols1770(otciu_CLDRHelper1814_getShortMonthMap1773(), a_language, b_country);
 }
 function otciu_CLDRHelper1814_getTimeZoneName1326(a_language_locale, b_country, c_id) {
-    var d, e, f, g;
+    var d, e, f;
     d = otciu_CLDRHelper1814_getCode1782(a_language_locale, b_country);
     if (otciu_CLDRHelper1814_getTimeZoneLocalizationMap1784().hasOwnProperty($rt_ustr(d)) != 0) {
         a_language_locale = d;
@@ -30738,20 +30743,20 @@ function otciu_CLDRHelper1814_getTimeZoneName1326(a_language_locale, b_country, 
         return null;
     }
     e = otciu_CLDRHelper1814_getTimeZoneLocalizationMap1784()[$rt_ustr(a_language_locale)];
-    f = jl_String1_indexOf953(c_id, 47);
-    if (f < 0) {
+    a_language_locale = jl_String1_indexOf953(c_id, 47);
+    if (a_language_locale < 0) {
         return null;
     }
-    g = jl_String1_substring950(c_id, 0, f);
-    c_id = jl_String1_substring511(c_id, f + 1 | 0);
-    if (e.timeZones.hasOwnProperty($rt_ustr(g)) == 0) {
+    f = jl_String1_substring950(c_id, 0, a_language_locale);
+    b_country = jl_String1_substring511(c_id, a_language_locale + 1 | 0);
+    if (e.timeZones.hasOwnProperty($rt_ustr(f)) == 0) {
         return null;
     }
-    a_language_locale = e.timeZones[$rt_ustr(g)];
-    if (a_language_locale.hasOwnProperty($rt_ustr(c_id)) == 0) {
+    c_id = e.timeZones[$rt_ustr(f)];
+    if (c_id.hasOwnProperty($rt_ustr(b_country)) == 0) {
         return null;
     }
-    return (a_language_locale[$rt_ustr(c_id)].value !== null ? $rt_str(a_language_locale[$rt_ustr(c_id)].value) : null);
+    return (c_id[$rt_ustr(b_country)].value !== null ? $rt_str(c_id[$rt_ustr(b_country)].value) : null);
 }
 function otciu_CLDRHelper1814_resolveMonths1785(a_language, b_country) {
     return otciu_CLDRHelper1814_resolveDateFormatSymbols1770(otciu_CLDRHelper1814_getMonthMap1786(), a_language, b_country);
@@ -30956,11 +30961,11 @@ function olv_LuaClosure1826_call411($this, a_arg1, b_arg2) {
     switch ($this.p1827.numparams780) {
         case 0:
             if ($this.p1827.is_vararg774 == 0) {
-                a_arg1 = olv_LuaValue297.NONE310;
+                b_arg2 = olv_LuaValue297.NONE310;
             } else {
-                a_arg1 = olv_LuaValue297_varargsOf426(a_arg1, b_arg2);
+                b_arg2 = olv_LuaValue297_varargsOf426(a_arg1, b_arg2);
             }
-            return olv_LuaClosure1826_execute1799($this, c, a_arg1).arg1106();
+            return olv_LuaClosure1826_execute1799($this, c, b_arg2).arg1106();
         case 1:
             break;
         default:
@@ -31009,7 +31014,7 @@ function olv_LuaClosure1826_errorHook1800($this, a_msg, b_level) {
             return d;
         }
         try {
-            d = $rt_s(450);
+            f = $rt_s(450);
         } catch ($e) {
             $je = $e.$javaException;
             if ($je) {
@@ -31020,7 +31025,7 @@ function olv_LuaClosure1826_errorHook1800($this, a_msg, b_level) {
             }
         }
         c.errorfunc1561 = b_level;
-        return d;
+        return f;
     }
     c.errorfunc1561 = b_level;
     $rt_throw(e);
@@ -31054,19 +31059,19 @@ function olv_LuaClosure1826_call406($this, a_arg1, b_arg2, c_arg3) {
     switch ($this.p1827.numparams780) {
         case 0:
             if ($this.p1827.is_vararg774 == 0) {
-                a_arg1 = olv_LuaValue297.NONE310;
+                b_arg2 = olv_LuaValue297.NONE310;
             } else {
-                a_arg1 = olv_LuaValue297_varargsOf421(a_arg1, b_arg2, c_arg3);
+                b_arg2 = olv_LuaValue297_varargsOf421(a_arg1, b_arg2, c_arg3);
             }
-            return olv_LuaClosure1826_execute1799($this, d, a_arg1).arg1106();
+            return olv_LuaClosure1826_execute1799($this, d, b_arg2).arg1106();
         case 1:
             d.data[0] = a_arg1;
             if ($this.p1827.is_vararg774 == 0) {
-                a_arg1 = olv_LuaValue297.NONE310;
+                b_arg2 = olv_LuaValue297.NONE310;
             } else {
-                a_arg1 = olv_LuaValue297_varargsOf426(b_arg2, c_arg3);
+                b_arg2 = olv_LuaValue297_varargsOf426(b_arg2, c_arg3);
             }
-            return olv_LuaClosure1826_execute1799($this, d, a_arg1).arg1106();
+            return olv_LuaClosure1826_execute1799($this, d, b_arg2).arg1106();
         case 2:
             break;
         default:
@@ -31103,7 +31108,7 @@ function olv_LuaClosure1826_invoke470($this, a_varargs) {
     return olv_LuaClosure1826_onInvoke484($this, a_varargs).eval98();
 }
 function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
-    var c, d, e, f, g, h, i, j, k, m, n, o, p, q, r, s, t, u, v, w, x, y, z, a1, b1, $je;
+    var c, d, e, f, g, h, i, j, k, m, n, o, p, q, r, s, t, u, v, w, x, y, z, a1, $je;
     c = 0;
     d = 0;
     e = olv_LuaValue297.NONE310;
@@ -31350,8 +31355,8 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                                                                                                         }
                                                                                                                                                                     }
                                                                                                                                                                     try {
-                                                                                                                                                                        t = a_stack.data;
-                                                                                                                                                                        t[q] = t[p >>> 23].not491();
+                                                                                                                                                                        r = a_stack.data;
+                                                                                                                                                                        r[q] = r[p >>> 23].not491();
                                                                                                                                                                         s = i;
                                                                                                                                                                         j = i;
                                                                                                                                                                         c = i;
@@ -31373,8 +31378,8 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                                                                                                     }
                                                                                                                                                                 }
                                                                                                                                                                 try {
-                                                                                                                                                                    t = a_stack.data;
-                                                                                                                                                                    t[q] = t[p >>> 23].len460();
+                                                                                                                                                                    r = a_stack.data;
+                                                                                                                                                                    r[q] = r[p >>> 23].len460();
                                                                                                                                                                     s = i;
                                                                                                                                                                     j = i;
                                                                                                                                                                     c = i;
@@ -31462,13 +31467,13 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                                                                                     }
                                                                                                                                                 }
                                                                                                                                                 try {
-                                                                                                                                                    n = a_stack.data;
-                                                                                                                                                    o = n[q].checknumber486($rt_s(451));
-                                                                                                                                                    u = n[q + 1 | 0].checknumber486($rt_s(452));
-                                                                                                                                                    v = n[q + 2 | 0].checknumber486($rt_s(453));
-                                                                                                                                                    n[q] = o.sub494(v);
-                                                                                                                                                    n[q + 1 | 0] = u;
-                                                                                                                                                    n[q + 2 | 0] = v;
+                                                                                                                                                    k = a_stack.data;
+                                                                                                                                                    n = k[q].checknumber486($rt_s(451));
+                                                                                                                                                    o = k[q + 1 | 0].checknumber486($rt_s(452));
+                                                                                                                                                    u = k[q + 2 | 0].checknumber486($rt_s(453));
+                                                                                                                                                    k[q] = n.sub494(u);
+                                                                                                                                                    k[q + 1 | 0] = o;
+                                                                                                                                                    k[q + 2 | 0] = u;
                                                                                                                                                     c = i + ((p >>> 14) - 131071 | 0) | 0;
                                                                                                                                                     s = c;
                                                                                                                                                     j = c;
@@ -31510,16 +31515,16 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                                                                             }
                                                                                                                                             while (true) {
                                                                                                                                                 try {
-                                                                                                                                                    p = r +  -1 | 0;
+                                                                                                                                                    t = r +  -1 | 0;
                                                                                                                                                     if (r < 0) {
                                                                                                                                                         break;
                                                                                                                                                     }
-                                                                                                                                                    t = a_stack.data;
-                                                                                                                                                    r = q + 1 | 0;
+                                                                                                                                                    p = a_stack.data;
+                                                                                                                                                    v = q + 1 | 0;
                                                                                                                                                     olv_LuaValue297_$clinit();
-                                                                                                                                                    t[q] = olv_LuaValue297.NIL319;
-                                                                                                                                                    q = r;
-                                                                                                                                                    r = p;
+                                                                                                                                                    p[q] = olv_LuaValue297.NIL319;
+                                                                                                                                                    q = v;
+                                                                                                                                                    r = t;
                                                                                                                                                     j = i;
                                                                                                                                                     c = i;
                                                                                                                                                     continue;
@@ -31589,10 +31594,10 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                                                                         }
                                                                                                                                     }
                                                                                                                                     try {
-                                                                                                                                        t = a_stack.data;
-                                                                                                                                        s = t[q].invoke470(olv_LuaValue297_varargsOf426(t[q + 1 | 0], t[q + 2 | 0]));
-                                                                                                                                        e = p >> 14 & 511;
-                                                                                                                                        o = q + 3 | 0;
+                                                                                                                                        r = a_stack.data;
+                                                                                                                                        v = r[q].invoke470(olv_LuaValue297_varargsOf426(r[q + 1 | 0], r[q + 2 | 0]));
+                                                                                                                                        p = p >> 14 & 511;
+                                                                                                                                        x = q + 3 | 0;
                                                                                                                                         j = i;
                                                                                                                                         c = i;
                                                                                                                                     } catch ($e) {
@@ -31612,11 +31617,11 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                                                                     }
                                                                                                                                     while (true) {
                                                                                                                                         try {
-                                                                                                                                            e = e +  -1 | 0;
-                                                                                                                                            if (e < 0) {
+                                                                                                                                            p = p +  -1 | 0;
+                                                                                                                                            if (p < 0) {
                                                                                                                                                 break;
                                                                                                                                             }
-                                                                                                                                            t[o + e | 0] = s.arg102(e + 1 | 0);
+                                                                                                                                            r[x + p | 0] = v.arg102(p + 1 | 0);
                                                                                                                                             j = i;
                                                                                                                                             c = i;
                                                                                                                                             continue;
@@ -31661,13 +31666,13 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                                                                 $bU: {
                                                                                                                                     $bV: {
                                                                                                                                         try {
-                                                                                                                                            x = a_stack.data;
-                                                                                                                                            s = x[p >>> 23];
+                                                                                                                                            s = a_stack.data;
+                                                                                                                                            v = s[p >>> 23];
                                                                                                                                             r = p >> 14 & 511;
                                                                                                                                             if (r > 255) {
                                                                                                                                                 break $bV;
                                                                                                                                             }
-                                                                                                                                            r = x[r];
+                                                                                                                                            t = s[r];
                                                                                                                                             j = i;
                                                                                                                                             c = i;
                                                                                                                                             break $bU;
@@ -31688,7 +31693,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                                                                         }
                                                                                                                                     }
                                                                                                                                     try {
-                                                                                                                                        r = g.data[r & 255];
+                                                                                                                                        t = g.data[r & 255];
                                                                                                                                         j = i;
                                                                                                                                         c = i;
                                                                                                                                         break $bU;
@@ -31709,7 +31714,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                                                                     }
                                                                                                                                 }
                                                                                                                                 try {
-                                                                                                                                    x[q] = s.get450(r);
+                                                                                                                                    s[q] = v.get450(t);
                                                                                                                                     s = i;
                                                                                                                                     j = i;
                                                                                                                                     c = i;
@@ -31804,15 +31809,15 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                                                         $bY: {
                                                                                                                             $bZ: {
                                                                                                                                 try {
-                                                                                                                                    t = a_stack.data;
-                                                                                                                                    s = q + 1 | 0;
-                                                                                                                                    x = t[p >>> 23];
-                                                                                                                                    t[s] = x;
-                                                                                                                                    p = p >> 14 & 511;
-                                                                                                                                    if (p > 255) {
+                                                                                                                                    v = a_stack.data;
+                                                                                                                                    r = q + 1 | 0;
+                                                                                                                                    s = v[p >>> 23];
+                                                                                                                                    v[r] = s;
+                                                                                                                                    t = p >> 14 & 511;
+                                                                                                                                    if (t > 255) {
                                                                                                                                         break $bZ;
                                                                                                                                     }
-                                                                                                                                    r = t[p];
+                                                                                                                                    t = v[t];
                                                                                                                                     j = i;
                                                                                                                                     c = i;
                                                                                                                                     break $bY;
@@ -31833,7 +31838,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                                                                 }
                                                                                                                             }
                                                                                                                             try {
-                                                                                                                                r = g.data[p & 255];
+                                                                                                                                t = g.data[t & 255];
                                                                                                                                 j = i;
                                                                                                                                 c = i;
                                                                                                                                 break $bY;
@@ -31854,7 +31859,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                                                             }
                                                                                                                         }
                                                                                                                         try {
-                                                                                                                            t[q] = x.get450(r);
+                                                                                                                            v[q] = s.get450(t);
                                                                                                                             s = i;
                                                                                                                             j = i;
                                                                                                                             c = i;
@@ -31877,8 +31882,8 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                                                     }
                                                                                                                     $b0: {
                                                                                                                         try {
-                                                                                                                            v = p >>> 23;
-                                                                                                                            if (v != 0) {
+                                                                                                                            x = p >>> 23;
+                                                                                                                            if (x != 0) {
                                                                                                                                 break $b0;
                                                                                                                             }
                                                                                                                             d = q + b_varargs.narg101() | 0;
@@ -31924,7 +31929,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                                                     }
                                                                                                                     while (true) {
                                                                                                                         try {
-                                                                                                                            if (r >= v) {
+                                                                                                                            if (r >= x) {
                                                                                                                                 break;
                                                                                                                             }
                                                                                                                             a_stack.data[(q + r | 0) - 1 | 0] = b_varargs.arg102(r);
@@ -31993,9 +31998,9 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                                                     break $bi;
                                                                                                                 }
                                                                                                                 try {
-                                                                                                                    t = h.data;
-                                                                                                                    i = q +  -1 | 0;
-                                                                                                                    q = t.length;
+                                                                                                                    p = h.data;
+                                                                                                                    t = q +  -1 | 0;
+                                                                                                                    v = p.length;
                                                                                                                     j = s;
                                                                                                                     c = s;
                                                                                                                 } catch ($e) {
@@ -32015,8 +32020,8 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                                                 }
                                                                                                                 $b2: while (true) {
                                                                                                                     try {
-                                                                                                                        q = q +  -1 | 0;
-                                                                                                                        if (q < 0) {
+                                                                                                                        v = v +  -1 | 0;
+                                                                                                                        if (v < 0) {
                                                                                                                             break;
                                                                                                                         }
                                                                                                                     } catch ($e) {
@@ -32036,7 +32041,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                                                     }
                                                                                                                     $b3: {
                                                                                                                         try {
-                                                                                                                            if (t[q] !== null) {
+                                                                                                                            if (p[v] !== null) {
                                                                                                                                 break $b3;
                                                                                                                             }
                                                                                                                         } catch ($e) {
@@ -32058,7 +32063,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                                                     }
                                                                                                                     $b4: {
                                                                                                                         try {
-                                                                                                                            if (t[q].index2182 >= i) {
+                                                                                                                            if (p[v].index2182 >= t) {
                                                                                                                                 break $b4;
                                                                                                                             }
                                                                                                                         } catch ($e) {
@@ -32079,8 +32084,8 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                                                         continue $b2;
                                                                                                                     }
                                                                                                                     try {
-                                                                                                                        olv_UpValue2180_close1806(t[q]);
-                                                                                                                        t[q] = null;
+                                                                                                                        olv_UpValue2180_close1806(p[v]);
+                                                                                                                        p[v] = null;
                                                                                                                         j = s;
                                                                                                                         c = s;
                                                                                                                         continue;
@@ -32104,13 +32109,13 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                                             }
                                                                                                             $b5: {
                                                                                                                 try {
-                                                                                                                    r = p >>> 23;
-                                                                                                                    s = p >> 14 & 511;
-                                                                                                                    if (s > (r + 1 | 0)) {
+                                                                                                                    t = p >>> 23;
+                                                                                                                    v = p >> 14 & 511;
+                                                                                                                    if (v > (t + 1 | 0)) {
                                                                                                                         break $b5;
                                                                                                                     }
                                                                                                                     t = a_stack.data;
-                                                                                                                    t[q] = t[s - 1 | 0].concat495(t[s]);
+                                                                                                                    t[q] = t[v - 1 | 0].concat495(t[v]);
                                                                                                                     s = i;
                                                                                                                     j = i;
                                                                                                                     c = i;
@@ -32132,8 +32137,8 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                                                 }
                                                                                                             }
                                                                                                             try {
-                                                                                                                x = a_stack.data;
-                                                                                                                p = olv_LuaValue297_buffer499(x[s]);
+                                                                                                                p = a_stack.data;
+                                                                                                                s = olv_LuaValue297_buffer499(p[v]);
                                                                                                                 j = i;
                                                                                                                 c = i;
                                                                                                             } catch ($e) {
@@ -32153,11 +32158,11 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                                             }
                                                                                                             while (true) {
                                                                                                                 try {
-                                                                                                                    s = s +  -1 | 0;
-                                                                                                                    if (s < r) {
+                                                                                                                    v = v +  -1 | 0;
+                                                                                                                    if (v < t) {
                                                                                                                         break;
                                                                                                                     }
-                                                                                                                    p = x[s].concat482(p);
+                                                                                                                    s = p[v].concat482(s);
                                                                                                                     j = i;
                                                                                                                     c = i;
                                                                                                                     continue;
@@ -32178,7 +32183,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                                                 }
                                                                                                             }
                                                                                                             try {
-                                                                                                                x[q] = olv_Buffer2174_value531(p);
+                                                                                                                p[q] = olv_Buffer2174_value531(s);
                                                                                                                 s = i;
                                                                                                                 j = i;
                                                                                                                 c = i;
@@ -32200,11 +32205,11 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                                             }
                                                                                                         }
                                                                                                         try {
-                                                                                                            r = $this.p1827.p769.data[p >>> 14];
-                                                                                                            t = olv_LuaClosure1826_$init1798(r, $this.globals1829);
-                                                                                                            o = r.upvalues773.data;
-                                                                                                            r = 0;
-                                                                                                            u = o.length;
+                                                                                                            t = $this.p1827.p769.data[p >>> 14];
+                                                                                                            r = olv_LuaClosure1826_$init1798(t, $this.globals1829);
+                                                                                                            o = t.upvalues773.data;
+                                                                                                            p = 0;
+                                                                                                            x = o.length;
                                                                                                             j = i;
                                                                                                             c = i;
                                                                                                         } catch ($e) {
@@ -32224,7 +32229,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                                         }
                                                                                                         while (true) {
                                                                                                             try {
-                                                                                                                if (r >= u) {
+                                                                                                                if (p >= x) {
                                                                                                                     break;
                                                                                                                 }
                                                                                                             } catch ($e) {
@@ -32245,10 +32250,10 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                                             $b6: {
                                                                                                                 $b7: {
                                                                                                                     try {
-                                                                                                                        if (o[r].instack2715 == 0) {
+                                                                                                                        if (o[p].instack2715 == 0) {
                                                                                                                             break $b7;
                                                                                                                         }
-                                                                                                                        t.upValues1828.data[r] = olv_LuaClosure1826_findupval1807($this, a_stack, o[r].idx2714, h);
+                                                                                                                        r.upValues1828.data[p] = olv_LuaClosure1826_findupval1807($this, a_stack, o[p].idx2714, h);
                                                                                                                         j = i;
                                                                                                                         c = i;
                                                                                                                         break $b6;
@@ -32269,7 +32274,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                                                     }
                                                                                                                 }
                                                                                                                 try {
-                                                                                                                    t.upValues1828.data[r] = $this.upValues1828.data[o[r].idx2714];
+                                                                                                                    r.upValues1828.data[p] = $this.upValues1828.data[o[p].idx2714];
                                                                                                                     j = i;
                                                                                                                     c = i;
                                                                                                                     break $b6;
@@ -32290,7 +32295,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                                                 }
                                                                                                             }
                                                                                                             try {
-                                                                                                                r = r + 1 | 0;
+                                                                                                                p = p + 1 | 0;
                                                                                                                 j = i;
                                                                                                                 c = i;
                                                                                                                 continue;
@@ -32311,7 +32316,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                                             }
                                                                                                         }
                                                                                                         try {
-                                                                                                            a_stack.data[q] = t;
+                                                                                                            a_stack.data[q] = r;
                                                                                                             s = i;
                                                                                                             j = i;
                                                                                                             c = i;
@@ -32335,11 +32340,11 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                                     $b8: {
                                                                                                         $b9: {
                                                                                                             try {
-                                                                                                                t = a_stack.data[q].toboolean412();
+                                                                                                                r = a_stack.data[q].toboolean412();
                                                                                                                 if ((p & 8372224) != 0) {
                                                                                                                     break $b9;
                                                                                                                 }
-                                                                                                                r = 0;
+                                                                                                                t = 0;
                                                                                                                 j = i;
                                                                                                                 c = i;
                                                                                                                 break $b8;
@@ -32360,7 +32365,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                                             }
                                                                                                         }
                                                                                                         try {
-                                                                                                            r = 1;
+                                                                                                            t = 1;
                                                                                                             j = i;
                                                                                                             c = i;
                                                                                                             break $b8;
@@ -32382,7 +32387,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                                     }
                                                                                                     $bab: {
                                                                                                         try {
-                                                                                                            if (t != r) {
+                                                                                                            if (r != t) {
                                                                                                                 break $bab;
                                                                                                             }
                                                                                                         } catch ($e) {
@@ -32521,13 +32526,13 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                             $beb: {
                                                                                                 $bfb: {
                                                                                                     try {
-                                                                                                        s = a_stack.data;
-                                                                                                        x = s[p >>> 23];
-                                                                                                        t = x.toboolean412();
+                                                                                                        v = a_stack.data;
+                                                                                                        s = v[p >>> 23];
+                                                                                                        r = s.toboolean412();
                                                                                                         if ((p & 8372224) != 0) {
                                                                                                             break $bfb;
                                                                                                         }
-                                                                                                        r = 0;
+                                                                                                        t = 0;
                                                                                                         j = i;
                                                                                                         c = i;
                                                                                                         break $beb;
@@ -32548,7 +32553,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                                     }
                                                                                                 }
                                                                                                 try {
-                                                                                                    r = 1;
+                                                                                                    t = 1;
                                                                                                     j = i;
                                                                                                     c = i;
                                                                                                     break $beb;
@@ -32570,7 +32575,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                             }
                                                                                             $bgb: {
                                                                                                 try {
-                                                                                                    if (t == r) {
+                                                                                                    if (r == t) {
                                                                                                         break $bgb;
                                                                                                     }
                                                                                                     c = i + 1 | 0;
@@ -32594,7 +32599,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                                 }
                                                                                             }
                                                                                             try {
-                                                                                                s[q] = x;
+                                                                                                v[q] = s;
                                                                                                 s = i;
                                                                                                 j = i;
                                                                                                 c = i;
@@ -32619,14 +32624,14 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                             $bib: {
                                                                                                 $bjb: {
                                                                                                     try {
-                                                                                                        s = a_stack.data;
-                                                                                                        r = s[q + 1 | 0];
-                                                                                                        n = s[q + 2 | 0];
-                                                                                                        o = n.add434(s[q]);
-                                                                                                        if (n.gt_b443(0) != 0) {
+                                                                                                        t = a_stack.data;
+                                                                                                        r = t[q + 1 | 0];
+                                                                                                        k = t[q + 2 | 0];
+                                                                                                        x = k.add434(t[q]);
+                                                                                                        if (k.gt_b443(0) != 0) {
                                                                                                             break $bjb;
                                                                                                         }
-                                                                                                        if (o.gteq_b1808(r) != 0) {
+                                                                                                        if (x.gteq_b1808(r) != 0) {
                                                                                                             break $bib;
                                                                                                         }
                                                                                                     } catch ($e) {
@@ -32648,7 +32653,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                                 }
                                                                                                 $bkb: {
                                                                                                     try {
-                                                                                                        if (o.lteq_b455(r) != 0) {
+                                                                                                        if (x.lteq_b455(r) != 0) {
                                                                                                             break $bkb;
                                                                                                         }
                                                                                                     } catch ($e) {
@@ -32689,8 +32694,8 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                                 }
                                                                                             }
                                                                                             try {
-                                                                                                s[q] = o;
-                                                                                                s[q + 3 | 0] = o;
+                                                                                                t[q] = x;
+                                                                                                t[q + 3 | 0] = x;
                                                                                                 c = i + ((p >>> 14) - 131071 | 0) | 0;
                                                                                                 i = c;
                                                                                                 j = c;
@@ -32735,13 +32740,13 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                     $bmb: {
                                                                                         $bnb: {
                                                                                             try {
-                                                                                                x = a_stack.data;
-                                                                                                t = x[q];
-                                                                                                s = p >>> 23;
-                                                                                                if (s > 255) {
+                                                                                                r = a_stack.data;
+                                                                                                s = r[q];
+                                                                                                v = p >>> 23;
+                                                                                                if (v > 255) {
                                                                                                     break $bnb;
                                                                                                 }
-                                                                                                s = x[s];
+                                                                                                v = r[v];
                                                                                                 j = i;
                                                                                                 c = i;
                                                                                                 break $bmb;
@@ -32762,7 +32767,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                             }
                                                                                         }
                                                                                         try {
-                                                                                            s = g.data[s & 255];
+                                                                                            v = g.data[v & 255];
                                                                                             j = i;
                                                                                             c = i;
                                                                                             break $bmb;
@@ -32785,11 +32790,11 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                     $bob: {
                                                                                         $bpb: {
                                                                                             try {
-                                                                                                q = p >> 14 & 511;
-                                                                                                if (q > 255) {
+                                                                                                p = p >> 14 & 511;
+                                                                                                if (p > 255) {
                                                                                                     break $bpb;
                                                                                                 }
-                                                                                                r = x[q];
+                                                                                                t = r[p];
                                                                                                 j = i;
                                                                                                 c = i;
                                                                                                 break $bob;
@@ -32810,7 +32815,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                             }
                                                                                         }
                                                                                         try {
-                                                                                            r = g.data[q & 255];
+                                                                                            t = g.data[p & 255];
                                                                                             j = i;
                                                                                             c = i;
                                                                                             break $bob;
@@ -32831,7 +32836,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                         }
                                                                                     }
                                                                                     try {
-                                                                                        t.set447(s, r);
+                                                                                        s.set447(v, t);
                                                                                         s = i;
                                                                                         j = i;
                                                                                         c = i;
@@ -32856,11 +32861,11 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                     $brb: {
                                                                                         try {
                                                                                             t = olv_UpValue2180_getValue1804($this.upValues1828.data[q]);
-                                                                                            q = p >>> 23;
-                                                                                            if (q > 255) {
+                                                                                            r = p >>> 23;
+                                                                                            if (r > 255) {
                                                                                                 break $brb;
                                                                                             }
-                                                                                            s = a_stack.data[q];
+                                                                                            v = a_stack.data[r];
                                                                                             j = i;
                                                                                             c = i;
                                                                                             break $bqb;
@@ -32881,7 +32886,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                         }
                                                                                     }
                                                                                     try {
-                                                                                        s = g.data[q & 255];
+                                                                                        v = g.data[r & 255];
                                                                                         j = i;
                                                                                         c = i;
                                                                                         break $bqb;
@@ -32950,7 +32955,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                     }
                                                                                 }
                                                                                 try {
-                                                                                    t.set447(s, r);
+                                                                                    t.set447(v, r);
                                                                                     s = i;
                                                                                     j = i;
                                                                                     c = i;
@@ -32974,11 +32979,11 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                             $bub: {
                                                                                 $bvb: {
                                                                                     try {
-                                                                                        s = p >>> 23;
-                                                                                        if (s > 255) {
+                                                                                        r = p >>> 23;
+                                                                                        if (r > 255) {
                                                                                             break $bvb;
                                                                                         }
-                                                                                        s = a_stack.data[s];
+                                                                                        v = a_stack.data[r];
                                                                                         j = i;
                                                                                         c = i;
                                                                                         break $bub;
@@ -32999,7 +33004,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                     }
                                                                                 }
                                                                                 try {
-                                                                                    s = g.data[s & 255];
+                                                                                    v = g.data[r & 255];
                                                                                     j = i;
                                                                                     c = i;
                                                                                     break $bub;
@@ -33022,11 +33027,11 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                             $bwb: {
                                                                                 $bxb: {
                                                                                     try {
-                                                                                        p = p >> 14 & 511;
-                                                                                        if (p > 255) {
+                                                                                        r = p >> 14 & 511;
+                                                                                        if (r > 255) {
                                                                                             break $bxb;
                                                                                         }
-                                                                                        r = a_stack.data[p];
+                                                                                        t = a_stack.data[r];
                                                                                         j = i;
                                                                                         c = i;
                                                                                         break $bwb;
@@ -33047,7 +33052,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                     }
                                                                                 }
                                                                                 try {
-                                                                                    r = g.data[p & 255];
+                                                                                    t = g.data[r & 255];
                                                                                     j = i;
                                                                                     c = i;
                                                                                     break $bwb;
@@ -33068,7 +33073,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                 }
                                                                             }
                                                                             try {
-                                                                                a_stack.data[q] = s.add434(r);
+                                                                                a_stack.data[q] = v.add434(t);
                                                                                 s = i;
                                                                                 j = i;
                                                                                 c = i;
@@ -33092,11 +33097,11 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                         $byb: {
                                                                             $bzb: {
                                                                                 try {
-                                                                                    s = p >>> 23;
-                                                                                    if (s > 255) {
+                                                                                    r = p >>> 23;
+                                                                                    if (r > 255) {
                                                                                         break $bzb;
                                                                                     }
-                                                                                    s = a_stack.data[s];
+                                                                                    r = a_stack.data[r];
                                                                                     j = i;
                                                                                     c = i;
                                                                                     break $byb;
@@ -33117,7 +33122,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                 }
                                                                             }
                                                                             try {
-                                                                                s = g.data[s & 255];
+                                                                                r = g.data[r & 255];
                                                                                 j = i;
                                                                                 c = i;
                                                                                 break $byb;
@@ -33144,7 +33149,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                     if (p > 255) {
                                                                                         break $bBb;
                                                                                     }
-                                                                                    t = a_stack.data[p];
+                                                                                    p = a_stack.data[p];
                                                                                     j = i;
                                                                                     c = i;
                                                                                     break $bAb;
@@ -33165,7 +33170,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                 }
                                                                             }
                                                                             try {
-                                                                                t = g.data[p & 255];
+                                                                                p = g.data[p & 255];
                                                                                 j = i;
                                                                                 c = i;
                                                                                 break $bAb;
@@ -33186,7 +33191,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                             }
                                                                         }
                                                                         try {
-                                                                            a_stack.data[q] = s.sub494(t);
+                                                                            a_stack.data[q] = r.sub494(p);
                                                                             s = i;
                                                                             j = i;
                                                                             c = i;
@@ -33210,11 +33215,11 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                     $bCb: {
                                                                         $bDb: {
                                                                             try {
-                                                                                t = p >>> 23;
-                                                                                if (t > 255) {
+                                                                                r = p >>> 23;
+                                                                                if (r > 255) {
                                                                                     break $bDb;
                                                                                 }
-                                                                                x = a_stack.data[t];
+                                                                                v = a_stack.data[r];
                                                                                 j = i;
                                                                                 c = i;
                                                                                 break $bCb;
@@ -33235,7 +33240,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                             }
                                                                         }
                                                                         try {
-                                                                            x = g.data[t & 255];
+                                                                            v = g.data[r & 255];
                                                                             j = i;
                                                                             c = i;
                                                                             break $bCb;
@@ -33258,11 +33263,11 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                     $bEb: {
                                                                         $bFb: {
                                                                             try {
-                                                                                t = p >> 14 & 511;
-                                                                                if (t > 255) {
+                                                                                r = p >> 14 & 511;
+                                                                                if (r > 255) {
                                                                                     break $bFb;
                                                                                 }
-                                                                                t = a_stack.data[t];
+                                                                                t = a_stack.data[r];
                                                                                 j = i;
                                                                                 c = i;
                                                                                 break $bEb;
@@ -33283,7 +33288,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                             }
                                                                         }
                                                                         try {
-                                                                            t = g.data[t & 255];
+                                                                            t = g.data[r & 255];
                                                                             j = i;
                                                                             c = i;
                                                                             break $bEb;
@@ -33304,7 +33309,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                         }
                                                                     }
                                                                     try {
-                                                                        a_stack.data[q] = x.mul429(t);
+                                                                        a_stack.data[q] = v.mul429(t);
                                                                         s = i;
                                                                         j = i;
                                                                         c = i;
@@ -33328,11 +33333,11 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                 $bGb: {
                                                                     $bHb: {
                                                                         try {
-                                                                            s = p >>> 23;
-                                                                            if (s > 255) {
+                                                                            r = p >>> 23;
+                                                                            if (r > 255) {
                                                                                 break $bHb;
                                                                             }
-                                                                            t = a_stack.data[s];
+                                                                            v = a_stack.data[r];
                                                                             j = i;
                                                                             c = i;
                                                                             break $bGb;
@@ -33353,7 +33358,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                         }
                                                                     }
                                                                     try {
-                                                                        t = g.data[s & 255];
+                                                                        v = g.data[r & 255];
                                                                         j = i;
                                                                         c = i;
                                                                         break $bGb;
@@ -33376,11 +33381,11 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                 $bIb: {
                                                                     $bJb: {
                                                                         try {
-                                                                            s = p >> 14 & 511;
-                                                                            if (s > 255) {
+                                                                            p = p >> 14 & 511;
+                                                                            if (p > 255) {
                                                                                 break $bJb;
                                                                             }
-                                                                            s = a_stack.data[s];
+                                                                            t = a_stack.data[p];
                                                                             j = i;
                                                                             c = i;
                                                                             break $bIb;
@@ -33401,7 +33406,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                         }
                                                                     }
                                                                     try {
-                                                                        s = g.data[s & 255];
+                                                                        t = g.data[p & 255];
                                                                         j = i;
                                                                         c = i;
                                                                         break $bIb;
@@ -33422,7 +33427,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                     }
                                                                 }
                                                                 try {
-                                                                    a_stack.data[q] = t.div481(s);
+                                                                    a_stack.data[q] = v.div481(t);
                                                                     s = i;
                                                                     j = i;
                                                                     c = i;
@@ -33450,7 +33455,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                         if (r > 255) {
                                                                             break $bLb;
                                                                         }
-                                                                        s = a_stack.data[r];
+                                                                        r = a_stack.data[r];
                                                                         j = i;
                                                                         c = i;
                                                                         break $bKb;
@@ -33471,7 +33476,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                     }
                                                                 }
                                                                 try {
-                                                                    s = g.data[r & 255];
+                                                                    r = g.data[r & 255];
                                                                     j = i;
                                                                     c = i;
                                                                     break $bKb;
@@ -33494,11 +33499,11 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                             $bMb: {
                                                                 $bNb: {
                                                                     try {
-                                                                        p = p >> 14 & 511;
-                                                                        if (p > 255) {
+                                                                        t = p >> 14 & 511;
+                                                                        if (t > 255) {
                                                                             break $bNb;
                                                                         }
-                                                                        t = a_stack.data[p];
+                                                                        t = a_stack.data[t];
                                                                         j = i;
                                                                         c = i;
                                                                         break $bMb;
@@ -33519,7 +33524,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                     }
                                                                 }
                                                                 try {
-                                                                    t = g.data[p & 255];
+                                                                    t = g.data[t & 255];
                                                                     j = i;
                                                                     c = i;
                                                                     break $bMb;
@@ -33540,7 +33545,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                 }
                                                             }
                                                             try {
-                                                                a_stack.data[q] = s.mod492(t);
+                                                                a_stack.data[q] = r.mod492(t);
                                                                 s = i;
                                                                 j = i;
                                                                 c = i;
@@ -33564,11 +33569,11 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                         $bOb: {
                                                             $bPb: {
                                                                 try {
-                                                                    r = p >>> 23;
-                                                                    if (r > 255) {
+                                                                    t = p >>> 23;
+                                                                    if (t > 255) {
                                                                         break $bPb;
                                                                     }
-                                                                    r = a_stack.data[r];
+                                                                    v = a_stack.data[t];
                                                                     j = i;
                                                                     c = i;
                                                                     break $bOb;
@@ -33589,7 +33594,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                 }
                                                             }
                                                             try {
-                                                                r = g.data[r & 255];
+                                                                v = g.data[t & 255];
                                                                 j = i;
                                                                 c = i;
                                                                 break $bOb;
@@ -33612,11 +33617,11 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                         $bQb: {
                                                             $bRb: {
                                                                 try {
-                                                                    t = p >> 14 & 511;
-                                                                    if (t > 255) {
+                                                                    p = p >> 14 & 511;
+                                                                    if (p > 255) {
                                                                         break $bRb;
                                                                     }
-                                                                    s = a_stack.data[t];
+                                                                    t = a_stack.data[p];
                                                                     j = i;
                                                                     c = i;
                                                                     break $bQb;
@@ -33637,7 +33642,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                 }
                                                             }
                                                             try {
-                                                                s = g.data[t & 255];
+                                                                t = g.data[p & 255];
                                                                 j = i;
                                                                 c = i;
                                                                 break $bQb;
@@ -33658,7 +33663,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                             }
                                                         }
                                                         try {
-                                                            a_stack.data[q] = r.pow477(s);
+                                                            a_stack.data[q] = v.pow477(t);
                                                             s = i;
                                                             j = i;
                                                             c = i;
@@ -33682,8 +33687,8 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                     $bSb: {
                                                         $bTb: {
                                                             try {
-                                                                r = p >> 14 & 511;
-                                                                if (r == 0) {
+                                                                t = p >> 14 & 511;
+                                                                if (t == 0) {
                                                                     break $bTb;
                                                                 }
                                                             } catch ($e) {
@@ -33705,7 +33710,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                         }
                                                         try {
                                                             c = i + 1 | 0;
-                                                            r = o[c];
+                                                            t = o[c];
                                                             i = c;
                                                             j = c;
                                                             break $bSb;
@@ -33728,15 +33733,15 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                     $bUb: {
                                                         $bVb: {
                                                             try {
-                                                                s = a_stack.data;
-                                                                y = (r - 1 | 0) * 50 | 0;
-                                                                x = s[q];
-                                                                z = p >>> 23;
-                                                                if (z == 0) {
+                                                                y = a_stack.data;
+                                                                v = (t - 1 | 0) * 50 | 0;
+                                                                z = y[q];
+                                                                w = p >>> 23;
+                                                                if (w == 0) {
                                                                     break $bVb;
                                                                 }
-                                                                x.presize488(y + z | 0);
-                                                                r = 1;
+                                                                z.presize488(v + w | 0);
+                                                                p = 1;
                                                                 j = i;
                                                                 c = i;
                                                             } catch ($e) {
@@ -33756,11 +33761,11 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                             }
                                                             while (true) {
                                                                 try {
-                                                                    if (r > z) {
+                                                                    if (p > w) {
                                                                         break $bUb;
                                                                     }
-                                                                    x.set467(y + r | 0, s[q + r | 0]);
-                                                                    r = r + 1 | 0;
+                                                                    z.set467(v + p | 0, y[q + p | 0]);
+                                                                    p = p + 1 | 0;
                                                                     j = i;
                                                                     c = i;
                                                                     continue;
@@ -33782,9 +33787,9 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                             }
                                                         }
                                                         try {
-                                                            v = (d - q | 0) - 1 | 0;
-                                                            t = v - e.narg101() | 0;
-                                                            r = 1;
+                                                            x = (d - q | 0) - 1 | 0;
+                                                            p = x - e.narg101() | 0;
+                                                            s = 1;
                                                             j = i;
                                                             c = i;
                                                         } catch ($e) {
@@ -33804,11 +33809,11 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                         }
                                                         while (true) {
                                                             try {
-                                                                if (r > t) {
+                                                                if (s > p) {
                                                                     break;
                                                                 }
-                                                                x.set467(y + r | 0, s[q + r | 0]);
-                                                                r = r + 1 | 0;
+                                                                z.set467(v + s | 0, y[q + s | 0]);
+                                                                s = s + 1 | 0;
                                                                 j = i;
                                                                 c = i;
                                                                 continue;
@@ -33830,11 +33835,11 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                         }
                                                         while (true) {
                                                             try {
-                                                                if (r > v) {
+                                                                if (s > x) {
                                                                     break;
                                                                 }
-                                                                x.set467(y + r | 0, e.arg102(r - t | 0));
-                                                                r = r + 1 | 0;
+                                                                z.set467(v + s | 0, e.arg102(s - p | 0));
+                                                                s = s + 1 | 0;
                                                                 j = i;
                                                                 c = i;
                                                                 continue;
@@ -33975,8 +33980,8 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                                     }
                                                                                 }
                                                                                 try {
-                                                                                    t = a_stack.data;
-                                                                                    t[q].call461(t[q + 1 | 0]);
+                                                                                    p = a_stack.data;
+                                                                                    p[q].call461(p[q + 1 | 0]);
                                                                                     s = i;
                                                                                     j = i;
                                                                                     c = i;
@@ -34021,8 +34026,8 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                             }
                                                                         }
                                                                         try {
-                                                                            t = a_stack.data;
-                                                                            t[q] = t[q].call461(t[q + 1 | 0]);
+                                                                            p = a_stack.data;
+                                                                            p[q] = p[q].call461(p[q + 1 | 0]);
                                                                             s = i;
                                                                             j = i;
                                                                             c = i;
@@ -34044,8 +34049,8 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                         }
                                                                     }
                                                                     try {
-                                                                        s = a_stack.data;
-                                                                        e = s[q].invoke470(s[q + 1 | 0]);
+                                                                        r = a_stack.data;
+                                                                        e = r[q].invoke470(r[q + 1 | 0]);
                                                                         d = q + e.narg101() | 0;
                                                                         s = i;
                                                                         j = i;
@@ -34068,8 +34073,8 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                                     }
                                                                 }
                                                                 try {
-                                                                    m = a_stack.data;
-                                                                    m[q].call411(m[q + 1 | 0], m[q + 2 | 0]);
+                                                                    t = a_stack.data;
+                                                                    t[q].call411(t[q + 1 | 0], t[q + 2 | 0]);
                                                                     s = i;
                                                                     j = i;
                                                                     c = i;
@@ -34114,8 +34119,8 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                             }
                                                         }
                                                         try {
-                                                            t = a_stack.data;
-                                                            t[q].call406(t[q + 1 | 0], t[q + 2 | 0], t[q + 3 | 0]);
+                                                            v = a_stack.data;
+                                                            v[q].call406(v[q + 1 | 0], v[q + 2 | 0], v[q + 3 | 0]);
                                                             s = i;
                                                             j = i;
                                                             c = i;
@@ -34137,8 +34142,8 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                         }
                                                     }
                                                     try {
-                                                        s = a_stack.data;
-                                                        s[q] = s[q].call406(s[q + 1 | 0], s[q + 2 | 0], s[q + 3 | 0]);
+                                                        p = a_stack.data;
+                                                        p[q] = p[q].call406(p[q + 1 | 0], p[q + 2 | 0], p[q + 3 | 0]);
                                                         s = i;
                                                         j = i;
                                                         c = i;
@@ -34162,12 +34167,12 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                 $b6b: {
                                                     $b7b: {
                                                         try {
-                                                            s = p >>> 23;
+                                                            v = p >>> 23;
                                                             t = p >> 14 & 511;
-                                                            if (s <= 0) {
+                                                            if (v <= 0) {
                                                                 break $b7b;
                                                             }
-                                                            r = olv_LuaValue297_varargsOf418(a_stack, q + 1 | 0, s - 1 | 0);
+                                                            r = olv_LuaValue297_varargsOf418(a_stack, q + 1 | 0, v - 1 | 0);
                                                             j = i;
                                                             c = i;
                                                             break $b6b;
@@ -34210,8 +34215,8 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                 }
                                                 $b8b: {
                                                     try {
-                                                        s = a_stack.data;
-                                                        e = s[q].invoke470(r);
+                                                        p = a_stack.data;
+                                                        e = p[q].invoke470(r);
                                                         if (t > 0) {
                                                             break $b8b;
                                                         }
@@ -34242,7 +34247,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                         if (t <= 0) {
                                                             break;
                                                         }
-                                                        s[(q + t | 0) - 1 | 0] = e.arg102(t);
+                                                        p[(q + t | 0) - 1 | 0] = e.arg102(t);
                                                         j = i;
                                                         c = i;
                                                         continue;
@@ -34287,11 +34292,11 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                             $b9b: {
                                                 $bac: {
                                                     try {
-                                                        s = p >>> 23;
-                                                        if (s > 255) {
+                                                        r = p >>> 23;
+                                                        if (r > 255) {
                                                             break $bac;
                                                         }
-                                                        t = a_stack.data[s];
+                                                        r = a_stack.data[r];
                                                         j = i;
                                                         c = i;
                                                         break $b9b;
@@ -34312,7 +34317,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                     }
                                                 }
                                                 try {
-                                                    t = g.data[s & 255];
+                                                    r = g.data[r & 255];
                                                     j = i;
                                                     c = i;
                                                     break $b9b;
@@ -34335,11 +34340,11 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                             $bbc: {
                                                 $bcc: {
                                                     try {
-                                                        s = p >> 14 & 511;
-                                                        if (s > 255) {
+                                                        t = p >> 14 & 511;
+                                                        if (t > 255) {
                                                             break $bcc;
                                                         }
-                                                        r = a_stack.data[s];
+                                                        t = a_stack.data[t];
                                                         j = i;
                                                         c = i;
                                                         break $bbc;
@@ -34360,7 +34365,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                     }
                                                 }
                                                 try {
-                                                    r = g.data[s & 255];
+                                                    t = g.data[t & 255];
                                                     j = i;
                                                     c = i;
                                                     break $bbc;
@@ -34383,7 +34388,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                             $bdc: {
                                                 $bec: {
                                                     try {
-                                                        r = t.eq_b469(r);
+                                                        r = r.eq_b469(t);
                                                         if (q != 0) {
                                                             break $bec;
                                                         }
@@ -34475,11 +34480,11 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                         $bgc: {
                                             $bhc: {
                                                 try {
-                                                    t = p >>> 23;
-                                                    if (t > 255) {
+                                                    r = p >>> 23;
+                                                    if (r > 255) {
                                                         break $bhc;
                                                     }
-                                                    x = a_stack.data[t];
+                                                    r = a_stack.data[r];
                                                     j = i;
                                                     c = i;
                                                     break $bgc;
@@ -34500,7 +34505,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                 }
                                             }
                                             try {
-                                                x = g.data[t & 255];
+                                                r = g.data[r & 255];
                                                 j = i;
                                                 c = i;
                                                 break $bgc;
@@ -34523,11 +34528,11 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                         $bic: {
                                             $bjc: {
                                                 try {
-                                                    t = p >> 14 & 511;
-                                                    if (t > 255) {
+                                                    p = p >> 14 & 511;
+                                                    if (p > 255) {
                                                         break $bjc;
                                                     }
-                                                    r = a_stack.data[t];
+                                                    t = a_stack.data[p];
                                                     j = i;
                                                     c = i;
                                                     break $bic;
@@ -34548,7 +34553,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                 }
                                             }
                                             try {
-                                                r = g.data[t & 255];
+                                                t = g.data[p & 255];
                                                 j = i;
                                                 c = i;
                                                 break $bic;
@@ -34571,11 +34576,11 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                         $bkc: {
                                             $bmc: {
                                                 try {
-                                                    t = x.lt_b451(r);
+                                                    r = r.lt_b451(t);
                                                     if (q != 0) {
                                                         break $bmc;
                                                     }
-                                                    r = 0;
+                                                    t = 0;
                                                     j = i;
                                                     c = i;
                                                     break $bkc;
@@ -34596,7 +34601,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                                 }
                                             }
                                             try {
-                                                r = 1;
+                                                t = 1;
                                                 j = i;
                                                 c = i;
                                                 break $bkc;
@@ -34618,7 +34623,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                         }
                                         $bnc: {
                                             try {
-                                                if (t != r) {
+                                                if (r != t) {
                                                     break $bnc;
                                                 }
                                             } catch ($e) {
@@ -34663,11 +34668,11 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                     $boc: {
                                         $bpc: {
                                             try {
-                                                t = p >>> 23;
-                                                if (t > 255) {
+                                                r = p >>> 23;
+                                                if (r > 255) {
                                                     break $bpc;
                                                 }
-                                                s = a_stack.data[t];
+                                                r = a_stack.data[r];
                                                 j = i;
                                                 c = i;
                                                 break $boc;
@@ -34688,7 +34693,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                             }
                                         }
                                         try {
-                                            s = g.data[t & 255];
+                                            r = g.data[r & 255];
                                             j = i;
                                             c = i;
                                             break $boc;
@@ -34711,11 +34716,11 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                     $bqc: {
                                         $brc: {
                                             try {
-                                                r = p >> 14 & 511;
-                                                if (r > 255) {
+                                                p = p >> 14 & 511;
+                                                if (p > 255) {
                                                     break $brc;
                                                 }
-                                                r = a_stack.data[r];
+                                                t = a_stack.data[p];
                                                 j = i;
                                                 c = i;
                                                 break $bqc;
@@ -34736,7 +34741,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                             }
                                         }
                                         try {
-                                            r = g.data[r & 255];
+                                            t = g.data[p & 255];
                                             j = i;
                                             c = i;
                                             break $bqc;
@@ -34759,11 +34764,11 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                     $bsc: {
                                         $btc: {
                                             try {
-                                                t = s.lteq_b455(r);
+                                                r = r.lteq_b455(t);
                                                 if (q != 0) {
                                                     break $btc;
                                                 }
-                                                r = 0;
+                                                t = 0;
                                                 j = i;
                                                 c = i;
                                                 break $bsc;
@@ -34784,7 +34789,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                             }
                                         }
                                         try {
-                                            r = 1;
+                                            t = 1;
                                             j = i;
                                             c = i;
                                             break $bsc;
@@ -34806,7 +34811,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                     }
                                     $buc: {
                                         try {
-                                            if (t != r) {
+                                            if (r != t) {
                                                 break $buc;
                                             }
                                         } catch ($e) {
@@ -34909,8 +34914,8 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                         $bwc: {
                             $bxc: {
                                 try {
-                                    z = p >>> 23;
-                                    switch (z) {
+                                    w = p >>> 23;
+                                    switch (w) {
                                         case 0:
                                             break $bvc;
                                         case 1:
@@ -34920,7 +34925,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                         default:
                                             break $bwc;
                                     }
-                                    v = olv_LuaValue297.NONE310;
+                                    x = olv_LuaValue297.NONE310;
                                     j = i;
                                     c = i;
                                 } catch ($e) {
@@ -34939,26 +34944,26 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                     }
                                 }
                                 if (h !== null) {
-                                    z = h.data;
-                                    b_varargs = z.length;
+                                    w = h.data;
+                                    t = w.length;
                                     while (true) {
-                                        b_varargs = b_varargs +  -1 | 0;
-                                        if (b_varargs < 0) {
+                                        t = t +  -1 | 0;
+                                        if (t < 0) {
                                             break;
                                         }
-                                        if (z[b_varargs] === null) {
+                                        if (w[t] === null) {
                                             continue;
                                         }
-                                        olv_UpValue2180_close1806(z[b_varargs]);
+                                        olv_UpValue2180_close1806(w[t]);
                                     }
                                 }
                                 if ($this.globals1829 !== null && $this.globals1829.debuglib1399 !== null) {
                                     $this.globals1829.debuglib1399.onReturn1809();
                                 }
-                                return v;
+                                return x;
                             }
                             try {
-                                v = a_stack.data[q];
+                                x = a_stack.data[q];
                                 j = i;
                                 c = i;
                             } catch ($e) {
@@ -34977,26 +34982,26 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                 }
                             }
                             if (h !== null) {
-                                n = h.data;
-                                a_stack = n.length;
+                                k = h.data;
+                                a_stack = k.length;
                                 while (true) {
                                     a_stack = a_stack +  -1 | 0;
                                     if (a_stack < 0) {
                                         break;
                                     }
-                                    if (n[a_stack] === null) {
+                                    if (k[a_stack] === null) {
                                         continue;
                                     }
-                                    olv_UpValue2180_close1806(n[a_stack]);
+                                    olv_UpValue2180_close1806(k[a_stack]);
                                 }
                             }
                             if ($this.globals1829 !== null && $this.globals1829.debuglib1399 !== null) {
                                 $this.globals1829.debuglib1399.onReturn1809();
                             }
-                            return v;
+                            return x;
                         }
                         try {
-                            v = olv_LuaValue297_varargsOf418(a_stack, q, z - 1 | 0);
+                            x = olv_LuaValue297_varargsOf418(a_stack, q, w - 1 | 0);
                             j = i;
                             c = i;
                         } catch ($e) {
@@ -35016,25 +35021,25 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                         }
                         if (h !== null) {
                             n = h.data;
-                            a_stack = n.length;
+                            t = n.length;
                             while (true) {
-                                a_stack = a_stack +  -1 | 0;
-                                if (a_stack < 0) {
+                                t = t +  -1 | 0;
+                                if (t < 0) {
                                     break;
                                 }
-                                if (n[a_stack] === null) {
+                                if (n[t] === null) {
                                     continue;
                                 }
-                                olv_UpValue2180_close1806(n[a_stack]);
+                                olv_UpValue2180_close1806(n[t]);
                             }
                         }
                         if ($this.globals1829 !== null && $this.globals1829.debuglib1399 !== null) {
                             $this.globals1829.debuglib1399.onReturn1809();
                         }
-                        return v;
+                        return x;
                     }
                     try {
-                        z = olv_LuaValue297_varargsOf423(a_stack, q, (d - e.narg101() | 0) - q | 0, e);
+                        w = olv_LuaValue297_varargsOf423(a_stack, q, (d - e.narg101() | 0) - q | 0, e);
                         j = i;
                         c = i;
                     } catch ($e) {
@@ -35053,23 +35058,23 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                         }
                     }
                     if (h !== null) {
-                        w = h.data;
-                        a_stack = w.length;
+                        g = h.data;
+                        a_stack = g.length;
                         while (true) {
                             a_stack = a_stack +  -1 | 0;
                             if (a_stack < 0) {
                                 break;
                             }
-                            if (w[a_stack] === null) {
+                            if (g[a_stack] === null) {
                                 continue;
                             }
-                            olv_UpValue2180_close1806(w[a_stack]);
+                            olv_UpValue2180_close1806(g[a_stack]);
                         }
                     }
                     if ($this.globals1829 !== null && $this.globals1829.debuglib1399 !== null) {
                         $this.globals1829.debuglib1399.onReturn1809();
                     }
-                    return z;
+                    return w;
                 }
                 $byc: {
                     $bzc: {
@@ -35089,7 +35094,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                             break $byc;
                                     }
                                     a_stack = a_stack.data;
-                                    b_varargs = olv_TailcallVarargs510_$init104(a_stack[q], olv_LuaValue297.NONE310);
+                                    t = olv_TailcallVarargs510_$init104(a_stack[q], olv_LuaValue297.NONE310);
                                     j = i;
                                     c = i;
                                 } catch ($e) {
@@ -35108,27 +35113,27 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                     }
                                 }
                                 if (h !== null) {
-                                    a_stack = h.data;
-                                    r = a_stack.length;
+                                    r = h.data;
+                                    p = r.length;
                                     while (true) {
-                                        r = r +  -1 | 0;
-                                        if (r < 0) {
+                                        p = p +  -1 | 0;
+                                        if (p < 0) {
                                             break;
                                         }
-                                        if (a_stack[r] === null) {
+                                        if (r[p] === null) {
                                             continue;
                                         }
-                                        olv_UpValue2180_close1806(a_stack[r]);
+                                        olv_UpValue2180_close1806(r[p]);
                                     }
                                 }
                                 if ($this.globals1829 !== null && $this.globals1829.debuglib1399 !== null) {
                                     $this.globals1829.debuglib1399.onReturn1809();
                                 }
-                                return b_varargs;
+                                return t;
                             }
                             try {
                                 a_stack = a_stack.data;
-                                r = olv_TailcallVarargs510_$init104(a_stack[q], a_stack[q + 1 | 0]);
+                                t = olv_TailcallVarargs510_$init104(a_stack[q], a_stack[q + 1 | 0]);
                                 j = i;
                                 c = i;
                             } catch ($e) {
@@ -35147,27 +35152,27 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                                 }
                             }
                             if (h !== null) {
-                                b_varargs = h.data;
-                                t = b_varargs.length;
+                                a_stack = h.data;
+                                p = a_stack.length;
                                 while (true) {
-                                    t = t +  -1 | 0;
-                                    if (t < 0) {
+                                    p = p +  -1 | 0;
+                                    if (p < 0) {
                                         break;
                                     }
-                                    if (b_varargs[t] === null) {
+                                    if (a_stack[p] === null) {
                                         continue;
                                     }
-                                    olv_UpValue2180_close1806(b_varargs[t]);
+                                    olv_UpValue2180_close1806(a_stack[p]);
                                 }
                             }
                             if ($this.globals1829 !== null && $this.globals1829.debuglib1399 !== null) {
                                 $this.globals1829.debuglib1399.onReturn1809();
                             }
-                            return r;
+                            return t;
                         }
                         try {
-                            b_varargs = a_stack.data;
-                            s = olv_TailcallVarargs510_$init104(b_varargs[q], olv_LuaValue297_varargsOf426(b_varargs[q + 1 | 0], b_varargs[q + 2 | 0]));
+                            r = a_stack.data;
+                            t = olv_TailcallVarargs510_$init104(r[q], olv_LuaValue297_varargsOf426(r[q + 1 | 0], r[q + 2 | 0]));
                             j = i;
                             c = i;
                         } catch ($e) {
@@ -35186,27 +35191,27 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                             }
                         }
                         if (h !== null) {
-                            r = h.data;
-                            a_stack = r.length;
+                            a_stack = h.data;
+                            p = a_stack.length;
                             while (true) {
-                                a_stack = a_stack +  -1 | 0;
-                                if (a_stack < 0) {
+                                p = p +  -1 | 0;
+                                if (p < 0) {
                                     break;
                                 }
-                                if (r[a_stack] === null) {
+                                if (a_stack[p] === null) {
                                     continue;
                                 }
-                                olv_UpValue2180_close1806(r[a_stack]);
+                                olv_UpValue2180_close1806(a_stack[p]);
                             }
                         }
                         if ($this.globals1829 !== null && $this.globals1829.debuglib1399 !== null) {
                             $this.globals1829.debuglib1399.onReturn1809();
                         }
-                        return s;
+                        return t;
                     }
                     try {
-                        s = a_stack.data;
-                        e = olv_TailcallVarargs510_$init104(s[q], olv_LuaValue297_varargsOf421(s[q + 1 | 0], s[q + 2 | 0], s[q + 3 | 0]));
+                        v = a_stack.data;
+                        p = olv_TailcallVarargs510_$init104(v[q], olv_LuaValue297_varargsOf421(v[q + 1 | 0], v[q + 2 | 0], v[q + 3 | 0]));
                         j = i;
                         c = i;
                     } catch ($e) {
@@ -35226,31 +35231,31 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                     }
                     if (h !== null) {
                         a_stack = h.data;
-                        b_varargs = a_stack.length;
+                        r = a_stack.length;
                         while (true) {
-                            b_varargs = b_varargs +  -1 | 0;
-                            if (b_varargs < 0) {
+                            r = r +  -1 | 0;
+                            if (r < 0) {
                                 break;
                             }
-                            if (a_stack[b_varargs] === null) {
+                            if (a_stack[r] === null) {
                                 continue;
                             }
-                            olv_UpValue2180_close1806(a_stack[b_varargs]);
+                            olv_UpValue2180_close1806(a_stack[r]);
                         }
                     }
                     if ($this.globals1829 !== null && $this.globals1829.debuglib1399 !== null) {
                         $this.globals1829.debuglib1399.onReturn1809();
                     }
-                    return e;
+                    return p;
                 }
                 $bCc: {
                     $bDc: {
                         try {
-                            z = p >>> 23;
-                            if (z <= 0) {
+                            w = p >>> 23;
+                            if (w <= 0) {
                                 break $bDc;
                             }
-                            b_varargs = olv_LuaValue297_varargsOf418(a_stack, q + 1 | 0, z - 1 | 0);
+                            t = olv_LuaValue297_varargsOf418(a_stack, q + 1 | 0, w - 1 | 0);
                             j = i;
                             c = i;
                             break $bCc;
@@ -35271,7 +35276,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                         }
                     }
                     try {
-                        b_varargs = olv_LuaValue297_varargsOf423(a_stack, q + 1 | 0, (d - e.narg101() | 0) - (q + 1 | 0) | 0, e);
+                        t = olv_LuaValue297_varargsOf423(a_stack, q + 1 | 0, (d - e.narg101() | 0) - (q + 1 | 0) | 0, e);
                         j = i;
                         c = i;
                         break $bCc;
@@ -35293,7 +35298,7 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                 }
                 try {
                     a1 = a_stack.data;
-                    b1 = olv_TailcallVarargs510_$init104(a1[q], b_varargs);
+                    b_varargs = olv_TailcallVarargs510_$init104(a1[q], t);
                     j = i;
                     c = i;
                 } catch ($e) {
@@ -35312,28 +35317,28 @@ function olv_LuaClosure1826_execute1799($this, a_stack, b_varargs) {
                     }
                 }
                 if (h !== null) {
-                    v = h.data;
-                    a_stack = v.length;
+                    k = h.data;
+                    a_stack = k.length;
                     while (true) {
                         a_stack = a_stack +  -1 | 0;
                         if (a_stack < 0) {
                             break;
                         }
-                        if (v[a_stack] === null) {
+                        if (k[a_stack] === null) {
                             continue;
                         }
-                        olv_UpValue2180_close1806(v[a_stack]);
+                        olv_UpValue2180_close1806(k[a_stack]);
                     }
                 }
                 if ($this.globals1829 !== null && $this.globals1829.debuglib1399 !== null) {
                     $this.globals1829.debuglib1399.onReturn1809();
                 }
-                return b1;
+                return b_varargs;
             }
             try {
-                a_stack = olv_LuaError718_$init155(m);
-                olv_LuaClosure1826_processErrorHooks1810($this, a_stack, $this.p1827, j);
-                $rt_throw(a_stack);
+                t = olv_LuaError718_$init155(m);
+                olv_LuaClosure1826_processErrorHooks1810($this, t, $this.p1827, j);
+                $rt_throw(t);
             } catch ($e) {
                 $je = $e.$javaException;
                 if ($je) {
@@ -35387,11 +35392,11 @@ function olv_LuaClosure1826_processErrorHooks1810($this, a_le, b_p, c_pc) {
     }
     d = jl_StringBuilder2321_append36(jl_StringBuilder2321_append36(d, e), $rt_s(218));
     if (b_p.lineinfo770 !== null && c_pc >= 0 && c_pc < b_p.lineinfo770.data.length) {
-        c_pc = jl_String1_valueOf940(b_p.lineinfo770.data[c_pc]);
+        e = jl_String1_valueOf940(b_p.lineinfo770.data[c_pc]);
     } else {
-        c_pc = $rt_s(169);
+        e = $rt_s(169);
     }
-    a_le.fileline719 = jl_StringBuilder2321_toString35(jl_StringBuilder2321_append36(d, c_pc));
+    a_le.fileline719 = jl_StringBuilder2321_toString35(jl_StringBuilder2321_append36(d, e));
     a_le.traceback722 = olv_LuaClosure1826_errorHook1800($this, olv_LuaError718_getMessage157(a_le), a_le.level720);
     return;
 }
@@ -35412,14 +35417,14 @@ function olv_LuaClosure1826_findupval1807($this, a_stack, b_idx, c_openups) {
     f = 0;
     while (true) {
         if (f >= e) {
-            f = 0;
-            while (f < e) {
-                if (d[f] === null) {
-                    g = olv_UpValue2180_$init1811(a_stack, b_idx);
-                    d[f] = g;
-                    return g;
+            g = 0;
+            while (g < e) {
+                if (d[g] === null) {
+                    f = olv_UpValue2180_$init1811(a_stack, b_idx);
+                    d[g] = f;
+                    return f;
                 }
-                f = f + 1 | 0;
+                g = g + 1 | 0;
             }
             olv_LuaValue297_error407($rt_s(456));
             return null;
@@ -35536,38 +35541,40 @@ function dmgp_GameProcessManager1840_kill1815($this, a_aProcess) {
     return;
 }
 function dmgp_GameProcessManager1840_proceedGame995($this, a, b_aGameTime, c_aElapsedTime) {
-    var d, e, f, g, h;
+    var d, e, f, g, h, i, j;
     $this.processesAmountOfTime1843 = Long_add($this.processesAmountOfTime1843, c_aElapsedTime);
     if (Long_compare($this.processesAmountOfTime1843, Long_fromInt(8)) > 0) {
         d = ju_ArrayList2151_$init4();
-        c_aElapsedTime = $this.runningProcesses1842.data;
-        e = c_aElapsedTime.length;
-        f = 0;
-        while (f < e) {
+        e = $this.runningProcesses1842.data;
+        f = e.length;
+        g = 0;
+        while (g < f) {
             $ba: {
-                g = c_aElapsedTime[f];
-                h = g.proceedGame550(b_aGameTime, $this.processesAmountOfTime1843);
+                h = e[g];
+                i = h.proceedGame550(b_aGameTime, $this.processesAmountOfTime1843);
                 dmgp_GameProcessManager$11356_$clinit();
-                switch (dmgp_GameProcessManager$11356.$SwitchMap$de$mirkosertic$gameengine$process$GameProcess$ProceedResult1357.data[jl_Enum140_ordinal147(h)]) {
+                switch (dmgp_GameProcessManager$11356.$SwitchMap$de$mirkosertic$gameengine$process$GameProcess$ProceedResult1357.data[jl_Enum140_ordinal147(i)]) {
                     case 1:
                         break;
                     case 2:
-                        ju_HashSet1342_add131($this.killedProcesses1841, g);
-                        a = g.getChildProcess581();
-                        if (a === null) {
+                        ju_HashSet1342_add131($this.killedProcesses1841, h);
+                        j = h.getChildProcess581();
+                        if (j === null) {
                             break $ba;
                         }
-                        ju_AbstractList1487_add131(d, a);
+                        ju_AbstractList1487_add131(d, j);
                         break $ba;
                     default:
                         break $ba;
                 }
             }
-            f = f + 1 | 0;
+            g = g + 1 | 0;
         }
-        b_aGameTime = ju_AbstractList1487_iterator742(d);
-        while (ju_AbstractList$11185_hasNext745(b_aGameTime) != 0) {
-            dmgp_GameProcessManager1840_start1813($this, ju_AbstractList$11185_next746(b_aGameTime));
+        if (ju_AbstractCollection906_isEmpty71(d) == 0) {
+            b_aGameTime = ju_AbstractList1487_iterator742(d);
+            while (ju_AbstractList$11185_hasNext745(b_aGameTime) != 0) {
+                dmgp_GameProcessManager1840_start1813($this, ju_AbstractList$11185_next746(b_aGameTime));
+            }
         }
         if (ju_HashSet1342_size129($this.killedProcesses1841) > 0) {
             b_aGameTime = dmg_ArrayUtils2172_asList126($this.runningProcesses1842);
@@ -35602,19 +35609,19 @@ function jnc_CoderMalfunctionError1844_$init156($this, a_cause) {
 function dmgc_GameObject1845_$clinit() {
     dmgc_GameObject1845_$clinit = function(){};
     dmgc_GameObject1845_$init1817 = function($this, a_aScene, b_aName, c_aUUID) {
-        var d, e;
+        var d, e, f;
         jl_Object2_$init8($this);
         d = dmgc_GameRuntime1097_getEventManager264(dmgc_GameScene2107_getRuntime262(a_aScene));
         $this.gameScene1846 = a_aScene;
         $this.uuid1851 = dmge_Property43_$init118($rt_cls(jl_String1), $this, $rt_s(460), c_aUUID, d);
         $this.name1849 = dmge_Property43_$init118($rt_cls(jl_String1), $this, $rt_s(137), b_aName, d);
         $this.size1848 = dmge_Property43_$init118($rt_cls(dmgt_Size1982), $this, $rt_s(138), dmgt_Size1982_$init182(64, 64), d);
-        a_aScene = new dmge_Property43;
+        e = new dmge_Property43;
         c_aUUID = $rt_cls(jl_Boolean2001);
-        e = $rt_s(461);
+        f = $rt_s(461);
         jl_Boolean2001_$clinit();
-        dmge_Property43_$init119(a_aScene, c_aUUID, $this, e, jl_Boolean2001.TRUE2003, d);
-        $this.visible1847 = a_aScene;
+        dmge_Property43_$init119(e, c_aUUID, $this, f, jl_Boolean2001.TRUE2003, d);
+        $this.visible1847 = e;
         $this.componentTemplates1850 = ju_HashMap1688_$init4();
         return;
     };
@@ -36213,9 +36220,9 @@ function olvc_FuncState1866_code1857($this, a_instruction, b_line) {
         c.lineinfo770 = olvc_LuaC1862_realloc1458(c.lineinfo770, ($this.pc1878 * 2 | 0) + 1 | 0);
     }
     c.lineinfo770.data[$this.pc1878] = b_line;
-    b_line = $this.pc1878;
-    $this.pc1878 = b_line + 1 | 0;
-    return b_line;
+    a_instruction = $this.pc1878;
+    $this.pc1878 = a_instruction + 1 | 0;
+    return a_instruction;
 }
 function olvc_FuncState1866_patchlist1580($this, a_list, b_target) {
     var c;
@@ -36237,7 +36244,7 @@ function olvc_FuncState1866_code_label1860($this, a_A, b_b, c_jump) {
     return olvc_FuncState1866_codeABC1549($this, 3, a_A, b_b, c_jump);
 }
 function olvc_FuncState1866_setlist1861($this, a_base, b_nelems, c_tostore) {
-    var d, e, f;
+    var d, e;
     d = ((b_nelems - 1 | 0) / 50 | 0) + 1 | 0;
     if (c_tostore !=  -1) {
         e = c_tostore;
@@ -36245,11 +36252,11 @@ function olvc_FuncState1866_setlist1861($this, a_base, b_nelems, c_tostore) {
         e = 0;
     }
     if (c_tostore == 0) {
-        f = 0;
+        c_tostore = 0;
     } else {
-        f = 1;
+        c_tostore = 1;
     }
-    olvc_LuaC1862__assert1447(f);
+    olvc_LuaC1862__assert1447(c_tostore);
     if (d <= 511) {
         olvc_FuncState1866_codeABC1549($this, 36, a_base, e, d);
     } else {
@@ -36456,15 +36463,15 @@ function olvc_FuncState1866_concat1543($this, a_l1, b_l2) {
     if (a_l1.i873 ==  -1) {
         a_l1.i873 = b_l2;
     } else {
-        c = a_l1.i873;
+        a_l1 = a_l1.i873;
         while (true) {
-            a_l1 = olvc_FuncState1866_getjump1866($this, c);
-            if (a_l1 ==  -1) {
+            c = olvc_FuncState1866_getjump1866($this, a_l1);
+            if (c ==  -1) {
                 break;
             }
-            c = a_l1;
+            a_l1 = c;
         }
-        olvc_FuncState1866_fixjump1862($this, c, b_l2);
+        olvc_FuncState1866_fixjump1862($this, a_l1, b_l2);
     }
     return;
 }
@@ -36526,11 +36533,11 @@ function olvc_FuncState1866_getlocvar1563($this, a_i) {
 }
 function olvc_FuncState1866_errorlimit1875($this, a_limit, b_what) {
     if ($this.f1870.linedefined775 == 0) {
-        b_what = $this.L1877.pushfstring1556(jl_StringBuilder2321_toString35(jl_StringBuilder2321_append36(jl_StringBuilder2321_append36(jl_StringBuilder2321_append76(jl_StringBuilder2321_append36(jl_StringBuilder2321_$init4(), $rt_s(469)), a_limit), $rt_s(207)), b_what)));
+        a_limit = $this.L1877.pushfstring1556(jl_StringBuilder2321_toString35(jl_StringBuilder2321_append36(jl_StringBuilder2321_append36(jl_StringBuilder2321_append76(jl_StringBuilder2321_append36(jl_StringBuilder2321_$init4(), $rt_s(469)), a_limit), $rt_s(207)), b_what)));
     } else {
-        b_what = $this.L1877.pushfstring1556(jl_StringBuilder2321_toString35(jl_StringBuilder2321_append36(jl_StringBuilder2321_append36(jl_StringBuilder2321_append76(jl_StringBuilder2321_append36(jl_StringBuilder2321_append76(jl_StringBuilder2321_append36(jl_StringBuilder2321_$init4(), $rt_s(470)), $this.f1870.linedefined775), $rt_s(471)), a_limit), $rt_s(207)), b_what)));
+        a_limit = $this.L1877.pushfstring1556(jl_StringBuilder2321_toString35(jl_StringBuilder2321_append36(jl_StringBuilder2321_append36(jl_StringBuilder2321_append76(jl_StringBuilder2321_append36(jl_StringBuilder2321_append76(jl_StringBuilder2321_append36(jl_StringBuilder2321_$init4(), $rt_s(470)), $this.f1870.linedefined775), $rt_s(471)), a_limit), $rt_s(207)), b_what)));
     }
-    olvc_LexState1510_lexerror1502($this.ls1872, b_what, 0);
+    olvc_LexState1510_lexerror1502($this.ls1872, a_limit, 0);
     return;
 }
 function olvc_FuncState1866_exp2RK1584($this, a_e) {
@@ -36601,15 +36608,14 @@ function olvc_FuncState1866_codeABx1442($this, a_o, b_a, c_bc) {
     return olvc_FuncState1866_code1857($this, olvc_LuaC1862_CREATE_ABx1845(a_o, b_a, c_bc), $this.ls1872.lastline1518);
 }
 function olvc_FuncState1866_patchtestreg1878($this, a_node, b_reg) {
-    var c;
-    c = olvc_FuncState1866_getjumpcontrol1853($this, a_node);
-    if (olv_Lua1859_GET_OPCODE1839(olvc_InstructionPtr1042_get1157(c)) != 28) {
+    a_node = olvc_FuncState1866_getjumpcontrol1853($this, a_node);
+    if (olv_Lua1859_GET_OPCODE1839(olvc_InstructionPtr1042_get1157(a_node)) != 28) {
         return 0;
     }
-    if (b_reg != 255 && b_reg != olv_Lua1859_GETARG_B1835(olvc_InstructionPtr1042_get1157(c))) {
-        olvc_LuaC1862_SETARG_A1846(c, b_reg);
+    if (b_reg != 255 && b_reg != olv_Lua1859_GETARG_B1835(olvc_InstructionPtr1042_get1157(a_node))) {
+        olvc_LuaC1862_SETARG_A1846(a_node, b_reg);
     } else {
-        olvc_InstructionPtr1042_set1158(c, olvc_LuaC1862_CREATE_ABC1842(27, olv_Lua1859_GETARG_B1835(olvc_InstructionPtr1042_get1157(c)), 0, olv_Lua1859_GETARG_C1841(olvc_InstructionPtr1042_get1157(c))));
+        olvc_InstructionPtr1042_set1158(a_node, olvc_LuaC1862_CREATE_ABC1842(27, olv_Lua1859_GETARG_B1835(olvc_InstructionPtr1042_get1157(a_node)), 0, olv_Lua1859_GETARG_C1841(olvc_InstructionPtr1042_get1157(a_node))));
     }
     return 1;
 }
@@ -37012,15 +37018,15 @@ function olvc_FuncState1866_jumponcond1874($this, a_e, b_cond) {
         c = olvc_FuncState1866_getcode1536($this, a_e);
         if (olv_Lua1859_GET_OPCODE1839(c) == 20) {
             $this.pc1878 = $this.pc1878 - 1 | 0;
-            d = 27;
-            a_e = olv_Lua1859_GETARG_B1835(c);
-            c = 0;
+            a_e = 27;
+            c = olv_Lua1859_GETARG_B1835(c);
+            d = 0;
             if (b_cond == 0) {
                 b_cond = 1;
             } else {
                 b_cond = 0;
             }
-            return olvc_FuncState1866_condjump1854($this, d, a_e, c, b_cond);
+            return olvc_FuncState1866_condjump1854($this, a_e, c, d, b_cond);
         }
     }
     olvc_FuncState1866_discharge2anyreg1864($this, a_e);
@@ -37184,7 +37190,7 @@ function olvc_FuncState1866_hasmultret1530($this, a_k) {
     return a_k;
 }
 function olvc_FuncState1866_indexed1449($this, a_t, b_k) {
-    var c, d;
+    var c;
     a_t.u2218.ind_t1793 = a_t.u2218.info1794 << 16 >> 16;
     a_t.u2218.ind_idx1791 = olvc_FuncState1866_exp2RK1584($this, b_k) << 16 >> 16;
     if (a_t.k2220 != 8 && olvc_FuncState1866_vkisinreg1873(a_t.k2220) == 0) {
@@ -37193,13 +37199,13 @@ function olvc_FuncState1866_indexed1449($this, a_t, b_k) {
         c = 1;
     }
     olvc_LuaC1862__assert1447(c);
-    d = a_t.u2218;
+    b_k = a_t.u2218;
     if (a_t.k2220 != 8) {
         c = 7;
     } else {
         c = 8;
     }
-    d.ind_vt1790 = c << 16 >> 16;
+    b_k.ind_vt1790 = c << 16 >> 16;
     a_t.k2220 = 9;
     return;
 }
@@ -37216,16 +37222,16 @@ function olvc_FuncState1866_closelistfield1598($this, a_cc) {
     return;
 }
 function olvc_FuncState1866_nil1559($this, a_from, b_n) {
-    var c, d, e, f, g, h;
+    var c, d, e, f;
     $ba: {
         c = (a_from + b_n | 0) - 1 | 0;
         if ($this.pc1878 > $this.lasttarget1869 && $this.pc1878 > 0) {
             d = $this.f1870.code772.data[$this.pc1878 - 1 | 0];
             if (olv_Lua1859_GET_OPCODE1839(d) == 4) {
                 e = olv_Lua1859_GETARG_A1535(d);
-                f = e + olv_Lua1859_GETARG_B1835(d) | 0;
-                g = $rt_compare(e, a_from);
-                if (g <= 0 && a_from <= (f + 1 | 0)) {
+                d = e + olv_Lua1859_GETARG_B1835(d) | 0;
+                f = $rt_compare(e, a_from);
+                if (f <= 0 && a_from <= (d + 1 | 0)) {
                     break $ba;
                 }
                 if (a_from <= e && e <= (c + 1 | 0)) {
@@ -37236,15 +37242,15 @@ function olvc_FuncState1866_nil1559($this, a_from, b_n) {
         olvc_FuncState1866_codeABC1549($this, 4, a_from, b_n - 1 | 0, 0);
         return;
     }
-    if (g >= 0) {
+    if (f >= 0) {
         e = a_from;
     }
-    if (f <= c) {
-        f = c;
+    if (d <= c) {
+        d = c;
     }
-    h = olvc_InstructionPtr1042_$init1155($this.f1870.code772, $this.pc1878 - 1 | 0);
-    olvc_LuaC1862_SETARG_A1846(h, e);
-    olvc_LuaC1862_SETARG_B1601(h, f - e | 0);
+    b_n = olvc_InstructionPtr1042_$init1155($this.f1870.code772, $this.pc1878 - 1 | 0);
+    olvc_LuaC1862_SETARG_A1846(b_n, e);
+    olvc_LuaC1862_SETARG_B1601(b_n, d - e | 0);
     return;
 }
 function olvc_FuncState1866_removevalues1865($this, a_list) {
@@ -37335,11 +37341,11 @@ function olvc_FuncState1866_exp2reg1869($this, a_e, b_reg) {
         olvc_FuncState1866_patchlistaux1859($this, a_e.f2219.i873, f, b_reg, c);
         olvc_FuncState1866_patchlistaux1859($this, a_e.t2217.i873, f, b_reg, d);
     }
-    e = a_e.f2219;
-    c = a_e.t2217;
+    c = a_e.f2219;
+    e = a_e.t2217;
     d =  -1;
-    c.i873 = d;
     e.i873 = d;
+    c.i873 = d;
     a_e.u2218.info1794 = b_reg;
     a_e.k2220 = 6;
     return;
@@ -37540,9 +37546,9 @@ function ojd_ContactManager1889_collide205($this) {
         }
         $ba: {
             if (ojd_Body1436_isAwake194(f) != 0) {
-                h = f.m_type1462;
+                i = f.m_type1462;
                 ojd_BodyType2123_$clinit();
-                if (h !== ojd_BodyType2123.STATIC2125) {
+                if (i !== ojd_BodyType2123.STATIC2125) {
                     i = 1;
                     break $ba;
                 }
@@ -37576,11 +37582,11 @@ function ojd_ContactManager1889_collide205($this) {
     return;
 }
 function ojd_ContactManager1889_destroy250($this, a_c) {
-    var b, c, d, e;
+    var b, c, d;
     b = ojdc_Contact642_getFixtureA209(a_c);
     c = ojdc_Contact642_getFixtureB210(a_c);
     d = ojd_Fixture421_getBody212(b);
-    e = ojd_Fixture421_getBody212(c);
+    c = ojd_Fixture421_getBody212(c);
     if ($this.m_contactListener1895 !== null && ojdc_Contact642_isTouching200(a_c) != 0) {
         dmgpj_JBox2DGamePhysicsManager$11707_endContact836($this.m_contactListener1895, a_c);
     }
@@ -37608,8 +37614,8 @@ function ojd_ContactManager1889_destroy250($this, a_c) {
     if (a_c.m_nodeB651.next1610 !== null) {
         a_c.m_nodeB651.next1610.prev1613 = a_c.m_nodeB651.prev1613;
     }
-    if (a_c.m_nodeB651 === e.m_contactList1454) {
-        e.m_contactList1454 = a_c.m_nodeB651.next1610;
+    if (a_c.m_nodeB651 === c.m_contactList1454) {
+        c.m_contactList1454 = a_c.m_nodeB651.next1610;
     }
     ojd_World83_pushContact208($this.pool1890, a_c);
     $this.m_contactCount1891 = $this.m_contactCount1891 - 1 | 0;
@@ -37618,77 +37624,77 @@ function ojd_ContactManager1889_destroy250($this, a_c) {
 function ojd_ContactManager1889_addPair907($this, a_proxyUserDataA, b_proxyUserDataB) {
     var c, d, e, f, g, h, i, j, k, m, n;
     c = a_proxyUserDataA;
-    a_proxyUserDataA = b_proxyUserDataB;
+    b_proxyUserDataB = b_proxyUserDataB;
     d = c.fixture888;
-    e = a_proxyUserDataA.fixture888;
+    e = b_proxyUserDataB.fixture888;
     f = c.childIndex889;
-    g = a_proxyUserDataA.childIndex889;
+    g = b_proxyUserDataB.childIndex889;
     h = ojd_Fixture421_getBody212(d);
-    c = ojd_Fixture421_getBody212(e);
-    if (h === c) {
+    b_proxyUserDataB = ojd_Fixture421_getBody212(e);
+    if (h === b_proxyUserDataB) {
         return;
     }
-    i = ojd_Body1436_getContactList258(c);
+    a_proxyUserDataA = ojd_Body1436_getContactList258(b_proxyUserDataB);
     while (true) {
-        if (i === null) {
-            if (ojd_Body1436_shouldCollide1410(c, h) == 0) {
+        if (a_proxyUserDataA === null) {
+            if (ojd_Body1436_shouldCollide1410(b_proxyUserDataB, h) == 0) {
                 return;
             }
             if ($this.m_contactFilter1892 !== null && ojc_ContactFilter2168_shouldCollide1889($this.m_contactFilter1892, d, e) == 0) {
                 return;
             }
-            h = ojd_World83_popContact244($this.pool1890, d, f, e, g);
-            if (h === null) {
+            d = ojd_World83_popContact244($this.pool1890, d, f, e, g);
+            if (d === null) {
                 return;
             }
-            j = ojdc_Contact642_getFixtureA209(h);
-            k = ojdc_Contact642_getFixtureB210(h);
-            ojdc_Contact642_getChildIndexA232(h);
-            ojdc_Contact642_getChildIndexB233(h);
-            c = ojd_Fixture421_getBody212(j);
-            e = ojd_Fixture421_getBody212(k);
-            h.m_prev649 = null;
-            h.m_next650 = $this.m_contactList1893;
+            i = ojdc_Contact642_getFixtureA209(d);
+            j = ojdc_Contact642_getFixtureB210(d);
+            ojdc_Contact642_getChildIndexA232(d);
+            ojdc_Contact642_getChildIndexB233(d);
+            c = ojd_Fixture421_getBody212(i);
+            h = ojd_Fixture421_getBody212(j);
+            d.m_prev649 = null;
+            d.m_next650 = $this.m_contactList1893;
             if ($this.m_contactList1893 !== null) {
-                $this.m_contactList1893.m_prev649 = h;
+                $this.m_contactList1893.m_prev649 = d;
             }
-            $this.m_contactList1893 = h;
-            h.m_nodeA647.contact1612 = h;
-            h.m_nodeA647.other1611 = e;
-            h.m_nodeA647.prev1613 = null;
-            h.m_nodeA647.next1610 = c.m_contactList1454;
+            $this.m_contactList1893 = d;
+            d.m_nodeA647.contact1612 = d;
+            d.m_nodeA647.other1611 = h;
+            d.m_nodeA647.prev1613 = null;
+            d.m_nodeA647.next1610 = c.m_contactList1454;
             if (c.m_contactList1454 !== null) {
-                c.m_contactList1454.prev1613 = h.m_nodeA647;
+                c.m_contactList1454.prev1613 = d.m_nodeA647;
             }
-            c.m_contactList1454 = h.m_nodeA647;
-            h.m_nodeB651.contact1612 = h;
-            h.m_nodeB651.other1611 = c;
-            h.m_nodeB651.prev1613 = null;
-            h.m_nodeB651.next1610 = e.m_contactList1454;
-            if (e.m_contactList1454 !== null) {
-                e.m_contactList1454.prev1613 = h.m_nodeB651;
+            c.m_contactList1454 = d.m_nodeA647;
+            d.m_nodeB651.contact1612 = d;
+            d.m_nodeB651.other1611 = c;
+            d.m_nodeB651.prev1613 = null;
+            d.m_nodeB651.next1610 = h.m_contactList1454;
+            if (h.m_contactList1454 !== null) {
+                h.m_contactList1454.prev1613 = d.m_nodeB651;
             }
-            e.m_contactList1454 = h.m_nodeB651;
-            if (ojd_Fixture421_isSensor211(j) == 0 && ojd_Fixture421_isSensor211(k) == 0) {
+            h.m_contactList1454 = d.m_nodeB651;
+            if (ojd_Fixture421_isSensor211(i) == 0 && ojd_Fixture421_isSensor211(j) == 0) {
                 ojd_Body1436_setAwake198(c, 1);
-                ojd_Body1436_setAwake198(e, 1);
+                ojd_Body1436_setAwake198(h, 1);
             }
             $this.m_contactCount1891 = $this.m_contactCount1891 + 1 | 0;
             return;
         }
-        if (i.other1611 === h) {
-            m = ojdc_Contact642_getFixtureA209(i.contact1612);
-            a_proxyUserDataA = ojdc_Contact642_getFixtureB210(i.contact1612);
-            n = ojdc_Contact642_getChildIndexA232(i.contact1612);
-            b_proxyUserDataB = ojdc_Contact642_getChildIndexB233(i.contact1612);
-            if (m === d && n == f && a_proxyUserDataA === e && b_proxyUserDataB == g) {
+        if (a_proxyUserDataA.other1611 === h) {
+            k = ojdc_Contact642_getFixtureA209(a_proxyUserDataA.contact1612);
+            c = ojdc_Contact642_getFixtureB210(a_proxyUserDataA.contact1612);
+            m = ojdc_Contact642_getChildIndexA232(a_proxyUserDataA.contact1612);
+            n = ojdc_Contact642_getChildIndexB233(a_proxyUserDataA.contact1612);
+            if (k === d && m == f && c === e && n == g) {
                 return;
             }
-            if (m === e && n == g && a_proxyUserDataA === d && b_proxyUserDataB == f) {
+            if (k === e && m == g && c === d && n == f) {
                 break;
             }
         }
-        i = i.next1610;
+        a_proxyUserDataA = a_proxyUserDataA.next1610;
     }
     return;
 }
@@ -38053,24 +38059,24 @@ function ji_StringReader1910_$init29(a) {
     return $r;
 }
 function ji_StringReader1910_read1898($this, a_cbuf, b_off, c_len) {
-    var d, e, f, g, h, i;
+    var d, e, f, g, h;
     ji_StringReader1910_checkOpened1899($this);
     if ($this.index1912 >= jl_String1_length2($this.string1911)) {
         return  -1;
     }
-    d = jl_Math2210_min730(jl_String1_length2($this.string1911) - $this.index1912 | 0, c_len);
-    e = 0;
-    while (e < d) {
-        f = a_cbuf.data;
-        g = b_off + 1 | 0;
-        h = $this.string1911;
-        i = $this.index1912;
-        $this.index1912 = i + 1 | 0;
-        f[b_off] = jl_String1_charAt72(h, i);
-        e = e + 1 | 0;
-        b_off = g;
+    c_len = jl_Math2210_min730(jl_String1_length2($this.string1911) - $this.index1912 | 0, c_len);
+    d = 0;
+    while (d < c_len) {
+        e = a_cbuf.data;
+        f = b_off + 1 | 0;
+        g = $this.string1911;
+        h = $this.index1912;
+        $this.index1912 = h + 1 | 0;
+        e[b_off] = jl_String1_charAt72(g, h);
+        d = d + 1 | 0;
+        b_off = f;
     }
-    return d;
+    return c_len;
 }
 function ji_StringReader1910_$init28($this, a_string) {
     ji_Reader1908_$init8($this);
@@ -38230,7 +38236,7 @@ function ju_PriorityQueue1926_$init1632(a, b) {
     return $r;
 }
 function ju_PriorityQueue1926_removeAt1906($this, a_index) {
-    var b, c, d, e, f;
+    var b, c, d, e;
     $this.version1931 = $this.version1931 + 1 | 0;
     b = $this.data1928.data[$this.size1929 - 1 | 0];
     $ba: {
@@ -38251,10 +38257,10 @@ function ju_PriorityQueue1926_removeAt1906($this, a_index) {
         }
     }
     $this.data1928.data[a_index] = b;
-    e = $this.data1928.data;
-    f = $this.size1929 - 1 | 0;
-    $this.size1929 = f;
-    e[f] = null;
+    a_index = $this.data1928.data;
+    e = $this.size1929 - 1 | 0;
+    $this.size1929 = e;
+    a_index[e] = null;
     return;
 }
 function ju_PriorityQueue1926_offer1383($this, a_e) {
@@ -38717,46 +38723,47 @@ function dmgt_TeaVMRenderer1970_boot1942($this) {
     e = dmgt_TeaVMRenderer$42365_$init1747($this);
     d = 0;
     a.addEventListener($rt_ustr(c), otji_JS391_function601(e, "handleEvent"), !!d);
-    a = $this.canvasElement1979;
-    c = $rt_s(492);
-    f = dmgt_TeaVMRenderer$52363_$init1747($this);
+    f = $this.canvasElement1979;
+    b = $rt_s(492);
+    a = dmgt_TeaVMRenderer$52363_$init1747($this);
     d = 0;
-    a.addEventListener($rt_ustr(c), otji_JS391_function601(f, "handleEvent"), !!d);
+    f.addEventListener($rt_ustr(b), otji_JS391_function601(a, "handleEvent"), !!d);
     c = $this.canvasElement1979;
     a = $rt_s(493);
-    f = dmgt_TeaVMRenderer$62369_$init1747($this);
+    e = dmgt_TeaVMRenderer$62369_$init1747($this);
     d = 0;
-    c.addEventListener($rt_ustr(a), otji_JS391_function601(f, "handleEvent"), !!d);
-    f = $this.canvasElement1979;
-    c = $rt_s(494);
-    b = dmgt_TeaVMRenderer$72367_$init1747($this);
+    c.addEventListener($rt_ustr(a), otji_JS391_function601(e, "handleEvent"), !!d);
+    c = $this.canvasElement1979;
+    b = $rt_s(494);
+    f = dmgt_TeaVMRenderer$72367_$init1747($this);
     d = 0;
-    f.addEventListener($rt_ustr(c), otji_JS391_function601(b, "handleEvent"), !!d);
-    a = $this.canvasElement1979;
-    c = $rt_s(495);
-    e = dmgt_TeaVMRenderer$82350_$init1747($this);
+    c.addEventListener($rt_ustr(b), otji_JS391_function601(f, "handleEvent"), !!d);
+    e = $this.canvasElement1979;
+    b = $rt_s(495);
+    c = dmgt_TeaVMRenderer$82350_$init1747($this);
     d = 0;
-    a.addEventListener($rt_ustr(c), otji_JS391_function601(e, "handleEvent"), !!d);
-    f = $this.canvasElement1979;
+    e.addEventListener($rt_ustr(b), otji_JS391_function601(c, "handleEvent"), !!d);
+    e = $this.canvasElement1979;
     b = $rt_s(496);
-    a = dmgt_TeaVMRenderer$92347_$init1747($this);
-    f.addEventListener($rt_ustr(b), otji_JS391_function601(a, "handleEvent"));
-    a = $this.canvasElement1979;
-    b = $rt_s(497);
+    c = dmgt_TeaVMRenderer$92347_$init1747($this);
+    e.addEventListener($rt_ustr(b), otji_JS391_function601(c, "handleEvent"));
+    b = $this.canvasElement1979;
+    e = $rt_s(497);
     c = dmgt_TeaVMRenderer$101768_$init1747($this);
-    a.addEventListener($rt_ustr(b), otji_JS391_function601(c, "handleEvent"));
+    b.addEventListener($rt_ustr(e), otji_JS391_function601(c, "handleEvent"));
     b = dmgt_TeaVMRenderer1970.window1981;
-    a = $rt_s(498);
-    f = dmgt_TeaVMRenderer$111787_$init1747($this);
+    c = $rt_s(498);
+    e = dmgt_TeaVMRenderer$111787_$init1747($this);
     d = 1;
-    b.addEventListener($rt_ustr(a), otji_JS391_function601(f, "handleEvent"), !!d);
+    b.addEventListener($rt_ustr(c), otji_JS391_function601(e, "handleEvent"), !!d);
     return;
 }
 function dmgt_TeaVMRenderer1970_keyReleased1922($this, a_aEvent) {
+    var b;
     if (dmgc_PlaySceneStrategy970_hasGameLoop1084($this.runSceneStrategy1978) != 0) {
-        a_aEvent = a_aEvent.keyCode;
-        dmgi_DefaultGestureDetector1658_keyReleased1682(dmgg_GenericAbstractGameView678_getGestureDetector880(dmgc_GameLoop1621_getHumanGameView1656(dmgc_PlaySceneStrategy970_getRunningGameLoop1089($this.runSceneStrategy1978))), dmgt_TeaVMKeyCodeTranslator2330_translate1945(a_aEvent));
-        dmgt_TeaVMLogger2222_info1946(jl_StringBuilder2321_toString35(jl_StringBuilder2321_append76(jl_StringBuilder2321_append36(jl_StringBuilder2321_$init4(), $rt_s(499)), a_aEvent)));
+        b = a_aEvent.keyCode;
+        dmgi_DefaultGestureDetector1658_keyReleased1682(dmgg_GenericAbstractGameView678_getGestureDetector880(dmgc_GameLoop1621_getHumanGameView1656(dmgc_PlaySceneStrategy970_getRunningGameLoop1089($this.runSceneStrategy1978))), dmgt_TeaVMKeyCodeTranslator2330_translate1945(b));
+        dmgt_TeaVMLogger2222_info1946(jl_StringBuilder2321_toString35(jl_StringBuilder2321_append76(jl_StringBuilder2321_append36(jl_StringBuilder2321_$init4(), $rt_s(499)), b)));
     }
     return;
 }
@@ -38803,21 +38810,21 @@ function dmgt_Size1982_hashCode22($this) {
     return (31 * $this.width1983 | 0) + $this.height1984 | 0;
 }
 function dmgt_Size1982_equals18($this, a_o) {
-    var b;
+    var b, c;
     if ($this === a_o) {
         return 1;
     }
     if (a_o !== null && jl_Object2_getClass9($this) === jl_Object2_getClass9(a_o)) {
-        a_o = a_o;
-        if ($this.height1984 != a_o.height1984) {
+        b = a_o;
+        if ($this.height1984 != b.height1984) {
             return 0;
         }
-        if ($this.width1983 != a_o.width1983) {
-            b = 0;
+        if ($this.width1983 != b.width1983) {
+            c = 0;
         } else {
-            b = 1;
+            c = 1;
         }
-        return b;
+        return c;
     }
     return 0;
 }
@@ -38910,11 +38917,11 @@ function otp_Platform1995_postpone32(a_runnable) {
 }
 function otp_Platform1995_isInstance764(a_obj, b_cls) {
     if (a_obj !== null && (typeof a_obj.constructor.$meta === 'undefined' ? 1 : 0) == 0 && otp_Platform1995_isAssignable1955(a_obj.constructor, b_cls) != 0) {
-        a_obj = 1;
+        b_cls = 1;
     } else {
-        a_obj = 0;
+        b_cls = 0;
     }
-    return a_obj;
+    return b_cls;
 }
 function otp_Platform1995_getEnumConstants767(a) {
     var c = '$$enumConstants$$';
@@ -39400,16 +39407,16 @@ function ojdc_ChainAndCircleContact2024_$init385(a_argPool) {
 function ojdc_ChainAndCircleContact2024_init246($this, a_fA, b_indexA, c_fB, d_indexB) {
     ojdc_Contact642_init246($this, a_fA, b_indexA, c_fB, d_indexB);
     if (ojdc_ChainAndCircleContact2024.$assertionsDisabled2026 == 0) {
-        c_fB = ojd_Fixture421_getType214($this.m_fixtureA645);
+        b_indexA = ojd_Fixture421_getType214($this.m_fixtureA645);
         ojcs_ShapeType738_$clinit();
-        if (c_fB !== ojcs_ShapeType738.CHAIN739) {
+        if (b_indexA !== ojcs_ShapeType738.CHAIN739) {
             $rt_throw(jl_AssertionError746_$init4());
         }
     }
     if (ojdc_ChainAndCircleContact2024.$assertionsDisabled2026 == 0) {
-        a_fA = ojd_Fixture421_getType214($this.m_fixtureB643);
+        b_indexA = ojd_Fixture421_getType214($this.m_fixtureB643);
         ojcs_ShapeType738_$clinit();
-        if (a_fA !== ojcs_ShapeType738.CIRCLE743) {
+        if (b_indexA !== ojcs_ShapeType738.CIRCLE743) {
             $rt_throw(jl_AssertionError746_$init4());
         }
     }
@@ -39574,7 +39581,7 @@ function ju_Arrays2037_fill1980(a_a, b_fromIndex, c_toIndex, d_val) {
     return;
 }
 function ju_Arrays2037_sort1981(a_a, b_fromIndex, c_toIndex, d_c) {
-    var e, f, g, h;
+    var e, f, g;
     e = $rt_createArray(jl_Object2, c_toIndex - b_fromIndex | 0);
     f = b_fromIndex;
     while (f < c_toIndex) {
@@ -39583,11 +39590,11 @@ function ju_Arrays2037_sort1981(a_a, b_fromIndex, c_toIndex, d_c) {
         f = f + 1 | 0;
     }
     ju_Arrays2037_sort1982(e, d_c);
-    h = b_fromIndex;
-    while (h < c_toIndex) {
-        f = e.data;
-        a_a.data[h] = f[h - b_fromIndex | 0];
-        h = h + 1 | 0;
+    f = b_fromIndex;
+    while (f < c_toIndex) {
+        d_c = e.data;
+        a_a.data[f] = d_c[f - b_fromIndex | 0];
+        f = f + 1 | 0;
     }
     return;
 }
@@ -39619,7 +39626,7 @@ function ju_Arrays2037_binarySearch1983(a_a, b_fromIndex_l, c_toIndex, d_key) {
     return g;
 }
 function ju_Arrays2037_merge1984(a_a, b_b, c_from, d_split, e_to, f_comp) {
-    var g, h, i, j, k, m;
+    var g, h, i, j, k, m, n;
     g = c_from;
     h = d_split;
     $ba: {
@@ -39632,9 +39639,9 @@ function ju_Arrays2037_merge1984(a_a, b_b, c_from, d_split, e_to, f_comp) {
                 j = i[c_from];
                 k = i[h];
                 if (ju_Arrays$NaturalOrder1681_compare166(f_comp, j, k) > 0) {
-                    j = b_b.data;
+                    m = b_b.data;
                     i = g + 1 | 0;
-                    j[g] = k;
+                    m[g] = k;
                     h = h + 1 | 0;
                 } else {
                     m = b_b.data;
@@ -39648,23 +39655,23 @@ function ju_Arrays2037_merge1984(a_a, b_b, c_from, d_split, e_to, f_comp) {
                 if (h >= e_to) {
                     break $ba;
                 }
-                f_comp = a_a.data;
-                c_from = b_b.data;
-                j = g + 1 | 0;
-                i = h + 1 | 0;
-                c_from[g] = f_comp[h];
-                g = j;
-                h = i;
+                n = a_a.data;
+                j = b_b.data;
+                f_comp = g + 1 | 0;
+                d_split = h + 1 | 0;
+                j[g] = n[h];
+                g = f_comp;
+                h = d_split;
             }
         }
         while (c_from < d_split) {
-            h = a_a.data;
-            i = b_b.data;
-            m = g + 1 | 0;
-            j = c_from + 1 | 0;
-            i[g] = h[c_from];
-            g = m;
-            c_from = j;
+            j = a_a.data;
+            e_to = b_b.data;
+            i = g + 1 | 0;
+            f_comp = c_from + 1 | 0;
+            e_to[g] = j[c_from];
+            g = i;
+            c_from = f_comp;
         }
     }
     return;
@@ -39676,16 +39683,16 @@ function ju_Arrays2037_binarySearch1369(a_a, b_key) {
     return ju_Arrays2037_binarySearch1983(a_a, 0, a_a.data.length, b_key);
 }
 function ju_Arrays2037_copyOf371(a_array, b_length) {
-    var c, d, e;
-    c = a_array.data;
-    d = $rt_createCharArray(b_length);
-    b_length = jl_Math2210_min730(b_length, c.length);
-    e = 0;
-    while (e < b_length) {
-        d.data[e] = c[e];
-        e = e + 1 | 0;
+    var c, d;
+    a_array = a_array.data;
+    c = $rt_createCharArray(b_length);
+    d = jl_Math2210_min730(b_length, a_array.length);
+    b_length = 0;
+    while (b_length < d) {
+        c.data[b_length] = a_array[b_length];
+        b_length = b_length + 1 | 0;
     }
-    return d;
+    return c;
 }
 function ju_Arrays2037_sort1982(a_a, b_c) {
     var c, d, e, f, g, h, i;
@@ -39712,14 +39719,14 @@ function ju_Arrays2037_sort1982(a_a, b_c) {
         d = i;
     }
     if (f !== a_a) {
-        b_c = 0;
+        e = 0;
         while (true) {
-            e = f.data;
-            if (b_c >= e.length) {
+            i = f.data;
+            if (e >= i.length) {
                 break;
             }
-            d.data[b_c] = e[b_c];
-            b_c = b_c + 1 | 0;
+            d.data[e] = i[e];
+            e = e + 1 | 0;
         }
     }
     return;
@@ -39731,26 +39738,26 @@ function ju_Arrays2037_fill1717(a_a, b_val) {
     return;
 }
 function ju_Arrays2037_copyOf606(a_array, b_length) {
-    var c, d;
-    a_array = a_array.data;
-    c = $rt_createByteArray(b_length);
-    b_length = jl_Math2210_min730(b_length, a_array.length);
-    d = 0;
-    while (d < b_length) {
-        c.data[d] = a_array[d];
-        d = d + 1 | 0;
-    }
-    return c;
-}
-function ju_Arrays2037_copyOf607(a_original, b_newLength) {
     var c, d, e;
-    c = a_original.data;
-    a_original = jlr_Array365_newInstance573(jl_Class0_getComponentType758(jl_Object2_getClass9(a_original)), b_newLength);
-    d = jl_Math2210_min730(b_newLength, c.length);
+    c = a_array.data;
+    a_array = $rt_createByteArray(b_length);
+    d = jl_Math2210_min730(b_length, c.length);
     e = 0;
     while (e < d) {
-        a_original.data[e] = c[e];
+        a_array.data[e] = c[e];
         e = e + 1 | 0;
+    }
+    return a_array;
+}
+function ju_Arrays2037_copyOf607(a_original, b_newLength) {
+    var c, d;
+    c = a_original.data;
+    a_original = jlr_Array365_newInstance573(jl_Class0_getComponentType758(jl_Object2_getClass9(a_original)), b_newLength);
+    b_newLength = jl_Math2210_min730(b_newLength, c.length);
+    d = 0;
+    while (d < b_newLength) {
+        a_original.data[d] = c[d];
+        d = d + 1 | 0;
     }
     return a_original;
 }
@@ -40249,8 +40256,8 @@ function otcit_DateTimeZoneBuilder$DSTZone2078_$init2006(a, b, c, d) {
 function otcit_DateTimeZoneBuilder$DSTZone2078_previousTransition1368($this, a_instant) {
     var b, c, d, e, f, g, h, i, j, $je;
     b = Long_add(a_instant, Long_fromInt(1));
-    a_instant = $this.iStandardOffset2079;
-    c = $this.iStartRecurrence2080;
+    c = $this.iStandardOffset2079;
+    a_instant = $this.iStartRecurrence2080;
     d = $this.iEndRecurrence2081;
     $ba: {
         $bb: {
@@ -40258,7 +40265,7 @@ function otcit_DateTimeZoneBuilder$DSTZone2078_previousTransition1368($this, a_i
                 $bd: {
                     $be: {
                         try {
-                            e = otcit_DateTimeZoneBuilder$Recurrence880_previous1034(c, b, a_instant, otcit_DateTimeZoneBuilder$Recurrence880_getSaveMillis1039(d));
+                            e = otcit_DateTimeZoneBuilder$Recurrence880_previous1034(a_instant, b, c, otcit_DateTimeZoneBuilder$Recurrence880_getSaveMillis1039(d));
                             if (Long_compare(b, Long_ZERO) < 0) {
                                 break $be;
                             }
@@ -40330,17 +40337,17 @@ function otcit_DateTimeZoneBuilder$DSTZone2078_previousTransition1368($this, a_i
                 $bj: {
                     $bk: {
                         try {
-                            i = otcit_DateTimeZoneBuilder$Recurrence880_previous1034(d, b, a_instant, otcit_DateTimeZoneBuilder$Recurrence880_getSaveMillis1039(c));
+                            i = otcit_DateTimeZoneBuilder$Recurrence880_previous1034(d, b, c, otcit_DateTimeZoneBuilder$Recurrence880_getSaveMillis1039(a_instant));
                             if (Long_compare(b, Long_ZERO) < 0) {
                                 break $bk;
                             }
                         } catch ($e) {
                             $je = $e.$javaException;
                             if ($je && $je instanceof jl_IllegalArgumentException480) {
-                                c = $je;
+                                a_instant = $je;
                                 break $bh;
                             } else if ($je && $je instanceof jl_ArithmeticException2309) {
-                                c = $je;
+                                a_instant = $je;
                                 break $bi;
                             } else {
                                 throw $e;
@@ -40356,10 +40363,10 @@ function otcit_DateTimeZoneBuilder$DSTZone2078_previousTransition1368($this, a_i
                         } catch ($e) {
                             $je = $e.$javaException;
                             if ($je && $je instanceof jl_IllegalArgumentException480) {
-                                c = $je;
+                                a_instant = $je;
                                 break $bh;
                             } else if ($je && $je instanceof jl_ArithmeticException2309) {
-                                c = $je;
+                                a_instant = $je;
                                 break $bi;
                             } else {
                                 throw $e;
@@ -40963,7 +40970,7 @@ function dmgc_CameraBehavior$12105_$init2021($this, a_this$0) {
 function dmgc_GameScene2107_$clinit() {
     dmgc_GameScene2107_$clinit = function(){};
     dmgc_GameScene2107_deserialize1074 = function(a_aGame, b_aGameRuntime, c_aSerializedData) {
-        var d, e, f, g;
+        var d, e;
         d = dmgc_GameScene2107_$init2023(a_aGame, b_aGameRuntime);
         dmge_Property43_setQuietly132(d.name2118, dmgt_TeaVMMap2946_get47(c_aSerializedData, $rt_s(137)));
         e = ju_AbstractList1487_iterator742(dmgt_TeaVMMap2946_get47(c_aSerializedData, $rt_s(515)));
@@ -40977,15 +40984,15 @@ function dmgc_GameScene2107_$clinit() {
                 dmgc_GameScene2107_addInstance1341(d, dmgc_GameObjectInstance2906_deserialize2025(b_aGameRuntime, d, ju_AbstractList$11185_next746(e)));
             }
         }
-        a_aGame = ju_ArrayList2151_$init4();
-        e = dmgt_TeaVMMap2946_get47(c_aSerializedData, $rt_s(517));
-        if (e !== null) {
-            e = ju_AbstractList1487_iterator742(e);
-            while (ju_AbstractList$11185_hasNext745(e) != 0) {
-                ju_AbstractList1487_add131(a_aGame, dmgc_EventSheet1642_unmarshall1667(dmgc_GameRuntime1097_getIORegistry274(b_aGameRuntime), d, ju_AbstractList$11185_next746(e)));
+        e = ju_ArrayList2151_$init4();
+        a_aGame = dmgt_TeaVMMap2946_get47(c_aSerializedData, $rt_s(517));
+        if (a_aGame !== null) {
+            a_aGame = ju_AbstractList1487_iterator742(a_aGame);
+            while (ju_AbstractList$11185_hasNext745(a_aGame) != 0) {
+                ju_AbstractList1487_add131(e, dmgc_EventSheet1642_unmarshall1667(dmgc_GameRuntime1097_getIORegistry274(b_aGameRuntime), d, ju_AbstractList$11185_next746(a_aGame)));
             }
         }
-        d.eventSheets2120 = ju_AbstractCollection906_toArray128(a_aGame, $rt_createArray(dmgc_EventSheet1642, ju_ArrayList2151_size129(a_aGame)));
+        d.eventSheets2120 = ju_AbstractCollection906_toArray128(e, $rt_createArray(dmgc_EventSheet1642, ju_ArrayList2151_size129(e)));
         a_aGame = dmgt_TeaVMMap2946_get47(c_aSerializedData, $rt_s(518));
         if (a_aGame !== null) {
             dmge_Property43_setQuietly132(d.cameraObject2110, dmgc_GameScene2107_findObjectByID566(d, a_aGame));
@@ -40994,9 +41001,9 @@ function dmgc_GameScene2107_$clinit() {
         if (a_aGame !== null) {
             dmge_Property43_setQuietly132(d.defaultPlayer2115, dmgc_GameScene2107_findObjectByID566(d, a_aGame));
         }
-        e = dmgt_TeaVMMap2946_get47(c_aSerializedData, $rt_s(520));
-        if (e !== null) {
-            dmge_Property43_setQuietly132(d.backgroundColor2108, dmgt_Color1596_deserialize547(e));
+        a_aGame = dmgt_TeaVMMap2946_get47(c_aSerializedData, $rt_s(520));
+        if (a_aGame !== null) {
+            dmge_Property43_setQuietly132(d.backgroundColor2108, dmgt_Color1596_deserialize547(a_aGame));
         }
         a_aGame = dmgt_TeaVMMap2946_get47(c_aSerializedData, $rt_s(521));
         if (a_aGame !== null) {
@@ -41004,10 +41011,10 @@ function dmgc_GameScene2107_$clinit() {
         }
         a_aGame = dmgt_TeaVMMap2946_get47(c_aSerializedData, $rt_s(522));
         if (a_aGame !== null) {
-            f = ju_AbstractList1487_iterator742(a_aGame);
-            while (ju_AbstractList$11185_hasNext745(f) != 0) {
-                g = ju_AbstractList$11185_next746(f);
-                dmgc_GameScene2107_addEffect2026(d, dmgs_StarfieldGameSceneEffectUnmarshaller2904_unmarshall2027(dmgc_IORegistry2741_getSceneEffectUnmarshallerFor2028(dmgc_GameRuntime1097_getIORegistry274(b_aGameRuntime), g.get47($rt_s(72))), b_aGameRuntime, d, g));
+            e = ju_AbstractList1487_iterator742(a_aGame);
+            while (ju_AbstractList$11185_hasNext745(e) != 0) {
+                a_aGame = ju_AbstractList$11185_next746(e);
+                dmgc_GameScene2107_addEffect2026(d, dmgs_StarfieldGameSceneEffectUnmarshaller2904_unmarshall2027(dmgc_IORegistry2741_getSceneEffectUnmarshallerFor2028(dmgc_GameRuntime1097_getIORegistry274(b_aGameRuntime), a_aGame.get47($rt_s(72))), b_aGameRuntime, d, a_aGame));
             }
         }
         b_aGameRuntime = dmgt_TeaVMMap2946_get47(c_aSerializedData, $rt_s(523));
@@ -41492,11 +41499,12 @@ function ju_ArrayList2151_get1275($this, a_index) {
     return $this.array2153.data[a_index];
 }
 function ju_ArrayList2151_remove127($this, a_o) {
-    a_o = ju_AbstractList1487_indexOf1422($this, a_o);
-    if (a_o < 0) {
+    var b;
+    b = ju_AbstractList1487_indexOf1422($this, a_o);
+    if (b < 0) {
         return 0;
     }
-    ju_ArrayList2151_remove1276($this, a_o);
+    ju_ArrayList2151_remove1276($this, b);
     return 1;
 }
 function ju_ArrayList2151_size129($this) {
@@ -41717,22 +41725,22 @@ function ojc_ContactFilter2168_$init4() {
 }
 function ojc_ContactFilter2168_shouldCollide1889($this, a_fixtureA, b_fixtureB) {
     var c, d;
-    c = ojd_Fixture421_getFilterData659(a_fixtureA);
-    d = ojd_Fixture421_getFilterData659(b_fixtureB);
-    if (c.groupIndex736 == d.groupIndex736 && c.groupIndex736 != 0) {
-        if (c.groupIndex736 <= 0) {
-            a_fixtureA = 0;
+    a_fixtureA = ojd_Fixture421_getFilterData659(a_fixtureA);
+    c = ojd_Fixture421_getFilterData659(b_fixtureB);
+    if (a_fixtureA.groupIndex736 == c.groupIndex736 && a_fixtureA.groupIndex736 != 0) {
+        if (a_fixtureA.groupIndex736 <= 0) {
+            d = 0;
         } else {
-            a_fixtureA = 1;
+            d = 1;
         }
-        return a_fixtureA;
+        return d;
     }
-    if ((c.maskBits737 & d.categoryBits735) != 0 && (c.categoryBits735 & d.maskBits737) != 0) {
-        a_fixtureA = 1;
+    if ((a_fixtureA.maskBits737 & c.categoryBits735) != 0 && (a_fixtureA.categoryBits735 & c.maskBits737) != 0) {
+        d = 1;
     } else {
-        a_fixtureA = 0;
+        d = 0;
     }
-    return a_fixtureA;
+    return d;
 }
 function ojc_ContactFilter2168_$init8($this) {
     jl_Object2_$init8($this);
@@ -41760,21 +41768,21 @@ function dmgc_FollowCameraProcess2169_affectsInstance580($this, a_aInstance) {
     return c;
 }
 function dmgc_FollowCameraProcess2169_proceedGame550($this, a, b_aElapsedTimeSinceLastLoop) {
-    var c, d, e, f, g, h, i;
-    a = dmgc_GameObjectInstance2906_getBehavior1094($this.cameraObject2171, $rt_cls(dmgc_CameraBehavior2829));
-    c = dmge_ReadOnlyProperty38_get113(dmgc_GameObjectInstance2906_positionProperty674($this.cameraObject2171));
-    a = dmgc_CameraBehavior2829_getScreenSize1102(a);
-    d = dmgt_Position636_$init555(c.x637 + (a.width1983 / 2 | 0), c.y638 + (a.height1984 / 2 | 0));
-    e = dmge_ReadOnlyProperty38_get113(dmgc_GameObjectInstance2906_positionProperty674($this.playerObject2170));
-    f = dmge_ReadOnlyProperty38_get113(dmgc_GameObject1845_sizeProperty939(dmgc_GameObjectInstance2906_getOwnerGameObject568($this.playerObject2170)));
-    a = dmgt_Position636_$init555(e.x637 + (f.width1983 / 2 | 0), e.y638 + (f.height1984 / 2 | 0));
-    g = a.x637 - d.x637;
-    h = a.y638 - d.y638;
-    i = g / 300.0;
-    b_aElapsedTimeSinceLastLoop = Long_toNumber(b_aElapsedTimeSinceLastLoop);
-    i = i * b_aElapsedTimeSinceLastLoop;
-    b_aElapsedTimeSinceLastLoop = h / 300.0 * b_aElapsedTimeSinceLastLoop;
-    dmge_Property43_set120(dmgc_GameObjectInstance2906_positionProperty674($this.cameraObject2171), dmgt_Position636_$init555(c.x637 + i, c.y638 + b_aElapsedTimeSinceLastLoop));
+    var c, d, e, f, g, h, i, j;
+    c = dmgc_GameObjectInstance2906_getBehavior1094($this.cameraObject2171, $rt_cls(dmgc_CameraBehavior2829));
+    d = dmge_ReadOnlyProperty38_get113(dmgc_GameObjectInstance2906_positionProperty674($this.cameraObject2171));
+    e = dmgc_CameraBehavior2829_getScreenSize1102(c);
+    c = dmgt_Position636_$init555(d.x637 + (e.width1983 / 2 | 0), d.y638 + (e.height1984 / 2 | 0));
+    f = dmge_ReadOnlyProperty38_get113(dmgc_GameObjectInstance2906_positionProperty674($this.playerObject2170));
+    e = dmge_ReadOnlyProperty38_get113(dmgc_GameObject1845_sizeProperty939(dmgc_GameObjectInstance2906_getOwnerGameObject568($this.playerObject2170)));
+    g = dmgt_Position636_$init555(f.x637 + (e.width1983 / 2 | 0), f.y638 + (e.height1984 / 2 | 0));
+    h = g.x637 - c.x637;
+    i = g.y638 - c.y638;
+    a = h / 300.0;
+    j = Long_toNumber(b_aElapsedTimeSinceLastLoop);
+    h = a * j;
+    a = i / 300.0 * j;
+    dmge_Property43_set120(dmgc_GameObjectInstance2906_positionProperty674($this.cameraObject2171), dmgt_Position636_$init555(d.x637 + h, d.y638 + a));
     dmgp_GameProcess$ProceedResult2842_$clinit();
     return dmgp_GameProcess$ProceedResult2842.CONTINUE_RUNNING2844;
 }
@@ -41888,12 +41896,13 @@ function olv_Buffer2174_concatTo1022($this, a_lhs) {
     return b;
 }
 function olv_Buffer2174_concatTo1892($this, a_lhs) {
+    var b;
     if ($this.value2178 !== null && $this.value2178.isstring448() == 0) {
-        a_lhs = olv_Buffer2174_setvalue2047($this, olv_LuaNumber1897_concat495(a_lhs, $this.value2178));
+        b = olv_Buffer2174_setvalue2047($this, olv_LuaNumber1897_concat495(a_lhs, $this.value2178));
     } else {
-        a_lhs = olv_Buffer2174_prepend2048($this, a_lhs.strvalue456());
+        b = olv_Buffer2174_prepend2048($this, a_lhs.strvalue456());
     }
-    return a_lhs;
+    return b;
 }
 function olv_Buffer2174_tostring2049($this) {
     olv_Buffer2174_realloc2046($this, $this.length2177, 0);
@@ -41922,13 +41931,13 @@ function olv_Buffer2174_concatTo483($this, a_lhs) {
     return olv_Buffer2174_setvalue2047($this, a_lhs.concat495(olv_Buffer2174_value531($this)));
 }
 function olv_Buffer2174_append100($this, a_str) {
-    var b, c;
+    var b, c, d;
     b = jl_String1_toCharArray610(a_str);
     c = b.data;
-    a_str = olv_LuaString860_lengthAsUtf81028(b);
-    olv_Buffer2174_makeroom2045($this, 0, a_str);
+    d = olv_LuaString860_lengthAsUtf81028(b);
+    olv_Buffer2174_makeroom2045($this, 0, d);
     olv_LuaString860_encodeToUtf8398(b, c.length, $this.bytes2176, $this.offset2175 + $this.length2177 | 0);
-    $this.length2177 = $this.length2177 + a_str | 0;
+    $this.length2177 = $this.length2177 + d | 0;
     return $this;
 }
 function olv_Buffer2174_prepend2048($this, a_s) {
@@ -42065,17 +42074,17 @@ function dmgc_Game2189_$clinit() {
         if (d !== null) {
             dmge_Property43_setQuietly132(b.enableDebug2190, jl_Boolean2001_valueOf919(d));
         }
-        c = dmgt_TeaVMMap2946_get47(a_aSerializedData, $rt_s(523));
-        if (c !== null) {
-            dmge_Property43_setQuietly132(b.customProperties2193, dmgt_CustomProperties2224_deserialize2029(c));
+        d = dmgt_TeaVMMap2946_get47(a_aSerializedData, $rt_s(523));
+        if (d !== null) {
+            dmge_Property43_setQuietly132(b.customProperties2193, dmgt_CustomProperties2224_deserialize2029(d));
         }
-        c = dmgt_TeaVMMap2946_get47(a_aSerializedData, $rt_s(542));
-        if (c !== null) {
-            dmge_Property43_setQuietly132(b.enableNetworking2194, jl_Boolean2001_valueOf913(jl_Boolean2001_parseBoolean1964(c)));
+        d = dmgt_TeaVMMap2946_get47(a_aSerializedData, $rt_s(542));
+        if (d !== null) {
+            dmge_Property43_setQuietly132(b.enableNetworking2194, jl_Boolean2001_valueOf913(jl_Boolean2001_parseBoolean1964(d)));
         }
-        a_aSerializedData = dmgt_TeaVMMap2946_get47(a_aSerializedData, $rt_s(543));
-        if (a_aSerializedData !== null) {
-            dmge_Property43_setQuietly132(b.fireBaseURL2196, a_aSerializedData);
+        d = dmgt_TeaVMMap2946_get47(a_aSerializedData, $rt_s(543));
+        if (d !== null) {
+            dmge_Property43_setQuietly132(b.fireBaseURL2196, d);
         }
         return b;
     };
@@ -42094,19 +42103,19 @@ function dmgc_Game2189_$clinit() {
         jl_Boolean2001_$clinit();
         dmge_Property43_$init112(a, b, $this, c, jl_Boolean2001.TRUE2003);
         $this.enableWebGL2192 = a;
-        c = new dmge_Property43;
-        b = $rt_cls(jl_Boolean2001);
-        d = $rt_s(541);
+        b = new dmge_Property43;
+        d = $rt_cls(jl_Boolean2001);
+        a = $rt_s(541);
         jl_Boolean2001_$clinit();
-        dmge_Property43_$init112(c, b, $this, d, jl_Boolean2001.FALSE2004);
-        $this.enableDebug2190 = c;
+        dmge_Property43_$init112(b, d, $this, a, jl_Boolean2001.FALSE2004);
+        $this.enableDebug2190 = b;
         $this.customProperties2193 = dmge_Property43_$init111($rt_cls(dmgt_CustomProperties2224), $this, $rt_s(523), dmgt_CustomProperties2224_$init4());
-        d = new dmge_Property43;
-        b = $rt_cls(jl_Boolean2001);
-        a = $rt_s(542);
+        a = new dmge_Property43;
+        d = $rt_cls(jl_Boolean2001);
+        c = $rt_s(542);
         jl_Boolean2001_$clinit();
-        dmge_Property43_$init112(d, b, $this, a, jl_Boolean2001.FALSE2004);
-        $this.enableNetworking2194 = d;
+        dmge_Property43_$init112(a, d, $this, c, jl_Boolean2001.FALSE2004);
+        $this.enableNetworking2194 = a;
         $this.fireBaseURL2196 = dmge_Property43_$init111($rt_cls(jl_String1), $this, $rt_s(543), $rt_s(546));
         return;
     };
@@ -42333,7 +42342,7 @@ function jl_Math2210_ceil1334(a) {
     return Math.ceil(a);
 }
 function jl_Math2210_getExponent792(a_f) {
-    var b, c, d, e, f, g, h, i, j, k, m;
+    var b, c, d, e, f, g, h, i, j, k, m, n;
     a_f = jl_Math2210_abs779(a_f);
     b = 0;
     jl_Math$FloatExponents1770_$clinit();
@@ -42358,22 +42367,22 @@ function jl_Math2210_getExponent792(a_f) {
         }
     } else if (a_f < 1.0) {
         k = 1 << (d.data.length - 1 | 0);
-        m = 0;
+        j = 0;
         if (a_f < 1.1754943508222875E-38) {
             a_f = a_f * 8388608.0;
-            m = 23;
+            j = 23;
         }
-        f = e.data;
-        j = f.length - 1 | 0;
-        while (j >= 0) {
-            if (a_f < f[j]) {
-                a_f = a_f * c.data[j];
+        m = e.data;
+        n = m.length - 1 | 0;
+        while (n >= 0) {
+            if (a_f < m[n]) {
+                a_f = a_f * c.data[n];
                 b = b | k;
             }
             k = k >>> 1;
-            j = j +  -1 | 0;
+            n = n +  -1 | 0;
         }
-        b =  -(b + m | 0) | 0;
+        b =  -(b + j | 0) | 0;
     }
     return b;
 }
@@ -42384,7 +42393,7 @@ function jl_Math2210_max1968(a_a, b_b) {
     return b_b;
 }
 function jl_Math2210_getExponent2060(a_d) {
-    var b, c, d, e, f, g, h, i, j, k, m, n;
+    var b, c, d, e, f, g, h, i, j, k, m;
     a_d = jl_Math2210_abs2058(a_d);
     b = 0;
     jl_Math$ExponentConstants1338_$clinit();
@@ -42408,23 +42417,23 @@ function jl_Math2210_getExponent2060(a_d) {
             j = j +  -1 | 0;
         }
     } else if (a_d < 1.0) {
-        k = 1 << (d.data.length - 1 | 0);
-        m = 0;
+        i = 1 << (d.data.length - 1 | 0);
+        j = 0;
         if (a_d < 2.2250738585072014E-308) {
             a_d = a_d * 4.503599627370496E15;
-            m = 52;
+            j = 52;
         }
-        i = e.data;
-        n = i.length - 1 | 0;
-        while (n >= 0) {
-            if (a_d < i[n]) {
-                a_d = a_d * c.data[n];
-                b = b | k;
+        k = e.data;
+        m = k.length - 1 | 0;
+        while (m >= 0) {
+            if (a_d < k[m]) {
+                a_d = a_d * c.data[m];
+                b = b | i;
             }
-            k = k >>> 1;
-            n = n +  -1 | 0;
+            i = i >>> 1;
+            m = m +  -1 | 0;
         }
-        b =  -(b + m | 0) | 0;
+        b =  -(b + j | 0) | 0;
     }
     return b;
 }
@@ -42614,14 +42623,14 @@ function dmgp_GameObjectCollisionClassInformation$12221_getValue96($this, a) {
 function dmgt_TeaVMLogger2222_$clinit() {
     dmgt_TeaVMLogger2222_$clinit = function(){};
     dmgt_TeaVMLogger2222_error889 = function(a_aMessage) {
-        var b, c, d, e;
+        var b, c, d, e, f;
         b = dmgt_TeaVMLogger2222.document2223.getElementById("logger");
         c = dmgt_TeaVMLogger2222.document2223.createElement("div");
         d = $rt_s(553);
         e = $rt_s(554);
         c.setAttribute($rt_ustr(d), $rt_ustr(e));
-        e = dmgt_TeaVMLogger2222.document2223.createTextNode($rt_ustr(a_aMessage));
-        c.appendChild(e);
+        f = dmgt_TeaVMLogger2222.document2223.createTextNode($rt_ustr(a_aMessage));
+        c.appendChild(f);
         b.appendChild(c);
         return;
     };
@@ -42630,11 +42639,11 @@ function dmgt_TeaVMLogger2222_$clinit() {
         return;
     };
     dmgt_TeaVMLogger2222_info1946 = function(a_aMessage) {
-        var b, c;
+        var b, c, d;
         b = dmgt_TeaVMLogger2222.document2223.getElementById("logger");
         c = dmgt_TeaVMLogger2222.document2223.createElement("div");
-        a_aMessage = dmgt_TeaVMLogger2222.document2223.createTextNode($rt_ustr(a_aMessage));
-        c.appendChild(a_aMessage);
+        d = dmgt_TeaVMLogger2222.document2223.createTextNode($rt_ustr(a_aMessage));
+        c.appendChild(d);
         b.appendChild(c);
         return;
     };
@@ -42713,18 +42722,18 @@ function dmgt_CustomProperties2224_getClassInformation2066($this) {
 function ojc_Distance$Simplex2227_$clinit() {
     ojc_Distance$Simplex2227_$clinit = function(){};
     ojc_Distance$Simplex2227_$init2067 = function($this, a) {
-        var b;
+        var b, c;
         $this.this$02237 = a;
         jl_Object2_$init8($this);
         $this.m_v12243 = ojc_Distance$SimplexVertex2956_$init2069($this.this$02237, null);
         $this.m_v22240 = ojc_Distance$SimplexVertex2956_$init2069($this.this$02237, null);
         $this.m_v32242 = ojc_Distance$SimplexVertex2956_$init2069($this.this$02237, null);
-        a = $rt_createArray(ojc_Distance$SimplexVertex2956, 3);
-        b = a.data;
-        b[0] = $this.m_v12243;
-        b[1] = $this.m_v22240;
-        b[2] = $this.m_v32242;
-        $this.vertices2230 = a;
+        b = $rt_createArray(ojc_Distance$SimplexVertex2956, 3);
+        c = b.data;
+        c[0] = $this.m_v12243;
+        c[1] = $this.m_v22240;
+        c[2] = $this.m_v32242;
+        $this.vertices2230 = b;
         $this.e122232 = ojc_Vec22016_$init4();
         $this.case22228 = ojc_Vec22016_$init4();
         $this.case222234 = ojc_Vec22016_$init4();
@@ -42764,7 +42773,7 @@ function ojc_Distance$Simplex2227_$init2069(a_x0, b) {
     return $r;
 }
 function ojc_Distance$Simplex2227_readCache2071($this, a_cache, b_proxyA, c_transformA, d_proxyB, e_transformB) {
-    var f, g, h, i, j, k, m;
+    var f, g, h, i, j, k, m, n;
     if (ojc_Distance$Simplex2227.$assertionsDisabled2244 == 0 && a_cache.count2821 > 3) {
         $rt_throw(jl_AssertionError746_$init4());
     }
@@ -42793,10 +42802,10 @@ function ojc_Distance$Simplex2227_readCache2071($this, a_cache, b_proxyA, c_tran
         m = $this.vertices2230.data[0];
         m.indexA2958 = 0;
         m.indexB2961 = 0;
-        b_proxyA = ojc_Distance$DistanceProxy2836_getVertex1236(b_proxyA, 0);
-        d_proxyB = ojc_Distance$DistanceProxy2836_getVertex1236(d_proxyB, 0);
-        ojc_Transform2027_mulToOutUnsafe802(c_transformA, b_proxyA, m.wA2962);
-        ojc_Transform2027_mulToOutUnsafe802(e_transformB, d_proxyB, m.wB2963);
+        n = ojc_Distance$DistanceProxy2836_getVertex1236(b_proxyA, 0);
+        b_proxyA = ojc_Distance$DistanceProxy2836_getVertex1236(d_proxyB, 0);
+        ojc_Transform2027_mulToOutUnsafe802(c_transformA, n, m.wA2962);
+        ojc_Transform2027_mulToOutUnsafe802(e_transformB, b_proxyA, m.wB2963);
         ojc_Vec22016_subLocal804(ojc_Vec22016_set176(m.w2959, m.wB2963), m.wA2962);
         $this.m_count2236 = 1;
     }
@@ -42908,9 +42917,9 @@ function ojc_Distance$Simplex2227_solve32077($this) {
     d = ojc_Vec22016_dot798($this.w32241, $this.e132231);
     e =  -a;
     ojc_Vec22016_subLocal804(ojc_Vec22016_set176($this.e232233, $this.w32241), $this.w22239);
-    f = ojc_Vec22016_dot798($this.w22239, $this.e232233);
-    a = ojc_Vec22016_dot798($this.w32241, $this.e232233);
-    g =  -f;
+    a = ojc_Vec22016_dot798($this.w22239, $this.e232233);
+    f = ojc_Vec22016_dot798($this.w32241, $this.e232233);
+    g =  -a;
     h = ojc_Vec22016_cross1061($this.e122232, $this.e132231);
     i = h * ojc_Vec22016_cross1061($this.w22239, $this.w32241);
     j = h * ojc_Vec22016_cross1061($this.w32241, $this.w12238);
@@ -42921,16 +42930,16 @@ function ojc_Distance$Simplex2227_solve32077($this) {
         return;
     }
     if (b > 0.0 && c > 0.0 && h <= 0.0) {
-        f = 1.0 / (b + c);
-        $this.m_v12243.a2957 = b * f;
-        $this.m_v22240.a2957 = c * f;
+        a = 1.0 / (b + c);
+        $this.m_v12243.a2957 = b * a;
+        $this.m_v22240.a2957 = c * a;
         $this.m_count2236 = 2;
         return;
     }
     if (d > 0.0 && e > 0.0 && j <= 0.0) {
-        f = 1.0 / (d + e);
-        $this.m_v12243.a2957 = d * f;
-        $this.m_v32242.a2957 = e * f;
+        g = 1.0 / (d + e);
+        $this.m_v12243.a2957 = d * g;
+        $this.m_v32242.a2957 = e * g;
         $this.m_count2236 = 2;
         ojc_Distance$SimplexVertex2956_set2075($this.m_v22240, $this.m_v32242);
         return;
@@ -42941,24 +42950,24 @@ function ojc_Distance$Simplex2227_solve32077($this) {
         ojc_Distance$SimplexVertex2956_set2075($this.m_v12243, $this.m_v22240);
         return;
     }
-    if (d <= 0.0 && a <= 0.0) {
+    if (d <= 0.0 && f <= 0.0) {
         $this.m_v32242.a2957 = 1.0;
         $this.m_count2236 = 1;
         ojc_Distance$SimplexVertex2956_set2075($this.m_v12243, $this.m_v32242);
         return;
     }
-    if (a > 0.0 && g > 0.0 && i <= 0.0) {
-        f = 1.0 / (a + g);
-        $this.m_v22240.a2957 = a * f;
-        $this.m_v32242.a2957 = g * f;
+    if (f > 0.0 && g > 0.0 && i <= 0.0) {
+        a = 1.0 / (f + g);
+        $this.m_v22240.a2957 = f * a;
+        $this.m_v32242.a2957 = g * a;
         $this.m_count2236 = 2;
         ojc_Distance$SimplexVertex2956_set2075($this.m_v12243, $this.m_v32242);
         return;
     }
-    a = 1.0 / (i + j + h);
-    $this.m_v12243.a2957 = i * a;
-    $this.m_v22240.a2957 = j * a;
-    $this.m_v32242.a2957 = h * a;
+    g = 1.0 / (i + j + h);
+    $this.m_v12243.a2957 = i * g;
+    $this.m_v22240.a2957 = j * g;
+    $this.m_v32242.a2957 = h * g;
     $this.m_count2236 = 3;
     return;
 }
@@ -43067,10 +43076,10 @@ function dmgt_TeaVMGameResourceLoader2250_load2080($this, a_aResourceName) {
     d = $rt_s(559);
     c.setAttribute($rt_ustr(d), $rt_ustr(b));
     $this.resourceCacheElement2251.appendChild(c);
-    a_aResourceName = new dmgt_TeaVMGameResource2374;
+    d = new dmgt_TeaVMGameResource2374;
     dmgc_GameResourceType627_$clinit();
-    dmgt_TeaVMGameResource2374_$init2081(a_aResourceName, b, dmgc_GameResourceType627.BITMAP628, c);
-    return a_aResourceName;
+    dmgt_TeaVMGameResource2374_$init2081(d, b, dmgc_GameResourceType627.BITMAP628, c);
+    return d;
 }
 function dmgt_TeaVMGameResourceLoader2250_$init1115($this, a_aSceneID, b_aDocument, c_aResourceCacheElement) {
     jl_Object2_$init8($this);
@@ -43322,7 +43331,7 @@ function jt_DateFormatElement$Rfc822Timezone2289_$init1163(a_locale) {
     return $r;
 }
 function jt_DateFormatElement$Rfc822Timezone2289_format140($this, a_date, b_buffer) {
-    var c, d;
+    var c, d, e;
     c = ju_IANATimeZone1298_getOffset1173(ju_Calendar210_getTimeZone334(a_date), ju_Calendar210_getTimeInMillis336(a_date)) / 60000 | 0;
     if (c >= 0) {
         jl_StringBuffer243_append143(b_buffer, 43);
@@ -43331,8 +43340,8 @@ function jt_DateFormatElement$Rfc822Timezone2289_format140($this, a_date, b_buff
         jl_StringBuffer243_append143(b_buffer, 45);
     }
     d = c / 60 | 0;
-    a_date = c % 60;
-    jl_StringBuffer243_append142(jl_StringBuffer243_append142(jl_StringBuffer243_append142(jl_StringBuffer243_append142(b_buffer, d / 10 | 0), d % 10), a_date / 10 | 0), a_date % 10);
+    e = c % 60;
+    jl_StringBuffer243_append142(jl_StringBuffer243_append142(jl_StringBuffer243_append142(jl_StringBuffer243_append142(b_buffer, d / 10 | 0), d % 10), e / 10 | 0), e % 10);
     return;
 }
 function jt_DateFormatElement$Rfc822Timezone2289_$init1159($this, a_locale) {
@@ -43619,16 +43628,16 @@ function olv_LuaInteger2310_$clinit() {
         return b;
     };
     olv_LuaInteger2310_valueOf704 = function(a_l) {
-        var b;
+        var b, c;
         b = a_l.lo;
         if (Long_compare(a_l, Long_fromInt(b)) != 0) {
-            a_l = olv_LuaDouble1899_valueOf409(Long_toNumber(a_l));
+            c = olv_LuaDouble1899_valueOf409(Long_toNumber(a_l));
         } else if (b <= 255 && b >=  -256) {
-            a_l = olv_LuaInteger2310.intValues2312.data[b + 256 | 0];
+            c = olv_LuaInteger2310.intValues2312.data[b + 256 | 0];
         } else {
-            a_l = olv_LuaInteger2310_$init80(b);
+            c = olv_LuaInteger2310_$init80(b);
         }
-        return a_l;
+        return c;
     };
     olv_LuaInteger2310_$clinit43 = function() {
         var a;
@@ -44527,9 +44536,9 @@ function ojdc_EdgeAndPolygonContact2354_init246($this, a_fA, b_indexA, c_fB, d_i
         }
     }
     if (ojdc_EdgeAndPolygonContact2354.$assertionsDisabled2355 == 0) {
-        b_indexA = ojd_Fixture421_getType214($this.m_fixtureB643);
+        a_fA = ojd_Fixture421_getType214($this.m_fixtureB643);
         ojcs_ShapeType738_$clinit();
-        if (b_indexA !== ojcs_ShapeType738.POLYGON740) {
+        if (a_fA !== ojcs_ShapeType738.POLYGON740) {
             $rt_throw(jl_AssertionError746_$init4());
         }
     }
@@ -44573,7 +44582,7 @@ function dmgt_TeaVMRenderer$22361_$init1747(a_aEvent) {
     return $r;
 }
 function dmgt_TeaVMRenderer$22361_onGameLoaded1417($this, a_aGame) {
-    var b, c, d, e, f;
+    var b, c, d, e;
     dmgt_TeaVMRenderer1970_access$1021926($this.this$02362, a_aGame);
     if (jl_Boolean2001_booleanValue751(dmge_ReadOnlyProperty38_get113(dmgc_Game2189_enableNetworkingProperty110(a_aGame))) == 0) {
         dmgt_TeaVMRenderer1970_access$3021943($this.this$02362, dmgn_DefaultNetworkConnector788_$init4());
@@ -44591,9 +44600,9 @@ function dmgt_TeaVMRenderer$22361_onGameLoaded1417($this, a_aGame) {
         dmgt_TeaVMRenderer1970_access$3021943($this.this$02362, dmgt_TeaVMFirebaseNetworkConnector790_$init976(e, c, d));
     }
     dmgt_TeaVMRenderer1970_access$4021937($this.this$02362, dmgt_TeaVMRenderer$2$1975_$init1110($this, dmgt_TeaVMRenderer1970_access$5001938($this.this$02362), dmgt_TeaVMRenderer1970_access$6001920($this.this$02362), dmgt_TeaVMRenderer1970_access$3001932($this.this$02362)));
-    f = dmge_ReadOnlyProperty38_get113(dmgc_Game2189_defaultSceneProperty144(a_aGame));
-    dmgt_TeaVMLogger2222_info1946(jl_StringBuilder2321_toString35(jl_StringBuilder2321_append36(jl_StringBuilder2321_append36(jl_StringBuilder2321_$init4(), $rt_s(568)), f)));
-    dmgt_TeaVMGameSceneLoader959_loadFromServer1077(dmgt_TeaVMRenderer1970_access$9001113($this.this$02362), dmgt_TeaVMRenderer1970_access$1001114($this.this$02362), f, dmgt_TeaVMGameResourceLoader2250_$init1116(f, dmgt_TeaVMRenderer1970_access$7001117(), dmgt_TeaVMRenderer1970_access$8001118($this.this$02362)));
+    a_aGame = dmge_ReadOnlyProperty38_get113(dmgc_Game2189_defaultSceneProperty144(a_aGame));
+    dmgt_TeaVMLogger2222_info1946(jl_StringBuilder2321_toString35(jl_StringBuilder2321_append36(jl_StringBuilder2321_append36(jl_StringBuilder2321_$init4(), $rt_s(568)), a_aGame)));
+    dmgt_TeaVMGameSceneLoader959_loadFromServer1077(dmgt_TeaVMRenderer1970_access$9001113($this.this$02362), dmgt_TeaVMRenderer1970_access$1001114($this.this$02362), a_aGame, dmgt_TeaVMGameResourceLoader2250_$init1116(a_aGame, dmgt_TeaVMRenderer1970_access$7001117(), dmgt_TeaVMRenderer1970_access$8001118($this.this$02362)));
     return;
 }
 function dmgt_TeaVMRenderer$22361_$init1748($this, a_this$0) {
@@ -44673,11 +44682,11 @@ function dmgt_TeaVMEffectCanvas2372_drawSingleDot560($this, a_aPosition) {
     return;
 }
 function dmgt_TeaVMEffectCanvas2372_setPaint559($this, a_aColor) {
-    var b, c;
-    a_aColor = dmgg_CSSUtils2675_toColor893(a_aColor);
-    b = $this.context2373;
-    c = $rt_ustr(a_aColor);
-    b.strokeStyle = c;
+    var b, c, d;
+    b = dmgg_CSSUtils2675_toColor893(a_aColor);
+    c = $this.context2373;
+    d = $rt_ustr(b);
+    c.strokeStyle = d;
     return;
 }
 function dmgt_TeaVMEffectCanvas2372_$init890($this, a_context) {
@@ -44862,7 +44871,7 @@ function ojc_Sweep2384_advance231($this, a_alpha) {
     return;
 }
 function ojc_Sweep2384_getTransform774($this, a_xf, b_beta) {
-    var c, d;
+    var c;
     if (ojc_Sweep2384.$assertionsDisabled2391 == 0 && a_xf === null) {
         $rt_throw(jl_AssertionError746_$init4());
     }
@@ -44870,10 +44879,10 @@ function ojc_Sweep2384_getTransform774($this, a_xf, b_beta) {
     a_xf.p2028.y2018 = (1.0 - b_beta) * $this.c02388.y2018 + b_beta * $this.c2386.y2018;
     ojc_Rot2779_set1063(a_xf.q2029, (1.0 - b_beta) * $this.a02390 + b_beta * $this.a2385);
     c = a_xf.q2029;
-    d = a_xf.p2028;
-    d.x2017 = d.x2017 - (c.c2781 * $this.localCenter2387.x2017 - c.s2780 * $this.localCenter2387.y2018);
-    a_xf = a_xf.p2028;
-    a_xf.y2018 = a_xf.y2018 - (c.s2780 * $this.localCenter2387.x2017 + c.c2781 * $this.localCenter2387.y2018);
+    b_beta = a_xf.p2028;
+    b_beta.x2017 = b_beta.x2017 - (c.c2781 * $this.localCenter2387.x2017 - c.s2780 * $this.localCenter2387.y2018);
+    b_beta = a_xf.p2028;
+    b_beta.y2018 = b_beta.y2018 - (c.s2780 * $this.localCenter2387.x2017 + c.c2781 * $this.localCenter2387.y2018);
     return;
 }
 function olvc_LexState$Labeldesc2392_$init1597(a_xf, b_beta, c, d) {
@@ -45799,7 +45808,7 @@ function jt_DateFormatElement$GeneralTimezone2666_$init1163(a_start) {
     return $r;
 }
 function jt_DateFormatElement$GeneralTimezone2666_format140($this, a_date, b_buffer) {
-    var c, d, e, f;
+    var c, d, e;
     c = ju_Calendar210_getTimeZone334(a_date);
     if (jl_String1_startsWith947(ju_TimeZone1294_getID680(c), $rt_s(292)) == 0) {
         jl_StringBuffer243_append374(b_buffer, ju_TimeZone1294_getDisplayName1324(c, $this.locale2288));
@@ -45812,9 +45821,9 @@ function jt_DateFormatElement$GeneralTimezone2666_format140($this, a_date, b_buf
             d =  -d | 0;
             jl_StringBuffer243_append143(b_buffer, 45);
         }
-        e = d / 60 | 0;
-        f = d % 60;
-        jl_StringBuffer243_append142(jl_StringBuffer243_append142(jl_StringBuffer243_append143(jl_StringBuffer243_append142(jl_StringBuffer243_append142(b_buffer, e / 10 | 0), e % 10), 58), f / 10 | 0), f % 10);
+        a_date = d / 60 | 0;
+        e = d % 60;
+        jl_StringBuffer243_append142(jl_StringBuffer243_append142(jl_StringBuffer243_append143(jl_StringBuffer243_append142(jl_StringBuffer243_append142(b_buffer, a_date / 10 | 0), a_date % 10), 58), e / 10 | 0), e % 10);
     }
     return;
 }
@@ -45861,14 +45870,14 @@ function jt_DateFormatElement$WeekdayText2671_$init1239($this, a_symbols, b_abbr
     return;
 }
 function jt_DateFormatElement$WeekdayText2671_format140($this, a_date, b_buffer) {
-    var c, d;
-    c = ju_Calendar210_get141(a_date, 7) - 1 | 0;
+    var c;
+    a_date = ju_Calendar210_get141(a_date, 7) - 1 | 0;
     if ($this.abbreviated2674 == 0) {
-        d = $this.weeks2672.data[c];
+        c = $this.weeks2672.data[a_date];
     } else {
-        d = $this.shortWeeks2673.data[c];
+        c = $this.shortWeeks2673.data[a_date];
     }
-    jl_StringBuffer243_append374(b_buffer, d);
+    jl_StringBuffer243_append374(b_buffer, c);
     return;
 }
 function dmgg_CSSUtils2675_toColor893(a_aColor) {
@@ -46740,7 +46749,7 @@ function ojc_AABB2760_$init8($this) {
     return;
 }
 function ojc_AABB2760_combine626($this, a_aabb1, b_aab) {
-    var c, d;
+    var c, d, e;
     c = $this.lowerBound2762;
     if (a_aabb1.lowerBound2762.x2017 >= b_aab.lowerBound2762.x2017) {
         d = b_aab.lowerBound2762.x2017;
@@ -46762,13 +46771,13 @@ function ojc_AABB2760_combine626($this, a_aabb1, b_aab) {
         d = a_aabb1.upperBound2761.x2017;
     }
     c.x2017 = d;
-    c = $this.upperBound2761;
+    e = $this.upperBound2761;
     if (a_aabb1.upperBound2761.y2018 <= b_aab.upperBound2761.y2018) {
         a_aabb1 = b_aab.upperBound2761.y2018;
     } else {
         a_aabb1 = a_aabb1.upperBound2761.y2018;
     }
-    c.y2018 = a_aabb1;
+    e.y2018 = a_aabb1;
     return;
 }
 function dmgp_GameProcessManagerFactory$32763_$init2054(a_aabb1, b_aab) {
@@ -46841,26 +46850,26 @@ function dmgt_PositionClassInformation2772_$clinit() {
         dmgt_PositionClassInformation2772.ADD2773 = a;
         a = new dmgt_PositionClassInformation$2952;
         e = $rt_s(815);
-        b = $rt_cls(dmgt_Position636);
+        c = $rt_cls(dmgt_Position636);
         f = $rt_createArray(jl_Class0, 1);
         f.data[0] = $rt_cls(jl_Float558);
-        dmgt_PositionClassInformation$2952_$init302(a, e, b, f);
+        dmgt_PositionClassInformation$2952_$init302(a, e, c, f);
         dmgt_PositionClassInformation2772.CHANGEX2777 = a;
         a = new dmgt_PositionClassInformation$3953;
-        c = $rt_s(816);
+        e = $rt_s(816);
         b = $rt_cls(dmgt_Position636);
         f = $rt_createArray(jl_Class0, 1);
         f.data[0] = $rt_cls(jl_Float558);
-        dmgt_PositionClassInformation$3953_$init302(a, c, b, f);
+        dmgt_PositionClassInformation$3953_$init302(a, e, b, f);
         dmgt_PositionClassInformation2772.CHANGEY2778 = a;
         a = new dmgt_PositionClassInformation$4950;
-        c = $rt_s(817);
-        b = $rt_cls(dmgt_Position636);
-        d = $rt_createArray(jl_Class0, 2);
-        f = d.data;
-        f[0] = $rt_cls(jl_Integer21);
-        f[1] = $rt_cls(jl_Integer21);
-        dmgt_PositionClassInformation$4950_$init302(a, c, b, d);
+        e = $rt_s(817);
+        c = $rt_cls(dmgt_Position636);
+        f = $rt_createArray(jl_Class0, 2);
+        d = f.data;
+        d[0] = $rt_cls(jl_Integer21);
+        d[1] = $rt_cls(jl_Integer21);
+        dmgt_PositionClassInformation$4950_$init302(a, e, c, f);
         dmgt_PositionClassInformation2772.SNAPTOGRID2774 = a;
         dmgt_PositionClassInformation2772.X2775 = dmgt_PositionClassInformation$5951_$init91($rt_s(193), $rt_cls(jl_Float558));
         dmgt_PositionClassInformation2772.Y2776 = dmgt_PositionClassInformation$6946_$init91($rt_s(194), $rt_cls(jl_Float558));
@@ -46972,9 +46981,9 @@ function ojdc_EdgeAndCircleContact2784_$init385(a_argPool) {
 function ojdc_EdgeAndCircleContact2784_init246($this, a_fA, b_indexA, c_fB, d_indexB) {
     ojdc_Contact642_init246($this, a_fA, b_indexA, c_fB, d_indexB);
     if (ojdc_EdgeAndCircleContact2784.$assertionsDisabled2785 == 0) {
-        b_indexA = ojd_Fixture421_getType214($this.m_fixtureA645);
+        c_fB = ojd_Fixture421_getType214($this.m_fixtureA645);
         ojcs_ShapeType738_$clinit();
-        if (b_indexA !== ojcs_ShapeType738.EDGE741) {
+        if (c_fB !== ojcs_ShapeType738.EDGE741) {
             $rt_throw(jl_AssertionError746_$init4());
         }
     }
@@ -47059,7 +47068,7 @@ function dmgc_SceneStartedCondition2789_unmarshall896(a, b) {
 function olvl_StringLib2790_$clinit() {
     olvl_StringLib2790_$clinit = function(){};
     olvl_StringLib2790_$clinit43 = function() {
-        var a, b, c, d, e, f, g, h;
+        var a, b, c, d, e, f, g;
         olvl_StringLib2790.SPECIALS2793 = olv_LuaValue297_valueOf414($rt_s(822));
         olvl_StringLib2790.CHAR_TABLE2792 = $rt_createByteArray(256);
         a = 0;
@@ -47078,18 +47087,18 @@ function olvl_StringLib2790_$clinit() {
             }
             f = d | e;
             if (jl_Character2057_isUpperCase2003(b) == 0) {
-                d = 0;
+                e = 0;
             } else {
-                d = 4;
+                e = 4;
             }
-            g = f | d;
+            g = f | e;
             if (b >= 32 && b != 127) {
-                d = 0;
+                e = 0;
             } else {
-                d = 64;
+                e = 64;
             }
             $ba: {
-                c.data[a] = (g | d) << 24 >> 24;
+                c.data[a] = (g | e) << 24 >> 24;
                 if (!(b >= 97 && b <= 102) && !(b >= 65 && b <= 70)) {
                     if (b < 48) {
                         break $ba;
@@ -47114,15 +47123,15 @@ function olvl_StringLib2790_$clinit() {
                 c[a] = (c[a] | 16) << 24 >> 24;
             }
             if ((olvl_StringLib2790.CHAR_TABLE2792.data[a] & 6) != 0) {
-                e = olvl_StringLib2790.CHAR_TABLE2792.data;
-                e[a] = (e[a] | 1) << 24 >> 24;
+                d = olvl_StringLib2790.CHAR_TABLE2792.data;
+                d[a] = (d[a] | 1) << 24 >> 24;
             }
             a = a + 1 | 0;
         }
         olvl_StringLib2790.CHAR_TABLE2792.data[32] = 32;
-        c = olvl_StringLib2790.CHAR_TABLE2792.data;
+        f = olvl_StringLib2790.CHAR_TABLE2792.data;
         a = 13;
-        c[a] = (c[a] | 32) << 24 >> 24;
+        f[a] = (f[a] | 32) << 24 >> 24;
         c = olvl_StringLib2790.CHAR_TABLE2792.data;
         a = 10;
         c[a] = (c[a] | 32) << 24 >> 24;
@@ -47132,9 +47141,9 @@ function olvl_StringLib2790_$clinit() {
         c = olvl_StringLib2790.CHAR_TABLE2792.data;
         a = 12;
         c[a] = (c[a] | 32) << 24 >> 24;
-        h = olvl_StringLib2790.CHAR_TABLE2792.data;
+        d = olvl_StringLib2790.CHAR_TABLE2792.data;
         a = 12;
-        h[a] = (h[a] | 32) << 24 >> 24;
+        d[a] = (d[a] | 32) << 24 >> 24;
         return;
     };
     olvl_StringLib2790_$clinit43();
@@ -47146,23 +47155,23 @@ function dmgp_PlatformBehaviorTemplate2794_$clinit() {
         jl_Object2_$init8($this);
         $this.owner2795 = b_aOwner;
         c = new dmge_Property43;
-        b_aOwner = $rt_cls(dmgt_GameKeyCode2409);
-        d = $rt_s(431);
+        d = $rt_cls(dmgt_GameKeyCode2409);
+        b_aOwner = $rt_s(431);
         dmgt_GameKeyCode2409_$clinit();
-        dmge_Property43_$init119(c, b_aOwner, $this, d, dmgt_GameKeyCode2409.LEFT2420, a_aEventManager);
+        dmge_Property43_$init119(c, d, $this, b_aOwner, dmgt_GameKeyCode2409.LEFT2420, a_aEventManager);
         $this.moveLeftKey2798 = c;
-        e = new dmge_Property43;
+        b_aOwner = new dmge_Property43;
+        d = $rt_cls(dmgt_GameKeyCode2409);
+        c = $rt_s(432);
+        dmgt_GameKeyCode2409_$clinit();
+        dmge_Property43_$init119(b_aOwner, d, $this, c, dmgt_GameKeyCode2409.RIGHT2581, a_aEventManager);
+        $this.moveRightKey2799 = b_aOwner;
+        b_aOwner = new dmge_Property43;
         c = $rt_cls(dmgt_GameKeyCode2409);
-        d = $rt_s(432);
+        e = $rt_s(433);
         dmgt_GameKeyCode2409_$clinit();
-        dmge_Property43_$init119(e, c, $this, d, dmgt_GameKeyCode2409.RIGHT2581, a_aEventManager);
-        $this.moveRightKey2799 = e;
-        d = new dmge_Property43;
-        b_aOwner = $rt_cls(dmgt_GameKeyCode2409);
-        c = $rt_s(433);
-        dmgt_GameKeyCode2409_$clinit();
-        dmge_Property43_$init119(d, b_aOwner, $this, c, dmgt_GameKeyCode2409.UP2479, a_aEventManager);
-        $this.jumpKey2800 = d;
+        dmge_Property43_$init119(b_aOwner, c, $this, e, dmgt_GameKeyCode2409.UP2479, a_aEventManager);
+        $this.jumpKey2800 = b_aOwner;
         $this.leftRightImpulse2796 = dmge_Property43_$init118($rt_cls(jl_Float558), $this, $rt_s(434), jl_Float558_valueOf537(4.0), a_aEventManager);
         $this.jumpImpulse2797 = dmge_Property43_$init118($rt_cls(jl_Float558), $this, $rt_s(435), jl_Float558_valueOf537(2.0), a_aEventManager);
         return;
@@ -47186,9 +47195,9 @@ function dmgp_PlatformBehaviorTemplate2794_$clinit() {
         if (a_aEventManager !== null) {
             dmge_Property43_setQuietly132(d.jumpKey2800, dmgt_GameKeyCode2409_valueOf1254(a_aEventManager));
         }
-        a_aEventManager = c_aSerializedData.get47($rt_s(435));
-        if (a_aEventManager !== null) {
-            dmge_Property43_setQuietly132(d.jumpImpulse2797, jl_Float558_valueOf537(jl_Float558_parseFloat784(a_aEventManager)));
+        b_aObject = c_aSerializedData.get47($rt_s(435));
+        if (b_aObject !== null) {
+            dmge_Property43_setQuietly132(d.jumpImpulse2797, jl_Float558_valueOf537(jl_Float558_parseFloat784(b_aObject)));
         }
         a_aEventManager = c_aSerializedData.get47($rt_s(434));
         if (a_aEventManager !== null) {
@@ -47262,13 +47271,13 @@ function jl_Double2802_$clinit() {
         } else {
             e = b * 4.49423283715579E307 * jl_Double2802_binaryExponent2159(d - 1022 | 0);
         }
-        e = Long_or(Long_and(Long_fromNumber(e + 0.5), new Long(4294967295, 1048575)), Long_shl(Long_add(Long_fromInt(c), Long_fromInt(1023)), 52));
+        d = Long_or(Long_and(Long_fromNumber(e + 0.5), new Long(4294967295, 1048575)), Long_shl(Long_add(Long_fromInt(c), Long_fromInt(1023)), 52));
         if (a_value >= 0.0 && 1.0 / a_value !=  -Infinity) {
-            d = Long_ZERO;
+            a_value = Long_ZERO;
         } else {
-            d = new Long(0, 2147483648);
+            a_value = new Long(0, 2147483648);
         }
-        return Long_or(e, d);
+        return Long_or(d, a_value);
     };
     jl_Double2802_binaryExponent2159 = function(a_n) {
         var b, c, d;
@@ -47283,14 +47292,14 @@ function jl_Double2802_$clinit() {
                 c = c * c;
             }
         } else {
-            a_n =  -a_n | 0;
-            d = 0.5;
-            while (a_n != 0) {
-                if (a_n % 2 != 0) {
-                    b = b * d;
+            d =  -a_n | 0;
+            c = 0.5;
+            while (d != 0) {
+                if (d % 2 != 0) {
+                    b = b * c;
                 }
-                a_n = a_n / 2 | 0;
-                d = d * d;
+                d = d / 2 | 0;
+                c = c * c;
             }
         }
         return b;
@@ -47364,40 +47373,40 @@ function jl_Double2802_$clinit() {
                         if (j != 101 && j != 69) {
                             $rt_throw(jl_NumberFormatException2835_$init4());
                         }
-                        i = d + 1 | 0;
-                        k = 0;
-                        if (jl_String1_charAt72(b, i) == 45) {
-                            i = i + 1 | 0;
-                            k = 1;
-                        } else if (jl_String1_charAt72(b, i) == 43) {
-                            i = i + 1 | 0;
+                        a_string = d + 1 | 0;
+                        i = 0;
+                        if (jl_String1_charAt72(b, a_string) == 45) {
+                            a_string = a_string + 1 | 0;
+                            i = 1;
+                        } else if (jl_String1_charAt72(b, a_string) == 43) {
+                            a_string = a_string + 1 | 0;
                         }
-                        d = 0;
+                        k = 0;
                         m = 0;
                         $bc: {
                             while (true) {
-                                if (i >= jl_String1_length2(b)) {
+                                if (a_string >= jl_String1_length2(b)) {
                                     break $bc;
                                 }
-                                j = jl_String1_charAt72(b, i);
+                                j = jl_String1_charAt72(b, a_string);
                                 if (j < 48) {
                                     break $bc;
                                 }
                                 if (j > 57) {
                                     break;
                                 }
-                                d = (10 * d | 0) + (j - 48 | 0) | 0;
+                                k = (10 * k | 0) + (j - 48 | 0) | 0;
                                 m = 1;
-                                i = i + 1 | 0;
+                                a_string = a_string + 1 | 0;
                             }
                         }
                         if (m == 0) {
                             $rt_throw(jl_NumberFormatException2835_$init4());
                         }
-                        if (k != 0) {
-                            d =  -d | 0;
+                        if (i != 0) {
+                            k =  -k | 0;
                         }
-                        g = g + d | 0;
+                        g = g + k | 0;
                     }
                     $bd: {
                         if (g <= 308) {
@@ -47587,11 +47596,11 @@ function dmgs_PlaySoundAction2816_$init8($this) {
     return;
 }
 function dmgs_PlaySoundAction2816_unmarshall1812(a_aSerializedData) {
-    var b;
+    var b, c;
     b = dmgs_PlaySoundAction2816_$init4();
-    a_aSerializedData = a_aSerializedData.get47($rt_s(794));
-    if (a_aSerializedData !== null) {
-        dmge_Property43_setQuietly132(b.resourceName2817, dmgt_ResourceName373_$init29(a_aSerializedData));
+    c = a_aSerializedData.get47($rt_s(794));
+    if (c !== null) {
+        dmge_Property43_setQuietly132(b.resourceName2817, dmgt_ResourceName373_$init29(c));
     }
     return b;
 }
@@ -47658,26 +47667,26 @@ function otcit_CachedDateTimeZone2825_getInfo2166($this, a_millis) {
     return e;
 }
 function otcit_CachedDateTimeZone2825_createInfo2167($this, a_millis) {
-    var b, c, d, e;
-    a_millis = Long_and(a_millis, new Long(0, 4294967295));
-    b = otcit_CachedDateTimeZone$Info1481_$init1418($this.iZone2826, a_millis);
-    c = Long_or(a_millis, new Long(4294967295, 0));
-    d = b;
+    var b, c, d, e, f;
+    b = Long_and(a_millis, new Long(0, 4294967295));
+    c = otcit_CachedDateTimeZone$Info1481_$init1418($this.iZone2826, b);
+    d = Long_or(b, new Long(4294967295, 0));
+    e = c;
     $ba: {
         while (true) {
-            e = otcit_DateTimeZoneBuilder$PrecalculatedZone1390_nextTransition1371($this.iZone2826, a_millis);
-            if (Long_compare(e, a_millis) == 0) {
+            f = otcit_DateTimeZoneBuilder$PrecalculatedZone1390_nextTransition1371($this.iZone2826, b);
+            if (Long_compare(f, b) == 0) {
                 break $ba;
             }
-            if (Long_compare(e, c) > 0) {
+            if (Long_compare(f, d) > 0) {
                 break;
             }
-            d.iNextInfo1484 = otcit_CachedDateTimeZone$Info1481_$init1418($this.iZone2826, e);
-            d = d.iNextInfo1484;
-            a_millis = e;
+            e.iNextInfo1484 = otcit_CachedDateTimeZone$Info1481_$init1418($this.iZone2826, f);
+            e = e.iNextInfo1484;
+            b = f;
         }
     }
-    return b;
+    return c;
 }
 function otcit_CachedDateTimeZone2825_getStandardOffset1328($this, a_instant) {
     return otcit_CachedDateTimeZone$Info1481_getStandardOffset1328(otcit_CachedDateTimeZone2825_getInfo2166($this, a_instant), a_instant);
@@ -47761,10 +47770,10 @@ function dmgc_CameraBehavior2829_getInstance1400($this) {
     return $this.objectInstance2830;
 }
 function dmgc_CameraBehavior2829_centerOn2171($this, a_aGameObjectInstance) {
-    var b, c;
+    var b;
     b = dmge_ReadOnlyProperty38_get113(dmgc_GameObjectInstance2906_positionProperty674(a_aGameObjectInstance));
-    c = dmge_ReadOnlyProperty38_get113(dmgc_GameObject1845_sizeProperty939(dmgc_GameObjectInstance2906_getOwnerGameObject568(a_aGameObjectInstance)));
-    dmgc_CameraBehavior2829_centerOn2172($this, dmgt_Position636_$init555(b.x637 + (c.width1983 / 2 | 0), b.y638 + (c.height1984 / 2 | 0)));
+    a_aGameObjectInstance = dmge_ReadOnlyProperty38_get113(dmgc_GameObject1845_sizeProperty939(dmgc_GameObjectInstance2906_getOwnerGameObject568(a_aGameObjectInstance)));
+    dmgc_CameraBehavior2829_centerOn2172($this, dmgt_Position636_$init555(b.x637 + (a_aGameObjectInstance.width1983 / 2 | 0), b.y638 + (a_aGameObjectInstance.height1984 / 2 | 0)));
     return;
 }
 function dmgc_CameraBehavior2829_getClassInformation49($this) {
@@ -47918,7 +47927,7 @@ function ojc_Distance$DistanceProxy2836_getSupport1235($this, a_d) {
     return b;
 }
 function ojc_Distance$DistanceProxy2836_set234($this, a_shape, b_index) {
-    var c, d, e;
+    var c, d, e, f;
     $ba: {
         $bb: {
             ojc_Distance$1732_$clinit();
@@ -47929,34 +47938,34 @@ function ojc_Distance$DistanceProxy2836_set234($this, a_shape, b_index) {
                     c = a_shape;
                     $this.m_count2837 = c.m_count1496;
                     $this.m_radius2839 = c.m_radius197;
-                    a_shape = 0;
-                    while (a_shape < $this.m_count2837) {
-                        ojc_Vec22016_set176($this.m_vertices2840.data[a_shape], c.m_vertices1501.data[a_shape]);
-                        a_shape = a_shape + 1 | 0;
+                    d = 0;
+                    while (d < $this.m_count2837) {
+                        ojc_Vec22016_set176($this.m_vertices2840.data[d], c.m_vertices1501.data[d]);
+                        d = d + 1 | 0;
                     }
                     break $ba;
                 case 3:
-                    c = a_shape;
-                    if (ojc_Distance$DistanceProxy2836.$assertionsDisabled2841 == 0 && !(0 <= b_index && b_index < c.m_count200)) {
+                    e = a_shape;
+                    if (ojc_Distance$DistanceProxy2836.$assertionsDisabled2841 == 0 && !(0 <= b_index && b_index < e.m_count200)) {
                         $rt_throw(jl_AssertionError746_$init4());
                     }
-                    $this.m_buffer2838.data[0] = c.m_vertices201.data[b_index];
-                    if ((b_index + 1 | 0) >= c.m_count200) {
-                        $this.m_buffer2838.data[1] = c.m_vertices201.data[0];
+                    $this.m_buffer2838.data[0] = e.m_vertices201.data[b_index];
+                    if ((b_index + 1 | 0) >= e.m_count200) {
+                        $this.m_buffer2838.data[1] = e.m_vertices201.data[0];
                     } else {
-                        $this.m_buffer2838.data[1] = c.m_vertices201.data[b_index + 1 | 0];
+                        $this.m_buffer2838.data[1] = e.m_vertices201.data[b_index + 1 | 0];
                     }
                     ojc_Vec22016_set176($this.m_vertices2840.data[0], $this.m_buffer2838.data[0]);
                     ojc_Vec22016_set176($this.m_vertices2840.data[1], $this.m_buffer2838.data[1]);
                     $this.m_count2837 = 2;
-                    $this.m_radius2839 = c.m_radius197;
+                    $this.m_radius2839 = e.m_radius197;
                     break $ba;
                 case 4:
-                    d = a_shape;
-                    ojc_Vec22016_set176($this.m_vertices2840.data[0], d.m_vertex12262);
-                    ojc_Vec22016_set176($this.m_vertices2840.data[1], d.m_vertex22263);
+                    e = a_shape;
+                    ojc_Vec22016_set176($this.m_vertices2840.data[0], e.m_vertex12262);
+                    ojc_Vec22016_set176($this.m_vertices2840.data[1], e.m_vertex22263);
                     $this.m_count2837 = 2;
-                    $this.m_radius2839 = d.m_radius197;
+                    $this.m_radius2839 = e.m_radius197;
                     break $ba;
                 default:
             }
@@ -47965,10 +47974,10 @@ function ojc_Distance$DistanceProxy2836_set234($this, a_shape, b_index) {
             }
             $rt_throw(jl_AssertionError746_$init4());
         }
-        e = a_shape;
-        ojc_Vec22016_set176($this.m_vertices2840.data[0], e.m_p2302);
+        f = a_shape;
+        ojc_Vec22016_set176($this.m_vertices2840.data[0], f.m_p2302);
         $this.m_count2837 = 1;
-        $this.m_radius2839 = e.m_radius197;
+        $this.m_radius2839 = f.m_radius197;
     }
     return;
 }
@@ -48103,21 +48112,21 @@ function dmgn_NewGameInstance2854_runEventInScene1338(a_aEventData, b_aGameScene
 function dmgp_PhysicsBehaviorTemplate2856_$clinit() {
     dmgp_PhysicsBehaviorTemplate2856_$clinit = function(){};
     dmgp_PhysicsBehaviorTemplate2856_$init915 = function($this, a_aEventManager, b_aOwner) {
-        var c, d;
+        var c, d, e;
         jl_Object2_$init8($this);
         $this.owner2857 = b_aOwner;
-        c = new dmge_Property43;
-        b_aOwner = $rt_cls(jl_Boolean2001);
+        b_aOwner = new dmge_Property43;
+        c = $rt_cls(jl_Boolean2001);
         d = $rt_s(505);
         jl_Boolean2001_$clinit();
-        dmge_Property43_$init119(c, b_aOwner, $this, d, jl_Boolean2001.TRUE2003, a_aEventManager);
-        $this.active2861 = c;
-        c = new dmge_Property43;
-        b_aOwner = $rt_cls(jl_Boolean2001);
-        d = $rt_s(506);
+        dmge_Property43_$init119(b_aOwner, c, $this, d, jl_Boolean2001.TRUE2003, a_aEventManager);
+        $this.active2861 = b_aOwner;
+        d = new dmge_Property43;
+        e = $rt_cls(jl_Boolean2001);
+        b_aOwner = $rt_s(506);
         jl_Boolean2001_$clinit();
-        dmge_Property43_$init119(c, b_aOwner, $this, d, jl_Boolean2001.FALSE2004, a_aEventManager);
-        $this.fixedRotation2863 = c;
+        dmge_Property43_$init119(d, e, $this, b_aOwner, jl_Boolean2001.FALSE2004, a_aEventManager);
+        $this.fixedRotation2863 = d;
         $this.density2858 = dmge_Property43_$init118($rt_cls(jl_Float558), $this, $rt_s(507), jl_Float558_valueOf537(1.0), a_aEventManager);
         $this.friction2862 = dmge_Property43_$init118($rt_cls(jl_Float558), $this, $rt_s(508), jl_Float558_valueOf537(1.8), a_aEventManager);
         $this.restitution2859 = dmge_Property43_$init118($rt_cls(jl_Float558), $this, $rt_s(509), jl_Float558_valueOf537(0.0), a_aEventManager);
@@ -48127,29 +48136,29 @@ function dmgp_PhysicsBehaviorTemplate2856_$clinit() {
     dmgp_PhysicsBehaviorTemplate2856_deserialize2094 = function(a_aEventManager, b_aOwner, c_aSerializedData) {
         var d, e;
         d = dmgp_PhysicsBehaviorTemplate2856_$init917(a_aEventManager, b_aOwner);
-        a_aEventManager = c_aSerializedData.get47($rt_s(505));
-        if (a_aEventManager !== null) {
-            dmge_Property43_setQuietly132(d.active2861, jl_Boolean2001_valueOf913(jl_Boolean2001_parseBoolean1964(a_aEventManager)));
+        b_aOwner = c_aSerializedData.get47($rt_s(505));
+        if (b_aOwner !== null) {
+            dmge_Property43_setQuietly132(d.active2861, jl_Boolean2001_valueOf913(jl_Boolean2001_parseBoolean1964(b_aOwner)));
         }
         e = c_aSerializedData.get47($rt_s(830));
         if (e !== null) {
             dmge_Property43_setQuietly132(d.fixedRotation2863, jl_Boolean2001_valueOf913(jl_Boolean2001_parseBoolean1964(e)));
         }
-        a_aEventManager = c_aSerializedData.get47($rt_s(507));
-        if (a_aEventManager !== null) {
-            dmge_Property43_setQuietly132(d.density2858, jl_Float558_valueOf537(jl_Float558_parseFloat784(a_aEventManager)));
-        }
-        e = c_aSerializedData.get47($rt_s(508));
+        e = c_aSerializedData.get47($rt_s(507));
         if (e !== null) {
-            dmge_Property43_setQuietly132(d.friction2862, jl_Float558_valueOf537(jl_Float558_parseFloat784(e)));
+            dmge_Property43_setQuietly132(d.density2858, jl_Float558_valueOf537(jl_Float558_parseFloat784(e)));
         }
-        a_aEventManager = c_aSerializedData.get47($rt_s(509));
-        if (a_aEventManager !== null) {
-            dmge_Property43_setQuietly132(d.restitution2859, jl_Float558_valueOf537(jl_Float558_parseFloat784(a_aEventManager)));
+        b_aOwner = c_aSerializedData.get47($rt_s(508));
+        if (b_aOwner !== null) {
+            dmge_Property43_setQuietly132(d.friction2862, jl_Float558_valueOf537(jl_Float558_parseFloat784(b_aOwner)));
         }
-        a_aEventManager = c_aSerializedData.get47($rt_s(510));
-        if (a_aEventManager !== null) {
-            dmge_Property43_setQuietly132(d.gravityScale2860, jl_Float558_valueOf537(jl_Float558_parseFloat784(a_aEventManager)));
+        b_aOwner = c_aSerializedData.get47($rt_s(509));
+        if (b_aOwner !== null) {
+            dmge_Property43_setQuietly132(d.restitution2859, jl_Float558_valueOf537(jl_Float558_parseFloat784(b_aOwner)));
+        }
+        e = c_aSerializedData.get47($rt_s(510));
+        if (e !== null) {
+            dmge_Property43_setQuietly132(d.gravityScale2860, jl_Float558_valueOf537(jl_Float558_parseFloat784(e)));
         }
         return d;
     };
@@ -48227,18 +48236,18 @@ function dmgg_GenericAbstractGameView$12865_process2019($this, a_aValue) {
         e = 0;
         f = dmgc_GameObjectInstance2906_getBehavior1094(a_aValue, $rt_cls(dmgs_SpriteBehavior2696));
         if (f !== null) {
-            g = dmgs_SpriteBehavior2696_computeCurrentFrame2132(f, $this.val$aGameTime2867);
-            if (g !== null) {
+            f = dmgs_SpriteBehavior2696_computeCurrentFrame2132(f, $this.val$aGameTime2867);
+            if (f !== null) {
                 $bb: {
                     try {
-                        h = dmgc_GameResourceCache2693_getResourceFor2063(dmgc_GameRuntime1097_getResourceCache1222(dmgg_GenericAbstractGameView678_access$100858($this.this$02868)), g);
-                        dmgt_TeaVMGameView690_drawImage884($this.this$02868, a_aValue, b, d, h);
+                        g = dmgc_GameResourceCache2693_getResourceFor2063(dmgc_GameRuntime1097_getResourceCache1222(dmgg_GenericAbstractGameView678_access$100858($this.this$02868)), f);
+                        dmgt_TeaVMGameView690_drawImage884($this.this$02868, a_aValue, b, d, g);
                         e = 1;
-                        i = e;
+                        h = e;
                     } catch ($e) {
                         $je = $e.$javaException;
                         if ($je && $je instanceof ji_IOException1172) {
-                            f = $je;
+                            i = $je;
                             break $bb;
                         } else {
                             throw $e;
@@ -48246,21 +48255,21 @@ function dmgg_GenericAbstractGameView$12865_process2019($this, a_aValue) {
                     }
                     break $ba;
                 }
-                dmgt_TeaVMGameView690_logError888($this.this$02868, jl_StringBuilder2321_toString35(jl_StringBuilder2321_append36(jl_StringBuilder2321_append36(jl_StringBuilder2321_$init4(), $rt_s(831)), g.name374)));
-                e = i;
+                dmgt_TeaVMGameView690_logError888($this.this$02868, jl_StringBuilder2321_toString35(jl_StringBuilder2321_append36(jl_StringBuilder2321_append36(jl_StringBuilder2321_$init4(), $rt_s(831)), f.name374)));
+                e = h;
             }
         }
     }
-    g = dmgc_GameObjectInstance2906_getBehavior1094(a_aValue, $rt_cls(dmgt_TextBehavior1573));
-    if (g !== null) {
+    i = dmgc_GameObjectInstance2906_getBehavior1094(a_aValue, $rt_cls(dmgt_TextBehavior1573));
+    if (i !== null) {
         $bc: {
-            h = dmge_ReadOnlyProperty38_get113(dmgt_TextBehavior1573_textExpressionProperty921(g));
-            if (jl_Boolean2001_booleanValue751(dmge_ReadOnlyProperty38_get113(dmgt_TextBehavior1573_isScriptProperty925(g))) == 0) {
-                e = h.expression1406;
+            g = dmge_ReadOnlyProperty38_get113(dmgt_TextBehavior1573_textExpressionProperty921(i));
+            if (jl_Boolean2001_booleanValue751(dmge_ReadOnlyProperty38_get113(dmgt_TextBehavior1573_isScriptProperty925(i))) == 0) {
+                e = g.expression1406;
             } else {
                 $bd: {
                     try {
-                        e = dmgsl_LuaJScriptEngine494_evaluateSimpleExpressionFor714(dmgsl_LuaJScriptEngineFactory2786_createNewEngine2153(dmgc_GameRuntime1097_getScriptEngineFactory1226(dmgg_GenericAbstractGameView678_access$100858($this.this$02868)), $this.val$aScene2866, h), a_aValue);
+                        e = dmgsl_LuaJScriptEngine494_evaluateSimpleExpressionFor714(dmgsl_LuaJScriptEngineFactory2786_createNewEngine2153(dmgc_GameRuntime1097_getScriptEngineFactory1226(dmgg_GenericAbstractGameView678_access$100858($this.this$02868)), $this.val$aScene2866, g), a_aValue);
                     } catch ($e) {
                         $je = $e.$javaException;
                         if ($je && $je instanceof jl_Exception361) {
@@ -48275,7 +48284,7 @@ function dmgg_GenericAbstractGameView$12865_process2019($this, a_aValue) {
                 e = jl_StringBuilder2321_toString35(jl_StringBuilder2321_append36(jl_StringBuilder2321_append36(jl_StringBuilder2321_$init4(), $rt_s(832)), f.getMessage157()));
             }
         }
-        dmgt_TeaVMGameView690_drawText878($this.this$02868, a_aValue, b, d, dmge_ReadOnlyProperty38_get113(dmgt_TextBehavior1573_fontProperty920(g)), dmge_ReadOnlyProperty38_get113(dmgt_TextBehavior1573_colorProperty926(g)), e, c);
+        dmgt_TeaVMGameView690_drawText878($this.this$02868, a_aValue, b, d, dmge_ReadOnlyProperty38_get113(dmgt_TextBehavior1573_fontProperty920(i)), dmge_ReadOnlyProperty38_get113(dmgt_TextBehavior1573_colorProperty926(i)), e, c);
         e = 1;
     }
     if (e == 0) {
@@ -48320,7 +48329,7 @@ function ojc_Distance2869_$init4() {
     return $r;
 }
 function ojc_Distance2869_distance775($this, a_output, b_cache, c_input) {
-    var d, e, f, g, h, i, j, k, m, n, o, p;
+    var d, e, f, g, h, i, j, k, m, n, o, p, q, r, s;
     ojc_Distance2869.GJK_CALLS2880 = ojc_Distance2869.GJK_CALLS2880 + 1 | 0;
     d = c_input.proxyA288;
     e = c_input.proxyB290;
@@ -48366,38 +48375,38 @@ function ojc_Distance2869_distance775($this, a_output, b_cache, c_input) {
                 break $ba;
             }
             ojc_Distance$Simplex2227_getClosestPoint2073($this.simplex2876, $this.closestPoint2871);
-            m = ojc_Vec22016_lengthSquared1975($this.closestPoint2871);
+            o = ojc_Vec22016_lengthSquared1975($this.closestPoint2871);
             ojc_Distance$Simplex2227_getSearchDirection2079($this.simplex2876, $this.d2873);
             if (ojc_Vec22016_lengthSquared1975($this.d2873) < 1.4210855E-14) {
                 break $ba;
             }
-            o = h.data[$this.simplex2876.m_count2236];
+            p = h.data[$this.simplex2876.m_count2236];
             ojc_Rot2779_mulTransUnsafe1234(f.q2029, ojc_Vec22016_negateLocal814($this.d2873), $this.temp2872);
-            o.indexA2958 = ojc_Distance$DistanceProxy2836_getSupport1235(d, $this.temp2872);
-            ojc_Transform2027_mulToOutUnsafe802(f, ojc_Distance$DistanceProxy2836_getVertex1236(d, o.indexA2958), o.wA2962);
+            p.indexA2958 = ojc_Distance$DistanceProxy2836_getSupport1235(d, $this.temp2872);
+            ojc_Transform2027_mulToOutUnsafe802(f, ojc_Distance$DistanceProxy2836_getVertex1236(d, p.indexA2958), p.wA2962);
             ojc_Rot2779_mulTransUnsafe1234(g.q2029, ojc_Vec22016_negateLocal814($this.d2873), $this.temp2872);
-            o.indexB2961 = ojc_Distance$DistanceProxy2836_getSupport1235(e, $this.temp2872);
-            ojc_Transform2027_mulToOutUnsafe802(g, ojc_Distance$DistanceProxy2836_getVertex1236(e, o.indexB2961), o.wB2963);
-            ojc_Vec22016_subLocal804(ojc_Vec22016_set176(o.w2959, o.wB2963), o.wA2962);
+            p.indexB2961 = ojc_Distance$DistanceProxy2836_getSupport1235(e, $this.temp2872);
+            ojc_Transform2027_mulToOutUnsafe802(g, ojc_Distance$DistanceProxy2836_getVertex1236(e, p.indexB2961), p.wB2963);
+            ojc_Vec22016_subLocal804(ojc_Vec22016_set176(p.w2959, p.wB2963), p.wA2962);
             j = j + 1 | 0;
             ojc_Distance2869.GJK_ITERS2877 = ojc_Distance2869.GJK_ITERS2877 + 1 | 0;
-            p = 0;
-            i = 0;
+            m = 0;
+            q = 0;
             $bd: {
-                while (i < k) {
-                    if (o.indexA2958 == $this.saveA2874.data[i] && o.indexB2961 == $this.saveB2875.data[i]) {
-                        p = 1;
+                while (q < k) {
+                    if (p.indexA2958 == $this.saveA2874.data[q] && p.indexB2961 == $this.saveB2875.data[q]) {
+                        m = 1;
                         break $bd;
                     }
-                    i = i + 1 | 0;
+                    q = q + 1 | 0;
                 }
             }
-            if (p != 0) {
+            if (m != 0) {
                 break $ba;
             }
-            k = $this.simplex2876;
-            k.m_count2236 = k.m_count2236 + 1 | 0;
-            i = m;
+            m = $this.simplex2876;
+            m.m_count2236 = m.m_count2236 + 1 | 0;
+            i = o;
         }
         $rt_throw(jl_AssertionError746_$init4());
     }
@@ -48407,17 +48416,17 @@ function ojc_Distance2869_distance775($this, a_output, b_cache, c_input) {
     a_output.iterations448 = j;
     ojc_Distance$Simplex2227_writeCache2078($this.simplex2876, b_cache);
     if (c_input.useRadii291 != 0) {
-        o = d.m_radius2839;
-        c_input = e.m_radius2839;
-        b_cache = a_output.distance445;
-        f = o + c_input;
-        if (b_cache > f && a_output.distance445 > 1.1920929E-7) {
+        r = d.m_radius2839;
+        b_cache = e.m_radius2839;
+        s = a_output.distance445;
+        f = r + b_cache;
+        if (s > f && a_output.distance445 > 1.1920929E-7) {
             a_output.distance445 = a_output.distance445 - f;
             ojc_Vec22016_subLocal804(ojc_Vec22016_set176($this.normal2870, a_output.pointB447), a_output.pointA446);
             ojc_Vec22016_normalize148($this.normal2870);
-            ojc_Vec22016_mulLocal806(ojc_Vec22016_set176($this.temp2872, $this.normal2870), o);
+            ojc_Vec22016_mulLocal806(ojc_Vec22016_set176($this.temp2872, $this.normal2870), r);
             ojc_Vec22016_addLocal805(a_output.pointA446, $this.temp2872);
-            ojc_Vec22016_mulLocal806(ojc_Vec22016_set176($this.temp2872, $this.normal2870), c_input);
+            ojc_Vec22016_mulLocal806(ojc_Vec22016_set176($this.temp2872, $this.normal2870), b_cache);
             ojc_Vec22016_subLocal804(a_output.pointB447, $this.temp2872);
         } else {
             ojc_Vec22016_mulLocal806(ojc_Vec22016_addLocal805(a_output.pointA446, a_output.pointB447), 0.5);
@@ -48542,16 +48551,16 @@ function dmgn_NetworkGameView2898_renderGame863($this, a, b, c_aScene, d_aStatis
     if (ju_AbstractCollection906_isEmpty71(a) == 0) {
         a = ju_AbstractList1487_iterator742(a);
         while (ju_AbstractList$11185_hasNext745(a) != 0) {
-            f = ju_AbstractList$11185_next746(a);
+            e = ju_AbstractList$11185_next746(a);
             dmgc_RuntimeStatistics1222_incrementNumberOfNetworkeventsReceived1296(d_aStatistics);
-            dmgn_DefaultEventInterpreter2336_process2105($this.eventInterpreter2900, f, c_aScene);
+            dmgn_DefaultEventInterpreter2336_process2105($this.eventInterpreter2900, e, c_aScene);
         }
     }
-    a = ju_ArrayList2151_$init983($this.eventsDuringLastLoopCycle2899);
+    c_aScene = ju_ArrayList2151_$init983($this.eventsDuringLastLoopCycle2899);
     ju_ArrayList2151_clear196($this.eventsDuringLastLoopCycle2899);
-    c_aScene = ju_AbstractList1487_iterator742(a);
-    while (ju_AbstractList$11185_hasNext745(c_aScene) != 0) {
-        d_aStatistics = ju_AbstractList$11185_next746(c_aScene);
+    a = ju_AbstractList1487_iterator742(c_aScene);
+    while (ju_AbstractList$11185_hasNext745(a) != 0) {
+        d_aStatistics = ju_AbstractList$11185_next746(a);
         if (d_aStatistics.isForced1342() != 0) {
             ju_AbstractList1487_add131($this.eventsDuringLastLoopCycle2899, d_aStatistics);
         }
@@ -48684,51 +48693,51 @@ function dmgc_GameObjectInstance2906_$clinit() {
         dmge_Property43_$init119(c, d, $this, e, jl_Boolean2001.FALSE2004, a_aEventManager);
         $this.absolutePosition2907 = c;
         d = new dmge_Property43;
-        f = $rt_cls(dmgt_AbsolutePositionAnchor1633);
-        c = $rt_s(836);
+        e = $rt_cls(dmgt_AbsolutePositionAnchor1633);
+        f = $rt_s(836);
         dmgt_AbsolutePositionAnchor1633_$clinit();
-        dmge_Property43_$init119(d, f, $this, c, dmgt_AbsolutePositionAnchor1633.TOP_LEFT1635, a_aEventManager);
+        dmge_Property43_$init119(d, e, $this, f, dmgt_AbsolutePositionAnchor1633.TOP_LEFT1635, a_aEventManager);
         $this.absolutePositionAnchor2916 = d;
         $this.ownerGameObject2914 = b_aOwnerGameObject;
         $this.behaviors2909 = ju_HashMap1688_$init4();
         return;
     };
     dmgc_GameObjectInstance2906_deserialize2025 = function(a_aGameRuntime, b_aScene, c_theInstance) {
-        var d, e, f;
+        var d, e;
         d = c_theInstance.get47($rt_s(837));
         b_aScene = dmgc_GameScene2107_findObjectByID566(b_aScene, d);
         if (b_aScene === null) {
             $rt_throw(jl_RuntimeException362_$init29(jl_StringBuilder2321_toString35(jl_StringBuilder2321_append36(jl_StringBuilder2321_append36(jl_StringBuilder2321_$init4(), $rt_s(838)), d))));
         }
-        e = dmgc_GameObjectInstance2906_$init917(dmgc_GameRuntime1097_getEventManager264(a_aGameRuntime), b_aScene);
-        dmge_Property43_setQuietly132(e.position2915, dmgt_Position636_deserialize821(c_theInstance.get47($rt_s(135))));
-        dmge_Property43_setQuietly132(e.name2913, c_theInstance.get47($rt_s(137)));
-        d = c_theInstance.get47($rt_s(460));
-        if (d !== null) {
-            dmge_Property43_setQuietly132(e.uuid2910, d);
+        d = dmgc_GameObjectInstance2906_$init917(dmgc_GameRuntime1097_getEventManager264(a_aGameRuntime), b_aScene);
+        dmge_Property43_setQuietly132(d.position2915, dmgt_Position636_deserialize821(c_theInstance.get47($rt_s(135))));
+        dmge_Property43_setQuietly132(d.name2913, c_theInstance.get47($rt_s(137)));
+        b_aScene = c_theInstance.get47($rt_s(460));
+        if (b_aScene !== null) {
+            dmge_Property43_setQuietly132(d.uuid2910, b_aScene);
         }
         b_aScene = c_theInstance.get47($rt_s(461));
         if (b_aScene !== null) {
-            dmge_Property43_setQuietly132(e.visible2908, jl_Boolean2001_valueOf913(jl_Boolean2001_parseBoolean1964(b_aScene)));
+            dmge_Property43_setQuietly132(d.visible2908, jl_Boolean2001_valueOf913(jl_Boolean2001_parseBoolean1964(b_aScene)));
         }
-        b_aScene = c_theInstance.get47($rt_s(835));
-        if (b_aScene !== null) {
-            dmge_Property43_setQuietly132(e.absolutePosition2907, jl_Boolean2001_valueOf913(jl_Boolean2001_parseBoolean1964(b_aScene)));
+        e = c_theInstance.get47($rt_s(835));
+        if (e !== null) {
+            dmge_Property43_setQuietly132(d.absolutePosition2907, jl_Boolean2001_valueOf913(jl_Boolean2001_parseBoolean1964(e)));
         }
         b_aScene = c_theInstance.get47($rt_s(836));
         if (b_aScene !== null) {
-            dmge_Property43_setQuietly132(e.absolutePositionAnchor2916, dmgt_AbsolutePositionAnchor1633_valueOf1664(b_aScene));
+            dmge_Property43_setQuietly132(d.absolutePositionAnchor2916, dmgt_AbsolutePositionAnchor1633_valueOf1664(b_aScene));
         }
         b_aScene = c_theInstance.get47($rt_s(839));
         if (b_aScene !== null) {
-            dmge_Property43_setQuietly132(e.rotationAngle2912, dmgt_Angle1361_deserialize1349(b_aScene));
+            dmge_Property43_setQuietly132(d.rotationAngle2912, dmgt_Angle1361_deserialize1349(b_aScene));
         }
-        d = ju_AbstractList1487_iterator742(c_theInstance.get47($rt_s(840)));
-        while (ju_AbstractList$11185_hasNext745(d) != 0) {
-            f = ju_AbstractList$11185_next746(d);
-            dmgc_GameObjectInstance2906_addBehavior2035(e, dmgc_IORegistry2741_getBehaviorUnmarshallerFor2145(dmgc_GameRuntime1097_getIORegistry274(a_aGameRuntime), f.get47($rt_s(72))).deserialize1825(a_aGameRuntime, e, f));
+        b_aScene = ju_AbstractList1487_iterator742(c_theInstance.get47($rt_s(840)));
+        while (ju_AbstractList$11185_hasNext745(b_aScene) != 0) {
+            e = ju_AbstractList$11185_next746(b_aScene);
+            dmgc_GameObjectInstance2906_addBehavior2035(d, dmgc_IORegistry2741_getBehaviorUnmarshallerFor2145(dmgc_GameRuntime1097_getIORegistry274(a_aGameRuntime), e.get47($rt_s(72))).deserialize1825(a_aGameRuntime, d, e));
         }
-        return e;
+        return d;
     };
     dmgc_GameObjectInstance2906_$clinit43 = function() {
         dmgc_GameObjectInstance2906.CIINSTANCE2917 = dmgc_GameObjectInstanceClassInformation1344_$init4();
@@ -48877,41 +48886,22 @@ function dmgt_Animation2935_$init2178(a, b, c) {
     return $r;
 }
 function dmgt_Animation2935_deserialize1211(a_aData) {
-    var b, c, d;
+    var b, c, d, e;
     b = a_aData.get47($rt_s(137));
     c = a_aData.get47($rt_s(460));
     d = ju_ArrayList2151_$init4();
-    a_aData = ju_AbstractList1487_iterator742(a_aData.get47($rt_s(841)));
-    while (ju_AbstractList$11185_hasNext745(a_aData) != 0) {
-        ju_AbstractList1487_add131(d, dmgt_ResourceName373_deserialize587(ju_AbstractList$11185_next746(a_aData)));
+    e = ju_AbstractList1487_iterator742(a_aData.get47($rt_s(841)));
+    while (ju_AbstractList$11185_hasNext745(e) != 0) {
+        ju_AbstractList1487_add131(d, dmgt_ResourceName373_deserialize587(ju_AbstractList$11185_next746(e)));
     }
-    return dmgt_Animation2935_$init2178(c, b, d);
+    return dmgt_Animation2935_$init2178(c, b, ju_AbstractCollection906_toArray128(d, $rt_createArray(dmgt_ResourceName373, ju_ArrayList2151_size129(d))));
 }
 function dmgt_Animation2935_getUuid1213($this) {
     return $this.uuid2938;
 }
 function dmgt_Animation2935_$init28($this, a_aName) {
-    dmgt_Animation2935_$init2179($this, dmgt_UUID1833_randomUID990(), a_aName, ju_ArrayList2151_$init4());
+    dmgt_Animation2935_$init2179($this, dmgt_UUID1833_randomUID990(), a_aName, $rt_createArray(dmgt_ResourceName373, 0));
     return;
-}
-function dmgt_Animation2935_serialize51($this) {
-    var a, b, c;
-    a = ju_HashMap1688_$init4();
-    ju_HashMap1688_put52(a, $rt_s(460), $this.uuid2938);
-    ju_HashMap1688_put52(a, $rt_s(137), $this.name2937);
-    b = ju_ArrayList2151_$init4();
-    c = ju_AbstractList1487_iterator742($this.animationSequence2936);
-    while (ju_AbstractList$11185_hasNext745(c) != 0) {
-        ju_AbstractList1487_add131(b, dmgt_ResourceName373_serialize51(ju_AbstractList$11185_next746(c)));
-    }
-    ju_HashMap1688_put52(a, $rt_s(841), b);
-    return a;
-}
-function dmgt_Animation2935_addToAnimationSequence1209($this, a_aName) {
-    var b;
-    b = ju_ArrayList2151_$init983($this.animationSequence2936);
-    ju_AbstractList1487_add131(b, a_aName);
-    return dmgt_Animation2935_$init2178($this.uuid2938, $this.name2937, b);
 }
 function dmgt_Animation2935_$init2179($this, a_aUUID, b_aName, c_aAnimationSequence) {
     jl_Object2_$init8($this);
@@ -48920,11 +48910,33 @@ function dmgt_Animation2935_$init2179($this, a_aUUID, b_aName, c_aAnimationSeque
     $this.animationSequence2936 = c_aAnimationSequence;
     return;
 }
+function dmgt_Animation2935_serialize51($this) {
+    var a, b, c, d, e;
+    a = ju_HashMap1688_$init4();
+    ju_HashMap1688_put52(a, $rt_s(460), $this.uuid2938);
+    ju_HashMap1688_put52(a, $rt_s(137), $this.name2937);
+    b = ju_ArrayList2151_$init4();
+    c = $this.animationSequence2936.data;
+    d = c.length;
+    e = 0;
+    while (e < d) {
+        ju_AbstractList1487_add131(b, dmgt_ResourceName373_serialize51(c[e]));
+        e = e + 1 | 0;
+    }
+    ju_HashMap1688_put52(a, $rt_s(841), b);
+    return a;
+}
+function dmgt_Animation2935_addToAnimationSequence1209($this, a_aName) {
+    var b;
+    b = dmg_ArrayUtils2172_asList126($this.animationSequence2936);
+    ju_AbstractList1487_add131(b, a_aName);
+    return dmgt_Animation2935_$init2178($this.uuid2938, $this.name2937, ju_AbstractCollection906_toArray128(b, $rt_createArray(dmgt_ResourceName373, ju_ArrayList2151_size129(b))));
+}
 function dmgt_Animation2935_computeCurrentFrame2133($this, a_aGameTime, b_aSpeed) {
-    if (ju_AbstractCollection906_isEmpty71($this.animationSequence2936) != 0) {
+    if ($this.animationSequence2936.data.length == 0) {
         return null;
     }
-    return ju_ArrayList2151_get1275($this.animationSequence2936, Long_toNumber(a_aGameTime) / 1000.0 * jl_Integer21_intValue87(b_aSpeed) % ju_ArrayList2151_size129($this.animationSequence2936) | 0);
+    return $this.animationSequence2936.data[Long_toNumber(a_aGameTime) / 1000.0 * jl_Integer21_intValue87(b_aSpeed) % $this.animationSequence2936.data.length | 0];
 }
 function dmgp_StaticClassInformation$12939_$init313(a_aGameTime, b_aSpeed, c) {
     var $r = new dmgp_StaticClassInformation$12939();
@@ -48982,21 +48994,21 @@ function dmgpj_JBox2DGamePhysicsManager$SizeChangeListener2942_handleGameEvent74
         c = ju_HashSet1342_$init4();
         d = ju_HashMap$11506_iterator742(ju_HashMap1688_keySet1335(dmgpj_JBox2DGamePhysicsManager1726_access$100744($this.this$02943)));
         while (ju_HashMap$AbstractMapIterator835_hasNext745(d) != 0) {
-            e = ju_HashMap$KeyIterator1335_next746(d);
-            if (dmgc_GameObjectInstance2906_getOwnerGameObject568(e) === b) {
-                ju_HashSet1342_add131(c, e);
+            a_aEvent = ju_HashMap$KeyIterator1335_next746(d);
+            if (dmgc_GameObjectInstance2906_getOwnerGameObject568(a_aEvent) === b) {
+                ju_HashSet1342_add131(c, a_aEvent);
             }
         }
-        e = ju_HashMap$11506_iterator742(ju_HashMap1688_keySet1335(dmgpj_JBox2DGamePhysicsManager1726_access$0001737($this.this$02943)));
-        while (ju_HashMap$AbstractMapIterator835_hasNext745(e) != 0) {
-            d = ju_HashMap$KeyIterator1335_next746(e);
-            if (dmgc_GameObjectInstance2906_getOwnerGameObject568(d) === b) {
-                ju_HashSet1342_add131(c, d);
+        d = ju_HashMap$11506_iterator742(ju_HashMap1688_keySet1335(dmgpj_JBox2DGamePhysicsManager1726_access$0001737($this.this$02943)));
+        while (ju_HashMap$AbstractMapIterator835_hasNext745(d) != 0) {
+            a_aEvent = ju_HashMap$KeyIterator1335_next746(d);
+            if (dmgc_GameObjectInstance2906_getOwnerGameObject568(a_aEvent) === b) {
+                ju_HashSet1342_add131(c, a_aEvent);
             }
         }
-        c = ju_HashSet1342_iterator742(c);
-        while (ju_HashMap$AbstractMapIterator835_hasNext745(c) != 0) {
-            e = ju_HashMap$KeyIterator1335_next746(c);
+        b = ju_HashSet1342_iterator742(c);
+        while (ju_HashMap$AbstractMapIterator835_hasNext745(b) != 0) {
+            e = ju_HashMap$KeyIterator1335_next746(b);
             a_aEvent = dmgpj_JBox2DGamePhysicsManager1726_gameObjectInstanceRemovedFromScene1292($this.this$02943, e);
             e = dmgpj_JBox2DGamePhysicsManager1726_gameObjectInstanceAddedToScene1359($this.this$02943, e);
             if (a_aEvent !== null && e !== null) {
@@ -49040,7 +49052,7 @@ function dmgt_TeaVMMap2946_$init1076(a_this$0) {
     return $r;
 }
 function dmgt_TeaVMMap2946_unwrap2181($this, a_aValue) {
-    var b, c, d;
+    var b, c, d, e;
     if (a_aValue === null) {
         return null;
     }
@@ -49094,14 +49106,14 @@ function dmgt_TeaVMMap2946_unwrap2181($this, a_aValue) {
             if ((Object.prototype.toString.call(a_aValue) === '[object Array]' ? 1 : 0) == 0) {
                 return dmgt_TeaVMMap2946_$init1076(otj_JSObject490_cast$static697(a_aValue));
             }
-            b = a_aValue;
-            d = ju_ArrayList2151_$init4();
+            d = a_aValue;
+            e = ju_ArrayList2151_$init4();
             c = 0;
-            while (c < b.length) {
-                ju_AbstractList1487_add131(d, dmgt_TeaVMMap2946_unwrap2181($this, b[c]));
+            while (c < d.length) {
+                ju_AbstractList1487_add131(e, dmgt_TeaVMMap2946_unwrap2181($this, d[c]));
                 c = c + 1 | 0;
             }
-            return d;
+            return e;
         default:
             $rt_throw(jl_RuntimeException362_$init29(jl_StringBuilder2321_toString35(jl_StringBuilder2321_append36(jl_StringBuilder2321_append36(jl_StringBuilder2321_$init4(), $rt_s(844)), $rt_str(typeof a_aValue)))));
     }
@@ -49319,7 +49331,7 @@ function ojcb_DynamicTree$TreeNodeStack2968_reset188($this) {
     return;
 }
 function ojcb_DynamicTree$TreeNodeStack2968_push619($this, a_i) {
-    var b, c, d, e;
+    var b, c, d;
     if ($this.position2972 == $this.size2970) {
         b = $this.stack2969;
         c = b.data;
@@ -49327,10 +49339,10 @@ function ojcb_DynamicTree$TreeNodeStack2968_push619($this, a_i) {
         $this.size2970 = $this.stack2969.data.length;
         jl_System2747_arraycopy343(b, 0, $this.stack2969, 0, c.length);
     }
-    d = $this.stack2969.data;
-    e = $this.position2972;
-    $this.position2972 = e + 1 | 0;
-    d[e] = a_i;
+    c = $this.stack2969.data;
+    d = $this.position2972;
+    $this.position2972 = d + 1 | 0;
+    c[d] = a_i;
     return;
 }
 $rt_metadata([jl_Object2, "java.lang.Object", 0, [], 0, 0, [], ["getClass9", function() { return jl_Object2_getClass9(this); }, "clone10", function() { return jl_Object2_clone10(this); }, "equals18", function(a_i) { return jl_Object2_equals18(this, a_i); }, "hashCode22", function() { return jl_Object2_hashCode22(this); }, "isEmptyMonitor24", function() { return jl_Object2_isEmptyMonitor24(this); }, "identity23", function() { return jl_Object2_identity23(this); }, "toString35", function() { return jl_Object2_toString35(this);
@@ -50518,8 +50530,8 @@ function() { return dmgc_GameObjectInstance2906_rotationAngleProperty1735(this);
 function() { dmgc_GameObjectInstance2906_markAsRemoteObject1340(this); }],
 dmgp_StartProcessClassInformation2918, "de.mirkosertic.gameengine.process.StartProcessClassInformation", dmge_GameEventClassInformation292, [], 0, dmgp_StartProcessClassInformation2918_$clinit, ['dmgp_StartProcessClassInformation2918_$clinit43', 'dmgp_StartProcessClassInformation2918_$init8'], ["$init8", function() { dmgp_StartProcessClassInformation2918_$init8(this); }],
 ojd_BodyDef2920, "org.jbox2d.dynamics.BodyDef", jl_Object2, [], 0, 0, [], ["$init8", function() { ojd_BodyDef2920_$init8(this); }],
-dmgt_Animation2935, "de.mirkosertic.gameengine.type.Animation", jl_Object2, [dmgt_Distributable6], 0, 0, [], ["getUuid1213", function() { return dmgt_Animation2935_getUuid1213(this); }, "$init28", function(a_i) { dmgt_Animation2935_$init28(this, a_i); }, "serialize51", function() { return dmgt_Animation2935_serialize51(this); }, "addToAnimationSequence1209", function(a_i) { return dmgt_Animation2935_addToAnimationSequence1209(this, a_i); }, "$init2179", function(a_i, b, c) { dmgt_Animation2935_$init2179(this,
-a_i, b, c); }, "computeCurrentFrame2133", function(a_i, b) { return dmgt_Animation2935_computeCurrentFrame2133(this, a_i, b); }],
+dmgt_Animation2935, "de.mirkosertic.gameengine.type.Animation", jl_Object2, [dmgt_Distributable6], 0, 0, [], ["getUuid1213", function() { return dmgt_Animation2935_getUuid1213(this); }, "$init28", function(a_i) { dmgt_Animation2935_$init28(this, a_i); }, "$init2179", function(a_i, b, c) { dmgt_Animation2935_$init2179(this, a_i, b, c); }, "serialize51", function() { return dmgt_Animation2935_serialize51(this); }, "addToAnimationSequence1209", function(a_i) { return dmgt_Animation2935_addToAnimationSequence1209(this,
+a_i); }, "computeCurrentFrame2133", function(a_i, b) { return dmgt_Animation2935_computeCurrentFrame2133(this, a_i, b); }],
 dmgp_StaticClassInformation$12939, "de.mirkosertic.gameengine.physic.StaticClassInformation$1", dmgt_Method697, [], 0, 0, [], ["invoke2180", function(a_i, b) { return dmgp_StaticClassInformation$12939_invoke2180(this, a_i, b); }, "invoke900", function(a_i, b) { return dmgp_StaticClassInformation$12939_invoke900(this, a_i, b); }, "$init302", function(a_i, b, c) { dmgp_StaticClassInformation$12939_$init302(this, a_i, b, c); }],
 dmgc_SetScreenResolutionClassInformation2940, "de.mirkosertic.gameengine.camera.SetScreenResolutionClassInformation", dmge_GameEventClassInformation292, [], 0, dmgc_SetScreenResolutionClassInformation2940_$clinit, ['dmgc_SetScreenResolutionClassInformation2940_$clinit43', 'dmgc_SetScreenResolutionClassInformation2940_$init8'], ["$init8", function() { dmgc_SetScreenResolutionClassInformation2940_$init8(this); }],
 dmgpj_JBox2DGamePhysicsManager$SizeChangeListener2942, "de.mirkosertic.gameengine.physics.jbox2d.JBox2DGamePhysicsManager$SizeChangeListener", jl_Object2, [dmge_GameEventListener514], 0, 0, [], ["$init737", function(a_i) { dmgpj_JBox2DGamePhysicsManager$SizeChangeListener2942_$init737(this, a_i); }, "handleGameEvent740", function(a_i) { dmgpj_JBox2DGamePhysicsManager$SizeChangeListener2942_handleGameEvent740(this, a_i); }, "handleGameEvent124", function(a_i) { dmgpj_JBox2DGamePhysicsManager$SizeChangeListener2942_handleGameEvent124(this,
@@ -50542,7 +50554,7 @@ $rt_stringPool(["Can\'t enter monitor from another thread synchronously", "@", "
 "__tostring", "__concat", "", "loop in gettable", "attempt to concatenate ", " and ", "attempt to compare ", " on ", "strValue", "table or string", "attempt to index ? (a ", " value)", "attempt to perform arithmetic on ", "attempt to get length of ", "rawset", "attempt to call ", "\'", "\' not implemented for ", "rawget", "attempt to perform arithmetic ", " expected, got ", "bad argument: ", " with ", " on number and ", "function: ", "numberOfStars", "starspeed", "starSpeed", "color", "gameObjectUUID", "position",
 "gameObject", "name", "size", "Replacement preconditions do not hold", "Action must be non-null", "KillProcessesForInstance", "primaryObjectUuid", "secondaryObjectUuid", "primaryObject", "secondaryObject", "Id must not be null", "MouseEventCondition", "End of stack reached, there is probably a leak somewhere", "Beginning of stack reached, push/pops are unmatched", "UTF-8", "ObjectCollisionCondition", "javaobject", "Cannot convert ", " to java object", "Not supported return type : ", "No ", " function defined",
 "Invalid return type : ", "objectUUID", "IGNORE_INSTANCES", "ALL_INSTANCES", "FILTER_BY_OBJECT_TYPE", "EVERYWHERE", "TOP", "BOTTOM", "LEFT", "RIGHT", "Lua", "?", "call", "line", "count", "return", "func", "istailcall", "isvararg", "nups", "nparams", "namewhat", "what", "source", "short_src", "linedefined", "lastlinedefined", "currentline", "activelines", "VERTEX", "FACE", "BITMAP", "SOUND", "force", "sceneId", "x", "y", "The last char in dst ", " is outside ", "of array of size ", "Length ", " must be non-negative",
-"Offset ", "Gameengine 0.5-SNAPSHOT Revision 1441308", "Time for every frame : ", " ms", "Number of visible instances : ", "SceneStartedCondition", "ApplyForceToGameObjectInstance", " ", "vm error: ", "font", "textExpression", "isScript", "CIRCLE", "EDGE", "POLYGON", "CHAIN", "KillProcessesForInstanceAction", " arguments required for ", ":", "-", "child_added", "forceX", "forceY", "delete", "fontProperty", "textExpressionProperty", "colorProperty", "isScriptProperty", "object", "Not handled filter type : ",
+"Offset ", "Gameengine 0.5-SNAPSHOT Revision 6d6f835", "Time for every frame : ", " ms", "Number of visible instances : ", "SceneStartedCondition", "ApplyForceToGameObjectInstance", " ", "vm error: ", "font", "textExpression", "isScript", "CIRCLE", "EDGE", "POLYGON", "CHAIN", "KillProcessesForInstanceAction", " arguments required for ", ":", "-", "child_added", "forceX", "forceY", "delete", "fontProperty", "textExpressionProperty", "colorProperty", "isScriptProperty", "object", "Not handled filter type : ",
 "eventType", "filterType", "objectType", "activeProperty", "fixedRotationProperty", "densityProperty", "frictionProperty", "restitutionProperty", "gravityScaleProperty", "ConstantMovement", "attempt to compare string with number", "DeleteGameObjectInstanceAction", "Unknown mode: ", "[", ", ", "incrementBy", "MouseReleased", "text/plain", "GET", "/scene.json", "Text", "SystemException", "Process already initialized", "event", "game", "textexpression", "SetScreenResolution", "n", "table index", "currentAnimation",
 "speed", "resourcename", "Default", "animations", "Unknown UUID", "PlaySound", "KeyPressed", "GameObjectConfigurationChanged", "script", "--\n-- This is the default method of every action. It is called once for every game loop cycle.\n--\n-- event is an object which represents the GameEvent causing this action\n-- instance is an optional injected object which is a reference to the GameObjectInstance for \n-- which this script is executed.\n-- scene is an injected object which is a reference to the GameScene for \n-- which this script is executed.\n--\nfunction proceedGame(aGameTime, aElapsedTimeSinceLastLoop) \n\n\t-- The method must return either STOPPED or CONTINUE_RUNNING\n\t-- STOPPED will kill the script, it is not invoked the next time\n\t-- CONTINUE_RUNNING will invoke the skript the next game loop cycle.\n\treturn \'STOPPED\'\nend",
 "keyCode", "game.json", "rotationSpeed", "KeyReleased", "en", "CA", "fr", "zh", "CN", "FR", "de", "DE", "it", "IT", "ja", "JP", "ko", "KR", "TW", "GB", "US", "00", "GMT", "speedProperty", "rotationSpeedProperty", "=", "systime", "formatTime", "max", "min", "nvl", "GameObjectInstanceAddedToSceneCondition", "findBehaviorByType", "uuidProperty", "positionProperty", "rotationAngleProperty", "visibleProperty", "absolutePositionProperty", "absolutePositionAnchorProperty", "GameObjectInstanceAddedToScene", "newInstanceID",

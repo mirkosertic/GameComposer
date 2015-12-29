@@ -72,8 +72,10 @@ public class GameProcessManager implements GameSystem {
                 }
             }
 
-            for (GameProcess theChildProcess : theNewChildProcesses) {
-                start(theChildProcess);
+            if (!theNewChildProcesses.isEmpty()) {
+                for (GameProcess theChildProcess : theNewChildProcesses) {
+                    start(theChildProcess);
+                }
             }
 
             if (killedProcesses.size() > 0) {
