@@ -32,17 +32,13 @@ public class Property<T> extends ReadOnlyProperty<T> {
             // Nothing to do
             return;
         }
-        if (value != null) {
-            if (value.equals(aValue)) {
-                // Nothing to do
-                return;
-            }
+        if (value != null && value.equals(aValue)) {
+            // Nothing to do
+            return;
         }
-        if (aValue != null) {
-            if (aValue.equals(value)) {
-                // Nothing to do
-                return;
-            }
+        if (aValue != null &&  aValue.equals(value)) {
+            // Nothing to do
+            return;
         }
 
         if (value == null && aValue == null) {
