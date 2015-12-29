@@ -1,5 +1,7 @@
 package de.mirkosertic.gameengine.event;
 
+import de.mirkosertic.gameengine.ArrayUtils;
+
 import java.util.*;
 
 public class Property<T> extends ReadOnlyProperty<T> {
@@ -69,27 +71,17 @@ public class Property<T> extends ReadOnlyProperty<T> {
     }
 
     public List<GameEventListener<PropertyChanged>> getChangeListener() {
-        List<GameEventListener<PropertyChanged>> theNewListener = new ArrayList<>();
-        for (GameEventListener<PropertyChanged> theListener : changeListener) {
-            theNewListener.add(theListener);
-        }
-        return theNewListener;
+        return ArrayUtils.asList(changeListener);
     }
 
     public void addChangeListener(GameEventListener<PropertyChanged> aListener) {
-        List<GameEventListener<PropertyChanged>> theNewListener = new ArrayList<>();
-        for (GameEventListener<PropertyChanged> theListener : changeListener) {
-            theNewListener.add(theListener);
-        }
+        List<GameEventListener<PropertyChanged>> theNewListener = ArrayUtils.asList(changeListener);
         theNewListener.add(aListener);
         changeListener = theNewListener.toArray(new GameEventListener[theNewListener.size()]);
     }
 
     public void removeChangeListener(GameEventListener<PropertyChanged> aListener) {
-        List<GameEventListener<PropertyChanged>> theNewListener = new ArrayList<>();
-        for (GameEventListener<PropertyChanged> theListener : changeListener) {
-            theNewListener.add(theListener);
-        }
+        List<GameEventListener<PropertyChanged>> theNewListener = ArrayUtils.asList(changeListener);
         theNewListener.remove(aListener);
         changeListener = theNewListener.toArray(new GameEventListener[theNewListener.size()]);
     }

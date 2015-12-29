@@ -10,8 +10,11 @@ public class GameEventManager implements GameEventListener {
 
     private final Map<Class<GameEvent>, GameEventListener[]> registeredListeners;
 
+    private GameEventListener catchAllEventListener[];
+
     public GameEventManager() {
         registeredListeners = new HashMap<>();
+        catchAllEventListener = new GameEventListener[0];
     }
 
     public void register(Object aOwningInstance, Class aEvent, GameEventListener aEventListener) {
@@ -19,26 +22,31 @@ public class GameEventManager implements GameEventListener {
         if (theListener == null) {
             theListener = new GameEventListener[] { aEventListener };
             registeredListeners.put(aEvent, theListener);
+
+            if (aEvent == GameEvent.class) {
+                catchAllEventListener = new GameEventListener[] { aEventListener };
+            }
+
             return;
         }
         List<GameEventListener> theListenerList = ArrayUtils.asList(theListener);
         theListenerList.add(aEventListener);
-        registeredListeners.put(aEvent, theListenerList.toArray(new GameEventListener[theListenerList.size()]));
+
+        GameEventListener[] theEventListener = theListenerList.toArray(new GameEventListener[theListenerList.size()]);
+        registeredListeners.put(aEvent, theEventListener);
+
+        if (aEvent == GameEvent.class) {
+            catchAllEventListener = theEventListener;
+        }
     }
 
     public void fire(GameEvent aEvent) {
-        if (aEvent == null) {
-            throw new IllegalArgumentException("Event must not be null!");
-        }
         try {
-            GameEventListener[] theRegisteredListener = registeredListeners.get(GameEvent.class);
-            if (theRegisteredListener != null) {
-                for (GameEventListener theListener : theRegisteredListener) {
-                    theListener.handleGameEvent(aEvent);
-                }
+            for (GameEventListener theListener : catchAllEventListener) {
+                theListener.handleGameEvent(aEvent);
             }
 
-            theRegisteredListener = registeredListeners.get(aEvent.getClass());
+            GameEventListener[] theRegisteredListener = registeredListeners.get(aEvent.getClass());
             if (theRegisteredListener != null) {
                 for (GameEventListener theListener : theRegisteredListener) {
                     theListener.handleGameEvent(aEvent);
@@ -60,5 +68,6 @@ public class GameEventManager implements GameEventListener {
 
     public void clearListener() {
         registeredListeners.clear();
+        catchAllEventListener = new GameEventListener[0];
     }
 }
