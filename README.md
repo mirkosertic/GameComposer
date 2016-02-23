@@ -33,7 +33,7 @@ Core concepts and components of the game engine are:
 | GameLoop               | The GameLoop drives the engine by calling the GameSystems, rendering the GameView and dispatching events.
 | GameProcess            | A GameProcess is something that takes multiple GameLoop cycles to complete, for instance playing background music or playing an animation.
 
-Current travis-ci build status: [![Build Status](https://travis-ci.org/mirkosertic/GameComposer.svg?branch=master)](https://travis-ci.org/mirkosertic/GameComposer)
+Current travis-ci build status: [![Build Status](https://travis-ci.org/mirkosertic/GameComposer.svg?branch=master)](https://travis-ci.org/mirkosertic/GameComposer) [![Gitter](https://badges.gitter.im/mirkosertic/GameComposer.svg)](https://gitter.im/mirkosertic/GameComposer?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 
 GameEngine-FXRenderer
