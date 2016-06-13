@@ -16,7 +16,7 @@
     </scm>
 
     <properties>
-        <teavm.version>0.4.1</teavm.version>
+        <teavm.version>0.4.3</teavm.version>
     </properties>
 
     <dependencies>
