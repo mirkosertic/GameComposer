@@ -41,6 +41,26 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
     private GestureDetector gestureDetector;
     private Size currentScreenSize;
 
+    private static class CachedLUAText {
+
+        private long gameTime;
+        private String value;
+
+        public CachedLUAText(long aGameTime, String aValue) {
+            gameTime = aGameTime;
+            value = aValue;
+        }
+
+        public boolean needsUpdate(long aCurrentGameTime) {
+            return gameTime  + 60 <= aCurrentGameTime;
+        }
+
+        public void update(long aCurrentGameTime, String aNewValue) {
+            gameTime = aCurrentGameTime;
+            value = aNewValue;
+        }
+    }
+
     public GenericAbstractGameView(GameRuntime aGameRuntime, CameraBehavior aCameraBehavior, GestureDetector aGestureDetector) {
         gameRuntime = aGameRuntime;
         cameraBehavior = aCameraBehavior;
@@ -81,13 +101,13 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
     protected abstract EffectCanvas createEffectCanvas();
 
     @Override
-    public void renderGame(final long aGameTime, long aElapsedTimeSinceLastLoop, final GameScene aScene, RuntimeStatistics aStatistics) {
+    public void renderGame(final long aGameTime, final long aElapsedTimeSinceLastLoop, final GameScene aScene, RuntimeStatistics aStatistics) {
 
         if (!beginFrame(aScene)) {
             return;
         }
 
-        EffectCanvas theEffectCanvas = createEffectCanvas();
+        final EffectCanvas theEffectCanvas = createEffectCanvas();
 
         // Run the preprocessors
         for (GameSceneEffect theEffect : aScene.getPreprocessorEffects()) {
@@ -133,19 +153,35 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
                 TextBehavior theTextBehavior = aValue.getBehavior(TextBehavior.class);
                 if (theTextBehavior != null) {
                     TextExpression theExpression = theTextBehavior.textExpressionProperty().get();
+
                     String theTextToDraw;
                     if (theTextBehavior.isScriptProperty().get()) {
-                        // Scripting is enabled, so we have to evaluate the expression
-                        try {
-                            LUAScriptEngine theEngine = gameRuntime.getScriptEngineFactory()
-                                    .createNewEngine(aScene, theExpression);
 
-                            theTextToDraw = theEngine.evaluateSimpleExpressionFor(aValue);
-                        } catch (Exception e) {
-                            // Failed to process the script
-                            // can be IOException
-                            // or more likely compile errors
-                            theTextToDraw = "Processing error : " + e.getMessage();
+                        String theCacheKey = aValue.uuidProperty().get() + ".luatext";
+                        CachedLUAText theCachedValue = aScene.getObjectForKey(theCacheKey);
+
+                        if (theCachedValue == null || theCachedValue.needsUpdate(aGameTime)) {
+                            // Scripting is enabled, so we have to evaluate the expression
+                            try {
+                                LUAScriptEngine theEngine = gameRuntime.getScriptEngineFactory()
+                                        .createNewEngine(aScene, theExpression);
+
+                                theTextToDraw = theEngine.evaluateSimpleExpressionFor(aValue);
+                            } catch (Exception e) {
+                                // Failed to process the script
+                                // can be IOException
+                                // or more likely compile errors
+                                theTextToDraw = "Processing error : " + e.getMessage();
+                            }
+
+                            if (theCachedValue == null) {
+                                theCachedValue = new CachedLUAText(aGameTime, theTextToDraw);
+                                aScene.setObjectForKey(theCacheKey, theCachedValue);
+                            } else {
+                                theCachedValue.update(aGameTime, theTextToDraw);
+                            }
+                        } else {
+                            theTextToDraw = theCachedValue.value;
                         }
                     } else {
                         theTextToDraw = theExpression.expression;

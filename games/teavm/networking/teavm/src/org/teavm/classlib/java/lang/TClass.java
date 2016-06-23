@@ -15,9 +15,9 @@
  */
 package org.teavm.classlib.java.lang;
 
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.teavm.classlib.impl.DeclaringClassMetadataGenerator;
 import org.teavm.classlib.java.lang.annotation.TAnnotation;
 import org.teavm.classlib.java.lang.reflect.TAnnotatedElement;
@@ -265,5 +265,23 @@ public class TClass<T> extends TObject implements TAnnotatedElement {
         for (TAnnotation annot : getAnnotations()) {
             annotationsByType.put((TClass<?>) (Object) annot.annotationType(), annot);
         }
+    }
+
+    public InputStream getResourceAsStream(String name) {
+        if (name.startsWith("/")) {
+            return getClassLoader().getResourceAsStream(name.substring(1));
+        }
+
+        TClass<?> cls = this;
+        while (cls.isArray()) {
+            cls = cls.getComponentType();
+        }
+        String prefix = cls.getName().toString();
+        int index = prefix.lastIndexOf('.');
+        if (index >= 0) {
+            name = prefix.substring(0, index + 1).replace('.', '/') + name;
+        }
+
+        return getClassLoader().getResourceAsStream(name);
     }
 }
