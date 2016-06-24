@@ -1,6 +1,7 @@
 package de.mirkosertic.gameengine.sound;
 
 import de.mirkosertic.gameengine.core.GameSystem;
+import de.mirkosertic.gameengine.core.GameSystemWork;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.process.StartProcess;
 import de.mirkosertic.gameengine.type.ResourceName;
@@ -16,7 +17,8 @@ public class GameSoundManager implements GameSystem {
     }
 
     @Override
-    public void proceedGame(long aTotalTicks, long aGameTime, long aElapsedTime) {
+    public GameSystemWork proceedGame(long aTotalTicks, long aGameTime, long aElapsedTime) {
+        return GameSystemWork.NOTHING;
     }
 
     void onPlaySoundEvent(ResourceName aResourceName) {

@@ -17,6 +17,7 @@ import de.mirkosertic.gameengine.core.IORegistry;
 import de.mirkosertic.gameengine.core.RunSceneActionUnmarshaller;
 import de.mirkosertic.gameengine.core.SceneStartedConditionUnmarshaller;
 import de.mirkosertic.gameengine.core.SpawnGameObjectInstanceActionUnmarshaller;
+import de.mirkosertic.gameengine.core.ThreadingManager;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.input.KeyEventConditionUnmarshaller;
 import de.mirkosertic.gameengine.input.MouseEventConditionUnmarshaller;
@@ -48,6 +49,8 @@ import de.mirkosertic.gameengine.text.TextBehaviorUnmarshaller;
 
 public abstract class AbstractGameRuntimeFactory {
 
+    protected abstract ThreadingManager createThreadingManager();
+
     protected abstract LUAScriptEngineFactory createScriptEngine();
 
     protected abstract GamePhysicsManagerFactory createPhysicsManagerFactory();
@@ -58,9 +61,11 @@ public abstract class AbstractGameRuntimeFactory {
         GameProcessManagerFactory theProcessManagerFactory = new GameProcessManagerFactory();
         GameProcessManager theProcessManager = theProcessManagerFactory.create(theEventManager);
 
+        ThreadingManager theThreadingManager = createThreadingManager();
+
         // Physics system
         GamePhysicsManagerFactory thePhysicsManagerFactory = createPhysicsManagerFactory();
-        GamePhysicsManager thePhysicsManager = thePhysicsManagerFactory.create(theEventManager);
+        GamePhysicsManager thePhysicsManager = thePhysicsManagerFactory.create(theEventManager, theThreadingManager);
 
         // By default we use Lua as a script engine
         LUAScriptEngineFactory theScriptEngineFactory = createScriptEngine();

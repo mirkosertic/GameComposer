@@ -3,7 +3,9 @@ package de.mirkosertic.gameengine.core;
 import de.mirkosertic.gameengine.ArrayUtils;
 import de.mirkosertic.gameengine.event.SystemException;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GameLoop implements Runnable {
 
@@ -94,14 +96,23 @@ public class GameLoop implements Runnable {
 
                 statistics.beginGameLoop();
 
+                // First give the gamesystems the change to do something
+                Map<GameSystem, GameSystemWork> theFutures = new HashMap<>();
                 // The game systems like physics or process need a chance to do something useful.
                 for (GameSystem theSystem : runtime.getSystems()) {
-                    theSystem.proceedGame(theNumberOfTicks, theGameTime, theElapsedTime);
-                }
+                    GameSystemWork theWork = theSystem.proceedGame(theNumberOfTicks, theGameTime, theElapsedTime);
+                    theWork.runInFrame();
+                    theFutures.put(theSystem, theWork);
+                };
 
                 // Trigger rerendering of game view
                 for (GameView theGameView : gameViews) {
                     theGameView.renderGame(theGameTime, theElapsedTime, scene, statistics);
+                }
+
+                // Finally wait for the game systems till they have completed their job
+                for (Map.Entry<GameSystem, GameSystemWork> theEntry : theFutures.entrySet()) {
+                    theEntry.getValue().runAfterFrame();
                 }
 
                 lastInvocation = theCurrentTime;

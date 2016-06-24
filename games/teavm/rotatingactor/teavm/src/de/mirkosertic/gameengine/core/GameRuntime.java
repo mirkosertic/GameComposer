@@ -14,7 +14,8 @@ public class GameRuntime {
     private final IORegistry ioRegistry;
     private final LUAScriptEngineFactory scriptEngineFactory;
 
-    public GameRuntime(GameEventManager aEventManager, GameResourceLoader aResourceLoader, LUAScriptEngineFactory aScriptEngineFactory) {
+    public GameRuntime(GameEventManager aEventManager, GameResourceLoader aResourceLoader,
+            LUAScriptEngineFactory aScriptEngineFactory) {
         ioRegistry = new IORegistry();
         eventManager = aEventManager;
         systems = new GameSystem[0];
