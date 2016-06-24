@@ -53,12 +53,6 @@ GameEngine-AndroidRenderer
 This is the game presentation logic using the Android Java SDK. This also includes a SoundSystem implementation for Android devices.
 We use an Android SurfaceView for rendering. Future versions will include OpenGL ES support.
 
-GameEngine-DragomeRenderer
---------------
-
-This is the game presentation logic using the Dragome Java-to-JavaScript Transpiler Framework. It will render the game view
-using the HTML5 Canvas API.
-
 GameEngine-TeaVMRenderer
 --------------
 
@@ -111,7 +105,7 @@ GWT Renderer:
 [Rotating actor](http://mirkosertic.github.io/GameComposer/games/gwt/rotatingactor/index.html)
 
 
-Dragome Renderer:
+Dragome Renderer (no longer Supported):
 
 [Bouncing block](http://mirkosertic.github.io/GameComposer/games/dragome/bounce/index.html)
 
