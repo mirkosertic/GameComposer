@@ -3,6 +3,8 @@ package de.mirkosertic.gameengine.gwt;
 import de.mirkosertic.gameengine.AbstractGameRuntimeFactory;
 import de.mirkosertic.gameengine.core.GameResourceLoader;
 import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.NoThreadingThreadingManager;
+import de.mirkosertic.gameengine.core.ThreadingManager;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.SystemException;
 import de.mirkosertic.gameengine.physics.jbox2d.JBox2DGamePhysicsManagerFactory;
@@ -23,6 +25,11 @@ class GWTGameRuntimeFactory extends AbstractGameRuntimeFactory {
             }
         });
         return theRuntime;
+    }
+
+    @Override
+    protected ThreadingManager createThreadingManager() {
+        return new NoThreadingThreadingManager();
     }
 
     @Override

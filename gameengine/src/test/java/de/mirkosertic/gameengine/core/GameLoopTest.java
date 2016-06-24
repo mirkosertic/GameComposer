@@ -116,7 +116,10 @@ public class GameLoopTest {
         GameEventManager theEventManager = mock(GameEventManager.class);
         when(theRuntime.getEventManager()).thenReturn(theEventManager);
 
+        GameSystemWork theWork = mock(GameSystemWork.class);
+
         GameSystem theSystem = mock(GameSystem.class);
+        when(theSystem.proceedGame(anyLong(), anyLong(), anyLong())).thenReturn(theWork);
         when(theRuntime.getSystems()).thenReturn(new GameSystem[] {theSystem});
 
         GameLoop theLoop = new GameLoop(theScene, theGameView, theRuntime);
@@ -126,6 +129,8 @@ public class GameLoopTest {
 
         verify(theSystem).proceedGame(anyLong(), anyLong(), anyLong());
         verify(theGameView).renderGame(anyLong(), anyLong(), eq(theScene), any(RuntimeStatistics.class));
+        verify(theWork, times(1)).runInFrame();
+        verify(theWork, times(1)).runAfterFrame();
         assertEquals(1, theLoop.getStatistics().getNumberTicks());
     }
 
