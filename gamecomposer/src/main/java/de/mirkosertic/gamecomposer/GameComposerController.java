@@ -13,12 +13,12 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.util.prefs.Preferences;
 import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.io.File;
+import java.util.prefs.Preferences;
 
 @Singleton
 public class GameComposerController {
@@ -154,27 +154,6 @@ public class GameComposerController {
         File theTargetDirectory = theDirectoryChooser.showDialog(stage);
         if (theTargetDirectory != null) {
             eventGateway.fire(new ExportGameHTML5GWTEvent(theTargetDirectory));
-
-            directoryPreferences.put(GAME_EXPORTDIRECTORY_HTML_PREF_KEY, theTargetDirectory.toString());
-        }
-    }
-
-    @FXML
-    public void onSaveAndExportHTML5Dragome() {
-        DirectoryChooser theDirectoryChooser = new DirectoryChooser();
-        theDirectoryChooser.setTitle("Choose target directory");
-
-        String theLastExportDir = directoryPreferences.get(GAME_EXPORTDIRECTORY_HTML_PREF_KEY, null);
-        if (theLastExportDir != null) {
-            File theFile = new File(theLastExportDir);
-            if (theFile.exists() && theFile.isDirectory()) {
-                theDirectoryChooser.setInitialDirectory(theFile);
-            }
-        }
-
-        File theTargetDirectory = theDirectoryChooser.showDialog(stage);
-        if (theTargetDirectory != null) {
-            eventGateway.fire(new ExportGameHTML5DragomeEvent(theTargetDirectory));
 
             directoryPreferences.put(GAME_EXPORTDIRECTORY_HTML_PREF_KEY, theTargetDirectory.toString());
         }

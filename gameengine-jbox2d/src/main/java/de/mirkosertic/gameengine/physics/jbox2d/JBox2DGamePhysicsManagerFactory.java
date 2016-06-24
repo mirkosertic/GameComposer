@@ -3,6 +3,7 @@ package de.mirkosertic.gameengine.physics.jbox2d;
 import de.mirkosertic.gameengine.core.GameObjectConfigurationChanged;
 import de.mirkosertic.gameengine.core.GameObjectInstanceAddedToScene;
 import de.mirkosertic.gameengine.core.GameObjectInstanceRemovedFromScene;
+import de.mirkosertic.gameengine.core.ThreadingManager;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.physic.ApplyForceToGameObjectInstance;
@@ -14,8 +15,8 @@ import de.mirkosertic.gameengine.physic.GamePhysicsManagerFactory;
 public class JBox2DGamePhysicsManagerFactory implements GamePhysicsManagerFactory {
 
     @Override
-    public JBox2DGamePhysicsManager create(GameEventManager aEventManager) {
-        final JBox2DGamePhysicsManager thePhysicsManager = new JBox2DGamePhysicsManager(aEventManager);
+    public JBox2DGamePhysicsManager create(GameEventManager aEventManager, ThreadingManager aThreadingManager) {
+        final JBox2DGamePhysicsManager thePhysicsManager = new JBox2DGamePhysicsManager(aEventManager, aThreadingManager);
         aEventManager.register(null, GameObjectInstanceAddedToScene.class, new GameEventListener<GameObjectInstanceAddedToScene>() {
             @Override
             public void handleGameEvent(GameObjectInstanceAddedToScene aEvent) {

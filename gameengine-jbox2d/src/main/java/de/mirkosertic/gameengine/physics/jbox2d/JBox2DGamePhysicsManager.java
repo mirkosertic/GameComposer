@@ -1,7 +1,11 @@
 package de.mirkosertic.gameengine.physics.jbox2d;
 
+import de.mirkosertic.gameengine.core.FutureResult;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
+import de.mirkosertic.gameengine.core.GameSystemWork;
+import de.mirkosertic.gameengine.core.Job;
+import de.mirkosertic.gameengine.core.ThreadingManager;
 import de.mirkosertic.gameengine.event.GameEvent;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.GameEventManager;
@@ -133,8 +137,10 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
     private final Set<GameObject> alreadyRegisteredSizeListener;
     private boolean insimulation;
     private final List<GameEvent> queuedEventsOfLastLoop;
+    private final ThreadingManager threadingManager;
 
-    JBox2DGamePhysicsManager(GameEventManager aEventManager) {
+    JBox2DGamePhysicsManager(GameEventManager aEventManager, ThreadingManager aThreadingManager) {
+        threadingManager = aThreadingManager;
         queuedEventsOfLastLoop = new ArrayList<>();
         eventManager = aEventManager;
         alreadyRegisteredSizeListener = new HashSet<>();
@@ -338,8 +344,35 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
         }
     }
 
-    @Override
-    public void proceedGame(long aTotalTicks, long aGameTime, long aElapsedTime) {
+    private FutureResult lastResult;
+
+    public GameSystemWork proceedGame(final long aTotalTicks, final long aGameTime, final long aElapsedTime) {
+        return new GameSystemWork() {
+            @Override
+            public void runInFrame() {
+                lastResult = threadingManager.submit(new Job() {
+                    @Override
+                    public void run() {
+                        inframe(aTotalTicks, aGameTime, aElapsedTime);
+                    }
+                });
+            }
+
+            @Override
+            public void runAfterFrame() {
+                if (lastResult != null) {
+                    try {
+                        lastResult.waitForCompletion();
+                        afterFrame();
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        };
+    }
+
+    private void inframe(long aTotalTicks, long aGameTime, long aElapsedTime) {
 
         insimulation = true;
 
@@ -359,35 +392,41 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
 
             physicsWorld.step(theTimestep, theVelocityIterations, thePositionIterations);
 
-            // Fire the queued events
-            // Events caused by the simulation(collision) are fired after the simulation
-            // because events might change the world, and the world is locked
-            // while running the simulation
-            for (GameEvent theEvent : queuedEventsOfLastLoop) {
-                eventManager.fire(theEvent);
-            }
-            queuedEventsOfLastLoop.clear();
-
-            // Finally, we have to update the position of our game objects to sync them to the simulation
-            for (Map.Entry<GameObjectInstance, Body> theEntry : dynamicObjects.entrySet()) {
-                GameObjectInstance theObjectInstance = theEntry.getKey();
-                Size theInstanceSize = theObjectInstance.getOwnerGameObject().sizeProperty().get();
-                Body theSimulatedBody = theEntry.getValue();
-
-                Vec2 thePosition = theSimulatedBody.getPosition();
-
-                if (theSimulatedBody.isActive()) {
-                    // Now we have to use the XY coordinates again
-                    theObjectInstance.positionProperty().set(
-                            new Position((thePosition.x / SIZE_FACTOR) - theInstanceSize.width / 2,
-                                    -(thePosition.y / SIZE_FACTOR) - theInstanceSize.height / 2));
-                    theObjectInstance.rotationAngleProperty().set(
-                            Angle.fromRadians(theSimulatedBody.getAngle()).invert());
-                }
-            }
-
             // Reset the time counter
             physicsAmountOfTime = 0;
+        }
+
+        insimulation = false;
+    }
+
+    private void afterFrame() {
+        insimulation = true;
+
+        // Fire the queued events
+        // Events caused by the simulation(collision) are fired after the simulation
+        // because events might change the world, and the world is locked
+        // while running the simulation
+        for (GameEvent theEvent : queuedEventsOfLastLoop) {
+            eventManager.fire(theEvent);
+        }
+        queuedEventsOfLastLoop.clear();
+
+        // Finally, we have to update the position of our game objects to sync them to the simulation
+        for (Map.Entry<GameObjectInstance, Body> theEntry : dynamicObjects.entrySet()) {
+            GameObjectInstance theObjectInstance = theEntry.getKey();
+            Size theInstanceSize = theObjectInstance.getOwnerGameObject().sizeProperty().get();
+            Body theSimulatedBody = theEntry.getValue();
+
+            Vec2 thePosition = theSimulatedBody.getPosition();
+
+            if (theSimulatedBody.isActive()) {
+                // Now we have to use the XY coordinates again
+                theObjectInstance.positionProperty().set(
+                        new Position((thePosition.x / SIZE_FACTOR) - theInstanceSize.width / 2,
+                                -(thePosition.y / SIZE_FACTOR) - theInstanceSize.height / 2));
+                theObjectInstance.rotationAngleProperty().set(
+                        Angle.fromRadians(theSimulatedBody.getAngle()).invert());
+            }
         }
 
         insimulation = false;
