@@ -34,7 +34,6 @@
         <Menu fx:id="exportMenu" mnemonicParsing="false" text="%menu.export">
           <items>
             <MenuItem mnemonicParsing="false" onAction="#onSaveAndExportHTML5GWT" text="%menu.exportashtmlgwt" />
-            <MenuItem mnemonicParsing="false" onAction="#onSaveAndExportHTML5Dragome" text="%menu.exportashtmldragome" />
             <MenuItem mnemonicParsing="false" onAction="#onSaveAndExportHTML5TeaVM" text="%menu.exportashtmlteavm" />
             <MenuItem mnemonicParsing="false" onAction="#onSaveAndExportAndroid" text="%menu.exportasandroid" />
           </items>

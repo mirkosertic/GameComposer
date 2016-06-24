@@ -93,12 +93,6 @@
         </dependency>
         <dependency>
             <groupId>de.mirkosertic</groupId>
-            <artifactId>gameengine-dragomerenderer</artifactId>
-            <type>war</type>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>de.mirkosertic</groupId>
             <artifactId>gameengine-teavmrenderer</artifactId>
             <type>war</type>
             <scope>provided</scope>
