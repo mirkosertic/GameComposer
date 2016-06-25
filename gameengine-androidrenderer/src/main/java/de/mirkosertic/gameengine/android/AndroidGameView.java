@@ -4,6 +4,8 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.os.Debug;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
@@ -104,8 +106,7 @@ public class AndroidGameView extends GenericAbstractGameView<AndroidBitmapResour
 
     @Override
     protected void logError(String aMessage) {
-        // TODO: Android logging implement herre
-        throw new RuntimeException(aMessage);
+        Log.e("Error", aMessage);
     }
 
     private Typeface toTypeface(Font aFont) {

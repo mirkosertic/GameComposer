@@ -28,7 +28,7 @@ class AndroidGameRuntimeFactory extends AbstractGameRuntimeFactory {
 
     @Override
     protected ThreadingManager createThreadingManager() {
-        return new NoThreadingThreadingManager();
+        return new AndroidThreadingManager();
     }
 
     @Override
