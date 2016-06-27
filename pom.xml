@@ -28,6 +28,7 @@
         <module>gameengine-gwtrenderer</module>
         <module>gameengine-androidrenderer</module>
         <module>gameengine-teavmrenderer</module>
+        <module>gameengine-dragomerenderer</module>
         <module>gameengine-tools</module>
         <module>gamecomposer</module>
         <module>examples</module>
@@ -112,6 +113,12 @@
             <dependency>
                 <groupId>de.mirkosertic</groupId>
                 <artifactId>gameengine-teavmrenderer</artifactId>
+                <version>${project.version}</version>
+                <type>war</type>
+            </dependency>
+            <dependency>
+                <groupId>de.mirkosertic</groupId>
+                <artifactId>gameengine-dragomerenderer</artifactId>
                 <version>${project.version}</version>
                 <type>war</type>
             </dependency>

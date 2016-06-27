@@ -25,6 +25,21 @@
                 <executions>
                     <!-- Bounce example -->
                     <execution>
+                        <id>bounce_dragome</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>de.mirkosertic.gamecomposer.tools.Main</mainClass>
+                            <arguments>
+                                <argument>DRAGOME</argument>
+                                <argument>${project.basedir}/bounce</argument>
+                                <argument>${project.build.directory}/games/dragome/bounce</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
                         <id>bounce_teavm</id>
                         <phase>compile</phase>
                         <goals>
@@ -56,6 +71,21 @@
                     </execution>
 
                     <!-- camera example -->
+                    <execution>
+                        <id>camera_dragome</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>de.mirkosertic.gamecomposer.tools.Main</mainClass>
+                            <arguments>
+                                <argument>DRAGOME</argument>
+                                <argument>${project.basedir}/camera</argument>
+                                <argument>${project.build.directory}/games/dragome/camera</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
                     <execution>
                         <id>camera_teavm</id>
                         <phase>compile</phase>
@@ -89,6 +119,21 @@
 
                     <!-- Gravity example -->
                     <execution>
+                        <id>gravity_dragome</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>de.mirkosertic.gamecomposer.tools.Main</mainClass>
+                            <arguments>
+                                <argument>DRAGOME</argument>
+                                <argument>${project.basedir}/gravity</argument>
+                                <argument>${project.build.directory}/games/dragome/gravity</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
                         <id>gravity_teavm</id>
                         <phase>compile</phase>
                         <goals>
@@ -120,6 +165,21 @@
                     </execution>
 
                     <!-- networking example -->
+                    <execution>
+                        <id>networking_dragome</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>de.mirkosertic.gamecomposer.tools.Main</mainClass>
+                            <arguments>
+                                <argument>DRAGOME</argument>
+                                <argument>${project.basedir}/networking</argument>
+                                <argument>${project.build.directory}/games/dragome/networking</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
                     <execution>
                         <id>networking_teavm</id>
                         <phase>compile</phase>
@@ -153,6 +213,21 @@
 
                     <!-- platformer example -->
                     <execution>
+                        <id>platformer_dragome</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>de.mirkosertic.gamecomposer.tools.Main</mainClass>
+                            <arguments>
+                                <argument>DRAGOME</argument>
+                                <argument>${project.basedir}/platformer</argument>
+                                <argument>${project.build.directory}/games/dragome/platformer</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
                         <id>platformer_teavm</id>
                         <phase>compile</phase>
                         <goals>
@@ -185,6 +260,21 @@
 
                     <!-- Positiontest example -->
                     <execution>
+                        <id>positiontest_dragome</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>de.mirkosertic.gamecomposer.tools.Main</mainClass>
+                            <arguments>
+                                <argument>DRAGOME</argument>
+                                <argument>${project.basedir}/positiontest</argument>
+                                <argument>${project.build.directory}/games/dragome/positiontest</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
                         <id>positiontest_teavm</id>
                         <phase>compile</phase>
                         <goals>
@@ -216,6 +306,21 @@
                     </execution>
 
                     <!-- Rotating actor example -->
+                    <execution>
+                        <id>rotatingactor_dragome</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>de.mirkosertic.gamecomposer.tools.Main</mainClass>
+                            <arguments>
+                                <argument>DRAGOME</argument>
+                                <argument>${project.basedir}/rotatingactor</argument>
+                                <argument>${project.build.directory}/games/dragome/rotatingactor</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
                     <execution>
                         <id>rotatingactor_teavm</id>
                         <phase>compile</phase>
