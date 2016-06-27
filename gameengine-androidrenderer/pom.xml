@@ -18,7 +18,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<platform.version>2.3.3</platform.version>
+		<platform.version>4.0.1.2</platform.version>
 		<android.plugin.version>4.0.0-rc.2</android.plugin.version>
 	</properties>
 
@@ -78,7 +78,7 @@
 				<artifactId>android-maven-plugin</artifactId>
 				<configuration>
 					<sdk>
-						<platform>10</platform>
+						<platform>16</platform>
 					</sdk>
                     <androidManifestFile>AndroidManifest.xml</androidManifestFile>
                     <resourceDirectory>res</resourceDirectory>

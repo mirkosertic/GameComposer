@@ -12,8 +12,8 @@ public class AndroidEffectCanvas implements EffectCanvas {
 
     private Paint currentPaint;
 
-    public AndroidEffectCanvas(Canvas canvas) {
-        this.canvas = canvas;
+    public AndroidEffectCanvas(Canvas aCanvas) {
+        canvas = aCanvas;
     }
 
     @Override

@@ -9,7 +9,6 @@ import android.view.View;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
 import de.mirkosertic.gameengine.core.Game;
-import de.mirkosertic.gameengine.core.GameLoop;
 import de.mirkosertic.gameengine.core.GameLoopFactory;
 import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.core.GameScene;
@@ -20,15 +19,13 @@ import de.mirkosertic.gameengine.network.NetworkConnector;
 import de.mirkosertic.gameengine.type.Size;
 import de.mirkosertic.gameengine.type.TouchIdentifier;
 import de.mirkosertic.gameengine.type.TouchPosition;
+import org.apache.commons.io.IOUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
-import org.apache.commons.io.IOUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class GameEngineActivity extends Activity {
 
@@ -81,9 +78,11 @@ public class GameEngineActivity extends Activity {
             @Override
             public void handleResize() {
                 Size theCurrentSize = getScreenSize();
-                getRunningGameLoop().getScene().getRuntime().getEventManager().fire(new SetScreenResolution(theCurrentSize));
-                if (gameView != null) {
-                    gameView.setCurrentScreenSize(theCurrentSize);
+                if ((theCurrentSize != null) && (theCurrentSize.width != 0) && (theCurrentSize.height != 0)) {
+                    getRunningGameLoop().getScene().getRuntime().getEventManager().fire(new SetScreenResolution(theCurrentSize));
+                    if (gameView != null) {
+                        gameView.setCurrentScreenSize(theCurrentSize);
+                    }
                 }
             }
         };
@@ -105,6 +104,7 @@ public class GameEngineActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         androidCanvas = (AndroidCanvas) findViewById(R.id.canvasView);
+        androidCanvas.setPlaySceneStrategy(playSceneStrategy);
         androidCanvas.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View aView, MotionEvent aEvent) {
@@ -154,7 +154,9 @@ public class GameEngineActivity extends Activity {
 
     private void loadGame() {
         AssetManager theAssetManager = getAssets();
-        try (InputStream theStream = theAssetManager.open("game.json")) {
+        InputStream theStream = null;
+        try {
+            theStream = theAssetManager.open("game.json");
             JSONObject theGameJSON = new JSONObject(IOUtils.toString(theStream));
             Map<String, Object> theGameData = JSONUtils.toMap(theGameJSON);
 
@@ -162,26 +164,29 @@ public class GameEngineActivity extends Activity {
 
         } catch (IOException | JSONException e) {
             throw new RuntimeException(e);
+        } finally {
+            safeClose(theStream);
         }
-
-        new Timer().scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                GameLoop theLoop = playSceneStrategy.getRunningGameLoop();
-                if (theLoop != null && !theLoop.isShutdown()) {
-                    theLoop.singleRun();
-                }
-            }
-        }, 0, 16);
 
         String theDefaultScene = game.defaultSceneProperty().get();
         loadScene(theDefaultScene);
     }
 
+    private static void safeClose(InputStream aStream) {
+        if (aStream != null) {
+            try {
+                aStream.close();
+            } catch (IOException e) {
+            }
+        }
+    }
+
     private void loadScene(String aSceneID) {
         AssetManager theAssetManager = getAssets();
 
-        try (InputStream theStream = theAssetManager.open(aSceneID + "/scene.json")) {
+        InputStream theStream = null;
+        try {
+            theStream = theAssetManager.open(aSceneID + "/scene.json");
             JSONObject theSceneJSON = new JSONObject(IOUtils.toString(theStream));
             Map<String, Object> theGameData = JSONUtils.toMap(theSceneJSON);
 
@@ -194,6 +199,8 @@ public class GameEngineActivity extends Activity {
 
         } catch (IOException | JSONException e) {
             throw new RuntimeException(e);
+        } finally {
+            safeClose(theStream);
         }
     }
 
