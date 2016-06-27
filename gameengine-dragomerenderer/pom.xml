@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>de.mirkosertic</groupId>
+        <artifactId>gamecreator</artifactId>
+        <version>0.5-SNAPSHOT</version>
+    </parent>
+    <artifactId>gameengine-dragomerenderer</artifactId>
+    <name>GameComposer Dragome Renderer</name>
+    <packaging>war</packaging>
+
+    <scm>
+        <url>https://github.com/mirkosertic/GameComposer</url>
+        <connection>scm:git:https://github.com/mirkosertic/GameComposer.git</connection>
+    </scm>
+
+    <properties>
+        <dragome.version>0.96-beta3</dragome.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>de.mirkosertic</groupId>
+            <artifactId>gameengine</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.mirkosertic</groupId>
+            <artifactId>gameengine-jbox2d</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.mirkosertic</groupId>
+            <artifactId>gameengine-lua</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.dragome</groupId>
+            <artifactId>dragome-js-commons</artifactId>
+            <version>${dragome.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.dragome</groupId>
+            <artifactId>dragome-js-jre</artifactId>
+            <version>${dragome.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.dragome</groupId>
+            <artifactId>dragome-core</artifactId>
+            <version>${dragome.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.dragome</groupId>
+            <artifactId>dragome-bytecode-js-compiler</artifactId>
+            <version>${dragome.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-web-api</artifactId>
+            <version>6.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+              <groupId>com.dragome</groupId>
+              <artifactId>dragome-maven-plugin</artifactId>
+              <version>${dragome.version}</version>
+              <executions>
+                <execution>
+                  <phase>prepare-package</phase>
+                  <goals>
+                    <goal>compileclient</goal>
+                  </goals>
+                </execution>
+              </executions>
+              <configuration>
+                <destinationDirectory>${project.build.directory}/${project.build.finalName}</destinationDirectory>
+                <forceRebuild>true</forceRebuild>
+                <removeCache>false</removeCache>
+              </configuration>
+              <dependencies>
+                <dependency>
+                  <groupId>de.mirkosertic</groupId>
+                  <artifactId>gameengine-dragomerenderer</artifactId>
+                  <version>${project.version}</version>
+                </dependency>
+              </dependencies>
+            </plugin>
+
+            <plugin>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>9.1.3.v20140225</version>
+                <configuration>
+                    <webApp>
+                        <defaultsDescriptor>${basedir}/src/main/resources/webdefault.xml</defaultsDescriptor>
+                        <contextPath>/artifact</contextPath>
+                    </webApp>
+                    <classesDirectory>${basedir}/src/main/webapp/WEB-INF/classes</classesDirectory>
+                    <webAppSourceDirectory>${basedir}/src/main/webapp</webAppSourceDirectory>
+
+                    <!-- <classesDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/classes</classesDirectory> -->
+                    <!-- <webAppSourceDirectory>${project.build.directory}/${project.build.finalName}</webAppSourceDirectory> -->
+                    <connectors>
+                        <connector implementation="org.eclipse.jetty.server.ServerConnector">
+                            <port>8080</port>
+                            <maxIdleTime>7000000</maxIdleTime>
+                        </connector>
+                    </connectors>
+                </configuration>
+
+                <dependencies>
+                    <dependency>
+                        <groupId>org.ow2.asm</groupId>
+                        <artifactId>asm</artifactId>
+                        <version>5.0.2</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.ow2.asm</groupId>
+                        <artifactId>asm-commons</artifactId>
+                        <version>5.0.2</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
+</project>
