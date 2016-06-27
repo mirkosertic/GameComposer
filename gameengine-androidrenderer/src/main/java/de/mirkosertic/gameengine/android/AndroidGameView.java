@@ -4,9 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.os.Debug;
 import android.util.Log;
-import android.view.SurfaceHolder;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
@@ -38,16 +36,11 @@ public class AndroidGameView extends GenericAbstractGameView<AndroidBitmapResour
         verdanaTypeface = Typeface.create("Verdana", Typeface.NORMAL);
     }
 
-    private SurfaceHolder surfaceHolder;
     private Canvas canvas;
 
     @Override
     protected boolean beginFrame(GameScene aScene) {
-        surfaceHolder = androidCanvas.getHolder();
-        if (surfaceHolder.isCreating()) {
-            return false;
-        }
-        Canvas theCanvas = surfaceHolder.lockCanvas();
+        Canvas theCanvas = androidCanvas.getCurrentCanvas();
         if (theCanvas == null) {
             // Cannot lock
             return false;
@@ -101,7 +94,6 @@ public class AndroidGameView extends GenericAbstractGameView<AndroidBitmapResour
 
     @Override
     protected void framefinished() {
-        surfaceHolder.unlockCanvasAndPost(canvas);
     }
 
     @Override
