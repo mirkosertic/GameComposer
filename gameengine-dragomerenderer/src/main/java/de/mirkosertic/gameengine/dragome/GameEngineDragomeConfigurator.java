@@ -3,34 +3,12 @@ package de.mirkosertic.gameengine.dragome;
 import com.dragome.commons.DragomeConfiguratorImplementor;
 import com.dragome.commons.compiler.CompilerMode;
 import com.dragome.web.config.DomHandlerApplicationConfigurator;
-import com.dragome.web.helpers.serverside.DefaultClasspathFilter;
-
-import java.io.File;
 
 @DragomeConfiguratorImplementor
 public class GameEngineDragomeConfigurator extends DomHandlerApplicationConfigurator {
 
     public GameEngineDragomeConfigurator() {
-        System.setProperty("dragome-compile-mode", CompilerMode.Production.toString());
-
-        setClasspathFilter(new DefaultClasspathFilter() {
-            @Override
-            public boolean accept(File pathname, File aFolder) {
-                boolean accept = super.accept(pathname, aFolder);
-
-                String string = pathname.toString();
-
-                accept &= !string.contains("java/util/concurrent");
-                accept &= !string.contains("java/util/stream");
-                accept &= !string.contains("java/util/function");
-                accept &= !string.contains("java/sql");
-                accept &= !string.contains("org/w3c/dom/html");
-                accept &= !string.contains("java/org/junit");
-                accept &= !string.contains("junit");
-
-                return accept;
-            }
-        });
+        System.setProperty("dragome-compile-mode", CompilerMode.Debug.toString());
     }
 
     @Override
