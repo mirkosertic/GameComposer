@@ -3,6 +3,8 @@ package de.mirkosertic.gameengine.dragome;
 import com.dragome.services.WebServiceLocator;
 import com.dragome.view.DefaultVisualActivity;
 import com.dragome.web.annotations.PageAlias;
+import com.dragome.web.enhancers.jsdelegate.JsCast;
+
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
 import de.mirkosertic.gameengine.core.*;
@@ -89,7 +91,7 @@ public class IndexPage extends DefaultVisualActivity {
             @Override
             protected GameView getOrCreateCurrentGameView(GameRuntime aGameRuntime, CameraBehavior aCamera, GestureDetector aGestureDetector) {
                 if (gameView == null) {
-                    HTMLCanvasElement theCanvas= (HTMLCanvasElement) WebServiceLocator.getInstance().getDomHandler().getElementBySelector("#html5canvas");
+                    HTMLCanvasElement theCanvas= JsCast.castTo(WebServiceLocator.getInstance().getDomHandler().getElementBySelector("#html5canvas"), HTMLCanvasElement.class);
                     gameView = new DragomeGameView(aGameRuntime, aCamera, aGestureDetector, theCanvas);
                 } else {
                     gameView.prepareNewScene(aGameRuntime, aCamera, aGestureDetector);
