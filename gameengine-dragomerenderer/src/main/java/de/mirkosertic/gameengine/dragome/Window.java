@@ -2,6 +2,8 @@ package de.mirkosertic.gameengine.dragome;
 
 import com.dragome.commons.javascript.ScriptHelper;
 import com.dragome.services.WebServiceLocator;
+import com.dragome.web.enhancers.jsdelegate.JsCast;
+
 import org.w3c.dom.events.EventListener;
 import org.w3c.dom.events.EventTarget;
 
@@ -24,7 +26,7 @@ public final class Window {
     }
 
     public void addEventListener(EventListener aEventListener, String... aEvent) {
-        EventTarget theElement = (EventTarget) WebServiceLocator.getInstance().getDomHandler().getElementBySelector("body");
+        EventTarget theElement = JsCast.castTo(WebServiceLocator.getInstance().getDomHandler().getElementBySelector("body"), EventTarget.class);
         for (String theEvent : aEvent) {
             theElement.addEventListener(theEvent, aEventListener, true);
         }
