@@ -157,7 +157,7 @@ public class IndexPage extends DefaultVisualActivity {
 
     private void handleSingleKeyboardEvent(KeyboardEvent aKeyboardEvent) {
         if (playSceneStrategy.hasGameLoop()) {
-            GameKeyCode theKeyCode = DragomeKeyCodeTranslator.translate(Integer.toString(aKeyboardEvent.getCharCode()));
+            GameKeyCode theKeyCode = DragomeKeyCodeTranslator.translate(Integer.toString(aKeyboardEvent.getKeyCode()));
             if ("keyup".equals(aKeyboardEvent.getType())) {
                 playSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector().keyReleased(theKeyCode);
             }
