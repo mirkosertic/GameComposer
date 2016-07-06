@@ -18,6 +18,8 @@ import org.w3c.dom.html.CanvasRenderingContext2D;
 import org.w3c.dom.html.HTMLCanvasElement;
 import org.w3c.dom.html.HTMLImageElement;
 
+import com.dragome.web.enhancers.jsdelegate.JsCast;
+
 class DragomeGameView extends GenericAbstractGameView<DragomeGameResource> {
 
     private final HTMLCanvasElement canvas;
@@ -36,7 +38,7 @@ class DragomeGameView extends GenericAbstractGameView<DragomeGameResource> {
 
     @Override
     protected boolean beginFrame(GameScene aScene) {
-        renderingContext2D = (CanvasRenderingContext2D) canvas.getContext("2d");
+        renderingContext2D = JsCast.castTo(canvas.getContext("2d"), CanvasRenderingContext2D.class);
         Size theCurrentScreenSize = getCurrentScreenSize();
         renderingContext2D.setFillStyle(CSSUtils.toColor(aScene.backgroundColorProperty().get()));
         renderingContext2D.fillRect(0, 0, theCurrentScreenSize.width, theCurrentScreenSize.height);
