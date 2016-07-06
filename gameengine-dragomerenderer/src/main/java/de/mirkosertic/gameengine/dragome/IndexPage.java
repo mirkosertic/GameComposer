@@ -3,6 +3,8 @@ package de.mirkosertic.gameengine.dragome;
 import com.dragome.services.WebServiceLocator;
 import com.dragome.view.DefaultVisualActivity;
 import com.dragome.web.annotations.PageAlias;
+import com.dragome.web.enhancers.jsdelegate.JsCast;
+
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
 import de.mirkosertic.gameengine.core.*;
@@ -89,7 +91,7 @@ public class IndexPage extends DefaultVisualActivity {
             @Override
             protected GameView getOrCreateCurrentGameView(GameRuntime aGameRuntime, CameraBehavior aCamera, GestureDetector aGestureDetector) {
                 if (gameView == null) {
-                    HTMLCanvasElement theCanvas= (HTMLCanvasElement) WebServiceLocator.getInstance().getDomHandler().getElementBySelector("#html5canvas");
+                    HTMLCanvasElement theCanvas= JsCast.castTo(WebServiceLocator.getInstance().getDomHandler().getElementBySelector("#html5canvas"), HTMLCanvasElement.class);
                     gameView = new DragomeGameView(aGameRuntime, aCamera, aGestureDetector, theCanvas);
                 } else {
                     gameView.prepareNewScene(aGameRuntime, aCamera, aGestureDetector);
@@ -116,11 +118,11 @@ public class IndexPage extends DefaultVisualActivity {
                     case "keydown":
                     case "keypress":
                     case "keyup":
-                        handleSingleKeyboardEvent((KeyboardEvent) aEvent);
+                        handleSingleKeyboardEvent(JsCast.castTo(aEvent,KeyboardEvent.class));
                         break;
                     case "mousedown":
                     case "mouseup":
-                        handleSingleMouseEvent((MouseEvent) aEvent);
+                        handleSingleMouseEvent(JsCast.castTo(aEvent,MouseEvent.class));
                         break;
                 }
             }
@@ -155,7 +157,7 @@ public class IndexPage extends DefaultVisualActivity {
 
     private void handleSingleKeyboardEvent(KeyboardEvent aKeyboardEvent) {
         if (playSceneStrategy.hasGameLoop()) {
-            GameKeyCode theKeyCode = DragomeKeyCodeTranslator.translate(Integer.toString(aKeyboardEvent.getCharCode()));
+            GameKeyCode theKeyCode = DragomeKeyCodeTranslator.translate(Integer.toString(aKeyboardEvent.getKeyCode()));
             if ("keyup".equals(aKeyboardEvent.getType())) {
                 playSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector().keyReleased(theKeyCode);
             }
