@@ -15,16 +15,14 @@ public class GameEngineDragomeConfigurator extends DomHandlerApplicationConfigur
 
     public GameEngineDragomeConfigurator() {
     	   super(Arrays.asList(MouseEvent.class, KeyboardEvent.class));
-        System.setProperty("dragome-compile-mode", CompilerMode.Production.toString());
+        System.setProperty("dragome-compile-mode", CompilerMode.Debug.toString());
     }
 
     @Override
     public boolean filterClassPath(String aClassPathEntry) {
 		boolean include= false;
 
-		include|= aClassPathEntry.contains("gameengine-0.5");
-		include|= aClassPathEntry.contains("gameengine-lua");
-		include|= aClassPathEntry.contains("gameengine-jbox2d");
+		include|= aClassPathEntry.contains("gameengine-");
 		include|= aClassPathEntry.contains("dragome-js-jre");
 		include|= aClassPathEntry.contains("dragome-web");
 		include|= aClassPathEntry.contains("dragome-w3c");

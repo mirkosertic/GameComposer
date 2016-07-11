@@ -6,7 +6,7 @@
 
     <groupId>de.mirkosertic</groupId>
     <artifactId>gamecreator</artifactId>
-    <version>0.5-SNAPSHOT</version>
+    <version>0.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>GameComposer Parent POM</name>
 
@@ -281,4 +281,24 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>automaticversion</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>fr.brouillard.oss</groupId>
+                        <artifactId>jgitver-maven-plugin</artifactId>
+                        <version>0.1.1</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <mavenLike>true</mavenLike>
+                            <nonQualifierBranches>master</nonQualifierBranches>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
