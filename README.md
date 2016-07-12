@@ -111,7 +111,7 @@ GWT Renderer:
 [Rotating actor](http://mirkosertic.github.io/GameComposer/games/gwt/rotatingactor/index.html)
 
 
-Dragome Renderer (no longer Supported):
+Dragome Renderer:
 
 [Bouncing block](http://mirkosertic.github.io/GameComposer/games/dragome/bounce/index.html)
 
