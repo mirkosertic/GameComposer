@@ -19,10 +19,27 @@ public class DragomeEffectCanvas implements EffectCanvas {
     public void setPaint(Color aColor) {
         String theColor = CSSUtils.toColor(aColor);
         renderingContext.setStrokeStyle(theColor);
+        renderingContext.setFillStyle(theColor);
     }
 
     @Override
     public void drawSingleDot(Position aPosition) {
         renderingContext.strokeRect(aPosition.x, aPosition.y, 1, 1);
+    }
+
+    @Override
+    public void fillRect(int aX, int aY, int aWidth, int aHeight) {
+        renderingContext.fillRect(aX, aY, aWidth, aHeight);
+    }
+
+    @Override
+    public void fillPolygon(int[] aXPositions, int[] aYPositions, int aNumberOfPositions) {
+        renderingContext.beginPath();
+        renderingContext.moveTo(aXPositions[0], aYPositions[0]);
+        for (int i=1;i<aNumberOfPositions;i++) {
+            renderingContext.lineTo(aXPositions[i], aYPositions[i]);
+        }
+        renderingContext.closePath();
+        renderingContext.fill();
     }
 }
