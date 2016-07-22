@@ -95,6 +95,8 @@ TeaVM Renderer:
 
 [Networking](http://mirkosertic.github.io/GameComposer/games/teavm/networking/index.html)
 
+[Arcade Racer](http://mirkosertic.github.io/GameComposer/games/teavm/arcaderacer/index.html)
+
 
 GWT Renderer:
 
@@ -109,6 +111,8 @@ GWT Renderer:
 [Position test](http://mirkosertic.github.io/GameComposer/games/gwt/positiontest/index.html)
 
 [Rotating actor](http://mirkosertic.github.io/GameComposer/games/gwt/rotatingactor/index.html)
+
+[Arcade Racer](http://mirkosertic.github.io/GameComposer/games/gwt/arcaderacer/index.html)
 
 
 Dragome Renderer:
@@ -125,3 +129,4 @@ Dragome Renderer:
 
 [Rotating actor](http://mirkosertic.github.io/GameComposer/games/dragome/rotatingactor/index.html)
 
+[Arcade Racer](http://mirkosertic.github.io/GameComposer/games/dragome/arcaderacer/index.html)
