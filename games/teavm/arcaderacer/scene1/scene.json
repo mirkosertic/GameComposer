@@ -1,0 +1,78 @@
+{
+  "cameraobjectid" : "6942467363676639744",
+  "eventsheets" : [ ],
+  "effects" : [ {
+    "type" : "ArcadeRacerGameSceneEffect"
+  } ],
+  "customProperties" : {
+    "data" : [ ]
+  },
+  "layoutBounds" : {
+    "size" : {
+      "width" : "2147483647",
+      "height" : "2147483647"
+    },
+    "position" : {
+      "x" : "0.0",
+      "y" : "0.0"
+    }
+  },
+  "instances" : [ {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
+    "components" : [ {
+      "type" : "Sprite"
+    } ],
+    "visible" : "false",
+    "name" : "Player_1469193410335",
+    "gameobjectuuid" : "-4277405105029508415",
+    "position" : {
+      "x" : "431.0",
+      "y" : "606.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "4221965276721871523"
+  } ],
+  "defaultplayerobjectid" : "-4277405105029508415",
+  "objects" : [ {
+    "visible" : "true",
+    "size" : {
+      "width" : "64",
+      "height" : "64"
+    },
+    "templates" : [ {
+      "type" : "Camera",
+      "cameratype" : "FOLLOWPLAYER"
+    } ],
+    "name" : "Camera",
+    "uuid" : "6942467363676639744"
+  }, {
+    "visible" : "true",
+    "size" : {
+      "width" : "64",
+      "height" : "64"
+    },
+    "templates" : [ {
+      "animations" : [ {
+        "animationSequence" : [ {
+          "name" : "/assets/sprites/ferrari_left1.png"
+        } ],
+        "name" : "Car",
+        "uuid" : "-407516198283476370"
+      } ],
+      "currentAnimation" : "-407516198283476370",
+      "type" : "Sprite",
+      "speed" : "5"
+    } ],
+    "name" : "Player",
+    "uuid" : "-4277405105029508415"
+  } ],
+  "name" : "Intro",
+  "backgroundcolor" : {
+    "r" : "0",
+    "b" : "0",
+    "g" : "0"
+  }
+}
