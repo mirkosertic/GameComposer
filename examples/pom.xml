@@ -351,6 +351,53 @@
                             </arguments>
                         </configuration>
                     </execution>
+
+                    <!-- Arcade racer example -->
+                    <execution>
+                        <id>arcaderacer_dragome</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>de.mirkosertic.gamecomposer.tools.Main</mainClass>
+                            <arguments>
+                                <argument>DRAGOME</argument>
+                                <argument>${project.basedir}/arcaderacer</argument>
+                                <argument>${project.build.directory}/games/dragome/arcaderacer</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>arcaderacer_teavm</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>de.mirkosertic.gamecomposer.tools.Main</mainClass>
+                            <arguments>
+                                <argument>TEAVM</argument>
+                                <argument>${project.basedir}/arcaderacer</argument>
+                                <argument>${project.build.directory}/games/teavm/arcaderacer</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>arcaderacer_gwt</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>de.mirkosertic.gamecomposer.tools.Main</mainClass>
+                            <arguments>
+                                <argument>GWT</argument>
+                                <argument>${project.basedir}/arcaderacer</argument>
+                                <argument>${project.build.directory}/games/gwt/arcaderacer</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
               </executions>
             </plugin>
         </plugins>

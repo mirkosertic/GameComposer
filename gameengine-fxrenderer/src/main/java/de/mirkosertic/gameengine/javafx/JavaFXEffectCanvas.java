@@ -24,4 +24,20 @@ public class JavaFXEffectCanvas implements EffectCanvas {
     public void drawSingleDot(Position aPosition) {
         context.fillRect(aPosition.x, aPosition.y, 1, 1);
     }
+
+    @Override
+    public void fillRect(int aX, int aY, int aWidth, int aHeight) {
+        context.fillRect(aX, aY, aWidth, aHeight);
+    }
+
+    @Override
+    public void fillPolygon(int[] aXPositions, int[] aYPositions, int aNumberOfPositions) {
+        double[] theX = new double[aNumberOfPositions];
+        double[] theY = new double[aNumberOfPositions];
+        for (int i=0;i<aNumberOfPositions;i++) {
+            theX[i] = aXPositions[i];
+            theY[i] = aYPositions[i];
+        }
+        context.fillPolygon(theX, theY, aNumberOfPositions);
+    }
 }
