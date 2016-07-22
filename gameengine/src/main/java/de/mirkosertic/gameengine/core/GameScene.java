@@ -5,7 +5,6 @@ import de.mirkosertic.gameengine.annotations.ReflectiveField;
 import de.mirkosertic.gameengine.annotations.ReflectiveMethod;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
-import de.mirkosertic.gameengine.starfield.StarfieldGameSceneEffect;
 import de.mirkosertic.gameengine.type.Color;
 import de.mirkosertic.gameengine.type.CustomProperties;
 import de.mirkosertic.gameengine.type.KeyValueObjectCache;
@@ -157,7 +156,7 @@ public class GameScene implements Reflectable<GameSceneClassInformation>, KeyVal
         }
     }
 
-    public void removeEffect(StarfieldGameSceneEffect aInstance) {
+    public void removeEffect(GameSceneEffect aInstance) {
         switch (aInstance.getEffectType()) {
             case PREPROCESSOR:
                 List<GameSceneEffect> thePreEffects = ArrayUtils.asList(preprocessorEffects);

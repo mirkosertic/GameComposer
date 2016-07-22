@@ -11,21 +11,20 @@ import de.mirkosertic.gamecomposer.objectinspector.PropertyEditorItem;
 import de.mirkosertic.gamecomposer.objectinspector.utils.ColorPropertyEditor;
 import de.mirkosertic.gamecomposer.objectinspector.utils.GameObjectPropertyEditor;
 import de.mirkosertic.gamecomposer.objectinspector.utils.StringPropertyEditor;
+import de.mirkosertic.gameengine.arcaderacer.ArcadeRacerGameSceneEffect;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.core.GameSceneEffect;
 import de.mirkosertic.gameengine.starfield.StarfieldGameSceneEffect;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Node;
+import org.controlsfx.control.PropertySheet;
 
+import javax.enterprise.event.Event;
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import javax.enterprise.event.Event;
-import javax.inject.Inject;
-import org.controlsfx.control.PropertySheet;
 
 @ObjectInspectorElementConfiguratorType(clazz = GameScene.class)
 public class GameSceneElementConfigurator implements ObjectInspectorElementConfigurator<GameScene> {
@@ -69,6 +68,18 @@ public class GameSceneElementConfigurator implements ObjectInspectorElementConfi
             }
         });
 
+        theAvailableEffects.put(ArcadeRacerGameSceneEffect.class, new EffectDescription() {
+            @Override
+            public String description() {
+                return "ArcadeRacer";
+            }
+
+            @Override
+            public GameSceneEffect create() {
+                return new ArcadeRacerGameSceneEffect(aObject, aObject.getRuntime().getEventManager());
+            }
+        });
+
         for (GameSceneEffect theEffect : aObject.getPreprocessorEffects()) {
             theAvailableEffects.remove(theEffect.getClass());
         }
@@ -78,22 +89,15 @@ public class GameSceneElementConfigurator implements ObjectInspectorElementConfi
         }
 
         ActionPropertyEditorItem theActions = new ActionPropertyEditorItem(CATEGORY_NAME, "", "Available actions");
-        theActions.addAction(new ActionPropertyEditorItem.Action("Delete scene...", new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent aEvent) {
-                if (messageBox.showMessageBox((Node) aEvent.getSource(), "Delete scene", "Do you really want to delete the scene?", MessageBox.ButtonType.YES, MessageBox.ButtonType.NO) == MessageBox.ButtonType.YES) {
-                    persistenceManager.deleteScene(aObject);
-                    event.fire(new GameSceneDeletedEvent());
-                }
+        theActions.addAction(new ActionPropertyEditorItem.Action("Delete scene...", aEvent -> {
+            if (messageBox.showMessageBox((Node) aEvent.getSource(), "Delete scene", "Do you really want to delete the scene?", MessageBox.ButtonType.YES, MessageBox.ButtonType.NO) == MessageBox.ButtonType.YES) {
+                persistenceManager.deleteScene(aObject);
+                event.fire(new GameSceneDeletedEvent());
             }
         }));
         for (Map.Entry<Class<? extends GameSceneEffect>, EffectDescription> theEntry : theAvailableEffects.entrySet()) {
-            theActions.addAction(new ActionPropertyEditorItem.Action("Add " + theEntry.getValue().description()+" effect", new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent aEvent) {
-                    aObject.addEffect(theEntry.getValue().create());
-                }
-            }));
+            theActions.addAction(new ActionPropertyEditorItem.Action("Add " + theEntry.getValue().description()+" effect",
+                    aEvent -> aObject.addEffect(theEntry.getValue().create())));
         }
         theResult.add(theActions);
 

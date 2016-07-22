@@ -26,4 +26,20 @@ public class GWTEffectCanvas implements EffectCanvas {
     public void drawSingleDot(Position aPosition) {
         context.fillRect(aPosition.x, aPosition.y, 1, 1);
     }
+
+    @Override
+    public void fillRect(int aX, int aY, int aWidth, int aHeight) {
+        context.fillRect(aX, aY, aWidth, aHeight);
+    }
+
+    @Override
+    public void fillPolygon(int[] aXPositions, int[] aYPositions, int aNumberOfPositions) {
+        context.beginPath();
+        context.moveTo(aXPositions[0], aYPositions[0]);
+        for (int i=1;i<aNumberOfPositions;i++) {
+            context.lineTo(aXPositions[i], aYPositions[i]);
+        }
+        context.closePath();
+        context.fill();
+    }
 }
