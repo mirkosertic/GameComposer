@@ -1,5 +1,5 @@
 {
-  "enableDebug" : "false",
+  "enableDebug" : "true",
   "customProperties" : {
     "data" : [ ]
   },
@@ -7,5 +7,5 @@
   "enableNetworking" : "false",
   "enablewebgl" : "true",
   "name" : "New game",
-  "defaultscene" : ""
+  "defaultscene" : "scene1"
 }
