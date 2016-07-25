@@ -28,12 +28,12 @@ public class AndroidEffectCanvas implements EffectCanvas {
     }
 
     @Override
-    public void fillRect(int aX, int aY, int aWidth, int aHeight) {
+    public void fillRect(float aX, float aY, float aWidth, float aHeight) {
         canvas.drawRect(aX, aY, aX + aWidth, aY + aHeight, currentPaint);
     }
 
     @Override
-    public void fillPolygon(int[] aXPositions, int[] aYPositions, int aNumberOfPositions) {
+    public void fillPolygon(float[] aXPositions, float[] aYPositions, int aNumberOfPositions) {
         Path thePath = new Path();
         thePath.moveTo(aXPositions[0], aYPositions[0]);
         for (int i=0;i<aNumberOfPositions;i++) {
@@ -41,5 +41,10 @@ public class AndroidEffectCanvas implements EffectCanvas {
         }
         thePath.close();
         canvas.drawPath(thePath, currentPaint);
+    }
+
+    @Override
+    public void drawLine(float aX1, float aY1, float aX2, float aY2) {
+        canvas.drawLine(aX1, aY1, aX2, aY2, currentPaint);
     }
 }

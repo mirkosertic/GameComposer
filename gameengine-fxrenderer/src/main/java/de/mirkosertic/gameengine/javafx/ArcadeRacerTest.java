@@ -37,13 +37,24 @@ public class ArcadeRacerTest {
         }
 
         @Override
-        public void fillRect(int aX, int aY, int aWidth, int aHeight) {
-            graphics2D.fillRect(aX, aY, aWidth, aHeight);
+        public void fillRect(float aX, float aY, float aWidth, float aHeight) {
+            graphics2D.fillRect((int) aX, (int) aY, (int) aWidth, (int) aHeight);
         }
 
         @Override
-        public void fillPolygon(int[] aXPositions, int[] aYPositions, int aNumberOfPositions) {
-            graphics2D.fillPolygon(aXPositions, aYPositions, aNumberOfPositions);
+        public void fillPolygon(float[] aXPositions, float[] aYPositions, int aNumberOfPositions) {
+            int[] theX = new int[aNumberOfPositions];
+            int[] theY = new int[aNumberOfPositions];
+            for (int i=0;i<aNumberOfPositions;i++) {
+                theX[i] = (int) aXPositions[i];
+                theY[i] = (int) aYPositions[i];
+            }
+            graphics2D.fillPolygon(theX, theY, aNumberOfPositions);
+        }
+
+        @Override
+        public void drawLine(float aX1, float aY1, float aX2, float aY2) {
+            graphics2D.drawLine((int) aX1, (int) aY1, (int) aX2, (int) aY2);
         }
     }
 

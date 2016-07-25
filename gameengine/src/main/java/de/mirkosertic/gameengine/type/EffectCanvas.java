@@ -6,7 +6,9 @@ public interface EffectCanvas {
 
     void drawSingleDot(Position aPosition);
 
-    void fillRect(int aX, int aY, int aWidth, int aHeight);
+    void fillRect(float aX, float aY, float aWidth, float aHeight);
 
-    void fillPolygon(int[] aXPositions, int[] aYPositions, int aNumberOfPositions);
+    void fillPolygon(float[] aXPositions, float[] aYPositions, int aNumberOfPositions);
+
+    void drawLine(float aX1, float aY1, float aX2, float aY2);
 }
