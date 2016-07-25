@@ -28,12 +28,12 @@ public class DragomeEffectCanvas implements EffectCanvas {
     }
 
     @Override
-    public void fillRect(int aX, int aY, int aWidth, int aHeight) {
+    public void fillRect(float aX, float aY, float aWidth, float aHeight) {
         renderingContext.fillRect(aX, aY, aWidth, aHeight);
     }
 
     @Override
-    public void fillPolygon(int[] aXPositions, int[] aYPositions, int aNumberOfPositions) {
+    public void fillPolygon(float[] aXPositions, float[] aYPositions, int aNumberOfPositions) {
         renderingContext.beginPath();
         renderingContext.moveTo(aXPositions[0], aYPositions[0]);
         for (int i=1;i<aNumberOfPositions;i++) {
@@ -41,5 +41,13 @@ public class DragomeEffectCanvas implements EffectCanvas {
         }
         renderingContext.closePath();
         renderingContext.fill();
+    }
+
+    @Override
+    public void drawLine(float aX1, float aY1, float aX2, float aY2) {
+        renderingContext.beginPath();
+        renderingContext.moveTo(aX1, aY1);
+        renderingContext.lineTo(aX2, aY2);
+        renderingContext.stroke();
     }
 }

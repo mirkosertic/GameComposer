@@ -38,7 +38,6 @@ public class ArcadeRacerGameSceneEffect implements GameSceneEffect {
     public static final String DISTANCEPROJECTIONPLANE_PROPERTY = "distanceProjectionPlane";
     public static final String DISTANCECAR_PROPERTY = "distanceCar";
     public static final String CAMERAHEIGHT_PROPERTY = "cameraHeight";
-    public static final String ZPROJECTIONFACTOR_PROPERTY = "zProjectionFactor";
 
     private final GameScene gameScene;
     private Size screenSize;
@@ -53,12 +52,15 @@ public class ArcadeRacerGameSceneEffect implements GameSceneEffect {
     private final Property<Float> distanceProjectionPlane;
     private final Property<Float> distanceCar;
     private final Property<Float> cameraHeight;
-    private final Property<Float> zProjectionFactor;
     private final Property<Float> speed;
+
+    private final Track track;
 
     public ArcadeRacerGameSceneEffect(GameScene aScene,
             GameEventManager aEventManager) {
         gameScene = aScene;
+
+        track = new Track();
 
         trackColorDark = new Property<>(Color.class, this, TRACK_COLOR_DARK_PROPERTY, new Color(0, 200, 0), aEventManager);
         trackColorLight = new Property<>(Color.class, this, TRACK_COLOR_LIGHT_PROPERTY, new Color(0, 220, 0), aEventManager);
@@ -66,13 +68,12 @@ public class ArcadeRacerGameSceneEffect implements GameSceneEffect {
         roadColorLight = new Property<>(Color.class, this, ROAD_COLOR_LIGHT_PROPERTY, new Color(180, 180, 180), aEventManager);
         curbColorDark = new Property<>(Color.class, this, CURB_COLOR_DARK_PROPERTY, new Color(255, 0, 0), aEventManager);
         curbColorLight = new Property<>(Color.class, this, CURB_COLOR_LIGHT_PROPERTY, new Color(255, 255, 255), aEventManager);
-        speed = new Property<>(Float.class, this, SPEED_PROPERTY, 3f, aEventManager);
+        speed = new Property<>(Float.class, this, SPEED_PROPERTY, 1f, aEventManager);
 
         positionOnTrack = new Property<>(Float.class, this, POSITIONONTRACK_PROPERTY, 0f, aEventManager);
         distanceProjectionPlane = new Property<>(Float.class, this, DISTANCEPROJECTIONPLANE_PROPERTY, 3f, aEventManager);
-        distanceCar = new Property<>(Float.class, this, DISTANCECAR_PROPERTY, 6f, aEventManager);
+        distanceCar = new Property<>(Float.class, this, DISTANCECAR_PROPERTY, 9f, aEventManager);
         cameraHeight = new Property<>(Float.class, this, CAMERAHEIGHT_PROPERTY, 2f, aEventManager);
-        zProjectionFactor = new Property<>(Float.class, this, ZPROJECTIONFACTOR_PROPERTY, 2.5f, aEventManager);
 
         aEventManager.register(this, SetScreenResolution.class, new GameEventListener<SetScreenResolution>() {
             @Override
@@ -124,11 +125,6 @@ public class ArcadeRacerGameSceneEffect implements GameSceneEffect {
     }
 
     @ReflectiveField
-    public Property<Float> zProjectionFactor() {
-        return zProjectionFactor;
-    }
-
-    @ReflectiveField
     public Property<Color> curbColorDark() {
         return curbColorDark;
     }
@@ -166,48 +162,113 @@ public class ArcadeRacerGameSceneEffect implements GameSceneEffect {
         aEffectCanvas.setPaint(Color.BLACK);
         aEffectCanvas.fillRect(0, 0, screenSize.width, screenSize.height);
 
-        Camera theCamera = new Camera(screenSize, cameraHeight.get(), distanceProjectionPlane.get(),
-                zProjectionFactor.get(), positionOnTrack.get());
+        float thePositionOnTrack = positionOnTrack.get();
+
+        Camera theCamera = new Camera(screenSize, distanceProjectionPlane.get(),
+                positionOnTrack.get());
 
         int theViewDepth = 60;
 
         // Ok, first of all we need to compute the track to draw
-        int theFaresPosition = (int) Math.ceil(positionOnTrack.get() + distanceCar.get() + theViewDepth);
-        int theNearestPosition = theFaresPosition - theViewDepth - 4;
+        int theFarestPosition = (int) Math.ceil(thePositionOnTrack + theViewDepth);
+        int theNearestPosition = theFarestPosition - theViewDepth - 1;
+
+        int[] theOldDataX = null;
+        int[] theOldDataY = null;
+
+        // Calculate the curve data
+        // And the camera position
+        int theXoffset = 0;
+        for (int theZ = theFarestPosition; theZ >= theNearestPosition; theZ--) {
+            TrackElement theTrackElement = track.getTrackElementForPosition(theZ);
+            Road theRoad = theTrackElement.getRoad();
+
+            theXoffset+= theRoad.getCurveFactor();
+        }
+
+        // Correct some flickery
+        TrackElement theNearestElement = track.getTrackElementForPosition((int) theNearestPosition);
+        theXoffset+=theNearestElement.getRoad().getCurveFactor() * (1 - thePositionOnTrack % 1);
+
+        int theViewDistance = -9;
+
+        //TrackElement theNearestElementOnCamera = track.getTrackElementForPosition((int) theNearestPosition + theViewDistance);
+        //TrackElement theSecondNearestElement = track.getTrackElementForPosition((int) theNearestPosition + theViewDistance + 1);
+        //float theDeltaHeight = theSecondNearestElement.getHeight() - theNearestElementOnCamera.getHeight();
+
+        //float theHeightOffset = cameraHeight.get() + theNearestElementOnCamera.getHeight() - theDeltaHeight * (1 - thePositionOnTrack % 1);
+        float theHeightOffset = cameraHeight.get();
 
         // Now we draw the track
-        for (double theZ = theFaresPosition; theZ >= theNearestPosition; theZ--) {
+        for (float theZ = theFarestPosition; theZ >= theNearestPosition; theZ--) {
 
-            // Calculate the color according the the real track data
-            aEffectCanvas.setPaint(theZ % 2 == 0 ? trackColorDark.get() : trackColorLight.get());
+            TrackElement theTrackElement = track.getTrackElementForPosition((int) theZ);
+            Road theRoad = theTrackElement.getRoad();
 
-            Point2D theRoadLeftFarOutside  = theCamera.project(new Point3D(-2, 0, theZ));
-            Point2D theRoadRightFarOutside  = theCamera.project(new Point3D(2, 0, theZ));
+            float theRelativeHeight = theHeightOffset + theTrackElement.getHeight();
+            float theRelatveZ = theZ;
 
-            Point2D theRoadLeftFarInside  = theCamera.project(new Point3D(-1.8, 0, theZ));
-            Point2D theRoadRightFarInside  = theCamera.project(new Point3D(1.8, 0, theZ));
+            Point2D theRoadLeftOutside  = theCamera.project(new Point3D(theRoad.getPositionLeft(), theRelativeHeight, theRelatveZ * 2));
+            Point2D theRoadLeftInside  = theCamera.project(new Point3D(theRoad.getPositionLeft() + theRoad.getCurbWidth(), theRelativeHeight, theRelatveZ * 2));
+            Point2D theRoadRightInside  = theCamera.project(new Point3D(theRoad.getPositionRight() - theRoad.getCurbWidth(), theRelativeHeight, theRelatveZ * 2));
+            Point2D theRoadRightOutside  = theCamera.project(new Point3D(theRoad.getPositionRight(), theRelativeHeight, theRelatveZ * 2));
 
-            Point2D theRoadLeftNearOutside  = theCamera.project(new Point3D(-2, 0, theZ - 1));
-            Point2D theRoadRightNearOutside  = theCamera.project(new Point3D(2, 0, theZ - 1));
+            if (theOldDataX == null) {
+                theOldDataX = new int[] {theRoadLeftOutside.x + theXoffset, theRoadLeftInside.x + theXoffset, theRoadRightInside.x + theXoffset, theRoadRightOutside.x + theXoffset};
+                theOldDataY = new int[] {theRoadLeftOutside.y, theRoadLeftInside.y, theRoadRightInside.y, theRoadRightOutside.y};
+            } else {
 
-            Point2D theRoadLeftNearInside  = theCamera.project(new Point3D(-1.8, 0, theZ - 1));
-            Point2D theRoadRightNearInside  = theCamera.project(new Point3D(1.8, 0, theZ - 1));
+                int tempNewXData[] = new int[] {theRoadLeftOutside.x + theXoffset, theRoadLeftInside.x + theXoffset, theRoadRightInside.x + theXoffset, theRoadRightOutside.x + theXoffset};
+                int tempNewYData[] = new int[] {theRoadLeftOutside.y, theRoadLeftInside.y, theRoadRightInside.y, theRoadRightOutside.y};
 
+                // Draw things
 
-            // Left and right part of the Road
-            aEffectCanvas.fillPolygon(new int[] {0, theRoadLeftFarOutside.x, theRoadLeftNearOutside.x, 0}, new int[] {theRoadLeftFarOutside.y, theRoadLeftFarOutside.y, theRoadLeftNearOutside.y, theRoadLeftNearOutside.y}, 4);
-            aEffectCanvas.fillPolygon(new int[] {theRoadRightFarOutside.x, screenSize.width, screenSize.width, theRoadRightNearOutside.x}, new int[] {theRoadRightFarOutside.y, theRoadRightFarOutside.y, theRoadRightNearOutside.y, theRoadRightNearOutside.y}, 4);
+                // Calculate the color according the the real track data
+                aEffectCanvas.setPaint(theZ % 2 == 0 ? trackColorDark.get() : trackColorLight.get());
 
-            // The curbs
-            aEffectCanvas.setPaint(theZ % 2 == 0 ? curbColorLight.get() : curbColorDark.get());
-            aEffectCanvas.fillPolygon(new int[] {theRoadLeftFarOutside.x, theRoadLeftFarInside.x, theRoadLeftNearInside.x, theRoadLeftNearOutside.x}, new int[] {theRoadLeftFarOutside.y, theRoadLeftFarInside.y, theRoadLeftNearInside.y, theRoadLeftNearOutside.y}, 4);
-            aEffectCanvas.fillPolygon(new int[] {theRoadRightFarOutside.x, theRoadRightFarInside.x, theRoadRightNearInside.x, theRoadRightNearOutside.x}, new int[] {theRoadRightFarOutside.y, theRoadRightFarInside.y, theRoadRightNearInside.y, theRoadRightNearOutside.y}, 4);
+                // Left and right part of the Road
+                aEffectCanvas.fillPolygon(new float[] {0, theOldDataX[0], tempNewXData[0], 0}, new float[] {theOldDataY[1], theOldDataY[1], tempNewYData[1], tempNewYData[1]}, 4);
+                aEffectCanvas.fillPolygon(new float[] {theOldDataX[3], screenSize.width, screenSize.width, tempNewXData[3]}, new float[] {theOldDataY[3], theOldDataY[3], tempNewYData[3], tempNewYData[3]}, 4);
 
-            // The road itself
-            // Calculate the color according the the real track data
-            aEffectCanvas.setPaint(theZ % 2 == 0 ? roadColorDark.get() : roadColorLight.get());
-            aEffectCanvas.fillPolygon(new int[] {theRoadLeftFarInside.x, theRoadRightFarInside.x, theRoadRightNearInside.x, theRoadLeftNearInside.x}, new int[] {theRoadLeftFarInside.y, theRoadRightFarInside.y, theRoadRightNearInside.y, theRoadLeftNearInside.y}, 4);
+                // The curbs
+                aEffectCanvas.setPaint(theZ % 2 == 0 ? curbColorLight.get() : curbColorDark.get());
+                aEffectCanvas.fillPolygon(new float[] {theOldDataX[0], theOldDataX[1], tempNewXData[1], tempNewXData[0]}, new float[] {theOldDataY[0], theOldDataY[1], tempNewYData[1], tempNewYData[0]}, 4);
+                aEffectCanvas.fillPolygon(new float[] {theOldDataX[3], theOldDataX[2], tempNewXData[2], tempNewXData[3]}, new float[] {theOldDataY[3], theOldDataY[2], tempNewYData[2], tempNewYData[3]}, 4);
+
+                // The road itself
+                // Calculate the color according the the real track data
+                aEffectCanvas.setPaint(theZ % 2 == 0 ? roadColorDark.get() : roadColorLight.get());
+                aEffectCanvas.fillPolygon(new float[] {theOldDataX[1], theOldDataX[2], tempNewXData[2], tempNewXData[1]}, new float[] {theOldDataY[1], theOldDataY[2], tempNewYData[2], tempNewYData[1]}, 4);
+
+                // Keep track of the old positions to prevent them fro being recomputed
+                theOldDataX = tempNewXData;
+                theOldDataY = tempNewYData;
+            }
+
+            theXoffset -= theRoad.getCurveFactor();
         }
+
+        // Draw some debug data
+        for (int theZ = theFarestPosition; theZ>=theNearestPosition; theZ--) {
+            TrackElement theElement1 = track.getTrackElementForPosition((int) theZ - 1);
+            TrackElement theElement2 = track.getTrackElementForPosition((int) theZ);
+
+            float theX = 85 + (theZ - thePositionOnTrack) * 15;
+            float theY = 200 + theElement1.getHeight() * 30;
+            float theX2 = 85 + (theZ - thePositionOnTrack + 1) * 15;
+            float theY2 = 200 + theElement2.getHeight() * 30;
+
+            aEffectCanvas.setPaint(new Color(0, 255, 0));
+            aEffectCanvas.drawLine(theX, theY, theX2, theY2);
+
+            aEffectCanvas.drawLine(theX, theY - 5, theX, theY + 5);
+
+            aEffectCanvas.setPaint(new Color(255,0,0));
+            float thePlayerPos = (thePositionOnTrack % 1) * 15;
+            aEffectCanvas.drawLine(100 + thePlayerPos, 100, 100 + thePlayerPos , 300);
+        }
+        aEffectCanvas.setPaint(new Color(0,0,255));
+        aEffectCanvas.drawLine(100, 200 - (theHeightOffset * 30), 800, 200 - (theHeightOffset * 30));
     }
 
     @Override
