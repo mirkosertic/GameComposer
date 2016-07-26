@@ -2,11 +2,19 @@ package de.mirkosertic.gameengine.javafx;
 
 import de.mirkosertic.gameengine.arcaderacer.ArcadeRacerGameSceneEffect;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
+import de.mirkosertic.gameengine.core.GameResource;
+import de.mirkosertic.gameengine.core.GameResourceLoader;
+import de.mirkosertic.gameengine.core.GameResourceType;
+import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.event.GameEventManager;
+import de.mirkosertic.gameengine.scriptengine.luaj.LuaJScriptEngineFactory;
 import de.mirkosertic.gameengine.type.EffectCanvas;
 import de.mirkosertic.gameengine.type.Position;
+import de.mirkosertic.gameengine.type.ResourceName;
 import de.mirkosertic.gameengine.type.Size;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.Color;
@@ -15,6 +23,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 public class ArcadeRacerTest {
 
@@ -53,8 +63,9 @@ public class ArcadeRacerTest {
         }
 
         @Override
-        public void drawLine(float aX1, float aY1, float aX2, float aY2) {
-            graphics2D.drawLine((int) aX1, (int) aY1, (int) aX2, (int) aY2);
+        public void drawScaled(GameResource aResource, float aX, float aY, float aWidth, float aHeight) {
+            SwingResource theResource = (SwingResource) aResource;
+            graphics2D.drawImage(theResource.bufferedImage, (int) aX, (int) aY,(int) aWidth,(int) aHeight, null);
         }
     }
 
@@ -75,10 +86,43 @@ public class ArcadeRacerTest {
         }
     }
 
+    public static class SwingResource implements GameResource {
+
+        private final BufferedImage bufferedImage;
+
+        public SwingResource(BufferedImage aImage) {
+            bufferedImage = aImage;
+        }
+
+        @Override
+        public GameResourceType getType() {
+            return GameResourceType.BITMAP;
+        }
+    }
+
     public static void main(String[] args) {
 
         final GameEventManager theEventManager = new GameEventManager();
-        ArcadeRacerGameSceneEffect theEffect = new ArcadeRacerGameSceneEffect(null, theEventManager);
+        GameResourceLoader theLoader = new GameResourceLoader() {
+            @Override
+            public GameResource load(ResourceName aResourceName) throws IOException {
+                try {
+                    return new SwingResource(ImageIO.read(ArcadeRacerTest.class.getResourceAsStream("/" + aResourceName.name)));
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            @Override
+            public void flush() {
+            }
+        };
+
+        GameRuntime theRuntime = new GameRuntime(theEventManager, theLoader,
+                new LuaJScriptEngineFactory(new JDKBuiltInFunctions()));
+        GameScene theScene = new GameScene(null, theRuntime);
+
+        ArcadeRacerGameSceneEffect theEffect = new ArcadeRacerGameSceneEffect(theScene, theEventManager);
 
         ArcadePanel thePanel = new ArcadePanel(theEffect);
 

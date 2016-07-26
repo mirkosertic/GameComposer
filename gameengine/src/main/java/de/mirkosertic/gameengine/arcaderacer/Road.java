@@ -1,32 +1,20 @@
 package de.mirkosertic.gameengine.arcaderacer;
 
+import de.mirkosertic.gameengine.type.Color;
+
 public class Road {
 
-    private final float positionLeft;
-    private final float positionRight;
-    private final float curbWidth;
-    private final int curveFactor;
+    public final float positionLeft;
+    public final float positionRight;
+    public final int curveFactor;
+    public final Color roadColor;
+    public final Curb[] curbs;
 
-    public Road(float aPositionLeft, float aPositionRight, float aCurbWidth, int aCurveFactor) {
+    public Road(float aPositionLeft, float aPositionRight, int aCurveFactor, Color aRoadColor, Curb[] aCurbs) {
         positionLeft = aPositionLeft;
         positionRight = aPositionRight;
-        curbWidth = aCurbWidth;
+        curbs = aCurbs;
         curveFactor = aCurveFactor;
-    }
-
-    public float getPositionLeft() {
-        return positionLeft;
-    }
-
-    public float getPositionRight() {
-        return positionRight;
-    }
-
-    public float getCurbWidth() {
-        return curbWidth;
-    }
-
-    public int getCurveFactor() {
-        return curveFactor;
+        roadColor = aRoadColor;
     }
 }

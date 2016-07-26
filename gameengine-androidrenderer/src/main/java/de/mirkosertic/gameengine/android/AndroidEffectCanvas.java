@@ -3,6 +3,7 @@ package de.mirkosertic.gameengine.android;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
+import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.type.Color;
 import de.mirkosertic.gameengine.type.EffectCanvas;
 import de.mirkosertic.gameengine.type.Position;
@@ -44,7 +45,6 @@ public class AndroidEffectCanvas implements EffectCanvas {
     }
 
     @Override
-    public void drawLine(float aX1, float aY1, float aX2, float aY2) {
-        canvas.drawLine(aX1, aY1, aX2, aY2, currentPaint);
+    public void drawScaled(GameResource aResource, float aX, float aY, float aWidth, float aHeight) {
     }
 }
