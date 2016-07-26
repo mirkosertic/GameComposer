@@ -1,5 +1,7 @@
 package de.mirkosertic.gameengine.type;
 
+import de.mirkosertic.gameengine.core.GameResource;
+
 public interface EffectCanvas {
 
     void setPaint(Color aColor);
@@ -10,5 +12,5 @@ public interface EffectCanvas {
 
     void fillPolygon(float[] aXPositions, float[] aYPositions, int aNumberOfPositions);
 
-    void drawLine(float aX1, float aY1, float aX2, float aY2);
+    void drawScaled(GameResource aResource, float aX, float aY, float aWidth, float aHeight);
 }
