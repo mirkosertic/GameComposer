@@ -1,5 +1,6 @@
 package de.mirkosertic.gameengine.dragome;
 
+import de.mirkosertic.gameengine.core.GameResource;
 import org.w3c.dom.html.CanvasRenderingContext2D;
 
 import de.mirkosertic.gameengine.generic.CSSUtils;
@@ -44,10 +45,6 @@ public class DragomeEffectCanvas implements EffectCanvas {
     }
 
     @Override
-    public void drawLine(float aX1, float aY1, float aX2, float aY2) {
-        renderingContext.beginPath();
-        renderingContext.moveTo(aX1, aY1);
-        renderingContext.lineTo(aX2, aY2);
-        renderingContext.stroke();
+    public void drawScaled(GameResource aResource, float aX, float aY, float aWidth, float aHeight) {
     }
 }

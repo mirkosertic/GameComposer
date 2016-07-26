@@ -6,26 +6,27 @@ public class Camera {
 
     private final int halfViewWidth;
     private final int halfViewHeight;
-    private final double distanceProjectionPlane;
-    private final double positionOnTrack;
+    private final Point3D position;
+    private final double d;
 
-    public Camera(Size aSceeenSize, double aDistanceProjectionPlane,
-            double aPositionOnTrack) {
+    public Camera(Size aSceeenSize, Point3D aCameraPosition, int aFOV) {
         halfViewWidth = aSceeenSize.width / 2;
         halfViewHeight = aSceeenSize.height / 2;
-        distanceProjectionPlane = aDistanceProjectionPlane;
-        positionOnTrack = aPositionOnTrack;
+        position = aCameraPosition;
+        d = 1 / Math.tan(Math.toRadians(aFOV / 2));
     }
 
     public Point2D project(Point3D aPoint) {
 
-        double theProjectedDistance = aPoint.z - positionOnTrack;
+        double theXCameraSpace = aPoint.x - position.x;
+        double theYCameraSpace = aPoint.y - position.y;
+        double theZCameraSpace = aPoint.z - position.z;
 
-        double theYFactor = aPoint.y * distanceProjectionPlane / theProjectedDistance;
-        double theXFactor = aPoint.x * distanceProjectionPlane / theProjectedDistance;
+        double theXProjected = theXCameraSpace * d / theZCameraSpace;
+        double theYProjected = theYCameraSpace * d  / theZCameraSpace;
 
-        int x = (int) (halfViewWidth + (halfViewWidth * theXFactor));
-        int y = (int) (halfViewHeight + (halfViewHeight * theYFactor));
+        int x = (int) (halfViewWidth - (halfViewWidth * theXProjected));
+        int y = (int) (halfViewHeight - (halfViewHeight * theYProjected));
 
         return new Point2D(x, y);
     }

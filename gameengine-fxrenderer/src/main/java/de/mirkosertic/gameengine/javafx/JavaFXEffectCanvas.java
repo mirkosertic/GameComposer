@@ -1,5 +1,6 @@
 package de.mirkosertic.gameengine.javafx;
 
+import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.type.Color;
 import de.mirkosertic.gameengine.type.EffectCanvas;
 import de.mirkosertic.gameengine.type.Position;
@@ -42,10 +43,6 @@ public class JavaFXEffectCanvas implements EffectCanvas {
     }
 
     @Override
-    public void drawLine(float aX1, float aY1, float aX2, float aY2) {
-        context.beginPath();
-        context.moveTo(aX1, aY1);
-        context.lineTo(aX2, aY2);
-        context.stroke();
+    public void drawScaled(GameResource aResource, float aX, float aY, float aWidth, float aHeight) {
     }
 }
