@@ -1,5 +1,6 @@
 package de.mirkosertic.gameengine.teavm;
 
+import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.generic.CSSUtils;
 import de.mirkosertic.gameengine.type.Color;
 import de.mirkosertic.gameengine.type.EffectCanvas;
@@ -28,12 +29,12 @@ public class TeaVMEffectCanvas implements EffectCanvas {
     }
 
     @Override
-    public void fillRect(int aX, int aY, int aWidth, int aHeight) {
+    public void fillRect(double aX, double aY, double aWidth, double aHeight) {
         context.fillRect(aX, aY, aWidth, aHeight);
     }
 
     @Override
-    public void fillPolygon(int[] aXPositions, int[] aYPositions, int aNumberOfPositions) {
+    public void fillPolygon(double[] aXPositions, double[] aYPositions, int aNumberOfPositions) {
         context.beginPath();
         context.moveTo(aXPositions[0], aYPositions[0]);
         for (int i=1;i<aNumberOfPositions;i++) {
@@ -41,5 +42,11 @@ public class TeaVMEffectCanvas implements EffectCanvas {
         }
         context.closePath();
         context.fill();
+    }
+
+    @Override
+    public void drawScaled(GameResource aResource, double aX, double aY, double aWidth, double aHeight) {
+        TeaVMGameResource theImage = (TeaVMGameResource) aResource;
+        context.drawImage(theImage.getElement(), aX, aY, aWidth, aHeight);
     }
 }
