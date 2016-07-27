@@ -30,26 +30,26 @@ public class AndroidEffectCanvas implements EffectCanvas {
     }
 
     @Override
-    public void fillRect(float aX, float aY, float aWidth, float aHeight) {
-        canvas.drawRect(aX, aY, aX + aWidth, aY + aHeight, currentPaint);
+    public void fillRect(double aX, double aY, double aWidth, double aHeight) {
+        canvas.drawRect((float) aX, (float)aY, (float)(aX + aWidth), (float)(aY + aHeight), currentPaint);
     }
 
     @Override
-    public void fillPolygon(float[] aXPositions, float[] aYPositions, int aNumberOfPositions) {
+    public void fillPolygon(double[] aXPositions, double[] aYPositions, int aNumberOfPositions) {
         Path thePath = new Path();
-        thePath.moveTo(aXPositions[0], aYPositions[0]);
+        thePath.moveTo((float) aXPositions[0], (float) aYPositions[0]);
         for (int i=0;i<aNumberOfPositions;i++) {
-            thePath.lineTo(aXPositions[i], aYPositions[i]);
+            thePath.lineTo((float) aXPositions[i], (float) aYPositions[i]);
         }
         thePath.close();
         canvas.drawPath(thePath, currentPaint);
     }
 
     @Override
-    public void drawScaled(GameResource aResource, float aX, float aY, float aWidth, float aHeight) {
+    public void drawScaled(GameResource aResource, double aX, double aY, double aWidth, double aHeight) {
         AndroidBitmapResource theResource = (AndroidBitmapResource) aResource;
         Rect theSource = new Rect(0, 0, theResource.bitmap.getWidth(), theResource.bitmap.getHeight());
-        Rect teeDestination = new Rect((int) aX, (int) aY, (int) (aX + aWidth), (int) (aY + aHeight));
-        canvas.drawBitmap(theResource.bitmap, theSource, teeDestination, currentPaint);
+        Rect theDestination = new Rect((int) aX, (int) aY, (int) (aX + aWidth), (int) (aY + aHeight));
+        canvas.drawBitmap(theResource.bitmap, theSource, theDestination, currentPaint);
     }
 }
