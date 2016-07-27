@@ -8,9 +8,9 @@ public interface EffectCanvas {
 
     void drawSingleDot(Position aPosition);
 
-    void fillRect(float aX, float aY, float aWidth, float aHeight);
+    void fillRect(double aX, double aY, double aWidth, double aHeight);
 
-    void fillPolygon(float[] aXPositions, float[] aYPositions, int aNumberOfPositions);
+    void fillPolygon(double[] aXPositions, double[] aYPositions, int aNumberOfPositions);
 
-    void drawScaled(GameResource aResource, float aX, float aY, float aWidth, float aHeight);
+    void drawScaled(GameResource aResource, double aX, double aY, double aWidth, double aHeight);
 }

@@ -3,21 +3,13 @@ package de.mirkosertic.gameengine.arcaderacer;
 import de.mirkosertic.gameengine.annotations.ReflectiveField;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
-import de.mirkosertic.gameengine.core.GameResource;
-import de.mirkosertic.gameengine.core.GameRuntime;
-import de.mirkosertic.gameengine.core.GameScene;
-import de.mirkosertic.gameengine.core.GameSceneEffect;
-import de.mirkosertic.gameengine.core.GameSceneEffectType;
+import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.process.GameProcess;
 import de.mirkosertic.gameengine.process.StartProcess;
-import de.mirkosertic.gameengine.type.ClassInformation;
-import de.mirkosertic.gameengine.type.Color;
-import de.mirkosertic.gameengine.type.EffectCanvas;
-import de.mirkosertic.gameengine.type.ResourceName;
-import de.mirkosertic.gameengine.type.Size;
+import de.mirkosertic.gameengine.type.*;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -41,12 +33,12 @@ public class ArcadeRacerGameSceneEffect implements GameSceneEffect {
     private Size screenSize;
     private long gameTime;
 
-    private final Property<Float> positionOnTrack;
+    private final Property<Double> positionOnTrack;
     private final Property<Integer> fieldOfView;
     private final Property<Integer> viewDepth;
     private final Property<Integer> distanceCamera;
-    private final Property<Float> cameraHeight;
-    private final Property<Float> speed;
+    private final Property<Double> cameraHeight;
+    private final Property<Double> speed;
 
     private final Track track;
 
@@ -56,12 +48,12 @@ public class ArcadeRacerGameSceneEffect implements GameSceneEffect {
 
         track = new Track();
 
-        speed = new Property<>(Float.class, this, SPEED_PROPERTY, 6f, aEventManager);
+        speed = new Property<>(Double.class, this, SPEED_PROPERTY, 6d, aEventManager);
 
-        positionOnTrack = new Property<>(Float.class, this, POSITIONONTRACK_PROPERTY, 0f, aEventManager);
+        positionOnTrack = new Property<>(Double.class, this, POSITIONONTRACK_PROPERTY, 0d, aEventManager);
         fieldOfView = new Property<>(Integer.class, this, FIELDOFVIEW_PROPERTY, 95, aEventManager);
         viewDepth = new Property<>(Integer.class, this, VIEWDEPTH_PROPERTY, 60, aEventManager);
-        cameraHeight = new Property<>(Float.class, this, CAMERAHEIGHT_PROPERTY, 2f, aEventManager);
+        cameraHeight = new Property<>(Double.class, this, CAMERAHEIGHT_PROPERTY, 2d, aEventManager);
         distanceCamera = new Property<>(Integer.class, this, DISTANCECAMERA_PROPERTY, -3, aEventManager);
 
         aEventManager.register(this, SetScreenResolution.class, new GameEventListener<SetScreenResolution>() {
@@ -84,17 +76,17 @@ public class ArcadeRacerGameSceneEffect implements GameSceneEffect {
     }
 
     @ReflectiveField
-    public Property<Float> positionOnTrack() {
+    public Property<Double> positionOnTrack() {
         return positionOnTrack;
     }
 
     @ReflectiveField
-    public Property<Float> cameraHeight() {
+    public Property<Double> cameraHeight() {
         return cameraHeight;
     }
 
     @ReflectiveField
-    public Property<Float> speed() {
+    public Property<Double> speed() {
         return speed;
     }
 
@@ -114,7 +106,7 @@ public class ArcadeRacerGameSceneEffect implements GameSceneEffect {
     }
 
     @ReflectiveField
-    public Property<Float> getSpeed() {
+    public Property<Double> getSpeed() {
         return speed;
     }
 
@@ -137,21 +129,24 @@ public class ArcadeRacerGameSceneEffect implements GameSceneEffect {
         int theOldCurbX[] = null;
         int theOldCurbY[] = null;
 
-        float thePositonOnTrack = positionOnTrack.get();
+        double thePositonOnTrack = positionOnTrack.get();
 
-        int theNearestZ = (int) Math.floor(thePositonOnTrack);
+        int theDistanceCamera = distanceCamera.get();
+        double theCameraHeight = cameraHeight.get();
+        int theNearestZ = (int) thePositonOnTrack;
         int theFarestZ = theNearestZ + viewDepth.get();
 
         // We have to calculate the camera position properly
-        Point3D theCameraPosition = null;
+        Point3D theCameraPosition;
         if (thePositonOnTrack % 0 == 0) {
-            TrackElement theTrackElement = track.getTrackElementForPosition(theNearestZ - distanceCamera.get());
-            theCameraPosition = new Point3D(0, -cameraHeight.get() + theTrackElement.height , -thePositonOnTrack);
+            TrackElement theTrackElement = track.getTrackElementForPosition(theNearestZ - theDistanceCamera);
+            theCameraPosition = new Point3D(0, -theCameraHeight + theTrackElement.height , -thePositonOnTrack);
         } else {
-            TrackElement theTrackElement1 = track.getTrackElementForPosition(theNearestZ - distanceCamera.get());
-            TrackElement theTrackElement2 = track.getTrackElementForPosition(theNearestZ - distanceCamera.get() + 1);
+            TrackElement theTrackElement1 = track.getTrackElementForPosition(theNearestZ - theDistanceCamera);
+            TrackElement theTrackElement2 = track.getTrackElementForPosition(theNearestZ - theDistanceCamera + 1);
             double theHeightDelta = theTrackElement2.height - theTrackElement1.height;
-            theCameraPosition = new Point3D(0, -cameraHeight.get() + theTrackElement1.height + theHeightDelta * (thePositonOnTrack % 1) , -thePositonOnTrack);
+            double thePositionModulo = thePositonOnTrack - (int) thePositonOnTrack;
+            theCameraPosition = new Point3D(0, -theCameraHeight + theTrackElement1.height + theHeightDelta * thePositionModulo, -thePositonOnTrack);
         }
 
         Camera theCamera = new Camera(screenSize, theCameraPosition, fieldOfView.get());
@@ -167,7 +162,7 @@ public class ArcadeRacerGameSceneEffect implements GameSceneEffect {
         // Now we draw the track
         for (int theZ = theFarestZ; theZ >= theNearestZ; theZ--) {
 
-            TrackElement theTrackElement = track.getTrackElementForPosition((int) theZ);
+            TrackElement theTrackElement = track.getTrackElementForPosition(theZ);
             Road theRoad = theTrackElement.road;
 
             double theSceneZ = -theZ;
@@ -217,22 +212,22 @@ public class ArcadeRacerGameSceneEffect implements GameSceneEffect {
                     aEffectCanvas.setPaint(theTrackElement.terrainColor);
 
                     // Left and right part of the Road
-                    aEffectCanvas.fillPolygon(new float[] { 0, theOldTrackDataX[0], theNewTrackDataX[0], 0 },
-                            new float[] { theOldTrackDataY[0], theOldTrackDataY[0], theNewTrackDataY[0], theNewTrackDataY[0] }, 4);
-                    aEffectCanvas.fillPolygon(new float[] { theOldTrackDataX[1], screenSize.width, screenSize.width, theNewTrackDataX[1] },
-                            new float[] { theOldTrackDataY[1], theOldTrackDataY[1], theNewTrackDataY[1], theNewTrackDataY[1] }, 4);
+                    aEffectCanvas.fillPolygon(new double[] { 0, theOldTrackDataX[0], theNewTrackDataX[0], 0 },
+                            new double[] { theOldTrackDataY[0], theOldTrackDataY[0], theNewTrackDataY[0], theNewTrackDataY[0] }, 4);
+                    aEffectCanvas.fillPolygon(new double[] { theOldTrackDataX[1], screenSize.width, screenSize.width, theNewTrackDataX[1] },
+                            new double[] { theOldTrackDataY[1], theOldTrackDataY[1], theNewTrackDataY[1], theNewTrackDataY[1] }, 4);
 
                     // The road itself
                     aEffectCanvas.setPaint(theRoad.roadColor);
-                    aEffectCanvas.fillPolygon(new float[] { theOldTrackDataX[0], theOldTrackDataX[1], theNewTrackDataX[1], theNewTrackDataX[0] },
-                            new float[] { theOldTrackDataY[0], theOldTrackDataY[1], theNewTrackDataY[1], theNewTrackDataY[0] }, 4);
+                    aEffectCanvas.fillPolygon(new double[] { theOldTrackDataX[0], theOldTrackDataX[1], theNewTrackDataX[1], theNewTrackDataX[0] },
+                            new double[] { theOldTrackDataY[0], theOldTrackDataY[1], theNewTrackDataY[1], theNewTrackDataY[0] }, 4);
 
                     // And the Curbs
                     for (int i=0;i<theRoad.curbs.length;i++) {
                         Curb theCurb = theRoad.curbs[i];
                         aEffectCanvas.setPaint(theCurb.getColor());
-                        aEffectCanvas.fillPolygon(new float[] { theOldCurbX[i*2], theOldCurbX[i*2+1], theNewCurbX[i*2+1], theNewCurbX[i*2]},
-                                new float[] { theOldCurbY[i*2], theOldCurbY[i*2+1], theNewCurbY[i*2+1], theNewCurbY[i*2]}, 4);
+                        aEffectCanvas.fillPolygon(new double[] { theOldCurbX[i*2], theOldCurbX[i*2+1], theNewCurbX[i*2+1], theNewCurbX[i*2]},
+                                new double[] { theOldCurbY[i*2], theOldCurbY[i*2+1], theNewCurbY[i*2+1], theNewCurbY[i*2]}, 4);
                     }
                 }
 

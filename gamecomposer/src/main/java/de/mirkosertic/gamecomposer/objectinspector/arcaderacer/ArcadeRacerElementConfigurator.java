@@ -7,7 +7,7 @@ import de.mirkosertic.gamecomposer.objectinspector.ActionPropertyEditorItem;
 import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorElementConfigurator;
 import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorElementConfiguratorType;
 import de.mirkosertic.gamecomposer.objectinspector.PropertyEditorItem;
-import de.mirkosertic.gamecomposer.objectinspector.utils.FloatPropertyEditor;
+import de.mirkosertic.gamecomposer.objectinspector.utils.DoublePropertyEditor;
 import de.mirkosertic.gamecomposer.objectinspector.utils.IntegerPropertyEditor;
 import de.mirkosertic.gamecomposer.objectinspector.utils.PositiveIntegerPropertyEditor;
 import de.mirkosertic.gameengine.arcaderacer.ArcadeRacerGameSceneEffect;
@@ -37,11 +37,11 @@ public class ArcadeRacerElementConfigurator implements ObjectInspectorElementCon
     @Override
     public List<PropertySheet.Item> getItemsFor(final ArcadeRacerGameSceneEffect aObject) {
         List<PropertySheet.Item> theResult = new ArrayList<>();
-        theResult.add(new PropertyEditorItem<>(CATEGORY_NAME, aObject.speed(), "Speed", "Speed", Optional.of(FloatPropertyEditor.class)));
+        theResult.add(new PropertyEditorItem<>(CATEGORY_NAME, aObject.speed(), "Speed", "Speed", Optional.of(DoublePropertyEditor.class)));
         theResult.add(new PropertyEditorItem<>(CATEGORY_NAME, aObject.fieldOfView(), "Field of view", "The field of view", Optional.of(PositiveIntegerPropertyEditor.class)));
         theResult.add(new PropertyEditorItem<>(CATEGORY_NAME, aObject.viewDepth(), "View depth", "View depth", Optional.of(PositiveIntegerPropertyEditor.class)));
         theResult.add(new PropertyEditorItem<>(CATEGORY_NAME, aObject.distanceCamera(), "Distance Camera", "Distance camera", Optional.of(IntegerPropertyEditor.class)));
-        theResult.add(new PropertyEditorItem<>(CATEGORY_NAME, aObject.cameraHeight(), "The camera height", "Camera height", Optional.of(FloatPropertyEditor.class)));
+        theResult.add(new PropertyEditorItem<>(CATEGORY_NAME, aObject.cameraHeight(), "The camera height", "Camera height", Optional.of(DoublePropertyEditor.class)));
 
         ActionPropertyEditorItem theActions = new ActionPropertyEditorItem(CATEGORY_NAME, "", "Available actions");
         theActions.addAction(new ActionPropertyEditorItem.Action("Delete effect...", aEvent -> {
