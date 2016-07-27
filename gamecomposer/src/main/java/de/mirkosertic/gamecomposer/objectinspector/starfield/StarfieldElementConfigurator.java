@@ -9,7 +9,7 @@ import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorElementConfigu
 import de.mirkosertic.gamecomposer.objectinspector.PropertyEditorItem;
 import de.mirkosertic.gamecomposer.objectinspector.utils.ColorPropertyEditor;
 import de.mirkosertic.gamecomposer.objectinspector.utils.FloatPropertyEditor;
-import de.mirkosertic.gamecomposer.objectinspector.utils.IntegerPropertyEditor;
+import de.mirkosertic.gamecomposer.objectinspector.utils.PositiveIntegerPropertyEditor;
 import de.mirkosertic.gameengine.starfield.StarfieldGameSceneEffect;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -39,17 +39,14 @@ public class StarfieldElementConfigurator implements ObjectInspectorElementConfi
     @Override
     public List<PropertySheet.Item> getItemsFor(final StarfieldGameSceneEffect aObject) {
         List<PropertySheet.Item> theResult = new ArrayList<>();
-        theResult.add(new PropertyEditorItem<>(CATEGORY_NAME, aObject.numberofStars(), "Number of stars", "The number of stars", Optional.of(IntegerPropertyEditor.class)));
+        theResult.add(new PropertyEditorItem<>(CATEGORY_NAME, aObject.numberofStars(), "Number of stars", "The number of stars", Optional.of(PositiveIntegerPropertyEditor.class)));
         theResult.add(new PropertyEditorItem<>(CATEGORY_NAME, aObject.starSpeed(), "Star speed", "The speed of the stars", Optional.of(FloatPropertyEditor.class)));
         theResult.add(new PropertyEditorItem<>(CATEGORY_NAME, aObject.color(), "Star color", "The color of the stars", Optional.of(ColorPropertyEditor.class)));
 
         ActionPropertyEditorItem theActions = new ActionPropertyEditorItem(CATEGORY_NAME, "", "Available actions");
-        theActions.addAction(new ActionPropertyEditorItem.Action("Delete effect...", new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent aEvent) {
-                if (messageBox.showMessageBox((Node) aEvent.getSource(), "Delete effect", "Do you really want to delete this item?", MessageBox.ButtonType.YES, MessageBox.ButtonType.NO) == MessageBox.ButtonType.YES) {
-                    aObject.getScene().removeEffect(aObject);
-                }
+        theActions.addAction(new ActionPropertyEditorItem.Action("Delete effect...", aEvent -> {
+            if (messageBox.showMessageBox((Node) aEvent.getSource(), "Delete effect", "Do you really want to delete this item?", MessageBox.ButtonType.YES, MessageBox.ButtonType.NO) == MessageBox.ButtonType.YES) {
+                aObject.getScene().removeEffect(aObject);
             }
         }));
         theResult.add(theActions);

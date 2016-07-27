@@ -14,7 +14,7 @@ public class Track {
                 new Curb(-0.05, 0.1, aPosition %2 == 0 ? new Color(160, 160, 160) : new Color(255, 255, 0)),
                 new Curb(1.9, 0.1, aPosition %2 == 0 ? new Color(255, 0, 0) : new Color(255, 255, 255))
         };
-        Animation theAnimation = new Animation("Lala").addToAnimationSequence(new ResourceName("column.png"));
+        Animation theAnimation = new Animation("Lala").addToAnimationSequence(new ResourceName("/assets/sprites/column.png"));
         Sprite[] theSprites = new Sprite[] {
             new Sprite(theAnimation, -3, -1, 2, 2, 4)
         };

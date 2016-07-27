@@ -46,5 +46,7 @@ public class TeaVMEffectCanvas implements EffectCanvas {
 
     @Override
     public void drawScaled(GameResource aResource, float aX, float aY, float aWidth, float aHeight) {
+        TeaVMGameResource theImage = (TeaVMGameResource) aResource;
+        context.drawImage(theImage.getElement(), aX, aY, aWidth, aWidth);
     }
 }

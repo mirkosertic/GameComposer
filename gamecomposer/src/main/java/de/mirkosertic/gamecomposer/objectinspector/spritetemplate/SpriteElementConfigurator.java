@@ -7,7 +7,7 @@ import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorElementConfigu
 import de.mirkosertic.gamecomposer.objectinspector.ObjectInspectorElementConfiguratorType;
 import de.mirkosertic.gamecomposer.objectinspector.PersistentPropertyEditorItem;
 import de.mirkosertic.gamecomposer.objectinspector.utils.AnimationPropertyEditor;
-import de.mirkosertic.gamecomposer.objectinspector.utils.IntegerPropertyEditor;
+import de.mirkosertic.gamecomposer.objectinspector.utils.PositiveIntegerPropertyEditor;
 import de.mirkosertic.gameengine.sprite.Sprite;
 import de.mirkosertic.gameengine.sprite.SpriteBehaviorTemplate;
 import de.mirkosertic.gameengine.type.Animation;
@@ -37,7 +37,7 @@ public class SpriteElementConfigurator implements ObjectInspectorElementConfigur
     public List<PropertySheet.Item> getItemsFor(Sprite aObject) {
         List<PropertySheet.Item> theResult = new ArrayList<>();
         theResult.add(new PersistentPropertyEditorItem<>(persistenceManager, CATEGORY_NAME, aObject.speedProperty(), "Animation speed", "The animation speed in frames / second",
-                Optional.of(IntegerPropertyEditor.class)));
+                Optional.of(PositiveIntegerPropertyEditor.class)));
         theResult.add(new PersistentPropertyEditorItem<>(persistenceManager, CATEGORY_NAME, aObject.currentAnimationProperty(), "Current animation", "The current animation",
               Optional.of(AnimationPropertyEditor.class)));
 
