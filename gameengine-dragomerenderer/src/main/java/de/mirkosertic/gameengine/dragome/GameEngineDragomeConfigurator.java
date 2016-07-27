@@ -28,7 +28,7 @@ public class GameEngineDragomeConfigurator extends DomHandlerApplicationConfigur
 		include|= aClassPathEntry.contains("dragome-w3c");
 		include|= aClassPathEntry.contains("dragome-js-commons");
 		include|= aClassPathEntry.contains("dragome-core");
-
+        include&= !aClassPathEntry.contains("gameengine-apt");
 		return include;
     }
 
@@ -37,9 +37,8 @@ public class GameEngineDragomeConfigurator extends DomHandlerApplicationConfigur
         return false;
     }
 
-    public boolean isRemoveUnusedCode()
-    {
-        return true;
+    public boolean isRemoveUnusedCode() {
+        return false;
     }
     
     public URL getAdditionalCodeKeepConfigFile() {
