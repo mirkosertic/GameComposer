@@ -46,5 +46,7 @@ public class GWTEffectCanvas implements EffectCanvas {
 
     @Override
     public void drawScaled(GameResource aResource, float aX, float aY, float aWidth, float aHeight) {
+        GWTBitmapResource theImage = (GWTBitmapResource) aResource;
+        context.drawImage(theImage.getImage(), aX, aY, aWidth, aWidth);
     }
 }
