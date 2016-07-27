@@ -27,12 +27,12 @@ public class JavaFXEffectCanvas implements EffectCanvas {
     }
 
     @Override
-    public void fillRect(float aX, float aY, float aWidth, float aHeight) {
+    public void fillRect(double aX, double aY, double aWidth, double aHeight) {
         context.fillRect(aX, aY, aWidth, aHeight);
     }
 
     @Override
-    public void fillPolygon(float[] aXPositions, float[] aYPositions, int aNumberOfPositions) {
+    public void fillPolygon(double[] aXPositions, double[] aYPositions, int aNumberOfPositions) {
         double[] theX = new double[aNumberOfPositions];
         double[] theY = new double[aNumberOfPositions];
         for (int i=0;i<aNumberOfPositions;i++) {
@@ -43,7 +43,7 @@ public class JavaFXEffectCanvas implements EffectCanvas {
     }
 
     @Override
-    public void drawScaled(GameResource aResource, float aX, float aY, float aWidth, float aHeight) {
+    public void drawScaled(GameResource aResource, double aX, double aY, double aWidth, double aHeight) {
         JavaFXBitmapResource theBitmap = (JavaFXBitmapResource) aResource;
         context.drawImage(theBitmap, aX, aY, aWidth, aHeight);
     }
