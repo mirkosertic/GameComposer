@@ -7,6 +7,7 @@ import de.mirkosertic.gameengine.generic.CSSUtils;
 import de.mirkosertic.gameengine.type.Color;
 import de.mirkosertic.gameengine.type.EffectCanvas;
 import de.mirkosertic.gameengine.type.Position;
+import org.w3c.dom.html.HTMLImageElement;
 
 public class DragomeEffectCanvas implements EffectCanvas {
 
@@ -46,5 +47,8 @@ public class DragomeEffectCanvas implements EffectCanvas {
 
     @Override
     public void drawScaled(GameResource aResource, float aX, float aY, float aWidth, float aHeight) {
+        DragomeGameResource theImage = (DragomeGameResource) aResource;
+        HTMLImageElement theImageSource= (HTMLImageElement) theImage.getElement();
+        renderingContext.drawImage(theImageSource, aX, aY, aWidth, aWidth);
     }
 }

@@ -44,5 +44,7 @@ public class JavaFXEffectCanvas implements EffectCanvas {
 
     @Override
     public void drawScaled(GameResource aResource, float aX, float aY, float aWidth, float aHeight) {
+        JavaFXBitmapResource theBitmap = (JavaFXBitmapResource) aResource;
+        context.drawImage(theBitmap, aX, aY, aWidth, aHeight);
     }
 }
