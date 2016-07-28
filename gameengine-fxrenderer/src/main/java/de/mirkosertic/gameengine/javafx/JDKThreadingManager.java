@@ -13,7 +13,11 @@ public class JDKThreadingManager implements ThreadingManager {
     private final ExecutorService executorService;
 
     public JDKThreadingManager() {
-        executorService = Executors.newSingleThreadExecutor();
+        executorService = Executors.newSingleThreadExecutor(r -> {
+            Thread theThread = new Thread(r);
+            theThread.setDaemon(true);
+            return theThread;
+        });
     }
 
     @Override

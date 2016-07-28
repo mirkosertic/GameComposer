@@ -10,8 +10,8 @@ public class JavaFXEffectCanvas implements EffectCanvas {
 
     private final GraphicsContext context;
 
-    public JavaFXEffectCanvas(GraphicsContext context) {
-        this.context = context;
+    public JavaFXEffectCanvas(GraphicsContext aContext) {
+        context = aContext;
     }
 
     @Override
@@ -32,14 +32,46 @@ public class JavaFXEffectCanvas implements EffectCanvas {
     }
 
     @Override
-    public void fillPolygon(double[] aXPositions, double[] aYPositions, int aNumberOfPositions) {
-        double[] theX = new double[aNumberOfPositions];
-        double[] theY = new double[aNumberOfPositions];
-        for (int i=0;i<aNumberOfPositions;i++) {
-            theX[i] = aXPositions[i];
-            theY[i] = aYPositions[i];
-        }
-        context.fillPolygon(theX, theY, aNumberOfPositions);
+    public void fillTriangle(double aX0, double aY0, double aX1, double aY1, double aX2, double aY2) {
+        context.beginPath();
+        context.moveTo(aX0, aY0);
+        context.lineTo(aX1, aY1);
+        context.lineTo(aX2, aY2);
+        context.closePath();
+        context.stroke();
+        context.fill();
+    }
+
+    @Override
+    public void fillTriangle(GameResource aTexture, double aX0, double aY0, double aX1, double aY1, double aX2,
+            double aY2, double aU0, double aV0, double aU1, double aV1, double aU2, double aV2) {
+
+        // Affine Texture Mapping
+        context.save();
+
+        context.beginPath();
+        context.moveTo(aX0, aY0);
+        context.lineTo(aX1, aY1);
+        context.lineTo(aX2, aY2);
+        context.closePath();
+        context.clip();
+
+        aX1 -= aX0; aY1 -= aY0; aX2 -= aX0; aY2 -= aY0;
+        aU1 -= aU0; aV1 -= aV0; aU2 -= aU0; aV2 -= aV0;
+
+        double id = 1.0 / (aU1*aV2 - aU2*aV1);
+        double a = id * (aV2*aX1 - aV1*aX2);
+        double b = id * (aV2*aY1 - aV1*aY2);
+        double c = id * (aU1*aX2 - aU2*aX1);
+        double d = id * (aU1*aY2 - aU2*aY1);
+        double e = aX0 - a*aU0 - c*aV0;
+        double f = aY0 - b*aU0 - d*aV0;
+
+        context.transform( a, b, c, d, e, f );
+        JavaFXBitmapResource theBitmap = (JavaFXBitmapResource) aTexture;
+        context.drawImage(theBitmap, 0, 0);
+
+        context.restore();
     }
 
     @Override
