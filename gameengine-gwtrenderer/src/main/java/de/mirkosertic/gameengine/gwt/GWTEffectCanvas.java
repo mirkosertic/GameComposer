@@ -41,6 +41,7 @@ public class GWTEffectCanvas implements EffectCanvas {
         context.lineTo(aX2, aY2);
         context.closePath();
         context.fill();
+        context.stroke();
     }
 
     @Override
@@ -69,7 +70,9 @@ public class GWTEffectCanvas implements EffectCanvas {
 
         context.transform( a, b, c, d, e, f );
         GWTBitmapResource theImage = (GWTBitmapResource) aTexture;
-        context.drawImage(theImage.getImage(), 0, 0);
+        if (theImage.isLoaded()) {
+            context.drawImage(theImage.getImage(), 0, 0);
+        }
 
         context.restore();
     }
