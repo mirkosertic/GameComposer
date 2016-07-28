@@ -16,11 +16,11 @@ public class Camera {
         d = 1 / Math.tan(Math.toRadians(aFOV / 2));
     }
 
-    public Point2D project(Point3D aPoint) {
+    public Point2D project(double aX, double aY, double aZ) {
 
-        double theXCameraSpace = aPoint.x - position.x;
-        double theYCameraSpace = aPoint.y - position.y;
-        double theZCameraSpace = aPoint.z - position.z;
+        double theXCameraSpace = aX - position.x;
+        double theYCameraSpace = aY - position.y;
+        double theZCameraSpace = aZ - position.z;
 
         double theXProjected = theXCameraSpace * d / theZCameraSpace;
         double theYProjected = theYCameraSpace * d  / theZCameraSpace;

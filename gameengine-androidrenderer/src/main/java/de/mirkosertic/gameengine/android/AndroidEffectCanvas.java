@@ -35,12 +35,22 @@ public class AndroidEffectCanvas implements EffectCanvas {
     }
 
     @Override
-    public void fillPolygon(double[] aXPositions, double[] aYPositions, int aNumberOfPositions) {
+    public void fillTriangle(double aX0, double aY0, double aX1, double aY1, double aX2, double aY2) {
         Path thePath = new Path();
-        thePath.moveTo((float) aXPositions[0], (float) aYPositions[0]);
-        for (int i=0;i<aNumberOfPositions;i++) {
-            thePath.lineTo((float) aXPositions[i], (float) aYPositions[i]);
-        }
+        thePath.moveTo((float) aX0, (float) aY0);
+        thePath.lineTo((float) aX1, (float) aY1);
+        thePath.lineTo((float) aX2, (float) aY2);
+        thePath.close();
+        canvas.drawPath(thePath, currentPaint);
+    }
+
+    @Override
+    public void fillTriangle(GameResource aTexture, double aX0, double aY0, double aX1, double aY1, double aX2,
+            double aY2, double aU0, double aV0, double aU1, double aV1, double aU2, double aV2) {
+        Path thePath = new Path();
+        thePath.moveTo((float) aX0, (float) aY0);
+        thePath.lineTo((float) aX1, (float) aY1);
+        thePath.lineTo((float) aX2, (float) aY2);
         thePath.close();
         canvas.drawPath(thePath, currentPaint);
     }

@@ -168,8 +168,8 @@ public class ArcadeRacerGameSceneEffect implements GameSceneEffect {
             double theSceneZ = -theZ;
             double theSceneHeight = theTrackElement.height;
 
-            Point2D theRoadLeftOutside  = theCamera.project(new Point3D(theRoad.positionLeft, theSceneHeight, theSceneZ));
-            Point2D theRoadRightOutside  = theCamera.project(new Point3D(theRoad.positionRight, theSceneHeight, theSceneZ));
+            Point2D theRoadLeftOutside  = theCamera.project(theRoad.positionLeft, theSceneHeight, theSceneZ);
+            Point2D theRoadRightOutside  = theCamera.project(theRoad.positionRight, theSceneHeight, theSceneZ);
 
             if (theOldTrackDataX == null) {
                 theOldTrackDataX = new int[] {theRoadLeftOutside.x + theXoffset, theRoadRightOutside.x + theXoffset};
@@ -179,8 +179,8 @@ public class ArcadeRacerGameSceneEffect implements GameSceneEffect {
                 theOldCurbY = new int[theRoad.curbs.length * 2];
                 for (int i=0;i<theRoad.curbs.length;i++) {
                     Curb theCurb = theRoad.curbs[i];
-                    Point2D theCurbLeft  = theCamera.project(new Point3D(theCurb.getPosition(), theSceneHeight, theSceneZ));
-                    Point2D theCurbRight  = theCamera.project(new Point3D(theCurb.getPosition() + theCurb.getWidth(), theSceneHeight, theSceneZ));
+                    Point2D theCurbLeft  = theCamera.project(theCurb.getPosition(), theSceneHeight, theSceneZ);
+                    Point2D theCurbRight  = theCamera.project(theCurb.getPosition() + theCurb.getWidth(), theSceneHeight, theSceneZ);
 
                     theOldCurbX[i*2] = theCurbLeft.x + theXoffset;
                     theOldCurbY[i*2] = theCurbLeft.y;
@@ -196,8 +196,8 @@ public class ArcadeRacerGameSceneEffect implements GameSceneEffect {
                 int theNewCurbY[] = new int[theRoad.curbs.length * 2];
                 for (int i=0;i<theRoad.curbs.length;i++) {
                     Curb theCurb = theRoad.curbs[i];
-                    Point2D theCurbLeft  = theCamera.project(new Point3D(theCurb.getPosition(), theSceneHeight, theSceneZ));
-                    Point2D theCurbRight  = theCamera.project(new Point3D(theCurb.getPosition() + theCurb.getWidth(), theSceneHeight, theSceneZ));
+                    Point2D theCurbLeft  = theCamera.project(theCurb.getPosition(), theSceneHeight, theSceneZ);
+                    Point2D theCurbRight  = theCamera.project(theCurb.getPosition() + theCurb.getWidth(), theSceneHeight, theSceneZ);
 
                     theNewCurbX[i*2] = theCurbLeft.x + theXoffset;
                     theNewCurbY[i*2] = theCurbLeft.y;
@@ -211,23 +211,45 @@ public class ArcadeRacerGameSceneEffect implements GameSceneEffect {
 
                     aEffectCanvas.setPaint(theTrackElement.terrainColor);
 
-                    // Left and right part of the Road
-                    aEffectCanvas.fillPolygon(new double[] { 0, theOldTrackDataX[0], theNewTrackDataX[0], 0 },
-                            new double[] { theOldTrackDataY[0], theOldTrackDataY[0], theNewTrackDataY[0], theNewTrackDataY[0] }, 4);
-                    aEffectCanvas.fillPolygon(new double[] { theOldTrackDataX[1], screenSize.width, screenSize.width, theNewTrackDataX[1] },
-                            new double[] { theOldTrackDataY[1], theOldTrackDataY[1], theNewTrackDataY[1], theNewTrackDataY[1] }, 4);
+                    // Left part of the road
+                    aEffectCanvas.fillTriangle(0d, theOldTrackDataY[0], theOldTrackDataX[0], theOldTrackDataY[0], theNewTrackDataX[0], theNewTrackDataY[0]);
+                    aEffectCanvas.fillTriangle(0d, theNewTrackDataY[0], theNewTrackDataX[0], theNewTrackDataY[0], 0d, theOldTrackDataY[0]);
+
+                    // Right part of the road
+                    aEffectCanvas.fillTriangle(theOldTrackDataX[1], theOldTrackDataY[1], screenSize.width, theOldTrackDataY[1], screenSize.width, theNewTrackDataY[1]);
+                    aEffectCanvas.fillTriangle(theOldTrackDataX[1], theOldTrackDataY[1],theNewTrackDataX[1], theNewTrackDataY[1], screenSize.width, theNewTrackDataY[1]);
 
                     // The road itself
-                    aEffectCanvas.setPaint(theRoad.roadColor);
-                    aEffectCanvas.fillPolygon(new double[] { theOldTrackDataX[0], theOldTrackDataX[1], theNewTrackDataX[1], theNewTrackDataX[0] },
-                            new double[] { theOldTrackDataY[0], theOldTrackDataY[1], theNewTrackDataY[1], theNewTrackDataY[0] }, 4);
+                    try {
+                        GameResource theRoadTexture = gameScene.getRuntime().getResourceCache().getResourceFor(theRoad.texture);
+
+                        aEffectCanvas
+                                .fillTriangle(theRoadTexture, theOldTrackDataX[0], theOldTrackDataY[0], theOldTrackDataX[1], theOldTrackDataY[0],
+                                        theNewTrackDataX[1], theNewTrackDataY[0],
+                                        0, 0, 511, 0, 511, 511);
+
+                        aEffectCanvas
+                                .fillTriangle(theRoadTexture, theNewTrackDataX[0], theNewTrackDataY[0], theOldTrackDataX[0], theOldTrackDataY[0],
+                                        theNewTrackDataX[1], theNewTrackDataY[1],
+                                        0, 511, 0, 0, 511, 511);
+
+                    } catch (IOException e) {
+                        aEffectCanvas.setPaint(theRoad.roadColor);
+                        aEffectCanvas
+                                .fillTriangle(theOldTrackDataX[0], theOldTrackDataY[0], theOldTrackDataX[1], theOldTrackDataY[0],
+                                        theNewTrackDataX[1], theNewTrackDataY[0]);
+                        aEffectCanvas
+                                .fillTriangle(theNewTrackDataX[0], theNewTrackDataY[0], theOldTrackDataX[0], theOldTrackDataY[0],
+                                        theNewTrackDataX[1], theNewTrackDataY[1]);
+                    }
 
                     // And the Curbs
                     for (int i=0;i<theRoad.curbs.length;i++) {
                         Curb theCurb = theRoad.curbs[i];
                         aEffectCanvas.setPaint(theCurb.getColor());
-                        aEffectCanvas.fillPolygon(new double[] { theOldCurbX[i*2], theOldCurbX[i*2+1], theNewCurbX[i*2+1], theNewCurbX[i*2]},
-                                new double[] { theOldCurbY[i*2], theOldCurbY[i*2+1], theNewCurbY[i*2+1], theNewCurbY[i*2]}, 4);
+
+                        aEffectCanvas.fillTriangle(theOldCurbX[i*2], theOldCurbY[i*2], theOldCurbX[i*2+1], theOldCurbY[i*2+1], theNewCurbX[i*2+1], theNewCurbY[i*2+1]);
+                        aEffectCanvas.fillTriangle(theNewCurbX[i*2], theNewCurbY[i*2], theOldCurbX[i*2], theOldCurbY[i*2], theNewCurbX[i*2+1], theNewCurbY[i*2+1]);
                     }
                 }
 
@@ -240,8 +262,8 @@ public class ArcadeRacerGameSceneEffect implements GameSceneEffect {
 
             // Draw the Sprites on the Track
             for (Sprite theSprite : theTrackElement.sprites) {
-                Point2D theTopLeft  = theCamera.project(new Point3D(theSprite.positionX - theSprite.width / 2, theSceneHeight - theSprite.height , theSceneZ));
-                Point2D theBottomRight  = theCamera.project(new Point3D(theSprite.positionX + theSprite.width / 2, theSceneHeight, theSceneZ));
+                Point2D theTopLeft  = theCamera.project(theSprite.positionX - theSprite.width / 2, theSceneHeight - theSprite.height , theSceneZ);
+                Point2D theBottomRight  = theCamera.project(theSprite.positionX + theSprite.width / 2, theSceneHeight, theSceneZ);
 
                 if (theBottomRight.x >=0 && theTopLeft.x < screenSize.width) {
                     //
