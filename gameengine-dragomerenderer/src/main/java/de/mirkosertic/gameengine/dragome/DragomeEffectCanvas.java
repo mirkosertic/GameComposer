@@ -42,6 +42,7 @@ public class DragomeEffectCanvas implements EffectCanvas {
         context.lineTo(aX2, aY2);
         context.closePath();
         context.fill();
+        context.stroke();
     }
 
     @Override
