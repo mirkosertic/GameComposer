@@ -30,12 +30,12 @@ public class AndroidEffectCanvas implements EffectCanvas {
     }
 
     @Override
-    public void fillRect(double aX, double aY, double aWidth, double aHeight) {
+    public void fillRect(int aX, int aY, int aWidth, int aHeight) {
         canvas.drawRect((float) aX, (float)aY, (float)(aX + aWidth), (float)(aY + aHeight), currentPaint);
     }
 
     @Override
-    public void fillTriangle(double aX0, double aY0, double aX1, double aY1, double aX2, double aY2) {
+    public void fillTriangle(int aX0, int aY0, int aX1, int aY1, int aX2, int aY2) {
         Path thePath = new Path();
         thePath.moveTo((float) aX0, (float) aY0);
         thePath.lineTo((float) aX1, (float) aY1);
@@ -45,8 +45,8 @@ public class AndroidEffectCanvas implements EffectCanvas {
     }
 
     @Override
-    public void fillTriangle(GameResource aTexture, double aX0, double aY0, double aX1, double aY1, double aX2,
-            double aY2, double aU0, double aV0, double aU1, double aV1, double aU2, double aV2) {
+    public void fillTriangle(GameResource aTexture, int aX0, int aY0, int aX1, int aY1, int aX2,
+            int aY2, int aU0, int aV0, int aU1, int aV1, int aU2, int aV2) {
         Path thePath = new Path();
         thePath.moveTo((float) aX0, (float) aY0);
         thePath.lineTo((float) aX1, (float) aY1);
@@ -56,7 +56,7 @@ public class AndroidEffectCanvas implements EffectCanvas {
     }
 
     @Override
-    public void drawScaled(GameResource aResource, double aX, double aY, double aWidth, double aHeight) {
+    public void drawScaled(GameResource aResource, int aX, int aY, int aWidth, int aHeight) {
         AndroidBitmapResource theResource = (AndroidBitmapResource) aResource;
         Rect theSource = new Rect(0, 0, theResource.bitmap.getWidth(), theResource.bitmap.getHeight());
         Rect theDestination = new Rect((int) aX, (int) aY, (int) (aX + aWidth), (int) (aY + aHeight));

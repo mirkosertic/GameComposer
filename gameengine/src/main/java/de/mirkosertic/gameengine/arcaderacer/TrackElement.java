@@ -1,18 +1,18 @@
 package de.mirkosertic.gameengine.arcaderacer;
 
-import de.mirkosertic.gameengine.type.Color;
-
 public class TrackElement {
 
-    public final Road road;
+    public final int curveFactor;
+    public final Segment[] segments;
     public final double height;
-    public final Color terrainColor;
     public final Sprite[] sprites;
+    public final int angle;
 
-    public TrackElement(Road aRoad, double aHeight, Color aTerrainColor, Sprite[] aSprites) {
-        road = aRoad;
+    public TrackElement(int aCurveFactor, Segment[] aSegments, double aHeight, Sprite[] aSprites, int aAngle) {
+        curveFactor = aCurveFactor;
+        segments = aSegments;
         height = aHeight;
-        terrainColor = aTerrainColor;
         sprites = aSprites;
+        angle = aAngle;
     }
 }
