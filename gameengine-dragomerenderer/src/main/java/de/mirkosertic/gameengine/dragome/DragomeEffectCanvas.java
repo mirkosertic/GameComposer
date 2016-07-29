@@ -1,12 +1,11 @@
 package de.mirkosertic.gameengine.dragome;
 
 import de.mirkosertic.gameengine.core.GameResource;
-import org.w3c.dom.html.CanvasRenderingContext2D;
-
 import de.mirkosertic.gameengine.generic.CSSUtils;
 import de.mirkosertic.gameengine.type.Color;
 import de.mirkosertic.gameengine.type.EffectCanvas;
 import de.mirkosertic.gameengine.type.Position;
+import org.w3c.dom.html.CanvasRenderingContext2D;
 import org.w3c.dom.html.HTMLImageElement;
 
 public class DragomeEffectCanvas implements EffectCanvas {
@@ -30,12 +29,12 @@ public class DragomeEffectCanvas implements EffectCanvas {
     }
 
     @Override
-    public void fillRect(double aX, double aY, double aWidth, double aHeight) {
+    public void fillRect(int aX, int aY, int aWidth, int aHeight) {
         context.fillRect(aX, aY, aWidth, aHeight);
     }
 
     @Override
-    public void fillTriangle(double aX0, double aY0, double aX1, double aY1, double aX2, double aY2) {
+    public void fillTriangle(int aX0, int aY0, int aX1, int aY1, int aX2, int aY2) {
         context.beginPath();
         context.moveTo(aX0, aY0);
         context.lineTo(aX1, aY1);
@@ -46,8 +45,8 @@ public class DragomeEffectCanvas implements EffectCanvas {
     }
 
     @Override
-    public void fillTriangle(GameResource aTexture, double aX0, double aY0, double aX1, double aY1, double aX2,
-            double aY2, double aU0, double aV0, double aU1, double aV1, double aU2, double aV2) {
+    public void fillTriangle(GameResource aTexture, int aX0, int aY0, int aX1, int aY1, int aX2,
+            int aY2, int aU0, int aV0, int aU1, int aV1, int aU2, int aV2) {
         // Affine Texture Mapping
         context.save();
 
@@ -78,7 +77,7 @@ public class DragomeEffectCanvas implements EffectCanvas {
     }
 
     @Override
-    public void drawScaled(GameResource aResource, double aX, double aY, double aWidth, double aHeight) {
+    public void drawScaled(GameResource aResource, int aX, int aY, int aWidth, int aHeight) {
         DragomeGameResource theImage = (DragomeGameResource) aResource;
         HTMLImageElement theImageSource= (HTMLImageElement) theImage.getElement();
         context.drawImage(theImageSource, aX, aY, aWidth, aHeight);
