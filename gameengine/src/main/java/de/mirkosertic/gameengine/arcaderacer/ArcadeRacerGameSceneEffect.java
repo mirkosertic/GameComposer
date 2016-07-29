@@ -3,13 +3,21 @@ package de.mirkosertic.gameengine.arcaderacer;
 import de.mirkosertic.gameengine.annotations.ReflectiveField;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
-import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.core.GameResource;
+import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.GameSceneEffect;
+import de.mirkosertic.gameengine.core.GameSceneEffectType;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.process.GameProcess;
 import de.mirkosertic.gameengine.process.StartProcess;
-import de.mirkosertic.gameengine.type.*;
+import de.mirkosertic.gameengine.type.ClassInformation;
+import de.mirkosertic.gameengine.type.Color;
+import de.mirkosertic.gameengine.type.EffectCanvas;
+import de.mirkosertic.gameengine.type.ResourceName;
+import de.mirkosertic.gameengine.type.Size;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -126,9 +134,6 @@ public class ArcadeRacerGameSceneEffect implements GameSceneEffect {
         int theOldTrackDataX[] = null;
         int theOldTrackDataY[] = null;
 
-        int theOldCurbX[] = null;
-        int theOldCurbY[] = null;
-
         double thePositonOnTrack = positionOnTrack.get();
 
         int theDistanceCamera = distanceCamera.get();
@@ -155,109 +160,98 @@ public class ArcadeRacerGameSceneEffect implements GameSceneEffect {
         int theXoffset = 0;
         for (int theZ = theFarestZ; theZ >= theNearestZ; theZ--) {
             TrackElement theTrackElement = track.getTrackElementForPosition(theZ);
-            Road theRoad = theTrackElement.road;
-            theXoffset+= theRoad.curveFactor;
+            theXoffset+= theTrackElement.curveFactor;
         }
 
         // Now we draw the track
         for (int theZ = theFarestZ; theZ >= theNearestZ; theZ--) {
 
             TrackElement theTrackElement = track.getTrackElementForPosition(theZ);
-            Road theRoad = theTrackElement.road;
 
             double theSceneZ = -theZ;
             double theSceneHeight = theTrackElement.height;
 
-            Point2D theRoadLeftOutside  = theCamera.project(theRoad.positionLeft, theSceneHeight, theSceneZ);
-            Point2D theRoadRightOutside  = theCamera.project(theRoad.positionRight, theSceneHeight, theSceneZ);
-
             if (theOldTrackDataX == null) {
-                theOldTrackDataX = new int[] {theRoadLeftOutside.x + theXoffset, theRoadRightOutside.x + theXoffset};
-                theOldTrackDataY = new int[] {theRoadLeftOutside.y, theRoadRightOutside.y};
 
-                theOldCurbX = new int[theRoad.curbs.length * 2];
-                theOldCurbY = new int[theRoad.curbs.length * 2];
-                for (int i=0;i<theRoad.curbs.length;i++) {
-                    Curb theCurb = theRoad.curbs[i];
-                    Point2D theCurbLeft  = theCamera.project(theCurb.getPosition(), theSceneHeight, theSceneZ);
-                    Point2D theCurbRight  = theCamera.project(theCurb.getPosition() + theCurb.getWidth(), theSceneHeight, theSceneZ);
+                theOldTrackDataX = new int[theTrackElement.segments.length * 2];
+                theOldTrackDataY = new int[theTrackElement.segments.length * 2];
+                for (int i = 0;i<theTrackElement.segments.length;i++) {
+                    Segment theSegment = theTrackElement.segments[i];
+                    Point2D theSegmentStart  = theCamera.project(theSegment.xStart, theSceneHeight + theSegment.yStart, theSceneZ);
+                    Point2D theSegmentEnd  = theCamera.project(theSegment.xEnd, theSceneHeight + theSegment.yEnd, theSceneZ);
+                    theOldTrackDataX[i * 2] = theSegmentStart.x + theXoffset;
+                    theOldTrackDataY[i * 2] = theSegmentStart.y;
 
-                    theOldCurbX[i*2] = theCurbLeft.x + theXoffset;
-                    theOldCurbY[i*2] = theCurbLeft.y;
-                    theOldCurbX[i*2 + 1] = theCurbRight.x + theXoffset;
-                    theOldCurbY[i*2 + 1] = theCurbRight.y;
+                    theOldTrackDataX[i * 2 + 1] = theSegmentEnd.x + theXoffset;
+                    theOldTrackDataY[i * 2 + 1] = theSegmentEnd.y;
                 }
+
             } else {
 
-                int theNewTrackDataX[] = new int[] {theRoadLeftOutside.x + theXoffset, theRoadRightOutside.x + theXoffset};
-                int theNewTrackDataY[] = new int[] {theRoadLeftOutside.y, theRoadRightOutside.y};
+                int[] theNewTrackDataX = new int[theTrackElement.segments.length * 2];
+                int[] theNewTrackDataY = new int[theTrackElement.segments.length * 2];
+                for (int i = 0;i<theTrackElement.segments.length;i++) {
+                    Segment theSegment = theTrackElement.segments[i];
 
-                int theNewCurbX[] = new int[theRoad.curbs.length * 2];
-                int theNewCurbY[] = new int[theRoad.curbs.length * 2];
-                for (int i=0;i<theRoad.curbs.length;i++) {
-                    Curb theCurb = theRoad.curbs[i];
-                    Point2D theCurbLeft  = theCamera.project(theCurb.getPosition(), theSceneHeight, theSceneZ);
-                    Point2D theCurbRight  = theCamera.project(theCurb.getPosition() + theCurb.getWidth(), theSceneHeight, theSceneZ);
+                    double theAngle = Math.toRadians(theTrackElement.angle);
 
-                    theNewCurbX[i*2] = theCurbLeft.x + theXoffset;
-                    theNewCurbY[i*2] = theCurbLeft.y;
-                    theNewCurbX[i*2 + 1] = theCurbRight.x + theXoffset;
-                    theNewCurbY[i*2 + 1] = theCurbRight.y;
-                }
+    //                double theStartX = theSegment.xStart * Math.cos(theAngle) - theSegment.yStart * Math.sin(theAngle);
+      //              double theStartY = theSegment.xStart * Math.sin(theAngle) + theSegment.yStart * Math.cos(theAngle);
 
-                // Draw things
-                // Clip invisible faces
-                if (theNewTrackDataY[0] > theOldTrackDataY[0]) {
+                    double theStartX = theSegment.xStart;
+                    double theStartY = theSegment.yStart;
 
-                    aEffectCanvas.setPaint(theTrackElement.terrainColor);
 
-                    // Left part of the road
-                    aEffectCanvas.fillTriangle(0d, theOldTrackDataY[0], theOldTrackDataX[0], theOldTrackDataY[0], theNewTrackDataX[0], theNewTrackDataY[0]);
-                    aEffectCanvas.fillTriangle(0d, theNewTrackDataY[0], theNewTrackDataX[0], theNewTrackDataY[0], 0d, theOldTrackDataY[0]);
+        //            double theEndX = theSegment.xEnd * Math.cos(theAngle) - theSegment.yEnd * Math.sin(theAngle);
+          //          double theEndY = theSegment.xEnd * Math.sin(theAngle) + theSegment.yEnd * Math.cos(theAngle);
 
-                    // Right part of the road
-                    aEffectCanvas.fillTriangle(theOldTrackDataX[1], theOldTrackDataY[1], screenSize.width, theOldTrackDataY[1], screenSize.width, theNewTrackDataY[1]);
-                    aEffectCanvas.fillTriangle(theOldTrackDataX[1], theOldTrackDataY[1],theNewTrackDataX[1], theNewTrackDataY[1], screenSize.width, theNewTrackDataY[1]);
+                    double theEndX = theSegment.xEnd;
+                    double theEndY = theSegment.yEnd;
 
-                    // The road itself
-                    try {
-                        GameResource theRoadTexture = gameScene.getRuntime().getResourceCache().getResourceFor(theRoad.texture);
+                    Point2D theSegmentStart  = theCamera.project(theStartX, theSceneHeight + theStartY, theSceneZ);
+                    Point2D theSegmentEnd  = theCamera.project(theEndX, theSceneHeight + theEndY, theSceneZ);
 
-                        aEffectCanvas
-                                .fillTriangle(theRoadTexture, theOldTrackDataX[0], theOldTrackDataY[0], theOldTrackDataX[1], theOldTrackDataY[0],
-                                        theNewTrackDataX[1], theNewTrackDataY[0],
-                                        0, 0, 511, 0, 511, 511);
+                    theNewTrackDataX[i * 2] = theSegmentStart.x + theXoffset;
+                    theNewTrackDataY[i * 2] = theSegmentStart.y;
+                    theNewTrackDataX[i * 2 + 1] = theSegmentEnd.x + theXoffset;
+                    theNewTrackDataY[i * 2 + 1] = theSegmentEnd.y;
 
-                        aEffectCanvas
-                                .fillTriangle(theRoadTexture, theNewTrackDataX[0], theNewTrackDataY[0], theOldTrackDataX[0], theOldTrackDataY[0],
-                                        theNewTrackDataX[1], theNewTrackDataY[1],
-                                        0, 511, 0, 0, 511, 511);
+                    // Backface culling
+                    if (theNewTrackDataY[i*2] > theOldTrackDataY[i*2]) {
+                        if (theSegment.color != null) {
+                            // Color
+                            aEffectCanvas.setPaint(theSegment.color);
 
-                    } catch (IOException e) {
-                        aEffectCanvas.setPaint(theRoad.roadColor);
-                        aEffectCanvas
-                                .fillTriangle(theOldTrackDataX[0], theOldTrackDataY[0], theOldTrackDataX[1], theOldTrackDataY[0],
-                                        theNewTrackDataX[1], theNewTrackDataY[0]);
-                        aEffectCanvas
-                                .fillTriangle(theNewTrackDataX[0], theNewTrackDataY[0], theOldTrackDataX[0], theOldTrackDataY[0],
-                                        theNewTrackDataX[1], theNewTrackDataY[1]);
-                    }
+                            aEffectCanvas.fillTriangle(theOldTrackDataX[i*2], theOldTrackDataY[i*2], theOldTrackDataX[i*2+1], theOldTrackDataY[i*2+1], theNewTrackDataX[i*2+1], theNewTrackDataY[i*2+1]);
+                            aEffectCanvas.fillTriangle(theNewTrackDataX[i*2], theNewTrackDataY[i*2], theNewTrackDataX[i*2+1], theNewTrackDataY[i*2+1], theOldTrackDataX[i*2], theOldTrackDataY[i*2]);
+                        } else {
+                            // Texture
+                            try {
+                                GameResource theTexture = gameScene.getRuntime().getResourceCache().getResourceFor(theSegment.texture);
 
-                    // And the Curbs
-                    for (int i=0;i<theRoad.curbs.length;i++) {
-                        Curb theCurb = theRoad.curbs[i];
-                        aEffectCanvas.setPaint(theCurb.getColor());
+                                aEffectCanvas
+                                        .fillTriangle(theTexture, theOldTrackDataX[i*2], theOldTrackDataY[i*2], theOldTrackDataX[i*2+1], theOldTrackDataY[i*2],
+                                                theNewTrackDataX[i*2+1], theNewTrackDataY[i*2+1],
+                                                0, 0, 511, 0, 511, 511);
 
-                        aEffectCanvas.fillTriangle(theOldCurbX[i*2], theOldCurbY[i*2], theOldCurbX[i*2+1], theOldCurbY[i*2+1], theNewCurbX[i*2+1], theNewCurbY[i*2+1]);
-                        aEffectCanvas.fillTriangle(theNewCurbX[i*2], theNewCurbY[i*2], theOldCurbX[i*2], theOldCurbY[i*2], theNewCurbX[i*2+1], theNewCurbY[i*2+1]);
+                                aEffectCanvas
+                                        .fillTriangle(theTexture, theNewTrackDataX[i*2], theNewTrackDataY[i*2], theOldTrackDataX[i*2], theOldTrackDataY[i*2],
+                                                theNewTrackDataX[i*2+1], theNewTrackDataY[i*2+1],
+                                                0, 511, 0, 0, 511, 511);
+
+                            } catch (IOException e) {
+                                // Color
+                                aEffectCanvas.setPaint(Color.WHITE);
+                                aEffectCanvas.fillTriangle(theOldTrackDataX[i*2], theOldTrackDataY[i*2], theOldTrackDataX[i*2+1], theOldTrackDataY[i*2+1], theNewTrackDataX[i*2+1], theNewTrackDataY[i*2+1]);
+                                aEffectCanvas.fillTriangle(theNewTrackDataX[i*2], theNewTrackDataY[i*2], theNewTrackDataX[i*2+1], theNewTrackDataY[i*2+1], theOldTrackDataX[i*2], theOldTrackDataY[i*2]);
+                            }
+                        }
                     }
                 }
 
                 // Keep track of the old positions to prevent them fro being recomputed
                 theOldTrackDataX = theNewTrackDataX;
                 theOldTrackDataY = theNewTrackDataY;
-                theOldCurbX = theNewCurbX;
-                theOldCurbY = theNewCurbY;
             }
 
             // Draw the Sprites on the Track
@@ -282,7 +276,7 @@ public class ArcadeRacerGameSceneEffect implements GameSceneEffect {
                 }
             }
 
-            theXoffset -= theRoad.curveFactor;
+            theXoffset -= theTrackElement.curveFactor;
         }
     }
 
