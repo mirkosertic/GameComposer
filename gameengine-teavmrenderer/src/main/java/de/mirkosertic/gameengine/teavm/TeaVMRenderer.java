@@ -13,6 +13,9 @@ import de.mirkosertic.gameengine.core.GestureDetector;
 import de.mirkosertic.gameengine.core.PlaySceneStrategy;
 import de.mirkosertic.gameengine.network.DefaultNetworkConnector;
 import de.mirkosertic.gameengine.network.NetworkConnector;
+import de.mirkosertic.gameengine.teavm.pixi.Global;
+import de.mirkosertic.gameengine.teavm.pixi.Renderer;
+import de.mirkosertic.gameengine.teavm.pixi.Stage;
 import de.mirkosertic.gameengine.type.GameKeyCode;
 import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Size;
@@ -202,6 +205,10 @@ public class TeaVMRenderer {
                 }
             }
         }, true);
+
+        Stage theStage = Global.createStage(0xff00ff);
+        Renderer theRenderer = Global.autodetectRenderer(320, 200, (HTMLCanvasElement) document.getElementById("html5canvas2"));
+        //theRenderer.render(theStage);
     }
 
     private void mouseDown(TeaVMMouseEvent aEvent) {
