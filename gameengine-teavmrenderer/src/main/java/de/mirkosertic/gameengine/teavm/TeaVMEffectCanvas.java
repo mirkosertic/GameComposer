@@ -13,6 +13,7 @@ public class TeaVMEffectCanvas implements EffectCanvas {
 
     public TeaVMEffectCanvas(CanvasRenderingContext2D context) {
         this.context = context;
+        // http://stackoverflow.com/questions/9165766/html5-canvas-set-z-index
     }
 
     @Override

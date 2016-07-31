@@ -138,7 +138,7 @@ public class ArcadeRacerGameSceneEffect implements GameSceneEffect {
 
         int theDistanceCamera = distanceCamera.get();
         double theCameraHeight = cameraHeight.get();
-        int theNearestZ = (int) thePositonOnTrack;
+        int theNearestZ = (int) thePositonOnTrack + 1;
         int theFarestZ = theNearestZ + viewDepth.get();
 
         // We have to calculate the camera position properly
@@ -167,6 +167,7 @@ public class ArcadeRacerGameSceneEffect implements GameSceneEffect {
         for (int theZ = theFarestZ; theZ >= theNearestZ; theZ--) {
 
             TrackElement theTrackElement = track.getTrackElementForPosition(theZ);
+            double theAngle = Math.toRadians(theTrackElement.angle);
 
             double theSceneZ = -theZ;
             double theSceneHeight = theTrackElement.height;
@@ -193,20 +194,11 @@ public class ArcadeRacerGameSceneEffect implements GameSceneEffect {
                 for (int i = 0;i<theTrackElement.segments.length;i++) {
                     Segment theSegment = theTrackElement.segments[i];
 
-                    double theAngle = Math.toRadians(theTrackElement.angle);
+                    double theStartX = theSegment.xStart * Math.cos(theAngle) - theSegment.yStart * Math.sin(theAngle);
+                    double theStartY = theSegment.xStart * Math.sin(theAngle) + theSegment.yStart * Math.cos(theAngle);
 
-    //                double theStartX = theSegment.xStart * Math.cos(theAngle) - theSegment.yStart * Math.sin(theAngle);
-      //              double theStartY = theSegment.xStart * Math.sin(theAngle) + theSegment.yStart * Math.cos(theAngle);
-
-                    double theStartX = theSegment.xStart;
-                    double theStartY = theSegment.yStart;
-
-
-        //            double theEndX = theSegment.xEnd * Math.cos(theAngle) - theSegment.yEnd * Math.sin(theAngle);
-          //          double theEndY = theSegment.xEnd * Math.sin(theAngle) + theSegment.yEnd * Math.cos(theAngle);
-
-                    double theEndX = theSegment.xEnd;
-                    double theEndY = theSegment.yEnd;
+                    double theEndX = theSegment.xEnd * Math.cos(theAngle) - theSegment.yEnd * Math.sin(theAngle);
+                    double theEndY = theSegment.xEnd * Math.sin(theAngle) + theSegment.yEnd * Math.cos(theAngle);
 
                     Point2D theSegmentStart  = theCamera.project(theStartX, theSceneHeight + theStartY, theSceneZ);
                     Point2D theSegmentEnd  = theCamera.project(theEndX, theSceneHeight + theEndY, theSceneZ);
@@ -217,34 +209,27 @@ public class ArcadeRacerGameSceneEffect implements GameSceneEffect {
                     theNewTrackDataY[i * 2 + 1] = theSegmentEnd.y;
 
                     // Backface culling
-                    if (theNewTrackDataY[i*2] > theOldTrackDataY[i*2]) {
-                        if (theSegment.color != null) {
-                            // Color
-                            aEffectCanvas.setPaint(theSegment.color);
+                    if (theSegment.color != null) {
+                        // Color
+                        aEffectCanvas.setPaint(theSegment.color);
 
+                        aEffectCanvas.fillTriangle(theOldTrackDataX[i*2], theOldTrackDataY[i*2], theOldTrackDataX[i*2+1], theOldTrackDataY[i*2+1], theNewTrackDataX[i*2+1], theNewTrackDataY[i*2+1]);
+                        aEffectCanvas.fillTriangle(theNewTrackDataX[i*2], theNewTrackDataY[i*2], theNewTrackDataX[i*2+1], theNewTrackDataY[i*2+1], theOldTrackDataX[i*2], theOldTrackDataY[i*2]);
+                    } else {
+                        // Texture
+                        try {
+                            GameResource theTexture = gameScene.getRuntime().getResourceCache().getResourceFor(theSegment.texture);
+
+                            aEffectCanvas.fillTriangle(theTexture, theOldTrackDataX[i*2], theOldTrackDataY[i*2], theOldTrackDataX[i*2+1], theOldTrackDataY[i*2+1], theNewTrackDataX[i*2+1], theNewTrackDataY[i*2+1],
+                                    0, 0, 511, 0, 511, 511);
+                            aEffectCanvas.fillTriangle(theTexture, theNewTrackDataX[i*2], theNewTrackDataY[i*2], theNewTrackDataX[i*2+1], theNewTrackDataY[i*2+1], theOldTrackDataX[i*2], theOldTrackDataY[i*2],
+                                    0, 511, 511, 511, 0, 0);
+
+                        } catch (IOException e) {
+                            // Color
+                            aEffectCanvas.setPaint(Color.WHITE);
                             aEffectCanvas.fillTriangle(theOldTrackDataX[i*2], theOldTrackDataY[i*2], theOldTrackDataX[i*2+1], theOldTrackDataY[i*2+1], theNewTrackDataX[i*2+1], theNewTrackDataY[i*2+1]);
                             aEffectCanvas.fillTriangle(theNewTrackDataX[i*2], theNewTrackDataY[i*2], theNewTrackDataX[i*2+1], theNewTrackDataY[i*2+1], theOldTrackDataX[i*2], theOldTrackDataY[i*2]);
-                        } else {
-                            // Texture
-                            try {
-                                GameResource theTexture = gameScene.getRuntime().getResourceCache().getResourceFor(theSegment.texture);
-
-                                aEffectCanvas
-                                        .fillTriangle(theTexture, theOldTrackDataX[i*2], theOldTrackDataY[i*2], theOldTrackDataX[i*2+1], theOldTrackDataY[i*2],
-                                                theNewTrackDataX[i*2+1], theNewTrackDataY[i*2+1],
-                                                0, 0, 511, 0, 511, 511);
-
-                                aEffectCanvas
-                                        .fillTriangle(theTexture, theNewTrackDataX[i*2], theNewTrackDataY[i*2], theOldTrackDataX[i*2], theOldTrackDataY[i*2],
-                                                theNewTrackDataX[i*2+1], theNewTrackDataY[i*2+1],
-                                                0, 511, 0, 0, 511, 511);
-
-                            } catch (IOException e) {
-                                // Color
-                                aEffectCanvas.setPaint(Color.WHITE);
-                                aEffectCanvas.fillTriangle(theOldTrackDataX[i*2], theOldTrackDataY[i*2], theOldTrackDataX[i*2+1], theOldTrackDataY[i*2+1], theNewTrackDataX[i*2+1], theNewTrackDataY[i*2+1]);
-                                aEffectCanvas.fillTriangle(theNewTrackDataX[i*2], theNewTrackDataY[i*2], theNewTrackDataX[i*2+1], theNewTrackDataY[i*2+1], theOldTrackDataX[i*2], theOldTrackDataY[i*2]);
-                            }
                         }
                     }
                 }
@@ -256,6 +241,9 @@ public class ArcadeRacerGameSceneEffect implements GameSceneEffect {
 
             // Draw the Sprites on the Track
             for (Sprite theSprite : theTrackElement.sprites) {
+
+                // TODO: Handles sprite rotation properly
+
                 Point2D theTopLeft  = theCamera.project(theSprite.positionX - theSprite.width / 2, theSceneHeight - theSprite.height , theSceneZ);
                 Point2D theBottomRight  = theCamera.project(theSprite.positionX + theSprite.width / 2, theSceneHeight, theSceneZ);
 
