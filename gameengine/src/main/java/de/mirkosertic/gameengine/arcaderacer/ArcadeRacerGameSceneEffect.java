@@ -128,9 +128,6 @@ public class ArcadeRacerGameSceneEffect implements GameSceneEffect {
     @Override
     public void render(EffectCanvas aEffectCanvas, CameraBehavior aCameraBehavior) {
 
-        aEffectCanvas.setPaint(Color.BLACK);
-        aEffectCanvas.fillRect(0, 0, screenSize.width, screenSize.height);
-
         int theOldTrackDataX[] = null;
         int theOldTrackDataY[] = null;
 
@@ -165,6 +162,8 @@ public class ArcadeRacerGameSceneEffect implements GameSceneEffect {
 
         // Now we draw the track
         for (int theZ = theFarestZ; theZ >= theNearestZ; theZ--) {
+
+            String theElementIdentifier = "te" + theZ + "_";
 
             TrackElement theTrackElement = track.getTrackElementForPosition(theZ);
             double theAngle = Math.toRadians(theTrackElement.angle);
@@ -211,25 +210,22 @@ public class ArcadeRacerGameSceneEffect implements GameSceneEffect {
                     // Backface culling
                     if (theSegment.color != null) {
                         // Color
-                        aEffectCanvas.setPaint(theSegment.color);
-
-                        aEffectCanvas.fillTriangle(theOldTrackDataX[i*2], theOldTrackDataY[i*2], theOldTrackDataX[i*2+1], theOldTrackDataY[i*2+1], theNewTrackDataX[i*2+1], theNewTrackDataY[i*2+1]);
-                        aEffectCanvas.fillTriangle(theNewTrackDataX[i*2], theNewTrackDataY[i*2], theNewTrackDataX[i*2+1], theNewTrackDataY[i*2+1], theOldTrackDataX[i*2], theOldTrackDataY[i*2]);
+                        aEffectCanvas.fillTriangle(theElementIdentifier + "t_" + i, theOldTrackDataX[i*2], theOldTrackDataY[i*2], theOldTrackDataX[i*2+1], theOldTrackDataY[i*2+1], theNewTrackDataX[i*2+1], theNewTrackDataY[i*2+1], theSegment.color, theZ);
+                        aEffectCanvas.fillTriangle(theElementIdentifier + "t_" + i + 1, theNewTrackDataX[i*2], theNewTrackDataY[i*2], theNewTrackDataX[i*2+1], theNewTrackDataY[i*2+1], theOldTrackDataX[i*2], theOldTrackDataY[i*2], theSegment.color, theZ);
                     } else {
                         // Texture
                         try {
                             GameResource theTexture = gameScene.getRuntime().getResourceCache().getResourceFor(theSegment.texture);
 
-                            aEffectCanvas.fillTriangle(theTexture, theOldTrackDataX[i*2], theOldTrackDataY[i*2], theOldTrackDataX[i*2+1], theOldTrackDataY[i*2+1], theNewTrackDataX[i*2+1], theNewTrackDataY[i*2+1],
-                                    0, 0, 511, 0, 511, 511);
-                            aEffectCanvas.fillTriangle(theTexture, theNewTrackDataX[i*2], theNewTrackDataY[i*2], theNewTrackDataX[i*2+1], theNewTrackDataY[i*2+1], theOldTrackDataX[i*2], theOldTrackDataY[i*2],
-                                    0, 511, 511, 511, 0, 0);
+                            aEffectCanvas.fillTriangle(theElementIdentifier + "t_" + i, theTexture, theOldTrackDataX[i*2], theOldTrackDataY[i*2], theOldTrackDataX[i*2+1], theOldTrackDataY[i*2+1], theNewTrackDataX[i*2+1], theNewTrackDataY[i*2+1],
+                                    0, 0, 511, 0, 511, 511, theZ);
+                            aEffectCanvas.fillTriangle(theElementIdentifier + "t_" + i + 1, theTexture, theNewTrackDataX[i*2], theNewTrackDataY[i*2], theNewTrackDataX[i*2+1], theNewTrackDataY[i*2+1], theOldTrackDataX[i*2], theOldTrackDataY[i*2],
+                                    0, 511, 511, 511, 0, 0, theZ);
 
                         } catch (IOException e) {
                             // Color
-                            aEffectCanvas.setPaint(Color.WHITE);
-                            aEffectCanvas.fillTriangle(theOldTrackDataX[i*2], theOldTrackDataY[i*2], theOldTrackDataX[i*2+1], theOldTrackDataY[i*2+1], theNewTrackDataX[i*2+1], theNewTrackDataY[i*2+1]);
-                            aEffectCanvas.fillTriangle(theNewTrackDataX[i*2], theNewTrackDataY[i*2], theNewTrackDataX[i*2+1], theNewTrackDataY[i*2+1], theOldTrackDataX[i*2], theOldTrackDataY[i*2]);
+                            aEffectCanvas.fillTriangle(theElementIdentifier + "t_" + i, theOldTrackDataX[i*2], theOldTrackDataY[i*2], theOldTrackDataX[i*2+1], theOldTrackDataY[i*2+1], theNewTrackDataX[i*2+1], theNewTrackDataY[i*2+1], Color.WHITE, theZ);
+                            aEffectCanvas.fillTriangle(theElementIdentifier + "t_" + i + 1, theNewTrackDataX[i*2], theNewTrackDataY[i*2], theNewTrackDataX[i*2+1], theNewTrackDataY[i*2+1], theOldTrackDataX[i*2], theOldTrackDataY[i*2], Color.WHITE, theZ);
                         }
                     }
                 }
@@ -240,7 +236,8 @@ public class ArcadeRacerGameSceneEffect implements GameSceneEffect {
             }
 
             // Draw the Sprites on the Track
-            for (Sprite theSprite : theTrackElement.sprites) {
+            for (int i=0;i<theTrackElement.sprites.length;i++) {
+                Sprite theSprite = theTrackElement.sprites[i];
 
                 // TODO: Handles sprite rotation properly
 
@@ -253,13 +250,12 @@ public class ArcadeRacerGameSceneEffect implements GameSceneEffect {
                     try {
                         GameResource theResource = gameScene.getRuntime().getResourceCache().getResourceFor(theResourceName);
                         aEffectCanvas
-                                .drawScaled(theResource, theTopLeft.x + theXoffset, theTopLeft.y, theBottomRight.x - theTopLeft.x,
-                                        theBottomRight.y - theTopLeft.y);
+                                .drawScaled(theElementIdentifier + "s_" + i,  theResource, theTopLeft.x + theXoffset, theTopLeft.y, theBottomRight.x - theTopLeft.x,
+                                        theBottomRight.y - theTopLeft.y, theZ);
                     } catch (IOException e) {
-                        aEffectCanvas.setPaint(Color.WHITE);
                         aEffectCanvas
-                                .fillRect(theTopLeft.x + theXoffset, theTopLeft.y, theBottomRight.x - theTopLeft.x,
-                                        theBottomRight.y - theTopLeft.y);
+                                .fillRect(theElementIdentifier + "s_" + i, theTopLeft.x + theXoffset, theTopLeft.y, theBottomRight.x - theTopLeft.x,
+                                        theBottomRight.y - theTopLeft.y, Color.WHITE, theZ);
                     }
                 }
             }

@@ -14,25 +14,27 @@ public class JavaFXEffectCanvas implements EffectCanvas {
         context = aContext;
     }
 
-    @Override
-    public void setPaint(Color aColor) {
+    private void updateCurrentPaint(Color aColor) {
         javafx.scene.paint.Color theFXColor = javafx.scene.paint.Color.rgb(aColor.r, aColor.g, aColor.b);
         context.setFill(theFXColor);
         context.setStroke(theFXColor);
     }
 
     @Override
-    public void drawSingleDot(Position aPosition) {
+    public void drawSingleDot(String aObjectID, Position aPosition, Color aColor, int aZIndex) {
+        updateCurrentPaint(aColor);
         context.fillRect(aPosition.x, aPosition.y, 1, 1);
     }
 
     @Override
-    public void fillRect(int aX, int aY, int aWidth, int aHeight) {
+    public void fillRect(String aObjectID, int aX, int aY, int aWidth, int aHeight, Color aColor, int aZIndex) {
+        updateCurrentPaint(aColor);
         context.fillRect(aX, aY, aWidth, aHeight);
     }
 
     @Override
-    public void fillTriangle(int aX0, int aY0, int aX1, int aY1, int aX2, int aY2) {
+    public void fillTriangle(String aObjectID, int aX0, int aY0, int aX1, int aY1, int aX2, int aY2, Color aColor, int aZIndex) {
+        updateCurrentPaint(aColor);
         context.beginPath();
         context.moveTo(aX0, aY0);
         context.lineTo(aX1, aY1);
@@ -43,8 +45,8 @@ public class JavaFXEffectCanvas implements EffectCanvas {
     }
 
     @Override
-    public void fillTriangle(GameResource aTexture, int aX0, int aY0, int aX1, int aY1, int aX2,
-            int aY2, int aU0, int aV0, int aU1, int aV1, int aU2, int aV2) {
+    public void fillTriangle(String aObjectID, GameResource aTexture, int aX0, int aY0, int aX1, int aY1, int aX2,
+            int aY2, int aU0, int aV0, int aU1, int aV1, int aU2, int aV2, int aZIndex) {
 
         // Affine Texture Mapping
         context.save();
@@ -75,7 +77,7 @@ public class JavaFXEffectCanvas implements EffectCanvas {
     }
 
     @Override
-    public void drawScaled(GameResource aResource, int aX, int aY, int aWidth, int aHeight) {
+    public void drawScaled(String aObjectID, GameResource aResource, int aX, int aY, int aWidth, int aHeight, int aZIndex) {
         JavaFXBitmapResource theBitmap = (JavaFXBitmapResource) aResource;
         context.drawImage(theBitmap, aX, aY, aWidth, aHeight);
     }
