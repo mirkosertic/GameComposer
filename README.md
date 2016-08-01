@@ -63,7 +63,7 @@ GameEngine-TeaVMRenderer
 --------------
 
 This is the game presentation logic using the TeaVM Java-to-JavaScript Transpiler Framework. It will render the game view
-using the HTML5 Canvas API.
+using [pixi.ks](http://www.pixijs.com), which uses WebGL or the HTML5 Canvas API as a fallback.
 
 GameEngine-Networking
 --------------
