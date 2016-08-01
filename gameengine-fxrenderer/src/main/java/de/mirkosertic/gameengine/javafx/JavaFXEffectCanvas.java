@@ -27,27 +27,20 @@ public class JavaFXEffectCanvas implements EffectCanvas {
     }
 
     @Override
-    public void fillRect(String aObjectID, int aX, int aY, int aWidth, int aHeight, Color aColor, int aZIndex) {
-        updateCurrentPaint(aColor);
-        context.fillRect(aX, aY, aWidth, aHeight);
-    }
-
-    @Override
-    public void fillTriangle(String aObjectID, int aX0, int aY0, int aX1, int aY1, int aX2, int aY2, Color aColor, int aZIndex) {
+    public void fillRectangle(String aObjectID, int aX0, int aY0, int aX1, int aY1, int aX2, int aY2, int aX3, int aY3, Color aColor, int aZIndex) {
         updateCurrentPaint(aColor);
         context.beginPath();
         context.moveTo(aX0, aY0);
         context.lineTo(aX1, aY1);
         context.lineTo(aX2, aY2);
+        context.lineTo(aX3, aY3);
         context.closePath();
         context.stroke();
         context.fill();
     }
 
-    @Override
-    public void fillTriangle(String aObjectID, GameResource aTexture, int aX0, int aY0, int aX1, int aY1, int aX2,
-            int aY2, int aU0, int aV0, int aU1, int aV1, int aU2, int aV2, int aZIndex) {
-
+    private void fillTriangle(String aObjectID, GameResource aTexture, int aX0, int aY0, int aX1, int aY1, int aX2,
+                              int aY2, int aU0, int aV0, int aU1, int aV1, int aU2, int aV2) {
         // Affine Texture Mapping
         context.save();
 
@@ -70,11 +63,21 @@ public class JavaFXEffectCanvas implements EffectCanvas {
         double f = aY0 - b*aU0 - d*aV0;
 
         context.transform( a, b, c, d, e, f );
-        JavaFXBitmapResource theBitmap = (JavaFXBitmapResource) aTexture;
-        context.drawImage(theBitmap, 0, 0);
+
+        JavaFXBitmapResource theImage = (JavaFXBitmapResource) aTexture;
+        context.drawImage(theImage, 0, 0);
 
         context.restore();
     }
+
+    @Override
+    public void fillRectangle(String aObjectID, GameResource aTexture, int aX0, int aY0, int aX1, int aY1, int aX2,
+                              int aY2, int aX3,int aY3, int aU0, int aV0, int aU1, int aV1, int aU2, int aV2, int aU3, int aV3, int aZIndex) {
+
+        fillTriangle(aObjectID, aTexture, aX0, aY0, aX1, aY1, aX2, aY2, aU0, aV0, aU1, aV1, aU2, aV2);
+        fillTriangle(aObjectID, aTexture, aX0, aY0, aX2, aY2, aX3, aY3, aU0, aV0, aU2, aV2, aU3, aV3);
+    }
+
 
     @Override
     public void drawScaled(String aObjectID, GameResource aResource, int aX, int aY, int aWidth, int aHeight, int aZIndex) {

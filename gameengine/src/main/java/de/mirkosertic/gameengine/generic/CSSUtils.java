@@ -20,6 +20,6 @@ public class CSSUtils {
     }
 
     public static int toInt(Color aColor) {
-        return aColor.r + aColor.g * 256 + aColor.b * 65536;
+        return aColor.b + aColor.g * 256 + aColor.r * 65536;
     }
 }

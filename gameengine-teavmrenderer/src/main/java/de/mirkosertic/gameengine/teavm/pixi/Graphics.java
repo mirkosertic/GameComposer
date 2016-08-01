@@ -27,4 +27,6 @@ public abstract class Graphics extends Container {
     public abstract void clear();
 
     public abstract void lineStyle(int aLineWidth, int aColor, float aAlpha);
+
+    public abstract Texture generateTexture(int aResolution, int aScaleMode);
 }
