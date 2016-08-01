@@ -71,7 +71,7 @@ public class GWTCanvasGameView extends GenericAbstractGameView<GWTBitmapResource
     }
 
     @Override
-    protected void drawText(GameObjectInstance aInstance, Position aPosition, Position aCenterOffset, Font aFont, Color aColor, String aText,
+    protected void drawText(String aInstanceID, Position aPosition, Angle aAngle, Position aCenterOffset, Font aFont, Color aColor, String aText,
             Size aSize) {
         GWTCanvasUtils.drawText(context2d, aPosition, aFont, aColor, aText, aSize);
     }

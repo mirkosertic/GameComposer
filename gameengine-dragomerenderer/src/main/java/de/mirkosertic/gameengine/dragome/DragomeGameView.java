@@ -59,7 +59,8 @@ class DragomeGameView extends GenericAbstractGameView<DragomeGameResource> {
     }
 
     @Override
-    protected void drawText(GameObjectInstance aInstance, Position aPosition, Position aCenterOffset, Font aFont, Color aColor, String aText, Size aSize) {
+    protected void drawText(String aInstanceID, Position aPosition, Angle aAngle, Position aCenterOffset, Font aFont, Color aColor, String aText,
+            Size aSize) {
         String theTextColor = CSSUtils.toColor(aColor);
         renderingContext2D.setFillStyle(theTextColor);
         renderingContext2D.setStrokeStyle(theTextColor);

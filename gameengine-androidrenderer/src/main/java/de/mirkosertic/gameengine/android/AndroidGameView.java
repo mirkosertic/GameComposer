@@ -75,7 +75,8 @@ public class AndroidGameView extends GenericAbstractGameView<AndroidBitmapResour
     }
 
     @Override
-    protected void drawText(GameObjectInstance aInstance, Position aPosition, Position aCenterOffset, Font aFont, Color aColor, String aText, Size aSize) {
+    protected void drawText(String aInstanceID, Position aPosition, Angle aAngle, Position aCenterOffset, Font aFont, Color aColor, String aText,
+            Size aSize) {
         Paint thePaint = AndroidUtils.toFilledPaint(aColor);
         thePaint.setTextSize(aFont.size);
         thePaint.setTypeface(toTypeface(aFont));
