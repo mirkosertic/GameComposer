@@ -1,7 +1,6 @@
 package de.mirkosertic.gameengine.teavm;
 
 import de.mirkosertic.gameengine.core.GameResource;
-import de.mirkosertic.gameengine.generic.CSSUtils;
 import de.mirkosertic.gameengine.type.Color;
 import de.mirkosertic.gameengine.type.EffectCanvas;
 import de.mirkosertic.gameengine.type.Position;
@@ -18,30 +17,30 @@ public class TeaVMEffectCanvas implements EffectCanvas {
 
     @Override
     public void setPaint(Color aColor) {
-        String theColor = CSSUtils.toColor(aColor);
+        /*String theColor = CSSUtils.toColor(aColor);
         context.setStrokeStyle(theColor);
-        context.setFillStyle(theColor);
+        context.setFillStyle(theColor);*/
     }
 
     @Override
     public void drawSingleDot(Position aPosition) {
-        context.strokeRect(aPosition.x, aPosition.y, 1, 1);
+        /*context.strokeRect(aPosition.x, aPosition.y, 1, 1);*/
     }
 
     @Override
     public void fillRect(int aX, int aY, int aWidth, int aHeight) {
-        context.fillRect(aX, aY, aWidth, aHeight);
+        /*context.fillRect(aX, aY, aWidth, aHeight);*/
     }
 
     @Override
     public void fillTriangle(int aX0, int aY0, int aX1, int aY1, int aX2, int aY2) {
-        context.beginPath();
+        /*context.beginPath();
         context.moveTo(aX0, aY0);
         context.lineTo(aX1, aY1);
         context.lineTo(aX2, aY2);
         context.closePath();
         context.fill();
-        context.stroke();
+        context.stroke();*/
     }
 
     @Override
@@ -49,7 +48,7 @@ public class TeaVMEffectCanvas implements EffectCanvas {
             int aY2, int aU0, int aV0, int aU1, int aV1, int aU2, int aV2) {
 
         // Affine Texture Mapping
-        context.save();
+        /*context.save();
 
         context.beginPath();
         context.moveTo(aX0, aY0);
@@ -73,13 +72,13 @@ public class TeaVMEffectCanvas implements EffectCanvas {
         TeaVMGameResource theBitmap = (TeaVMGameResource) aTexture;
         context.drawImage(theBitmap.getElement(), 0, 0);
 
-        context.restore();
+        context.restore();*/
 
     }
 
     @Override
     public void drawScaled(GameResource aResource, int aX, int aY, int aWidth, int aHeight) {
-        TeaVMGameResource theImage = (TeaVMGameResource) aResource;
-        context.drawImage(theImage.getElement(), aX, aY, aWidth, aHeight);
+        /*TeaVMGameResource theImage = (TeaVMGameResource) aResource;
+        context.drawImage(theImage.getElement(), aX, aY, aWidth, aHeight);*/
     }
 }

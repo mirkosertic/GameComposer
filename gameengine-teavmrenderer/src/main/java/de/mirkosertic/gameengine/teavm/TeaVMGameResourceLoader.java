@@ -2,48 +2,46 @@ package de.mirkosertic.gameengine.teavm;
 
 import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.core.GameResourceLoader;
-import de.mirkosertic.gameengine.core.GameResourceType;
+import de.mirkosertic.gameengine.teavm.pixi.Texture;
 import de.mirkosertic.gameengine.type.ResourceName;
 
 import java.io.IOException;
-import org.teavm.jso.dom.html.HTMLDocument;
-import org.teavm.jso.dom.html.HTMLElement;
-import org.teavm.jso.dom.html.HTMLImageElement;
-import org.teavm.jso.dom.xml.Node;
-import org.teavm.jso.dom.xml.NodeList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TeaVMGameResourceLoader implements GameResourceLoader {
 
     private final String sceneId;
-    private final HTMLElement resourceCacheElement;
-    private final HTMLDocument document;
+    private final Map<ResourceName, TeaVMTextureResource> textureResources;
 
-    public TeaVMGameResourceLoader(String aSceneID, HTMLDocument aDocument, HTMLElement aResourceCacheElement) {
+    public TeaVMGameResourceLoader(String aSceneID) {
         sceneId = aSceneID;
-        document = aDocument;
-        resourceCacheElement = aResourceCacheElement;
+        textureResources = new HashMap<>();
     }
 
     @Override
     public GameResource load(ResourceName aResourceName) throws IOException {
         String theResourceName = sceneId + aResourceName.name.replace('\\', '/');
         if (aResourceName.name.endsWith(".wav")) {
-            return new TeaVMGameResource(theResourceName, GameResourceType.SOUND, null);
+            return new TeaVMSoundResource(theResourceName);
         }
 
-        HTMLImageElement theImage = (HTMLImageElement) document.createElement("img");
-        theImage.setAttribute("src", theResourceName);
-        resourceCacheElement.appendChild(theImage);
+        TeaVMTextureResource theResource = textureResources.get(aResourceName);
+        if (theResource == null) {
+            Texture theTexure = Texture.createTextureFromImage(theResourceName);
+            theResource = new TeaVMTextureResource(theTexure);
+            textureResources.put(aResourceName, theResource);
+        }
 
-        return new TeaVMGameResource(theResourceName, GameResourceType.BITMAP, theImage);
+        return theResource;
     }
 
     @Override
     public void flush() {
-        NodeList theChildren = resourceCacheElement.getChildNodes();
-        for (int i=0;i<theChildren.getLength();i++) {
-            Node theChild = (Node) theChildren.get(i);
-            theChild.getParentNode().removeChild(theChild);
+
+        for (Map.Entry<ResourceName, TeaVMTextureResource> aEntry : textureResources.entrySet()) {
+            aEntry.getValue().getTexture().destroy();
         }
+        textureResources.clear();
     }
 }

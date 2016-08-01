@@ -1,4 +1,3 @@
-
 package de.mirkosertic.gameengine.teavm;
 
 import de.mirkosertic.gameengine.camera.CameraBehavior;
@@ -13,15 +12,12 @@ import de.mirkosertic.gameengine.core.GestureDetector;
 import de.mirkosertic.gameengine.core.PlaySceneStrategy;
 import de.mirkosertic.gameengine.network.DefaultNetworkConnector;
 import de.mirkosertic.gameengine.network.NetworkConnector;
-import de.mirkosertic.gameengine.teavm.pixi.Global;
 import de.mirkosertic.gameengine.teavm.pixi.Renderer;
-import de.mirkosertic.gameengine.teavm.pixi.Stage;
 import de.mirkosertic.gameengine.type.GameKeyCode;
 import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Size;
 import de.mirkosertic.gameengine.type.TouchIdentifier;
 import de.mirkosertic.gameengine.type.TouchPosition;
-
 import org.teavm.jso.browser.Window;
 import org.teavm.jso.core.JSArrayReader;
 import org.teavm.jso.dom.events.Event;
@@ -29,7 +25,6 @@ import org.teavm.jso.dom.events.EventListener;
 import org.teavm.jso.dom.events.EventTarget;
 import org.teavm.jso.dom.html.HTMLCanvasElement;
 import org.teavm.jso.dom.html.HTMLDocument;
-import org.teavm.jso.dom.html.HTMLElement;
 
 public class TeaVMRenderer {
 
@@ -46,10 +41,8 @@ public class TeaVMRenderer {
     private TeaVMGameRuntimeFactory runtimeFactory;
     private TeaVMGameSceneLoader sceneLoader;
     private HTMLCanvasElement canvasElement;
-    private HTMLElement resourceCache;
     private Game game;
     private NetworkConnector networkConnector;
-    private TeaVMPrerenderedTextCache prerenderedTextCache;
 
     private TeaVMRenderer() {
     }
@@ -58,13 +51,13 @@ public class TeaVMRenderer {
 
         TeaVMLogger.info("Booting game runtime");
 
-        prerenderedTextCache = new TeaVMPrerenderedTextCache(document);
-
         canvasElement = (HTMLCanvasElement) document.getElementById("html5canvas");
-        resourceCache = document.getElementById("resourcecache");
 
         gameLoopFactory = new GameLoopFactory();
         runtimeFactory = new TeaVMGameRuntimeFactory();
+
+        // Initialize PIXI
+        final Renderer theRenderer = Renderer.autodetectRenderer(320, 200, canvasElement);
 
         sceneLoader = new TeaVMGameSceneLoader(new TeaVMGameSceneLoader.GameSceneLoadedListener() {
             @Override
@@ -109,7 +102,7 @@ public class TeaVMRenderer {
 
                     @Override
                     protected void loadOtherScene(String aSceneId) {
-                        sceneLoader.loadFromServer(game, aSceneId, new TeaVMGameResourceLoader(aSceneId, document, resourceCache));
+                        sceneLoader.loadFromServer(game, aSceneId, new TeaVMGameResourceLoader(aSceneId));
                     }
 
                     @Override
@@ -120,9 +113,8 @@ public class TeaVMRenderer {
                     @Override
                     protected GameView getOrCreateCurrentGameView(GameRuntime aGameRuntime, CameraBehavior aCamera, GestureDetector aGestureDetector) {
                         if (gameView == null) {
-                            gameView = new TeaVMGameView(aGameRuntime, aCamera, aGestureDetector, canvasElement, prerenderedTextCache);
+                            gameView = new TeaVMGameView(aGameRuntime, aCamera, aGestureDetector, theRenderer);
                         } else {
-                            prerenderedTextCache.clearCache();
                             gameView.prepareNewScene(aGameRuntime, aCamera, aGestureDetector);
                         }
                         gameView.setSize(getScreenSize());
@@ -139,7 +131,7 @@ public class TeaVMRenderer {
 
                 String theSceneId = aGame.defaultSceneProperty().get();
                 TeaVMLogger.info("Loading scene " + theSceneId);
-                sceneLoader.loadFromServer(game, theSceneId, new TeaVMGameResourceLoader(theSceneId, document, resourceCache));
+                sceneLoader.loadFromServer(game, theSceneId, new TeaVMGameResourceLoader(theSceneId));
             }
 
             @Override
@@ -205,10 +197,6 @@ public class TeaVMRenderer {
                 }
             }
         }, true);
-
-        Stage theStage = Global.createStage(0xff00ff);
-        Renderer theRenderer = Global.autodetectRenderer(320, 200, (HTMLCanvasElement) document.getElementById("html5canvas2"));
-        //theRenderer.render(theStage);
     }
 
     private void mouseDown(TeaVMMouseEvent aEvent) {
