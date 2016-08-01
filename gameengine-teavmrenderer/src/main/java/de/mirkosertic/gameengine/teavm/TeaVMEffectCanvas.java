@@ -2,18 +2,41 @@ package de.mirkosertic.gameengine.teavm;
 
 import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.generic.CSSUtils;
-import de.mirkosertic.gameengine.teavm.pixi.Graphics;
-import de.mirkosertic.gameengine.teavm.pixi.Sprite;
+import de.mirkosertic.gameengine.teavm.pixi.*;
 import de.mirkosertic.gameengine.type.Color;
 import de.mirkosertic.gameengine.type.EffectCanvas;
 import de.mirkosertic.gameengine.type.Position;
+import org.teavm.jso.typedarrays.Float32Array;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class TeaVMEffectCanvas implements EffectCanvas {
 
     private final InstanceCache instanceCache;
+    private final Renderer renderer;
+    private final Map<Color, Texture> coloredTextures;
 
-    public TeaVMEffectCanvas(InstanceCache aInstanceCacne) {
+    public TeaVMEffectCanvas(InstanceCache aInstanceCacne, Renderer aRenderer) {
         instanceCache = aInstanceCacne;
+        renderer = aRenderer;
+        coloredTextures = new HashMap<>();
+    }
+
+    private Texture getTexttureFor(Color aColor) {
+        Texture theResult = coloredTextures.get(aColor);
+        if (theResult == null) {
+            Graphics theGrapics = Graphics.createGraphics();
+            theGrapics.setWidth(5);
+            theGrapics.setHeight(5);
+            theGrapics.lineStyle(5, CSSUtils.toInt(aColor), 1);
+            theGrapics.drawRect(0,0,5,5);
+
+            theResult = theGrapics.generateTexture(1, 0);
+
+            coloredTextures.put(aColor, theResult);
+        }
+        return theResult;
     }
 
     @Override
@@ -37,68 +60,56 @@ public class TeaVMEffectCanvas implements EffectCanvas {
     }
 
     @Override
-    public void fillRect(String aObjectID, int aX, int aY, int aWidth, int aHeight, Color aColor, int aZIndex) {
-        /*context.fillRect(aX, aY, aWidth, aHeight);*/
-    }
+    public void fillRectangle(String aObjectID, final int aX0, final int aY0, final int aX1, final int aY1, final int aX2, final int aY2, final int aX3, final int aY3, final Color aColor, int aZIndex) {
 
-    @Override
-    public void fillTriangle(String aObjectID, int aX0, int aY0, int aX1, int aY1, int aX2, int aY2, Color aColor, int aZIndex) {
-        /*context.beginPath();
-        context.moveTo(aX0, aY0);
-        context.lineTo(aX1, aY1);
-        context.lineTo(aX2, aY2);
-        context.closePath();
-        context.fill();
-        context.stroke();*/
-    }
-
-    @Override
-    public void fillTriangle(String aObjectID, final GameResource aTexture, final int aX0, final int aY0, final int aX1, final int aY1, final int aX2,
-            final int aY2, int aU0, int aV0, int aU1, int aV1, int aU2, int aV2, int aZIndex) {
-
-        /*final Mesh theFilledTriangle = instanceCache.getOrCreate(aObjectID, new InstanceCache.Producer<Mesh>() {
+        Mesh theMesh = instanceCache.getOrCreate(aObjectID, new InstanceCache.Producer<Mesh>() {
             @Override
             public Mesh create() {
-                TeaVMTextureResource theTexture = (TeaVMTextureResource) aTexture;
-                float[] thePoints = new float[6];
-                thePoints[0] = aX0;
-                thePoints[1] = aY0;
-                thePoints[2] = aX1;
-                thePoints[3] = aY1;
-                thePoints[4] = aX2;
-                thePoints[5] = aY2;
-                Mesh theMesh = Mesh.createMesh(theTexture.getTexture(), thePoints);
-                return theMesh;
+                Graphics theGrapics = Graphics.createGraphics();
+                theGrapics.setWidth(1);
+                theGrapics.setHeight(1);
+                theGrapics.lineStyle(1, CSSUtils.toInt(aColor), 1);
+                theGrapics.drawRect(0,0,1,1);
+
+                return Mesh.createMesh(getTexttureFor(aColor));
             }
-        });*/
+        }, aZIndex);
 
-        // Affine Texture Mapping
-        /*context.save();
+        Float32Array theVertices = Float32Array.create(8);
+        theVertices.set(0, aX0);
+        theVertices.set(1, aY0);
+        theVertices.set(2, aX1);
+        theVertices.set(3, aY1);
+        theVertices.set(4, aX2);
+        theVertices.set(5, aY2);
+        theVertices.set(6, aX3);
+        theVertices.set(7, aY3);
+        theMesh.setVertices(theVertices);
+    }
 
-        context.beginPath();
-        context.moveTo(aX0, aY0);
-        context.lineTo(aX1, aY1);
-        context.lineTo(aX2, aY2);
-        context.closePath();
-        context.clip();
+    @Override
+    public void fillRectangle(String aObjectID, final GameResource aTexture, final int aX0, final int aY0, final int aX1, final int aY1, final int aX2,
+                              final int aY2, final int aX3, final int aY3, final int aU0, final int aV0, final int aU1, final int aV1, final int aU2, final int aV2, int aU3, int aV3, int aZIndex) {
 
-        aX1 -= aX0; aY1 -= aY0; aX2 -= aX0; aY2 -= aY0;
-        aU1 -= aU0; aV1 -= aV0; aU2 -= aU0; aV2 -= aV0;
 
-        double id = 1.0 / (aU1*aV2 - aU2*aV1);
-        double a = id * (aV2*aX1 - aV1*aX2);
-        double b = id * (aV2*aY1 - aV1*aY2);
-        double c = id * (aU1*aX2 - aU2*aX1);
-        double d = id * (aU1*aY2 - aU2*aY1);
-        double e = aX0 - a*aU0 - c*aV0;
-        double f = aY0 - b*aU0 - d*aV0;
+        Mesh theMesh = instanceCache.getOrCreate(aObjectID, new InstanceCache.Producer<Mesh>() {
+            @Override
+            public Mesh create() {
+                TeaVMTextureResource theResource = (TeaVMTextureResource) aTexture;
+                return Mesh.createMesh(theResource.getTexture());
+            }
+        }, aZIndex);
 
-        context.transform( a, b, c, d, e, f );
-        TeaVMGameResource theBitmap = (TeaVMGameResource) aTexture;
-        context.drawImage(theBitmap.getElement(), 0, 0);
-
-        context.restore();*/
-
+        Float32Array theVertices = Float32Array.create(8);
+        theVertices.set(0, aX0);
+        theVertices.set(1, aY0);
+        theVertices.set(2, aX1);
+        theVertices.set(3, aY1);
+        theVertices.set(4, aX2);
+        theVertices.set(5, aY2);
+        theVertices.set(6, aX3);
+        theVertices.set(7, aY3);
+        theMesh.setVertices(theVertices);
     }
 
     @Override
