@@ -22,25 +22,25 @@ import de.mirkosertic.gameengine.type.Font;
 import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Size;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 class TeaVMGameView extends GenericAbstractGameView<GameResource> {
 
     private final Renderer renderer;
     private final Map<String, DisplayObject> instances;
-    private final Set<String> touchedInstances;
     private Stage stage;
+    private InstanceCache instanceCache;
 
     public TeaVMGameView(GameRuntime aGameRuntime, CameraBehavior aCameraBehavior, GestureDetector aGestureDetector,
             Renderer aRenderer) {
         super(aGameRuntime, aCameraBehavior, aGestureDetector);
-        touchedInstances = new HashSet<>();
         renderer = aRenderer;
         instances = new HashMap<>();
         stage = Stage.createStage(0);
+        instanceCache = new InstanceCache(stage);
     }
 
     @Override
@@ -53,18 +53,19 @@ class TeaVMGameView extends GenericAbstractGameView<GameResource> {
         instances.clear();
         stage.destroy();
         stage = Stage.createStage(0);
+        instanceCache = new InstanceCache(stage);
     }
 
     @Override
     protected boolean beginFrame(GameScene aScene) {
         renderer.setBackgroundColor(CSSUtils.toInt(aScene.backgroundColorProperty().get()));
-        touchedInstances.clear();
+        instanceCache.clearTouchedInstances();
         return true;
     }
 
     @Override
     protected EffectCanvas createEffectCanvas() {
-        return new TeaVMEffectCanvas(null);
+        return new TeaVMEffectCanvas(instanceCache);
     }
 
     @Override
@@ -73,38 +74,39 @@ class TeaVMGameView extends GenericAbstractGameView<GameResource> {
     }
 
     @Override
-    protected void drawImage(GameObjectInstance aInstance, Position aPositionOnScreen, Position aCenterOffset,
-            GameResource aResource) {
+    protected void drawImage(GameObjectInstance aInstance, Position aPositionOnScreen, final Position aCenterOffset,
+            final GameResource aResource) {
 
         String theInstanceID = aInstance.uuidProperty().get();
-        Sprite theCurrentObject = (Sprite) instances.get(theInstanceID);
-        if (theCurrentObject == null) {
-            TeaVMTextureResource theTexture = (TeaVMTextureResource) aResource;
-            theCurrentObject = Sprite.createSprite(theTexture.getTexture());
-            instances.put(theInstanceID, theCurrentObject);
-            theCurrentObject.getScale().set(1, 1);
-            theCurrentObject.getPivot().set(aCenterOffset.x, aCenterOffset.y);
-            stage.addChild(theCurrentObject);
-        }
+        Sprite theCurrentObject = instanceCache.getOrCreate(theInstanceID, new InstanceCache.Producer<Sprite>() {
+            @Override
+            public Sprite create() {
+                TeaVMTextureResource theTexture = (TeaVMTextureResource) aResource;
+                Sprite theSprite =  Sprite.createSprite(theTexture.getTexture());
+                theSprite.getScale().set(1, 1);
+                theSprite.getPivot().set(aCenterOffset.x, aCenterOffset.y);
+                return theSprite;
+            }
+        }, 0);
+
         // Update the position and all the other stuff
         theCurrentObject.getPosition().set(aPositionOnScreen.x + aCenterOffset.x, aPositionOnScreen.y + aCenterOffset.y);
         theCurrentObject.setRotation(aInstance.rotationAngleProperty().get().toRadians());
-
-        touchedInstances.add(theInstanceID);
     }
 
     @Override
-    protected void drawText(String aInstanceID, Position aPosition, Angle aAngle, Position aCenterOffset, Font aFont, Color aColor, String aText,
+    protected void drawText(String aInstanceID, Position aPosition, Angle aAngle, final Position aCenterOffset, Font aFont, Color aColor, final String aText,
             Size aSize) {
 
-        Text theCurrentObject = (Text) instances.get(aInstanceID);
-        if (theCurrentObject == null) {
-            theCurrentObject = Text.createText(aText);
-            instances.put(aInstanceID, theCurrentObject);
-            theCurrentObject.getScale().set(1, 1);
-            theCurrentObject.getPivot().set(aCenterOffset.x, aCenterOffset.y);
-            stage.addChild(theCurrentObject);
-        }
+        Text theCurrentObject = instanceCache.getOrCreate(aInstanceID, new InstanceCache.Producer<Text>() {
+            @Override
+            public Text create() {
+                Text theText = Text.createText(aText);
+                theText.getScale().set(1, 1);
+                theText.getPivot().set(aCenterOffset.x, aCenterOffset.y);
+                return theText;
+            }
+        }, 0);
 
         Style theStyle = theCurrentObject.getStyle();
         theStyle.setFont(CSSUtils.toFont(aFont));
@@ -115,34 +117,30 @@ class TeaVMGameView extends GenericAbstractGameView<GameResource> {
         // Update the position and all the other stuff
         theCurrentObject.getPosition().set(aPosition.x + aCenterOffset.x, aPosition.y + aCenterOffset.y);
         theCurrentObject.setRotation(aAngle.toRadians());
-
-        touchedInstances.add(aInstanceID);
     }
 
     @Override
-    protected void drawRect(GameObjectInstance aInstance, Position aPositionOnScreen, Position aCenterOffset, Color aColor,
-            Size aSize) {
+    protected void drawRect(GameObjectInstance aInstance, Position aPositionOnScreen, final Position aCenterOffset, final Color aColor,
+            final Size aSize) {
 
         String theInstanceID = aInstance.uuidProperty().get();
-        Graphics theCurrentObject = (Graphics) instances.get(theInstanceID);
-        if (theCurrentObject == null) {
-            theCurrentObject = Graphics.createGraphics();
-            instances.put(theInstanceID, theCurrentObject);
-            theCurrentObject.getScale().set(1, 1);
-            theCurrentObject.getPivot().set(aCenterOffset.x, aCenterOffset.y);
-            theCurrentObject.setWidth(aSize.width);
-            theCurrentObject.setHeight(aSize.height);
+        Graphics theCurrentObject = instanceCache.getOrCreate(theInstanceID, new InstanceCache.Producer<Graphics>() {
+            @Override
+            public Graphics create() {
+                Graphics theCurrentObject = Graphics.createGraphics();
+                theCurrentObject.getScale().set(1, 1);
+                theCurrentObject.getPivot().set(aCenterOffset.x, aCenterOffset.y);
+                theCurrentObject.setWidth(aSize.width);
+                theCurrentObject.setHeight(aSize.height);
+                theCurrentObject.lineStyle(1, CSSUtils.toInt(aColor), 1f);
+                theCurrentObject.drawRect(0, 0, aSize.width, aSize.height);
+                return theCurrentObject;
+            }
+        }, 0);
 
-            theCurrentObject.lineStyle(1, CSSUtils.toInt(aColor), 1f);
-            theCurrentObject.drawRect(0, 0, aSize.width, aSize.height);
-
-            stage.addChild(theCurrentObject);
-        }
         // Update the position and all the other stuff
         theCurrentObject.getPosition().set(aPositionOnScreen.x + aCenterOffset.x, aPositionOnScreen.y + aCenterOffset.y);
         theCurrentObject.setRotation(aInstance.rotationAngleProperty().get().toRadians());
-
-        touchedInstances.add(theInstanceID);
     }
 
     @Override
@@ -154,16 +152,28 @@ class TeaVMGameView extends GenericAbstractGameView<GameResource> {
         super.framefinished();
 
         // Remove no longer visible instances
-        Set<String> theRemovedInstances = new HashSet<>();
-        for (Map.Entry<String, DisplayObject> theEntry : instances.entrySet()) {
-            if (!touchedInstances.contains(theEntry.getKey())) {
-                theRemovedInstances.add(theEntry.getKey());
-                stage.removeChild(theEntry.getValue());
+        instanceCache.keepOnlyTouched();
+
+        // Now we sort by ZIndex
+        List<DisplayObject> theChildren = new ArrayList<>();
+        DisplayObject[] theObjects = stage.getChildren();
+        for (DisplayObject theEntry : theObjects) {
+            theChildren.add(theEntry);
+            stage.removeChild(theEntry);
+        }
+
+        for (int i=0;i<theObjects.length;i++)  {
+            for (int j=i+1;j<theObjects.length;j++) {
+                if (theObjects[i].getZOrder() < theObjects[j].getZOrder()) {
+                    DisplayObject theTemp = theObjects[i];
+                    theObjects[i] = theObjects[j];
+                    theObjects[j] = theTemp;
+                }
             }
         }
 
-        for (String theEntry : theRemovedInstances) {
-            instances.remove(theEntry);
+        for (DisplayObject theEntry : theObjects) {
+            stage.addChild(theEntry);
         }
 
         renderer.render(stage);

@@ -18,4 +18,16 @@ public abstract class DisplayObject implements JSObject {
 
     @JSProperty
     public abstract Point getPivot();
+
+    @JSProperty
+    public abstract void setWidth(int aWidth);
+
+    @JSProperty
+    public abstract void setHeight(int aHeight);
+
+    @JSProperty
+    public abstract void setZOrder(int aIndex);
+
+    @JSProperty
+    public abstract int getZOrder();
 }
