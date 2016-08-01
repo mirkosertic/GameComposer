@@ -65,7 +65,7 @@ class TeaVMGameView extends GenericAbstractGameView<GameResource> {
 
     @Override
     protected EffectCanvas createEffectCanvas() {
-        return new TeaVMEffectCanvas(instanceCache);
+        return new TeaVMEffectCanvas(instanceCache, renderer);
     }
 
     @Override
