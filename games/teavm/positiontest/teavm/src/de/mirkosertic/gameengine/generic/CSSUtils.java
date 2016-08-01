@@ -18,4 +18,8 @@ public class CSSUtils {
     public static String toColor(Color aColor) {
         return "rgb(" + aColor.r + "," + aColor.g + "," + aColor.b + ")";
     }
+
+    public static int toInt(Color aColor) {
+        return aColor.b + aColor.g * 256 + aColor.r * 65536;
+    }
 }

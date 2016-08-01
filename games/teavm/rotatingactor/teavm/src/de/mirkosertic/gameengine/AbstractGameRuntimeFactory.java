@@ -4,6 +4,7 @@ import de.mirkosertic.gameengine.action.ActionManagerFactory;
 import de.mirkosertic.gameengine.action.SystemTickConditionUnmarshaller;
 import de.mirkosertic.gameengine.arcade.ConstantMovementBehaviorTemplateUnmarshaller;
 import de.mirkosertic.gameengine.arcade.ConstantMovementBehaviorUnmarshaller;
+import de.mirkosertic.gameengine.arcaderacer.ArcadeRacerGameScaneEffectUnmarshaller;
 import de.mirkosertic.gameengine.camera.CameraBehaviorTemplateUnmarshaller;
 import de.mirkosertic.gameengine.camera.CameraBehaviorUnmarshaller;
 import de.mirkosertic.gameengine.core.DeleteGameObjectInstanceActionUnmarshaller;
@@ -117,6 +118,7 @@ public abstract class AbstractGameRuntimeFactory {
         theRegistry.registerActionUnmarshaller(new RunScriptActionUnmarshaller());
 
         theRegistry.registerGameSceneEffectUnmarshaller(new StarfieldGameSceneEffectUnmarshaller());
+        theRegistry.registerGameSceneEffectUnmarshaller(new ArcadeRacerGameScaneEffectUnmarshaller());
 
         return theGameRuntime;
     }

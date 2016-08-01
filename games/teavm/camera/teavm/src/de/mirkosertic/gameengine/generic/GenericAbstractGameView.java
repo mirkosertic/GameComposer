@@ -87,7 +87,7 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
 
     protected abstract void drawImage(GameObjectInstance aInstance, Position aPositionOnScreen, Position aCenterOffset, S aResource);
 
-    protected abstract void drawText(GameObjectInstance aInstance, Position aPositionOnScreen, Position aCenterOffset, de.mirkosertic.gameengine.type.Font aFont, de.mirkosertic.gameengine.type.Color aColor, String aText, Size aSize);
+    protected abstract void drawText(String aObjectUUID, Position aPositionOnScreen, Angle aAngle, Position aCenterOffset, de.mirkosertic.gameengine.type.Font aFont, de.mirkosertic.gameengine.type.Color aColor, String aText, Size aSize);
 
     protected abstract void drawRect(GameObjectInstance aInstance, Position aPositionOnScreen, Position aCenterOffset, Color aColor, Size aSize);
 
@@ -187,7 +187,7 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
                         theTextToDraw = theExpression.expression;
                     }
 
-                    drawText(aValue, thePositionOnScreen, theCenterOffset, theTextBehavior.fontProperty().get(),
+                    drawText(aValue.uuidProperty().get(), thePositionOnScreen, aValue.rotationAngleProperty().get(), theCenterOffset, theTextBehavior.fontProperty().get(),
                             theTextBehavior.colorProperty().get(), theTextToDraw, theSize);
 
 
@@ -212,22 +212,22 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
         if (aScene.getGame().enableDebugProperty().get()) {
             // Draw version information
             AbsolutePositionAnchor theAnchor = AbsolutePositionAnchor.BOTTOM_LEFT;
-            drawTextAt(theAnchor, THE_DEBUG_POSITION_VERSION, THE_DEBUG_CENTER, THE_DEBUG_TEXT_SIZE, THE_DEBUG_FONT, THE_DEBUG_TEXT_COLOR, Version.VERSION);
-            drawTextAt(theAnchor, THE_DEBUG_FRAME_RATE, THE_DEBUG_CENTER, THE_DEBUG_TEXT_SIZE, THE_DEBUG_FONT, THE_DEBUG_TEXT_COLOR,
+            drawTextAt("debug1", theAnchor, THE_DEBUG_POSITION_VERSION, THE_DEBUG_CENTER, THE_DEBUG_TEXT_SIZE, THE_DEBUG_FONT, THE_DEBUG_TEXT_COLOR, Version.VERSION);
+            drawTextAt("debug2", theAnchor, THE_DEBUG_FRAME_RATE, THE_DEBUG_CENTER, THE_DEBUG_TEXT_SIZE, THE_DEBUG_FONT, THE_DEBUG_TEXT_COLOR,
                     "Time for every frame : " + aStatistics.getAverageTimePerLoopCycle() + " ms");
-            drawTextAt(theAnchor, THE_DEBUG_VIVISBLE_INSTANCES, THE_DEBUG_CENTER, THE_DEBUG_TEXT_SIZE, THE_DEBUG_FONT, THE_DEBUG_TEXT_COLOR,
+            drawTextAt("debug3", theAnchor, THE_DEBUG_VIVISBLE_INSTANCES, THE_DEBUG_CENTER, THE_DEBUG_TEXT_SIZE, THE_DEBUG_FONT, THE_DEBUG_TEXT_COLOR,
                     "Number of visible instances : " + theNumberOfInstances);
         }
 
         framefinished();
     }
 
-    private void drawTextAt(AbsolutePositionAnchor aAnchor, Position aPosition, Position aCenterOffset, Size aSize, Font aFont, Color aColor, String aText) {
+    private void drawTextAt(String aID, AbsolutePositionAnchor aAnchor, Position aPosition, Position aCenterOffset, Size aSize, Font aFont, Color aColor, String aText) {
 
         Position thePositionOnScreen = aAnchor.compute(aPosition, getCurrentScreenSize());
 
         beforeInstance(null, thePositionOnScreen, aCenterOffset, Angle.ZERO);
-        drawText(null, thePositionOnScreen, aCenterOffset, aFont, aColor, aText, aSize);
+        drawText(aID, thePositionOnScreen, Angle.ZERO, aCenterOffset, aFont, aColor, aText, aSize);
         afterInstance(null, thePositionOnScreen);
     }
 

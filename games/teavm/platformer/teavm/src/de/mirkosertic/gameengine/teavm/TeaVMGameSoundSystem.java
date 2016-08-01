@@ -16,7 +16,7 @@ class TeaVMGameSoundSystem implements GameSoundSystem<TeaVMSound> {
     @Override
     public TeaVMSound play(ResourceName aResourceName) {
         try {
-            TeaVMGameResource theResource = runtime.getResourceCache().getResourceFor(aResourceName);
+            TeaVMSoundResource theResource = runtime.getResourceCache().getResourceFor(aResourceName);
             if (theResource != null && theResource.getType() == GameResourceType.SOUND) {
                 TeaVMSound theSound = TeaVMSound.create(theResource.getName());
                 theSound.play();
