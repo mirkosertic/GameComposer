@@ -3,7 +3,6 @@ package de.mirkosertic.gameengine.android;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Rect;
 import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.type.Color;
 import de.mirkosertic.gameengine.type.EffectCanvas;
@@ -50,13 +49,5 @@ public class AndroidEffectCanvas implements EffectCanvas {
         thePath.lineTo((float) aX3, (float) aY3);
         thePath.close();
         canvas.drawPath(thePath, currentPaint);
-    }
-
-    @Override
-    public void drawScaled(String aObjectID, GameResource aResource, int aX, int aY, int aWidth, int aHeight, int aZIndex) {
-        AndroidBitmapResource theResource = (AndroidBitmapResource) aResource;
-        Rect theSource = new Rect(0, 0, theResource.bitmap.getWidth(), theResource.bitmap.getHeight());
-        Rect theDestination = new Rect((int) aX, (int) aY, (int) (aX + aWidth), (int) (aY + aHeight));
-        canvas.drawBitmap(theResource.bitmap, theSource, theDestination, currentPaint);
     }
 }

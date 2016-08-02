@@ -1,7 +1,7 @@
 package de.mirkosertic.gameengine.dragome;
 
 import de.mirkosertic.gameengine.core.GameResource;
-import de.mirkosertic.gameengine.generic.CSSUtils;
+import de.mirkosertic.gameengine.generic.CSSCache;
 import de.mirkosertic.gameengine.type.Color;
 import de.mirkosertic.gameengine.type.EffectCanvas;
 import de.mirkosertic.gameengine.type.Position;
@@ -11,13 +11,15 @@ import org.w3c.dom.html.HTMLImageElement;
 public class DragomeEffectCanvas implements EffectCanvas {
 
     private final CanvasRenderingContext2D context;
+    private final CSSCache cssCache;
 
-    public DragomeEffectCanvas(CanvasRenderingContext2D aContext) {
+    public DragomeEffectCanvas(CanvasRenderingContext2D aContext, CSSCache aCSSCache) {
         context = aContext;
+        cssCache = aCSSCache;
     }
 
     private void updateCurrentPaint(Color aColor) {
-        String theColor = CSSUtils.toColor(aColor);
+        String theColor = cssCache.toColor(aColor);
         context.setStrokeStyle(theColor);
         context.setFillStyle(theColor);
     }
@@ -79,12 +81,5 @@ public class DragomeEffectCanvas implements EffectCanvas {
 
         fillTriangle(aObjectID, aTexture, aX0, aY0, aX1, aY1, aX2, aY2, aU0, aV0, aU1, aV1, aU2, aV2);
         fillTriangle(aObjectID, aTexture, aX0, aY0, aX2, aY2, aX3, aY3, aU0, aV0, aU2, aV2, aU3, aV3);
-    }
-
-    @Override
-    public void drawScaled(String aObjectID, GameResource aResource, int aX, int aY, int aWidth, int aHeight, int aZIndex) {
-        DragomeGameResource theImage = (DragomeGameResource) aResource;
-        HTMLImageElement theImageSource= (HTMLImageElement) theImage.getElement();
-        context.drawImage(theImageSource, aX, aY, aWidth, aHeight);
     }
 }

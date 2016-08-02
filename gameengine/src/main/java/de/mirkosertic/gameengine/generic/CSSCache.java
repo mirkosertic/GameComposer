@@ -16,7 +16,7 @@ public class CSSCache {
         colorCache = new HashMap<>();
     }
 
-    public String getCSS(Font aFont) {
+    public String toFont(Font aFont) {
         String theCSS = fontCache.get(aFont);
         if (theCSS == null) {
             theCSS = CSSUtils.toFont(aFont);
@@ -25,7 +25,7 @@ public class CSSCache {
         return theCSS;
     }
 
-    public String getCSS(Color aColor) {
+    public String toColor(Color aColor) {
         String theCSS = colorCache.get(aColor);
         if (theCSS == null) {
             theCSS = CSSUtils.toColor(aColor);
