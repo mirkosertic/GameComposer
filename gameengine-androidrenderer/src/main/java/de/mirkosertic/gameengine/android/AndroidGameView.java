@@ -4,7 +4,6 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.util.Log;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
@@ -95,11 +94,6 @@ public class AndroidGameView extends GenericAbstractGameView<AndroidBitmapResour
 
     @Override
     protected void framefinished() {
-    }
-
-    @Override
-    protected void logError(String aMessage) {
-        Log.e("Error", aMessage);
     }
 
     private Typeface toTypeface(Font aFont) {

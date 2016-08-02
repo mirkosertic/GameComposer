@@ -81,6 +81,10 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
         gameRuntime = aGameRuntime;
     }
 
+    protected GameRuntime getCurrentGameRuntime() {
+        return gameRuntime;
+    }
+
     protected abstract boolean beginFrame(GameScene aScene);
 
     protected abstract void beforeInstance(GameObjectInstance aInstance, Position aPositionOnScreen, Position aCenterOffset, Angle aRotation);
@@ -96,8 +100,6 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
     protected void framefinished() {
     }
 
-    protected abstract void logError(String aMessage);
-
     protected abstract EffectCanvas createEffectCanvas();
 
     @Override
@@ -107,12 +109,17 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
             return;
         }
 
+        gameRuntime.getLogger().time("renderGame");
+
         final EffectCanvas theEffectCanvas = createEffectCanvas();
 
         // Run the preprocessors
+
+        gameRuntime.getLogger().time("preprocessorEffects");
         for (GameSceneEffect theEffect : aScene.getPreprocessorEffects()) {
             theEffect.render(theEffectCanvas, cameraBehavior);
         }
+        gameRuntime.getLogger().timeEnd("preprocessorEffects");
 
         int theNumberOfInstances = cameraBehavior.processVisibleInstances(new Callback<GameObjectInstance>() {
             @Override
@@ -146,7 +153,7 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
                             theSomethingRendered = true;
 
                         } catch (IOException e) {
-                            logError("Error while rendering sprite " + theSpriteResource.name);
+                            gameRuntime.getLogger().error("Error while rendering sprite " + theSpriteResource.name);
                         }
                     }
                 }
@@ -204,12 +211,15 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
         });
 
         // Run the postprocessors
+        gameRuntime.getLogger().time("postprocessorEffects");
         for (GameSceneEffect theEffect : aScene.getPostprocessorEffects()) {
             theEffect.render(theEffectCanvas, cameraBehavior);
         }
+        gameRuntime.getLogger().timeEnd("postprocessorEffects");
 
         // Shall we print Debug Information to the Screen?
         if (aScene.getGame().enableDebugProperty().get()) {
+            gameRuntime.getLogger().time("debugInformation");
             // Draw version information
             AbsolutePositionAnchor theAnchor = AbsolutePositionAnchor.BOTTOM_LEFT;
             drawTextAt("debug1", theAnchor, THE_DEBUG_POSITION_VERSION, THE_DEBUG_CENTER, THE_DEBUG_TEXT_SIZE, THE_DEBUG_FONT, THE_DEBUG_TEXT_COLOR, Version.VERSION);
@@ -217,9 +227,14 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
                     "Time for every frame : " + aStatistics.getAverageTimePerLoopCycle() + " ms");
             drawTextAt("debug3", theAnchor, THE_DEBUG_VIVISBLE_INSTANCES, THE_DEBUG_CENTER, THE_DEBUG_TEXT_SIZE, THE_DEBUG_FONT, THE_DEBUG_TEXT_COLOR,
                     "Number of visible instances : " + theNumberOfInstances);
+            gameRuntime.getLogger().timeEnd("debugInformation");
         }
 
+        gameRuntime.getLogger().time("frameFinished");
         framefinished();
+        gameRuntime.getLogger().timeEnd("frameFinished");
+
+        gameRuntime.getLogger().timeEnd("renderGame");
     }
 
     private void drawTextAt(String aID, AbsolutePositionAnchor aAnchor, Position aPosition, Position aCenterOffset, Size aSize, Font aFont, Color aColor, String aText) {

@@ -1,25 +1,18 @@
 package de.mirkosertic.gameengine.teavm;
 
-import org.teavm.jso.browser.Window;
-import org.teavm.jso.dom.html.HTMLDocument;
-import org.teavm.jso.dom.html.HTMLElement;
+import org.teavm.jso.JSBody;
 
-class TeaVMLogger {
+public abstract class TeaVMLogger {
 
-    private static final HTMLDocument document = Window.current().getDocument();
+    @JSBody(params = {"aMessage"}, script = "console.info(aMessage);")
+    public static native void info(String aMessage);
 
-    public static void info(String aMessage) {
-        HTMLElement theLogger = document.getElementById("logger");
-        HTMLElement theDiv = document.createElement("div");
-        theDiv.appendChild(document.createTextNode(aMessage));
-        theLogger.appendChild(theDiv);
-    }
+    @JSBody(params = {"aMessage"}, script = "console.error(aMessage);")
+    public static native void error(String aMessage);
 
-    public static void error(String aMessage) {
-        HTMLElement theLogger = document.getElementById("logger");
-        HTMLElement theDiv = document.createElement("div");
-        theDiv.setAttribute("style","color: red;");
-        theDiv.appendChild(document.createTextNode(aMessage));
-        theLogger.appendChild(theDiv);
-    }
+    @JSBody(params = {"aLabel"}, script = "console.time(aLabel);")
+    public static native void time(String aLabel);
+
+    @JSBody(params = {"aLabel"}, script = "console.timeEnd(aLabel);")
+    public static native void timeEnd(String aLabel);
 }

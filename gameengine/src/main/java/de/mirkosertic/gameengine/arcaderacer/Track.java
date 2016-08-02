@@ -15,8 +15,8 @@ public class Track {
         };
         Segment[] theSegments = new Segment[] {
             // Left and right terrain
-            new Segment(-40, 0, -2, 0, aPosition % 2 == 0 ? new Color(0, 200, 0) : new Color(0, 180, 0)),
-            new Segment(2, 0, 40, 0, aPosition % 2 == 0 ? new Color(0, 200, 0) : new Color(0, 180, 0)),
+            new Segment(-100, 0, -2, 0, aPosition % 2 == 0 ? new Color(0, 200, 0) : new Color(0, 180, 0)),
+            new Segment(2, 0, 100, 0, aPosition % 2 == 0 ? new Color(0, 200, 0) : new Color(0, 180, 0)),
             // Left and right curbs
             new Segment(-2, 0 , -1.8, 0, aPosition % 2 == 0 ? new Color(255, 0, 0) : new Color(255, 255, 255)),
             new Segment(1.8, 0, 2, 0, aPosition % 2 == 0 ? new Color(255, 0, 0) : new Color(255, 255, 255)),
