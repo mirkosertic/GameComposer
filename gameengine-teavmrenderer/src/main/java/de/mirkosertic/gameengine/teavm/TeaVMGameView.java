@@ -164,6 +164,7 @@ class TeaVMGameView extends GenericAbstractGameView<GameResource> {
         int theNumberOfObjects = stage.getChildren().length;
 
         for (int i=0;i<theNumberOfObjects;i++)  {
+            boolean theChanged = false;
             for (int j=i+1;j<theNumberOfObjects;j++) {
                 DisplayObject theObject1 = theObjects[i];
                 DisplayObject theObject2 = theObjects[j];
@@ -172,8 +173,10 @@ class TeaVMGameView extends GenericAbstractGameView<GameResource> {
                     DisplayObject theTemp = theObjects[i];
                     theObjects[i] = theObjects[j];
                     theObjects[j] = theTemp;
+                    theChanged = true;
                 }
             }
+            if (!theChanged) break;
         }
         getCurrentGameRuntime().getLogger().timeEnd("Sorting by Z-Index");
 
