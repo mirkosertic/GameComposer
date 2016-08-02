@@ -60,7 +60,13 @@ public class TeaVMRenderer {
         runtimeFactory = new TeaVMGameRuntimeFactory();
 
         // Initialize PIXI
-        final Renderer theRenderer = Renderer.autodetectRenderer(320, 200, canvasElement);
+        final Renderer theRenderer;
+        if (window.getLocation().getFullURL().contains("canvas")) {
+            theRenderer = Renderer.canvasRenderer(320, 200, canvasElement);
+        } else {
+            theRenderer = Renderer.autodetectRenderer(320, 200, canvasElement);
+        }
+
         switch (theRenderer.getType()) {
             case Renderer.TYPE_WEBGL:
                 TeaVMLogger.info("Using: WebGL Renderer");
