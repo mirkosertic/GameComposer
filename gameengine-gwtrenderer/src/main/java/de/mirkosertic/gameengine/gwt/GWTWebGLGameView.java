@@ -314,9 +314,4 @@ public class GWTWebGLGameView extends GenericAbstractGameView<GWTBitmapResource>
     protected void afterInstance(GameObjectInstance aInstance, Position aPositionOnScreen) {
         GWTCanvasUtils.restoreState(context2d, savedState);
     }
-
-    @Override
-    protected void logError(String aMessage) {
-        throw new RuntimeException(aMessage);
-    }
 }

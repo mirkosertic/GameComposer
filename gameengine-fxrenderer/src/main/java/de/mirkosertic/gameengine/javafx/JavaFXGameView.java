@@ -104,11 +104,6 @@ public class JavaFXGameView extends GenericAbstractGameView<JavaFXBitmapResource
         restoreState(savedState);
     }
 
-    @Override
-    protected void logError(String aMessage) {
-        throw new RuntimeException(aMessage);
-    }
-
     protected SavedState saveState(GraphicsContext aContext) {
         SavedState theResult = new SavedState();
         theResult.fill = aContext.getFill();

@@ -17,7 +17,7 @@ public class GameRuntimeTest {
         GameEventManager theEventManager = mock(GameEventManager.class);
         GameResourceLoader theResourceLoader = mock(GameResourceLoader.class);
         LUAScriptEngineFactory theScriptEngineFactory = mock(LUAScriptEngineFactory.class);
-        GameRuntime theRuntime = new GameRuntime(theEventManager, theResourceLoader, theScriptEngineFactory);
+        GameRuntime theRuntime = new GameRuntime(theEventManager, theResourceLoader, theScriptEngineFactory, new DefaultLogger());
         assertNotNull(theRuntime.getResourceCache());
     }
 
@@ -26,7 +26,7 @@ public class GameRuntimeTest {
         GameEventManager theEventManager = mock(GameEventManager.class);
         GameResourceLoader theResourceLoader = mock(GameResourceLoader.class);
         LUAScriptEngineFactory theScriptEngineFactory = mock(LUAScriptEngineFactory.class);
-        GameRuntime theRuntime = new GameRuntime(theEventManager, theResourceLoader, theScriptEngineFactory);
+        GameRuntime theRuntime = new GameRuntime(theEventManager, theResourceLoader, theScriptEngineFactory, new DefaultLogger());
         assertSame(theEventManager, theRuntime.getEventManager());
     }
 
@@ -35,7 +35,7 @@ public class GameRuntimeTest {
         GameEventManager theEventManager = mock(GameEventManager.class);
         GameResourceLoader theResourceLoader = mock(GameResourceLoader.class);
         LUAScriptEngineFactory theScriptEngineFactory = mock(LUAScriptEngineFactory.class);
-        GameRuntime theRuntime = new GameRuntime(theEventManager, theResourceLoader, theScriptEngineFactory);
+        GameRuntime theRuntime = new GameRuntime(theEventManager, theResourceLoader, theScriptEngineFactory, new DefaultLogger());
         assertNotNull(theRuntime.getSystems());
         assertEquals(0, theRuntime.getSystems().length);
         GameSystem theSystem = mock(GameSystem.class);
@@ -49,7 +49,7 @@ public class GameRuntimeTest {
         GameEventManager theEventManager = mock(GameEventManager.class);
         GameResourceLoader theResourceLoader = mock(GameResourceLoader.class);
         LUAScriptEngineFactory theScriptEngineFactory = mock(LUAScriptEngineFactory.class);
-        GameRuntime theRuntime = new GameRuntime(theEventManager, theResourceLoader, theScriptEngineFactory);
+        GameRuntime theRuntime = new GameRuntime(theEventManager, theResourceLoader, theScriptEngineFactory, new DefaultLogger());
         assertNotNull(theRuntime.getIORegistry());
     }
 
@@ -58,7 +58,7 @@ public class GameRuntimeTest {
         GameEventManager theEventManager = mock(GameEventManager.class);
         GameResourceLoader theResourceLoader = mock(GameResourceLoader.class);
         LUAScriptEngineFactory theScriptEngineFactory = mock(LUAScriptEngineFactory.class);
-        GameRuntime theRuntime = new GameRuntime(theEventManager, theResourceLoader, theScriptEngineFactory);
+        GameRuntime theRuntime = new GameRuntime(theEventManager, theResourceLoader, theScriptEngineFactory, new DefaultLogger());
         assertSame(theScriptEngineFactory, theRuntime.getScriptEngineFactory());
     }
 }

@@ -2,7 +2,10 @@ package de.mirkosertic.gameengine.teavm;
 
 import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.generic.CSSUtils;
-import de.mirkosertic.gameengine.teavm.pixi.*;
+import de.mirkosertic.gameengine.teavm.pixi.Graphics;
+import de.mirkosertic.gameengine.teavm.pixi.Mesh;
+import de.mirkosertic.gameengine.teavm.pixi.Renderer;
+import de.mirkosertic.gameengine.teavm.pixi.Texture;
 import de.mirkosertic.gameengine.type.Color;
 import de.mirkosertic.gameengine.type.EffectCanvas;
 import de.mirkosertic.gameengine.type.Position;
@@ -65,17 +68,11 @@ public class TeaVMEffectCanvas implements EffectCanvas {
         Mesh theMesh = instanceCache.getOrCreate(aObjectID, new InstanceCache.Producer<Mesh>() {
             @Override
             public Mesh create() {
-                Graphics theGrapics = Graphics.createGraphics();
-                theGrapics.setWidth(1);
-                theGrapics.setHeight(1);
-                theGrapics.lineStyle(1, CSSUtils.toInt(aColor), 1);
-                theGrapics.drawRect(0,0,1,1);
-
-                return Mesh.createMesh(getTexttureFor(aColor));
+                return Mesh.createMesh(getTexttureFor(aColor), Float32Array.create(8));
             }
         }, aZIndex);
 
-        Float32Array theVertices = Float32Array.create(8);
+        Float32Array theVertices = theMesh.getVertices();
         theVertices.set(0, aX0);
         theVertices.set(1, aY0);
         theVertices.set(2, aX1);
@@ -84,7 +81,6 @@ public class TeaVMEffectCanvas implements EffectCanvas {
         theVertices.set(5, aY2);
         theVertices.set(6, aX3);
         theVertices.set(7, aY3);
-        theMesh.setVertices(theVertices);
     }
 
     @Override
@@ -96,11 +92,11 @@ public class TeaVMEffectCanvas implements EffectCanvas {
             @Override
             public Mesh create() {
                 TeaVMTextureResource theResource = (TeaVMTextureResource) aTexture;
-                return Mesh.createMesh(theResource.getTexture());
+                return Mesh.createMesh(theResource.getTexture(), Float32Array.create(8));
             }
         }, aZIndex);
 
-        Float32Array theVertices = Float32Array.create(8);
+        Float32Array theVertices = theMesh.getVertices();
         theVertices.set(0, aX0);
         theVertices.set(1, aY0);
         theVertices.set(2, aX1);
@@ -109,25 +105,5 @@ public class TeaVMEffectCanvas implements EffectCanvas {
         theVertices.set(5, aY2);
         theVertices.set(6, aX3);
         theVertices.set(7, aY3);
-        theMesh.setVertices(theVertices);
-    }
-
-    @Override
-    public void drawScaled(String aObjectID, final GameResource aResource, int aX, int aY, int aWidth, int aHeight, int aZIndex) {
-
-        Sprite theCurrentObject = instanceCache.getOrCreate(aObjectID, new InstanceCache.Producer<Sprite>() {
-            @Override
-            public Sprite create() {
-                TeaVMTextureResource theTexture = (TeaVMTextureResource) aResource;
-                Sprite theSprite =  Sprite.createSprite(theTexture.getTexture());
-                theSprite.getScale().set(1, 1);
-                return theSprite;
-            }
-        }, aZIndex);
-
-        // Update the position and all the other stuff
-        theCurrentObject.getPosition().set(aX, aY);
-        theCurrentObject.setWidth(aWidth);
-        theCurrentObject.setHeight(aHeight);
     }
 }

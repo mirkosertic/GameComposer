@@ -79,10 +79,4 @@ public class GWTEffectCanvas implements EffectCanvas {
         fillTriangle(aObjectID, aTexture, aX0, aY0, aX1, aY1, aX2, aY2, aU0, aV0, aU1, aV1, aU2, aV2);
         fillTriangle(aObjectID, aTexture, aX0, aY0, aX2, aY2, aX3, aY3, aU0, aV0, aU2, aV2, aU3, aV3);
     }
-
-    @Override
-    public void drawScaled(String aObjectID, GameResource aResource, int aX, int aY, int aWidth, int aHeight, int aZIndex) {
-        GWTBitmapResource theImage = (GWTBitmapResource) aResource;
-        context.drawImage(theImage.getImage(), aX, aY, aWidth, aHeight);
-    }
 }

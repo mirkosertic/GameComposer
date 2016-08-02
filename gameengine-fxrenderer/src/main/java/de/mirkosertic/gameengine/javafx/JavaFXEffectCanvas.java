@@ -9,15 +9,19 @@ import javafx.scene.canvas.GraphicsContext;
 public class JavaFXEffectCanvas implements EffectCanvas {
 
     private final GraphicsContext context;
+    private Color currentColor;
 
     public JavaFXEffectCanvas(GraphicsContext aContext) {
         context = aContext;
     }
 
     private void updateCurrentPaint(Color aColor) {
-        javafx.scene.paint.Color theFXColor = javafx.scene.paint.Color.rgb(aColor.r, aColor.g, aColor.b);
-        context.setFill(theFXColor);
-        context.setStroke(theFXColor);
+        if (currentColor == null || !currentColor.equals(aColor)) {
+            javafx.scene.paint.Color theFXColor = javafx.scene.paint.Color.rgb(aColor.r, aColor.g, aColor.b);
+            context.setFill(theFXColor);
+            context.setStroke(theFXColor);
+            currentColor = aColor;
+        }
     }
 
     @Override
@@ -76,12 +80,5 @@ public class JavaFXEffectCanvas implements EffectCanvas {
 
         fillTriangle(aObjectID, aTexture, aX0, aY0, aX1, aY1, aX2, aY2, aU0, aV0, aU1, aV1, aU2, aV2);
         fillTriangle(aObjectID, aTexture, aX0, aY0, aX2, aY2, aX3, aY3, aU0, aV0, aU2, aV2, aU3, aV3);
-    }
-
-
-    @Override
-    public void drawScaled(String aObjectID, GameResource aResource, int aX, int aY, int aWidth, int aHeight, int aZIndex) {
-        JavaFXBitmapResource theBitmap = (JavaFXBitmapResource) aResource;
-        context.drawImage(theBitmap, aX, aY, aWidth, aHeight);
     }
 }
