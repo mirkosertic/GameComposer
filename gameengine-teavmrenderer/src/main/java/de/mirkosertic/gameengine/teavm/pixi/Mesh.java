@@ -23,7 +23,7 @@ public abstract class Mesh extends Container {
     public abstract void setUvs(Float32Array aUVs);
 
     @JSProperty
-    public abstract void setIndices(Uint16Array aIndives);
+    public abstract void setIndices(Uint16Array aIncices);
 
     @JSProperty
     public abstract void setDrawMode(int aDrawMode);

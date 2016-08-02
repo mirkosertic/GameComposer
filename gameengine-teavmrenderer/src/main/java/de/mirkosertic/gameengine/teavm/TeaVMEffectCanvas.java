@@ -10,6 +10,7 @@ import de.mirkosertic.gameengine.type.Color;
 import de.mirkosertic.gameengine.type.EffectCanvas;
 import de.mirkosertic.gameengine.type.Position;
 import org.teavm.jso.typedarrays.Float32Array;
+import org.teavm.jso.typedarrays.Uint16Array;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -68,7 +69,19 @@ public class TeaVMEffectCanvas implements EffectCanvas {
         Mesh theMesh = instanceCache.getOrCreate(aObjectID, new InstanceCache.Producer<Mesh>() {
             @Override
             public Mesh create() {
-                return Mesh.createMesh(getTexttureFor(aColor), Float32Array.create(8));
+                Mesh theMesh = Mesh.createMesh(getTexttureFor(aColor), Float32Array.create(8));
+                if (renderer.getType() == Renderer.TYPE_CANVAS) {
+                    theMesh.setDrawMode(Mesh.DRAW_MODE_TRIANGLES);
+                    Uint16Array theIndices = Uint16Array.create(6);
+                    theIndices.set(0, 0);
+                    theIndices.set(1, 1);
+                    theIndices.set(2, 2);
+                    theIndices.set(3, 0);
+                    theIndices.set(4, 2);
+                    theIndices.set(5, 3);
+                    theMesh.setIndices(theIndices);
+                }
+                return theMesh;
             }
         }, aZIndex);
 
@@ -92,7 +105,20 @@ public class TeaVMEffectCanvas implements EffectCanvas {
             @Override
             public Mesh create() {
                 TeaVMTextureResource theResource = (TeaVMTextureResource) aTexture;
-                return Mesh.createMesh(theResource.getTexture(), Float32Array.create(8));
+                Mesh theMesh =  Mesh.createMesh(theResource.getTexture(), Float32Array.create(8));
+
+                if (renderer.getType() == Renderer.TYPE_CANVAS) {
+                    theMesh.setDrawMode(Mesh.DRAW_MODE_TRIANGLES);
+                    Uint16Array theIndices = Uint16Array.create(6);
+                    theIndices.set(0, 0);
+                    theIndices.set(1, 1);
+                    theIndices.set(2, 2);
+                    theIndices.set(3, 0);
+                    theIndices.set(4, 2);
+                    theIndices.set(5, 3);
+                    theMesh.setIndices(theIndices);
+                }
+                return theMesh;
             }
         }, aZIndex);
 
