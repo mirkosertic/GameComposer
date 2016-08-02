@@ -16,7 +16,9 @@ public class TeaVMThreadingManager implements ThreadingManager {
                 @Override
                 public void run() {
                     synchronized (LOCK) {
+                        TeaVMLogger.time("Thread");
                         aJob.run();
+                        TeaVMLogger.timeEnd("Thread");
                     }
                 }
             };
