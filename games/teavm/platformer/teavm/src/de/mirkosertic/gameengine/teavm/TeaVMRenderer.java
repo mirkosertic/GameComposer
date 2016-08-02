@@ -1,5 +1,6 @@
 package de.mirkosertic.gameengine.teavm;
 
+import de.mirkosertic.gameengine.Version;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
 import de.mirkosertic.gameengine.core.Game;
@@ -49,6 +50,8 @@ public class TeaVMRenderer {
 
     void boot() {
 
+        TeaVMLogger.info("Starting GameEngine " + Version.VERSION);
+
         TeaVMLogger.info("Booting game runtime");
 
         canvasElement = (HTMLCanvasElement) document.getElementById("html5canvas");
@@ -58,6 +61,17 @@ public class TeaVMRenderer {
 
         // Initialize PIXI
         final Renderer theRenderer = Renderer.autodetectRenderer(320, 200, canvasElement);
+        switch (theRenderer.getType()) {
+            case Renderer.TYPE_WEBGL:
+                TeaVMLogger.info("Using: WebGL Renderer");
+                break;
+            case Renderer.TYPE_CANVAS:
+                TeaVMLogger.info("Using: HTML5 Canvas Renderer");
+                break;
+            default:
+                TeaVMLogger.info("Using: Unknown Renderer");
+                break;
+        }
 
         sceneLoader = new TeaVMGameSceneLoader(new TeaVMGameSceneLoader.GameSceneLoadedListener() {
             @Override
@@ -90,6 +104,7 @@ public class TeaVMRenderer {
                     boolean theTruncateDB = "?truncate".equals(window.getLocation().getSearch());
 
                     String theFirebaseURL = aGame.fireBaseURLProperty().get();
+
                     TeaVMLogger.info("Enabling Firebase Networking with URL " + theFirebaseURL+", truncate = " + theTruncateDB);
                     networkConnector = new TeaVMFirebaseNetworkConnector(theFirebaseURL, theConnectionID, theTruncateDB);
                 } else {
@@ -130,6 +145,7 @@ public class TeaVMRenderer {
                 };
 
                 String theSceneId = aGame.defaultSceneProperty().get();
+
                 TeaVMLogger.info("Loading scene " + theSceneId);
                 sceneLoader.loadFromServer(game, theSceneId, new TeaVMGameResourceLoader(theSceneId));
             }

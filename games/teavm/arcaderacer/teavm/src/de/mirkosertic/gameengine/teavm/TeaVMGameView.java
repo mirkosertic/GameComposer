@@ -6,6 +6,7 @@ import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.core.GestureDetector;
+import de.mirkosertic.gameengine.generic.CSSCache;
 import de.mirkosertic.gameengine.generic.CSSUtils;
 import de.mirkosertic.gameengine.generic.GenericAbstractGameView;
 import de.mirkosertic.gameengine.teavm.pixi.DisplayObject;
@@ -22,9 +23,7 @@ import de.mirkosertic.gameengine.type.Font;
 import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Size;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 class TeaVMGameView extends GenericAbstractGameView<GameResource> {
@@ -33,11 +32,13 @@ class TeaVMGameView extends GenericAbstractGameView<GameResource> {
     private final Map<String, DisplayObject> instances;
     private Stage stage;
     private InstanceCache instanceCache;
+    private CSSCache cssCache;
 
     public TeaVMGameView(GameRuntime aGameRuntime, CameraBehavior aCameraBehavior, GestureDetector aGestureDetector,
             Renderer aRenderer) {
         super(aGameRuntime, aCameraBehavior, aGestureDetector);
         renderer = aRenderer;
+        cssCache = new CSSCache();
         instances = new HashMap<>();
         stage = Stage.createStage(0);
         instanceCache = new InstanceCache(stage);
@@ -109,9 +110,9 @@ class TeaVMGameView extends GenericAbstractGameView<GameResource> {
         }, 0);
 
         Style theStyle = theCurrentObject.getStyle();
-        theStyle.setFont(CSSUtils.toFont(aFont));
-        theStyle.setFill(CSSUtils.toColor(aColor));
-        theStyle.setStroke(CSSUtils.toColor(aColor));
+        theStyle.setFont(cssCache.toFont(aFont));
+        theStyle.setFill(cssCache.toColor(aColor));
+        theStyle.setStroke(cssCache.toColor(aColor));
         theCurrentObject.setText(aText);
 
         // Update the position and all the other stuff
@@ -152,36 +153,33 @@ class TeaVMGameView extends GenericAbstractGameView<GameResource> {
         super.framefinished();
 
         // Remove no longer visible instances
+        getCurrentGameRuntime().getLogger().time("Clean invisible instances");
         instanceCache.keepOnlyTouched();
+        getCurrentGameRuntime().getLogger().timeEnd("Clean invisible instances");
 
         // Now we sort by ZIndex
-        List<DisplayObject> theChildren = new ArrayList<>();
+        getCurrentGameRuntime().getLogger().time("Sorting by Z-Index");
         DisplayObject[] theObjects = stage.getChildren();
-        for (DisplayObject theEntry : theObjects) {
-            theChildren.add(theEntry);
-            stage.removeChild(theEntry);
-        }
 
-        for (int i=0;i<theObjects.length;i++)  {
-            for (int j=i+1;j<theObjects.length;j++) {
-                if (theObjects[i].getZOrder() < theObjects[j].getZOrder()) {
+        int theNumberOfObjects = stage.getChildren().length;
+
+        for (int i=0;i<theNumberOfObjects;i++)  {
+            for (int j=i+1;j<theNumberOfObjects;j++) {
+                DisplayObject theObject1 = theObjects[i];
+                DisplayObject theObject2 = theObjects[j];
+                if (theObject1.getZOrder() < theObject2.getZOrder()) {
+                    stage.swapChildren(theObject1, theObject2);
                     DisplayObject theTemp = theObjects[i];
                     theObjects[i] = theObjects[j];
                     theObjects[j] = theTemp;
                 }
             }
         }
+        getCurrentGameRuntime().getLogger().timeEnd("Sorting by Z-Index");
 
-        for (DisplayObject theEntry : theObjects) {
-            stage.addChild(theEntry);
-        }
-
+        getCurrentGameRuntime().getLogger().time("Pixi Rendering");
         renderer.render(stage);
-    }
-
-    @Override
-    protected void logError(String aMessage) {
-        TeaVMLogger.error(aMessage);
+        getCurrentGameRuntime().getLogger().timeEnd("Pixi Rendering");
     }
 
     public void setSize(Size aSize) {
