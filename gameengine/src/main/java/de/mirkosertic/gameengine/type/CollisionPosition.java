@@ -66,4 +66,8 @@ public abstract class CollisionPosition {
         }
         throw new IllegalArgumentException(aName);
     }
+
+    public static CollisionPosition[] values() {
+        return new CollisionPosition[] {EVERYWHERE, TOP, LEFT, BOTTOM, RIGHT};
+    }
 }
