@@ -57,7 +57,7 @@ public class TeaVMRenderer {
         canvasElement = (HTMLCanvasElement) document.getElementById("html5canvas");
 
         gameLoopFactory = new GameLoopFactory();
-        runtimeFactory = new TeaVMGameRuntimeFactory();
+        runtimeFactory = new TeaVMGameRuntimeFactory(!window.getLocation().getFullURL().contains("nothreading"));
 
         // Initialize PIXI
         final Renderer theRenderer;
