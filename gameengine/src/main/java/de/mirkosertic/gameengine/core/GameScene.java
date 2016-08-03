@@ -198,16 +198,6 @@ public class GameScene implements Reflectable<GameSceneClassInformation>, KeyVal
         return postprocessorEffects;
     }
 
-    public List<GameObjectInstance> findAllAt(Position aScreenPosition, Size aScreensize) {
-        List<GameObjectInstance> theResult = new ArrayList<>();
-        for (GameObjectInstance theInstance : instances) {
-            if (theInstance.contains(aScreenPosition, aScreensize)) {
-                theResult.add(theInstance);
-            }
-        }
-        return theResult;
-    }
-
     public GameObject findObjectByID(String aObjectUUID) {
         for (GameObject theObject : objects) {
             if (theObject.uuidProperty().get().equals(aObjectUUID)) {
