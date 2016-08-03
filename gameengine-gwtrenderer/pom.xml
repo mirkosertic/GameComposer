@@ -17,6 +17,45 @@
         <connection>scm:git:https://github.com/mirkosertic/GameComposer.git</connection>
     </scm>
 
+    <properties>
+        <gwt.version>2.8.0-SNAPSHOT</gwt.version>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>snapshots-repo</id>
+            <url>https://oss.sonatype.org/content/repositories/google-snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>snapshots-repo1</id>
+            <url>https://oss.sonatype.org/content/repositories/public</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>snapshots-repo</id>
+            <url>https://oss.sonatype.org/content/repositories/public</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
     <build>
         <plugins>
             <plugin>
@@ -35,12 +74,11 @@
                 <configuration>
                     <runTarget>de.mirkosertic.gameengine.gwt.GWTRenderer/index.html</runTarget>
                     <draftCompile>false</draftCompile>
-                    <optimizationLevel>0</optimizationLevel>
+                    <optimizationLevel>9</optimizationLevel>
                     <disableCastChecking>true</disableCastChecking>
                     <enableClosureCompiler>false</enableClosureCompiler>
                     <!--<disableClassMetaData>true</disableClassMetaData>-->
-                    <!-- <style>DETAILED</style> -->
-                    <!--<disableCastChecking>true</disableCastChecking>-->
+                    <style>OBF</style>
                 </configuration>
                 <dependencies>
                     <dependency>
@@ -64,8 +102,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
         </plugins>
