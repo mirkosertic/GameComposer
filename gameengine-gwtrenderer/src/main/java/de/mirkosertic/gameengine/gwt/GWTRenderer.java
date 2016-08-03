@@ -12,11 +12,7 @@ import de.mirkosertic.gameengine.core.GestureDetector;
 import de.mirkosertic.gameengine.core.PlaySceneStrategy;
 import de.mirkosertic.gameengine.generic.GenericAbstractGameView;
 import de.mirkosertic.gameengine.network.NetworkConnector;
-import de.mirkosertic.gameengine.type.GameKeyCode;
-import de.mirkosertic.gameengine.type.Position;
-import de.mirkosertic.gameengine.type.Size;
-import de.mirkosertic.gameengine.type.TouchIdentifier;
-import de.mirkosertic.gameengine.type.TouchPosition;
+import de.mirkosertic.gameengine.type.*;
 import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 
 import java.util.logging.Level;
@@ -284,7 +280,7 @@ public class GWTRenderer implements EntryPoint {
 
     private void handleOnKeyPressedEvent(KeyPressEvent aEvent) {
         if (playSceneStrategy.hasGameLoop()) {
-            GameKeyCode theCode = GameKeyCode.fromChar(aEvent.getCharCode());
+            GameKeyCode theCode = GameKeyCodeUtils.fromChar(aEvent.getCharCode());
             if (theCode != null) {
                 playSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector().keyPressed(theCode);
             }
