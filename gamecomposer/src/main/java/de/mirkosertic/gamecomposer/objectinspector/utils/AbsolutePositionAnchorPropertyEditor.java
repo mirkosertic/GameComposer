@@ -1,18 +1,16 @@
 package de.mirkosertic.gamecomposer.objectinspector.utils;
 
-import de.mirkosertic.gameengine.type.AbsolutePositionAnchor;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import de.mirkosertic.gameengine.type.PositionAnchor;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 
 import org.controlsfx.control.PropertySheet;
 import org.controlsfx.property.editor.PropertyEditor;
 
-public class AbsolutePositionAnchorPropertyEditor implements PropertyEditor<AbsolutePositionAnchor> {
+public class AbsolutePositionAnchorPropertyEditor implements PropertyEditor<PositionAnchor> {
 
-    private AbsolutePositionAnchor value;
-    private final ComboBox<AbsolutePositionAnchor> editor;
+    private PositionAnchor value;
+    private final ComboBox<PositionAnchor> editor;
     private PropertySheet.Item item;
 
     public AbsolutePositionAnchorPropertyEditor(PropertySheet.Item aItem) {
@@ -20,13 +18,8 @@ public class AbsolutePositionAnchorPropertyEditor implements PropertyEditor<Abso
         item = aItem;
 
         editor = new ComboBox<>();
-        editor.getItems().addAll(AbsolutePositionAnchor.values());
-        editor.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                item.setValue(editor.getValue());
-            }
-        });
+        editor.getItems().addAll(PositionAnchor.values());
+        editor.setOnAction(event -> item.setValue(editor.getValue()));
     }
 
     @Override
@@ -35,12 +28,12 @@ public class AbsolutePositionAnchorPropertyEditor implements PropertyEditor<Abso
     }
 
     @Override
-    public AbsolutePositionAnchor getValue() {
+    public PositionAnchor getValue() {
         return value;
     }
 
     @Override
-    public void setValue(AbsolutePositionAnchor aValue) {
+    public void setValue(PositionAnchor aValue) {
         value = aValue;
         editor.setValue(aValue);
     }

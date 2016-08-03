@@ -11,8 +11,6 @@ import de.mirkosertic.gamecomposer.objectinspector.utils.PositionPropertyEditor;
 import de.mirkosertic.gamecomposer.objectinspector.utils.SizePropertyEditor;
 import de.mirkosertic.gamecomposer.objectinspector.utils.StringPropertyEditor;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Node;
 
 import java.util.ArrayList;
@@ -42,16 +40,12 @@ public class GameObjectInstanceElementConfigurator implements ObjectInspectorEle
         theResult.add(new PropertyEditorItem<>(CATEGORY_NAME, aObject.positionProperty(), "Position", "The position of the instannce", Optional.of(PositionPropertyEditor.class)));
         theResult.add(new PropertyEditorItem<>(CATEGORY_NAME, aObject.visibleProperty(), "Visible", "Is the instance visible or not", Optional.empty()));
         theResult.add(new PropertyEditorItem<>(CATEGORY_NAME, aObject.rotationAngleProperty(), "Rotation angle", "The rotation angle of the instance", Optional.of(AnglePropertyEditor.class)));
-        theResult.add(new PropertyEditorItem<>(CATEGORY_NAME, aObject.absolutePositionProperty(), "Absolute position", "Is the instances position absolute?", Optional.empty()));
-        theResult.add(new PropertyEditorItem<>(CATEGORY_NAME, aObject.absolutePositionAnchorProperty(), "Position anchor", "The position anchor of the instance", Optional.of(AbsolutePositionAnchorPropertyEditor.class)));
+        theResult.add(new PropertyEditorItem<>(CATEGORY_NAME, aObject.positionAnchorProperty(), "Position anchor", "The position anchor of the instance", Optional.of(AbsolutePositionAnchorPropertyEditor.class)));
 
         ActionPropertyEditorItem theActions = new ActionPropertyEditorItem(CATEGORY_NAME, "", "Available actions");
-        theActions.addAction(new ActionPropertyEditorItem.Action("Delete object...", new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent aEvent) {
-                if (messageBox.showMessageBox((Node) aEvent.getSource(), "Delete object", "Do you really want to delete this item?", MessageBox.ButtonType.YES, MessageBox.ButtonType.NO) == MessageBox.ButtonType.YES) {
-                    aObject.getOwnerGameObject().getGameScene().removeGameObjectInstance(aObject);
-                }
+        theActions.addAction(new ActionPropertyEditorItem.Action("Delete object...", aEvent -> {
+            if (messageBox.showMessageBox((Node) aEvent.getSource(), "Delete object", "Do you really want to delete this item?", MessageBox.ButtonType.YES, MessageBox.ButtonType.NO) == MessageBox.ButtonType.YES) {
+                aObject.getOwnerGameObject().getGameScene().removeGameObjectInstance(aObject);
             }
         }));
         theResult.add(theActions);

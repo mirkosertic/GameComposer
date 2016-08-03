@@ -6,7 +6,6 @@ import de.mirkosertic.gamecomposer.ObjectSelectedEvent;
 import de.mirkosertic.gamecomposer.PersistenceManager;
 import de.mirkosertic.gamecomposer.ShutdownEvent;
 import de.mirkosertic.gamecomposer.contentarea.ContentController;
-import de.mirkosertic.gameengine.Callback;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
 import de.mirkosertic.gameengine.core.GameLoop;
@@ -33,9 +32,6 @@ import de.mirkosertic.gameengine.type.GameKeyCode;
 import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Size;
 import de.mirkosertic.gameengine.type.UUID;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -51,7 +47,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 import java.util.List;
 import javax.enterprise.event.Event;
@@ -105,66 +100,20 @@ public class GameSceneEditorController implements ContentController<GameScene> {
         cameraComponent = aCameraComponent;
         objectSelectedEventEvent = aSelectedEvent;
 
-        theCanvasNode.setOnDragOver(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent aEvent) {
-                onDragOver(aEvent);
-            }
-        });
-        theCanvasNode.setOnDragEntered(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent aEvent) {
-                onDragEntered(aEvent);
-            }
-        });
-        theCanvasNode.setOnDragExited(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent aEvent) {
-                onDragExited(aEvent);
-            }
-        });
-        theCanvasNode.setOnDragDropped(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent aEvent) {
-                setOnDragDropped(aEvent);
-            }
-        });
-        theCanvasNode.setOnMouseDragged(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent aEvent) {
-                onMouseDragged(aEvent);
-            }
-        });
-        theCanvasNode.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent aEvent) {
-                onMousePressed(aEvent);
-            }
-        });
-        theCanvasNode.setOnMouseReleased(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent aEvent) {
-                onMouseReleased(aEvent);
-            }
-        });
-        theCanvasNode.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent aEvent) {
-                onMouseClicked(aEvent);
-            }
-        });
+        theCanvasNode.setOnDragOver(aEvent -> onDragOver(aEvent));
+        theCanvasNode.setOnDragEntered(aEvent -> onDragEntered(aEvent));
+        theCanvasNode.setOnDragExited(aEvent -> onDragExited(aEvent));
+        theCanvasNode.setOnDragDropped(aEvent -> setOnDragDropped(aEvent));
+        theCanvasNode.setOnMouseDragged(aEvent -> onMouseDragged(aEvent));
+        theCanvasNode.setOnMousePressed(aEvent -> onMousePressed(aEvent));
+        theCanvasNode.setOnMouseReleased(aEvent -> onMouseReleased(aEvent));
+        theCanvasNode.setOnMouseClicked(aEvent -> onMouseClicked(aEvent));
 
-        gridsizeWidth.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String aOldValue, String aNewValue) {
-                gameView.gridsizeWidthProperty().set(Integer.valueOf(aNewValue));
-            }
+        gridsizeWidth.textProperty().addListener((observableValue, aOldValue, aNewValue) -> {
+            gameView.gridsizeWidthProperty().set(Integer.valueOf(aNewValue));
         });
-        gridsizeHeight.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String aOldValue, String aNewValue) {
-                gameView.gridsizeHeightProperty().set(Integer.valueOf(aNewValue));
-            }
+        gridsizeHeight.textProperty().addListener((observableValue, aOldValue, aNewValue) -> {
+            gameView.gridsizeHeightProperty().set(Integer.valueOf(aNewValue));
         });
         gridsizeWidth.setText(Integer.toString(gameView.gridsizeWidthProperty().get()));
         gridsizeHeight.setText(Integer.toString(gameView.gridsizeHeightProperty().get()));
@@ -231,7 +180,7 @@ public class GameSceneEditorController implements ContentController<GameScene> {
     private void onMousePressed(MouseEvent aEvent) {
         Position theScreenPosition = new Position(aEvent.getX(), aEvent.getY());
         Position theWorldPosition = cameraComponent.transformFromScreen(theScreenPosition);
-        List<GameObjectInstance> theFoundInstances = gameScene.findAllAt(theScreenPosition, theWorldPosition);
+        List<GameObjectInstance> theFoundInstances = gameScene.findAllAt(theScreenPosition, cameraComponent.getScreenSize());
         if (theFoundInstances.size() == 1) {
             draggingInstance = theFoundInstances.get(0);
             draggingMouseWorldPosition = theWorldPosition;
@@ -330,12 +279,9 @@ public class GameSceneEditorController implements ContentController<GameScene> {
 
     void onMouseClicked(MouseEvent aEvent) {
         Position theClickPosition = new Position(aEvent.getX(), aEvent.getY());
-        cameraComponent.processVisibleInstances(new Callback<GameObjectInstance>() {
-            @Override
-            public void process(GameObjectInstance aValue) {
-                if (aValue.contains(theClickPosition)) {
-                    objectSelectedEventEvent.fire(new ObjectSelectedEvent(aValue));
-                }
+        cameraComponent.processVisibleInstances(aValue -> {
+            if (aValue.contains(theClickPosition, cameraComponent.getScreenSize())) {
+                objectSelectedEventEvent.fire(new ObjectSelectedEvent(aValue));
             }
         });
     }
@@ -411,12 +357,9 @@ public class GameSceneEditorController implements ContentController<GameScene> {
 
             final GameObjectInstance theFinalPlayer = thePlayerInstance;
 
-            theEventManager.register(null, NewGameInstance.class, new GameEventListener<NewGameInstance>() {
-                @Override
-                public void handleGameEvent(NewGameInstance aEvent) {
-                    // Inform the other instances about the current player
-                    theNetworkGameView.handleGameEvent(new GameObjectInstanceAddedToScene(theFinalPlayer));
-                }
+            theEventManager.register(null, NewGameInstance.class, aEvent -> {
+                // Inform the other instances about the current player
+                theNetworkGameView.handleGameEvent(new GameObjectInstanceAddedToScene(theFinalPlayer));
             });
         }
 
@@ -456,17 +399,11 @@ public class GameSceneEditorController implements ContentController<GameScene> {
         theBorderPane.setPrefWidth(800);
         theBorderPane.setPrefHeight(600);
 
-        thePaneForCanvas.widthProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
-                theEventManager.fire(new SetScreenResolution(new Size((int) ((double) number2), theCameraInstanceBehavior.getScreenSize().height)));
-            }
+        thePaneForCanvas.widthProperty().addListener((observableValue, number, number2) -> {
+            theEventManager.fire(new SetScreenResolution(new Size((int) ((double) number2), theCameraInstanceBehavior.getScreenSize().height)));
         });
-        thePaneForCanvas.heightProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
-                theEventManager.fire(new SetScreenResolution(new Size(theCameraInstanceBehavior.getScreenSize().width, (int) (((double) number2)))));
-            }
+        thePaneForCanvas.heightProperty().addListener((observableValue, number, number2) -> {
+            theEventManager.fire(new SetScreenResolution(new Size(theCameraInstanceBehavior.getScreenSize().width, (int) (((double) number2)))));
         });
         thePreviewGameView.getCanvasNode().widthProperty().bind(thePaneForCanvas.widthProperty());
         thePreviewGameView.getCanvasNode().heightProperty().bind(thePaneForCanvas.heightProperty());
@@ -479,37 +416,18 @@ public class GameSceneEditorController implements ContentController<GameScene> {
         theStage.setScene(theScene);
         theStage.initOwner(view.getScene().getWindow());
 
-        theStage.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent aKeyEvent) {
-                thePreviewGameView.getGestureDetector().keyPressed(GameKeyCode.valueOf(aKeyEvent.getCode().name()));
-            }
-        });
-        theStage.addEventHandler(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent aKeyEvent) {
-                thePreviewGameView.getGestureDetector().keyReleased(GameKeyCode.valueOf(aKeyEvent.getCode().name()));
-            }
-        });
-        theStage.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent aEvent) {
-                thePreviewGameView.getGestureDetector().mousePressed(new Position(aEvent.getX(), aEvent.getY()));
-            }
-        });
-        theStage.addEventFilter(MouseEvent.MOUSE_RELEASED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent aEvent) {
-                thePreviewGameView.getGestureDetector().mouseReleased(new Position(aEvent.getX(), aEvent.getY()));
-            }
-        });
+        theStage.addEventHandler(KeyEvent.KEY_PRESSED,
+                aKeyEvent -> thePreviewGameView.getGestureDetector().keyPressed(GameKeyCode.valueOf(aKeyEvent.getCode().name())));
+        theStage.addEventHandler(KeyEvent.KEY_RELEASED,
+                aKeyEvent -> thePreviewGameView.getGestureDetector().keyReleased(GameKeyCode.valueOf(aKeyEvent.getCode().name())));
+        theStage.addEventFilter(MouseEvent.MOUSE_PRESSED,
+                aEvent -> thePreviewGameView.getGestureDetector().mousePressed(new Position(aEvent.getX(), aEvent.getY())));
+        theStage.addEventFilter(MouseEvent.MOUSE_RELEASED,
+                aEvent -> thePreviewGameView.getGestureDetector().mouseReleased(new Position(aEvent.getX(), aEvent.getY())));
 
-        theStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent windowEvent) {
-                thePreviewGameView.stopTimer();
-                theNetworkConnector.shutdown();
-            }
+        theStage.setOnCloseRequest(windowEvent -> {
+            thePreviewGameView.stopTimer();
+            theNetworkConnector.shutdown();
         });
         theStage.show();
         theStage.requestFocus();

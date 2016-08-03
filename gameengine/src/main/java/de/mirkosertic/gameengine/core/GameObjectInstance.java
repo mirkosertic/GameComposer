@@ -4,7 +4,7 @@ import de.mirkosertic.gameengine.annotations.ReflectiveField;
 import de.mirkosertic.gameengine.annotations.ReflectiveMethod;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
-import de.mirkosertic.gameengine.type.AbsolutePositionAnchor;
+import de.mirkosertic.gameengine.type.PositionAnchor;
 import de.mirkosertic.gameengine.type.Angle;
 import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Reflectable;
@@ -24,8 +24,7 @@ public class GameObjectInstance implements Reflectable<GameObjectInstanceClassIn
     public static final String POSITION_PROPERTY = "position";
     public static final String VISIBLE_PROPERTY = "visible";
     public static final String ROTATION_ANGLE_PROPERTY = "rotationAngle";
-    public static final String ABSOLUTE_POSITION_PROPERTY = "absolutePosition";
-    public static final String ABSOLUTE_POSITION_ANCHOR_PROPERTY = "absolutePositionAnchor";
+    public static final String POSITION_ANCHOR_PROPERTY = "positionAnchor";
 
     private final Map<Class<? extends Behavior>, Behavior> behaviors;
 
@@ -36,8 +35,7 @@ public class GameObjectInstance implements Reflectable<GameObjectInstanceClassIn
     private final Property<Position> position;
     private final Property<Angle> rotationAngle;
     private final Property<Boolean> visible;
-    private final Property<Boolean> absolutePosition;
-    private final Property<AbsolutePositionAnchor> absolutePositionAnchor;
+    private final Property<PositionAnchor> positionAnchor;
 
     private boolean remoteObject;
 
@@ -48,8 +46,7 @@ public class GameObjectInstance implements Reflectable<GameObjectInstanceClassIn
         position = new Property<>(Position.class, this, POSITION_PROPERTY, new Position(), aEventManager);
         visible = new Property<>(Boolean.class, this, VISIBLE_PROPERTY, aOwnerGameObject.visibleProperty().get(), aEventManager);
         rotationAngle = new Property<>(Angle.class, this, ROTATION_ANGLE_PROPERTY, new Angle(0), aEventManager);
-        absolutePosition = new Property<>(Boolean.class, this, ABSOLUTE_POSITION_PROPERTY, Boolean.FALSE, aEventManager);
-        absolutePositionAnchor = new Property<>(AbsolutePositionAnchor.class, this, ABSOLUTE_POSITION_ANCHOR_PROPERTY, AbsolutePositionAnchor.TOP_LEFT, aEventManager);
+        positionAnchor = new Property<>(PositionAnchor.class, this, POSITION_ANCHOR_PROPERTY, PositionAnchor.SCENE, aEventManager);
 
         ownerGameObject = aOwnerGameObject;
         behaviors = new HashMap<>();
@@ -60,9 +57,9 @@ public class GameObjectInstance implements Reflectable<GameObjectInstanceClassIn
         return CIINSTANCE;
     }
 
-    public boolean contains(Position aPosition) {
+    public boolean contains(Position aPosition, Size aScreenSize) {
         Size theSize = ownerGameObject.sizeProperty().get();
-        Position thePosition = position.get();
+        Position thePosition = positionAnchor.get().compute(position.get(), aScreenSize);
         return (aPosition.x >= thePosition.x && aPosition.y >= thePosition.y &&
                 aPosition.x <= thePosition.x + theSize.width &&
                 aPosition.y <= thePosition.y + theSize.height);
@@ -94,13 +91,8 @@ public class GameObjectInstance implements Reflectable<GameObjectInstanceClassIn
     }
 
     @ReflectiveField
-    public Property<Boolean> absolutePositionProperty() {
-        return absolutePosition;
-    }
-
-    @ReflectiveField
-    public Property<AbsolutePositionAnchor> absolutePositionAnchorProperty() {
-        return absolutePositionAnchor;
+    public Property<PositionAnchor> positionAnchorProperty() {
+        return positionAnchor;
     }
 
     public GameObject getOwnerGameObject() {
@@ -159,8 +151,7 @@ public class GameObjectInstance implements Reflectable<GameObjectInstanceClassIn
         theResult.put(POSITION_PROPERTY, position.get().serialize());
         theResult.put(NAME_PROPERTY, name.get());
         theResult.put(VISIBLE_PROPERTY, Boolean.toString(visible.get()));
-        theResult.put(ABSOLUTE_POSITION_PROPERTY, Boolean.toString(absolutePosition.get()));
-        theResult.put(ABSOLUTE_POSITION_ANCHOR_PROPERTY, absolutePositionAnchor.get().name());
+        theResult.put(POSITION_ANCHOR_PROPERTY, positionAnchor.get().name());
         theResult.put("rotationangle", rotationAngle.get().serialize());
 
         List<Map<String, Object>> theComponents = new ArrayList<>();
@@ -192,13 +183,25 @@ public class GameObjectInstance implements Reflectable<GameObjectInstanceClassIn
         if (theVisible != null) {
             theResult.visible.setQuietly(Boolean.parseBoolean(theVisible));
         }
-        String theAbsolutePositon = (String) theInstance.get(ABSOLUTE_POSITION_PROPERTY);
+        String theAbsolutePositon = (String) theInstance.get("absolutePosition");
         if (theAbsolutePositon != null) {
-            theResult.absolutePosition.setQuietly(Boolean.parseBoolean(theAbsolutePositon));
-        }
-        String theAnchor = (String) theInstance.get(ABSOLUTE_POSITION_ANCHOR_PROPERTY);
-        if (theAnchor != null) {
-            theResult.absolutePositionAnchor.setQuietly(AbsolutePositionAnchor.valueOf(theAnchor));
+            if (!Boolean.parseBoolean(theAbsolutePositon)) {
+                theResult.positionAnchor.setQuietly(PositionAnchor.SCENE);
+            } else {
+                String theAnchor = (String) theInstance.get(POSITION_ANCHOR_PROPERTY);
+                if (theAnchor != null) {
+                    theResult.positionAnchor.setQuietly(PositionAnchor.valueOf(theAnchor));
+                } else {
+                    theResult.positionAnchor.setQuietly(PositionAnchor.SCENE);
+                }
+            }
+        } else {
+            String theAnchor = (String) theInstance.get(POSITION_ANCHOR_PROPERTY);
+            if (theAnchor != null) {
+                theResult.positionAnchor.setQuietly(PositionAnchor.valueOf(theAnchor));
+            } else {
+                theResult.positionAnchor.setQuietly(PositionAnchor.SCENE);
+            }
         }
         Map<String, Object> theRotationAngle = (Map<String, Object>) theInstance.get("rotationangle");
         if (theRotationAngle != null) {

@@ -9,7 +9,7 @@ import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.process.StartProcess;
-import de.mirkosertic.gameengine.type.AbsolutePositionAnchor;
+import de.mirkosertic.gameengine.type.PositionAnchor;
 import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Reflectable;
 import de.mirkosertic.gameengine.type.Size;
@@ -101,20 +101,16 @@ public class CameraBehavior implements Behavior, Camera, Reflectable<CameraClass
                 }
                 // Just visible instances need to be drawn
                 if (theInstance.visibleProperty().get()) {
-                    //TODO: Optimize position handling here
-                    if (theInstance.absolutePositionProperty().get()) {
+                    Position theInstancePosition = theInstance.positionProperty().get();
+                    PositionAnchor thePositionAnchor = theInstance.positionAnchorProperty().get();
+                    Position thePosition = thePositionAnchor.compute(theInstancePosition, theScreenSize);
+                    Size theSize = theInstance.getOwnerGameObject().sizeProperty().get();
+                    if (thePosition.x + theSize.width >= theCameraPosition.x
+                            && thePosition.x <= theCameraPosition.x + theScreenSize.width
+                            && thePosition.y + theSize.height >= theCameraPosition.y
+                            && thePosition.y <= theCameraPosition.y + theScreenSize.height) {
                         aCallback.process(theInstance);
                         theCounter++;
-                    } else {
-                        Position theInstancePosition = theInstance.positionProperty().get();
-                        Size theSize = theInstance.getOwnerGameObject().sizeProperty().get();
-                        if (theInstancePosition.x + theSize.width >= theCameraPosition.x
-                                && theInstancePosition.x <= theCameraPosition.x + theScreenSize.width
-                                && theInstancePosition.y + theSize.height >= theCameraPosition.y
-                                && theInstancePosition.y <= theCameraPosition.y + theScreenSize.height) {
-                            aCallback.process(theInstance);
-                            theCounter++;
-                        }
                     }
                 }
             }
@@ -124,15 +120,8 @@ public class CameraBehavior implements Behavior, Camera, Reflectable<CameraClass
     }
 
     public Position transformToScreenPosition(GameObjectInstance aInstance) {
-        if (aInstance.absolutePositionProperty().get()) {
-            AbsolutePositionAnchor theAnchor = aInstance.absolutePositionAnchorProperty().get();
-            if (theAnchor != null) {
-                return theAnchor.compute(aInstance.positionProperty().get(), screenSize);
-            } else {
-                throw new IllegalStateException("instance " + aInstance.nameProperty().get()+" is set to invalid absolute position anchor");
-            }
-        }
-        return transformToScreenPosition(aInstance.positionProperty().get());
+        PositionAnchor theAnchor = aInstance.positionAnchorProperty().get();
+        return transformToScreenPosition(theAnchor.compute(aInstance.positionProperty().get(), screenSize));
     }
 
     public Position transformToScreenPosition(Position aWorldPosition) {
@@ -214,7 +203,7 @@ public class CameraBehavior implements Behavior, Camera, Reflectable<CameraClass
         processVisibleInstances(new Callback<GameObjectInstance>() {
             @Override
             public void process(GameObjectInstance aValue) {
-                if (aValue.contains(thePositionInGame)) {
+                if (aValue.contains(thePositionInGame, screenSize)) {
                     theInstances.add(aValue);
                 }
             }
