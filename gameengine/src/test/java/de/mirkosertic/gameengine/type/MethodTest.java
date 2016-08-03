@@ -11,17 +11,12 @@ public class MethodTest {
 
     @Before
     public void setup() {
-        method = new Method("lala", String.class, new Class[] {String.class, Integer.class}) {
+        method = new Method("lala", new Class[] {String.class, Integer.class}) {
             @Override
             public Object invoke(Object aTarget, Object[] aArguments) {
                 return null;
             }
         };
-    }
-
-    @Test
-    public void testGetReturnType() throws Exception {
-        assertEquals(String.class, method.getReturnType());
     }
 
     @Test

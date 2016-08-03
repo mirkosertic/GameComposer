@@ -5,6 +5,7 @@ import de.mirkosertic.gamecomposer.StringConverterFactory;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.input.KeyEventCondition;
 import de.mirkosertic.gameengine.type.GameKeyCode;
+import de.mirkosertic.gameengine.type.GameKeyCodeUtils;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
@@ -49,7 +50,7 @@ public class KeyEventConditionEditorController implements Controller {
         eventType.getSelectionModel().select(aCondition.eventTypeProperty().get());
 
         keyCode.getItems().clear();
-        keyCode.getItems().addAll(GameKeyCode.allKeysAsSortedList());
+        keyCode.getItems().addAll(GameKeyCodeUtils.allKeysAsSortedList());
         keyCode.setConverter(stringConverterFactory.createGameKeyCodeStringConverter());
         if (!condition.keyCodeProperty().isNull()) {
             keyCode.getSelectionModel().select(condition.keyCodeProperty().get());
