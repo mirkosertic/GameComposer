@@ -1,6 +1,5 @@
 package de.mirkosertic.gameengine.camera;
 
-import de.mirkosertic.gameengine.Callback;
 import de.mirkosertic.gameengine.core.Behavior;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
@@ -64,10 +63,6 @@ public class CameraBehavior implements Behavior, Camera, Reflectable<CameraClass
         return CIINSTANCE;
     }
 
-    public GameObjectInstance getObjectInstance() {
-        return objectInstance;
-    }
-
     @Override
     public Property<CameraType> typeProperty() {
         return type;
@@ -87,13 +82,14 @@ public class CameraBehavior implements Behavior, Camera, Reflectable<CameraClass
         }
     }
 
-    public int processVisibleInstances(Callback<GameObjectInstance> aCallback) {
+    public int processVisibleInstances(Callback aCallback) {
 
         int theCounter = 0;
 
         Size theScreenSize = getScreenSize();
         if (theScreenSize != null) {
             Position theCameraPosition = objectInstance.positionProperty().get();
+
             for (GameObjectInstance theInstance : scene.getInstances()) {
                 if (theInstance == objectInstance) {
                     // The camera object itself does not need to be drawn
@@ -101,15 +97,15 @@ public class CameraBehavior implements Behavior, Camera, Reflectable<CameraClass
                 }
                 // Just visible instances need to be drawn
                 if (theInstance.visibleProperty().get()) {
-                    Position theInstancePosition = theInstance.positionProperty().get();
-                    PositionAnchor thePositionAnchor = theInstance.positionAnchorProperty().get();
-                    Position thePosition = thePositionAnchor.compute(theInstancePosition, theScreenSize);
+                    PositionAnchor theAnchor = theInstance.positionAnchorProperty().get();
+                    Position theScreenPosition = theAnchor.compute(theInstance.positionProperty().get(), theCameraPosition, screenSize);
                     Size theSize = theInstance.getOwnerGameObject().sizeProperty().get();
-                    if (thePosition.x + theSize.width >= theCameraPosition.x
-                            && thePosition.x <= theCameraPosition.x + theScreenSize.width
-                            && thePosition.y + theSize.height >= theCameraPosition.y
-                            && thePosition.y <= theCameraPosition.y + theScreenSize.height) {
-                        aCallback.process(theInstance);
+                    // Do some clipping to prevent invisible objects from beeing rendered
+                    if (theScreenPosition.x + theSize.width >= 0
+                            && theScreenPosition.x <= theScreenSize.width
+                            && theScreenPosition.y + theSize.height >= 0
+                            && theScreenPosition.y <= theScreenSize.height) {
+                        aCallback.process(theInstance, theScreenPosition, theSize);
                         theCounter++;
                     }
                 }
@@ -117,11 +113,6 @@ public class CameraBehavior implements Behavior, Camera, Reflectable<CameraClass
         }
 
         return theCounter;
-    }
-
-    public Position transformToScreenPosition(GameObjectInstance aInstance) {
-        PositionAnchor theAnchor = aInstance.positionAnchorProperty().get();
-        return transformToScreenPosition(theAnchor.compute(aInstance.positionProperty().get(), screenSize));
     }
 
     public Position transformToScreenPosition(Position aWorldPosition) {
@@ -196,14 +187,15 @@ public class CameraBehavior implements Behavior, Camera, Reflectable<CameraClass
         return objectInstance;
     }
 
-    public GameObjectInstance[] findInstancesAt(Position aScreenPosition) {
+    public GameObjectInstance[] findInstancesAt(final Position aScreenPosition) {
         final List<GameObjectInstance> theInstances = new ArrayList<>();
-        final Position thePositionInGame = transformFromScreen(aScreenPosition);
-
-        processVisibleInstances(new Callback<GameObjectInstance>() {
+        processVisibleInstances(new Callback() {
             @Override
-            public void process(GameObjectInstance aValue) {
-                if (aValue.contains(thePositionInGame, screenSize)) {
+            public void process(GameObjectInstance aValue, Position aPositionOnScreen, Size aSize) {
+                if (aPositionOnScreen.x <= aScreenPosition.x &&
+                        aPositionOnScreen.y <= aScreenPosition.y &&
+                        aPositionOnScreen.x + aSize.width >= aScreenPosition.x &&
+                        aPositionOnScreen.y + aSize.height >= aScreenPosition.y) {
                     theInstances.add(aValue);
                 }
             }

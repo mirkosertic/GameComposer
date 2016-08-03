@@ -4,11 +4,10 @@ import de.mirkosertic.gameengine.annotations.ReflectiveField;
 import de.mirkosertic.gameengine.annotations.ReflectiveMethod;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
-import de.mirkosertic.gameengine.type.PositionAnchor;
 import de.mirkosertic.gameengine.type.Angle;
 import de.mirkosertic.gameengine.type.Position;
+import de.mirkosertic.gameengine.type.PositionAnchor;
 import de.mirkosertic.gameengine.type.Reflectable;
-import de.mirkosertic.gameengine.type.Size;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,14 +54,6 @@ public class GameObjectInstance implements Reflectable<GameObjectInstanceClassIn
     @Override
     public GameObjectInstanceClassInformation getClassInformation() {
         return CIINSTANCE;
-    }
-
-    public boolean contains(Position aPosition, Size aScreenSize) {
-        Size theSize = ownerGameObject.sizeProperty().get();
-        Position thePosition = positionAnchor.get().compute(position.get(), aScreenSize);
-        return (aPosition.x >= thePosition.x && aPosition.y >= thePosition.y &&
-                aPosition.x <= thePosition.x + theSize.width &&
-                aPosition.y <= thePosition.y + theSize.height);
     }
 
     @ReflectiveField
@@ -188,7 +179,7 @@ public class GameObjectInstance implements Reflectable<GameObjectInstanceClassIn
             if (!Boolean.parseBoolean(theAbsolutePositon)) {
                 theResult.positionAnchor.setQuietly(PositionAnchor.SCENE);
             } else {
-                String theAnchor = (String) theInstance.get(POSITION_ANCHOR_PROPERTY);
+                String theAnchor = (String) theInstance.get("absolutePositionAnchor");
                 if (theAnchor != null) {
                     theResult.positionAnchor.setQuietly(PositionAnchor.valueOf(theAnchor));
                 } else {
