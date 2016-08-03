@@ -31,7 +31,7 @@ class TeaVMGameView extends GenericAbstractGameView<GameResource> {
     private final Renderer renderer;
     private final Map<String, DisplayObject> instances;
     private Stage stage;
-    private InstanceCache instanceCache;
+    private TeaVMInstanceCache instanceCache;
     private CSSCache cssCache;
 
     public TeaVMGameView(GameRuntime aGameRuntime, CameraBehavior aCameraBehavior, GestureDetector aGestureDetector,
@@ -41,7 +41,7 @@ class TeaVMGameView extends GenericAbstractGameView<GameResource> {
         cssCache = new CSSCache();
         instances = new HashMap<>();
         stage = Stage.createStage(0);
-        instanceCache = new InstanceCache(stage);
+        instanceCache = new TeaVMInstanceCache(stage);
     }
 
     @Override
@@ -54,7 +54,7 @@ class TeaVMGameView extends GenericAbstractGameView<GameResource> {
         instances.clear();
         stage.destroy();
         stage = Stage.createStage(0);
-        instanceCache = new InstanceCache(stage);
+        instanceCache = new TeaVMInstanceCache(stage);
     }
 
     @Override
@@ -79,7 +79,7 @@ class TeaVMGameView extends GenericAbstractGameView<GameResource> {
             final GameResource aResource) {
 
         String theInstanceID = aInstance.uuidProperty().get();
-        Sprite theCurrentObject = instanceCache.getOrCreate(theInstanceID, new InstanceCache.Producer<Sprite>() {
+        Sprite theCurrentObject = instanceCache.getOrCreate(theInstanceID, new TeaVMInstanceCache.Producer<Sprite>() {
             @Override
             public Sprite create() {
                 TeaVMTextureResource theTexture = (TeaVMTextureResource) aResource;
@@ -99,7 +99,7 @@ class TeaVMGameView extends GenericAbstractGameView<GameResource> {
     protected void drawText(String aInstanceID, Position aPosition, Angle aAngle, final Position aCenterOffset, Font aFont, Color aColor, final String aText,
             Size aSize) {
 
-        Text theCurrentObject = instanceCache.getOrCreate(aInstanceID, new InstanceCache.Producer<Text>() {
+        Text theCurrentObject = instanceCache.getOrCreate(aInstanceID, new TeaVMInstanceCache.Producer<Text>() {
             @Override
             public Text create() {
                 Text theText = Text.createText(aText);
@@ -125,7 +125,7 @@ class TeaVMGameView extends GenericAbstractGameView<GameResource> {
             final Size aSize) {
 
         String theInstanceID = aInstance.uuidProperty().get();
-        Graphics theCurrentObject = instanceCache.getOrCreate(theInstanceID, new InstanceCache.Producer<Graphics>() {
+        Graphics theCurrentObject = instanceCache.getOrCreate(theInstanceID, new TeaVMInstanceCache.Producer<Graphics>() {
             @Override
             public Graphics create() {
                 Graphics theCurrentObject = Graphics.createGraphics();

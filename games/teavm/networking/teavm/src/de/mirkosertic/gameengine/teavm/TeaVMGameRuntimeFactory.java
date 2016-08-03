@@ -2,11 +2,18 @@ package de.mirkosertic.gameengine.teavm;
 
 import de.mirkosertic.gameengine.AbstractGameRuntimeFactory;
 import de.mirkosertic.gameengine.core.Logger;
+import de.mirkosertic.gameengine.core.NoThreadingThreadingManager;
 import de.mirkosertic.gameengine.core.ThreadingManager;
 import de.mirkosertic.gameengine.physics.jbox2d.JBox2DGamePhysicsManagerFactory;
 import de.mirkosertic.gameengine.scriptengine.luaj.LuaJScriptEngineFactory;
 
 public class TeaVMGameRuntimeFactory extends AbstractGameRuntimeFactory {
+
+    private final boolean multithreaded;
+
+    public TeaVMGameRuntimeFactory(boolean aMultithreaded) {
+        multithreaded = aMultithreaded;
+    }
 
     @Override
     protected Logger createLogger() {
@@ -35,7 +42,10 @@ public class TeaVMGameRuntimeFactory extends AbstractGameRuntimeFactory {
 
     @Override
     protected ThreadingManager createThreadingManager() {
-        return new TeaVMThreadingManager();
+        if (multithreaded) {
+            return new TeaVMThreadingManager();
+        }
+        return new NoThreadingThreadingManager();
     }
 
     @Override

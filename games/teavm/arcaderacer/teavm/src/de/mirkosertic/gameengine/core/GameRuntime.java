@@ -13,14 +13,20 @@ public class GameRuntime {
     private final GameResourceCache gameResourceCache;
     private final IORegistry ioRegistry;
     private final LUAScriptEngineFactory scriptEngineFactory;
+    private final Logger logger;
 
     public GameRuntime(GameEventManager aEventManager, GameResourceLoader aResourceLoader,
-            LUAScriptEngineFactory aScriptEngineFactory) {
+            LUAScriptEngineFactory aScriptEngineFactory, Logger aLogger) {
         ioRegistry = new IORegistry();
+        logger = aLogger;
         eventManager = aEventManager;
         systems = new GameSystem[0];
         gameResourceCache = new GameResourceCache(aResourceLoader);
         scriptEngineFactory = aScriptEngineFactory;
+    }
+
+    public Logger getLogger() {
+        return logger;
     }
 
     public GameResourceCache getResourceCache() {

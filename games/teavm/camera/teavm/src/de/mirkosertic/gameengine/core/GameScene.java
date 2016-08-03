@@ -9,6 +9,7 @@ import de.mirkosertic.gameengine.type.Color;
 import de.mirkosertic.gameengine.type.CustomProperties;
 import de.mirkosertic.gameengine.type.KeyValueObjectCache;
 import de.mirkosertic.gameengine.type.Position;
+import de.mirkosertic.gameengine.type.PositionAnchor;
 import de.mirkosertic.gameengine.type.Rectangle;
 import de.mirkosertic.gameengine.type.Reflectable;
 import de.mirkosertic.gameengine.type.Size;
@@ -195,22 +196,6 @@ public class GameScene implements Reflectable<GameSceneClassInformation>, KeyVal
 
     public GameSceneEffect[] getPostprocessorEffects() {
         return postprocessorEffects;
-    }
-
-    public List<GameObjectInstance> findAllAt(Position aScreenPosition, Position aWorldPosition) {
-        List<GameObjectInstance> theResult = new ArrayList<>();
-        for (GameObjectInstance theInstance : instances) {
-            if (theInstance.absolutePositionProperty().get()) {
-                if (theInstance.contains(aScreenPosition)) {
-                    theResult.add(theInstance);
-                }
-            } else {
-                if (theInstance.contains(aWorldPosition)) {
-                    theResult.add(theInstance);
-                }
-            }
-        }
-        return theResult;
     }
 
     public GameObject findObjectByID(String aObjectUUID) {
@@ -418,7 +403,7 @@ public class GameScene implements Reflectable<GameSceneClassInformation>, KeyVal
         int theMaxY = Integer.MIN_VALUE;
         for (GameObjectInstance theInstance : instances) {
             // Ignore instances with absolute positioning
-            if (!theInstance.absolutePositionProperty().get()) {
+            if (theInstance.positionAnchorProperty().get() == PositionAnchor.SCENE) {
                 Position thePosition = theInstance.positionProperty().get();
                 Size theSize = theInstance.getOwnerGameObject().sizeProperty().get();
                 theMinX = Math.min(theMinX, (int) thePosition.x);

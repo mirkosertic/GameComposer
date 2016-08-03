@@ -168,6 +168,9 @@ public class ArcadeRacerGameSceneEffect implements GameSceneEffect {
             TrackElement theTrackElement = track.getTrackElementForPosition(theZ);
             double theAngle = Math.toRadians(theTrackElement.angle);
 
+            double theSinAngle = Math.sin(theAngle);
+            double theCosAngle = Math.cos(theAngle);
+
             double theSceneZ = -theZ;
             double theSceneHeight = theTrackElement.height;
 
@@ -193,11 +196,11 @@ public class ArcadeRacerGameSceneEffect implements GameSceneEffect {
                 for (int i = 0;i<theTrackElement.segments.length;i++) {
                     Segment theSegment = theTrackElement.segments[i];
 
-                    double theStartX = theSegment.xStart * Math.cos(theAngle) - theSegment.yStart * Math.sin(theAngle);
-                    double theStartY = theSegment.xStart * Math.sin(theAngle) + theSegment.yStart * Math.cos(theAngle);
+                    double theStartX = theSegment.xStart * theCosAngle - theSegment.yStart * theSinAngle;
+                    double theStartY = theSegment.xStart * theSinAngle + theSegment.yStart * theCosAngle;
 
-                    double theEndX = theSegment.xEnd * Math.cos(theAngle) - theSegment.yEnd * Math.sin(theAngle);
-                    double theEndY = theSegment.xEnd * Math.sin(theAngle) + theSegment.yEnd * Math.cos(theAngle);
+                    double theEndX = theSegment.xEnd * theCosAngle - theSegment.yEnd * theSinAngle;
+                    double theEndY = theSegment.xEnd * theSinAngle + theSegment.yEnd * theCosAngle;
 
                     Point2D theSegmentStart  = theCamera.project(theStartX, theSceneHeight + theStartY, theSceneZ);
                     Point2D theSegmentEnd  = theCamera.project(theEndX, theSceneHeight + theEndY, theSceneZ);
@@ -226,7 +229,7 @@ public class ArcadeRacerGameSceneEffect implements GameSceneEffect {
                                     theOldTrackDataX[i*2+1], theOldTrackDataY[i*2+1],
                                     theNewTrackDataX[i*2+1], theNewTrackDataY[i*2+1],
                                     theNewTrackDataX[i*2], theNewTrackDataY[i*2],
-                                    0, 0, 511, 0, 511, 511, 0, 511, theZ);
+                                    0, 0, 1, 0, 1, 1, 0, 1, theZ);
 
                         } catch (IOException e) {
                             // Color
@@ -249,17 +252,31 @@ public class ArcadeRacerGameSceneEffect implements GameSceneEffect {
             for (int i=0;i<theTrackElement.sprites.length;i++) {
                 Sprite theSprite = theTrackElement.sprites[i];
 
-                Point2D theTopLeft  = theCamera.project(theSprite.positionX - theSprite.width / 2, theSceneHeight - theSprite.height , theSceneZ);
-                Point2D theBottomRight  = theCamera.project(theSprite.positionX + theSprite.width / 2, theSceneHeight, theSceneZ);
+                double theTopLeftX = (theSprite.positionX - theSprite.width / 2) * theCosAngle - (theSceneHeight - theSprite.height) * theSinAngle;
+                double theTopLeftY = (theSprite.positionX - theSprite.width / 2) * theSinAngle + (theSceneHeight - theSprite.height) * theCosAngle;
+
+                double theTopRightX = (theSprite.positionX + theSprite.width / 2) * theCosAngle - (theSceneHeight - theSprite.height) * theSinAngle;
+                double theTopRightY = (theSprite.positionX + theSprite.width / 2) * theSinAngle + (theSceneHeight - theSprite.height) * theCosAngle;
+
+                double theBottomLeftX = (theSprite.positionX - theSprite.width / 2) * theCosAngle - (theSceneHeight) * theSinAngle;
+                double theBottomLeftY = (theSprite.positionX - theSprite.width / 2) * theSinAngle + (theSceneHeight) * theCosAngle;
+
+                double theBottomRightX = (theSprite.positionX + theSprite.width / 2) * theCosAngle - (theSceneHeight) * theSinAngle;
+                double theBottomRightY = (theSprite.positionX + theSprite.width / 2) * theSinAngle + (theSceneHeight) * theCosAngle;
+
+                Point2D theTopLeft  = theCamera.project(theTopLeftX, theTopLeftY , theSceneZ);
+                Point2D theTopRight  = theCamera.project(theTopRightX, theTopRightY , theSceneZ);
+                Point2D theBottomLeft  = theCamera.project(theBottomLeftX, theBottomLeftY , theSceneZ);
+                Point2D theBottomRight  = theCamera.project(theBottomRightX, theBottomRightY , theSceneZ);
 
                 if (theBottomRight.x >=0 && theTopLeft.x < screenSize.width) {
                     //
                     ResourceName theResourceName = theSprite.computeCurrentView(gameTime);
                     try {
                         GameResource theResource = gameScene.getRuntime().getResourceCache().getResourceFor(theResourceName);
-                        aEffectCanvas
-                                .drawScaled(theElementIdentifier + "s_" + i,  theResource, theTopLeft.x + theXoffset, theTopLeft.y, theBottomRight.x - theTopLeft.x,
-                                        theBottomRight.y - theTopLeft.y, theZ);
+                        aEffectCanvas.fillRectangle(theElementIdentifier + "s_" + i, theResource,
+                                theTopLeft.x + theXoffset, theTopLeft.y, theTopRight.x + theXoffset, theTopRight.y, theBottomRight.x + theXoffset, theBottomRight.y,theBottomLeft.x + theXoffset, theBottomLeft.y,
+                                0, 0, 1, 0, 1, 1, 0, 1, theZ - 2);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }

@@ -7,6 +7,7 @@ import de.mirkosertic.gameengine.arcade.ConstantMovementBehaviorUnmarshaller;
 import de.mirkosertic.gameengine.arcaderacer.ArcadeRacerGameScaneEffectUnmarshaller;
 import de.mirkosertic.gameengine.camera.CameraBehaviorTemplateUnmarshaller;
 import de.mirkosertic.gameengine.camera.CameraBehaviorUnmarshaller;
+import de.mirkosertic.gameengine.core.DefaultLogger;
 import de.mirkosertic.gameengine.core.DeleteGameObjectInstanceActionUnmarshaller;
 import de.mirkosertic.gameengine.core.GameObjectInstanceAddedToSceneConditionUnmarshaller;
 import de.mirkosertic.gameengine.core.GameObjectInstanceLeftLayoutConditionUnmarshaller;
@@ -15,6 +16,7 @@ import de.mirkosertic.gameengine.core.GameResourceLoader;
 import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.core.IORegistry;
+import de.mirkosertic.gameengine.core.Logger;
 import de.mirkosertic.gameengine.core.RunSceneActionUnmarshaller;
 import de.mirkosertic.gameengine.core.SceneStartedConditionUnmarshaller;
 import de.mirkosertic.gameengine.core.SpawnGameObjectInstanceActionUnmarshaller;
@@ -64,6 +66,8 @@ public abstract class AbstractGameRuntimeFactory {
 
         ThreadingManager theThreadingManager = createThreadingManager();
 
+        Logger theLogger = createLogger();
+
         // Physics system
         GamePhysicsManagerFactory thePhysicsManagerFactory = createPhysicsManagerFactory();
         GamePhysicsManager thePhysicsManager = thePhysicsManagerFactory.create(theEventManager, theThreadingManager);
@@ -72,7 +76,7 @@ public abstract class AbstractGameRuntimeFactory {
         LUAScriptEngineFactory theScriptEngineFactory = createScriptEngine();
 
         // Runtime
-        GameRuntime theGameRuntime = new GameRuntime(theEventManager, aResourceLoader, theScriptEngineFactory);
+        GameRuntime theGameRuntime = new GameRuntime(theEventManager, aResourceLoader, theScriptEngineFactory, theLogger);
 
         // Sound
         GameSoundManager theSoundManager = GameSoundManagerFactory.create(theEventManager, aSoundSystemFactory.create(theGameRuntime));
@@ -127,5 +131,9 @@ public abstract class AbstractGameRuntimeFactory {
         // Finally we need to initialize the Action system, as now the scene is completely loaded
         ActionManagerFactory theActionManagerFactory = new ActionManagerFactory();
         aLoadesScene.getRuntime().addSystem(theActionManagerFactory.create(aLoadesScene, aLoadesScene.getRuntime().getEventManager()));
+    }
+
+    protected Logger createLogger() {
+        return new DefaultLogger();
     }
 }
