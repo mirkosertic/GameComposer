@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class InstanceCache {
+public class TeaVMInstanceCache {
 
     @FunctionalInterface
     public static interface Producer<T> {
@@ -20,7 +20,7 @@ public class InstanceCache {
     private final Container container;
     private final Set<String> touchedInstances;
 
-    public InstanceCache(Container aContainer) {
+    public TeaVMInstanceCache(Container aContainer) {
         instances = new HashMap<>();
         container = aContainer;
         touchedInstances = new HashSet<>();

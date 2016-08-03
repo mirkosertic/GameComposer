@@ -229,7 +229,7 @@ public class ArcadeRacerGameSceneEffect implements GameSceneEffect {
                                     theOldTrackDataX[i*2+1], theOldTrackDataY[i*2+1],
                                     theNewTrackDataX[i*2+1], theNewTrackDataY[i*2+1],
                                     theNewTrackDataX[i*2], theNewTrackDataY[i*2],
-                                    0, 0, 511, 0, 511, 511, 0, 511, theZ);
+                                    0, 0, 1, 0, 1, 1, 0, 1, theZ);
 
                         } catch (IOException e) {
                             // Color
@@ -276,7 +276,7 @@ public class ArcadeRacerGameSceneEffect implements GameSceneEffect {
                         GameResource theResource = gameScene.getRuntime().getResourceCache().getResourceFor(theResourceName);
                         aEffectCanvas.fillRectangle(theElementIdentifier + "s_" + i, theResource,
                                 theTopLeft.x + theXoffset, theTopLeft.y, theTopRight.x + theXoffset, theTopRight.y, theBottomRight.x + theXoffset, theBottomRight.y,theBottomLeft.x + theXoffset, theBottomLeft.y,
-                                0, 0, 63, 0, 63, 63, 0, 63, theZ - 2);
+                                0, 0, 1, 0, 1, 1, 0, 1, theZ - 2);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
