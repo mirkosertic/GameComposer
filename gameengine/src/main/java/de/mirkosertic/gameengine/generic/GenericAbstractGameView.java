@@ -14,7 +14,7 @@ import de.mirkosertic.gameengine.core.RuntimeStatistics;
 import de.mirkosertic.gameengine.scriptengine.LUAScriptEngine;
 import de.mirkosertic.gameengine.sprite.SpriteBehavior;
 import de.mirkosertic.gameengine.text.TextBehavior;
-import de.mirkosertic.gameengine.type.AbsolutePositionAnchor;
+import de.mirkosertic.gameengine.type.PositionAnchor;
 import de.mirkosertic.gameengine.type.Angle;
 import de.mirkosertic.gameengine.type.Color;
 import de.mirkosertic.gameengine.type.EffectCanvas;
@@ -221,7 +221,7 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
         if (aScene.getGame().enableDebugProperty().get()) {
             gameRuntime.getLogger().time("debugInformation");
             // Draw version information
-            AbsolutePositionAnchor theAnchor = AbsolutePositionAnchor.BOTTOM_LEFT;
+            PositionAnchor theAnchor = PositionAnchor.BOTTOM_LEFT;
             drawTextAt("debug1", theAnchor, THE_DEBUG_POSITION_VERSION, THE_DEBUG_CENTER, THE_DEBUG_TEXT_SIZE, THE_DEBUG_FONT, THE_DEBUG_TEXT_COLOR, Version.VERSION);
             drawTextAt("debug2", theAnchor, THE_DEBUG_FRAME_RATE, THE_DEBUG_CENTER, THE_DEBUG_TEXT_SIZE, THE_DEBUG_FONT, THE_DEBUG_TEXT_COLOR,
                     "Time for every frame : " + aStatistics.getAverageTimePerLoopCycle() + " ms");
@@ -237,7 +237,7 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
         gameRuntime.getLogger().timeEnd("renderGame");
     }
 
-    private void drawTextAt(String aID, AbsolutePositionAnchor aAnchor, Position aPosition, Position aCenterOffset, Size aSize, Font aFont, Color aColor, String aText) {
+    private void drawTextAt(String aID, PositionAnchor aAnchor, Position aPosition, Position aCenterOffset, Size aSize, Font aFont, Color aColor, String aText) {
 
         Position thePositionOnScreen = aAnchor.compute(aPosition, getCurrentScreenSize());
 

@@ -3,7 +3,7 @@ package de.mirkosertic.gameengine.core;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.event.PropertyChanged;
-import de.mirkosertic.gameengine.type.AbsolutePositionAnchor;
+import de.mirkosertic.gameengine.type.PositionAnchor;
 import de.mirkosertic.gameengine.type.Angle;
 import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Size;
@@ -53,11 +53,11 @@ public class GameObjectInstanceTest {
         when(theOwner.sizeProperty()).thenReturn(theSizeProperty);
 
         GameObjectInstance theInstance = new GameObjectInstance(theEventManager, theOwner);
-        assertTrue(theInstance.contains(new Position(5, 5)));
-        assertFalse(theInstance.contains(new Position(-5, 5)));
-        assertFalse(theInstance.contains(new Position(15, 5)));
-        assertFalse(theInstance.contains(new Position(5, -5)));
-        assertFalse(theInstance.contains(new Position(5, 25)));
+        assertTrue(theInstance.contains(new Position(5, 5), new Size(100, 100)));
+        assertFalse(theInstance.contains(new Position(-5, 5), new Size(100, 100)));
+        assertFalse(theInstance.contains(new Position(15, 5), new Size(100, 100)));
+        assertFalse(theInstance.contains(new Position(5, -5), new Size(100, 100)));
+        assertFalse(theInstance.contains(new Position(5, 25), new Size(100, 100)));
     }
 
     @Test
@@ -144,23 +144,6 @@ public class GameObjectInstanceTest {
     }
 
     @Test
-    public void testAbsolutePositionProperty() throws Exception {
-        GameEventManager theEventManager = mock(GameEventManager.class);
-        Property theVisibleProperty = mock(Property.class);
-        when(theVisibleProperty.get()).thenReturn(true);
-        GameObject theOwner = mock(GameObject.class);
-        when(theOwner.visibleProperty()).thenReturn(theVisibleProperty);
-
-        GameObjectInstance theInstance = new GameObjectInstance(theEventManager, theOwner);
-        assertEquals("absolutePosition", theInstance.absolutePositionProperty().getName());
-        assertEquals(Boolean.class, theInstance.absolutePositionProperty().getType());
-        assertFalse(theInstance.absolutePositionProperty().get());
-        theInstance.absolutePositionProperty().set(true);
-        assertTrue(theInstance.absolutePositionProperty().get());
-        verify(theEventManager).handleGameEvent(any(PropertyChanged.class));
-    }
-
-    @Test
     public void testAbsolutePositionAnchorProperty() throws Exception {
         GameEventManager theEventManager = mock(GameEventManager.class);
         Property theVisibleProperty = mock(Property.class);
@@ -169,11 +152,11 @@ public class GameObjectInstanceTest {
         when(theOwner.visibleProperty()).thenReturn(theVisibleProperty);
 
         GameObjectInstance theInstance = new GameObjectInstance(theEventManager, theOwner);
-        assertEquals("absolutePositionAnchor", theInstance.absolutePositionAnchorProperty().getName());
-        assertEquals(AbsolutePositionAnchor.class, theInstance.absolutePositionAnchorProperty().getType());
-        assertEquals(AbsolutePositionAnchor.TOP_LEFT, theInstance.absolutePositionAnchorProperty().get());
-        theInstance.absolutePositionAnchorProperty().set(AbsolutePositionAnchor.BOTTOM_LEFT);
-        assertEquals(AbsolutePositionAnchor.BOTTOM_LEFT, theInstance.absolutePositionAnchorProperty().get());
+        assertEquals("positionAnchor", theInstance.positionAnchorProperty().getName());
+        assertEquals(PositionAnchor.class, theInstance.positionAnchorProperty().getType());
+        assertEquals(PositionAnchor.SCENE, theInstance.positionAnchorProperty().get());
+        theInstance.positionAnchorProperty().set(PositionAnchor.BOTTOM_LEFT);
+        assertEquals(PositionAnchor.BOTTOM_LEFT, theInstance.positionAnchorProperty().get());
         verify(theEventManager).handleGameEvent(any(PropertyChanged.class));
     }
 
@@ -302,14 +285,13 @@ public class GameObjectInstanceTest {
         theInstance.nameProperty().set("NAME");
 
         Map<String, Object> theResult = theInstance.serialize();
-        assertEquals(9, theResult.size());
+        assertEquals(8, theResult.size());
         assertNotNull(theResult.get(GameObjectInstance.UUID_PROPERTY));
         assertEquals("OWNERID", theResult.get("gameobjectuuid"));
         assertEquals(new Position(10,12).serialize(), theResult.get(GameObjectInstance.POSITION_PROPERTY));
         assertEquals("NAME", theResult.get(GameObjectInstance.NAME_PROPERTY));
         assertEquals("true", theResult.get(GameObjectInstance.VISIBLE_PROPERTY));
-        assertEquals("false", theResult.get(GameObjectInstance.ABSOLUTE_POSITION_PROPERTY));
-        assertEquals("TOP_LEFT", theResult.get(GameObjectInstance.ABSOLUTE_POSITION_ANCHOR_PROPERTY));
+        assertEquals("SCENE", theResult.get(GameObjectInstance.POSITION_ANCHOR_PROPERTY));
         assertEquals(new Angle(0).serialize(), theResult.get("rotationangle"));
 
         List<Map<String, Object>> theBehaviors = (List<Map<String, Object>>) theResult.get("components");
@@ -343,8 +325,8 @@ public class GameObjectInstanceTest {
         theData.put(GameObjectInstance.VISIBLE_PROPERTY, "false");
         theData.put(GameObjectInstance.NAME_PROPERTY, "name");
         theData.put("rotationangle", new Angle(17).serialize());
-        theData.put(GameObjectInstance.ABSOLUTE_POSITION_PROPERTY, "true");
-        theData.put(GameObjectInstance.ABSOLUTE_POSITION_ANCHOR_PROPERTY, "BOTTOM_LEFT");
+        theData.put("absolutePosition", "true");
+        theData.put(GameObjectInstance.POSITION_ANCHOR_PROPERTY, "BOTTOM_LEFT");
         List<Map<String, Object>> theBehaviors = new ArrayList<>();
         Map<String, Object> theSingleBehavior = new HashMap<>();
         theSingleBehavior.put(Behavior.TYPE_ATTRIBUTE, "Behav");
@@ -358,8 +340,53 @@ public class GameObjectInstanceTest {
         assertEquals(new Position(10, 12), theInstance.positionProperty().get());
         assertEquals(new Angle(17), theInstance.rotationAngleProperty().get());
         assertFalse(theInstance.visibleProperty().get());
-        assertTrue(theInstance.absolutePositionProperty().get());
-        assertEquals(AbsolutePositionAnchor.BOTTOM_LEFT, theInstance.absolutePositionAnchorProperty().get());
+        assertEquals(PositionAnchor.BOTTOM_LEFT, theInstance.positionAnchorProperty().get());
+
+        assertEquals(theBehavior, theInstance.getBehavior(theBehavior.getClass()));
+    }
+
+    @Test
+    public void testDeserialize2() throws Exception {
+        GameRuntime theRuntime = mock(GameRuntime.class);
+        GameScene theScene = mock(GameScene.class);
+        GameObject theOwner = mock(GameObject.class);
+        when(theScene.findObjectByID(eq("OWNERID"))).thenReturn(theOwner);
+        Property theVisibleProperty = mock(Property.class);
+        when(theVisibleProperty.get()).thenReturn(true);
+        when(theOwner.visibleProperty()).thenReturn(theVisibleProperty);
+
+        Behavior theBehavior = mock(Behavior.class);
+
+        IORegistry theRegistry = mock(IORegistry.class);
+        BehaviorUnmarshaller theUnmarshaller = mock(BehaviorUnmarshaller.class);
+        when(theUnmarshaller.deserialize(any(GameRuntime.class), any(GameObjectInstance.class), anyMap())).thenReturn(theBehavior);
+        when(theRegistry.getBehaviorUnmarshallerFor(eq("Behav"))).thenReturn(theUnmarshaller);
+
+        when(theRuntime.getIORegistry()).thenReturn(theRegistry);
+
+        Map<String, Object> theData = new HashMap<>();
+        theData.put(GameObjectInstance.UUID_PROPERTY, "LALA");
+        theData.put("gameobjectuuid", "OWNERID");
+        theData.put(GameObjectInstance.POSITION_PROPERTY, new Position(10, 12).serialize());
+        theData.put(GameObjectInstance.VISIBLE_PROPERTY, "false");
+        theData.put(GameObjectInstance.NAME_PROPERTY, "name");
+        theData.put("rotationangle", new Angle(17).serialize());
+        theData.put("absolutePosition", "false");
+        theData.put(GameObjectInstance.POSITION_ANCHOR_PROPERTY, "BOTTOM_LEFT");
+        List<Map<String, Object>> theBehaviors = new ArrayList<>();
+        Map<String, Object> theSingleBehavior = new HashMap<>();
+        theSingleBehavior.put(Behavior.TYPE_ATTRIBUTE, "Behav");
+        theBehaviors.add(theSingleBehavior);
+        theData.put("components", theBehaviors);
+
+        GameObjectInstance theInstance = GameObjectInstance.deserialize(theRuntime, theScene, theData);
+        assertEquals("LALA", theInstance.uuidProperty().get());
+        assertEquals("name", theInstance.nameProperty().get());
+        assertEquals(theOwner, theInstance.getOwnerGameObject());
+        assertEquals(new Position(10, 12), theInstance.positionProperty().get());
+        assertEquals(new Angle(17), theInstance.rotationAngleProperty().get());
+        assertFalse(theInstance.visibleProperty().get());
+        assertEquals(PositionAnchor.SCENE, theInstance.positionAnchorProperty().get());
 
         assertEquals(theBehavior, theInstance.getBehavior(theBehavior.getClass()));
     }

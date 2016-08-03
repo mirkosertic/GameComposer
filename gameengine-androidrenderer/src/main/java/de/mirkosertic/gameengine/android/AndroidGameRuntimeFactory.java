@@ -4,7 +4,6 @@ import android.util.Log;
 import de.mirkosertic.gameengine.AbstractGameRuntimeFactory;
 import de.mirkosertic.gameengine.core.GameResourceLoader;
 import de.mirkosertic.gameengine.core.GameRuntime;
-import de.mirkosertic.gameengine.core.NoThreadingThreadingManager;
 import de.mirkosertic.gameengine.core.ThreadingManager;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.SystemException;
@@ -33,7 +32,7 @@ class AndroidGameRuntimeFactory extends AbstractGameRuntimeFactory {
 
     @Override
     protected LuaJScriptEngineFactory createScriptEngine() {
-        return new LuaJScriptEngineFactory(new JDKBuiltInFunctions());
+        return new LuaJScriptEngineFactory(new AndroidJDKBuiltInFunctions());
     }
 
     @Override
