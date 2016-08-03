@@ -99,7 +99,10 @@ public class AnnotationProcessor extends AbstractProcessor {
                 PrintWriter theClassWriter = new PrintWriter(theFiler.createSourceFile(theClassInfoFQName, theClass).openWriter());
                 theClassWriter.println("package " + thePackageName + ";");
                 theClassWriter.println();
-                theClassWriter.println("import de.mirkosertic.gameengine.type.*;");
+
+                theClassWriter.println("import de.mirkosertic.gameengine.type.ClassInformation;");
+                theClassWriter.println("import de.mirkosertic.gameengine.type.Field;");
+                theClassWriter.println("import de.mirkosertic.gameengine.type.Method;");
                 theClassWriter.println();
 
                 theClassWriter.print("public class ");
@@ -126,7 +129,7 @@ public class AnnotationProcessor extends AbstractProcessor {
 
                         String theFieldName = theElement.getSimpleName().toString().toUpperCase();
                         theClassWriter.println();
-                        theClassWriter.print("  public static final Field<");
+                        theClassWriter.print("  public final Field<");
                         theClassWriter.print(theClass.getSimpleName().toString());
                         theClassWriter.print(", ");
                         theClassWriter.print(theTypename);
@@ -165,7 +168,7 @@ public class AnnotationProcessor extends AbstractProcessor {
 
                         String theFieldName = theElement.getSimpleName().toString().toUpperCase();
                         theClassWriter.println();
-                        theClassWriter.print("  public static final Method<");
+                        theClassWriter.print("  public final Method<");
                         theClassWriter.print(theClass.getQualifiedName().toString());
                         theClassWriter.print("> ");
                         theClassWriter.print(theFieldName);
@@ -173,9 +176,7 @@ public class AnnotationProcessor extends AbstractProcessor {
                         theClassWriter.print(theClass.getQualifiedName().toString());
                         theClassWriter.print(">(\"");
                         theClassWriter.print(theElement.getSimpleName().toString());
-                        theClassWriter.print("\", ");
-                        theClassWriter.print(theTypename);
-                        theClassWriter.print(".class, new Class[] {");
+                        theClassWriter.print("\", new Class[] {");
 
                         List<? extends TypeMirror> theTypes = theElementType.getParameterTypes();
                         for (int i=0;i<theTypes.size();i++) {
