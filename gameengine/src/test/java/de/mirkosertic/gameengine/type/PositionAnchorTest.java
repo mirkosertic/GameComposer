@@ -4,11 +4,11 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class AbsolutePositionAnchorTest {
+public class PositionAnchorTest {
 
     @Test
     public void testComputeTopLeft() throws Exception {
-        AbsolutePositionAnchor theAnchor = AbsolutePositionAnchor.TOP_LEFT;
+        PositionAnchor theAnchor = PositionAnchor.TOP_LEFT;
         Size theScreenSize = new Size(320, 200);
         Position thePosition = new Position(10,10);
         Position thePositionOnScreen = theAnchor.compute(thePosition, theScreenSize);
@@ -17,8 +17,38 @@ public class AbsolutePositionAnchorTest {
     }
 
     @Test
+    public void testComputeCenter() throws Exception {
+        PositionAnchor theAnchor = PositionAnchor.CENTER;
+        Size theScreenSize = new Size(320, 200);
+        Position thePosition = new Position(-10,-10);
+        Position thePositionOnScreen = theAnchor.compute(thePosition, theScreenSize);
+        assertEquals(150f, thePositionOnScreen.x, 0);
+        assertEquals(90f, thePositionOnScreen.y, 0);
+    }
+
+    @Test
+    public void testComputePercent() throws Exception {
+        PositionAnchor theAnchor = PositionAnchor.PERCENT;
+        Size theScreenSize = new Size(320, 200);
+        Position thePosition = new Position(10,10);
+        Position thePositionOnScreen = theAnchor.compute(thePosition, theScreenSize);
+        assertEquals(32, thePositionOnScreen.x, 0);
+        assertEquals(20, thePositionOnScreen.y, 0);
+    }
+
+    @Test
+    public void testComputeScene() throws Exception {
+        PositionAnchor theAnchor = PositionAnchor.SCENE;
+        Size theScreenSize = new Size(320, 200);
+        Position thePosition = new Position(10,10);
+        Position thePositionOnScreen = theAnchor.compute(thePosition, theScreenSize);
+        assertEquals(10, thePositionOnScreen.x, 0);
+        assertEquals(10, thePositionOnScreen.y, 0);
+    }
+
+    @Test
     public void testComputeTopRight() throws Exception {
-        AbsolutePositionAnchor theAnchor = AbsolutePositionAnchor.TOP_RIGHT;
+        PositionAnchor theAnchor = PositionAnchor.TOP_RIGHT;
         Size theScreenSize = new Size(320, 200);
         Position thePosition = new Position(10,10);
         Position thePositionOnScreen = theAnchor.compute(thePosition, theScreenSize);
@@ -28,7 +58,7 @@ public class AbsolutePositionAnchorTest {
 
     @Test
     public void testComputeBottomLeft() throws Exception {
-        AbsolutePositionAnchor theAnchor = AbsolutePositionAnchor.BOTTOM_LEFT;
+        PositionAnchor theAnchor = PositionAnchor.BOTTOM_LEFT;
         Size theScreenSize = new Size(320, 200);
         Position thePosition = new Position(10,10);
         Position thePositionOnScreen = theAnchor.compute(thePosition, theScreenSize);
@@ -38,7 +68,7 @@ public class AbsolutePositionAnchorTest {
 
     @Test
     public void testComputeBottomRight() throws Exception {
-        AbsolutePositionAnchor theAnchor = AbsolutePositionAnchor.BOTTOM_RIGHT;
+        PositionAnchor theAnchor = PositionAnchor.BOTTOM_RIGHT;
         Size theScreenSize = new Size(320, 200);
         Position thePosition = new Position(10,10);
         Position thePositionOnScreen = theAnchor.compute(thePosition, theScreenSize);

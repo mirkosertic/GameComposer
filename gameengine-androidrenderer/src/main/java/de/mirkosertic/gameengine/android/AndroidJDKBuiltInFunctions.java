@@ -6,7 +6,7 @@ import de.mirkosertic.gameengine.type.BuiltInFunctionsClassInformation;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 
-public class JDKBuiltInFunctions extends BuiltInFunctions {
+public class AndroidJDKBuiltInFunctions extends BuiltInFunctions {
 
     public static final BuiltInFunctionsClassInformation CIINSTANCE = new BuiltInFunctionsClassInformation();
 

@@ -191,14 +191,8 @@ public class EditorFXGameView extends JavaFXGameView {
         }
         if (currentMousePosition != null) {
             boolean theHighlighted = false;
-            if (aInstance.absolutePositionProperty().get()) {
-                if (aInstance.contains(currentMousePosition)) {
-                    theHighlighted = true;
-                }
-            } else {
-                if (aInstance.contains(getCameraBehavior().transformFromScreen(currentMousePosition))) {
-                    theHighlighted = true;
-                }
+            if (aInstance.contains(getCameraBehavior().transformFromScreen(currentMousePosition), getCurrentScreenSize())) {
+                theHighlighted = true;
             }
 
             if (theHighlighted) {
