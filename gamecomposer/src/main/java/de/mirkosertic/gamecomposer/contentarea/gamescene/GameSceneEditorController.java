@@ -180,9 +180,9 @@ public class GameSceneEditorController implements ContentController<GameScene> {
     private void onMousePressed(MouseEvent aEvent) {
         Position theScreenPosition = new Position(aEvent.getX(), aEvent.getY());
         Position theWorldPosition = cameraComponent.transformFromScreen(theScreenPosition);
-        List<GameObjectInstance> theFoundInstances = gameScene.findAllAt(theScreenPosition, cameraComponent.getScreenSize());
-        if (theFoundInstances.size() == 1) {
-            draggingInstance = theFoundInstances.get(0);
+        GameObjectInstance[] theFoundInstances = cameraComponent.findInstancesAt(theScreenPosition);
+        if (theFoundInstances.length == 1) {
+            draggingInstance = theFoundInstances[0];
             draggingMouseWorldPosition = theWorldPosition;
 
             gameScene.getRuntime().getEventManager().fire(new DisableDynamicPhysics(draggingInstance));
@@ -216,8 +216,8 @@ public class GameSceneEditorController implements ContentController<GameScene> {
                 float theDY = theScreenPosition.y - draggingMouseWorldPosition.y;
 
                 // Move camera
-                Position theObjectPosition = cameraComponent.getObjectInstance().positionProperty().get();
-                cameraComponent.getObjectInstance().positionProperty().set(new Position(theObjectPosition.x - theDX, theObjectPosition.y - theDY));
+                Position theObjectPosition = cameraComponent.getInstance().positionProperty().get();
+                cameraComponent.getInstance().positionProperty().set(new Position(theObjectPosition.x - theDX, theObjectPosition.y - theDY));
 
                 draggingMouseWorldPosition = theScreenPosition;
             }
@@ -279,11 +279,9 @@ public class GameSceneEditorController implements ContentController<GameScene> {
 
     void onMouseClicked(MouseEvent aEvent) {
         Position theClickPosition = new Position(aEvent.getX(), aEvent.getY());
-        cameraComponent.processVisibleInstances(aValue -> {
-            if (aValue.contains(theClickPosition, cameraComponent.getScreenSize())) {
-                objectSelectedEventEvent.fire(new ObjectSelectedEvent(aValue));
-            }
-        });
+        for (GameObjectInstance theInstance : cameraComponent.findInstancesAt(theClickPosition)) {
+            objectSelectedEventEvent.fire(new ObjectSelectedEvent(theInstance));
+        }
     }
 
     @Override

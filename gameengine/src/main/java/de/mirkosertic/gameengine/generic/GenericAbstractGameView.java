@@ -1,6 +1,6 @@
 package de.mirkosertic.gameengine.generic;
 
-import de.mirkosertic.gameengine.Callback;
+import de.mirkosertic.gameengine.camera.Callback;
 import de.mirkosertic.gameengine.Version;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
@@ -121,21 +121,18 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
         }
         gameRuntime.getLogger().timeEnd("preprocessorEffects");
 
-        int theNumberOfInstances = cameraBehavior.processVisibleInstances(new Callback<GameObjectInstance>() {
+        int theNumberOfInstances = cameraBehavior.processVisibleInstances(new Callback() {
             @Override
-            public void process(GameObjectInstance aValue) {
-                Position thePositionOnScreen = cameraBehavior.transformToScreenPosition(aValue);
+            public void process(GameObjectInstance aValue, Position aPositionOnScreen, Size aSize) {
 
-                Size theSize = aValue.getOwnerGameObject().sizeProperty().get();
-
-                float theHalfWidth = theSize.width / 2;
-                float theHalfHeight = theSize.height / 2;
+                float theHalfWidth = aSize.width / 2;
+                float theHalfHeight = aSize.height / 2;
 
                 Position theCenterOffset = new Position(theHalfWidth, theHalfHeight);
 
                 Angle theAngle = aValue.rotationAngleProperty().get();
 
-                beforeInstance(aValue, thePositionOnScreen, theCenterOffset, theAngle);
+                beforeInstance(aValue, aPositionOnScreen, theCenterOffset, theAngle);
 
                 boolean theSomethingRendered = false;
 
@@ -148,7 +145,7 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
                             S theGameResource = gameRuntime.getResourceCache()
                                     .getResourceFor(theSpriteResource);
 
-                            drawImage(aValue, thePositionOnScreen, theCenterOffset, theGameResource);
+                            drawImage(aValue, aPositionOnScreen, theCenterOffset, theGameResource);
 
                             theSomethingRendered = true;
 
@@ -194,8 +191,8 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
                         theTextToDraw = theExpression.expression;
                     }
 
-                    drawText(aValue.uuidProperty().get(), thePositionOnScreen, aValue.rotationAngleProperty().get(), theCenterOffset, theTextBehavior.fontProperty().get(),
-                            theTextBehavior.colorProperty().get(), theTextToDraw, theSize);
+                    drawText(aValue.uuidProperty().get(), aPositionOnScreen, aValue.rotationAngleProperty().get(), theCenterOffset, theTextBehavior.fontProperty().get(),
+                            theTextBehavior.colorProperty().get(), theTextToDraw, aSize);
 
 
                     theSomethingRendered = true;
@@ -203,10 +200,10 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
 
                 if (!theSomethingRendered) {
                     // Nothing was rendered.
-                    drawRect(aValue, thePositionOnScreen, theCenterOffset, Color.WHITE, theSize);
+                    drawRect(aValue, aPositionOnScreen, theCenterOffset, Color.WHITE, aSize);
                 }
 
-                afterInstance(aValue, thePositionOnScreen);
+                afterInstance(aValue, aPositionOnScreen);
             }
         });
 
@@ -219,13 +216,14 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
 
         // Shall we print Debug Information to the Screen?
         if (aScene.getGame().enableDebugProperty().get()) {
+            Position theCameraPosition = cameraBehavior.getInstance().positionProperty().get();
             gameRuntime.getLogger().time("debugInformation");
             // Draw version information
             PositionAnchor theAnchor = PositionAnchor.BOTTOM_LEFT;
-            drawTextAt("debug1", theAnchor, THE_DEBUG_POSITION_VERSION, THE_DEBUG_CENTER, THE_DEBUG_TEXT_SIZE, THE_DEBUG_FONT, THE_DEBUG_TEXT_COLOR, Version.VERSION);
-            drawTextAt("debug2", theAnchor, THE_DEBUG_FRAME_RATE, THE_DEBUG_CENTER, THE_DEBUG_TEXT_SIZE, THE_DEBUG_FONT, THE_DEBUG_TEXT_COLOR,
+            drawTextAt("debug1", theAnchor.compute(THE_DEBUG_POSITION_VERSION, theCameraPosition, currentScreenSize), THE_DEBUG_CENTER, THE_DEBUG_TEXT_SIZE, THE_DEBUG_FONT, THE_DEBUG_TEXT_COLOR, Version.VERSION);
+            drawTextAt("debug2", theAnchor.compute(THE_DEBUG_FRAME_RATE, theCameraPosition, currentScreenSize), THE_DEBUG_CENTER, THE_DEBUG_TEXT_SIZE, THE_DEBUG_FONT, THE_DEBUG_TEXT_COLOR,
                     "Time for every frame : " + aStatistics.getAverageTimePerLoopCycle() + " ms");
-            drawTextAt("debug3", theAnchor, THE_DEBUG_VIVISBLE_INSTANCES, THE_DEBUG_CENTER, THE_DEBUG_TEXT_SIZE, THE_DEBUG_FONT, THE_DEBUG_TEXT_COLOR,
+            drawTextAt("debug3", theAnchor.compute(THE_DEBUG_VIVISBLE_INSTANCES, theCameraPosition, currentScreenSize), THE_DEBUG_CENTER, THE_DEBUG_TEXT_SIZE, THE_DEBUG_FONT, THE_DEBUG_TEXT_COLOR,
                     "Number of visible instances : " + theNumberOfInstances);
             gameRuntime.getLogger().timeEnd("debugInformation");
         }
@@ -237,13 +235,11 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
         gameRuntime.getLogger().timeEnd("renderGame");
     }
 
-    private void drawTextAt(String aID, PositionAnchor aAnchor, Position aPosition, Position aCenterOffset, Size aSize, Font aFont, Color aColor, String aText) {
+    private void drawTextAt(String aID, Position aPosition, Position aCenterOffset, Size aSize, Font aFont, Color aColor, String aText) {
 
-        Position thePositionOnScreen = aAnchor.compute(aPosition, getCurrentScreenSize());
-
-        beforeInstance(null, thePositionOnScreen, aCenterOffset, Angle.ZERO);
-        drawText(aID, thePositionOnScreen, Angle.ZERO, aCenterOffset, aFont, aColor, aText, aSize);
-        afterInstance(null, thePositionOnScreen);
+        beforeInstance(null, aPosition, aCenterOffset, Angle.ZERO);
+        drawText(aID, aPosition, Angle.ZERO, aCenterOffset, aFont, aColor, aText, aSize);
+        afterInstance(null, aPosition);
     }
 
     @Override

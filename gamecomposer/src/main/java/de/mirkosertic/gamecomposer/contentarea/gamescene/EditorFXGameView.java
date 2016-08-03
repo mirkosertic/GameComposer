@@ -97,7 +97,7 @@ public class EditorFXGameView extends JavaFXGameView {
             int theGridsizeWidth = gridsizeWidthProperty().get();
             int theGridsizeHeight = gridsizeHeightProperty().get();
 
-            Position theCameraPosition = theCameraBehavior.getObjectInstance().positionProperty().get();
+            Position theCameraPosition = theCameraBehavior.getInstance().positionProperty().get();
             Size theScreenSize = theCameraBehavior.getScreenSize();
 
             float theStartX = theCameraPosition.x - (theCameraPosition.x % theGridsizeWidth);
@@ -160,7 +160,7 @@ public class EditorFXGameView extends JavaFXGameView {
         GameScene theGameScene = getGameScene();
         Rectangle theLayoutBounds = theGameScene.layoutBoundsProperty().get();
 
-        GameObjectInstance theCamera = theCameraBehavior.getObjectInstance();
+        GameObjectInstance theCamera = theCameraBehavior.getInstance();
         Position theCurrentCameraPosition = theCamera.positionProperty().get();
 
         // Draw layout bounds
@@ -191,7 +191,11 @@ public class EditorFXGameView extends JavaFXGameView {
         }
         if (currentMousePosition != null) {
             boolean theHighlighted = false;
-            if (aInstance.contains(getCameraBehavior().transformFromScreen(currentMousePosition), getCurrentScreenSize())) {
+
+            if (aPositionOnScreen.x <= currentMousePosition.x &&
+                    aPositionOnScreen.y <= currentMousePosition.y &&
+                    aPositionOnScreen.x + theSize.width >= currentMousePosition.x &&
+                    aPositionOnScreen.y + theSize.height >= currentMousePosition.y) {
                 theHighlighted = true;
             }
 

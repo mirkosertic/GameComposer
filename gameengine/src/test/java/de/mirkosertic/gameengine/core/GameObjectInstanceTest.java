@@ -1,19 +1,5 @@
 package de.mirkosertic.gameengine.core;
 
-import de.mirkosertic.gameengine.event.GameEventManager;
-import de.mirkosertic.gameengine.event.Property;
-import de.mirkosertic.gameengine.event.PropertyChanged;
-import de.mirkosertic.gameengine.type.PositionAnchor;
-import de.mirkosertic.gameengine.type.Angle;
-import de.mirkosertic.gameengine.type.Position;
-import de.mirkosertic.gameengine.type.Size;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -27,6 +13,19 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import de.mirkosertic.gameengine.event.GameEventManager;
+import de.mirkosertic.gameengine.event.Property;
+import de.mirkosertic.gameengine.event.PropertyChanged;
+import de.mirkosertic.gameengine.type.Angle;
+import de.mirkosertic.gameengine.type.Position;
+import de.mirkosertic.gameengine.type.PositionAnchor;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class GameObjectInstanceTest {
 
     @Test
@@ -39,25 +38,6 @@ public class GameObjectInstanceTest {
 
         GameObjectInstance theInstance = new GameObjectInstance(theEventManager, theOwner);
         assertTrue(theInstance.getClassInformation() instanceof GameObjectInstanceClassInformation);
-    }
-
-    @Test
-    public void testContains() throws Exception {
-        GameEventManager theEventManager = mock(GameEventManager.class);
-        Property theVisibleProperty = mock(Property.class);
-        when(theVisibleProperty.get()).thenReturn(true);
-        Property theSizeProperty = mock(Property.class);
-        when(theSizeProperty.get()).thenReturn(new Size(10, 20));
-        GameObject theOwner = mock(GameObject.class);
-        when(theOwner.visibleProperty()).thenReturn(theVisibleProperty);
-        when(theOwner.sizeProperty()).thenReturn(theSizeProperty);
-
-        GameObjectInstance theInstance = new GameObjectInstance(theEventManager, theOwner);
-        assertTrue(theInstance.contains(new Position(5, 5), new Size(100, 100)));
-        assertFalse(theInstance.contains(new Position(-5, 5), new Size(100, 100)));
-        assertFalse(theInstance.contains(new Position(15, 5), new Size(100, 100)));
-        assertFalse(theInstance.contains(new Position(5, -5), new Size(100, 100)));
-        assertFalse(theInstance.contains(new Position(5, 25), new Size(100, 100)));
     }
 
     @Test
@@ -326,7 +306,7 @@ public class GameObjectInstanceTest {
         theData.put(GameObjectInstance.NAME_PROPERTY, "name");
         theData.put("rotationangle", new Angle(17).serialize());
         theData.put("absolutePosition", "true");
-        theData.put(GameObjectInstance.POSITION_ANCHOR_PROPERTY, "BOTTOM_LEFT");
+        theData.put("absolutePositionAnchor", "BOTTOM_LEFT");
         List<Map<String, Object>> theBehaviors = new ArrayList<>();
         Map<String, Object> theSingleBehavior = new HashMap<>();
         theSingleBehavior.put(Behavior.TYPE_ATTRIBUTE, "Behav");
