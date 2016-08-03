@@ -44,7 +44,16 @@ public class JavaFXEffectCanvas implements EffectCanvas {
     }
 
     private void fillTriangle(String aObjectID, GameResource aTexture, int aX0, int aY0, int aX1, int aY1, int aX2,
-                              int aY2, int aU0, int aV0, int aU1, int aV1, int aU2, int aV2) {
+                              int aY2, double aU0, double aV0, double aU1, double aV1, double aU2, double aV2) {
+
+        JavaFXBitmapResource theImage = (JavaFXBitmapResource) aTexture;
+        aU0 = aU0 * theImage.getWidth();
+        aV0 = aV0 * theImage.getHeight();
+        aU1 = aU1 * theImage.getWidth();
+        aV1 = aV1 * theImage.getHeight();
+        aU2 = aU2 * theImage.getWidth();
+        aV2 = aV2 * theImage.getHeight();
+
         // Affine Texture Mapping
         context.save();
 
@@ -67,8 +76,6 @@ public class JavaFXEffectCanvas implements EffectCanvas {
         double f = aY0 - b*aU0 - d*aV0;
 
         context.transform( a, b, c, d, e, f );
-
-        JavaFXBitmapResource theImage = (JavaFXBitmapResource) aTexture;
         context.drawImage(theImage, 0, 0);
 
         context.restore();
@@ -76,7 +83,7 @@ public class JavaFXEffectCanvas implements EffectCanvas {
 
     @Override
     public void fillRectangle(String aObjectID, GameResource aTexture, int aX0, int aY0, int aX1, int aY1, int aX2,
-                              int aY2, int aX3,int aY3, int aU0, int aV0, int aU1, int aV1, int aU2, int aV2, int aU3, int aV3, int aZIndex) {
+                              int aY2, int aX3,int aY3, double aU0, double aV0, double aU1, double aV1, double aU2, double aV2, double aU3, double aV3, int aZIndex) {
 
         fillTriangle(aObjectID, aTexture, aX0, aY0, aX1, aY1, aX2, aY2, aU0, aV0, aU1, aV1, aU2, aV2);
         fillTriangle(aObjectID, aTexture, aX0, aY0, aX2, aY2, aX3, aY3, aU0, aV0, aU2, aV2, aU3, aV3);

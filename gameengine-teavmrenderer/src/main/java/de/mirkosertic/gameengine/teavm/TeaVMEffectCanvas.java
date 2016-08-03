@@ -17,11 +17,11 @@ import java.util.Map;
 
 public class TeaVMEffectCanvas implements EffectCanvas {
 
-    private final InstanceCache instanceCache;
+    private final TeaVMInstanceCache instanceCache;
     private final Renderer renderer;
     private final Map<Color, Texture> coloredTextures;
 
-    public TeaVMEffectCanvas(InstanceCache aInstanceCacne, Renderer aRenderer) {
+    public TeaVMEffectCanvas(TeaVMInstanceCache aInstanceCacne, Renderer aRenderer) {
         instanceCache = aInstanceCacne;
         renderer = aRenderer;
         coloredTextures = new HashMap<>();
@@ -45,7 +45,7 @@ public class TeaVMEffectCanvas implements EffectCanvas {
 
     @Override
     public void drawSingleDot(String aObjectID, Position aPosition, final Color aColor, int aZIndex) {
-        Graphics theCurrentObject = instanceCache.getOrCreate(aObjectID, new InstanceCache.Producer<Graphics>() {
+        Graphics theCurrentObject = instanceCache.getOrCreate(aObjectID, new TeaVMInstanceCache.Producer<Graphics>() {
             @Override
             public Graphics create() {
                 Graphics theCurrentObject = Graphics.createGraphics();
@@ -66,7 +66,7 @@ public class TeaVMEffectCanvas implements EffectCanvas {
     @Override
     public void fillRectangle(String aObjectID, final int aX0, final int aY0, final int aX1, final int aY1, final int aX2, final int aY2, final int aX3, final int aY3, final Color aColor, int aZIndex) {
 
-        Mesh theMesh = instanceCache.getOrCreate(aObjectID, new InstanceCache.Producer<Mesh>() {
+        Mesh theMesh = instanceCache.getOrCreate(aObjectID, new TeaVMInstanceCache.Producer<Mesh>() {
             @Override
             public Mesh create() {
                 Mesh theMesh = Mesh.createMesh(getTexttureFor(aColor), Float32Array.create(8));
@@ -97,11 +97,9 @@ public class TeaVMEffectCanvas implements EffectCanvas {
     }
 
     @Override
-    public void fillRectangle(String aObjectID, final GameResource aTexture, final int aX0, final int aY0, final int aX1, final int aY1, final int aX2,
-                              final int aY2, final int aX3, final int aY3, final int aU0, final int aV0, final int aU1, final int aV1, final int aU2, final int aV2, int aU3, int aV3, int aZIndex) {
+    public void fillRectangle(String aObjectIdentifier, final GameResource aTexture, int aX0, int aY0, int aX1, int aY1, int aX2, int aY2, int aX3, int aY3, double aU0, double aV0, double aU1, double aV1, double aU2, double aV2, double aU3, double aV3, int aZIndex) {
 
-
-        Mesh theMesh = instanceCache.getOrCreate(aObjectID, new InstanceCache.Producer<Mesh>() {
+        Mesh theMesh = instanceCache.getOrCreate(aObjectIdentifier, new TeaVMInstanceCache.Producer<Mesh>() {
             @Override
             public Mesh create() {
                 TeaVMTextureResource theResource = (TeaVMTextureResource) aTexture;
