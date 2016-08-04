@@ -41,11 +41,11 @@ GameEngine-FXRenderer
 
 This is the game presentation logic by implementing a GameView using JavaFX 2. This also includes a Soundsystem implementation based on Java Sound API.
 
-GameEngine-GWTRenderer
+GameEngine-TeaVMRenderer (preferred)
 --------------
 
-This is the game presentation logic using GWT and HTML5(JavaScript) by implementing a GameView. This also includes a SoundSystem implementation based on HTML5 Media API.
-Currently the HTML5 renderer tries to use WebGL. If WebGL is not available, it will fallback to the HTML5 Canvas API.
+This is the game presentation logic using the TeaVM Java-to-JavaScript Transpiler Framework. It will render the game view
+using [pixi.js](http://www.pixijs.com), which uses WebGL or the HTML5 Canvas API as a fallback. Sound is done using [howler.js](https://github.com/goldfire/howler.js/) 
 
 GameEngine-AndroidRenderer
 --------------
@@ -53,17 +53,17 @@ GameEngine-AndroidRenderer
 This is the game presentation logic using the Android Java SDK. This also includes a SoundSystem implementation for Android devices.
 We use an Android SurfaceView for rendering. Future versions will include OpenGL ES support.
 
-GameEngine-DragomeRenderer
+GameEngine-GWTRenderer (outdated)
+--------------
+
+This is the game presentation logic using GWT and HTML5(JavaScript) by implementing a GameView. This also includes a SoundSystem implementation based on HTML5 Media API.
+Currently the HTML5 renderer tries to use WebGL. If WebGL is not available, it will fallback to the HTML5 Canvas API.
+
+GameEngine-DragomeRenderer (experimental)
 --------------
 
 This is the game presentation logic using the Dragome Java-to-JavaScript Transpiler Framework. It will render the game view
 using the HTML5 Canvas API.
-
-GameEngine-TeaVMRenderer
---------------
-
-This is the game presentation logic using the TeaVM Java-to-JavaScript Transpiler Framework. It will render the game view
-using [pixi.js](http://www.pixijs.com), which uses WebGL or the HTML5 Canvas API as a fallback.
 
 GameEngine-Networking
 --------------
