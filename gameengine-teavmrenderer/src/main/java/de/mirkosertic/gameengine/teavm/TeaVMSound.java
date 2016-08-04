@@ -1,15 +1,15 @@
 package de.mirkosertic.gameengine.teavm;
 
-import org.teavm.jso.JSBody;
-import org.teavm.jso.JSObject;
+import de.mirkosertic.gameengine.teavm.howler.Howl;
+import de.mirkosertic.gameengine.teavm.howler.SoundID;
 
-public abstract class TeaVMSound implements JSObject {
+public class TeaVMSound {
 
-    public abstract void play();
+    public final Howl howl;
+    public final SoundID soundID;
 
-    @JSBody(
-        params = {"aResourceName"},
-        script = "return new Audio(aResourceName);"
-    )
-    public native static TeaVMSound create(String aResourceName);
+    public TeaVMSound(Howl aHowl, SoundID aSoundID) {
+        howl = aHowl;
+        soundID = aSoundID;
+    }
 }
