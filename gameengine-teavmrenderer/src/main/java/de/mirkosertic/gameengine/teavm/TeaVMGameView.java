@@ -33,6 +33,7 @@ class TeaVMGameView extends GenericAbstractGameView<GameResource> {
     private Stage stage;
     private TeaVMInstanceCache instanceCache;
     private CSSCache cssCache;
+    private TeaVMEffectCanvas effectCanvas;
 
     public TeaVMGameView(GameRuntime aGameRuntime, CameraBehavior aCameraBehavior, GestureDetector aGestureDetector,
             Renderer aRenderer) {
@@ -42,6 +43,7 @@ class TeaVMGameView extends GenericAbstractGameView<GameResource> {
         instances = new HashMap<>();
         stage = Stage.createStage(0);
         instanceCache = new TeaVMInstanceCache(stage);
+        effectCanvas = new TeaVMEffectCanvas(instanceCache, renderer);
     }
 
     @Override
@@ -55,6 +57,7 @@ class TeaVMGameView extends GenericAbstractGameView<GameResource> {
         stage.destroy();
         stage = Stage.createStage(0);
         instanceCache = new TeaVMInstanceCache(stage);
+        effectCanvas = new TeaVMEffectCanvas(instanceCache, renderer);
     }
 
     @Override
@@ -66,7 +69,7 @@ class TeaVMGameView extends GenericAbstractGameView<GameResource> {
 
     @Override
     protected EffectCanvas createEffectCanvas() {
-        return new TeaVMEffectCanvas(instanceCache, renderer);
+        return effectCanvas;
     }
 
     @Override
