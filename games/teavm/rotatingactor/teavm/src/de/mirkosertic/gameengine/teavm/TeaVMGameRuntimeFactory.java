@@ -10,9 +10,11 @@ import de.mirkosertic.gameengine.scriptengine.luaj.LuaJScriptEngineFactory;
 public class TeaVMGameRuntimeFactory extends AbstractGameRuntimeFactory {
 
     private final boolean multithreaded;
+    private final boolean profiling;
 
-    public TeaVMGameRuntimeFactory(boolean aMultithreaded) {
+    public TeaVMGameRuntimeFactory(boolean aMultithreaded, boolean aProfiling) {
         multithreaded = aMultithreaded;
+        profiling = aProfiling;
     }
 
     @Override
@@ -30,12 +32,16 @@ public class TeaVMGameRuntimeFactory extends AbstractGameRuntimeFactory {
 
             @Override
             public void time(String aLabel) {
-                TeaVMLogger.time(aLabel);
+                if (profiling) {
+                    TeaVMLogger.time(aLabel);
+                }
             }
 
             @Override
             public void timeEnd(String aLabel) {
-                TeaVMLogger.timeEnd(aLabel);
+                if (profiling) {
+                    TeaVMLogger.timeEnd(aLabel);
+                }
             }
         };
     }

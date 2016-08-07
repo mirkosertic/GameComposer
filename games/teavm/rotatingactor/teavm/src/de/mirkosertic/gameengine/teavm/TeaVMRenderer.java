@@ -44,6 +44,7 @@ public class TeaVMRenderer {
     private HTMLCanvasElement canvasElement;
     private Game game;
     private NetworkConnector networkConnector;
+    private boolean fullscreenRequested;
 
     private TeaVMRenderer() {
     }
@@ -57,7 +58,9 @@ public class TeaVMRenderer {
         canvasElement = (HTMLCanvasElement) document.getElementById("html5canvas");
 
         gameLoopFactory = new GameLoopFactory();
-        runtimeFactory = new TeaVMGameRuntimeFactory(!window.getLocation().getFullURL().contains("nothreading"));
+        runtimeFactory = new TeaVMGameRuntimeFactory(
+                !window.getLocation().getFullURL().contains("nothreading"),
+                window.getLocation().getFullURL().contains("profiling"));
 
         // Initialize PIXI
         final Renderer theRenderer;
@@ -94,6 +97,7 @@ public class TeaVMRenderer {
         new TeaVMGameLoader(new TeaVMGameLoader.GameLoadedListener() {
             @Override
             public void onGameLoaded(Game aGame) {
+
                 game = aGame;
 
                 if (aGame.enableNetworkingProperty().get()) {
@@ -221,8 +225,18 @@ public class TeaVMRenderer {
         }, true);
     }
 
+    private void requestFullScreen() {
+        if (!fullscreenRequested) {
+
+            TeaVMLogger.info("Requesting fullscreen mode");
+            TeaVMWindow.requestFullScreen(canvasElement);
+            fullscreenRequested = true;
+        }
+    }
+
     private void mouseDown(TeaVMMouseEvent aEvent) {
         if (runSceneStrategy.hasGameLoop()) {
+            requestFullScreen();
             runSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector().mousePressed(
                     new Position(aEvent.getClientX(), aEvent.getClientY())
             );
@@ -231,6 +245,7 @@ public class TeaVMRenderer {
 
     private void mouseUp(TeaVMMouseEvent aEvent) {
         if (runSceneStrategy.hasGameLoop()) {
+            requestFullScreen();
             runSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector().mouseReleased(
                     new Position(aEvent.getClientX(), aEvent.getClientY())
             );
@@ -239,19 +254,21 @@ public class TeaVMRenderer {
 
     private void keyPressed(TeaVMKeyEvent aEvent) {
         if (runSceneStrategy.hasGameLoop()) {
+            requestFullScreen();
             int theCode = aEvent.getKeyCode();
             GameKeyCode theKeyCode = TeaVMKeyCodeTranslator.translate(theCode);
             runSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector().keyPressed(theKeyCode);
-            TeaVMLogger.info("KeyEvent keyPressed " + theCode);
+            runSceneStrategy.getRunningGameLoop().getScene().getRuntime().getLogger().info("KeyEvent keyPressed " + theCode);
         }
     }
 
     private void keyReleased(TeaVMKeyEvent aEvent) {
         if (runSceneStrategy.hasGameLoop()) {
+            requestFullScreen();
             int theCode = aEvent.getKeyCode();
             GameKeyCode theKeyCode = TeaVMKeyCodeTranslator.translate(theCode);
             runSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector().keyReleased(theKeyCode);
-            TeaVMLogger.info("KeyEvent keyReleased " + theCode);
+            runSceneStrategy.getRunningGameLoop().getScene().getRuntime().getLogger().info("KeyEvent keyReleased " + theCode);
         }
     }
 
@@ -266,6 +283,7 @@ public class TeaVMRenderer {
 
     private void touchStarted(TeaVMTouchEvent aEvent) {
         if (runSceneStrategy.hasGameLoop()) {
+            requestFullScreen();
             GestureDetector theDetector = runSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector();
             theDetector.touchStarted(toArray(aEvent.getTouches()));
         }
@@ -273,6 +291,7 @@ public class TeaVMRenderer {
 
     private void touchEnded(TeaVMTouchEvent aEvent) {
         if (runSceneStrategy.hasGameLoop()) {
+            requestFullScreen();
             GestureDetector theDetector = runSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector();
             theDetector.touchEnded(toArray(aEvent.getTouches()));
         }

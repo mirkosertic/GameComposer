@@ -47,6 +47,18 @@
                     clearTimeout(id);
                 };
         }());
+
+        function fullscreen(aElement) {
+            if(aElement.requestFullscreen) {
+                aElement.requestFullscreen();
+            } else if(aElement.mozRequestFullScreen) {
+                aElement.mozRequestFullScreen();
+            } else if(aElement.webkitRequestFullscreen) {
+                aElement.webkitRequestFullscreen();
+            } else if(aElement.msRequestFullscreen) {
+                aElement.msRequestFullscreen();
+            }
+        }
     </script>
 </head>
 <body onload="main()">
