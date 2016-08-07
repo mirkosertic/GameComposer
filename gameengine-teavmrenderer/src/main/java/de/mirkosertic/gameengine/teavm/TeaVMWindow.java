@@ -3,6 +3,7 @@ package de.mirkosertic.gameengine.teavm;
 import org.teavm.jso.JSBody;
 import org.teavm.jso.JSFunctor;
 import org.teavm.jso.JSObject;
+import org.teavm.jso.dom.html.HTMLElement;
 
 public abstract class TeaVMWindow {
 
@@ -16,4 +17,10 @@ public abstract class TeaVMWindow {
             script = "window.requestAnimationFrame(aHandler);"
     )
     public native static void requestAnimationFrame(RenderFrameHandler aHandler);
+
+    @JSBody(
+            params = {"aElement"},
+            script = "fullscreen(aElement);"
+    )
+    public native static void requestFullScreen(HTMLElement aElement);
 }
