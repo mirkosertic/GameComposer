@@ -26,6 +26,7 @@
         <module>gameengine-teavmrenderer</module>
         <module>gameengine-dragomerenderer</module>
         <module>gameengine-tools</module>
+        <module>gameengine-editor</module>
         <module>gamecomposer</module>
         <module>examples</module>
     </modules>
