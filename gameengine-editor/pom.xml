@@ -17,6 +17,10 @@
         <connection>scm:git:https://github.com/mirkosertic/GameComposer.git</connection>
     </scm>
 
+    <properties>
+        <teavm.version>0.4.3</teavm.version>
+    </properties>
+
     <build>
         <plugins>
             <plugin>
@@ -28,13 +32,89 @@
                     <verbose>true</verbose>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <webResources>
+                        <resource>
+                            <directory>${project.build.directory}/generated/js</directory>
+                        </resource>
+                    </webResources>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.teavm</groupId>
+                <artifactId>teavm-maven-plugin</artifactId>
+                <version>${teavm.version}</version>
+                <executions>
+                    <execution>
+                        <id>web-client</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <configuration>
+                            <targetDirectory>${project.build.directory}/generated/js/teavm</targetDirectory>
+                            <mainClass>de.mirkosertic.gameengine.web.WebUI</mainClass>
+                            <!-- How to attach runtime.js. Possible values are: SEPARATE, MERGED and NONE -->
+                            <runtime>SEPARATE</runtime>
+                            <!-- Whether TeaVM should produce minified JavaScript. Can reduce JavaScript file size more than
+                                 two times -->
+                            <minifying>false</minifying>
+                            <!-- Whether TeaVM should produce debug information for its built-in debugger -->
+                            <debugInformationGenerated>true</debugInformationGenerated>
+                            <!-- Whether TeaVM should produce source maps file -->
+                            <sourceMapsGenerated>true</sourceMapsGenerated>
+                            <!-- Whether TeaVM should also put source files into output directory,
+                                 for compatibility with source maps -->
+                            <sourceFilesCopied>true</sourceFilesCopied>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
     <dependencies>
+
         <dependency>
             <groupId>de.mirkosertic</groupId>
-            <artifactId>gameengine-fxrenderer</artifactId>
+            <artifactId>gameengine</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>de.mirkosertic</groupId>
+            <artifactId>gameengine-jbox2d</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>de.mirkosertic</groupId>
+            <artifactId>gameengine-lua</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.teavm</groupId>
+            <artifactId>teavm-classlib</artifactId>
+            <version>${teavm.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- JavaScriptObjects (JSO) - a JavaScript binding for TeaVM -->
+        <dependency>
+            <groupId>org.teavm</groupId>
+            <artifactId>teavm-jso</artifactId>
+            <version>${teavm.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.teavm</groupId>
+            <artifactId>teavm-jso-apis</artifactId>
+            <version>${teavm.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
