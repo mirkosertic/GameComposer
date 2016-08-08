@@ -1,4 +1,5 @@
 @numbergridcolumns: 12;
+@screenwidth: 800px;
 @pagebackground: white;
 @elementbackground: lightGray;
 @bordercolor: #bdc3c7;
@@ -33,7 +34,15 @@ body {
 
 .width(@counter) when (@counter > 0) {
   .width-@{counter} {
-    width: (100% / @numbergridcolumns * @counter)
+    width: (100% / @numbergridcolumns * @counter);
+  }
+
+  .min-width-@{counter} {
+    min-width: @screenwidth  / @numbergridcolumns * @counter;
+  }
+
+  .max-width-@{counter} {
+    max-width: @screenwidth  / @numbergridcolumns * @counter;
   }
 
   .width((@counter - 1));
@@ -100,28 +109,48 @@ body {
     flex-flow: row;
 
     label {
+      font-size: small;
+      padding-right: 0.2em;
       align-self: center;
-      display: inline-block;
+      display: flex;
       text-align: left;
       vertical-align: middle;
       padding-left: 0.2em;
-      white-space: nowrap;
+      flex-shrink: 5;
+    }
 
-      input[type=text] {
-        border: 1px solid @elementbackground;
-      }
+    input[type=text] {
+      border: 1px solid @elementbackground;
+      flex-grow: 10;
+    }
 
-      input[type=text]:hover {
-        border: 1px solid @backgroundcolor;
-      }
+    input[type=text]:hover {
+      border: 1px solid @backgroundcolor;
+    }
 
-      input[type=checkbox] {
-        border: 1px solid @elementbackground;
-      }
+    input[type=color] {
+      border: 1px solid @elementbackground;
+      flex-grow: 10;
+    }
 
-      input[type=checkbox]:hover {
-        border: 1px solid @backgroundcolor;
-      }
+    input[type=color]:hover {
+      border: 1px solid @backgroundcolor;
+    }
+
+    input[type=checkbox] {
+      border: 1px solid @elementbackground;
+    }
+
+    input[type=checkbox]:hover {
+      border: 1px solid @backgroundcolor;
+    }
+
+    select {
+      flex-grow: 10;
+    }
+
+    select:hover {
+      border: 1px solid @backgroundcolor;
     }
   }
 }

@@ -1,0 +1,237 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto);
+body {
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+}
+.flexVertical {
+  flex-direction: row;
+}
+.flexHorizontal {
+  flex-direction: column;
+}
+.grid {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff;
+}
+.width-12 {
+  width: 100%;
+}
+.min-width-12 {
+  min-width: 800px;
+}
+.max-width-12 {
+  max-width: 800px;
+}
+.width-11 {
+  width: 91.66666666666667%;
+}
+.min-width-11 {
+  min-width: 733.3333333333334px;
+}
+.max-width-11 {
+  max-width: 733.3333333333334px;
+}
+.width-10 {
+  width: 83.33333333333334%;
+}
+.min-width-10 {
+  min-width: 666.6666666666667px;
+}
+.max-width-10 {
+  max-width: 666.6666666666667px;
+}
+.width-9 {
+  width: 75%;
+}
+.min-width-9 {
+  min-width: 600px;
+}
+.max-width-9 {
+  max-width: 600px;
+}
+.width-8 {
+  width: 66.66666666666667%;
+}
+.min-width-8 {
+  min-width: 533.3333333333334px;
+}
+.max-width-8 {
+  max-width: 533.3333333333334px;
+}
+.width-7 {
+  width: 58.333333333333336%;
+}
+.min-width-7 {
+  min-width: 466.6666666666667px;
+}
+.max-width-7 {
+  max-width: 466.6666666666667px;
+}
+.width-6 {
+  width: 50%;
+}
+.min-width-6 {
+  min-width: 400px;
+}
+.max-width-6 {
+  max-width: 400px;
+}
+.width-5 {
+  width: 41.66666666666667%;
+}
+.min-width-5 {
+  min-width: 333.33333333333337px;
+}
+.max-width-5 {
+  max-width: 333.33333333333337px;
+}
+.width-4 {
+  width: 33.333333333333336%;
+}
+.min-width-4 {
+  min-width: 266.6666666666667px;
+}
+.max-width-4 {
+  max-width: 266.6666666666667px;
+}
+.width-3 {
+  width: 25%;
+}
+.min-width-3 {
+  min-width: 200px;
+}
+.max-width-3 {
+  max-width: 200px;
+}
+.width-2 {
+  width: 16.666666666666668%;
+}
+.min-width-2 {
+  min-width: 133.33333333333334px;
+}
+.max-width-2 {
+  max-width: 133.33333333333334px;
+}
+.width-1 {
+  width: 8.333333333333334%;
+}
+.min-width-1 {
+  min-width: 66.66666666666667px;
+}
+.max-width-1 {
+  max-width: 66.66666666666667px;
+}
+.gridItem {
+  background-color: lightGray;
+}
+.gridItem .shrink {
+  flex-shrink: 1;
+}
+.gridItem .grow {
+  flex-grow: 1;
+}
+.border-1 {
+  border: 1px solid #bdc3c7;
+}
+.border-2 {
+  border: 1px solid #bdc3c7;
+}
+.border-3 {
+  border: 1px solid #bdc3c7;
+}
+.border-4 {
+  border: 1px solid #bdc3c7;
+}
+.border-5 {
+  border: 1px solid #bdc3c7;
+}
+.border-6 {
+  border: 1px solid #bdc3c7;
+}
+.border-7 {
+  border: 1px solid #bdc3c7;
+}
+.border-8 {
+  border: 1px solid #bdc3c7;
+}
+.border-9 {
+  border: 1px solid #bdc3c7;
+}
+.border-10 {
+  border: 1px solid #bdc3c7;
+}
+.commonFont {
+  color: white;
+  font-family: 'Open Sans', sans-serif;
+}
+.commonFontTitle {
+  color: white;
+  font-family: 'Open Sans', sans-serif;
+}
+.input {
+  border: 1px solid lightGray;
+}
+.propertyEditor .separator {
+  color: white;
+  font-family: 'Open Sans', sans-serif;
+  background-color: #2980b9;
+  padding: 0.1em;
+}
+.propertyEditor .separator .border-1 {
+  border: 1px solid #bdc3c7;
+}
+.propertyEditor .separatorlight {
+  color: white;
+  font-family: 'Open Sans', sans-serif;
+  background-color: #2980b9;
+  padding: 0.1em;
+  background-color: #55a5d9;
+}
+.propertyEditor .separatorlight .border-1 {
+  border: 1px solid #bdc3c7;
+}
+.propertyEditor .propertyEditor {
+  background-color: white;
+  padding: 0.1em;
+  display: flex;
+  flex-flow: row;
+}
+.propertyEditor .propertyEditor label {
+  font-size: small;
+  padding-right: 0.2em;
+  align-self: center;
+  display: flex;
+  text-align: left;
+  vertical-align: middle;
+  padding-left: 0.2em;
+  flex-shrink: 5;
+}
+.propertyEditor .propertyEditor input[type=text] {
+  border: 1px solid lightGray;
+  flex-grow: 10;
+}
+.propertyEditor .propertyEditor input[type=text]:hover {
+  border: 1px solid #2980b9;
+}
+.propertyEditor .propertyEditor input[type=color] {
+  border: 1px solid lightGray;
+  flex-grow: 10;
+}
+.propertyEditor .propertyEditor input[type=color]:hover {
+  border: 1px solid #2980b9;
+}
+.propertyEditor .propertyEditor input[type=checkbox] {
+  border: 1px solid lightGray;
+}
+.propertyEditor .propertyEditor input[type=checkbox]:hover {
+  border: 1px solid #2980b9;
+}
+.propertyEditor .propertyEditor select {
+  flex-grow: 10;
+}
+.propertyEditor .propertyEditor select:hover {
+  border: 1px solid #2980b9;
+}
