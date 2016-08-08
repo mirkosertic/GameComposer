@@ -1,0 +1,130 @@
+@numbergridcolumns: 12;
+@pagebackground: white;
+@elementbackground: lightGray;
+@bordercolor: #bdc3c7;
+@backgroundcolor: #2980b9;
+@textcolor: white;
+// Colors taken from https://flatuicolors.com/
+
+@import url(https://fonts.googleapis.com/css?family=Roboto);
+
+// Global layout
+body {
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+}
+
+// Very Simple Grid System
+.flexVertical {
+  flex-direction: row;
+}
+
+.flexHorizontal {
+  flex-direction: column;
+}
+
+.grid {
+  display: flex;
+  .flexVertical;
+  width: 100%;
+  height: 100%;
+  background-color: @pagebackground;
+}
+
+.width(@counter) when (@counter > 0) {
+  .width-@{counter} {
+    width: (100% / @numbergridcolumns * @counter)
+  }
+
+  .width((@counter - 1));
+}
+
+.width(@numbergridcolumns);
+
+.gridItem {
+  background-color: @elementbackground;
+
+  .shrink {
+    flex-shrink: 1;
+  }
+
+  .grow {
+    flex-grow: 1;
+  }
+}
+
+
+// Borders
+.border(@counter) when (@counter > 0) {
+  .border((@counter - 1));
+
+  .border-@{counter} {
+    border: 1px solid @bordercolor;
+  }
+}
+.border(10);
+
+// Common Fonts
+.commonFont {
+  color: white;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.commonFontTitle {
+  .commonFont();
+}
+
+.input {
+  border:  1px solid @elementbackground;
+}
+
+// Property editor styles
+.propertyEditor {
+  // Separators
+  .separator {
+    .border(1);
+    .commonFontTitle();
+    background-color: @backgroundcolor;
+    padding: 0.1em;
+  }
+
+  .separatorlight {
+    .separator();
+    background-color: lighten(@backgroundcolor, 15%);
+  }
+
+  .propertyEditor {
+    background-color: white;
+    padding: 0.1em;
+    display: flex;
+    flex-flow: row;
+
+    label {
+      align-self: center;
+      display: inline-block;
+      text-align: left;
+      vertical-align: middle;
+      padding-left: 0.2em;
+      white-space: nowrap;
+
+      input[type=text] {
+        border: 1px solid @elementbackground;
+      }
+
+      input[type=text]:hover {
+        border: 1px solid @backgroundcolor;
+      }
+
+      input[type=checkbox] {
+        border: 1px solid @elementbackground;
+      }
+
+      input[type=checkbox]:hover {
+        border: 1px solid @backgroundcolor;
+      }
+    }
+  }
+}
+
+
+
