@@ -1,42 +1,87 @@
 <html>
     <head>
+        <title>GameEngine WebEditor</title>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="css/style.css"/>
+        <script type="text/javascript" charset="utf-8" src="teavm/runtime.js"></script>
+        <script type="text/javascript" charset="utf-8" src="teavm/classes.js"></script>
     </head>
-    <body>
+    <body onload="main()">
         <div class="grid">
-            <div class="gridItem border-1 propertyEditor shrink width-2">
-                <div class="separator">Object Properties</div>
+            <div class="gridItem border-1 propertyEditor shrink width-3 min-width-3" id="objectEditor">
+
                 <div class="separatorlight">Common</div>
                 <div class="propertyEditor">
-                    <label class="width-6">
-                        W:
-                        <input id="test" type="text" value="text" class="width-9"></input>
-                    </label>
-                    <label class="width-6">
-                        H:
-                        <input id="test" type="text" value="text" class="width-9"></input>
-                    </label>
+                    <label>W:</label>
+                    <input id="test" type="text" value="text" class="width-4"/>
+                    <label>H:</label>
+                    <input id="test" type="text" value="text" class="width-4"/>
                 </div>
                 <div class="propertyEditor">
-                    <label class="width-12">
-                        W:
-                        <input id="test" type="text" value="text" class="width-10"></input>
-                    </label>
+                    <label>Test: </label>
+                    <input id="test" type="text" value="text"/>
                 </div>
                 <div class="propertyEditor">
-                    <label class="width-10">
-                        <input type="checkbox" value="Not selected"/>
-                        Checkbox Label
-                    </label>
+                    <input type="checkbox" value="Not selected"/>
+                    <label>Checkbox label</label>
+                </div>
+                <div class="separatorlight">Section1</div>
+                <div class="propertyEditor">
+                    <label>Color: </label>
+                    <select>
+                        <option>Value1</option>
+                        <option>Value2</option>
+                        <option>Value3</option>
+                    </select>
+                </div>
+                <div class="propertyEditor">
+                    <label>Color: </label>
+                    <input type="color"/>
+                </div>
+                <div class="propertyEditor">
+                    <label>Range: </label>
+                    <input type="range"/>
                 </div>
             </div>
             <div class="gridItem width-8 border-1 grow">
                 lala
             </div>
-            <div class="gridItem width-2 border-1 shrink">
+            <div class="gridItem width-2 border-1 shrink min-width-2">
                 <div class="separator">Objects</div>
             </div>
         </div>
+
+        <template id="propertyMajorSeparator">
+            <div class="separator">{{title}}</div>
+        </template>
+
+        <template id="propertyMinorSeparator">
+            <div class="separatorlight">{{title}}</div>
+        </template>
+
+        <template id="propertyTextEditor">
+            <div class="propertyEditor">
+                <label>{{label}}: </label>
+                <input id="{{id}}.text" type="text" value="replace me"/>
+            </div>
+        </template>
+
+        <template id="propertyBooleanEditor">
+            <div class="propertyEditor">
+                <input id="{{id}}.checkbox" type="checkbox"/>
+                <label>{{label}}</label>
+            </div>
+        </template>
+
+        <template id="propertySizeEditor">
+            <div class="propertyEditor">
+                <label>W:</label>
+                <input id="{{id}}.width" type="text" value="text" class="width-4"/>
+                <label>H:</label>
+                <input id="{{id}}.height" type="text" value="text" class="width-4"/>
+            </div>
+        </template>
+
     </body>
 </html>
