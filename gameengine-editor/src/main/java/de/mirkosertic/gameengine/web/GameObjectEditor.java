@@ -1,7 +1,9 @@
 package de.mirkosertic.gameengine.web;
 
+import de.mirkosertic.gameengine.core.EventSheet;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
+import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Size;
@@ -10,41 +12,12 @@ import org.teavm.jso.dom.html.HTMLElement;
 import org.teavm.jso.dom.html.HTMLInputElement;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
-public class GameObjectEditor {
-
-    private final HTMLElement htmlElement;
-    private final HTMLTemplateEngine templateEngine;
-    private final Set<HTMLInputBinder> binder;
+public class GameObjectEditor extends ListingElement {
 
     public GameObjectEditor(HTMLElement aHtmlElement, HTMLTemplateEngine aTemplateEngine) {
-        htmlElement = aHtmlElement;
-        templateEngine = aTemplateEngine;
-        binder = new HashSet<>();
-    }
-
-    private void addTitleLevel1(String aTitle) {
-        Map<String, Object> theParams = new HashMap<>();
-        theParams.put("title", aTitle);
-        HTMLElement theElement = templateEngine.renderToElement("propertyMajorSeparator", theParams);
-        htmlElement.appendChild(theElement);
-    }
-
-    private void addTitleLevel2(String aTitle) {
-        Map<String, Object> theParams = new HashMap<>();
-        theParams.put("title", aTitle);
-        HTMLElement theElement = templateEngine.renderToElement("propertyMinorSeparator", theParams);
-        htmlElement.appendChild(theElement);
-    }
-
-    private void clear() {
-        for (HTMLInputBinder theBinder : binder) {
-            theBinder.unbind();
-        }
-        htmlElement.clear();
+        super(aHtmlElement, aTemplateEngine);
     }
 
     public void setEditingObject(GameObject aObject) {
@@ -54,6 +27,20 @@ public class GameObjectEditor {
         addStringPropertyEditor("Name", aObject.nameProperty());
         addSizePropertyEditor(aObject.sizeProperty());
         addBooleanPropertyEditor("Visible", aObject.visibleProperty());
+    }
+
+    public void setEditingObject(GameScene aObject) {
+        clear();
+        addTitleLevel1("Game Scene");
+        addTitleLevel2("Common properties");
+        addStringPropertyEditor("Name", aObject.nameProperty());
+    }
+
+    public void setEditingObject(EventSheet aObject) {
+        clear();
+        addTitleLevel1("Event Sheet");
+        addTitleLevel2("Common properties");
+        addStringPropertyEditor("Name", aObject.nameProperty());
     }
 
     public void setEditingObject(GameObjectInstance aObject) {
