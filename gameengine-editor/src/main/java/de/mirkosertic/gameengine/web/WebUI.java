@@ -224,6 +224,7 @@ public class WebUI {
             GameObjectInstance[] theInstances = theCamera.findInstancesAt(relativePosition(aEvent));
             if (theInstances.length == 1) {
                 objectEditor.setEditingObject(theInstances[0]);
+                treeView.setEditingObject(theInstances[0]);
             }
         }
     }

@@ -12,63 +12,87 @@ import java.util.Map;
 public class GameTreeView extends ListingElement {
 
     private final GameObjectEditor editor;
-    private HTMLElement oldSelection;
+    private EditorHTMLElement oldSelection;
+    private final Map<Object, EditorHTMLElement> knownObjects;
 
     public GameTreeView(HTMLElement aHtmlElement, HTMLTemplateEngine aTemplateEngine, GameObjectEditor aEditor) {
         super(aHtmlElement, aTemplateEngine);
         editor = aEditor;
+        knownObjects = new HashMap<>();
     }
 
-    private void select(HTMLElement aElement) {
+    @Override
+    protected void clear() {
+        super.clear();
+        knownObjects.clear();
+    }
+
+    private void select(EditorHTMLElement aElement) {
         if (oldSelection != null) {
             String theClass = oldSelection.getAttribute("class");
             oldSelection.setAttribute("class", theClass.replace("selected", ""));
         }
         String theClass = aElement.getAttribute("class");
         aElement.setAttribute("class", theClass + " selected");
+        aElement.scrollIntoView(false);
         oldSelection = aElement;
     }
 
     public void onGameSceneLoaded(GameScene aGameScene) {
         clear();
-        HTMLElement theSceneElement = addTitleLevel1(aGameScene.nameProperty().get());
+        EditorHTMLElement theSceneElement = addTitleLevel1(aGameScene.nameProperty().get());
+        binder.add(HTMLInputBinder.forElementContent(theSceneElement, aGameScene.nameProperty()));
+        knownObjects.put(aGameScene, theSceneElement);
         theSceneElement.addEventListener("click", evt -> {
             select(theSceneElement);
-            editor.setEditingObject((GameScene) aGameScene);
+            editor.setEditingObject(aGameScene);
         });
 
         addTitleLevel2("Objects");
         for (GameObject theObject : aGameScene.getObjects()) {
-            HTMLElement theElement = add(theObject.nameProperty().get(), 1);
+            EditorHTMLElement theElement = add(theObject.nameProperty().get(), 1);
+            binder.add(HTMLInputBinder.forElementContent(theElement, theObject.nameProperty()));
+            knownObjects.put(theObject, theElement);
             theElement.addEventListener("click", evt -> {
                 select(theElement);
-                editor.setEditingObject((GameObject) theObject);
+                editor.setEditingObject(theObject);
             });
         }
         addTitleLevel2("Eventsheets");
         for (EventSheet theSheet : aGameScene.getEventSheets()) {
-            HTMLElement theElement = add(theSheet.nameProperty().get(), 1);
+            EditorHTMLElement theElement = add(theSheet.nameProperty().get(), 1);
+            knownObjects.put(theSheet, theElement);
+            binder.add(HTMLInputBinder.forElementContent(theElement, theSheet.nameProperty()));
             theElement.addEventListener("click", evt -> {
                 select(theElement);
-                editor.setEditingObject((EventSheet) theSheet);
+                editor.setEditingObject(theSheet);
             });
         }
         addTitleLevel2("Instances");
         for (GameObjectInstance theInstance : aGameScene.getInstances()) {
-            HTMLElement theElement = add(theInstance.nameProperty().get(), 1);
+            EditorHTMLElement theElement = add(theInstance.nameProperty().get(), 1);
+            knownObjects.put(theInstance, theElement);
+            binder.add(HTMLInputBinder.forElementContent(theElement, theInstance.nameProperty()));
             theElement.addEventListener("click", evt -> {
                 select(theElement);
-                editor.setEditingObject((GameObjectInstance) theInstance);
+                editor.setEditingObject(theInstance);
             });
         }
     }
 
-    protected HTMLElement add(String aTitle, int aLevel) {
+    protected EditorHTMLElement add(String aTitle, int aLevel) {
         Map<String, Object> theParams = new HashMap<>();
         theParams.put("title", aTitle);
         theParams.put("level", Integer.toString(aLevel));
-        HTMLElement theElement = templateEngine.renderToElement("treeitem", theParams);
+        EditorHTMLElement theElement = templateEngine.renderToElement("treeitem", theParams);
         htmlElement.appendChild(theElement);
         return theElement;
+    }
+
+    public void setEditingObject(Object aObject) {
+        EditorHTMLElement theNewElement = knownObjects.get(aObject);
+        if (theNewElement != null) {
+            select(theNewElement);
+        }
     }
 }

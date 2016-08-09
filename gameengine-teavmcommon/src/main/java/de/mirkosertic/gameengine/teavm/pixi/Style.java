@@ -6,7 +6,13 @@ import org.teavm.jso.JSProperty;
 public abstract class Style implements JSObject {
 
     @JSProperty
-    public abstract void setFont(String aCSSFont);
+    public abstract void setFontFamily(String aFontFamily);
+
+    @JSProperty
+    public abstract void setFontSize(String aFontFamily);
+
+    @JSProperty
+    public abstract void setFontStyle(String aFontFamily);
 
     @JSProperty
     public abstract void setFill(String aCSSColor);
