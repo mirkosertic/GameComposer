@@ -81,17 +81,7 @@
 
         <dependency>
             <groupId>de.mirkosertic</groupId>
-            <artifactId>gameengine</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>de.mirkosertic</groupId>
-            <artifactId>gameengine-jbox2d</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>de.mirkosertic</groupId>
-            <artifactId>gameengine-lua</artifactId>
+            <artifactId>gameengine-teavmcommon</artifactId>
         </dependency>
 
         <dependency>
