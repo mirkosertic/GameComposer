@@ -4,11 +4,11 @@ import org.teavm.jso.dom.html.HTMLElement;
 
 import java.util.Map;
 
-public class TemplateEngine {
+public class HTMLTemplateEngine {
 
     private final HTML5Document document;
 
-    public TemplateEngine(HTML5Document aDocument) {
+    public HTMLTemplateEngine(HTML5Document aDocument) {
         document = aDocument;
     }
 

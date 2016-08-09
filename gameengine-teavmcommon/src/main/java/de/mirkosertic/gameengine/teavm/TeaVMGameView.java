@@ -26,7 +26,7 @@ import de.mirkosertic.gameengine.type.Size;
 import java.util.HashMap;
 import java.util.Map;
 
-class TeaVMGameView extends GenericAbstractGameView<GameResource> {
+public class TeaVMGameView extends GenericAbstractGameView<GameResource> {
 
     private final Renderer renderer;
     private final Map<String, DisplayObject> instances;
@@ -82,15 +82,12 @@ class TeaVMGameView extends GenericAbstractGameView<GameResource> {
             final GameResource aResource) {
 
         String theInstanceID = aInstance.uuidProperty().get();
-        Sprite theCurrentObject = instanceCache.getOrCreate(theInstanceID, new TeaVMInstanceCache.Producer<Sprite>() {
-            @Override
-            public Sprite create() {
-                TeaVMTextureResource theTexture = (TeaVMTextureResource) aResource;
-                Sprite theSprite =  Sprite.createSprite(theTexture.getTexture());
-                theSprite.getScale().set(1, 1);
-                theSprite.getPivot().set(aCenterOffset.x, aCenterOffset.y);
-                return theSprite;
-            }
+        Sprite theCurrentObject = instanceCache.getOrCreate(theInstanceID, () -> {
+            TeaVMTextureResource theTexture = (TeaVMTextureResource) aResource;
+            Sprite theSprite =  Sprite.createSprite(theTexture.getTexture());
+            theSprite.getScale().set(1, 1);
+            theSprite.getPivot().set(aCenterOffset.x, aCenterOffset.y);
+            return theSprite;
         }, 0);
 
         // Update the position and all the other stuff
@@ -102,15 +99,12 @@ class TeaVMGameView extends GenericAbstractGameView<GameResource> {
     protected void drawText(String aInstanceID, Position aPosition, Angle aAngle, final Position aCenterOffset, Font aFont, Color aColor, final String aText,
             Size aSize) {
 
-        Text theCurrentObject = instanceCache.getOrCreate(aInstanceID, new TeaVMInstanceCache.Producer<Text>() {
-            @Override
-            public Text create() {
-                Text theText = Text.createText(aText);
-                theText.getScale().set(1, 1);
-                theText.getPivot().set(aCenterOffset.x, aCenterOffset.y);
-                return theText;
-            }
-        }, 0);
+       Text theCurrentObject = instanceCache.getOrCreate(aInstanceID, () -> {
+           Text theText = Text.createText(aText);
+           theText.getScale().set(1, 1);
+           theText.getPivot().set(aCenterOffset.x, aCenterOffset.y);
+           return theText;
+       }, 0);
 
         Style theStyle = theCurrentObject.getStyle();
         theStyle.setFont(cssCache.toFont(aFont));
@@ -128,18 +122,15 @@ class TeaVMGameView extends GenericAbstractGameView<GameResource> {
             final Size aSize) {
 
         String theInstanceID = aInstance.uuidProperty().get();
-        Graphics theCurrentObject = instanceCache.getOrCreate(theInstanceID, new TeaVMInstanceCache.Producer<Graphics>() {
-            @Override
-            public Graphics create() {
-                Graphics theCurrentObject = Graphics.createGraphics();
-                theCurrentObject.getScale().set(1, 1);
-                theCurrentObject.getPivot().set(aCenterOffset.x, aCenterOffset.y);
-                theCurrentObject.setWidth(aSize.width);
-                theCurrentObject.setHeight(aSize.height);
-                theCurrentObject.lineStyle(1, CSSUtils.toInt(aColor), 1f);
-                theCurrentObject.drawRect(0, 0, aSize.width, aSize.height);
-                return theCurrentObject;
-            }
+        Graphics theCurrentObject = instanceCache.getOrCreate(theInstanceID, () -> {
+            Graphics theCurrentObject1 = Graphics.createGraphics();
+            theCurrentObject1.getScale().set(1, 1);
+            theCurrentObject1.getPivot().set(aCenterOffset.x, aCenterOffset.y);
+            theCurrentObject1.setWidth(aSize.width);
+            theCurrentObject1.setHeight(aSize.height);
+            theCurrentObject1.lineStyle(1, CSSUtils.toInt(aColor), 1f);
+            theCurrentObject1.drawRect(0, 0, aSize.width, aSize.height);
+            return theCurrentObject1;
         }, 0);
 
         // Update the position and all the other stuff
