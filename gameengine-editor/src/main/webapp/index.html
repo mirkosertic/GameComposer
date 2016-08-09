@@ -47,9 +47,9 @@
                     <input type="range"/>
                 </div>
             </div>
-            <div class="gridItem width-8 border-1 grow">
+            <canvas id="html5canvas" class="gridItem width-8 border-1 grow">
                 lala
-            </div>
+            </canvas>
             <div class="gridItem width-2 border-1 shrink min-width-2">
                 <div class="separator">Objects</div>
             </div>
@@ -83,6 +83,15 @@
                 <input id="{{id}}.width" type="text" value="text" class="width-4"/>
                 <label>H:</label>
                 <input id="{{id}}.height" type="text" value="text" class="width-4"/>
+            </div>
+        </template>
+
+        <template id="propertyPositionEditor">
+            <div class="propertyEditor">
+                <label>X:</label>
+                <input id="{{id}}.x" type="text" value="text" class="width-4"/>
+                <label>Y:</label>
+                <input id="{{id}}.y" type="text" value="text" class="width-4"/>
             </div>
         </template>
 
