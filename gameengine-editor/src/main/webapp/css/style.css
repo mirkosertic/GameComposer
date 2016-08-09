@@ -174,30 +174,35 @@ body {
 .input {
   border: 1px solid lightGray;
 }
-.propertyEditor .separator {
+.separator {
   color: white;
   font-family: 'Open Sans', sans-serif;
   background-color: #2980b9;
   padding: 0.1em;
 }
-.propertyEditor .separator .border-1 {
+.separator .border-1 {
   border: 1px solid #bdc3c7;
 }
-.propertyEditor .separatorlight {
+.separatorlight {
   color: white;
   font-family: 'Open Sans', sans-serif;
   background-color: #2980b9;
   padding: 0.1em;
   background-color: #55a5d9;
 }
-.propertyEditor .separatorlight .border-1 {
+.separatorlight .border-1 {
   border: 1px solid #bdc3c7;
 }
+.propertyEditor {
+  background-color: #ffffff;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
 .propertyEditor .propertyEditor {
-  background-color: white;
   padding: 0.1em;
   display: flex;
   flex-flow: row;
+  overflow: visible;
 }
 .propertyEditor .propertyEditor label {
   font-size: small;
@@ -231,7 +236,47 @@ body {
 }
 .propertyEditor .propertyEditor select {
   flex-grow: 10;
+  border: 1px solid lightGray;
 }
 .propertyEditor .propertyEditor select:hover {
   border: 1px solid #2980b9;
+}
+.objectTree {
+  background-color: #ffffff;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.objectTree .level5 {
+  padding-left: 5em;
+}
+.objectTree .level5:hover {
+  background-color: #f4f9fd;
+}
+.objectTree .level4 {
+  padding-left: 4em;
+}
+.objectTree .level4:hover {
+  background-color: #f4f9fd;
+}
+.objectTree .level3 {
+  padding-left: 3em;
+}
+.objectTree .level3:hover {
+  background-color: #f4f9fd;
+}
+.objectTree .level2 {
+  padding-left: 2em;
+}
+.objectTree .level2:hover {
+  background-color: #f4f9fd;
+}
+.objectTree .level1 {
+  padding-left: 1em;
+}
+.objectTree .level1:hover {
+  background-color: #f4f9fd;
+}
+.objectTree .selected {
+  background-color: #e7f2fa;
+  font-weight: bold;
 }

@@ -44,6 +44,7 @@ public class WebUI {
 
     private EditorHTMLCanvasElement canvasElement;
     private GameObjectEditor objectEditor;
+    private GameTreeView treeView;
     private PlaySceneStrategy runSceneStrategy;
     private Game game;
 
@@ -111,6 +112,13 @@ public class WebUI {
             TeaVMLogger.info("Using: Unknown Renderer");
             break;
         }
+
+        // Initialize object editor
+        HTMLElement thePropertyEditorElement = (HTMLElement) document.getElementById("objectEditor");
+        HTMLElement theTreeElement = (HTMLElement) document.getElementById("objecttree");
+        HTMLTemplateEngine theTemplateEngine = new HTMLTemplateEngine(document);
+        objectEditor = new GameObjectEditor(thePropertyEditorElement, theTemplateEngine);
+        treeView = new GameTreeView(theTreeElement, theTemplateEngine, objectEditor);
 
         TeaVMGameSceneLoader theSceneLoader = new TeaVMGameSceneLoader(new TeaVMGameSceneLoader.GameSceneLoadedListener() {
             @Override
@@ -180,11 +188,6 @@ public class WebUI {
             }
         }, true);
 
-        // Initialize object editor
-        HTMLElement theElement = (HTMLElement) document.getElementById("objectEditor");
-        HTMLTemplateEngine theTemplateEngine = new HTMLTemplateEngine(document);
-        objectEditor = new GameObjectEditor(theElement, theTemplateEngine);
-
         canvasElement.addEventListener("click", evt -> onMouseClick((TeaVMMouseEvent) evt));
         canvasElement.addEventListener("mousedown", evt -> onMousePressed((TeaVMMouseEvent) evt));
         canvasElement.addEventListener("mousemove", evt -> {
@@ -210,6 +213,7 @@ public class WebUI {
     }
 
     private void playScene(GameScene aGameScene) {
+        treeView.onGameSceneLoaded(aGameScene);
         runSceneStrategy.playScene(aGameScene);
         runSingleStep(runSceneStrategy.getRunningGameLoop());
     }
