@@ -19,18 +19,18 @@ public abstract class ListingElement {
         binder = new HashSet<>();
     }
 
-    protected HTMLElement addTitleLevel1(String aTitle) {
+    protected EditorHTMLElement addTitleLevel1(String aTitle) {
         Map<String, Object> theParams = new HashMap<>();
         theParams.put("title", aTitle);
-        HTMLElement theElement = templateEngine.renderToElement("majorSeparator", theParams);
+        EditorHTMLElement theElement = templateEngine.renderToElement("majorSeparator", theParams);
         htmlElement.appendChild(theElement);
         return theElement;
     }
 
-    protected HTMLElement addTitleLevel2(String aTitle) {
+    protected EditorHTMLElement addTitleLevel2(String aTitle) {
         Map<String, Object> theParams = new HashMap<>();
         theParams.put("title", aTitle);
-        HTMLElement theElement = templateEngine.renderToElement("minorSeparator", theParams);
+        EditorHTMLElement theElement = templateEngine.renderToElement("minorSeparator", theParams);
         htmlElement.appendChild(theElement);
         return theElement;
     }
