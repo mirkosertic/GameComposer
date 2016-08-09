@@ -21,8 +21,6 @@ import de.mirkosertic.gameengine.type.TouchIdentifier;
 import de.mirkosertic.gameengine.type.TouchPosition;
 import org.teavm.jso.browser.Window;
 import org.teavm.jso.core.JSArrayReader;
-import org.teavm.jso.dom.events.Event;
-import org.teavm.jso.dom.events.EventListener;
 import org.teavm.jso.dom.events.EventTarget;
 import org.teavm.jso.dom.html.HTMLCanvasElement;
 import org.teavm.jso.dom.html.HTMLDocument;
@@ -167,60 +165,18 @@ public class TeaVMRenderer {
         }).loadFromServer();
 
         EventTarget documentEventTarget = document;
-        documentEventTarget.addEventListener("keydown", new EventListener() {
-            @Override
-            public void handleEvent(Event aEvent) {
-                keyPressed((TeaVMKeyEvent) aEvent);
-            }
-        }, false);
-        documentEventTarget.addEventListener("keyup", new EventListener() {
-            @Override
-            public void handleEvent(Event aEvent) {
-                keyReleased((TeaVMKeyEvent) aEvent);
-            }
-        }, false);
-        canvasElement.addEventListener("touchstart", new EventListener() {
-            @Override
-            public void handleEvent(Event aEvent) {
-                touchStarted((TeaVMTouchEvent) aEvent);
-            }
-        }, false);
-        canvasElement.addEventListener("touchend", new EventListener() {
-            @Override
-            public void handleEvent(Event aEvent) {
-                touchEnded((TeaVMTouchEvent) aEvent);
-            }
-        }, false);
-        canvasElement.addEventListener("touchcancel", new EventListener() {
-            @Override
-            public void handleEvent(Event aEvent) {
-                touchCanceled((TeaVMTouchEvent) aEvent);
-            }
-        }, false);
-        canvasElement.addEventListener("touchmove", new EventListener() {
-            @Override
-            public void handleEvent(Event aEvent) {
-                touchMoved((TeaVMTouchEvent) aEvent);
-            }
-        }, false);
-        canvasElement.addEventListener("mousedown", new EventListener() {
-            @Override
-            public void handleEvent(Event aEvent) {
-                mouseDown((TeaVMMouseEvent) aEvent);
-            }
-        });
-        canvasElement.addEventListener("mouseup", new EventListener() {
-            @Override
-            public void handleEvent(Event aEvent) {
-                mouseUp((TeaVMMouseEvent) aEvent);
-            }
-        });
-        window.addEventListener("resize", new EventListener() {
-            @Override
-            public void handleEvent(Event evt) {
-                if (runSceneStrategy.hasGameLoop()) {
-                    runSceneStrategy.handleResize();
-                }
+        documentEventTarget.addEventListener("keydown", aEvent -> keyPressed((TeaVMKeyEvent) aEvent), false);
+        documentEventTarget.addEventListener("keyup", aEvent -> keyReleased((TeaVMKeyEvent) aEvent), false);
+        canvasElement.addEventListener("touchstart", aEvent -> touchStarted((TeaVMTouchEvent) aEvent), false);
+        canvasElement.addEventListener("touchend", aEvent -> touchEnded((TeaVMTouchEvent) aEvent), false);
+        canvasElement.addEventListener("touchcancel", aEvent -> touchCanceled((TeaVMTouchEvent) aEvent), false);
+        canvasElement.addEventListener("touchmove", aEvent -> touchMoved((TeaVMTouchEvent) aEvent), false);
+        canvasElement.addEventListener("mousedown", aEvent -> mouseDown((TeaVMMouseEvent) aEvent));
+        canvasElement.addEventListener("mouseup", aEvent -> mouseUp((TeaVMMouseEvent) aEvent));
+
+        window.addEventListener("resize", evt -> {
+            if (runSceneStrategy.hasGameLoop()) {
+                runSceneStrategy.handleResize();
             }
         }, true);
     }
@@ -314,12 +270,7 @@ public class TeaVMRenderer {
     private void runSingleStep(final GameLoop aGameLoop) {
         if (!aGameLoop.isShutdown()) {
             aGameLoop.singleRun();
-            TeaVMWindow.requestAnimationFrame(new TeaVMWindow.RenderFrameHandler() {
-                @Override
-                public void renderFrame(int aTimeDelta) {
-                    runSingleStep(aGameLoop);
-                }
-            });
+            TeaVMWindow.requestAnimationFrame(aTimeDelta -> runSingleStep(aGameLoop));
         }
     }
 
