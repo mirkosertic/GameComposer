@@ -1,5 +1,6 @@
 package de.mirkosertic.gameengine.web;
 
+import org.teavm.jso.dom.html.HTMLDocument;
 import org.teavm.jso.dom.html.HTMLElement;
 
 import java.util.Map;
@@ -12,7 +13,7 @@ public class HTMLTemplateEngine {
         document = aDocument;
     }
 
-    public HTMLElement renderToElement(String aTemplateID, Map<String, Object> aData) {
+    public EditorHTMLElement renderToElement(String aTemplateID, Map<String, Object> aData) {
         HTMLElement theTemplate = (HTMLElement) document.getElementById(aTemplateID);
         HTMLElement theImportedNode = document.importNode(theTemplate, true);
 
@@ -26,7 +27,7 @@ public class HTMLTemplateEngine {
         }
 
         DOMParser theParser = DOMParser.create();
-        HTMLElement theResult = theParser.parseFromString(theContent, "text/html");
-        return (HTMLElement) theResult.getFirstChild();
+        HTMLDocument theResult = theParser.parseFromString(theContent, "text/html");
+        return (EditorHTMLElement) theResult.getBody().getFirstChild();
     }
 }

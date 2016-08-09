@@ -3,6 +3,7 @@ package de.mirkosertic.gameengine.web;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.event.PropertyChanged;
+import org.teavm.jso.dom.html.HTMLElement;
 import org.teavm.jso.dom.html.HTMLInputElement;
 
 public class HTMLInputBinder {
@@ -22,6 +23,13 @@ public class HTMLInputBinder {
         aProperty.addChangeListener(theListener);
         aElement.setValue(aProperty.get());
         aElement.addEventListener("blur", evt -> aProperty.set(aElement.getValue()));
+        return new HTMLInputBinder(theListener, aProperty);
+    }
+
+    public static HTMLInputBinder forElementContent(HTMLElement aElement, Property<String> aProperty) {
+        GameEventListener<PropertyChanged> theListener = aEvent -> aElement.setInnerHTML(aProperty.get());
+        aProperty.addChangeListener(theListener);
+        aElement.setInnerHTML(aProperty.get());
         return new HTMLInputBinder(theListener, aProperty);
     }
 

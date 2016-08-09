@@ -107,7 +107,8 @@ public class TeaVMGameView extends GenericAbstractGameView<GameResource> {
        }, 0);
 
         Style theStyle = theCurrentObject.getStyle();
-        theStyle.setFont(cssCache.toFont(aFont));
+        theStyle.setFontFamily(CSSUtils.toFontFamily(aFont));
+        theStyle.setFontSize(aFont.size+"px");
         theStyle.setFill(cssCache.toColor(aColor));
         theStyle.setStroke(cssCache.toColor(aColor));
         theCurrentObject.setText(aText);
