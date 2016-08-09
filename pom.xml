@@ -23,6 +23,7 @@
         <module>gameengine-fxrenderer</module>
         <module>gameengine-gwtrenderer</module>
         <module>gameengine-androidrenderer</module>
+        <module>gameengine-teavmcommon</module>
         <module>gameengine-teavmrenderer</module>
         <module>gameengine-dragomerenderer</module>
         <module>gameengine-tools</module>
@@ -93,6 +94,11 @@
             <dependency>
                 <groupId>de.mirkosertic</groupId>
                 <artifactId>gameengine-tools</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.mirkosertic</groupId>
+                <artifactId>gameengine-teavmcommon</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
