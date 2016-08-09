@@ -1,7 +1,9 @@
 package de.mirkosertic.gameengine.web;
 
 import de.mirkosertic.gameengine.core.GameObject;
+import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.event.Property;
+import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Size;
 import de.mirkosertic.gameengine.type.UUID;
 import org.teavm.jso.dom.html.HTMLElement;
@@ -12,13 +14,13 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class ObjectEditor  {
+public class GameObjectEditor {
 
     private final HTMLElement htmlElement;
-    private final TemplateEngine templateEngine;
-    private final Set<Binder> binder;
+    private final HTMLTemplateEngine templateEngine;
+    private final Set<HTMLInputBinder> binder;
 
-    public ObjectEditor(HTMLElement aHtmlElement, TemplateEngine aTemplateEngine) {
+    public GameObjectEditor(HTMLElement aHtmlElement, HTMLTemplateEngine aTemplateEngine) {
         htmlElement = aHtmlElement;
         templateEngine = aTemplateEngine;
         binder = new HashSet<>();
@@ -39,7 +41,7 @@ public class ObjectEditor  {
     }
 
     private void clear() {
-        for (Binder theBinder : binder) {
+        for (HTMLInputBinder theBinder : binder) {
             theBinder.unbind();
         }
         htmlElement.clear();
@@ -51,6 +53,15 @@ public class ObjectEditor  {
         addTitleLevel2("Common properties");
         addStringPropertyEditor("Name", aObject.nameProperty());
         addSizePropertyEditor(aObject.sizeProperty());
+        addBooleanPropertyEditor("Visible", aObject.visibleProperty());
+    }
+
+    public void setEditingObject(GameObjectInstance aObject) {
+        clear();
+        setEditingObject(aObject.getOwnerGameObject());
+        addTitleLevel2("Game Object Instance");
+        addStringPropertyEditor("Name", aObject.nameProperty());
+        addPositionPropertyEditor(aObject.positionProperty());
         addBooleanPropertyEditor("Visible", aObject.visibleProperty());
     }
 
@@ -66,7 +77,7 @@ public class ObjectEditor  {
         htmlElement.appendChild(theElement);
 
         HTMLInputElement theTextElement = (HTMLInputElement) htmlElement.getOwnerDocument().getElementById(theNewID+".text");
-        binder.add(Binder.forStringProperty(theTextElement, aProperty));
+        binder.add(HTMLInputBinder.forStringProperty(theTextElement, aProperty));
     }
 
     private void addBooleanPropertyEditor(String aLabel, Property<Boolean> aProperty) {
@@ -81,7 +92,7 @@ public class ObjectEditor  {
         htmlElement.appendChild(theElement);
 
         HTMLInputElement theTextElement = (HTMLInputElement) htmlElement.getOwnerDocument().getElementById(theNewID+".checkbox");
-        binder.add(Binder.forBooleanProperty(theTextElement, aProperty));
+        binder.add(HTMLInputBinder.forBooleanProperty(theTextElement, aProperty));
     }
 
     private void addSizePropertyEditor(Property<Size> aProperty) {
@@ -95,7 +106,7 @@ public class ObjectEditor  {
         htmlElement.appendChild(theElement);
 
         HTMLInputElement theWidth = (HTMLInputElement) htmlElement.getOwnerDocument().getElementById(theNewID+".width");
-        binder.add(Binder.forAnyProperty(theWidth, aProperty, new Binder.Converter<Size>() {
+        binder.add(HTMLInputBinder.forAnyProperty(theWidth, aProperty, new HTMLInputBinder.Converter<Size>() {
             @Override
             public String asString(Size aValue) {
                 return Integer.toString(aValue.width);
@@ -108,7 +119,7 @@ public class ObjectEditor  {
         }));
 
         HTMLInputElement theHeight = (HTMLInputElement) htmlElement.getOwnerDocument().getElementById(theNewID+".height");
-        binder.add(Binder.forAnyProperty(theHeight, aProperty, new Binder.Converter<Size>() {
+        binder.add(HTMLInputBinder.forAnyProperty(theHeight, aProperty, new HTMLInputBinder.Converter<Size>() {
             @Override
             public String asString(Size aValue) {
                 return Integer.toString(aValue.height);
@@ -121,4 +132,40 @@ public class ObjectEditor  {
         }));
     }
 
+    private void addPositionPropertyEditor(Property<Position> aProperty) {
+
+        String theNewID = UUID.randomUID();
+
+        Map<String, Object> theParams = new HashMap<>();
+        theParams.put("id", theNewID);
+
+        HTMLElement theElement = templateEngine.renderToElement("propertyPositionEditor", theParams);
+        htmlElement.appendChild(theElement);
+
+        HTMLInputElement theWidth = (HTMLInputElement) htmlElement.getOwnerDocument().getElementById(theNewID+".x");
+        binder.add(HTMLInputBinder.forAnyProperty(theWidth, aProperty, new HTMLInputBinder.Converter<Position>() {
+            @Override
+            public String asString(Position aValue) {
+                return Integer.toString((int) aValue.x);
+            }
+
+            @Override
+            public Position asValue(String aValue) {
+                return aProperty.get().changeX((float) Integer.parseInt(aValue));
+            }
+        }));
+
+        HTMLInputElement theHeight = (HTMLInputElement) htmlElement.getOwnerDocument().getElementById(theNewID+".y");
+        binder.add(HTMLInputBinder.forAnyProperty(theHeight, aProperty, new HTMLInputBinder.Converter<Position>() {
+            @Override
+            public String asString(Position aValue) {
+                return Integer.toString((int) (aValue.y));
+            }
+
+            @Override
+            public Position asValue(String aValue) {
+                return aProperty.get().changeY((float) Integer.parseInt(aValue));
+            }
+        }));
+    }
 }
