@@ -87,26 +87,30 @@ body {
   border:  1px solid @elementbackground;
 }
 
+// Separatots
+.separator {
+  .border(1);
+  .commonFontTitle();
+  background-color: @backgroundcolor;
+  padding: 0.1em;
+}
+
+.separatorlight {
+  .separator();
+  background-color: lighten(@backgroundcolor, 15%);
+}
+
 // Property editor styles
 .propertyEditor {
-  // Separators
-  .separator {
-    .border(1);
-    .commonFontTitle();
-    background-color: @backgroundcolor;
-    padding: 0.1em;
-  }
-
-  .separatorlight {
-    .separator();
-    background-color: lighten(@backgroundcolor, 15%);
-  }
+  background-color: @pagebackground;
+  overflow-y: auto;
+  overflow-x: hidden;
 
   .propertyEditor {
-    background-color: white;
     padding: 0.1em;
     display: flex;
     flex-flow: row;
+    overflow: visible;
 
     label {
       font-size: small;
@@ -147,6 +151,7 @@ body {
 
     select {
       flex-grow: 10;
+      border: 1px solid @elementbackground;
     }
 
     select:hover {
@@ -155,5 +160,31 @@ body {
   }
 }
 
+.objectTree {
+  background-color: @pagebackground;
+  overflow-y: auto;
+  overflow-x: hidden;
 
+  .treelevel(@level) when (@level > 0) {
+
+    .level@{level} {
+      padding-left: 1em * @level;
+
+    }
+
+    .level@{level}:hover {
+      background-color: lighten(@backgroundcolor, 53%);
+    }
+
+
+    .treelevel((@level - 1));
+  }
+
+  .treelevel(5);
+
+  .selected {
+    background-color: lighten(@backgroundcolor, 50%);
+    font-weight: bold;
+  }
+}
 
