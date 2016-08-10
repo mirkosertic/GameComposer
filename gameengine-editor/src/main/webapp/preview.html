@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <script type="text/javascript" charset="utf-8" src="pixi-min-4.0.0-rc3.js"></script>
+    <script type="text/javascript" charset="utf-8" src="howler.core.min-2.0.0.js"></script>
+    <script type="text/javascript" charset="utf-8" src="firebase-2.2.2.js"></script>
+    <script type="text/javascript" charset="utf-8" src="teavm/runtime.js"></script>
+    <script type="text/javascript" charset="utf-8" src="teavm/classes.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: black;
+        }
+
+        .mainCanvas {
+            border: 0;
+            padding: 0;
+            z-index: 99;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+        }
+    </style>
+    <script language="JavaScript">
+        (function() {
+            var lastTime = 0;
+            var vendors = ['ms', 'moz', 'webkit', 'o'];
+            for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+                window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
+                window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame']
+                        || window[vendors[x]+'CancelRequestAnimationFrame'];
+            }
+            if (!window.requestAnimationFrame)
+                window.requestAnimationFrame = function(callback, element) {
+                    var currTime = new Date().getTime();
+                    var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+                    var id = window.setTimeout(function() { callback(currTime + timeToCall); },
+                            timeToCall);
+                    lastTime = currTime + timeToCall;
+                    return id;
+                };
+            if (!window.cancelAnimationFrame)
+                window.cancelAnimationFrame = function(id) {
+                    clearTimeout(id);
+                };
+        }());
+
+        function fullscreen(aElement) {
+            if(aElement.requestFullscreen) {
+                aElement.requestFullscreen();
+            } else if(aElement.mozRequestFullScreen) {
+                aElement.mozRequestFullScreen();
+            } else if(aElement.webkitRequestFullscreen) {
+                aElement.webkitRequestFullscreen();
+            } else if(aElement.msRequestFullscreen) {
+                aElement.msRequestFullscreen();
+            }
+        }
+    </script>
+</head>
+<body onload="main()">
+    <canvas id="html5canvas" class="mainCanvas"/>
+</body>
+</html>

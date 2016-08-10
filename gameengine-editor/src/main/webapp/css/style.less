@@ -18,15 +18,16 @@ body {
 // Very Simple Grid System
 .flexVertical {
   flex-direction: row;
+  display: flex;
 }
 
 .flexHorizontal {
+  display: flex;
   flex-direction: column;
 }
 
 .grid {
-  display: flex;
-  .flexVertical;
+  .flexVertical();
   width: 100%;
   height: 100%;
   background-color: @pagebackground;
@@ -35,6 +36,14 @@ body {
 .width(@counter) when (@counter > 0) {
   .width-@{counter} {
     width: (100% / @numbergridcolumns * @counter);
+  }
+
+  .emoffset-@{counter} {
+    margin-left: 1em * @counter;
+  }
+
+  .emwidth-@{counter} {
+    width: 1em * @counter;
   }
 
   .min-width-@{counter} {
@@ -93,11 +102,57 @@ body {
   .commonFontTitle();
   background-color: @backgroundcolor;
   padding: 0.1em;
+  height: 1.6em;
+  line-height: 1.6em;
+  vertical-align: middle;
 }
 
 .separatorlight {
   .separator();
   background-color: lighten(@backgroundcolor, 15%);
+}
+
+input[type=text] {
+  border: 1px solid @elementbackground;
+}
+
+input[type=text]:hover {
+  border: 1px solid @backgroundcolor;
+}
+
+input[type=color] {
+  border: 1px solid @elementbackground;
+}
+
+input[type=color]:hover {
+  border: 1px solid @backgroundcolor;
+}
+
+input[type=checkbox] {
+  border: 1px solid @elementbackground;
+}
+
+input[type=checkbox]:hover {
+  border: 1px solid @backgroundcolor;
+}
+
+select {
+  border: 1px solid @elementbackground;
+}
+
+select:hover {
+  border: 1px solid @backgroundcolor;
+}
+
+button {
+  border: 1px solid #1abc9c;
+  background-color: #1abc9c;
+  color: white;
+  font-weight: bold;
+}
+
+button:hover {
+  background-color: lighten(#1abc9c, 5%);
 }
 
 // Property editor styles
@@ -124,38 +179,15 @@ body {
     }
 
     input[type=text] {
-      border: 1px solid @elementbackground;
       flex-grow: 10;
-    }
-
-    input[type=text]:hover {
-      border: 1px solid @backgroundcolor;
     }
 
     input[type=color] {
-      border: 1px solid @elementbackground;
       flex-grow: 10;
-    }
-
-    input[type=color]:hover {
-      border: 1px solid @backgroundcolor;
-    }
-
-    input[type=checkbox] {
-      border: 1px solid @elementbackground;
-    }
-
-    input[type=checkbox]:hover {
-      border: 1px solid @backgroundcolor;
     }
 
     select {
       flex-grow: 10;
-      border: 1px solid @elementbackground;
-    }
-
-    select:hover {
-      border: 1px solid @backgroundcolor;
     }
   }
 }
