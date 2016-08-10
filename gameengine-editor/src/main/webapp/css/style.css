@@ -5,19 +5,27 @@ body {
 }
 .flexVertical {
   flex-direction: row;
+  display: flex;
 }
 .flexHorizontal {
+  display: flex;
   flex-direction: column;
 }
 .grid {
-  display: flex;
   flex-direction: row;
+  display: flex;
   width: 100%;
   height: 100%;
   background-color: #ffffff;
 }
 .width-12 {
   width: 100%;
+}
+.emoffset-12 {
+  margin-left: 12em;
+}
+.emwidth-12 {
+  width: 12em;
 }
 .min-width-12 {
   min-width: 800px;
@@ -28,6 +36,12 @@ body {
 .width-11 {
   width: 91.66666666666667%;
 }
+.emoffset-11 {
+  margin-left: 11em;
+}
+.emwidth-11 {
+  width: 11em;
+}
 .min-width-11 {
   min-width: 733.3333333333334px;
 }
@@ -36,6 +50,12 @@ body {
 }
 .width-10 {
   width: 83.33333333333334%;
+}
+.emoffset-10 {
+  margin-left: 10em;
+}
+.emwidth-10 {
+  width: 10em;
 }
 .min-width-10 {
   min-width: 666.6666666666667px;
@@ -46,6 +66,12 @@ body {
 .width-9 {
   width: 75%;
 }
+.emoffset-9 {
+  margin-left: 9em;
+}
+.emwidth-9 {
+  width: 9em;
+}
 .min-width-9 {
   min-width: 600px;
 }
@@ -54,6 +80,12 @@ body {
 }
 .width-8 {
   width: 66.66666666666667%;
+}
+.emoffset-8 {
+  margin-left: 8em;
+}
+.emwidth-8 {
+  width: 8em;
 }
 .min-width-8 {
   min-width: 533.3333333333334px;
@@ -64,6 +96,12 @@ body {
 .width-7 {
   width: 58.333333333333336%;
 }
+.emoffset-7 {
+  margin-left: 7em;
+}
+.emwidth-7 {
+  width: 7em;
+}
 .min-width-7 {
   min-width: 466.6666666666667px;
 }
@@ -72,6 +110,12 @@ body {
 }
 .width-6 {
   width: 50%;
+}
+.emoffset-6 {
+  margin-left: 6em;
+}
+.emwidth-6 {
+  width: 6em;
 }
 .min-width-6 {
   min-width: 400px;
@@ -82,6 +126,12 @@ body {
 .width-5 {
   width: 41.66666666666667%;
 }
+.emoffset-5 {
+  margin-left: 5em;
+}
+.emwidth-5 {
+  width: 5em;
+}
 .min-width-5 {
   min-width: 333.33333333333337px;
 }
@@ -90,6 +140,12 @@ body {
 }
 .width-4 {
   width: 33.333333333333336%;
+}
+.emoffset-4 {
+  margin-left: 4em;
+}
+.emwidth-4 {
+  width: 4em;
 }
 .min-width-4 {
   min-width: 266.6666666666667px;
@@ -100,6 +156,12 @@ body {
 .width-3 {
   width: 25%;
 }
+.emoffset-3 {
+  margin-left: 3em;
+}
+.emwidth-3 {
+  width: 3em;
+}
 .min-width-3 {
   min-width: 200px;
 }
@@ -109,6 +171,12 @@ body {
 .width-2 {
   width: 16.666666666666668%;
 }
+.emoffset-2 {
+  margin-left: 2em;
+}
+.emwidth-2 {
+  width: 2em;
+}
 .min-width-2 {
   min-width: 133.33333333333334px;
 }
@@ -117,6 +185,12 @@ body {
 }
 .width-1 {
   width: 8.333333333333334%;
+}
+.emoffset-1 {
+  margin-left: 1em;
+}
+.emwidth-1 {
+  width: 1em;
 }
 .min-width-1 {
   min-width: 66.66666666666667px;
@@ -179,6 +253,9 @@ body {
   font-family: 'Open Sans', sans-serif;
   background-color: #2980b9;
   padding: 0.1em;
+  height: 1.6em;
+  line-height: 1.6em;
+  vertical-align: middle;
 }
 .separator .border-1 {
   border: 1px solid #bdc3c7;
@@ -188,10 +265,46 @@ body {
   font-family: 'Open Sans', sans-serif;
   background-color: #2980b9;
   padding: 0.1em;
+  height: 1.6em;
+  line-height: 1.6em;
+  vertical-align: middle;
   background-color: #55a5d9;
 }
 .separatorlight .border-1 {
   border: 1px solid #bdc3c7;
+}
+input[type=text] {
+  border: 1px solid lightGray;
+}
+input[type=text]:hover {
+  border: 1px solid #2980b9;
+}
+input[type=color] {
+  border: 1px solid lightGray;
+}
+input[type=color]:hover {
+  border: 1px solid #2980b9;
+}
+input[type=checkbox] {
+  border: 1px solid lightGray;
+}
+input[type=checkbox]:hover {
+  border: 1px solid #2980b9;
+}
+select {
+  border: 1px solid lightGray;
+}
+select:hover {
+  border: 1px solid #2980b9;
+}
+button {
+  border: 1px solid #1abc9c;
+  background-color: #1abc9c;
+  color: white;
+  font-weight: bold;
+}
+button:hover {
+  background-color: #1dd2af;
 }
 .propertyEditor {
   background-color: #ffffff;
@@ -215,31 +328,13 @@ body {
   flex-shrink: 5;
 }
 .propertyEditor .propertyEditor input[type=text] {
-  border: 1px solid lightGray;
   flex-grow: 10;
-}
-.propertyEditor .propertyEditor input[type=text]:hover {
-  border: 1px solid #2980b9;
 }
 .propertyEditor .propertyEditor input[type=color] {
-  border: 1px solid lightGray;
   flex-grow: 10;
-}
-.propertyEditor .propertyEditor input[type=color]:hover {
-  border: 1px solid #2980b9;
-}
-.propertyEditor .propertyEditor input[type=checkbox] {
-  border: 1px solid lightGray;
-}
-.propertyEditor .propertyEditor input[type=checkbox]:hover {
-  border: 1px solid #2980b9;
 }
 .propertyEditor .propertyEditor select {
   flex-grow: 10;
-  border: 1px solid lightGray;
-}
-.propertyEditor .propertyEditor select:hover {
-  border: 1px solid #2980b9;
 }
 .objectTree {
   background-color: #ffffff;
