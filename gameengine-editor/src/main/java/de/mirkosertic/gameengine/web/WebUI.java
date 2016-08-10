@@ -27,6 +27,7 @@ public class WebUI {
                             String thePreviewData = window.getLocalStorage().getItem("previewscene");
                             if (thePreviewData == null) {
                                 super.loadFromServer(aGame, aSceneName, aResourceLoader);
+                                return;
                             }
                             listener.onGameSceneLoaded(parse(aGame, thePreviewData, aResourceLoader));
                         }
