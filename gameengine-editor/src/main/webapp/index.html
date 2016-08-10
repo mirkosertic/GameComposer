@@ -11,7 +11,7 @@
     <script type="text/javascript" charset="utf-8" src="teavm/classes.js"></script>
 </head>
 <body onload="main()">
-<div class="grid">
+<div class="grid flexVertical">
     <div class="gridItem border-1 propertyEditor shrink width-3 min-width-3" id="objectEditor">
 
         <div class="separatorlight">Common</div>
@@ -47,9 +47,19 @@
             <input type="range"/>
         </div>
     </div>
-    <canvas id="html5canvas" class="gridItem width-8 border-1 grow">
-        lala
-    </canvas>
+    <div class="gridItem width-8 border-1 grow flexHorizontal">
+        <div class="separator flexVertical shrink">
+            <input type="checkbox" value="Not selected"/>
+            <label>Snap to grid</label>
+            <label class="emoffset-4">Grid X:</label>
+            <input type="text" class="emwidth-2" value="5">
+            <label>Y:</label>
+            <input type="text" class="emwidth-2" value="5">
+            <button class="emwidth-6 emoffset-4" id="previewbutton">Preview!</button>
+        </div>
+        <canvas id="html5canvas" class="grow">
+        </canvas>
+    </div>
     <div class="gridItem width-3 border-1 shrink min-width-3 objectTree" id="objecttree">
         <div class="separator">Objects</div>
         <div class="level1">Item Level 1</div>
