@@ -16,7 +16,7 @@ public class TeaVMGameSceneLoader {
         void onGameSceneLoadedError(Throwable aThrowable);
     }
 
-    private final GameSceneLoadedListener listener;
+    protected final GameSceneLoadedListener listener;
     private final AbstractGameRuntimeFactory runtimeFactory;
 
     public TeaVMGameSceneLoader(GameSceneLoadedListener aListener, AbstractGameRuntimeFactory aRuntimeFactory) {
@@ -42,7 +42,7 @@ public class TeaVMGameSceneLoader {
         theRequest.send();
     }
 
-    private GameScene parse(Game aGame, String aResponse, TeaVMGameResourceLoader aResourceLoader) {
+    protected GameScene parse(Game aGame, String aResponse, TeaVMGameResourceLoader aResourceLoader) {
         Map<String, Object> theResult = new TeaVMMap((TeaVMMap.JSDelegate) JSON.parse(aResponse).cast());
         return GameScene.deserialize(aGame, runtimeFactory.create(aResourceLoader, new TeaVMGameSoundSystemFactory()), theResult);
     }
