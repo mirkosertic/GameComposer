@@ -3,22 +3,11 @@ package de.mirkosertic.gameengine.teavm;
 import de.mirkosertic.gameengine.Version;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
-import de.mirkosertic.gameengine.core.Game;
-import de.mirkosertic.gameengine.core.GameLoop;
-import de.mirkosertic.gameengine.core.GameLoopFactory;
-import de.mirkosertic.gameengine.core.GameRuntime;
-import de.mirkosertic.gameengine.core.GameScene;
-import de.mirkosertic.gameengine.core.GameView;
-import de.mirkosertic.gameengine.core.GestureDetector;
-import de.mirkosertic.gameengine.core.PlaySceneStrategy;
+import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.network.DefaultNetworkConnector;
 import de.mirkosertic.gameengine.network.NetworkConnector;
 import de.mirkosertic.gameengine.teavm.pixi.Renderer;
-import de.mirkosertic.gameengine.type.GameKeyCode;
-import de.mirkosertic.gameengine.type.Position;
-import de.mirkosertic.gameengine.type.Size;
-import de.mirkosertic.gameengine.type.TouchIdentifier;
-import de.mirkosertic.gameengine.type.TouchPosition;
+import de.mirkosertic.gameengine.type.*;
 import org.teavm.jso.browser.Window;
 import org.teavm.jso.core.JSArrayReader;
 import org.teavm.jso.dom.events.EventTarget;
@@ -42,8 +31,8 @@ public class TeaVMGenericPlayer {
     public TeaVMGenericPlayer() {
     }
 
-    protected TeaVMGameSceneLoader createSceneLoader(TeaVMGameRuntimeFactory aRuntimeFactory) {
-        return new TeaVMGameSceneLoader(new TeaVMGameSceneLoader.GameSceneLoadedListener() {
+    protected TeaVMGameSceneLoader.GameSceneLoadedListener createSceneLoaderListener() {
+        return new TeaVMGameSceneLoader.GameSceneLoadedListener() {
             @Override
             public void onGameSceneLoaded(GameScene aScene) {
                 playScene(aScene);
@@ -53,7 +42,11 @@ public class TeaVMGenericPlayer {
             public void onGameSceneLoadedError(Throwable aError) {
                 TeaVMLogger.error("Failed to load scene : " + aError.getMessage());
             }
-        }, aRuntimeFactory);
+        };
+    }
+
+    protected TeaVMGameSceneLoader createSceneLoader(TeaVMGameRuntimeFactory aRuntimeFactory) {
+        return new TeaVMGameSceneLoader(createSceneLoaderListener(), aRuntimeFactory);
     }
 
     protected TeaVMGameLoader createGameLoader(TeaVMGameLoader.GameLoadedListener aListener) {

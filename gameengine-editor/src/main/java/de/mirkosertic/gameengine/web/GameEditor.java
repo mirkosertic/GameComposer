@@ -15,18 +15,13 @@ import de.mirkosertic.gameengine.core.PlaySceneStrategy;
 import de.mirkosertic.gameengine.network.DefaultNetworkConnector;
 import de.mirkosertic.gameengine.physic.DisableDynamicPhysics;
 import de.mirkosertic.gameengine.physic.EnableDynamicPhysics;
-import de.mirkosertic.gameengine.teavm.TeaVMGameLoader;
-import de.mirkosertic.gameengine.teavm.TeaVMGameResourceLoader;
-import de.mirkosertic.gameengine.teavm.TeaVMGameRuntimeFactory;
-import de.mirkosertic.gameengine.teavm.TeaVMGameSceneLoader;
-import de.mirkosertic.gameengine.teavm.TeaVMGameView;
-import de.mirkosertic.gameengine.teavm.TeaVMLogger;
-import de.mirkosertic.gameengine.teavm.TeaVMMouseEvent;
-import de.mirkosertic.gameengine.teavm.TeaVMWindow;
+import de.mirkosertic.gameengine.teavm.*;
 import de.mirkosertic.gameengine.teavm.pixi.Renderer;
 import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Size;
+import org.teavm.jso.JSObject;
 import org.teavm.jso.browser.Window;
+import org.teavm.jso.json.JSON;
 
 import java.util.Map;
 
@@ -164,8 +159,10 @@ public class GameEditor {
 
     private void onPreview() {
 
-        Map<String, Object> theScene = runSceneStrategy.getRunningGameLoop().getScene().serialize();
+        JSObject theJSForm = TeaVMMap.toJS(runSceneStrategy.getRunningGameLoop().getScene().serialize());
+        String theJSON = JSON.stringify(theJSForm);
 
+        window.getLocalStorage().setItem("previewscene", theJSON);
 
         window.open("preview.html", "_blank");
     }
@@ -181,7 +178,6 @@ public class GameEditor {
     }
 
     protected void setSelectedInstance(GameObjectInstance aInstance) {
-
     }
 
     private CameraBehavior getCameraBehavior() {
