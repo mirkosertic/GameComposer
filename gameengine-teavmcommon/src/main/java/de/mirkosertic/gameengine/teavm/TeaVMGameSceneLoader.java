@@ -3,11 +3,10 @@ package de.mirkosertic.gameengine.teavm;
 import de.mirkosertic.gameengine.AbstractGameRuntimeFactory;
 import de.mirkosertic.gameengine.core.Game;
 import de.mirkosertic.gameengine.core.GameScene;
-
-import java.util.Map;
-import org.teavm.jso.ajax.ReadyStateChangeHandler;
 import org.teavm.jso.ajax.XMLHttpRequest;
 import org.teavm.jso.json.JSON;
+
+import java.util.Map;
 
 public class TeaVMGameSceneLoader {
 
@@ -28,17 +27,7 @@ public class TeaVMGameSceneLoader {
         final XMLHttpRequest theRequest = XMLHttpRequest.create();
         theRequest.overrideMimeType("text/plain");
         theRequest.open("GET", aSceneName+"/scene.json");
-        theRequest.setOnReadyStateChange(new ReadyStateChangeHandler() {
-            @Override
-            public void stateChanged() {
-                switch (theRequest.getReadyState()) {
-                    default:
-                        break;
-                    case XMLHttpRequest.DONE:
-                        listener.onGameSceneLoaded(parse(aGame, theRequest.getResponseText(), aResourceLoader));
-                }
-            }
-        });
+        theRequest.onComplete(() -> listener.onGameSceneLoaded(parse(aGame, theRequest.getResponseText(), aResourceLoader)));
         theRequest.send();
     }
 
