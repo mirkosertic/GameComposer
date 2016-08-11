@@ -3,7 +3,6 @@ package de.mirkosertic.gameengine.web;
 import de.mirkosertic.gameengine.core.Game;
 import de.mirkosertic.gameengine.teavm.*;
 import de.mirkosertic.gameengine.web.github.*;
-import org.teavm.jso.JSObject;
 import org.teavm.jso.browser.Window;
 import org.teavm.jso.dom.html.HTMLCanvasElement;
 
@@ -17,14 +16,17 @@ public class WebUI {
             theEditor.boot();
         } else if (window.getLocation().getPathName().endsWith("/gittest.html")) {
             TeaVMLogger.info("Starting to work!");
-            AuthenticationOptions theOptions = AuthenticationOptions.create();
-            Github theGithub = Github.create(theOptions);
-            Repository theRepo = theGithub.getRepo("mirkosertic", "FXDesktopSearch");
-            theRepo.getCommit("master", new Callback<Commit>() {
+            AuthenticationOptions theOptions = new AuthenticationOptions();
+            Github theGithub = new Github(theOptions);
+            Repository theRepo = theGithub.getRepo("mirkosertic", "GameComposer");
+            theRepo.visitContent(new FileVisitor() {
                 @Override
-                public void handle(Boolean aError, Commit aResult) {
-                    TeaVMLogger.info("Got something from commit");
-                    TeaVMLogger.info("Last Commit of " + theRepo.getName() + " -> " + aResult.getSha());
+                public void visit(File aFile, int aStatusCode, String aETag) {
+                    if (aFile.getType().equals(File.DIR_TYPE)) {
+                        theRepo.visitContent(aFile, this, null);
+                    } else{
+                        TeaVMLogger.info("Got file " + aFile.getPath() + " with ETag " + aETag);
+                    }
                 }
             });
         } else {
