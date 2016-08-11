@@ -1,18 +1,43 @@
 package de.mirkosertic.gameengine.web.github;
 
-import org.teavm.jso.JSObject;
-import org.teavm.jso.JSProperty;
+import de.mirkosertic.gameengine.teavm.TeaVMMap;
+import org.teavm.jso.core.JSArray;
 
-public interface Repository extends JSObject {
+public class Repository {
 
-    @JSProperty
-    long getId();
+    private final Github github;
+    private final String user;
+    private final String name;
 
-    @JSProperty
-    String getName();
+    public Repository(Github aGithub, String aUser, String aName) {
+        github = aGithub;
+        user = aUser;
+        name = aName;
+    }
 
-    @JSProperty
-    String getFull_name();
+    public void visitContent(FileVisitor aVisitor) {
+        github.open("/repos/" + user + "/" + name + "/contents", (aObject, aStatusCode, aResponseETag) -> {
+            if (TeaVMMap.isArray(aObject)) {
+                JSArray<File> theArray = aObject.cast();
+                for (int i = 0; i < theArray.getLength(); i++) {
+                    aVisitor.visit(theArray.get(i), aStatusCode, aResponseETag);
+                }
+            } else {
+                aVisitor.visit((File) aObject, aStatusCode, aResponseETag);
+            }
+        }, true, null);
+    }
 
-    void getCommit(String aSHA, Callback<Commit> aCallback);
+    public void visitContent(File aFile, FileVisitor aVisitor, String aETag) {
+        github.open(aFile.getUrl(), (aObject, aStatusCode, aResponseETag) -> {
+            if (TeaVMMap.isArray(aObject)) {
+                JSArray<File> theArray = aObject.cast();
+                for (int i = 0; i < theArray.getLength(); i++) {
+                    aVisitor.visit(theArray.get(i), aStatusCode, aResponseETag);
+                }
+            } else {
+                aVisitor.visit((File) aObject, aStatusCode, aResponseETag);
+            }
+        }, false, aETag);
+    }
 }
