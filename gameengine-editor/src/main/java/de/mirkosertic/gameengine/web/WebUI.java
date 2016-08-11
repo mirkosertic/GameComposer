@@ -1,10 +1,9 @@
 package de.mirkosertic.gameengine.web;
 
 import de.mirkosertic.gameengine.core.Game;
-import de.mirkosertic.gameengine.teavm.TeaVMGameResourceLoader;
-import de.mirkosertic.gameengine.teavm.TeaVMGameRuntimeFactory;
-import de.mirkosertic.gameengine.teavm.TeaVMGameSceneLoader;
-import de.mirkosertic.gameengine.teavm.TeaVMGenericPlayer;
+import de.mirkosertic.gameengine.teavm.*;
+import de.mirkosertic.gameengine.web.github.*;
+import org.teavm.jso.JSObject;
 import org.teavm.jso.browser.Window;
 import org.teavm.jso.dom.html.HTMLCanvasElement;
 
@@ -16,6 +15,18 @@ public class WebUI {
         if (window.getLocation().getPathName().endsWith("/index.html")) {
             Editor theEditor = new Editor();
             theEditor.boot();
+        } else if (window.getLocation().getPathName().endsWith("/gittest.html")) {
+            TeaVMLogger.info("Starting to work!");
+            AuthenticationOptions theOptions = AuthenticationOptions.create();
+            Github theGithub = Github.create(theOptions);
+            Repository theRepo = theGithub.getRepo("mirkosertic", "FXDesktopSearch");
+            theRepo.getCommit("master", new Callback<Commit>() {
+                @Override
+                public void handle(Boolean aError, Commit aResult) {
+                    TeaVMLogger.info("Got something from commit");
+                    TeaVMLogger.info("Last Commit of " + theRepo.getName() + " -> " + aResult.getSha());
+                }
+            });
         } else {
             HTMLCanvasElement theCanvasElement = (HTMLCanvasElement) window.getDocument().getElementById("html5canvas");
             TeaVMGenericPlayer thePlayer = new TeaVMGenericPlayer() {
