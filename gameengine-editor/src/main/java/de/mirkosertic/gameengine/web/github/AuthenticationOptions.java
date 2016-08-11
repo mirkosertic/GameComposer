@@ -1,17 +1,24 @@
 package de.mirkosertic.gameengine.web.github;
 
-import org.teavm.jso.JSBody;
-import org.teavm.jso.JSProperty;
-import org.teavm.jso.JSObject;
+public class AuthenticationOptions {
 
-public abstract class AuthenticationOptions implements JSObject {
+    private final String username;
+    private final String password;
 
-    @JSBody(params = {}, script = "return {};")
-    public native static AuthenticationOptions create();
+    public AuthenticationOptions(String aUsername, String aPassword) {
+        username = aUsername;
+        password = aPassword;
+    }
 
-    @JSProperty
-    public abstract void setUsername(String aUsername);
+    public AuthenticationOptions() {
+        this(null, null);
+    }
 
-    @JSProperty
-    public abstract void setPassword(String aPassword);
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
 }

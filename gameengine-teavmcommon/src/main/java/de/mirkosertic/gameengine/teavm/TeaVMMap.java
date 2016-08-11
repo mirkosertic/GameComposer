@@ -12,6 +12,12 @@ import java.util.*;
 
 public class TeaVMMap implements Map<String, Object> {
 
+    @JSBody(
+            params = {"aObject"},
+            script = "return Object.prototype.toString.call(aObject) === '[object Array]';"
+    )
+    public static native boolean isArray(JSObject aObject);
+
     public abstract static class JSDelegate implements JSObject {
 
         @JSBody(
@@ -31,12 +37,6 @@ public class TeaVMMap implements Map<String, Object> {
                 script = "return typeof aObject;"
         )
         public abstract String getTypeOf(JSObject aObject);
-
-        @JSBody(
-                params = {"aObject"},
-                script = "return Object.prototype.toString.call(aObject) === '[object Array]';"
-        )
-        public abstract boolean isArray(JSObject aObject);
     }
 
     public static JSObject toJS(Map<String, Object> aMap) {
@@ -118,7 +118,7 @@ public class TeaVMMap implements Map<String, Object> {
         case "boolean":
             return ((JSBoolean) aValue).booleanValue();
         case "object":
-            if (source.isArray(aValue)) {
+            if (isArray(aValue)) {
                 JSArray theArray = (JSArray) aValue;
                 List<Object> theResult = new ArrayList<>();
                 for (int i=0;i<theArray.getLength();i++) {
