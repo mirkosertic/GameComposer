@@ -13,7 +13,7 @@ public class TeaVMGameLoader {
         void onGameLoadedError(Throwable aThrowable);
     }
 
-    private final GameLoadedListener listener;
+    protected final GameLoadedListener listener;
 
     public TeaVMGameLoader(GameLoadedListener aListener) {
         listener = aListener;
@@ -27,7 +27,7 @@ public class TeaVMGameLoader {
         theRequest.send();
     }
 
-    private Game parse(String aResponse) {
+    protected Game parse(String aResponse) {
         Map<String, Object> theResult = new TeaVMMap(JSON.parse(aResponse).cast());
         return Game.deserialize(theResult);
     }
