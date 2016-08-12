@@ -15,15 +15,20 @@ import de.mirkosertic.gameengine.core.PlaySceneStrategy;
 import de.mirkosertic.gameengine.network.DefaultNetworkConnector;
 import de.mirkosertic.gameengine.physic.DisableDynamicPhysics;
 import de.mirkosertic.gameengine.physic.EnableDynamicPhysics;
-import de.mirkosertic.gameengine.teavm.*;
+import de.mirkosertic.gameengine.teavm.TeaVMGameLoader;
+import de.mirkosertic.gameengine.teavm.TeaVMGameRuntimeFactory;
+import de.mirkosertic.gameengine.teavm.TeaVMGameSceneLoader;
+import de.mirkosertic.gameengine.teavm.TeaVMGameView;
+import de.mirkosertic.gameengine.teavm.TeaVMLogger;
+import de.mirkosertic.gameengine.teavm.TeaVMMap;
+import de.mirkosertic.gameengine.teavm.TeaVMMouseEvent;
+import de.mirkosertic.gameengine.teavm.TeaVMWindow;
 import de.mirkosertic.gameengine.teavm.pixi.Renderer;
 import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Size;
 import org.teavm.jso.JSObject;
 import org.teavm.jso.browser.Window;
 import org.teavm.jso.json.JSON;
-
-import java.util.Map;
 
 public class GameEditor {
 
@@ -34,11 +39,13 @@ public class GameEditor {
 
     private GameObjectInstance draggingInstance;
     private Position draggingMouseWorldPosition;
+    private final EditorProject project;
 
-    public GameEditor(EditorHTMLCanvasElement aCanvas, Window aWindow) {
+    public GameEditor(EditorHTMLCanvasElement aCanvas, Window aWindow, EditorProject aEditorProject) {
 
         canvasElement = aCanvas;
         window = aWindow;
+        project = aEditorProject;
 
         GameLoopFactory theGameLoopFactory = new GameLoopFactory();
 
@@ -72,7 +79,7 @@ public class GameEditor {
             }
         };
 
-        TeaVMGameSceneLoader theSceneLoader = new TeaVMGameSceneLoader(new TeaVMGameSceneLoader.GameSceneLoadedListener() {
+        TeaVMGameSceneLoader theSceneLoader = project.createSceneLoader(new TeaVMGameSceneLoader.GameSceneLoadedListener() {
             @Override
             public void onGameSceneLoaded(GameScene aScene) {
                 playScene(aScene);
@@ -84,7 +91,8 @@ public class GameEditor {
             }
         }, theRuntimeFactory);
 
-        new TeaVMGameLoader(new TeaVMGameLoader.GameLoadedListener() {
+
+        TeaVMGameLoader theGameLoader = project.createGameLoader(new TeaVMGameLoader.GameLoadedListener() {
             @Override
             public void onGameLoaded(Game aGame) {
 
@@ -125,14 +133,16 @@ public class GameEditor {
                 String theSceneId = aGame.defaultSceneProperty().get();
 
                 TeaVMLogger.info("Loading scene " + theSceneId);
-                theSceneLoader.loadFromServer(game, theSceneId, new TeaVMGameResourceLoader(theSceneId));
+                theSceneLoader.loadFromServer(game, theSceneId, project.createResourceLoaderFor(theSceneId));
             }
 
             @Override
             public void onGameLoadedError(Throwable aError) {
                 TeaVMLogger.error("Failed to load scene : " + aError);
             }
-        }).loadFromServer();
+        });
+
+        theGameLoader.loadFromServer();
 
         aCanvas.addEventListener("click", evt -> onMouseClick((TeaVMMouseEvent) evt));
         aCanvas.addEventListener("mousedown", evt -> onMousePressed((TeaVMMouseEvent) evt));
@@ -162,7 +172,7 @@ public class GameEditor {
         JSObject theJSForm = TeaVMMap.toJS(runSceneStrategy.getRunningGameLoop().getScene().serialize());
         String theJSON = JSON.stringify(theJSForm);
 
-        window.getLocalStorage().setItem("previewscene", theJSON);
+        project.setCurrentPreview(theJSON);
 
         window.open("preview.html", "_blank");
     }

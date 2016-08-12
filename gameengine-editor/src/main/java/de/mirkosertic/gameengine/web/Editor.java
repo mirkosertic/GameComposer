@@ -10,7 +10,7 @@ public class Editor {
     private static final Window window = Window.current();
     private static final HTML5Document document = (HTML5Document) window.getDocument();
 
-    public void boot() {
+    public void boot(EditorProject aProject) {
         EditorHTMLCanvasElement theCanvasElement = (EditorHTMLCanvasElement) document.getElementById("html5canvas");
 
         // Initialize object editor
@@ -20,7 +20,7 @@ public class Editor {
         GameObjectEditor theObjectEditor = new GameObjectEditor(thePropertyEditorElement, theTemplateEngine);
         GameTreeView theTreeView = new GameTreeView(theTreeElement, theTemplateEngine, theObjectEditor);
 
-        GameEditor theGameEditor = new GameEditor(theCanvasElement, window) {
+        GameEditor theGameEditor = new GameEditor(theCanvasElement, window, aProject) {
 
             @Override
             protected void playScene(GameScene aGameScene) {

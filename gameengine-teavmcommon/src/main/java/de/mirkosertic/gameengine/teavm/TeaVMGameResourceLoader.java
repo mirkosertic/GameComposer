@@ -21,14 +21,18 @@ public class TeaVMGameResourceLoader implements GameResourceLoader {
 
     @Override
     public GameResource load(ResourceName aResourceName) throws IOException {
-        String theResourceName = sceneId + aResourceName.name.replace('\\', '/');
+        ResourceName theNewResourceName = new ResourceName(sceneId + aResourceName.name.replace('\\', '/'));
+        return convert(theNewResourceName);
+    }
+
+    protected GameResource convert(ResourceName aResourceName) {
         if (aResourceName.name.endsWith(".wav")) {
-            return new TeaVMSoundResource(theResourceName);
+            return new TeaVMSoundResource(aResourceName.name);
         }
 
         TeaVMTextureResource theResource = textureResources.get(aResourceName);
         if (theResource == null) {
-            Texture theTexure = Texture.createTextureFromImage(theResourceName);
+            Texture theTexure = Texture.createTextureFromImage(aResourceName.name);
             theResource = new TeaVMTextureResource(theTexure);
             textureResources.put(aResourceName, theResource);
         }
