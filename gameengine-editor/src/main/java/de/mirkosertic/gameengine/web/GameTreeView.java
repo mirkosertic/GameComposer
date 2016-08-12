@@ -4,6 +4,8 @@ import de.mirkosertic.gameengine.core.EventSheet;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.teavm.TeaVMDragEvent;
+import org.teavm.jso.dom.events.EventListener;
 import org.teavm.jso.dom.html.HTMLElement;
 
 import java.util.HashMap;
@@ -50,12 +52,18 @@ public class GameTreeView extends ListingElement {
 
         addTitleLevel2("Objects");
         for (GameObject theObject : aGameScene.getObjects()) {
-            EditorHTMLElement theElement = add(theObject.nameProperty().get(), 1);
+            EditorHTMLElement theElement = addDraggable(theObject.nameProperty().get(), 1);
             binder.add(HTMLInputBinder.forElementContent(theElement, theObject.nameProperty()));
             knownObjects.put(theObject, theElement);
             theElement.addEventListener("click", evt -> {
                 select(theElement);
                 editor.setEditingObject(theObject);
+            });
+            theElement.addEventListener("dragstart", new EventListener<TeaVMDragEvent>() {
+                @Override
+                public void handleEvent(TeaVMDragEvent aEvent) {
+                    aEvent.getDataTransfer().setData(Constants.DND_OBJECT_ID, theObject.uuidProperty().get());
+                }
             });
         }
         addTitleLevel2("Eventsheets");
@@ -85,6 +93,15 @@ public class GameTreeView extends ListingElement {
         theParams.put("title", aTitle);
         theParams.put("level", Integer.toString(aLevel));
         EditorHTMLElement theElement = templateEngine.renderToElement("treeitem", theParams);
+        htmlElement.appendChild(theElement);
+        return theElement;
+    }
+
+    protected EditorHTMLElement addDraggable(String aTitle, int aLevel) {
+        Map<String, Object> theParams = new HashMap<>();
+        theParams.put("title", aTitle);
+        theParams.put("level", Integer.toString(aLevel));
+        EditorHTMLElement theElement = templateEngine.renderToElement("treeitemdraggable", theParams);
         htmlElement.appendChild(theElement);
         return theElement;
     }

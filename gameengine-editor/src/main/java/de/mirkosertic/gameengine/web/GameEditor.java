@@ -15,6 +15,7 @@ import de.mirkosertic.gameengine.core.PlaySceneStrategy;
 import de.mirkosertic.gameengine.network.DefaultNetworkConnector;
 import de.mirkosertic.gameengine.physic.DisableDynamicPhysics;
 import de.mirkosertic.gameengine.physic.EnableDynamicPhysics;
+import de.mirkosertic.gameengine.teavm.TeaVMDragEvent;
 import de.mirkosertic.gameengine.teavm.TeaVMGameLoader;
 import de.mirkosertic.gameengine.teavm.TeaVMGameRuntimeFactory;
 import de.mirkosertic.gameengine.teavm.TeaVMGameSceneLoader;
@@ -28,6 +29,7 @@ import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Size;
 import org.teavm.jso.JSObject;
 import org.teavm.jso.browser.Window;
+import org.teavm.jso.dom.events.EventListener;
 import org.teavm.jso.json.JSON;
 
 public class GameEditor {
@@ -153,6 +155,15 @@ public class GameEditor {
             }
         });
         aCanvas.addEventListener("mouseup", evt -> onMouseReleased((TeaVMMouseEvent) evt));
+        aCanvas.addEventListener("dragover", new EventListener<TeaVMDragEvent>() {
+            @Override
+            public void handleEvent(TeaVMDragEvent aEvent) {
+                if (aEvent.getDataTransfer().getData(Constants.DND_OBJECT_ID) != null) {
+                    aEvent.preventDefault();
+                    // TODO: Init drag event here
+                }
+            }
+        });
         aWindow.getDocument().getElementById("previewbutton").addEventListener("click", evt -> onPreview());
     }
 
