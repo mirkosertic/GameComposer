@@ -3,15 +3,7 @@ package de.mirkosertic.gameengine.web;
 import de.mirkosertic.gameengine.AbstractGameRuntimeFactory;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
-import de.mirkosertic.gameengine.core.Game;
-import de.mirkosertic.gameengine.core.GameLoop;
-import de.mirkosertic.gameengine.core.GameLoopFactory;
-import de.mirkosertic.gameengine.core.GameObjectInstance;
-import de.mirkosertic.gameengine.core.GameRuntime;
-import de.mirkosertic.gameengine.core.GameScene;
-import de.mirkosertic.gameengine.core.GameView;
-import de.mirkosertic.gameengine.core.GestureDetector;
-import de.mirkosertic.gameengine.core.PlaySceneStrategy;
+import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.network.DefaultNetworkConnector;
 import de.mirkosertic.gameengine.physic.DisableDynamicPhysics;
 import de.mirkosertic.gameengine.physic.EnableDynamicPhysics;
@@ -41,6 +33,9 @@ public class GameEditor {
 
     private GameObjectInstance draggingInstance;
     private Position draggingMouseWorldPosition;
+
+    private GameObjectInstance dndCreateInstance;
+
     private final EditorProject project;
 
     public GameEditor(EditorHTMLCanvasElement aCanvas, Window aWindow, EditorProject aEditorProject) {
@@ -158,10 +153,25 @@ public class GameEditor {
         aCanvas.addEventListener("dragover", new EventListener<TeaVMDragEvent>() {
             @Override
             public void handleEvent(TeaVMDragEvent aEvent) {
-                if (aEvent.getDataTransfer().getData(Constants.DND_OBJECT_ID) != null) {
-                    aEvent.preventDefault();
-                    // TODO: Init drag event here
-                }
+                onDragOver(aEvent);
+            }
+        });
+        aCanvas.addEventListener("dragenter", new EventListener<TeaVMDragEvent>() {
+            @Override
+            public void handleEvent(TeaVMDragEvent aEvent) {
+                onDragEntered(aEvent);
+            }
+        });
+        aCanvas.addEventListener("dragleave", new EventListener<TeaVMDragEvent>() {
+            @Override
+            public void handleEvent(TeaVMDragEvent aEvent) {
+                onDragLeave(aEvent);
+            }
+        });
+        aCanvas.addEventListener("drop", new EventListener<TeaVMDragEvent>() {
+            @Override
+            public void handleEvent(TeaVMDragEvent aEvent) {
+                onDragDropped(aEvent);
             }
         });
         aWindow.getDocument().getElementById("previewbutton").addEventListener("click", evt -> onPreview());
@@ -276,6 +286,50 @@ public class GameEditor {
         }
     }
 
+    private void onDragOver(TeaVMDragEvent aEvent) {
+        if (dndCreateInstance != null) {
+            Position theNewPosition = getCameraBehavior().transformFromScreen(new Position(aEvent.getClientX() - canvasElement.getOffsetLeft(), aEvent.getClientY() - canvasElement.getOffsetTop()));
+            dndCreateInstance.positionProperty().set(theNewPosition);
+            aEvent.preventDefault();
+        }
+    }
+
+    private void onDragEntered(TeaVMDragEvent aEvent) {
+        String theID = aEvent.getDataTransfer().getData(Constants.DND_OBJECT_ID);
+        if (theID != null) {
+            GameScene theScene = runSceneStrategy.getRunningGameLoop().getScene();
+            GameObject theGameObject = theScene.findObjectByID(theID);
+
+            GameObjectInstance theInstance = theScene.createFrom(theGameObject);
+            theInstance.positionProperty().set(getCameraBehavior().transformFromScreen(new Position(aEvent.getClientX() - canvasElement.getOffsetLeft(), aEvent.getClientY() - canvasElement.getOffsetTop())));
+
+            theScene.addInstance(theInstance);
+            theScene.getRuntime().getEventManager().fire(new DisableDynamicPhysics(theInstance));
+
+            dndCreateInstance = theInstance;
+            aEvent.preventDefault();
+        }
+    }
+
+    private void onDragLeave(TeaVMDragEvent aEvent) {
+        if (dndCreateInstance != null) {
+            runSceneStrategy.getRunningGameLoop().getScene().removeGameObjectInstance(dndCreateInstance);
+            dndCreateInstance = null;
+            aEvent.preventDefault();
+        }
+    }
+
+    private void onDragDropped(TeaVMDragEvent aEvent) {
+        if (dndCreateInstance != null) {
+            aEvent.preventDefault();
+            //if (snapToGrid.isSelected()) {
+              //  dndCreateInstance.positionProperty().set(gameView.snapToGrid(dndCreateInstance.positionProperty().get()));
+            //}
+
+            runSceneStrategy.getRunningGameLoop().getScene().getRuntime().getEventManager().fire(new EnableDynamicPhysics(dndCreateInstance));
+            dndCreateInstance = null;
+        }
+    }
 
     private void runSingleStep(final GameLoop aGameLoop) {
         if (!aGameLoop.isShutdown()) {
