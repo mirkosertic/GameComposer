@@ -5,6 +5,7 @@ import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.event.PropertyChanged;
 import org.teavm.jso.dom.html.HTMLElement;
 import org.teavm.jso.dom.html.HTMLInputElement;
+import org.teavm.jso.dom.html.HTMLSelectElement;
 
 public class HTMLInputBinder {
 
@@ -46,6 +47,19 @@ public class HTMLInputBinder {
         aProperty.addChangeListener(theListener);
         aElement.setValue(aConverter.asString(aProperty.get()));
         aElement.addEventListener("change", evt -> aProperty.set(aConverter.asValue(aElement.getValue())));
+        return new HTMLInputBinder(theListener, aProperty);
+    }
+
+    public static <T> HTMLInputBinder forAnyProperty(HTMLSelectElement aElement, Property<T> aProperty, T[] aValues) {
+        GameEventListener<PropertyChanged> theListener = aEvent -> aElement.setSelectedIndex(aElement.getOptions().namedItem(aProperty.get().toString()).getIndex());
+        aProperty.addChangeListener(theListener);
+        aElement.setSelectedIndex(aElement.getOptions().namedItem(aProperty.get().toString()).getIndex());
+        aElement.addEventListener("change", evt -> {
+            int theIndex = aElement.getSelectedIndex();
+            if (theIndex >= 0) {
+                aProperty.set(aValues[theIndex]);
+            }
+        });
         return new HTMLInputBinder(theListener, aProperty);
     }
 
