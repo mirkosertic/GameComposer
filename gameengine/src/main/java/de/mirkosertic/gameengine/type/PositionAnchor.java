@@ -65,6 +65,11 @@ public abstract class PositionAnchor {
         return name;
     }
 
+    @Override
+    public String toString() {
+        return name();
+    }
+
     public abstract Position compute(Position aWorldPosition, Position aCameraPosition, Size aScreenSize);
 
     public static PositionAnchor valueOf(String aName) {
