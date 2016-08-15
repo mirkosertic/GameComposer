@@ -18,7 +18,7 @@ public class Editor {
         HTMLElement theTreeElement = (HTMLElement) document.getElementById("objecttree");
         HTMLTemplateEngine theTemplateEngine = new HTMLTemplateEngine(document);
         GameObjectEditor theObjectEditor = new GameObjectEditor(thePropertyEditorElement, theTemplateEngine);
-        GameTreeView theTreeView = new GameTreeView(theTreeElement, theTemplateEngine, theObjectEditor);
+        GameTreeView theTreeView = new GameTreeView(theTreeElement, theTemplateEngine, theObjectEditor, window);
 
         GameEditor theGameEditor = new GameEditor(theCanvasElement, window, aProject) {
 

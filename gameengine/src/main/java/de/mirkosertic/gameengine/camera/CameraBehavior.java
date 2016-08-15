@@ -8,8 +8,8 @@ import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.process.StartProcess;
-import de.mirkosertic.gameengine.type.PositionAnchor;
 import de.mirkosertic.gameengine.type.Position;
+import de.mirkosertic.gameengine.type.PositionAnchor;
 import de.mirkosertic.gameengine.type.Reflectable;
 import de.mirkosertic.gameengine.type.Size;
 
@@ -96,7 +96,7 @@ public class CameraBehavior implements Behavior, Camera, Reflectable<CameraClass
                     continue;
                 }
                 // Just visible instances need to be drawn
-                if (theInstance.visibleProperty().get()) {
+                if (aCallback.accepts(theInstance)) {
                     PositionAnchor theAnchor = theInstance.positionAnchorProperty().get();
                     Position theScreenPosition = theAnchor.compute(theInstance.positionProperty().get(), theCameraPosition, screenSize);
                     Size theSize = theInstance.getOwnerGameObject().sizeProperty().get();
@@ -187,9 +187,18 @@ public class CameraBehavior implements Behavior, Camera, Reflectable<CameraClass
         return objectInstance;
     }
 
-    public GameObjectInstance[] findInstancesAt(final Position aScreenPosition) {
+    public GameObjectInstance[] findInstancesAt(final Position aScreenPosition, final boolean aIncludeOnlyVisible) {
         final List<GameObjectInstance> theInstances = new ArrayList<>();
         processVisibleInstances(new Callback() {
+
+            @Override
+            public boolean accepts(GameObjectInstance aInstance) {
+                if (aIncludeOnlyVisible) {
+                    return aInstance.visibleProperty().get();
+                }
+                return true;
+            }
+
             @Override
             public void process(GameObjectInstance aValue, Position aPositionOnScreen, Size aSize) {
                 if (aPositionOnScreen.x <= aScreenPosition.x &&

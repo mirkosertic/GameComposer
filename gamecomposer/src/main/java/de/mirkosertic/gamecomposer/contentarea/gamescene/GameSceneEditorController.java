@@ -180,7 +180,7 @@ public class GameSceneEditorController implements ContentController<GameScene> {
     private void onMousePressed(MouseEvent aEvent) {
         Position theScreenPosition = new Position(aEvent.getX(), aEvent.getY());
         Position theWorldPosition = cameraComponent.transformFromScreen(theScreenPosition);
-        GameObjectInstance[] theFoundInstances = cameraComponent.findInstancesAt(theScreenPosition);
+        GameObjectInstance[] theFoundInstances = cameraComponent.findInstancesAt(theScreenPosition, true);
         if (theFoundInstances.length == 1) {
             draggingInstance = theFoundInstances[0];
             draggingMouseWorldPosition = theWorldPosition;
@@ -279,7 +279,7 @@ public class GameSceneEditorController implements ContentController<GameScene> {
 
     void onMouseClicked(MouseEvent aEvent) {
         Position theClickPosition = new Position(aEvent.getX(), aEvent.getY());
-        for (GameObjectInstance theInstance : cameraComponent.findInstancesAt(theClickPosition)) {
+        for (GameObjectInstance theInstance : cameraComponent.findInstancesAt(theClickPosition, true)) {
             objectSelectedEventEvent.fire(new ObjectSelectedEvent(theInstance));
         }
     }

@@ -5,6 +5,7 @@ import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.teavm.TeaVMDragEvent;
+import org.teavm.jso.browser.Window;
 import org.teavm.jso.dom.events.EventListener;
 import org.teavm.jso.dom.html.HTMLElement;
 
@@ -16,11 +17,13 @@ public class GameTreeView extends ListingElement {
     private final GameObjectEditor editor;
     private EditorHTMLElement oldSelection;
     private final Map<Object, EditorHTMLElement> knownObjects;
+    private final Window window;
 
-    public GameTreeView(HTMLElement aHtmlElement, HTMLTemplateEngine aTemplateEngine, GameObjectEditor aEditor) {
+    public GameTreeView(HTMLElement aHtmlElement, HTMLTemplateEngine aTemplateEngine, GameObjectEditor aEditor, Window aWindow) {
         super(aHtmlElement, aTemplateEngine);
         editor = aEditor;
         knownObjects = new HashMap<>();
+        window = aWindow;
     }
 
     @Override
@@ -60,11 +63,12 @@ public class GameTreeView extends ListingElement {
                 editor.setEditingObject(theObject);
             });
             theElement.addEventListener("dragstart", new EventListener<TeaVMDragEvent>() {
-                @Override
-                public void handleEvent(TeaVMDragEvent aEvent) {
-                    aEvent.getDataTransfer().setData(Constants.DND_OBJECT_ID, theObject.uuidProperty().get());
-                }
-            });
+                        @Override
+                        public void handleEvent(TeaVMDragEvent aEvent) {
+                            aEvent.getDataTransfer().setData(Constants.DND_OBJECT_ID, theObject.uuidProperty().get());
+                            window.getLocalStorage().setItem(Constants.DND_OBJECT_ID, theObject.uuidProperty().get());
+                        }
+                    });
         }
         addTitleLevel2("Eventsheets");
         for (EventSheet theSheet : aGameScene.getEventSheets()) {

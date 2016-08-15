@@ -83,7 +83,7 @@ public class JavaFXGameView extends GenericAbstractGameView<JavaFXBitmapResource
 
     @Override
     protected void drawText(String aInstanceID, Position aPosition, Angle aAngle, Position aCenterOffset, de.mirkosertic.gameengine.type.Font aFont, de.mirkosertic.gameengine.type.Color aColor, String aText,
-            Size aSize) {
+            Size aSize, boolean aVisible) {
         Color theTextColor = Color.rgb(aColor.r, aColor.g, aColor.b);
         context.setFill(theTextColor);
         context.setStroke(theTextColor);
