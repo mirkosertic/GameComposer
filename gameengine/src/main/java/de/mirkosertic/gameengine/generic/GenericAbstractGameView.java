@@ -1,7 +1,7 @@
 package de.mirkosertic.gameengine.generic;
 
-import de.mirkosertic.gameengine.camera.Callback;
 import de.mirkosertic.gameengine.Version;
+import de.mirkosertic.gameengine.camera.Callback;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameResource;
@@ -14,12 +14,12 @@ import de.mirkosertic.gameengine.core.RuntimeStatistics;
 import de.mirkosertic.gameengine.scriptengine.LUAScriptEngine;
 import de.mirkosertic.gameengine.sprite.SpriteBehavior;
 import de.mirkosertic.gameengine.text.TextBehavior;
-import de.mirkosertic.gameengine.type.PositionAnchor;
 import de.mirkosertic.gameengine.type.Angle;
 import de.mirkosertic.gameengine.type.Color;
 import de.mirkosertic.gameengine.type.EffectCanvas;
 import de.mirkosertic.gameengine.type.Font;
 import de.mirkosertic.gameengine.type.Position;
+import de.mirkosertic.gameengine.type.PositionAnchor;
 import de.mirkosertic.gameengine.type.ResourceName;
 import de.mirkosertic.gameengine.type.Size;
 import de.mirkosertic.gameengine.type.TextExpression;
@@ -91,7 +91,7 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
 
     protected abstract void drawImage(GameObjectInstance aInstance, Position aPositionOnScreen, Position aCenterOffset, S aResource);
 
-    protected abstract void drawText(String aObjectUUID, Position aPositionOnScreen, Angle aAngle, Position aCenterOffset, de.mirkosertic.gameengine.type.Font aFont, de.mirkosertic.gameengine.type.Color aColor, String aText, Size aSize);
+    protected abstract void drawText(String aID, Position aPositionOnScreen, Angle aAngle, Position aCenterOffset, de.mirkosertic.gameengine.type.Font aFont, de.mirkosertic.gameengine.type.Color aColor, String aText, Size aSize, boolean aVisible);
 
     protected abstract void drawRect(GameObjectInstance aInstance, Position aPositionOnScreen, Position aCenterOffset, Color aColor, Size aSize);
 
@@ -101,6 +101,10 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
     }
 
     protected abstract EffectCanvas createEffectCanvas();
+
+    protected boolean includeInRendering(GameObjectInstance aInstance) {
+        return aInstance.visibleProperty().get();
+    }
 
     @Override
     public void renderGame(final long aGameTime, final long aElapsedTimeSinceLastLoop, final GameScene aScene, RuntimeStatistics aStatistics) {
@@ -122,6 +126,12 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
         gameRuntime.getLogger().timeEnd("preprocessorEffects");
 
         int theNumberOfInstances = cameraBehavior.processVisibleInstances(new Callback() {
+
+            @Override
+            public boolean accepts(GameObjectInstance aInstance) {
+                return includeInRendering(aInstance);
+            }
+
             @Override
             public void process(GameObjectInstance aValue, Position aPositionOnScreen, Size aSize) {
 
@@ -192,7 +202,7 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
                     }
 
                     drawText(aValue.uuidProperty().get(), aPositionOnScreen, aValue.rotationAngleProperty().get(), theCenterOffset, theTextBehavior.fontProperty().get(),
-                            theTextBehavior.colorProperty().get(), theTextToDraw, aSize);
+                            theTextBehavior.colorProperty().get(), theTextToDraw, aSize, aValue.visibleProperty().get());
 
 
                     theSomethingRendered = true;
@@ -238,7 +248,7 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
     private void drawTextAt(String aID, Position aPosition, Position aCenterOffset, Size aSize, Font aFont, Color aColor, String aText) {
 
         beforeInstance(null, aPosition, aCenterOffset, Angle.ZERO);
-        drawText(aID, aPosition, Angle.ZERO, aCenterOffset, aFont, aColor, aText, aSize);
+        drawText(aID, aPosition, Angle.ZERO, aCenterOffset, aFont, aColor, aText, aSize, true);
         afterInstance(null, aPosition);
     }
 

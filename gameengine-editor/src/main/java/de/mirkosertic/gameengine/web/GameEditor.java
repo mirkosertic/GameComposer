@@ -3,7 +3,16 @@ package de.mirkosertic.gameengine.web;
 import de.mirkosertic.gameengine.AbstractGameRuntimeFactory;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
-import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.core.Game;
+import de.mirkosertic.gameengine.core.GameLoop;
+import de.mirkosertic.gameengine.core.GameLoopFactory;
+import de.mirkosertic.gameengine.core.GameObject;
+import de.mirkosertic.gameengine.core.GameObjectInstance;
+import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.GameView;
+import de.mirkosertic.gameengine.core.GestureDetector;
+import de.mirkosertic.gameengine.core.PlaySceneStrategy;
 import de.mirkosertic.gameengine.network.DefaultNetworkConnector;
 import de.mirkosertic.gameengine.physic.DisableDynamicPhysics;
 import de.mirkosertic.gameengine.physic.EnableDynamicPhysics;
@@ -111,7 +120,7 @@ public class GameEditor {
                     @Override
                     protected GameView getOrCreateCurrentGameView(GameRuntime aGameRuntime, CameraBehavior aCamera, GestureDetector aGestureDetector) {
                         if (gameView == null) {
-                            gameView = new TeaVMGameView(aGameRuntime, aCamera, aGestureDetector, theRenderer);
+                            gameView = new GameEditorGameView(aGameRuntime, aCamera, aGestureDetector, theRenderer);
                         } else {
                             gameView.prepareNewScene(aGameRuntime, aCamera, aGestureDetector);
                         }
@@ -201,7 +210,7 @@ public class GameEditor {
     private void onMouseClick(TeaVMMouseEvent aEvent) {
         if (runSceneStrategy.hasGameLoop()) {
             CameraBehavior theCamera = getCameraBehavior();
-            GameObjectInstance[] theInstances = theCamera.findInstancesAt(relativePosition(aEvent));
+            GameObjectInstance[] theInstances = theCamera.findInstancesAt(relativePosition(aEvent), false);
             if (theInstances.length == 1) {
                 setSelectedInstance(theInstances[0]);
             }
@@ -225,7 +234,7 @@ public class GameEditor {
             CameraBehavior theCamera = getCameraBehavior();
             Position theScreenPosition = relativePosition(aEvent);
             Position theWorldPosition = theCamera.transformFromScreen(theScreenPosition);
-            GameObjectInstance[] theFoundInstances = theCamera.findInstancesAt(theScreenPosition);
+            GameObjectInstance[] theFoundInstances = theCamera.findInstancesAt(theScreenPosition, false);
 
             if (theFoundInstances.length == 1) {
                 draggingInstance = theFoundInstances[0];
@@ -243,7 +252,6 @@ public class GameEditor {
         if (runSceneStrategy.hasGameLoop()) {
             CameraBehavior theCamera = getCameraBehavior();
             if (draggingMouseWorldPosition != null) {
-
                 if (draggingInstance != null) {
                     // Move object instance
 
@@ -295,11 +303,10 @@ public class GameEditor {
     }
 
     private void onDragEntered(TeaVMDragEvent aEvent) {
-        String theID = aEvent.getDataTransfer().getData(Constants.DND_OBJECT_ID);
-        if (theID != null) {
+        String theID = window.getLocalStorage().getItem(Constants.DND_OBJECT_ID);
+        if (theID != null && theID.length() > 0) {
             GameScene theScene = runSceneStrategy.getRunningGameLoop().getScene();
             GameObject theGameObject = theScene.findObjectByID(theID);
-
             GameObjectInstance theInstance = theScene.createFrom(theGameObject);
             theInstance.positionProperty().set(getCameraBehavior().transformFromScreen(new Position(aEvent.getClientX() - canvasElement.getOffsetLeft(), aEvent.getClientY() - canvasElement.getOffsetTop())));
 

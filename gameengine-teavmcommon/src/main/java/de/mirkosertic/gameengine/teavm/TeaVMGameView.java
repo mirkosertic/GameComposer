@@ -90,21 +90,33 @@ public class TeaVMGameView extends GenericAbstractGameView<GameResource> {
             return theSprite;
         }, 0);
 
+        if (aInstance.visibleProperty().get()) {
+            theCurrentObject.setAlpha(1f);
+        } else {
+            theCurrentObject.setAlpha(0.3f);
+        }
+
         // Update the position and all the other stuff
         theCurrentObject.getPosition().set(aPositionOnScreen.x + aCenterOffset.x, aPositionOnScreen.y + aCenterOffset.y);
         theCurrentObject.setRotation(aInstance.rotationAngleProperty().get().toRadians());
     }
 
     @Override
-    protected void drawText(String aInstanceID, Position aPosition, Angle aAngle, final Position aCenterOffset, Font aFont, Color aColor, final String aText,
-            Size aSize) {
+    protected void drawText(String aID, Position aPosition, Angle aAngle, final Position aCenterOffset, Font aFont, Color aColor, final String aText,
+            Size aSize, boolean aVisible) {
 
-       Text theCurrentObject = instanceCache.getOrCreate(aInstanceID, () -> {
+       Text theCurrentObject = instanceCache.getOrCreate(aID, () -> {
            Text theText = Text.createText(aText);
            theText.getScale().set(1, 1);
            theText.getPivot().set(aCenterOffset.x, aCenterOffset.y);
            return theText;
        }, 0);
+
+        if (aVisible) {
+            theCurrentObject.setAlpha(1f);
+        } else {
+            theCurrentObject.setAlpha(0.3f);
+        }
 
         Style theStyle = theCurrentObject.getStyle();
         theStyle.setFontFamily(CSSUtils.toFontFamily(aFont));
@@ -133,6 +145,12 @@ public class TeaVMGameView extends GenericAbstractGameView<GameResource> {
             theCurrentObject1.drawRect(0, 0, aSize.width, aSize.height);
             return theCurrentObject1;
         }, 0);
+
+        if (aInstance.visibleProperty().get()) {
+            theCurrentObject.setAlpha(1f);
+        } else {
+            theCurrentObject.setAlpha(0.3f);
+        }
 
         // Update the position and all the other stuff
         theCurrentObject.getPosition().set(aPositionOnScreen.x + aCenterOffset.x, aPositionOnScreen.y + aCenterOffset.y);

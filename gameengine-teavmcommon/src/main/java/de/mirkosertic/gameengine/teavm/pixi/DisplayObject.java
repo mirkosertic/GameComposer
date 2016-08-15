@@ -30,4 +30,7 @@ public abstract class DisplayObject implements JSObject {
 
     @JSProperty
     public abstract int getZOrder();
+
+    @JSProperty
+    public abstract void setAlpha(float alpha);
 }

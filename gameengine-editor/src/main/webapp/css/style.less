@@ -1,10 +1,10 @@
 @numbergridcolumns: 12;
 @screenwidth: 800px;
-@pagebackground: white;
-@elementbackground: lightGray;
-@bordercolor: #bdc3c7;
-@backgroundcolor: #2980b9;
+@bordercolor: white;
+@backgroundcolor: #33373c;
+@hovercolor: lighten(#3498db,10%);
 @textcolor: white;
+@objectbrowsertitle: #e74c3c;
 // Colors taken from https://flatuicolors.com/
 
 @import url(https://fonts.googleapis.com/css?family=Roboto);
@@ -13,6 +13,7 @@
 body {
   margin: 0 0 0 0;
   padding: 0 0 0 0;
+  background-color: @backgroundcolor;
 }
 
 // Very Simple Grid System
@@ -30,7 +31,6 @@ body {
   .flexVertical();
   width: 100%;
   height: 100%;
-  background-color: @pagebackground;
 }
 
 .width(@counter) when (@counter > 0) {
@@ -60,8 +60,6 @@ body {
 .width(@numbergridcolumns);
 
 .gridItem {
-  background-color: @elementbackground;
-
   .shrink {
     flex-shrink: 1;
   }
@@ -70,7 +68,6 @@ body {
     flex-grow: 1;
   }
 }
-
 
 // Borders
 .border(@counter) when (@counter > 0) {
@@ -93,15 +90,20 @@ body {
 }
 
 .input {
-  border:  1px solid @elementbackground;
+  border:  1px solid @backgroundcolor;
+}
+
+label {
+  color: white;
 }
 
 // Separatots
 .separator {
   .border(1);
   .commonFontTitle();
-  background-color: @backgroundcolor;
+  background-color: lighten(@backgroundcolor, 10%);
   padding: 0.1em;
+  padding-left: 0.3em;
   height: 1.6em;
   line-height: 1.6em;
   vertical-align: middle;
@@ -112,36 +114,48 @@ body {
   background-color: lighten(@backgroundcolor, 15%);
 }
 
+// Text Inputs
 input[type=text] {
-  border: 1px solid @elementbackground;
+  border: 3px solid @backgroundcolor;
 }
 
 input[type=text]:hover {
-  border: 1px solid @backgroundcolor;
+  border: 3px solid @hovercolor;
 }
 
+input[type=text]:focus {
+  border: 3px solid @hovercolor;
+}
+
+// Color Inputs
 input[type=color] {
-  border: 1px solid @elementbackground;
+  background-color: @backgroundcolor;
+  border: 3px solid @backgroundcolor;
 }
 
 input[type=color]:hover {
-  border: 1px solid @backgroundcolor;
+  border: 3px solid @hovercolor;
 }
 
+input[type=color]:focus {
+  border: 3px solid @hovercolor;
+}
+
+// Checkbox inputs
 input[type=checkbox] {
-  border: 1px solid @elementbackground;
+  border: 3px solid @backgroundcolor;
 }
 
 input[type=checkbox]:hover {
-  border: 1px solid @backgroundcolor;
+  border: 3px solid @hovercolor;
 }
 
 select {
-  border: 1px solid @elementbackground;
+  border: 3px solid @backgroundcolor;
 }
 
 select:hover {
-  border: 1px solid @backgroundcolor;
+  border: 3px solid @hovercolor;
 }
 
 button {
@@ -157,9 +171,12 @@ button:hover {
 
 // Property editor styles
 .propertyEditor {
-  background-color: @pagebackground;
   overflow-y: auto;
   overflow-x: hidden;
+
+  .separator {
+    background-color: @objectbrowsertitle;
+  }
 
   .propertyEditor {
     padding: 0.1em;
@@ -193,19 +210,23 @@ button:hover {
 }
 
 .objectTree {
-  background-color: @pagebackground;
   overflow-y: auto;
   overflow-x: hidden;
+
+  .separator {
+    background-color: @objectbrowsertitle;
+  }
 
   .treelevel(@level) when (@level > 0) {
 
     .level@{level} {
       padding-left: 1em * @level;
-
+      color: @textcolor;
     }
 
     .level@{level}:hover {
       background-color: lighten(@backgroundcolor, 53%);
+      color: black;
     }
 
 
@@ -216,7 +237,6 @@ button:hover {
 
   .selected {
     background-color: lighten(@backgroundcolor, 50%);
-    font-weight: bold;
+    color: black;
   }
 }
-

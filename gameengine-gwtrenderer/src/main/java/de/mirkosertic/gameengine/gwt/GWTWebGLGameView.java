@@ -301,7 +301,7 @@ public class GWTWebGLGameView extends GenericAbstractGameView<GWTBitmapResource>
 
     @Override
     protected void drawText(String aInstanceID, Position aPosition, Angle aAngle, Position aCenterOffset, Font aFont, Color aColor, String aText,
-            Size aSize) {
+            Size aSize, boolean aVisible) {
         GWTCanvasUtils.drawText(context2d, aPosition, aFont, aColor, aText, aSize);
     }
 
