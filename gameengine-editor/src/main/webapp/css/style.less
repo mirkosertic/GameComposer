@@ -14,6 +14,7 @@ body {
   margin: 0 0 0 0;
   padding: 0 0 0 0;
   background-color: @backgroundcolor;
+  font-family: 'Roboto', sans-serif;
 }
 
 // Very Simple Grid System
@@ -114,50 +115,6 @@ label {
   background-color: lighten(@backgroundcolor, 15%);
 }
 
-// Text Inputs
-input[type=text] {
-  border: 3px solid @backgroundcolor;
-}
-
-input[type=text]:hover {
-  border: 3px solid @hovercolor;
-}
-
-input[type=text]:focus {
-  border: 3px solid @hovercolor;
-}
-
-// Color Inputs
-input[type=color] {
-  background-color: @backgroundcolor;
-  border: 3px solid @backgroundcolor;
-}
-
-input[type=color]:hover {
-  border: 3px solid @hovercolor;
-}
-
-input[type=color]:focus {
-  border: 3px solid @hovercolor;
-}
-
-// Checkbox inputs
-input[type=checkbox] {
-  border: 3px solid @backgroundcolor;
-}
-
-input[type=checkbox]:hover {
-  border: 3px solid @hovercolor;
-}
-
-select {
-  border: 3px solid @backgroundcolor;
-}
-
-select:hover {
-  border: 3px solid @hovercolor;
-}
-
 button {
   border: 1px solid #1abc9c;
   background-color: #1abc9c;
@@ -238,5 +195,28 @@ button:hover {
   .selected {
     background-color: lighten(@backgroundcolor, 50%);
     color: black;
+  }
+}
+
+.field {
+
+  background-color: white;
+  width: 100%;
+  border: 2px solid @backgroundcolor;
+
+  label {
+    display: block;
+    background-color: #bdc3c7;
+    color: black;
+  }
+
+  input[type=text], input[type=color], input[type=range], select, textarea {
+    border: none;
+    width: 100%;
+    padding-left: 2px;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    z-index: 99;
+    background-color: white;
   }
 }
