@@ -17,35 +17,55 @@
         <div class="separator">Editor</div>
         <div class="separatorlight">Common</div>
         <div class="propertyEditor">
-            <label>W:</label>
-            <input id="test" type="text" value="text" class="width-4"/>
-            <label>H:</label>
-            <input id="test" type="text" value="text" class="width-4"/>
+            <span class="field width-4" >
+                <label for="fname">Width</label>
+                <input type="text" id="fname" name="fname"/>
+            </span>
+            <span class="field width-4">
+                <label for="fname">Height</label>
+                <input type="text" id="fname" name="fname"/>
+            </span>
         </div>
         <div class="propertyEditor">
-            <label>Test: </label>
-            <input id="test" type="text" value="text"/>
+            <span class="field">
+                <label for="fname">Test</label>
+                <input type="text" id="fname" name="fname"/>
+            </span>
         </div>
         <div class="propertyEditor">
-            <input type="checkbox" value="Not selected"/>
-            <label>Checkbox label</label>
+            <span class="field">
+                <label for="fname">Checkbox label</label>
+                <input type="checkbox" id="fname" name="fname" value=""/>
+            </span>
         </div>
         <div class="separatorlight">Section1</div>
         <div class="propertyEditor">
-            <label>Color: </label>
-            <select>
-                <option>Value1</option>
-                <option>Value2</option>
-                <option>Value3</option>
-            </select>
+            <span class="field">
+                <label for="fname">Color</label>
+                <select>
+                    <option>Value1</option>
+                    <option>Value2</option>
+                    <option>Value3</option>
+                </select>
+            </span>
         </div>
         <div class="propertyEditor">
-            <label>Color: </label>
-            <input type="color"/>
+            <span class="field">
+                <label for="fname">Color</label>
+                <input type="color"/>
+            </span>
         </div>
         <div class="propertyEditor">
-            <label>Range: </label>
-            <input type="range"/>
+            <span class="field">
+                <label for="fname">Range</label>
+                <input type="range"/>
+            </span>
+        </div>
+        <div class="propertyEditor">
+            <span class="field">
+                <label for="fname">Long text</label>
+                <textarea></textarea>
+            </span>
         </div>
     </div>
     <div class="gridItem width-8 border-1 grow flexHorizontal">
@@ -81,41 +101,85 @@
 
 <template id="propertyTextEditor">
     <div class="propertyEditor">
-        <label>{{label}}: </label>
-        <input id="{{id}}.text" type="text" value="replace me"/>
+        <span class="field">
+            <label for="{{id}}.text">{{label}}</label>
+            <input type="text" id="{{id}}.text" value="replace me"/>
+        </span>
+    </div>
+</template>
+
+<template id="propertyColorEditor">
+    <div class="propertyEditor">
+        <span class="field">
+            <label for="{{id}}.text">{{label}}</label>
+            <input type="color" id="{{id}}.color" value="replace me"/>
+        </span>
+    </div>
+</template>
+
+<template id="propertyTextAreaEditor">
+    <div class="propertyEditor">
+        <span class="field">
+            <label for="{{id}}.text">{{label}}</label>
+            <textarea id="{{id}}.text"></textarea>
+        </span>
     </div>
 </template>
 
 <template id="propertyBooleanEditor">
     <div class="propertyEditor">
-        <input id="{{id}}.checkbox" type="checkbox"/>
-        <label>{{label}}</label>
+        <span class="field">
+            <label for="{{id}}.text">{{label}}</label>
+            <input type="checkbox" id="{{id}}.checkbox" value=""/>
+        </span>
     </div>
 </template>
 
 <template id="propertySizeEditor">
     <div class="propertyEditor">
-        <label>W:</label>
-        <input id="{{id}}.width" type="text" value="text" class="width-4"/>
-        <label>H:</label>
-        <input id="{{id}}.height" type="text" value="text" class="width-4"/>
+        <span class="field width-4">
+            <label for="{{id}}.width">Width</label>
+            <input type="text" id="{{id}}.width" value="replace me"/>
+        </span>
+        <span class="field width-4">
+            <label for="{{id}}.width">Height</label>
+            <input type="text" id="{{id}}.height" value="replace me"/>
+        </span>
     </div>
 </template>
 
 <template id="propertyPositionEditor">
     <div class="propertyEditor">
-        <label>X:</label>
-        <input id="{{id}}.x" type="text" value="text" class="width-4"/>
-        <label>Y:</label>
-        <input id="{{id}}.y" type="text" value="text" class="width-4"/>
+        <span class="field width-4">
+            <label for="{{id}}.x">X</label>
+            <input type="text" id="{{id}}.x" value="replace me"/>
+        </span>
+        <span class="field width-4">
+            <label for="{{id}}.y">Y</label>
+            <input type="text" id="{{id}}.y" value="replace me"/>
+        </span>
     </div>
 </template>
 
 <template id="propertySelectionEditor">
     <div class="propertyEditor">
-        <label>{{label}}:</label>
-        <select id="{{id}}.selection" selected>
-        </select>
+        <span class="field">
+            <label for="{{id}}.selection">{{label}}</label>
+            <select id="{{id}}.selection" selected></select>
+        </span>
+    </div>
+</template>
+
+<template id="propertyFontEditor">
+    <div class="propertyEditor">
+        <span class="field width-6">
+            <label for="{{id}}.font">{{label}}</label>
+            <select id="{{id}}.font"></select>
+        </span>
+        <span class="field width-2">
+            <label for="{{id}}.size">Size</label>
+            <input type="text" id="{{id}}.size" value="replace me">
+        </span>
     </div>
 </template>
 
