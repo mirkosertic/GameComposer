@@ -10,24 +10,14 @@ import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.generic.CSSUtils;
-import de.mirkosertic.gameengine.physic.Static;
-import de.mirkosertic.gameengine.physic.StaticBehavior;
-import de.mirkosertic.gameengine.physic.StaticBehaviorTemplate;
+import de.mirkosertic.gameengine.physic.*;
 import de.mirkosertic.gameengine.playerscore.PlayerScore;
 import de.mirkosertic.gameengine.playerscore.PlayerScoreBehavior;
 import de.mirkosertic.gameengine.playerscore.PlayerScoreBehaviorTemplate;
 import de.mirkosertic.gameengine.text.Text;
 import de.mirkosertic.gameengine.text.TextBehavior;
 import de.mirkosertic.gameengine.text.TextBehaviorTemplate;
-import de.mirkosertic.gameengine.type.Angle;
-import de.mirkosertic.gameengine.type.Color;
-import de.mirkosertic.gameengine.type.Font;
-import de.mirkosertic.gameengine.type.Position;
-import de.mirkosertic.gameengine.type.PositionAnchor;
-import de.mirkosertic.gameengine.type.ScoreValue;
-import de.mirkosertic.gameengine.type.Size;
-import de.mirkosertic.gameengine.type.TextExpression;
-import de.mirkosertic.gameengine.type.UUID;
+import de.mirkosertic.gameengine.type.*;
 import org.teavm.jso.dom.html.HTMLElement;
 import org.teavm.jso.dom.html.HTMLInputElement;
 import org.teavm.jso.dom.html.HTMLOptionElement;
@@ -51,22 +41,11 @@ public class GameObjectEditor extends ListingElement {
         addSizePropertyEditor(aObject.sizeProperty());
         addBooleanPropertyEditor("Visible", aObject.visibleProperty());
 
-        CameraBehaviorTemplate theCamera = aObject.getBehaviorTemplate(CameraBehaviorTemplate.class);
-        if (theCamera != null) {
-            addSubComponent(theCamera);
-        }
-        PlayerScoreBehaviorTemplate thePlayerscore = aObject.getBehaviorTemplate(PlayerScoreBehaviorTemplate.class);
-        if (thePlayerscore != null) {
-            addSubComponent(thePlayerscore);
-        }
-        StaticBehaviorTemplate theStatic = aObject.getBehaviorTemplate(StaticBehaviorTemplate.class);
-        if (theStatic != null) {
-            addSubComponent(theStatic);
-        }
-        TextBehaviorTemplate theText = aObject.getBehaviorTemplate(TextBehaviorTemplate.class);
-        if (theText != null) {
-            addSubComponent(theText);
-        }
+        addSubComponent(aObject.getBehaviorTemplate(CameraBehaviorTemplate.class));
+        addSubComponent(aObject.getBehaviorTemplate(PlayerScoreBehaviorTemplate.class));
+        addSubComponent(aObject.getBehaviorTemplate(StaticBehaviorTemplate.class));
+        addSubComponent(aObject.getBehaviorTemplate(TextBehaviorTemplate.class));
+        addSubComponent(aObject.getBehaviorTemplate(PlatformBehaviorTemplate.class));
     }
 
     public void setEditingObject(GameScene aObject) {
@@ -103,34 +82,32 @@ public class GameObjectEditor extends ListingElement {
         });
         addSelectionEditor("Anchor", aObject.positionAnchorProperty(), PositionAnchor.values());
 
-        CameraBehavior theCamera = aObject.getBehavior(CameraBehavior.class);
-        if (theCamera != null) {
-            addSubComponent(theCamera);
-        }
-        PlayerScoreBehavior thePlayerscore = aObject.getBehavior(PlayerScoreBehavior.class);
-        if (thePlayerscore != null) {
-            addSubComponent(thePlayerscore);
-        }
-        StaticBehavior theStatic = aObject.getBehavior(StaticBehavior.class);
-        if (theStatic != null) {
-            addSubComponent(theStatic);
-        }
-        TextBehavior theText = aObject.getBehavior(TextBehavior.class);
-        if (theText != null) {
-            addSubComponent(theText);
-        }
+        addSubComponent(aObject.getBehavior(CameraBehavior.class));
+        addSubComponent(aObject.getBehavior(PlayerScoreBehavior.class));
+        addSubComponent(aObject.getBehavior(StaticBehavior.class));
+        addSubComponent(aObject.getBehavior(TextBehavior.class));
+        addSubComponent(aObject.getBehavior(PlatformBehavior.class));
     }
 
     private void addSubComponent(Camera aComponent) {
+        if (aComponent == null) {
+            return;
+        }
         addTitleLevel2("Camera");
         addSelectionEditor("Type", aComponent.typeProperty(), CameraType.values());
     }
 
     private void addSubComponent(Static aComponent) {
+        if (aComponent == null) {
+            return;
+        }
         addTitleLevel2("Static");
     }
 
     private void addSubComponent(Text aComponent) {
+        if (aComponent == null) {
+            return;
+        }
         addTitleLevel2("Text");
         addFontPropertyEditor("Font", aComponent.fontProperty());
         addBooleanPropertyEditor("Is LUA Script", aComponent.isScriptProperty());
@@ -150,6 +127,9 @@ public class GameObjectEditor extends ListingElement {
     }
 
     private void addSubComponent(PlayerScore aComponent) {
+        if (aComponent == null) {
+            return;
+        }
         addTitleLevel2("Player score");
         addStringPropertyEditor("Score", aComponent.scoreValueProperty(), new HTMLInputBinder.Converter<ScoreValue, String>() {
             @Override
@@ -160,6 +140,41 @@ public class GameObjectEditor extends ListingElement {
             @Override
             public ScoreValue convertTo(String aValue) {
                 return new ScoreValue(Long.parseLong(aValue));
+            }
+        });
+    }
+
+    private void addSubComponent(Platform aComponent) {
+        if (aComponent == null) {
+            return;
+        }
+
+        addTitleLevel2("Platformer");
+        addSelectionEditor("Move left", aComponent.moveLeftKeyProperty(), GameKeyCode.values());
+        addSelectionEditor("Move right", aComponent.moveRightKeyProperty(), GameKeyCode.values());
+        addSelectionEditor("Jump", aComponent.jumpKeyProperty(), GameKeyCode.values());
+        addStringPropertyEditor("Jump impulse.", aComponent.jumpImpulseProperty(), new HTMLInputBinder.Converter<Float, String>() {
+
+            @Override
+            public String convertFrom(Float aValue) {
+                return Float.toString(aValue);
+            }
+
+            @Override
+            public Float convertTo(String aValue) {
+                return Float.parseFloat(aValue);
+            }
+        });
+        addStringPropertyEditor("Left/rigt impulse.", aComponent.leftRightImpulseProperty(), new HTMLInputBinder.Converter<Float, String>() {
+
+            @Override
+            public String convertFrom(Float aValue) {
+                return Float.toString(aValue);
+            }
+
+            @Override
+            public Float convertTo(String aValue) {
+                return Float.parseFloat(aValue);
             }
         });
     }
