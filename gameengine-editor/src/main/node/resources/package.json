@@ -1,6 +1,6 @@
 {
   "name": "GameEngine-Editor",
-  "version": "1.0.0",
+  "version": "@VERSION@",
   "description": "An Editor for the Gameengine",
   "main": "main.js",
   "scripts": {
