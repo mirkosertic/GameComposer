@@ -1,0 +1,24 @@
+{
+  "name": "GameEngine-Editor",
+  "version": "1.0.0",
+  "description": "An Editor for the Gameengine",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mirkosertic/GameComposer.git"
+  },
+  "keywords": [
+  ],
+  "author": "Mirko Sertic",
+  "license": "CC0-1.0",
+  "bugs": {
+    "url": "https://github.com/mirkosertic/GameComposer/issues"
+  },
+  "homepage": "https://github.com/mirkosertic/GameComposer",
+  "devDependencies": {
+    "electron-prebuilt": "^1.2.0"
+  }
+}

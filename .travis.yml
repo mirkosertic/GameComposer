@@ -1,10 +1,13 @@
 language: java
 jdk:
   - oraclejdk8
+node_js:
+  - "6"
 env:
   global:
     - "MAVEN_OPTS=-Xmx2536m -XX:MaxPermSize=1024m -XX:+CMSClassUnloadingEnabled -XX:-UseGCOverheadLimit"
 before_install:
+  - "npm install electron-packager -g"
   - "env"
   - "echo 'MAVEN_OPTS = $MAVEN_OPTS'"
   # Install base Android SDK
