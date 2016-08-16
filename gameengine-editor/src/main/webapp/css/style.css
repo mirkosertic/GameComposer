@@ -3,6 +3,7 @@ body {
   margin: 0 0 0 0;
   padding: 0 0 0 0;
   background-color: #33373c;
+  font-family: 'Roboto', sans-serif;
 }
 .flexVertical {
   flex-direction: row;
@@ -275,37 +276,6 @@ label {
 .separatorlight .border-1 {
   border: 1px solid #ffffff;
 }
-input[type=text] {
-  border: 3px solid #33373c;
-}
-input[type=text]:hover {
-  border: 3px solid #5faee3;
-}
-input[type=text]:focus {
-  border: 3px solid #5faee3;
-}
-input[type=color] {
-  background-color: #33373c;
-  border: 3px solid #33373c;
-}
-input[type=color]:hover {
-  border: 3px solid #5faee3;
-}
-input[type=color]:focus {
-  border: 3px solid #5faee3;
-}
-input[type=checkbox] {
-  border: 3px solid #33373c;
-}
-input[type=checkbox]:hover {
-  border: 3px solid #5faee3;
-}
-select {
-  border: 3px solid #33373c;
-}
-select:hover {
-  border: 3px solid #5faee3;
-}
 button {
   border: 1px solid #1abc9c;
   background-color: #1abc9c;
@@ -397,4 +367,27 @@ button:hover {
 .objectTree .selected {
   background-color: #b1b6bd;
   color: black;
+}
+.field {
+  background-color: white;
+  width: 100%;
+  border: 2px solid #33373c;
+}
+.field label {
+  display: block;
+  background-color: #bdc3c7;
+  color: black;
+}
+.field input[type=text],
+.field input[type=color],
+.field input[type=range],
+.field select,
+.field textarea {
+  border: none;
+  width: 100%;
+  padding-left: 2px;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  z-index: 99;
+  background-color: white;
 }
