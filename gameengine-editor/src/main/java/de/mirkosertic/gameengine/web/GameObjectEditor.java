@@ -1,5 +1,8 @@
 package de.mirkosertic.gameengine.web;
 
+import de.mirkosertic.gameengine.arcade.ConstantMovement;
+import de.mirkosertic.gameengine.arcade.ConstantMovementBehavior;
+import de.mirkosertic.gameengine.arcade.ConstantMovementBehaviorTemplate;
 import de.mirkosertic.gameengine.camera.Camera;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.CameraBehaviorTemplate;
@@ -10,15 +13,40 @@ import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.generic.CSSUtils;
-import de.mirkosertic.gameengine.physic.*;
+import de.mirkosertic.gameengine.physic.Physics;
+import de.mirkosertic.gameengine.physic.PhysicsBehavior;
+import de.mirkosertic.gameengine.physic.PhysicsBehaviorTemplate;
+import de.mirkosertic.gameengine.physic.Platform;
+import de.mirkosertic.gameengine.physic.PlatformBehavior;
+import de.mirkosertic.gameengine.physic.PlatformBehaviorTemplate;
+import de.mirkosertic.gameengine.physic.Static;
+import de.mirkosertic.gameengine.physic.StaticBehavior;
+import de.mirkosertic.gameengine.physic.StaticBehaviorTemplate;
 import de.mirkosertic.gameengine.playerscore.PlayerScore;
 import de.mirkosertic.gameengine.playerscore.PlayerScoreBehavior;
 import de.mirkosertic.gameengine.playerscore.PlayerScoreBehaviorTemplate;
+import de.mirkosertic.gameengine.sprite.Sprite;
+import de.mirkosertic.gameengine.sprite.SpriteBehavior;
+import de.mirkosertic.gameengine.sprite.SpriteBehaviorTemplate;
+import de.mirkosertic.gameengine.teavm.TeaVMTextureResource;
 import de.mirkosertic.gameengine.text.Text;
 import de.mirkosertic.gameengine.text.TextBehavior;
 import de.mirkosertic.gameengine.text.TextBehaviorTemplate;
-import de.mirkosertic.gameengine.type.*;
+import de.mirkosertic.gameengine.type.Angle;
+import de.mirkosertic.gameengine.type.Animation;
+import de.mirkosertic.gameengine.type.Color;
+import de.mirkosertic.gameengine.type.Font;
+import de.mirkosertic.gameengine.type.GameKeyCode;
+import de.mirkosertic.gameengine.type.Position;
+import de.mirkosertic.gameengine.type.PositionAnchor;
+import de.mirkosertic.gameengine.type.ResourceName;
+import de.mirkosertic.gameengine.type.ScoreValue;
+import de.mirkosertic.gameengine.type.Size;
+import de.mirkosertic.gameengine.type.Speed;
+import de.mirkosertic.gameengine.type.TextExpression;
+import de.mirkosertic.gameengine.type.UUID;
 import org.teavm.jso.dom.html.HTMLElement;
+import org.teavm.jso.dom.html.HTMLImageElement;
 import org.teavm.jso.dom.html.HTMLInputElement;
 import org.teavm.jso.dom.html.HTMLOptionElement;
 import org.teavm.jso.dom.html.HTMLOptionsCollection;
@@ -28,6 +56,45 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GameObjectEditor extends ListingElement {
+
+    public static class FloatStringConverter implements HTMLInputBinder.Converter<Float, String> {
+
+        @Override
+        public String convertFrom(Float aValue) {
+            return Float.toString(aValue);
+        }
+
+        @Override
+        public Float convertTo(String aValue) {
+            return Float.parseFloat(aValue);
+        }
+    }
+
+    public static class IntegerStringConverter implements HTMLInputBinder.Converter<Integer, String> {
+
+        @Override
+        public String convertFrom(Integer aValue) {
+            return Integer.toString(aValue);
+        }
+
+        @Override
+        public Integer convertTo(String aValue) {
+            return Integer.parseInt(aValue);
+        }
+    }
+
+    public static class ColorStringConverter implements HTMLInputBinder.Converter<Color, String> {
+
+        @Override
+        public String convertFrom(Color aValue) {
+            return CSSUtils.toColorHex(aValue);
+        }
+
+        @Override
+        public Color convertTo(String aValue) {
+            return CSSUtils.fromColorHex(aValue);
+        }
+    }
 
     public GameObjectEditor(HTMLElement aHtmlElement, HTMLTemplateEngine aTemplateEngine) {
         super(aHtmlElement, aTemplateEngine);
@@ -46,6 +113,9 @@ public class GameObjectEditor extends ListingElement {
         addSubComponent(aObject.getBehaviorTemplate(StaticBehaviorTemplate.class));
         addSubComponent(aObject.getBehaviorTemplate(TextBehaviorTemplate.class));
         addSubComponent(aObject.getBehaviorTemplate(PlatformBehaviorTemplate.class));
+        addSubComponent(aObject.getBehaviorTemplate(ConstantMovementBehaviorTemplate.class));
+        addSubComponent(aObject.getBehaviorTemplate(PhysicsBehaviorTemplate.class));
+        addSubComponent(aObject.getBehaviorTemplate(SpriteBehaviorTemplate.class), aObject.getGameScene());
     }
 
     public void setEditingObject(GameScene aObject) {
@@ -53,6 +123,7 @@ public class GameObjectEditor extends ListingElement {
         addTitleLevel1("Game Scene");
         addTitleLevel2("Common properties");
         addStringPropertyEditor("Name", aObject.nameProperty());
+        addColorPropertyEditor("Background color", aObject.backgroundColorProperty());
     }
 
     public void setEditingObject(EventSheet aObject) {
@@ -87,6 +158,9 @@ public class GameObjectEditor extends ListingElement {
         addSubComponent(aObject.getBehavior(StaticBehavior.class));
         addSubComponent(aObject.getBehavior(TextBehavior.class));
         addSubComponent(aObject.getBehavior(PlatformBehavior.class));
+        addSubComponent(aObject.getBehavior(ConstantMovementBehavior.class));
+        addSubComponent(aObject.getBehavior(PhysicsBehavior.class));
+        addSubComponent(aObject.getBehavior(SpriteBehavior.class), aObject.getOwnerGameObject().getGameScene());
     }
 
     private void addSubComponent(Camera aComponent) {
@@ -144,6 +218,35 @@ public class GameObjectEditor extends ListingElement {
         });
     }
 
+    private void addSubComponent(ConstantMovement aComponent) {
+        if (aComponent == null) {
+            return;
+        }
+        addTitleLevel2("Constant movement");
+        addStringPropertyEditor("Movement speed", aComponent.speedProperty(), new HTMLInputBinder.Converter<Speed, String>() {
+            @Override
+            public String convertFrom(Speed aValue) {
+                return Long.toString(aValue.speed);
+            }
+
+            @Override
+            public Speed convertTo(String aValue) {
+                return new Speed(Long.parseLong(aValue));
+            }
+        });
+        addStringPropertyEditor("Rotation speed", aComponent.rotationSpeedProperty(), new HTMLInputBinder.Converter<Speed, String>() {
+            @Override
+            public String convertFrom(Speed aValue) {
+                return Long.toString(aValue.speed);
+            }
+
+            @Override
+            public Speed convertTo(String aValue) {
+                return new Speed(Long.parseLong(aValue));
+            }
+        });
+    }
+
     private void addSubComponent(Platform aComponent) {
         if (aComponent == null) {
             return;
@@ -153,30 +256,32 @@ public class GameObjectEditor extends ListingElement {
         addSelectionEditor("Move left", aComponent.moveLeftKeyProperty(), GameKeyCode.values());
         addSelectionEditor("Move right", aComponent.moveRightKeyProperty(), GameKeyCode.values());
         addSelectionEditor("Jump", aComponent.jumpKeyProperty(), GameKeyCode.values());
-        addStringPropertyEditor("Jump impulse.", aComponent.jumpImpulseProperty(), new HTMLInputBinder.Converter<Float, String>() {
+        addStringPropertyEditor("Jump impulse.", aComponent.jumpImpulseProperty(), new FloatStringConverter());
+        addStringPropertyEditor("Left/rigt impulse.", aComponent.leftRightImpulseProperty(), new FloatStringConverter());
+    }
 
-            @Override
-            public String convertFrom(Float aValue) {
-                return Float.toString(aValue);
-            }
+    private void addSubComponent(Physics aComponent) {
+        if (aComponent == null) {
+            return;
+        }
 
-            @Override
-            public Float convertTo(String aValue) {
-                return Float.parseFloat(aValue);
-            }
-        });
-        addStringPropertyEditor("Left/rigt impulse.", aComponent.leftRightImpulseProperty(), new HTMLInputBinder.Converter<Float, String>() {
+        addTitleLevel2("Physics");
+        addBooleanPropertyEditor("Active", aComponent.activeProperty());
+        addBooleanPropertyEditor("Fixed rotation", aComponent.fixedRotationProperty());
+        addStringPropertyEditor("Density", aComponent.densityProperty(), new FloatStringConverter());
+        addStringPropertyEditor("Friction", aComponent.frictionProperty(), new FloatStringConverter());
+        addStringPropertyEditor("Restitution", aComponent.restitutionProperty(), new FloatStringConverter());
+        addStringPropertyEditor("Gravity", aComponent.gravityScaleProperty(), new FloatStringConverter());
+    }
 
-            @Override
-            public String convertFrom(Float aValue) {
-                return Float.toString(aValue);
-            }
+    private void addSubComponent(Sprite aComponent, GameScene aGameScene) {
+        if (aComponent == null) {
+            return;
+        }
 
-            @Override
-            public Float convertTo(String aValue) {
-                return Float.parseFloat(aValue);
-            }
-        });
+        addTitleLevel2("Sprite");
+        addStringPropertyEditor("Speed", aComponent.speedProperty(), new IntegerStringConverter());
+        addAnimationEditor("Animation", aComponent.currentAnimationProperty(), aGameScene);
     }
 
     private void addStringPropertyEditor(String aLabel, Property<String> aProperty) {
@@ -206,17 +311,7 @@ public class GameObjectEditor extends ListingElement {
         htmlElement.appendChild(theElement);
 
         HTMLInputElement theTextElement = (HTMLInputElement) htmlElement.getOwnerDocument().getElementById(theNewID+".color");
-        binder.add(HTMLInputBinder.forAnyProperty(theTextElement, aProperty, new HTMLInputBinder.Converter<Color, String>() {
-            @Override
-            public String convertFrom(Color aValue) {
-                return CSSUtils.toColorHex(aValue);
-            }
-
-            @Override
-            public Color convertTo(String aValue) {
-                return CSSUtils.fromColorHex(aValue);
-            }
-        }));
+        binder.add(HTMLInputBinder.forAnyProperty(theTextElement, aProperty, new ColorStringConverter()));
     }
 
     private <T> void addStringPropertyEditor(String aLabel, Property<T> aProperty, HTMLInputBinder.Converter<T, String> aConverter) {
@@ -292,6 +387,30 @@ public class GameObjectEditor extends ListingElement {
         refreshCollections(theSelectElement, aValues);
 
         binder.add(HTMLInputBinder.forAnyProperty(theSelectElement, aProperty, aValues));
+    }
+
+    private void addAnimationEditor(String aLabel, Property<Animation> aProperty, GameScene aScene) {
+
+        String theNewID = UUID.randomUID();
+
+        Map<String, Object> theParams = new HashMap<>();
+        theParams.put("label", aLabel);
+        theParams.put("id", theNewID);
+
+        HTMLElement theElement = templateEngine.renderToElement("propertyAnimationEditor", theParams);
+        htmlElement.appendChild(theElement);
+
+        HTMLImageElement theImageElement = (HTMLImageElement) htmlElement.getOwnerDocument().getElementById(theNewID+".image");
+        Animation theCurrentAnimation = aProperty.get();
+        if (theCurrentAnimation != null && theCurrentAnimation.getSequenceSize() > 0) {
+            ResourceName theResourceName = theCurrentAnimation.getResourceByIndex(0);
+            try {
+                TeaVMTextureResource aTexture = aScene.getRuntime().getResourceCache().getResourceFor(theResourceName);
+                theImageElement.setSrc(aTexture.getUrl());
+            } catch (Exception e) {
+                aScene.getRuntime().getLogger().error("Error loading " + theResourceName.name);
+            }
+        }
     }
 
     private void addSizePropertyEditor(Property<Size> aProperty) {
