@@ -372,11 +372,13 @@ button:hover {
   background-color: white;
   width: 100%;
   border: 2px solid #33373c;
+  text-align: center;
 }
 .field label {
   display: block;
   background-color: #bdc3c7;
   color: black;
+  text-align: left;
 }
 .field input[type=text],
 .field input[type=color],

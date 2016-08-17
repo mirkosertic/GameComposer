@@ -33,7 +33,7 @@ public class TeaVMGameResourceLoader implements GameResourceLoader {
         TeaVMTextureResource theResource = textureResources.get(aResourceName);
         if (theResource == null) {
             Texture theTexure = Texture.createTextureFromImage(aResourceName.name);
-            theResource = new TeaVMTextureResource(theTexure);
+            theResource = new TeaVMTextureResource(theTexure, aResourceName.name);
             textureResources.put(aResourceName, theResource);
         }
 

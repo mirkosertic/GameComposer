@@ -67,6 +67,12 @@
                 <textarea></textarea>
             </span>
         </div>
+        <div class="propertyEditor">
+            <span class="field">
+                <label for="fname">Image</label>
+                <img class="width-8" src="https://www.google.de/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png">
+            </span>
+        </div>
     </div>
     <div class="gridItem width-8 border-1 grow flexHorizontal">
         <div class="separator flexVertical shrink">
@@ -166,6 +172,15 @@
         <span class="field">
             <label for="{{id}}.selection">{{label}}</label>
             <select id="{{id}}.selection" selected></select>
+        </span>
+    </div>
+</template>
+
+<template id="propertyAnimationEditor">
+    <div class="propertyEditor">
+        <span class="field">
+            <label for="{{id}}.image">{{label}}</label>
+            <img id="{{id}}.image" class="width-4"></img>
         </span>
     </div>
 </template>
