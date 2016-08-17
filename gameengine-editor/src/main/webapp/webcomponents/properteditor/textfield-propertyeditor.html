@@ -1,0 +1,36 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="textfield-propertyeditor">
+    <template>
+        <style include="shared-styles"></style>
+        <div class="field">
+            <label for="inputfield">[[label]]</label>
+            <input type="text" id="inputfield" name="inputfield" value="{{value}}" on-blur="updateData"/>
+        </div>
+    </template>
+    <script>
+        Polymer({
+            is: 'textfield-propertyeditor',
+
+            properties: {
+                label: {
+                    type: String,
+                    notify: true
+                },
+                value: {
+                    type: String,
+                    notify: true
+                }
+            },
+
+            updateData: function() {
+                this.value = this.$.inputfield.value;
+            },
+
+            ready: function() {
+            }
+
+        });
+    </script>
+</dom-module>

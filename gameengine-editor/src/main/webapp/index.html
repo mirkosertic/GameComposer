@@ -17,17 +17,18 @@
             } else {
                 // polyfill web components
                 var e = document.createElement('script');
-                e.src = '/bower_components/webcomponentsjs/webcomponents-lite.min.js';
+                e.src = 'bower_components/webcomponentsjs/webcomponents-lite.min.js';
                 document.head.appendChild(e);
             }
         })();
 
         // load pre-caching service worker
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
-                navigator.serviceWorker.register('/service-worker.js');
-            });
-        }
+        //if ('serviceWorker' in navigator) {
+//            window.addEventListener('load', function() {
+  //              navigator.serviceWorker.register('/service-worker.js');
+    //        });
+      //  }
+
     </script>
     <script type="text/javascript" charset="utf-8" src="pixi-min-4.0.0-rc3.js"></script>
     <script type="text/javascript" charset="utf-8" src="howler.core.min-2.0.0.js"></script>
@@ -35,7 +36,7 @@
     <script type="text/javascript" charset="utf-8" src="teavm/runtime.js"></script>
     <script type="text/javascript" charset="utf-8" src="teavm/classes.js"></script>
 
-    <link rel="import" href="webcomponents/properteditor/string-propertyeditor.html">
+    <link rel="import" href="webcomponents/properteditor/textfield-propertyeditor.html">
 </head>
 <body onload="main()">
 <div class="grid flexVertical">
@@ -101,14 +102,7 @@
             </span>
         </div>
 
-        <div class="propertyEditor">
-            <string-propertyeditor class="field" label="test" value="17"/>
-        </div>
-
-        <div class="propertyEditor">
-            <string-propertyeditor class="field width-4" label="x" value="a"></string-propertyeditor>
-            <string-propertyeditor class="field width-4" label="y" value="b"></string-propertyeditor>
-        </div>
+        <textfield-propertyeditor class="propertyEditor" label="test" value="17"/>
 
     </div>
     <div class="gridItem width-8 border-1 grow flexHorizontal">
