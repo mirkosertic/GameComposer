@@ -13,6 +13,11 @@ public class HTMLTemplateEngine {
         document = aDocument;
     }
 
+    public EditorHTMLElement createNewComponent(String aComponentID) {
+        EditorHTMLElement theTemplate = (EditorHTMLElement) document.createElement(aComponentID);
+        return theTemplate;
+    }
+
     public EditorHTMLElement renderToElement(String aTemplateID, Map<String, Object> aData) {
         HTMLElement theTemplate = (HTMLElement) document.getElementById(aTemplateID);
         HTMLElement theImportedNode = document.importNode(theTemplate, true);

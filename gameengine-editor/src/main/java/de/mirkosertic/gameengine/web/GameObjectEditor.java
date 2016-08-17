@@ -286,17 +286,22 @@ public class GameObjectEditor extends ListingElement {
 
     private void addStringPropertyEditor(String aLabel, Property<String> aProperty) {
 
-        String theNewID = UUID.randomUID();
+        HTMLElement theDIV = templateEngine.createNewComponent("div");
+        theDIV.setAttribute("class", "propertyEditor");
 
-        Map<String, Object> theParams = new HashMap<>();
-        theParams.put("label", aLabel);
-        theParams.put("id", theNewID);
+        EditorHTMLElement theElement = templateEngine.createNewComponent("string-propertyeditor");
+        theElement.setAttribute("label", aLabel);
+        theElement.setAttribute("value", aProperty.get());
+        theElement.setAttribute("class", "field");
+        theElement.addEventListener("value-changed", aEvent -> {
+            aProperty.set(theElement.get("value"));
+        });
+        theDIV.appendChild(theElement);
 
-        HTMLElement theElement = templateEngine.renderToElement("propertyTextEditor", theParams);
-        htmlElement.appendChild(theElement);
+        htmlElement.appendChild(theDIV);
 
-        HTMLInputElement theTextElement = (HTMLInputElement) htmlElement.getOwnerDocument().getElementById(theNewID+".text");
-        binder.add(HTMLInputBinder.forStringProperty(theTextElement, aProperty));
+//        HTMLInputElement theTextElement = (HTMLInputElement) htmlElement.getOwnerDocument().getElementById(theNewID+".text");
+//        binder.add(HTMLInputBinder.forStringProperty(theTextElement, aProperty));
     }
 
     private void addColorPropertyEditor(String aLabel, Property<Color> aProperty) {

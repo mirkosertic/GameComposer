@@ -4,11 +4,38 @@
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" href="css/style.css"/>
+    <script>
+        // setup Polymer options
+        window.Polymer = {lazyRegister: true, dom: 'shadow'};
+
+        // load webcomponents polyfills
+        (function() {
+            if ('registerElement' in document
+                    && 'import' in document.createElement('link')
+                    && 'content' in document.createElement('template')) {
+                // browser has web components
+            } else {
+                // polyfill web components
+                var e = document.createElement('script');
+                e.src = '/bower_components/webcomponentsjs/webcomponents-lite.min.js';
+                document.head.appendChild(e);
+            }
+        })();
+
+        // load pre-caching service worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/service-worker.js');
+            });
+        }
+    </script>
     <script type="text/javascript" charset="utf-8" src="pixi-min-4.0.0-rc3.js"></script>
     <script type="text/javascript" charset="utf-8" src="howler.core.min-2.0.0.js"></script>
     <script type="text/javascript" charset="utf-8" src="firebase-2.2.2.js"></script>
     <script type="text/javascript" charset="utf-8" src="teavm/runtime.js"></script>
     <script type="text/javascript" charset="utf-8" src="teavm/classes.js"></script>
+
+    <link rel="import" href="webcomponents/properteditor/string-propertyeditor.html">
 </head>
 <body onload="main()">
 <div class="grid flexVertical">
@@ -73,6 +100,16 @@
                 <img class="width-8" src="https://www.google.de/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png">
             </span>
         </div>
+
+        <div class="propertyEditor">
+            <string-propertyeditor class="field" label="test" value="17"/>
+        </div>
+
+        <div class="propertyEditor">
+            <string-propertyeditor class="field width-4" label="x" value="a"></string-propertyeditor>
+            <string-propertyeditor class="field width-4" label="y" value="b"></string-propertyeditor>
+        </div>
+
     </div>
     <div class="gridItem width-8 border-1 grow flexHorizontal">
         <div class="separator flexVertical shrink">
