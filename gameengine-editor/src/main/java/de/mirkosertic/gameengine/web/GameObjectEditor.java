@@ -289,7 +289,6 @@ public class GameObjectEditor extends ListingElement {
         EditorHTMLElement theElement = templateEngine.createNewComponent("textfield-propertyeditor");
         theElement.set("label", aLabel);
         theElement.set("value", aProperty.get());
-        theElement.setAttribute("class", "propertyEditor");
         theElement.addEventListener("value-changed", aEvent -> {
             aProperty.set(theElement.get("value"));
         });
