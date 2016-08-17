@@ -286,19 +286,15 @@ public class GameObjectEditor extends ListingElement {
 
     private void addStringPropertyEditor(String aLabel, Property<String> aProperty) {
 
-        HTMLElement theDIV = templateEngine.createNewComponent("div");
-        theDIV.setAttribute("class", "propertyEditor");
-
-        EditorHTMLElement theElement = templateEngine.createNewComponent("string-propertyeditor");
-        theElement.setAttribute("label", aLabel);
-        theElement.setAttribute("value", aProperty.get());
-        theElement.setAttribute("class", "field");
+        EditorHTMLElement theElement = templateEngine.createNewComponent("textfield-propertyeditor");
+        theElement.set("label", aLabel);
+        theElement.set("value", aProperty.get());
+        theElement.setAttribute("class", "propertyEditor");
         theElement.addEventListener("value-changed", aEvent -> {
             aProperty.set(theElement.get("value"));
         });
-        theDIV.appendChild(theElement);
 
-        htmlElement.appendChild(theDIV);
+        htmlElement.appendChild(theElement);
 
 //        HTMLInputElement theTextElement = (HTMLInputElement) htmlElement.getOwnerDocument().getElementById(theNewID+".text");
 //        binder.add(HTMLInputBinder.forStringProperty(theTextElement, aProperty));

@@ -8,5 +8,8 @@ public interface EditorHTMLElement extends HTMLElement {
     void scrollIntoView(boolean aParam);
 
     @JSIndexer
+    void set(String aKey, String aValue);
+
+    @JSIndexer
     String get(String aKey);
 }
