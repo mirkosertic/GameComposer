@@ -8,6 +8,7 @@ env:
     - "MAVEN_OPTS=-Xmx2536m -XX:MaxPermSize=1024m -XX:+CMSClassUnloadingEnabled -XX:-UseGCOverheadLimit"
 before_install:
   - "npm install electron-packager -g"
+  - "npm install cordova -g"
   - "env"
   - "echo 'MAVEN_OPTS = $MAVEN_OPTS'"
   # Install base Android SDK
