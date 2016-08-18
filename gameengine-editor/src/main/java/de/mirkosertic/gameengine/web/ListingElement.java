@@ -2,9 +2,7 @@ package de.mirkosertic.gameengine.web;
 
 import org.teavm.jso.dom.html.HTMLElement;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 public abstract class ListingElement {
@@ -19,18 +17,17 @@ public abstract class ListingElement {
         binder = new HashSet<>();
     }
 
-    protected EditorHTMLElement addTitleLevel1(String aTitle) {
-        Map<String, Object> theParams = new HashMap<>();
-        theParams.put("title", aTitle);
-        EditorHTMLElement theElement = templateEngine.renderToElement("majorSeparator", theParams);
+    protected HTMLElement addTitleLevel1(String aTitle) {
+        GlobalSeparatorHTMLElement theElement = templateEngine.createNewComponent("global-separator");
+        theElement.setText(aTitle);
+        theElement.setMajor(true);
         htmlElement.appendChild(theElement);
         return theElement;
     }
 
-    protected EditorHTMLElement addTitleLevel2(String aTitle) {
-        Map<String, Object> theParams = new HashMap<>();
-        theParams.put("title", aTitle);
-        EditorHTMLElement theElement = templateEngine.renderToElement("minorSeparator", theParams);
+    protected HTMLElement addTitleLevel2(String aTitle) {
+        GlobalSeparatorHTMLElement theElement = templateEngine.createNewComponent("global-separator");
+        theElement.setText(aTitle);
         htmlElement.appendChild(theElement);
         return theElement;
     }
