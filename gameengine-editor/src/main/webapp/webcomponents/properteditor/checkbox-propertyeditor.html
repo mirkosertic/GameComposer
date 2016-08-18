@@ -1,17 +1,17 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="shared-styles.html">
 
-<dom-module id="textfield-propertyeditor">
+<dom-module id="checkbox-propertyeditor">
     <template>
         <style include="shared-styles"></style>
         <div class="field">
-            <label for="inputfield">[[label]]</label>
-            <input type="text" id="inputfield" name="inputfield" value="{{value}}" on-blur="updateData">
+            <label for="checkbox">[[label]]</label>
+            <input type="checkbox" id="checkbox" name="checkbox" checked$="{{value}}" on-click="updateData">
         </div>
     </template>
     <script>
         Polymer({
-            is: 'textfield-propertyeditor',
+            is: 'checkbox-propertyeditor',
 
             properties: {
                 label: {
@@ -19,13 +19,13 @@
                     notify: true
                 },
                 value: {
-                    type: String,
+                    type: Boolean,
                     notify: true
                 }
             },
 
             updateData: function() {
-                this.value = this.$.inputfield.value;
+                this.value = this.$.checkbox.checked;
             },
 
             ready: function() {

@@ -37,6 +37,11 @@
     <script type="text/javascript" charset="utf-8" src="teavm/classes.js"></script>
 
     <link rel="import" href="webcomponents/properteditor/textfield-propertyeditor.html">
+    <link rel="import" href="webcomponents/properteditor/textarea-propertyeditor.html">
+    <link rel="import" href="webcomponents/properteditor/checkbox-propertyeditor.html">
+    <link rel="import" href="webcomponents/properteditor/animation-propertyeditor.html">
+    <link rel="import" href="webcomponents/properteditor/color-propertyeditor.html">
+    <link rel="import" href="webcomponents/properteditor/twofield-propertyeditor.html">
 </head>
 <body onload="main()">
 <div class="grid flexVertical">
@@ -44,28 +49,9 @@
 
         <div class="separator">Editor</div>
         <div class="separatorlight">Common</div>
-        <div class="propertyEditor">
-            <span class="field width-4" >
-                <label for="fname">Width</label>
-                <input type="text" id="fname" name="fname"/>
-            </span>
-            <span class="field width-4">
-                <label for="fname">Height</label>
-                <input type="text" id="fname" name="fname"/>
-            </span>
-        </div>
-        <div class="propertyEditor">
-            <span class="field">
-                <label for="fname">Test</label>
-                <input type="text" id="fname" name="fname"/>
-            </span>
-        </div>
-        <div class="propertyEditor">
-            <span class="field">
-                <label for="fname">Checkbox label</label>
-                <input type="checkbox" id="fname" name="fname" value=""/>
-            </span>
-        </div>
+
+        <twofield-propertyeditor label1="Width" label2="Height" value1="11" value2="12"></twofield-propertyeditor>
+
         <div class="separatorlight">Section1</div>
         <div class="propertyEditor">
             <span class="field">
@@ -77,32 +63,25 @@
                 </select>
             </span>
         </div>
-        <div class="propertyEditor">
-            <span class="field">
-                <label for="fname">Color</label>
-                <input type="color"/>
-            </span>
-        </div>
+
         <div class="propertyEditor">
             <span class="field">
                 <label for="fname">Range</label>
                 <input type="range"/>
             </span>
         </div>
-        <div class="propertyEditor">
-            <span class="field">
-                <label for="fname">Long text</label>
-                <textarea></textarea>
-            </span>
-        </div>
-        <div class="propertyEditor">
-            <span class="field">
-                <label for="fname">Image</label>
-                <img class="width-8" src="https://www.google.de/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png">
-            </span>
-        </div>
 
-        <textfield-propertyeditor label="test" value="17"/>
+        <textfield-propertyeditor label="Long text" value="Long text lalala"></textfield-propertyeditor>
+
+        <checkbox-propertyeditor label="checkbox 2" value="true"></checkbox-propertyeditor>
+
+        <textfield-propertyeditor label="test" value="17"></textfield-propertyeditor>
+
+        <textfield-propertyeditor label="test" value="18"></textfield-propertyeditor>
+
+        <animation-propertyeditor label="Image" url="https://www.google.de/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"></animation-propertyeditor>
+
+        <color-propertyeditor label="test" value="#ff0000"></color-propertyeditor>
 
     </div>
     <div class="gridItem width-8 border-1 grow flexHorizontal">
@@ -136,82 +115,11 @@
     <div class="separatorlight">{{title}}</div>
 </template>
 
-<template id="propertyTextEditor">
-    <div class="propertyEditor">
-        <span class="field">
-            <label for="{{id}}.text">{{label}}</label>
-            <input type="text" id="{{id}}.text" value="replace me"/>
-        </span>
-    </div>
-</template>
-
-<template id="propertyColorEditor">
-    <div class="propertyEditor">
-        <span class="field">
-            <label for="{{id}}.text">{{label}}</label>
-            <input type="color" id="{{id}}.color" value="replace me"/>
-        </span>
-    </div>
-</template>
-
-<template id="propertyTextAreaEditor">
-    <div class="propertyEditor">
-        <span class="field">
-            <label for="{{id}}.text">{{label}}</label>
-            <textarea id="{{id}}.text"></textarea>
-        </span>
-    </div>
-</template>
-
-<template id="propertyBooleanEditor">
-    <div class="propertyEditor">
-        <span class="field">
-            <label for="{{id}}.text">{{label}}</label>
-            <input type="checkbox" id="{{id}}.checkbox" value=""/>
-        </span>
-    </div>
-</template>
-
-<template id="propertySizeEditor">
-    <div class="propertyEditor">
-        <span class="field width-4">
-            <label for="{{id}}.width">Width</label>
-            <input type="text" id="{{id}}.width" value="replace me"/>
-        </span>
-        <span class="field width-4">
-            <label for="{{id}}.width">Height</label>
-            <input type="text" id="{{id}}.height" value="replace me"/>
-        </span>
-    </div>
-</template>
-
-<template id="propertyPositionEditor">
-    <div class="propertyEditor">
-        <span class="field width-4">
-            <label for="{{id}}.x">X</label>
-            <input type="text" id="{{id}}.x" value="replace me"/>
-        </span>
-        <span class="field width-4">
-            <label for="{{id}}.y">Y</label>
-            <input type="text" id="{{id}}.y" value="replace me"/>
-        </span>
-    </div>
-</template>
-
 <template id="propertySelectionEditor">
     <div class="propertyEditor">
         <span class="field">
             <label for="{{id}}.selection">{{label}}</label>
             <select id="{{id}}.selection" selected></select>
-        </span>
-    </div>
-</template>
-
-<template id="propertyAnimationEditor">
-    <div class="propertyEditor">
-        <span class="field">
-            <label for="{{id}}.image">{{label}}</label>
-            <img id="{{id}}.image" class="width-4"></img>
         </span>
     </div>
 </template>

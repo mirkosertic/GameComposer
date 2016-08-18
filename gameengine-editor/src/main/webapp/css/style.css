@@ -293,14 +293,24 @@ button:hover {
   background-color: #e74c3c;
 }
 .propertyEditor .propertyEditor,
-.propertyEditor textfield-propertyeditor {
+.propertyEditor textfield-propertyeditor,
+.propertyEditor textarea-propertyeditor,
+.propertyEditor checkbox-propertyeditor,
+.propertyEditor animation-propertyeditor,
+.propertyEditor color-propertyeditor,
+.propertyEditor twofield-propertyeditor {
   padding: 0.1em;
   display: flex;
   flex-flow: row;
   overflow: visible;
 }
 .propertyEditor .propertyEditor label,
-.propertyEditor textfield-propertyeditor label {
+.propertyEditor textfield-propertyeditor label,
+.propertyEditor textarea-propertyeditor label,
+.propertyEditor checkbox-propertyeditor label,
+.propertyEditor animation-propertyeditor label,
+.propertyEditor color-propertyeditor label,
+.propertyEditor twofield-propertyeditor label {
   font-size: small;
   padding-right: 0.2em;
   align-self: center;
@@ -311,15 +321,30 @@ button:hover {
   flex-shrink: 5;
 }
 .propertyEditor .propertyEditor input[type=text],
-.propertyEditor textfield-propertyeditor input[type=text] {
+.propertyEditor textfield-propertyeditor input[type=text],
+.propertyEditor textarea-propertyeditor input[type=text],
+.propertyEditor checkbox-propertyeditor input[type=text],
+.propertyEditor animation-propertyeditor input[type=text],
+.propertyEditor color-propertyeditor input[type=text],
+.propertyEditor twofield-propertyeditor input[type=text] {
   flex-grow: 10;
 }
 .propertyEditor .propertyEditor input[type=color],
-.propertyEditor textfield-propertyeditor input[type=color] {
+.propertyEditor textfield-propertyeditor input[type=color],
+.propertyEditor textarea-propertyeditor input[type=color],
+.propertyEditor checkbox-propertyeditor input[type=color],
+.propertyEditor animation-propertyeditor input[type=color],
+.propertyEditor color-propertyeditor input[type=color],
+.propertyEditor twofield-propertyeditor input[type=color] {
   flex-grow: 10;
 }
 .propertyEditor .propertyEditor select,
-.propertyEditor textfield-propertyeditor select {
+.propertyEditor textfield-propertyeditor select,
+.propertyEditor textarea-propertyeditor select,
+.propertyEditor checkbox-propertyeditor select,
+.propertyEditor animation-propertyeditor select,
+.propertyEditor color-propertyeditor select,
+.propertyEditor twofield-propertyeditor select {
   flex-grow: 10;
 }
 .objectTree {

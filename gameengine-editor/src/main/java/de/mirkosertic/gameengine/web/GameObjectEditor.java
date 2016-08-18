@@ -12,7 +12,6 @@ import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.event.Property;
-import de.mirkosertic.gameengine.generic.CSSUtils;
 import de.mirkosertic.gameengine.physic.Physics;
 import de.mirkosertic.gameengine.physic.PhysicsBehavior;
 import de.mirkosertic.gameengine.physic.PhysicsBehaviorTemplate;
@@ -28,7 +27,6 @@ import de.mirkosertic.gameengine.playerscore.PlayerScoreBehaviorTemplate;
 import de.mirkosertic.gameengine.sprite.Sprite;
 import de.mirkosertic.gameengine.sprite.SpriteBehavior;
 import de.mirkosertic.gameengine.sprite.SpriteBehaviorTemplate;
-import de.mirkosertic.gameengine.teavm.TeaVMTextureResource;
 import de.mirkosertic.gameengine.text.Text;
 import de.mirkosertic.gameengine.text.TextBehavior;
 import de.mirkosertic.gameengine.text.TextBehaviorTemplate;
@@ -39,14 +37,12 @@ import de.mirkosertic.gameengine.type.Font;
 import de.mirkosertic.gameengine.type.GameKeyCode;
 import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.PositionAnchor;
-import de.mirkosertic.gameengine.type.ResourceName;
 import de.mirkosertic.gameengine.type.ScoreValue;
 import de.mirkosertic.gameengine.type.Size;
 import de.mirkosertic.gameengine.type.Speed;
 import de.mirkosertic.gameengine.type.TextExpression;
 import de.mirkosertic.gameengine.type.UUID;
 import org.teavm.jso.dom.html.HTMLElement;
-import org.teavm.jso.dom.html.HTMLImageElement;
 import org.teavm.jso.dom.html.HTMLInputElement;
 import org.teavm.jso.dom.html.HTMLOptionElement;
 import org.teavm.jso.dom.html.HTMLOptionsCollection;
@@ -70,6 +66,19 @@ public class GameObjectEditor extends ListingElement {
         }
     }
 
+    public static class StringStringConverter implements HTMLInputBinder.Converter<String, String> {
+
+        @Override
+        public String convertFrom(String aValue) {
+            return aValue;
+        }
+
+        @Override
+        public String convertTo(String aValue) {
+            return aValue;
+        }
+    }
+
     public static class IntegerStringConverter implements HTMLInputBinder.Converter<Integer, String> {
 
         @Override
@@ -83,19 +92,6 @@ public class GameObjectEditor extends ListingElement {
         }
     }
 
-    public static class ColorStringConverter implements HTMLInputBinder.Converter<Color, String> {
-
-        @Override
-        public String convertFrom(Color aValue) {
-            return CSSUtils.toColorHex(aValue);
-        }
-
-        @Override
-        public Color convertTo(String aValue) {
-            return CSSUtils.fromColorHex(aValue);
-        }
-    }
-
     public GameObjectEditor(HTMLElement aHtmlElement, HTMLTemplateEngine aTemplateEngine) {
         super(aHtmlElement, aTemplateEngine);
     }
@@ -104,7 +100,7 @@ public class GameObjectEditor extends ListingElement {
         clear();
         addTitleLevel1("Game Object");
         addTitleLevel2("Common properties");
-        addStringPropertyEditor("Name", aObject.nameProperty());
+        addTextInputfieldPropertyEditor("Name", aObject.nameProperty(), new StringStringConverter());
         addSizePropertyEditor(aObject.sizeProperty());
         addBooleanPropertyEditor("Visible", aObject.visibleProperty());
 
@@ -122,7 +118,7 @@ public class GameObjectEditor extends ListingElement {
         clear();
         addTitleLevel1("Game Scene");
         addTitleLevel2("Common properties");
-        addStringPropertyEditor("Name", aObject.nameProperty());
+        addTextInputfieldPropertyEditor("Name", aObject.nameProperty(), new StringStringConverter());
         addColorPropertyEditor("Background color", aObject.backgroundColorProperty());
     }
 
@@ -130,16 +126,16 @@ public class GameObjectEditor extends ListingElement {
         clear();
         addTitleLevel1("Event Sheet");
         addTitleLevel2("Common properties");
-        addStringPropertyEditor("Name", aObject.nameProperty());
+        addTextInputfieldPropertyEditor("Name", aObject.nameProperty(), new StringStringConverter());
     }
 
     public void setEditingObject(GameObjectInstance aObject) {
         clear();
         addTitleLevel1("Game Object Instance");
-        addStringPropertyEditor("Name", aObject.nameProperty());
+        addTextInputfieldPropertyEditor("Name", aObject.nameProperty(), new StringStringConverter());
         addPositionPropertyEditor(aObject.positionProperty());
         addBooleanPropertyEditor("Visible", aObject.visibleProperty());
-        addStringPropertyEditor("Rot.", aObject.rotationAngleProperty(), new HTMLInputBinder.Converter<Angle, String>() {
+        addTextInputfieldPropertyEditor("Rotation", aObject.rotationAngleProperty(), new HTMLInputBinder.Converter<Angle, String>() {
 
             @Override
             public String convertFrom(Angle aValue) {
@@ -186,17 +182,17 @@ public class GameObjectEditor extends ListingElement {
         addFontPropertyEditor("Font", aComponent.fontProperty());
         addBooleanPropertyEditor("Is LUA Script", aComponent.isScriptProperty());
         addLongStringPropertyEditor("Text Expression", aComponent.textExpressionProperty(),
-                new HTMLInputBinder.Converter<TextExpression, String>() {
-                    @Override
-                    public String convertFrom(TextExpression aValue) {
-                        return aValue.expression;
-                    }
+            new HTMLInputBinder.Converter<TextExpression, String>() {
+                @Override
+                public String convertFrom(TextExpression aValue) {
+                    return aValue.expression;
+                }
 
-                    @Override
-                    public TextExpression convertTo(String aValue) {
-                        return new TextExpression(aValue);
-                    }
-                });
+                @Override
+                public TextExpression convertTo(String aValue) {
+                    return new TextExpression(aValue);
+                }
+            });
         addColorPropertyEditor("Text color", aComponent.colorProperty());
     }
 
@@ -205,7 +201,7 @@ public class GameObjectEditor extends ListingElement {
             return;
         }
         addTitleLevel2("Player score");
-        addStringPropertyEditor("Score", aComponent.scoreValueProperty(), new HTMLInputBinder.Converter<ScoreValue, String>() {
+        addTextInputfieldPropertyEditor("Score", aComponent.scoreValueProperty(), new HTMLInputBinder.Converter<ScoreValue, String>() {
             @Override
             public String convertFrom(ScoreValue aValue) {
                 return Long.toString(aValue.score);
@@ -223,7 +219,7 @@ public class GameObjectEditor extends ListingElement {
             return;
         }
         addTitleLevel2("Constant movement");
-        addStringPropertyEditor("Movement speed", aComponent.speedProperty(), new HTMLInputBinder.Converter<Speed, String>() {
+        addTextInputfieldPropertyEditor("Movement speed", aComponent.speedProperty(), new HTMLInputBinder.Converter<Speed, String>() {
             @Override
             public String convertFrom(Speed aValue) {
                 return Long.toString(aValue.speed);
@@ -234,7 +230,7 @@ public class GameObjectEditor extends ListingElement {
                 return new Speed(Long.parseLong(aValue));
             }
         });
-        addStringPropertyEditor("Rotation speed", aComponent.rotationSpeedProperty(), new HTMLInputBinder.Converter<Speed, String>() {
+        addTextInputfieldPropertyEditor("Rotation speed", aComponent.rotationSpeedProperty(), new HTMLInputBinder.Converter<Speed, String>() {
             @Override
             public String convertFrom(Speed aValue) {
                 return Long.toString(aValue.speed);
@@ -256,8 +252,8 @@ public class GameObjectEditor extends ListingElement {
         addSelectionEditor("Move left", aComponent.moveLeftKeyProperty(), GameKeyCode.values());
         addSelectionEditor("Move right", aComponent.moveRightKeyProperty(), GameKeyCode.values());
         addSelectionEditor("Jump", aComponent.jumpKeyProperty(), GameKeyCode.values());
-        addStringPropertyEditor("Jump impulse.", aComponent.jumpImpulseProperty(), new FloatStringConverter());
-        addStringPropertyEditor("Left/rigt impulse.", aComponent.leftRightImpulseProperty(), new FloatStringConverter());
+        addTextInputfieldPropertyEditor("Jump impulse.", aComponent.jumpImpulseProperty(), new FloatStringConverter());
+        addTextInputfieldPropertyEditor("Left/rigt impulse.", aComponent.leftRightImpulseProperty(), new FloatStringConverter());
     }
 
     private void addSubComponent(Physics aComponent) {
@@ -268,10 +264,10 @@ public class GameObjectEditor extends ListingElement {
         addTitleLevel2("Physics");
         addBooleanPropertyEditor("Active", aComponent.activeProperty());
         addBooleanPropertyEditor("Fixed rotation", aComponent.fixedRotationProperty());
-        addStringPropertyEditor("Density", aComponent.densityProperty(), new FloatStringConverter());
-        addStringPropertyEditor("Friction", aComponent.frictionProperty(), new FloatStringConverter());
-        addStringPropertyEditor("Restitution", aComponent.restitutionProperty(), new FloatStringConverter());
-        addStringPropertyEditor("Gravity", aComponent.gravityScaleProperty(), new FloatStringConverter());
+        addTextInputfieldPropertyEditor("Density", aComponent.densityProperty(), new FloatStringConverter());
+        addTextInputfieldPropertyEditor("Friction", aComponent.frictionProperty(), new FloatStringConverter());
+        addTextInputfieldPropertyEditor("Restitution", aComponent.restitutionProperty(), new FloatStringConverter());
+        addTextInputfieldPropertyEditor("Gravity", aComponent.gravityScaleProperty(), new FloatStringConverter());
     }
 
     private void addSubComponent(Sprite aComponent, GameScene aGameScene) {
@@ -280,83 +276,44 @@ public class GameObjectEditor extends ListingElement {
         }
 
         addTitleLevel2("Sprite");
-        addStringPropertyEditor("Speed", aComponent.speedProperty(), new IntegerStringConverter());
+        addTextInputfieldPropertyEditor("Speed", aComponent.speedProperty(), new IntegerStringConverter());
         addAnimationEditor("Animation", aComponent.currentAnimationProperty(), aGameScene);
     }
 
-    private void addStringPropertyEditor(String aLabel, Property<String> aProperty) {
+    private <T> void addTextInputfieldPropertyEditor(String aLabel, Property<T> aProperty, HTMLInputBinder.Converter<T, String> aConverter) {
 
-        EditorHTMLElement theElement = templateEngine.createNewComponent("textfield-propertyeditor");
-        theElement.set("label", aLabel);
-        theElement.set("value", aProperty.get());
-        theElement.addEventListener("value-changed", aEvent -> {
-            aProperty.set(theElement.get("value"));
-        });
+        TextfieldPropertyEditorHTMLElement theElement = templateEngine.createNewComponent("textfield-propertyeditor");
+        theElement.setLabel(aLabel);
+        binder.add(theElement.bindTo(aProperty, aConverter));
 
         htmlElement.appendChild(theElement);
-
-//        HTMLInputElement theTextElement = (HTMLInputElement) htmlElement.getOwnerDocument().getElementById(theNewID+".text");
-//        binder.add(HTMLInputBinder.forStringProperty(theTextElement, aProperty));
     }
 
     private void addColorPropertyEditor(String aLabel, Property<Color> aProperty) {
 
-        String theNewID = UUID.randomUID();
+        ColorPropertyEditorHTMLElement theElement = templateEngine.createNewComponent("color-propertyeditor");
+        theElement.setLabel(aLabel);
+        binder.add(theElement.bindTo(aProperty));
 
-        Map<String, Object> theParams = new HashMap<>();
-        theParams.put("label", aLabel);
-        theParams.put("id", theNewID);
-
-        HTMLElement theElement = templateEngine.renderToElement("propertyColorEditor", theParams);
         htmlElement.appendChild(theElement);
-
-        HTMLInputElement theTextElement = (HTMLInputElement) htmlElement.getOwnerDocument().getElementById(theNewID+".color");
-        binder.add(HTMLInputBinder.forAnyProperty(theTextElement, aProperty, new ColorStringConverter()));
-    }
-
-    private <T> void addStringPropertyEditor(String aLabel, Property<T> aProperty, HTMLInputBinder.Converter<T, String> aConverter) {
-
-        String theNewID = UUID.randomUID();
-
-        Map<String, Object> theParams = new HashMap<>();
-        theParams.put("label", aLabel);
-        theParams.put("id", theNewID);
-
-        HTMLElement theElement = templateEngine.renderToElement("propertyTextEditor", theParams);
-        htmlElement.appendChild(theElement);
-
-        HTMLInputElement theTextElement = (HTMLInputElement) htmlElement.getOwnerDocument().getElementById(theNewID+".text");
-        binder.add(HTMLInputBinder.forAnyProperty(theTextElement, aProperty, aConverter));
     }
 
     private <T> void addLongStringPropertyEditor(String aLabel, Property<T> aProperty, HTMLInputBinder.Converter<T, String> aConverter) {
 
-        String theNewID = UUID.randomUID();
+        TextareaPropertyEditorHTMLElement theElement = templateEngine.createNewComponent("textarea-propertyeditor");
+        theElement.setLabel(aLabel);
+        binder.add(theElement.bindTo(aProperty, aConverter));
 
-        Map<String, Object> theParams = new HashMap<>();
-        theParams.put("label", aLabel);
-        theParams.put("id", theNewID);
-
-        HTMLElement theElement = templateEngine.renderToElement("propertyTextAreaEditor", theParams);
         htmlElement.appendChild(theElement);
-
-        HTMLInputElement theTextElement = (HTMLInputElement) htmlElement.getOwnerDocument().getElementById(theNewID+".text");
-        binder.add(HTMLInputBinder.forAnyProperty(theTextElement, aProperty, aConverter));
     }
 
     private void addBooleanPropertyEditor(String aLabel, Property<Boolean> aProperty) {
 
-        String theNewID = UUID.randomUID();
+        CheckboxPropertyEditorHTMLElement theElement = templateEngine.createNewComponent("checkbox-propertyeditor");
+        theElement.setLabel(aLabel);
+        binder.add(theElement.bindTo(aProperty));
 
-        Map<String, Object> theParams = new HashMap<>();
-        theParams.put("label", aLabel);
-        theParams.put("id", theNewID);
-
-        HTMLElement theElement = templateEngine.renderToElement("propertyBooleanEditor", theParams);
         htmlElement.appendChild(theElement);
-
-        HTMLInputElement theTextElement = (HTMLInputElement) htmlElement.getOwnerDocument().getElementById(theNewID+".checkbox");
-        binder.add(HTMLInputBinder.forBooleanProperty(theTextElement, aProperty));
     }
 
     private <T> void refreshCollections(HTMLSelectElement aElement, T[] aValues) {
@@ -391,40 +348,19 @@ public class GameObjectEditor extends ListingElement {
 
     private void addAnimationEditor(String aLabel, Property<Animation> aProperty, GameScene aScene) {
 
-        String theNewID = UUID.randomUID();
+        AnimationPropertyEditorHTMLElement theElement = templateEngine.createNewComponent("animation-propertyeditor");
+        theElement.setLabel(aLabel);
+        theElement.bindTo(aProperty, aScene);
 
-        Map<String, Object> theParams = new HashMap<>();
-        theParams.put("label", aLabel);
-        theParams.put("id", theNewID);
-
-        HTMLElement theElement = templateEngine.renderToElement("propertyAnimationEditor", theParams);
         htmlElement.appendChild(theElement);
-
-        HTMLImageElement theImageElement = (HTMLImageElement) htmlElement.getOwnerDocument().getElementById(theNewID+".image");
-        Animation theCurrentAnimation = aProperty.get();
-        if (theCurrentAnimation != null && theCurrentAnimation.getSequenceSize() > 0) {
-            ResourceName theResourceName = theCurrentAnimation.getResourceByIndex(0);
-            try {
-                TeaVMTextureResource aTexture = aScene.getRuntime().getResourceCache().getResourceFor(theResourceName);
-                theImageElement.setSrc(aTexture.getUrl());
-            } catch (Exception e) {
-                aScene.getRuntime().getLogger().error("Error loading " + theResourceName.name);
-            }
-        }
     }
 
     private void addSizePropertyEditor(Property<Size> aProperty) {
 
-        String theNewID = UUID.randomUID();
-
-        Map<String, Object> theParams = new HashMap<>();
-        theParams.put("id", theNewID);
-
-        HTMLElement theElement = templateEngine.renderToElement("propertySizeEditor", theParams);
-        htmlElement.appendChild(theElement);
-
-        HTMLInputElement theWidth = (HTMLInputElement) htmlElement.getOwnerDocument().getElementById(theNewID+".width");
-        binder.add(HTMLInputBinder.forAnyProperty(theWidth, aProperty, new HTMLInputBinder.Converter<Size, String>() {
+        TwofieldPropertyEditorHTMLElement theElement = templateEngine.createNewComponent("twofield-propertyeditor");
+        theElement.setLabel1("Width");
+        theElement.setLabel2("Height");
+        binder.add(theElement.bindField1To(aProperty, new HTMLInputBinder.Converter<Size, String>() {
             @Override
             public String convertFrom(Size aValue) {
                 return Integer.toString(aValue.width);
@@ -435,9 +371,7 @@ public class GameObjectEditor extends ListingElement {
                 return aProperty.get().changeWidth(Integer.parseInt(aValue));
             }
         }));
-
-        HTMLInputElement theHeight = (HTMLInputElement) htmlElement.getOwnerDocument().getElementById(theNewID+".height");
-        binder.add(HTMLInputBinder.forAnyProperty(theHeight, aProperty, new HTMLInputBinder.Converter<Size, String>() {
+        binder.add(theElement.bindField2To(aProperty, new HTMLInputBinder.Converter<Size, String>() {
             @Override
             public String convertFrom(Size aValue) {
                 return Integer.toString(aValue.height);
@@ -448,20 +382,16 @@ public class GameObjectEditor extends ListingElement {
                 return aProperty.get().changeHeight(Integer.parseInt(aValue));
             }
         }));
+
+        htmlElement.appendChild(theElement);
     }
 
     private void addPositionPropertyEditor(Property<Position> aProperty) {
 
-        String theNewID = UUID.randomUID();
-
-        Map<String, Object> theParams = new HashMap<>();
-        theParams.put("id", theNewID);
-
-        HTMLElement theElement = templateEngine.renderToElement("propertyPositionEditor", theParams);
-        htmlElement.appendChild(theElement);
-
-        HTMLInputElement theWidth = (HTMLInputElement) htmlElement.getOwnerDocument().getElementById(theNewID+".x");
-        binder.add(HTMLInputBinder.forAnyProperty(theWidth, aProperty, new HTMLInputBinder.Converter<Position, String>() {
+        TwofieldPropertyEditorHTMLElement theElement = templateEngine.createNewComponent("twofield-propertyeditor");
+        theElement.setLabel1("X");
+        theElement.setLabel2("Y");
+        binder.add(theElement.bindField1To(aProperty, new HTMLInputBinder.Converter<Position, String>() {
             @Override
             public String convertFrom(Position aValue) {
                 return Integer.toString((int) aValue.x);
@@ -472,12 +402,10 @@ public class GameObjectEditor extends ListingElement {
                 return aProperty.get().changeX((float) Integer.parseInt(aValue));
             }
         }));
-
-        HTMLInputElement theHeight = (HTMLInputElement) htmlElement.getOwnerDocument().getElementById(theNewID+".y");
-        binder.add(HTMLInputBinder.forAnyProperty(theHeight, aProperty, new HTMLInputBinder.Converter<Position, String>() {
+        binder.add(theElement.bindField2To(aProperty, new HTMLInputBinder.Converter<Position, String>() {
             @Override
             public String convertFrom(Position aValue) {
-                return Integer.toString((int) (aValue.y));
+                return Integer.toString((int) aValue.y);
             }
 
             @Override
@@ -485,6 +413,8 @@ public class GameObjectEditor extends ListingElement {
                 return aProperty.get().changeY((float) Integer.parseInt(aValue));
             }
         }));
+
+        htmlElement.appendChild(theElement);
     }
 
     private void addFontPropertyEditor(String aLabel, Property<Font> aProperty) {

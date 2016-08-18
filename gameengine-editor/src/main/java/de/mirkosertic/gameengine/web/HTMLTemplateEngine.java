@@ -13,9 +13,8 @@ public class HTMLTemplateEngine {
         document = aDocument;
     }
 
-    public EditorHTMLElement createNewComponent(String aComponentID) {
-        EditorHTMLElement theTemplate = (EditorHTMLElement) document.createElement(aComponentID);
-        return theTemplate;
+    public <T extends HTMLElement> T createNewComponent(String aComponentID) {
+        return (T) document.createElement(aComponentID);
     }
 
     public EditorHTMLElement renderToElement(String aTemplateID, Map<String, Object> aData) {
