@@ -59,7 +59,7 @@
         </plugins>
 	</build>
 
-    <profiles>
+<!--    <profiles>
         <profile>
             <id>platform-linux</id>
             <activation>
@@ -78,20 +78,17 @@
                                 <configuration>
                                     <target>
                                         <mkdir dir="${project.build.directory}"/>
-                                        <!-- New Empty Project -->
                                         <exec executable="cordova" dir="${project.build.directory}">
                                             <arg value="create"/>
                                             <arg value="${project.cordova.directory}"/>
                                             <arg value="${project.cordova.packagename}"/>
                                             <arg value="${project.cordova.name}"/>
                                         </exec>
-                                        <!-- Add android support -->
                                         <exec executable="cordova" dir="${project.build.directory}/${project.cordova.directory}">
                                             <arg value="platform"/>
                                             <arg value="add"/>
                                             <arg value="android"/>
                                         </exec>
-                                        <!-- Add Crosswalk Support -->
                                         <exec executable="cordova" dir="${project.build.directory}/${project.cordova.directory}">
                                             <arg value="plugin"/>
                                             <arg value="add"/>
@@ -106,7 +103,6 @@
                                             <fileset dir="${project.build.directory}/webruntime" includes="**/*"/>
                                         </copy>
 
-                                        <!-- Trigger up build -->
                                         <exec executable="cordova" dir="${project.build.directory}/${project.cordova.directory}">
                                             <arg value="build"/>
                                             <arg value="android"/>
@@ -179,20 +175,17 @@
                                 <configuration>
                                     <target>
                                         <mkdir dir="${project.build.directory}"/>
-                                        <!-- New Empty Project -->
                                         <exec executable="cordova.cmd" dir="${project.build.directory}">
                                             <arg value="create"/>
                                             <arg value="${project.cordova.directory}"/>
                                             <arg value="${project.cordova.packagename}"/>
                                             <arg value="${project.cordova.name}"/>
                                         </exec>
-                                        <!-- Add android support -->
                                         <exec executable="cordova.cmd" dir="${project.build.directory}/${project.cordova.directory}">
                                             <arg value="platform"/>
                                             <arg value="add"/>
                                             <arg value="android"/>
                                         </exec>
-                                        <!-- Add Crosswalk Support -->
                                         <exec executable="cordova.cmd" dir="${project.build.directory}/${project.cordova.directory}">
                                             <arg value="plugin"/>
                                             <arg value="add"/>
@@ -207,7 +200,6 @@
                                             <fileset dir="${project.build.directory}/webruntime" includes="**/*"/>
                                         </copy>
 
-                                        <!-- Trigger up build -->
                                         <exec executable="cordova.cmd" dir="${project.build.directory}/${project.cordova.directory}">
                                             <arg value="build"/>
                                             <arg value="android"/>
@@ -261,5 +253,5 @@
                 </plugins>
             </build>
         </profile>
-    </profiles>
+    </profiles> -->
 </project>
