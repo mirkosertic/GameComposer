@@ -41,15 +41,7 @@ import de.mirkosertic.gameengine.type.ScoreValue;
 import de.mirkosertic.gameengine.type.Size;
 import de.mirkosertic.gameengine.type.Speed;
 import de.mirkosertic.gameengine.type.TextExpression;
-import de.mirkosertic.gameengine.type.UUID;
 import org.teavm.jso.dom.html.HTMLElement;
-import org.teavm.jso.dom.html.HTMLInputElement;
-import org.teavm.jso.dom.html.HTMLOptionElement;
-import org.teavm.jso.dom.html.HTMLOptionsCollection;
-import org.teavm.jso.dom.html.HTMLSelectElement;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class GameObjectEditor extends ListingElement {
 
@@ -179,7 +171,7 @@ public class GameObjectEditor extends ListingElement {
             return;
         }
         addTitleLevel2("Text");
-        addFontPropertyEditor("Font", aComponent.fontProperty());
+        addFontPropertyEditor(aComponent.fontProperty());
         addBooleanPropertyEditor("Is LUA Script", aComponent.isScriptProperty());
         addLongStringPropertyEditor("Text Expression", aComponent.textExpressionProperty(),
             new HTMLInputBinder.Converter<TextExpression, String>() {
@@ -316,34 +308,12 @@ public class GameObjectEditor extends ListingElement {
         htmlElement.appendChild(theElement);
     }
 
-    private <T> void refreshCollections(HTMLSelectElement aElement, T[] aValues) {
-        HTMLOptionsCollection theOptions = aElement.getOptions();
-        while(theOptions.getLength() > 0) {
-            theOptions.remove(0);
-        }
-        for (T theValue : aValues) {
-            HTMLOptionElement theOption = (HTMLOptionElement)aElement.getOwnerDocument().createElement("option");
-            theOption.setAttribute("name", theValue.toString());
-            theOption.setInnerHTML(theValue.toString());
-            theOptions.add(theOption);
-        }
-    }
-
     private <T> void addSelectionEditor(String aLabel, Property<T> aProperty, T[] aValues) {
 
-        String theNewID = UUID.randomUID();
-
-        Map<String, Object> theParams = new HashMap<>();
-        theParams.put("label", aLabel);
-        theParams.put("id", theNewID);
-
-        HTMLElement theElement = templateEngine.renderToElement("propertySelectionEditor", theParams);
+        SelectPropertyEditorHTMLElement theElement = templateEngine.createNewComponent("select-propertyeditor");
+        theElement.setLabel(aLabel);
+        binder.add(theElement.bindTo(aProperty, aValues));
         htmlElement.appendChild(theElement);
-
-        HTMLSelectElement theSelectElement = (HTMLSelectElement) htmlElement.getOwnerDocument().getElementById(theNewID+".selection");
-        refreshCollections(theSelectElement, aValues);
-
-        binder.add(HTMLInputBinder.forAnyProperty(theSelectElement, aProperty, aValues));
     }
 
     private void addAnimationEditor(String aLabel, Property<Animation> aProperty, GameScene aScene) {
@@ -417,44 +387,13 @@ public class GameObjectEditor extends ListingElement {
         htmlElement.appendChild(theElement);
     }
 
-    private void addFontPropertyEditor(String aLabel, Property<Font> aProperty) {
+    private void addFontPropertyEditor(Property<Font> aProperty) {
 
-        String theNewID = UUID.randomUID();
+        FontPropertyEditorHTMLElement theElement = templateEngine.createNewComponent("font-propertyeditor");
+        theElement.setLabel1("Font");
+        theElement.setLabel2("Size");
+        binder.add(theElement.bindTo(aProperty, Font.FontName.values()));
 
-        Map<String, Object> theParams = new HashMap<>();
-        theParams.put("id", theNewID);
-        theParams.put("label", aLabel);
-
-        HTMLElement theElement = templateEngine.renderToElement("propertyFontEditor", theParams);
         htmlElement.appendChild(theElement);
-
-        HTMLSelectElement theFont = (HTMLSelectElement) htmlElement.getOwnerDocument().getElementById(theNewID+".font");
-        refreshCollections(theFont, Font.FontName.values());
-
-        binder.add(HTMLInputBinder.forAnyProperty(theFont, aProperty, Font.FontName.values(),
-                new HTMLInputBinder.Converter<Font, Font.FontName>() {
-                    @Override
-                    public Font.FontName convertFrom(Font aValue) {
-                        return aValue.name;
-                    }
-
-                    @Override
-                    public Font convertTo(Font.FontName aValue) {
-                        return aProperty.get().changeName(aValue);
-                    }
-                }));
-
-        HTMLInputElement theSize = (HTMLInputElement) htmlElement.getOwnerDocument().getElementById(theNewID+".size");
-        binder.add(HTMLInputBinder.forAnyProperty(theSize, aProperty, new HTMLInputBinder.Converter<Font, String>() {
-            @Override
-            public String convertFrom(Font aValue) {
-                return Integer.toString((int) aValue.size);
-            }
-
-            @Override
-            public Font convertTo(String aValue) {
-                return aProperty.get().changeSize(Integer.parseInt(aValue));
-            }
-        }));
     }
 }
