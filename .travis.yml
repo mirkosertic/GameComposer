@@ -53,4 +53,5 @@ before_install:
   #30- Samples for SDK API 7, revision 1
   #31- Glass Development Kit Preview, Android API 19, revision 11
   #32- Android Support Library, revision 19.1
-  - echo "y" | android update sdk -u -t 1,2,3,14,8
+  - android list sdk --all
+  - echo "y" | android update sdk -u -t 1,2,3,14,8,6,30,108
