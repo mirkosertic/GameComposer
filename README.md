@@ -1,15 +1,25 @@
-FXGameComposer
+GameComposer
 =============
 
-FXGameComposer is a game authoring tool and also a game runtime environment, targeting at JavaFX2 or HTML5 capable devices.
+GameComposer is a game authoring tool and also a game runtime environment targeting at desktop and mobile devices.
+
+Started as a JavaFX implementation some years ago, it now supports desktop and mobile devices, with support for modern technologies such as HTML5, WebGL, Apache Cordova/Crosswalk and Electron.
+
+Its core is based on Domain-driven Design and a hexagonal architecture. The main game simulation logic stayed the same for years, but
+replacing presentation logic and adapting it to new technologies is a lot easier compared to traditional layered applications.
 
 To see it in action please visit [this page](http://www.mirkosertic.de/doku.php/javastuff/javafxgameauthoring)
 
-GameComposer
------------
+Current travis-ci build status: [![Build Status](https://travis-ci.org/mirkosertic/GameComposer.svg?branch=master)](https://travis-ci.org/mirkosertic/GameComposer) [![Gitter](https://badges.gitter.im/mirkosertic/GameComposer.svg)](https://gitter.im/mirkosertic/GameComposer?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-GameComposer is the authoring tool, the IDE. It is a JavaFX2 application. Using this tool, games can be designed
-and tested. Finally, they can be exported to a target runtime, e.g. HTML5.
+GameEngine-Editor
+-----------------
+
+This is the shiny new Web-enabled editor for the GameEngine. It is based on HTML5, Polymer/Webcomponents, Electron and TeaVM. 
+
+[Edit Dukes Adventure Example Game](http://mirkosertic.github.io/GameComposer/games/editor/index.html)
+
+The Electron Releases are available for download at the GitHub Releases section.
 
 GameEngine
 ----------
@@ -33,38 +43,6 @@ Core concepts and components of the game engine are:
 | GameLoop               | The GameLoop drives the engine by calling the GameSystems, rendering the GameView and dispatching events.
 | GameProcess            | A GameProcess is something that takes multiple GameLoop cycles to complete, for instance playing background music or playing an animation.
 
-Current travis-ci build status: [![Build Status](https://travis-ci.org/mirkosertic/GameComposer.svg?branch=master)](https://travis-ci.org/mirkosertic/GameComposer) [![Gitter](https://badges.gitter.im/mirkosertic/GameComposer.svg)](https://gitter.im/mirkosertic/GameComposer?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
-
-
-GameEngine-FXRenderer
----------------------
-
-This is the game presentation logic by implementing a GameView using JavaFX 2. This also includes a Soundsystem implementation based on Java Sound API.
-
-GameEngine-TeaVMRenderer (preferred)
---------------
-
-This is the game presentation logic using the TeaVM Java-to-JavaScript Transpiler Framework. It will render the game view
-using [pixi.js](http://www.pixijs.com), which uses WebGL or the HTML5 Canvas API as a fallback. Sound is done using [howler.js](https://github.com/goldfire/howler.js/) 
-
-GameEngine-AndroidRenderer
---------------
-
-This is the game presentation logic using the Android Java SDK. This also includes a SoundSystem implementation for Android devices.
-We use an Android SurfaceView for rendering. Future versions will include OpenGL ES support.
-
-GameEngine-GWTRenderer (outdated)
---------------
-
-This is the game presentation logic using GWT and HTML5(JavaScript) by implementing a GameView. This also includes a SoundSystem implementation based on HTML5 Media API.
-Currently the HTML5 renderer tries to use WebGL. If WebGL is not available, it will fallback to the HTML5 Canvas API.
-
-GameEngine-DragomeRenderer (experimental)
---------------
-
-This is the game presentation logic using the Dragome Java-to-JavaScript Transpiler Framework. It will render the game view
-using the HTML5 Canvas API.
-
 GameEngine-Networking
 --------------
 
@@ -75,6 +53,18 @@ then syncs the events back to other browsers bound to the same Firebase instance
 to see it in action. In this case, Firebase acts as a non-authorative game server. The game models and simulation is still run in the local browser.
 Only the game state is synchronized using events.
 
+GameEngine-TeaVMRenderer (preferred)
+--------------
+
+This is the game presentation logic using the TeaVM Java-to-JavaScript Transpiler Framework. It will render the game view
+using [pixi.js](http://www.pixijs.com), which uses WebGL or the HTML5 Canvas API as a fallback. Sound is done using [howler.js](https://github.com/goldfire/howler.js/) 
+
+
+GameEngine-Cordovarenderer (experimental)
+--------------
+
+This is basically the TeaVMRenderer packaged as a Cordova Application backed by Crosswalk(Chromium).
+ 
 
 Example Games
 -------------
@@ -129,4 +119,35 @@ Dragome Renderer:
 
 [Rotating actor](http://mirkosertic.github.io/GameComposer/games/dragome/rotatingactor/index.html)
 
-[Arcade Racer](http://mirkosertic.github.io/GameComposer/games/dragome/arcaderacer/index.html)
+[Arcade Racer](http://mirkosertic.github.io/GameComposer/games/dragome/arcaderacer/index.html) 
+
+
+
+GameEngine-FXRenderer (outdated)
+---------------------
+
+This is the game presentation logic by implementing a GameView using JavaFX 2. This also includes a Soundsystem implementation based on Java Sound API.
+
+GameEngine-AndroidRenderer (outdated)
+--------------
+
+This is the game presentation logic using the Android Java SDK. This also includes a SoundSystem implementation for Android devices.
+We use an Android SurfaceView for rendering. Future versions will include OpenGL ES support.
+
+GameEngine-GWTRenderer (outdated)
+--------------
+
+This is the game presentation logic using GWT and HTML5(JavaScript) by implementing a GameView. This also includes a SoundSystem implementation based on HTML5 Media API.
+Currently the HTML5 renderer tries to use WebGL. If WebGL is not available, it will fallback to the HTML5 Canvas API.
+
+GameEngine-DragomeRenderer (experimental)
+--------------
+
+This is the game presentation logic using the Dragome Java-to-JavaScript Transpiler Framework. It will render the game view
+using the HTML5 Canvas API.
+
+GameComposer (outdated)
+-----------
+
+GameComposer is the authoring tool, the IDE. It is a JavaFX2 application. Using this tool, games can be designed
+and tested. Finally, they can be exported to a target runtime, e.g. HTML5.
