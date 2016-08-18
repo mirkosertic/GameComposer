@@ -3,6 +3,7 @@ package de.mirkosertic.gameengine.web;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.event.PropertyChanged;
+import org.teavm.jso.JSBody;
 import org.teavm.jso.JSProperty;
 import org.teavm.jso.dom.html.HTMLElement;
 import org.teavm.jso.dom.html.HTMLOptionElement;
@@ -20,6 +21,9 @@ public abstract class SelectPropertyEditorHTMLElement implements HTMLElement {
 
     @JSProperty
     public abstract int getIndex();
+
+    @JSBody(params = {"aElement"}, script = "Polymer.dom(this).appendChild(aElement);")
+    public abstract void addOption(HTMLOptionElement aElement);
 
     private <T> int indexOf(T aValue, T[] aValues) {
         for (int i=0;i<aValues.length;i++) {
@@ -40,7 +44,7 @@ public abstract class SelectPropertyEditorHTMLElement implements HTMLElement {
 
             HTMLOptionElement theOption = (HTMLOptionElement) getOwnerDocument().createElement("option");
             theOption.setInnerHTML(theValue.toString());
-            appendChild(theOption);
+            addOption(theOption);
         }
 
         setIndex(theCurrentIndex);
