@@ -20,26 +20,10 @@ public class HTMLInputBinder {
     private final GameEventListener<PropertyChanged> listener;
     private final Property property;
 
-    public static HTMLInputBinder forStringProperty(HTMLInputElement aElement, Property<String> aProperty) {
-        GameEventListener<PropertyChanged> theListener = aEvent -> aElement.setValue(aProperty.get());
-        aProperty.addChangeListener(theListener);
-        aElement.setValue(aProperty.get());
-        aElement.addEventListener("blur", evt -> aProperty.set(aElement.getValue()));
-        return new HTMLInputBinder(theListener, aProperty);
-    }
-
     public static HTMLInputBinder forElementContent(HTMLElement aElement, Property<String> aProperty) {
         GameEventListener<PropertyChanged> theListener = aEvent -> aElement.setInnerHTML(aProperty.get());
         aProperty.addChangeListener(theListener);
         aElement.setInnerHTML(aProperty.get());
-        return new HTMLInputBinder(theListener, aProperty);
-    }
-
-    public static HTMLInputBinder forBooleanProperty(HTMLInputElement aElement, Property<Boolean> aProperty) {
-        GameEventListener<PropertyChanged> theListener = aEvent -> aElement.setChecked(aProperty.get());
-        aProperty.addChangeListener(theListener);
-        aElement.setChecked(aProperty.get());
-        aElement.addEventListener("change", evt -> aProperty.set(aElement.isChecked()));
         return new HTMLInputBinder(theListener, aProperty);
     }
 
@@ -82,7 +66,7 @@ public class HTMLInputBinder {
         return new HTMLInputBinder(theListener, aProperty);
     }
 
-    private HTMLInputBinder(GameEventListener<PropertyChanged> aListener, Property aProperty) {
+    HTMLInputBinder(GameEventListener<PropertyChanged> aListener, Property aProperty) {
         listener = aListener;
         property = aProperty;
     }
