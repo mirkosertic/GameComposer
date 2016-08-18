@@ -15,8 +15,8 @@ import java.util.Map;
 public class GameTreeView extends ListingElement {
 
     private final GameObjectEditor editor;
-    private EditorHTMLElement oldSelection;
-    private final Map<Object, EditorHTMLElement> knownObjects;
+    private TreeItemHTMLElement oldSelection;
+    private final Map<Object, TreeItemHTMLElement> knownObjects;
     private final Window window;
 
     public GameTreeView(HTMLElement aHtmlElement, HTMLTemplateEngine aTemplateEngine, GameObjectEditor aEditor, Window aWindow) {
@@ -32,21 +32,21 @@ public class GameTreeView extends ListingElement {
         knownObjects.clear();
     }
 
-    private void select(EditorHTMLElement aElement) {
+    private void select(TreeItemHTMLElement aElement) {
         if (oldSelection != null) {
-            String theClass = oldSelection.getAttribute("class");
-            oldSelection.setAttribute("class", theClass.replace("selected", ""));
+            oldSelection.setSelected(false);
         }
-        String theClass = aElement.getAttribute("class");
-        aElement.setAttribute("class", theClass + " selected");
+        aElement.setSelected(true);
         aElement.scrollIntoView(false);
         oldSelection = aElement;
     }
 
     public void onGameSceneLoaded(GameScene aGameScene) {
         clear();
-        EditorHTMLElement theSceneElement = addTitleLevel1(aGameScene.nameProperty().get());
-        binder.add(HTMLInputBinder.forElementContent(theSceneElement, aGameScene.nameProperty()));
+
+        TreeItemHTMLElement theSceneElement = addTreeItem(1);
+        theSceneElement.setSeparator(true);
+        binder.add(theSceneElement.bindTo(aGameScene.nameProperty()));
         knownObjects.put(aGameScene, theSceneElement);
         theSceneElement.addEventListener("click", evt -> {
             select(theSceneElement);
@@ -55,26 +55,29 @@ public class GameTreeView extends ListingElement {
 
         addTitleLevel2("Objects");
         for (GameObject theObject : aGameScene.getObjects()) {
-            EditorHTMLElement theElement = addDraggable(theObject.nameProperty().get(), 1);
-            binder.add(HTMLInputBinder.forElementContent(theElement, theObject.nameProperty()));
+
+            TreeItemHTMLElement theElement = addTreeItem(1);
+            theElement.setDraggable(true);
+            binder.add(theElement.bindTo(theObject.nameProperty()));
             knownObjects.put(theObject, theElement);
             theElement.addEventListener("click", evt -> {
                 select(theElement);
                 editor.setEditingObject(theObject);
             });
             theElement.addEventListener("dragstart", new EventListener<TeaVMDragEvent>() {
-                        @Override
-                        public void handleEvent(TeaVMDragEvent aEvent) {
-                            aEvent.getDataTransfer().setData(Constants.DND_OBJECT_ID, theObject.uuidProperty().get());
-                            window.getLocalStorage().setItem(Constants.DND_OBJECT_ID, theObject.uuidProperty().get());
-                        }
-                    });
+                @Override
+                public void handleEvent(TeaVMDragEvent aEvent) {
+                    aEvent.getDataTransfer().setData(Constants.DND_OBJECT_ID, theObject.uuidProperty().get());
+                    window.getLocalStorage().setItem(Constants.DND_OBJECT_ID, theObject.uuidProperty().get());
+                }
+            });
         }
         addTitleLevel2("Eventsheets");
         for (EventSheet theSheet : aGameScene.getEventSheets()) {
-            EditorHTMLElement theElement = add(theSheet.nameProperty().get(), 1);
+            TreeItemHTMLElement theElement = addTreeItem(1);
             knownObjects.put(theSheet, theElement);
-            binder.add(HTMLInputBinder.forElementContent(theElement, theSheet.nameProperty()));
+            binder.add(theElement.bindTo(theSheet.nameProperty()));
+
             theElement.addEventListener("click", evt -> {
                 select(theElement);
                 editor.setEditingObject(theSheet);
@@ -82,9 +85,9 @@ public class GameTreeView extends ListingElement {
         }
         addTitleLevel2("Instances");
         for (GameObjectInstance theInstance : aGameScene.getInstances()) {
-            EditorHTMLElement theElement = add(theInstance.nameProperty().get(), 1);
+            TreeItemHTMLElement theElement = addTreeItem(1);
             knownObjects.put(theInstance, theElement);
-            binder.add(HTMLInputBinder.forElementContent(theElement, theInstance.nameProperty()));
+            binder.add(theElement.bindTo(theInstance.nameProperty()));
             theElement.addEventListener("click", evt -> {
                 select(theElement);
                 editor.setEditingObject(theInstance);
@@ -92,26 +95,15 @@ public class GameTreeView extends ListingElement {
         }
     }
 
-    protected EditorHTMLElement add(String aTitle, int aLevel) {
-        Map<String, Object> theParams = new HashMap<>();
-        theParams.put("title", aTitle);
-        theParams.put("level", Integer.toString(aLevel));
-        EditorHTMLElement theElement = templateEngine.renderToElement("treeitem", theParams);
-        htmlElement.appendChild(theElement);
-        return theElement;
-    }
-
-    protected EditorHTMLElement addDraggable(String aTitle, int aLevel) {
-        Map<String, Object> theParams = new HashMap<>();
-        theParams.put("title", aTitle);
-        theParams.put("level", Integer.toString(aLevel));
-        EditorHTMLElement theElement = templateEngine.renderToElement("treeitemdraggable", theParams);
+    protected TreeItemHTMLElement addTreeItem(int aLevel) {
+        TreeItemHTMLElement theElement = templateEngine.createNewComponent("tree-item");
+        theElement.setLevel(aLevel);
         htmlElement.appendChild(theElement);
         return theElement;
     }
 
     public void setEditingObject(Object aObject) {
-        EditorHTMLElement theNewElement = knownObjects.get(aObject);
+        TreeItemHTMLElement theNewElement = knownObjects.get(aObject);
         if (theNewElement != null) {
             select(theNewElement);
         }
