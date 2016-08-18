@@ -289,9 +289,6 @@ button:hover {
   overflow-y: auto;
   overflow-x: hidden;
 }
-.propertyEditor .separator {
-  background-color: #e74c3c;
-}
 .propertyEditor .propertyEditor,
 .propertyEditor textfield-propertyeditor,
 .propertyEditor textarea-propertyeditor,
@@ -350,53 +347,6 @@ button:hover {
 .objectTree {
   overflow-y: auto;
   overflow-x: hidden;
-}
-.objectTree .separator {
-  background-color: #e74c3c;
-}
-.objectTree .level5 {
-  padding-left: 5em;
-  color: #ffffff;
-}
-.objectTree .level5:hover {
-  background-color: #b9bec4;
-  color: black;
-}
-.objectTree .level4 {
-  padding-left: 4em;
-  color: #ffffff;
-}
-.objectTree .level4:hover {
-  background-color: #b9bec4;
-  color: black;
-}
-.objectTree .level3 {
-  padding-left: 3em;
-  color: #ffffff;
-}
-.objectTree .level3:hover {
-  background-color: #b9bec4;
-  color: black;
-}
-.objectTree .level2 {
-  padding-left: 2em;
-  color: #ffffff;
-}
-.objectTree .level2:hover {
-  background-color: #b9bec4;
-  color: black;
-}
-.objectTree .level1 {
-  padding-left: 1em;
-  color: #ffffff;
-}
-.objectTree .level1:hover {
-  background-color: #b9bec4;
-  color: black;
-}
-.objectTree .selected {
-  background-color: #b1b6bd;
-  color: black;
 }
 .field {
   background-color: white;

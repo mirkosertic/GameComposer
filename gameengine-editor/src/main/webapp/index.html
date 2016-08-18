@@ -42,17 +42,22 @@
     <link rel="import" href="webcomponents/properteditor/animation-propertyeditor.html">
     <link rel="import" href="webcomponents/properteditor/color-propertyeditor.html">
     <link rel="import" href="webcomponents/properteditor/twofield-propertyeditor.html">
+
+    <link rel="import" href="webcomponents/tree/tree-item.html">
+
+    <link rel="import" href="webcomponents/global/global-separator.html">
 </head>
 <body onload="main()">
 <div class="grid flexVertical">
     <div class="gridItem border-1 propertyEditor shrink width-3 min-width-3" id="objectEditor">
 
-        <div class="separator">Editor</div>
-        <div class="separatorlight">Common</div>
+        <global-separator text="Editor" major="true"></global-separator>
+        <global-separator text="Common"></global-separator>
 
         <twofield-propertyeditor label1="Width" label2="Height" value1="11" value2="12"></twofield-propertyeditor>
 
-        <div class="separatorlight">Section1</div>
+        <global-separator text="Section1"></global-separator>
+
         <div class="propertyEditor">
             <span class="field">
                 <label for="fname">Color</label>
@@ -98,22 +103,12 @@
         </canvas>
     </div>
     <div class="gridItem width-3 border-1 shrink min-width-3 objectTree" id="objecttree">
-        <div class="separator">Objects</div>
-        <div class="level1">Item Level 1</div>
-        <div class="level2 selected">Item Level 2</div>
-        <div class="level3">Item Level 3</div>
-        <div class="level2">Item Level 2</div>
-        <div class="level2">Item Level 2</div>
+        <tree-item level="1" text="Objects" separator="true"></tree-item>
+        <tree-item level="2" text="Item Level 2" selected="true"></tree-item>
+        <tree-item level="3" text="Item Level 3" draggable="true"></tree-item>
+        <tree-item level="2" text="Item Level 2"></tree-item>
     </div>
 </div>
-
-<template id="majorSeparator">
-    <div class="separator">{{title}}</div>
-</template>
-
-<template id="minorSeparator">
-    <div class="separatorlight">{{title}}</div>
-</template>
 
 <template id="propertySelectionEditor">
     <div class="propertyEditor">
@@ -135,14 +130,6 @@
             <input type="text" id="{{id}}.size" value="replace me">
         </span>
     </div>
-</template>
-
-<template id="treeitem">
-    <div class="level{{level}}">{{title}}</div>
-</template>
-
-<template id="treeitemdraggable">
-    <div class="level{{level}}" draggable="true">{{title}}</div>
 </template>
 
 </body>

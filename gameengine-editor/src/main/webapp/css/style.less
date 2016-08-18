@@ -131,10 +131,6 @@ button:hover {
   overflow-y: auto;
   overflow-x: hidden;
 
-  .separator {
-    background-color: @objectbrowsertitle;
-  }
-
   .propertyEditor,
   textfield-propertyeditor,
   textarea-propertyeditor,
@@ -176,32 +172,6 @@ button:hover {
   overflow-y: auto;
   overflow-x: hidden;
 
-  .separator {
-    background-color: @objectbrowsertitle;
-  }
-
-  .treelevel(@level) when (@level > 0) {
-
-    .level@{level} {
-      padding-left: 1em * @level;
-      color: @textcolor;
-    }
-
-    .level@{level}:hover {
-      background-color: lighten(@backgroundcolor, 53%);
-      color: black;
-    }
-
-
-    .treelevel((@level - 1));
-  }
-
-  .treelevel(5);
-
-  .selected {
-    background-color: lighten(@backgroundcolor, 50%);
-    color: black;
-  }
 }
 
 .field {

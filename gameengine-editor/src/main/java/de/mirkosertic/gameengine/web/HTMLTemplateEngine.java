@@ -17,7 +17,7 @@ public class HTMLTemplateEngine {
         return (T) document.createElement(aComponentID);
     }
 
-    public EditorHTMLElement renderToElement(String aTemplateID, Map<String, Object> aData) {
+    public HTMLElement renderToElement(String aTemplateID, Map<String, Object> aData) {
         HTMLElement theTemplate = (HTMLElement) document.getElementById(aTemplateID);
         HTMLElement theImportedNode = document.importNode(theTemplate, true);
 
@@ -32,6 +32,6 @@ public class HTMLTemplateEngine {
 
         DOMParser theParser = DOMParser.create();
         HTMLDocument theResult = theParser.parseFromString(theContent, "text/html");
-        return (EditorHTMLElement) theResult.getBody().getFirstChild();
+        return (HTMLElement) theResult.getBody().getFirstChild();
     }
 }

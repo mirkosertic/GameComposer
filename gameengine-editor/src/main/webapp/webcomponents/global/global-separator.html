@@ -1,0 +1,38 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="global-separator">
+    <template>
+        <style include="global-shared-styles"></style>
+
+        <div class$="{{computeStyle(major)}}">{{text}}</div>
+    </template>
+    <script>
+        Polymer({
+            is: 'global-separator',
+
+            properties: {
+                text: {
+                    type: String,
+                    notify: true
+                },
+                major: {
+                    type: Boolean,
+                    notify: true,
+                    value: false
+                }
+            },
+
+            computeStyle: function(major) {
+                if (major) {
+                    return "separator";
+                }
+                return "separatorlight";
+            },
+
+            ready: function() {
+            }
+
+        });
+    </script>
+</dom-module>
