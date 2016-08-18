@@ -3,9 +3,6 @@ package de.mirkosertic.gameengine.web;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.event.PropertyChanged;
-import org.teavm.jso.dom.html.HTMLInputElement;
-import org.teavm.jso.dom.html.HTMLOptionElement;
-import org.teavm.jso.dom.html.HTMLSelectElement;
 
 public class HTMLInputBinder {
 
@@ -18,45 +15,6 @@ public class HTMLInputBinder {
 
     private final GameEventListener<PropertyChanged> listener;
     private final Property property;
-
-    public static <T> HTMLInputBinder forAnyProperty(HTMLInputElement aElement, Property<T> aProperty, Converter<T, String> aConverter) {
-        GameEventListener<PropertyChanged> theListener = aEvent -> aElement.setValue(aConverter.convertFrom(aProperty.get()));
-        aProperty.addChangeListener(theListener);
-        aElement.setValue(aConverter.convertFrom(aProperty.get()));
-        aElement.addEventListener("change", evt -> aProperty.set(aConverter.convertTo(aElement.getValue())));
-        return new HTMLInputBinder(theListener, aProperty);
-    }
-
-    public static <T> HTMLInputBinder forAnyProperty(HTMLSelectElement aElement, Property<T> aProperty, T[] aValues) {
-        GameEventListener<PropertyChanged> theListener = aEvent -> aElement.setSelectedIndex(aElement.getOptions().namedItem(aProperty.get().toString()).getIndex());
-        aProperty.addChangeListener(theListener);
-        aElement.setSelectedIndex(aElement.getOptions().namedItem(aProperty.get().toString()).getIndex());
-        aElement.addEventListener("change", evt -> {
-            int theIndex = aElement.getSelectedIndex();
-            if (theIndex >= 0) {
-                aProperty.set(aValues[theIndex]);
-            }
-        });
-        return new HTMLInputBinder(theListener, aProperty);
-    }
-
-    public static <T,V> HTMLInputBinder forAnyProperty(HTMLSelectElement aElement, Property<T> aProperty, V[] aValues, Converter<T, V> aConverter) {
-        GameEventListener<PropertyChanged> theListener = aEvent -> {
-            T theCurrentValue = aProperty.get();
-            V theValueToSelect = aConverter.convertFrom(theCurrentValue);
-            HTMLOptionElement theElementToSelect = aElement.getOptions().namedItem(theValueToSelect.toString());
-            aElement.setSelectedIndex(theElementToSelect.getIndex());
-        };
-        aProperty.addChangeListener(theListener);
-        aElement.setSelectedIndex(aElement.getOptions().namedItem(aConverter.convertFrom(aProperty.get()).toString()).getIndex());
-        aElement.addEventListener("change", evt -> {
-            int theIndex = aElement.getSelectedIndex();
-            if (theIndex >= 0) {
-                aProperty.set(aConverter.convertTo(aValues[theIndex]));
-            }
-        });
-        return new HTMLInputBinder(theListener, aProperty);
-    }
 
     HTMLInputBinder(GameEventListener<PropertyChanged> aListener, Property aProperty) {
         listener = aListener;

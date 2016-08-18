@@ -295,7 +295,9 @@ button:hover {
 .propertyEditor checkbox-propertyeditor,
 .propertyEditor animation-propertyeditor,
 .propertyEditor color-propertyeditor,
-.propertyEditor twofield-propertyeditor {
+.propertyEditor twofield-propertyeditor,
+.propertyEditor select-propertyeditor,
+.propertyEditor font-propertyeditor {
   padding: 0.1em;
   display: flex;
   flex-flow: row;
@@ -307,7 +309,9 @@ button:hover {
 .propertyEditor checkbox-propertyeditor label,
 .propertyEditor animation-propertyeditor label,
 .propertyEditor color-propertyeditor label,
-.propertyEditor twofield-propertyeditor label {
+.propertyEditor twofield-propertyeditor label,
+.propertyEditor select-propertyeditor label,
+.propertyEditor font-propertyeditor label {
   font-size: small;
   padding-right: 0.2em;
   align-self: center;
@@ -323,7 +327,9 @@ button:hover {
 .propertyEditor checkbox-propertyeditor input[type=text],
 .propertyEditor animation-propertyeditor input[type=text],
 .propertyEditor color-propertyeditor input[type=text],
-.propertyEditor twofield-propertyeditor input[type=text] {
+.propertyEditor twofield-propertyeditor input[type=text],
+.propertyEditor select-propertyeditor input[type=text],
+.propertyEditor font-propertyeditor input[type=text] {
   flex-grow: 10;
 }
 .propertyEditor .propertyEditor input[type=color],
@@ -332,7 +338,9 @@ button:hover {
 .propertyEditor checkbox-propertyeditor input[type=color],
 .propertyEditor animation-propertyeditor input[type=color],
 .propertyEditor color-propertyeditor input[type=color],
-.propertyEditor twofield-propertyeditor input[type=color] {
+.propertyEditor twofield-propertyeditor input[type=color],
+.propertyEditor select-propertyeditor input[type=color],
+.propertyEditor font-propertyeditor input[type=color] {
   flex-grow: 10;
 }
 .propertyEditor .propertyEditor select,
@@ -341,7 +349,9 @@ button:hover {
 .propertyEditor checkbox-propertyeditor select,
 .propertyEditor animation-propertyeditor select,
 .propertyEditor color-propertyeditor select,
-.propertyEditor twofield-propertyeditor select {
+.propertyEditor twofield-propertyeditor select,
+.propertyEditor select-propertyeditor select,
+.propertyEditor font-propertyeditor select {
   flex-grow: 10;
 }
 .objectTree {
