@@ -17,9 +17,13 @@ GameEngine-Editor
 
 This is the shiny new Web-enabled editor for the GameEngine. It is based on HTML5, Polymer/Webcomponents, Electron and TeaVM. 
 
+![Webeditor in Action](https://raw.githubusercontent.com/mirkosertic/GameComposer/master/docs/images/webeditor.png)
+
 [Edit Dukes Adventure Example Game](http://mirkosertic.github.io/GameComposer/games/editor/index.html)
 
 The Electron Releases are available for download at the GitHub Releases section.
+
+![Webeditor in Electron](https://raw.githubusercontent.com/mirkosertic/GameComposer/master/docs/images/electron.png)
 
 GameEngine
 ----------
@@ -64,7 +68,8 @@ GameEngine-Cordovarenderer (experimental)
 --------------
 
 This is basically the TeaVMRenderer packaged as a Cordova Application backed by Crosswalk(Chromium).
- 
+
+![A game running in Android Emulator](https://raw.githubusercontent.com/mirkosertic/GameComposer/master/docs/images/android.png)
 
 Example Games
 -------------
