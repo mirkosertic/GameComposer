@@ -1,6 +1,7 @@
 package de.mirkosertic.gamecomposer;
 
 import de.mirkosertic.gameengine.core.GameObject;
+import de.mirkosertic.gameengine.type.CollisionPosition;
 import de.mirkosertic.gameengine.type.Font;
 import de.mirkosertic.gameengine.type.GameKeyCode;
 import javafx.util.StringConverter;
@@ -68,4 +69,19 @@ public class StringConverterFactory {
             }
         };
     }
+
+    public StringConverter<CollisionPosition> createColissionPositiontringConverter() {
+        return new StringConverter<CollisionPosition>() {
+            @Override
+            public String toString(CollisionPosition anEnum) {
+                return anEnum.name();
+            }
+
+            @Override
+            public CollisionPosition fromString(String s) {
+                return CollisionPosition.valueOf(s);
+            }
+        };
+    }
+
 }

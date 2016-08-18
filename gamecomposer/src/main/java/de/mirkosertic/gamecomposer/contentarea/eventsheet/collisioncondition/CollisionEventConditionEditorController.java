@@ -54,7 +54,7 @@ public class CollisionEventConditionEditorController implements Controller {
 
         position.getItems().clear();
         position.getItems().addAll(CollisionPosition.values());
-        position.setConverter(stringConverterFactory.createEnumStringConverter());
+        position.setConverter(stringConverterFactory.createColissionPositiontringConverter());
         position.getSelectionModel().select(aCondition.positionProperty().get());
 
         primaryObject.setOnAction(actionEvent -> onPrimarySelected());

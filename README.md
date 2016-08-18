@@ -156,3 +156,5 @@ GameComposer (outdated)
 
 GameComposer is the authoring tool, the IDE. It is a JavaFX2 application. Using this tool, games can be designed
 and tested. Finally, they can be exported to a target runtime, e.g. HTML5.
+
+![JavaFX IDE](https://raw.githubusercontent.com/mirkosertic/GameComposer/master/docs/images/fxeditor.png)
