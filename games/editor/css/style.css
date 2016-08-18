@@ -1,0 +1,385 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto);
+body {
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+  background-color: #33373c;
+  font-family: 'Roboto', sans-serif;
+}
+.flexVertical {
+  flex-direction: row;
+  display: flex;
+}
+.flexHorizontal {
+  display: flex;
+  flex-direction: column;
+}
+.grid {
+  flex-direction: row;
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+.width-12 {
+  width: 100%;
+}
+.emoffset-12 {
+  margin-left: 12em;
+}
+.emwidth-12 {
+  width: 12em;
+}
+.min-width-12 {
+  min-width: 800px;
+}
+.max-width-12 {
+  max-width: 800px;
+}
+.width-11 {
+  width: 91.66666666666667%;
+}
+.emoffset-11 {
+  margin-left: 11em;
+}
+.emwidth-11 {
+  width: 11em;
+}
+.min-width-11 {
+  min-width: 733.3333333333334px;
+}
+.max-width-11 {
+  max-width: 733.3333333333334px;
+}
+.width-10 {
+  width: 83.33333333333334%;
+}
+.emoffset-10 {
+  margin-left: 10em;
+}
+.emwidth-10 {
+  width: 10em;
+}
+.min-width-10 {
+  min-width: 666.6666666666667px;
+}
+.max-width-10 {
+  max-width: 666.6666666666667px;
+}
+.width-9 {
+  width: 75%;
+}
+.emoffset-9 {
+  margin-left: 9em;
+}
+.emwidth-9 {
+  width: 9em;
+}
+.min-width-9 {
+  min-width: 600px;
+}
+.max-width-9 {
+  max-width: 600px;
+}
+.width-8 {
+  width: 66.66666666666667%;
+}
+.emoffset-8 {
+  margin-left: 8em;
+}
+.emwidth-8 {
+  width: 8em;
+}
+.min-width-8 {
+  min-width: 533.3333333333334px;
+}
+.max-width-8 {
+  max-width: 533.3333333333334px;
+}
+.width-7 {
+  width: 58.333333333333336%;
+}
+.emoffset-7 {
+  margin-left: 7em;
+}
+.emwidth-7 {
+  width: 7em;
+}
+.min-width-7 {
+  min-width: 466.6666666666667px;
+}
+.max-width-7 {
+  max-width: 466.6666666666667px;
+}
+.width-6 {
+  width: 50%;
+}
+.emoffset-6 {
+  margin-left: 6em;
+}
+.emwidth-6 {
+  width: 6em;
+}
+.min-width-6 {
+  min-width: 400px;
+}
+.max-width-6 {
+  max-width: 400px;
+}
+.width-5 {
+  width: 41.66666666666667%;
+}
+.emoffset-5 {
+  margin-left: 5em;
+}
+.emwidth-5 {
+  width: 5em;
+}
+.min-width-5 {
+  min-width: 333.33333333333337px;
+}
+.max-width-5 {
+  max-width: 333.33333333333337px;
+}
+.width-4 {
+  width: 33.333333333333336%;
+}
+.emoffset-4 {
+  margin-left: 4em;
+}
+.emwidth-4 {
+  width: 4em;
+}
+.min-width-4 {
+  min-width: 266.6666666666667px;
+}
+.max-width-4 {
+  max-width: 266.6666666666667px;
+}
+.width-3 {
+  width: 25%;
+}
+.emoffset-3 {
+  margin-left: 3em;
+}
+.emwidth-3 {
+  width: 3em;
+}
+.min-width-3 {
+  min-width: 200px;
+}
+.max-width-3 {
+  max-width: 200px;
+}
+.width-2 {
+  width: 16.666666666666668%;
+}
+.emoffset-2 {
+  margin-left: 2em;
+}
+.emwidth-2 {
+  width: 2em;
+}
+.min-width-2 {
+  min-width: 133.33333333333334px;
+}
+.max-width-2 {
+  max-width: 133.33333333333334px;
+}
+.width-1 {
+  width: 8.333333333333334%;
+}
+.emoffset-1 {
+  margin-left: 1em;
+}
+.emwidth-1 {
+  width: 1em;
+}
+.min-width-1 {
+  min-width: 66.66666666666667px;
+}
+.max-width-1 {
+  max-width: 66.66666666666667px;
+}
+.gridItem .shrink {
+  flex-shrink: 1;
+}
+.gridItem .grow {
+  flex-grow: 1;
+}
+.border-1 {
+  border: 1px solid #ffffff;
+}
+.border-2 {
+  border: 1px solid #ffffff;
+}
+.border-3 {
+  border: 1px solid #ffffff;
+}
+.border-4 {
+  border: 1px solid #ffffff;
+}
+.border-5 {
+  border: 1px solid #ffffff;
+}
+.border-6 {
+  border: 1px solid #ffffff;
+}
+.border-7 {
+  border: 1px solid #ffffff;
+}
+.border-8 {
+  border: 1px solid #ffffff;
+}
+.border-9 {
+  border: 1px solid #ffffff;
+}
+.border-10 {
+  border: 1px solid #ffffff;
+}
+.commonFont {
+  color: white;
+  font-family: 'Open Sans', sans-serif;
+}
+.commonFontTitle {
+  color: white;
+  font-family: 'Open Sans', sans-serif;
+}
+.input {
+  border: 1px solid #33373c;
+}
+label {
+  color: white;
+}
+.separator {
+  color: white;
+  font-family: 'Open Sans', sans-serif;
+  background-color: #4a5058;
+  padding: 0.1em;
+  padding-left: 0.3em;
+  height: 1.6em;
+  line-height: 1.6em;
+  vertical-align: middle;
+}
+.separator .border-1 {
+  border: 1px solid #ffffff;
+}
+.separatorlight {
+  color: white;
+  font-family: 'Open Sans', sans-serif;
+  background-color: #4a5058;
+  padding: 0.1em;
+  padding-left: 0.3em;
+  height: 1.6em;
+  line-height: 1.6em;
+  vertical-align: middle;
+  background-color: #565d65;
+}
+.separatorlight .border-1 {
+  border: 1px solid #ffffff;
+}
+button {
+  border: 1px solid #1abc9c;
+  background-color: #1abc9c;
+  color: white;
+  font-weight: bold;
+}
+button:hover {
+  background-color: #1dd2af;
+}
+.propertyEditor {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.propertyEditor .propertyEditor,
+.propertyEditor textfield-propertyeditor,
+.propertyEditor textarea-propertyeditor,
+.propertyEditor checkbox-propertyeditor,
+.propertyEditor animation-propertyeditor,
+.propertyEditor color-propertyeditor,
+.propertyEditor twofield-propertyeditor,
+.propertyEditor select-propertyeditor,
+.propertyEditor font-propertyeditor {
+  padding: 0.1em;
+  display: flex;
+  flex-flow: row;
+  overflow: visible;
+}
+.propertyEditor .propertyEditor label,
+.propertyEditor textfield-propertyeditor label,
+.propertyEditor textarea-propertyeditor label,
+.propertyEditor checkbox-propertyeditor label,
+.propertyEditor animation-propertyeditor label,
+.propertyEditor color-propertyeditor label,
+.propertyEditor twofield-propertyeditor label,
+.propertyEditor select-propertyeditor label,
+.propertyEditor font-propertyeditor label {
+  font-size: small;
+  padding-right: 0.2em;
+  align-self: center;
+  display: flex;
+  text-align: left;
+  vertical-align: middle;
+  padding-left: 0.2em;
+  flex-shrink: 5;
+}
+.propertyEditor .propertyEditor input[type=text],
+.propertyEditor textfield-propertyeditor input[type=text],
+.propertyEditor textarea-propertyeditor input[type=text],
+.propertyEditor checkbox-propertyeditor input[type=text],
+.propertyEditor animation-propertyeditor input[type=text],
+.propertyEditor color-propertyeditor input[type=text],
+.propertyEditor twofield-propertyeditor input[type=text],
+.propertyEditor select-propertyeditor input[type=text],
+.propertyEditor font-propertyeditor input[type=text] {
+  flex-grow: 10;
+}
+.propertyEditor .propertyEditor input[type=color],
+.propertyEditor textfield-propertyeditor input[type=color],
+.propertyEditor textarea-propertyeditor input[type=color],
+.propertyEditor checkbox-propertyeditor input[type=color],
+.propertyEditor animation-propertyeditor input[type=color],
+.propertyEditor color-propertyeditor input[type=color],
+.propertyEditor twofield-propertyeditor input[type=color],
+.propertyEditor select-propertyeditor input[type=color],
+.propertyEditor font-propertyeditor input[type=color] {
+  flex-grow: 10;
+}
+.propertyEditor .propertyEditor select,
+.propertyEditor textfield-propertyeditor select,
+.propertyEditor textarea-propertyeditor select,
+.propertyEditor checkbox-propertyeditor select,
+.propertyEditor animation-propertyeditor select,
+.propertyEditor color-propertyeditor select,
+.propertyEditor twofield-propertyeditor select,
+.propertyEditor select-propertyeditor select,
+.propertyEditor font-propertyeditor select {
+  flex-grow: 10;
+}
+.objectTree {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.field {
+  background-color: white;
+  width: 100%;
+  border: 2px solid #33373c;
+  text-align: center;
+}
+.field label {
+  display: block;
+  background-color: #bdc3c7;
+  color: black;
+  text-align: left;
+}
+.field input[type=text],
+.field input[type=color],
+.field input[type=range],
+.field select,
+.field textarea {
+  border: none;
+  width: 100%;
+  padding-left: 2px;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  z-index: 99;
+  background-color: white;
+}

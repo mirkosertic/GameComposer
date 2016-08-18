@@ -1,0 +1,202 @@
+@numbergridcolumns: 12;
+@screenwidth: 800px;
+@bordercolor: white;
+@backgroundcolor: #33373c;
+@hovercolor: lighten(#3498db,10%);
+@textcolor: white;
+@objectbrowsertitle: #e74c3c;
+// Colors taken from https://flatuicolors.com/
+
+@import url(https://fonts.googleapis.com/css?family=Roboto);
+
+// Global layout
+body {
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+  background-color: @backgroundcolor;
+  font-family: 'Roboto', sans-serif;
+}
+
+// Very Simple Grid System
+.flexVertical {
+  flex-direction: row;
+  display: flex;
+}
+
+.flexHorizontal {
+  display: flex;
+  flex-direction: column;
+}
+
+.grid {
+  .flexVertical();
+  width: 100%;
+  height: 100%;
+}
+
+.width(@counter) when (@counter > 0) {
+  .width-@{counter} {
+    width: (100% / @numbergridcolumns * @counter);
+  }
+
+  .emoffset-@{counter} {
+    margin-left: 1em * @counter;
+  }
+
+  .emwidth-@{counter} {
+    width: 1em * @counter;
+  }
+
+  .min-width-@{counter} {
+    min-width: @screenwidth  / @numbergridcolumns * @counter;
+  }
+
+  .max-width-@{counter} {
+    max-width: @screenwidth  / @numbergridcolumns * @counter;
+  }
+
+  .width((@counter - 1));
+}
+
+.width(@numbergridcolumns);
+
+.gridItem {
+  .shrink {
+    flex-shrink: 1;
+  }
+
+  .grow {
+    flex-grow: 1;
+  }
+}
+
+// Borders
+.border(@counter) when (@counter > 0) {
+  .border((@counter - 1));
+
+  .border-@{counter} {
+    border: 1px solid @bordercolor;
+  }
+}
+.border(10);
+
+// Common Fonts
+.commonFont {
+  color: white;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.commonFontTitle {
+  .commonFont();
+}
+
+.input {
+  border:  1px solid @backgroundcolor;
+}
+
+label {
+  color: white;
+}
+
+// Separatots
+.separator {
+  .border(1);
+  .commonFontTitle();
+  background-color: lighten(@backgroundcolor, 10%);
+  padding: 0.1em;
+  padding-left: 0.3em;
+  height: 1.6em;
+  line-height: 1.6em;
+  vertical-align: middle;
+}
+
+.separatorlight {
+  .separator();
+  background-color: lighten(@backgroundcolor, 15%);
+}
+
+button {
+  border: 1px solid #1abc9c;
+  background-color: #1abc9c;
+  color: white;
+  font-weight: bold;
+}
+
+button:hover {
+  background-color: lighten(#1abc9c, 5%);
+}
+
+// Property editor styles
+.propertyEditor {
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  .propertyEditor,
+  textfield-propertyeditor,
+  textarea-propertyeditor,
+  checkbox-propertyeditor,
+  animation-propertyeditor,
+  color-propertyeditor,
+  twofield-propertyeditor,
+  select-propertyeditor,
+  font-propertyeditor{
+    padding: 0.1em;
+    display: flex;
+    flex-flow: row;
+    overflow: visible;
+
+    label {
+      font-size: small;
+      padding-right: 0.2em;
+      align-self: center;
+      display: flex;
+      text-align: left;
+      vertical-align: middle;
+      padding-left: 0.2em;
+      flex-shrink: 5;
+    }
+
+    input[type=text] {
+      flex-grow: 10;
+    }
+
+    input[type=color] {
+      flex-grow: 10;
+    }
+
+    select {
+      flex-grow: 10;
+    }
+  }
+}
+
+.objectTree {
+  overflow-y: auto;
+  overflow-x: hidden;
+
+}
+
+.field {
+
+  background-color: white;
+  width: 100%;
+  border: 2px solid @backgroundcolor;
+  text-align: center;
+
+  label {
+    display: block;
+    background-color: #bdc3c7;
+    color: black;
+    text-align: left;
+  }
+
+  input[type=text], input[type=color], input[type=range], select, textarea {
+    border: none;
+    width: 100%;
+    padding-left: 2px;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    z-index: 99;
+    background-color: white;
+  }
+}

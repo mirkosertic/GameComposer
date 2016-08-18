@@ -1,0 +1,36 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="checkbox-propertyeditor">
+    <template>
+        <style include="property-shared-styles"></style>
+        <div class="field">
+            <label for="checkbox">[[label]]</label>
+            <input type="checkbox" id="checkbox" name="checkbox" checked$="{{value}}" on-click="updateData">
+        </div>
+    </template>
+    <script>
+        Polymer({
+            is: 'checkbox-propertyeditor',
+
+            properties: {
+                label: {
+                    type: String,
+                    notify: true
+                },
+                value: {
+                    type: Boolean,
+                    notify: true
+                }
+            },
+
+            updateData: function() {
+                this.value = this.$.checkbox.checked;
+            },
+
+            ready: function() {
+            }
+
+        });
+    </script>
+</dom-module>
