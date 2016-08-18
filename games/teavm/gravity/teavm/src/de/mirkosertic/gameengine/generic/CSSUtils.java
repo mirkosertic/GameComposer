@@ -15,7 +15,21 @@ public class CSSUtils {
         throw new IllegalArgumentException("Wrong font name : "+aFont.name);
     }
 
+    public static String toFontFamily(Font aFont) {
+        switch (aFont.name) {
+            case ARIAL:
+                return "arial";
+            case VERDANA:
+                return "verdana";
+        }
+        throw new IllegalArgumentException("Wrong font name : "+aFont.name);
+    }
+
     public static String toColor(Color aColor) {
         return "rgb(" + aColor.r + "," + aColor.g + "," + aColor.b + ")";
+    }
+
+    public static int toInt(Color aColor) {
+        return aColor.b + aColor.g * 256 + aColor.r * 65536;
     }
 }

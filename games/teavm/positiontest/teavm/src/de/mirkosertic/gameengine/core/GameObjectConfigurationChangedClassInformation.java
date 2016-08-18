@@ -1,10 +1,12 @@
 package de.mirkosertic.gameengine.core;
 
-import de.mirkosertic.gameengine.type.*;
+import de.mirkosertic.gameengine.type.ClassInformation;
+import de.mirkosertic.gameengine.type.Field;
+import de.mirkosertic.gameengine.type.Method;
 
 public class GameObjectConfigurationChangedClassInformation extends de.mirkosertic.gameengine.event.GameEventClassInformation {
 
-  public static final Field<GameObjectConfigurationChanged, de.mirkosertic.gameengine.core.GameObject> OBJECT = new Field<GameObjectConfigurationChanged, de.mirkosertic.gameengine.core.GameObject>("object", de.mirkosertic.gameengine.core.GameObject.class) {
+  public final Field<GameObjectConfigurationChanged, de.mirkosertic.gameengine.core.GameObject> OBJECT = new Field<GameObjectConfigurationChanged, de.mirkosertic.gameengine.core.GameObject>("object", de.mirkosertic.gameengine.core.GameObject.class) {
     @Override
     public de.mirkosertic.gameengine.core.GameObject getValue(GameObjectConfigurationChanged aObject) {
       return aObject.object;

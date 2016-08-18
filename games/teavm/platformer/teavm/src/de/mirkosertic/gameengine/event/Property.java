@@ -2,7 +2,7 @@ package de.mirkosertic.gameengine.event;
 
 import de.mirkosertic.gameengine.ArrayUtils;
 
-import java.util.*;
+import java.util.List;
 
 public class Property<T> extends ReadOnlyProperty<T> {
 
