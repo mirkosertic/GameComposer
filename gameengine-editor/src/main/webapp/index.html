@@ -42,6 +42,8 @@
     <link rel="import" href="webcomponents/properteditor/animation-propertyeditor.html">
     <link rel="import" href="webcomponents/properteditor/color-propertyeditor.html">
     <link rel="import" href="webcomponents/properteditor/twofield-propertyeditor.html">
+    <link rel="import" href="webcomponents/properteditor/select-propertyeditor.html">
+    <link rel="import" href="webcomponents/properteditor/font-propertyeditor.html">
 
     <link rel="import" href="webcomponents/tree/tree-item.html">
 
@@ -58,23 +60,11 @@
 
         <global-separator text="Section1"></global-separator>
 
-        <div class="propertyEditor">
-            <span class="field">
-                <label for="fname">Color</label>
-                <select>
-                    <option>Value1</option>
-                    <option>Value2</option>
-                    <option>Value3</option>
-                </select>
-            </span>
-        </div>
-
-        <div class="propertyEditor">
-            <span class="field">
-                <label for="fname">Range</label>
-                <input type="range"/>
-            </span>
-        </div>
+        <select-propertyeditor label="Color">
+            <option>Value1</option>
+            <option>Value2</option>
+            <option>Value3</option>
+        </select-propertyeditor>
 
         <textfield-propertyeditor label="Long text" value="Long text lalala"></textfield-propertyeditor>
 
@@ -87,6 +77,11 @@
         <animation-propertyeditor label="Image" url="https://www.google.de/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"></animation-propertyeditor>
 
         <color-propertyeditor label="test" value="#ff0000"></color-propertyeditor>
+
+        <font-propertyeditor label1="Font" label2="Size">
+            <option>ARIAL</option>
+            <option>TAHOMA</option>
+        </font-propertyeditor>
 
     </div>
     <div class="gridItem width-8 border-1 grow flexHorizontal">
@@ -109,28 +104,6 @@
         <tree-item level="2" text="Item Level 2"></tree-item>
     </div>
 </div>
-
-<template id="propertySelectionEditor">
-    <div class="propertyEditor">
-        <span class="field">
-            <label for="{{id}}.selection">{{label}}</label>
-            <select id="{{id}}.selection" selected></select>
-        </span>
-    </div>
-</template>
-
-<template id="propertyFontEditor">
-    <div class="propertyEditor">
-        <span class="field width-6">
-            <label for="{{id}}.font">{{label}}</label>
-            <select id="{{id}}.font"></select>
-        </span>
-        <span class="field width-2">
-            <label for="{{id}}.size">Size</label>
-            <input type="text" id="{{id}}.size" value="replace me">
-        </span>
-    </div>
-</template>
 
 </body>
 </html>
