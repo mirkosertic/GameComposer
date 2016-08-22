@@ -18,7 +18,14 @@
 
 <dom-module id="gameeditor-sceneeditor">
     <template>
-        <style include="content-shared-styles"></style>
+        <style include="content-shared-styles">
+            :host {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+            }
+        </style>
 
         <div class="separator flexVertical shrink">
             <input type="checkbox" value="Not selected"/>
@@ -29,7 +36,7 @@
             <input type="text" class="emwidth-2" value="5">
             <button class="emwidth-6 emoffset-4" id="previewbutton" on-click="handlePreview">Preview!</button>
         </div>
-        <canvas id="htmlcanvas"></canvas>
+        <canvas id="htmlcanvas" class="grow"></canvas>
     </template>
     <script>
         Polymer({

@@ -89,7 +89,6 @@
     </div>
     <div class="gridItem width-8 border-1 grow flexHorizontal">
         <gameeditor-tabbedpane class="grow" id="editortabbedpane">
-            <gameeditor-sceneeditor></gameeditor-sceneeditor>
         </gameeditor-tabbedpane>
     </div>
     <div class="gridItem width-3 border-1 shrink min-width-3 objectTree" id="objecttree">
@@ -98,6 +97,15 @@
         <gameeditor-treeitem level="3" text="Item Level 3" draggable="true"></gameeditor-treeitem>
         <gameeditor-treeitem level="2" text="Item Level 2"></gameeditor-treeitem>
     </div>
+<!--
+    <script>
+        var theTab = document.getElementById("editortabbedpane");
+        var theEditor1 = document.createElement("gameeditor-sceneeditor");
+        var theEditor2 = document.createElement("gameeditor-sceneeditor");
+        theTab.clearAll();
+        theTab.addTab("Editor", theEditor1);
+        theTab.addTab("Editor", theEditor2);
+    </script>-->
 </div>
 
 </body>
