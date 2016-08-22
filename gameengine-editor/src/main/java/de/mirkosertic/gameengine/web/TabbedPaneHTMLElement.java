@@ -19,8 +19,7 @@ import org.teavm.jso.dom.html.HTMLElement;
 
 public abstract class TabbedPaneHTMLElement implements HTMLElement {
 
-    public void addTab(String aTitle, HTMLElement aElement) {
-        clear();
-        appendChild(aElement);
-    }
+    public abstract void clearAll();
+
+    public abstract void addTab(String aTitle, HTMLElement aElement);
 }

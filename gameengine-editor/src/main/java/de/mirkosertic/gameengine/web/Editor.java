@@ -31,6 +31,7 @@ public class Editor {
 
         // Initialize object editor
         TabbedPaneHTMLElement theTabbedPanne = (TabbedPaneHTMLElement) document.getElementById("editortabbedpane");
+        theTabbedPanne.clearAll();
         theTabbedPanne.addTab("Editor", theSceneEditor);
 
         HTMLElement thePropertyEditorElement = (HTMLElement) document.getElementById("objectEditor");
