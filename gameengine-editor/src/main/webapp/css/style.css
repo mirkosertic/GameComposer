@@ -383,7 +383,3 @@ button:hover {
   z-index: 99;
   background-color: white;
 }
-canvas {
-  width: 100%;
-  height: 100%;
-}

@@ -15,14 +15,13 @@
  */
 package de.mirkosertic.gameengine.web;
 
-import org.teavm.jso.JSProperty;
-import org.teavm.jso.dom.html.HTMLCanvasElement;
+import org.teavm.jso.JSBody;
+import org.teavm.jso.dom.html.HTMLElement;
 
-public abstract class EditorHTMLCanvasElement implements HTMLCanvasElement {
+public abstract class SceneEditorHTMLElement implements HTMLElement {
 
-    @JSProperty
-    public abstract int getOffsetLeft();
+    @JSBody(params = {}, script = "return document.createElement('gameeditor-sceneeditor');")
+    public static native SceneEditorHTMLElement create();
 
-    @JSProperty
-    public abstract int getOffsetTop();
+    public abstract EditorHTMLCanvasElement currentCanvas();
 }
