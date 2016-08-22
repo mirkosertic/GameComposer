@@ -21,12 +21,12 @@
         <style include="global-shared-styles"></style>
 
         <div class="tabpane">
-            <div class="buttons">
+            <div id="buttons" class="buttons">
                 <div class="button">Pane 1</div>
                 <div class="button selected">Pane 2</div>
                 <div class="button">Pane 3</div>
             </div>
-            <div class="content">
+            <div id="con"></div>
                 <content></content>
             </div>
         </div>
@@ -36,6 +36,16 @@
             is: 'gameeditor-tabbedpane',
 
             properties: {
+            },
+
+            clearAll: function() {
+                //Polymer.dom(this.$.buttons).clear();
+                //Polymer.dom(this.$.content).clear();
+            },
+
+            addTab: function(aTite, aElement) {
+                //Polymer.dom(this.$.content).clear();
+                Polymer.dom(this.$.con).appendChild(aElement);
             },
 
             ready: function() {
