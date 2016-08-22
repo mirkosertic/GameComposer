@@ -27,7 +27,7 @@
                 <div class="button">Pane 3</div>
             </div>
             <div id="con"></div>
-                <content></content>
+                <content id="content"></content>
             </div>
         </div>
     </template>
@@ -36,16 +36,44 @@
             is: 'gameeditor-tabbedpane',
 
             properties: {
+                index: {
+                    type: Number,
+                    notify: true,
+                    value: 0
+                },
             },
 
             clearAll: function() {
-                //Polymer.dom(this.$.buttons).clear();
-                //Polymer.dom(this.$.content).clear();
+                while (this.$.buttons.hasChildNodes()) {
+                    this.$.buttons.removeChild(this.$.buttons.lastChild);
+                }
+            },
+
+            clearContent: function() {
+                while (this.hasChildNodes()) {
+                    this.removeChild(this.lastChild);
+                }
             },
 
             addTab: function(aTite, aElement) {
-                //Polymer.dom(this.$.content).clear();
-                Polymer.dom(this.$.con).appendChild(aElement);
+                this.clearContent();
+
+                var theDiv = document.createElement("div");
+                theDiv.innerText = aTite;
+                if (this.index == 0) {
+                    theDiv.setAttribute("class", "button selected");
+                } else {
+                    theDiv.setAttribute("class", "button");
+                }
+                var theCurrentIndex = this.index;
+                theDiv.addEventListener("click", function(e) {
+                    this.index = theCurrentIndex;
+                }, true);
+
+                Polymer.dom(this.$.buttons).appendChild(theDiv);
+                Polymer.dom(this).appendChild(aElement);
+
+                this.index++;
             },
 
             ready: function() {
