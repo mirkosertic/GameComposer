@@ -20,10 +20,14 @@ import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.event.PropertyChanged;
 import de.mirkosertic.gameengine.generic.CSSUtils;
 import de.mirkosertic.gameengine.type.Color;
+import org.teavm.jso.JSBody;
 import org.teavm.jso.JSProperty;
 import org.teavm.jso.dom.html.HTMLElement;
 
 public abstract class ColorPropertyEditorHTMLElement implements HTMLElement {
+
+    @JSBody(params = {}, script = "return document.createElement('gameeditor-colorpropertyeditor');")
+    public static native ColorPropertyEditorHTMLElement create();
 
     @JSProperty
     public abstract void setLabel(String aLabel);

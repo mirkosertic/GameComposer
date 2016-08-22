@@ -25,6 +25,9 @@ import org.teavm.jso.dom.html.HTMLOptionElement;
 
 public abstract class SelectPropertyEditorHTMLElement implements HTMLElement {
 
+    @JSBody(params = {}, script = "return document.createElement('gameeditor-selectpropertyeditor');")
+    public static native SelectPropertyEditorHTMLElement create();
+
     @JSProperty
     public abstract void setLabel(String aLabel);
 

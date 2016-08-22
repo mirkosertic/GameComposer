@@ -15,10 +15,14 @@
  */
 package de.mirkosertic.gameengine.web;
 
+import org.teavm.jso.JSBody;
 import org.teavm.jso.JSProperty;
 import org.teavm.jso.dom.html.HTMLElement;
 
 public abstract class GlobalSeparatorHTMLElement implements HTMLElement {
+
+    @JSBody(params = {}, script = "return document.createElement('gameeditor-separator');")
+    public static native GlobalSeparatorHTMLElement create();
 
     @JSProperty
     public abstract void setText(String aLabel);

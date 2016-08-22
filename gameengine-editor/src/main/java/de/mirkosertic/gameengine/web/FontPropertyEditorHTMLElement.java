@@ -26,6 +26,9 @@ import org.teavm.jso.dom.html.HTMLOptionElement;
 
 public abstract class FontPropertyEditorHTMLElement implements HTMLElement {
 
+    @JSBody(params = {}, script = "return document.createElement('gameeditor-fontpropertyeditor');")
+    public static native FontPropertyEditorHTMLElement create();
+
     @JSProperty
     public abstract void setLabel1(String aLabel);
 
