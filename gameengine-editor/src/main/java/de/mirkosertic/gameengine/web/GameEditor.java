@@ -50,7 +50,7 @@ import org.teavm.jso.json.JSON;
 
 public class GameEditor {
 
-    private final EditorHTMLCanvasElement canvasElement;
+    private final SceneEditorHTMLElement sceneEditorHTMLElement;
     private final Window window;
     private Game game;
     private PlaySceneStrategy runSceneStrategy;
@@ -62,9 +62,9 @@ public class GameEditor {
 
     private final EditorProject project;
 
-    public GameEditor(EditorHTMLCanvasElement aCanvas, Window aWindow, EditorProject aEditorProject) {
+    public GameEditor(SceneEditorHTMLElement aSceneEditor, Window aWindow, EditorProject aEditorProject) {
 
-        canvasElement = aCanvas;
+        sceneEditorHTMLElement = aSceneEditor;
         window = aWindow;
         project = aEditorProject;
 
@@ -73,9 +73,9 @@ public class GameEditor {
         // Initialize PIXI
         final Renderer theRenderer;
         if (aWindow.getLocation().getFullURL().contains("canvas")) {
-            theRenderer = Renderer.canvasRenderer(320, 200, aCanvas);
+            theRenderer = Renderer.canvasRenderer(320, 200, aSceneEditor.currentCanvas());
         } else {
-            theRenderer = Renderer.autodetectRenderer(320, 200, aCanvas);
+            theRenderer = Renderer.autodetectRenderer(320, 200, aSceneEditor.currentCanvas());
         }
 
         switch (theRenderer.getType()) {
@@ -129,7 +129,7 @@ public class GameEditor {
 
                     @Override
                     protected Size getScreenSize() {
-                        return new Size(aCanvas.getClientWidth(), aCanvas.getClientHeight());
+                        return new Size(aSceneEditor.currentCanvas().getClientWidth(), aSceneEditor.currentCanvas().getClientHeight());
                     }
 
                     @Override
@@ -165,40 +165,41 @@ public class GameEditor {
 
         theGameLoader.loadFromServer();
 
-        aCanvas.addEventListener("click", evt -> onMouseClick((TeaVMMouseEvent) evt));
-        aCanvas.addEventListener("mousedown", evt -> onMousePressed((TeaVMMouseEvent) evt));
-        aCanvas.addEventListener("mousemove", evt -> {
+        EditorHTMLCanvasElement theCanvas = aSceneEditor.currentCanvas();
+        theCanvas.addEventListener("click", evt -> onMouseClick((TeaVMMouseEvent) evt));
+        theCanvas.addEventListener("mousedown", evt -> onMousePressed((TeaVMMouseEvent) evt));
+        theCanvas.addEventListener("mousemove", evt -> {
             TeaVMMouseEvent aEvent = (TeaVMMouseEvent) evt;
             if (aEvent.getWhich() != 0) {
                 onMouseDragged(aEvent);
             }
         });
-        aCanvas.addEventListener("mouseup", evt -> onMouseReleased((TeaVMMouseEvent) evt));
-        aCanvas.addEventListener("dragover", new EventListener<TeaVMDragEvent>() {
+        theCanvas.addEventListener("mouseup", evt -> onMouseReleased((TeaVMMouseEvent) evt));
+        theCanvas.addEventListener("dragover", new EventListener<TeaVMDragEvent>() {
             @Override
             public void handleEvent(TeaVMDragEvent aEvent) {
                 onDragOver(aEvent);
             }
         });
-        aCanvas.addEventListener("dragenter", new EventListener<TeaVMDragEvent>() {
+        theCanvas.addEventListener("dragenter", new EventListener<TeaVMDragEvent>() {
             @Override
             public void handleEvent(TeaVMDragEvent aEvent) {
                 onDragEntered(aEvent);
             }
         });
-        aCanvas.addEventListener("dragleave", new EventListener<TeaVMDragEvent>() {
+        theCanvas.addEventListener("dragleave", new EventListener<TeaVMDragEvent>() {
             @Override
             public void handleEvent(TeaVMDragEvent aEvent) {
                 onDragLeave(aEvent);
             }
         });
-        aCanvas.addEventListener("drop", new EventListener<TeaVMDragEvent>() {
+        theCanvas.addEventListener("drop", new EventListener<TeaVMDragEvent>() {
             @Override
             public void handleEvent(TeaVMDragEvent aEvent) {
                 onDragDropped(aEvent);
             }
         });
-        aWindow.getDocument().getElementById("previewbutton").addEventListener("click", evt -> onPreview());
+        sceneEditorHTMLElement.addEventListener("preview", evt -> onPreview());
     }
 
     public void handleResize() {
@@ -241,7 +242,7 @@ public class GameEditor {
     }
 
     private Position relativePosition(TeaVMMouseEvent aEvent) {
-        return new Position(aEvent.getClientX() - canvasElement.getOffsetLeft(), aEvent.getClientY() - canvasElement.getOffsetTop());
+        return new Position(aEvent.getClientX() - sceneEditorHTMLElement.currentCanvas().getOffsetLeft(), aEvent.getClientY() - sceneEditorHTMLElement.currentCanvas().getOffsetTop());
     }
 
     private void onMousePressed(TeaVMMouseEvent aEvent) {
@@ -311,7 +312,7 @@ public class GameEditor {
 
     private void onDragOver(TeaVMDragEvent aEvent) {
         if (dndCreateInstance != null) {
-            Position theNewPosition = getCameraBehavior().transformFromScreen(new Position(aEvent.getClientX() - canvasElement.getOffsetLeft(), aEvent.getClientY() - canvasElement.getOffsetTop()));
+            Position theNewPosition = getCameraBehavior().transformFromScreen(new Position(aEvent.getClientX() - sceneEditorHTMLElement.currentCanvas().getOffsetLeft(), aEvent.getClientY() - sceneEditorHTMLElement.currentCanvas().getOffsetTop()));
             dndCreateInstance.positionProperty().set(theNewPosition);
             aEvent.preventDefault();
         }
@@ -323,7 +324,7 @@ public class GameEditor {
             GameScene theScene = runSceneStrategy.getRunningGameLoop().getScene();
             GameObject theGameObject = theScene.findObjectByID(theID);
             GameObjectInstance theInstance = theScene.createFrom(theGameObject);
-            theInstance.positionProperty().set(getCameraBehavior().transformFromScreen(new Position(aEvent.getClientX() - canvasElement.getOffsetLeft(), aEvent.getClientY() - canvasElement.getOffsetTop())));
+            theInstance.positionProperty().set(getCameraBehavior().transformFromScreen(new Position(aEvent.getClientX() - sceneEditorHTMLElement.currentCanvas().getOffsetLeft(), aEvent.getClientY() - sceneEditorHTMLElement.currentCanvas().getOffsetTop())));
 
             theScene.addInstance(theInstance);
             theScene.getRuntime().getEventManager().fire(new DisableDynamicPhysics(theInstance));
