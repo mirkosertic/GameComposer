@@ -36,72 +36,75 @@
     <script type="text/javascript" charset="utf-8" src="teavm/runtime.js"></script>
     <script type="text/javascript" charset="utf-8" src="teavm/classes.js"></script>
 
-    <link rel="import" href="webcomponents/properteditor/textfield-propertyeditor.html">
-    <link rel="import" href="webcomponents/properteditor/textarea-propertyeditor.html">
-    <link rel="import" href="webcomponents/properteditor/checkbox-propertyeditor.html">
-    <link rel="import" href="webcomponents/properteditor/animation-propertyeditor.html">
-    <link rel="import" href="webcomponents/properteditor/color-propertyeditor.html">
-    <link rel="import" href="webcomponents/properteditor/twofield-propertyeditor.html">
-    <link rel="import" href="webcomponents/properteditor/select-propertyeditor.html">
-    <link rel="import" href="webcomponents/properteditor/font-propertyeditor.html">
+    <link rel="import" href="webcomponents/properteditor/gameeditor-textfieldpropertyeditor.html">
+    <link rel="import" href="webcomponents/properteditor/gameeditor-textareapropertyeditor.html">
+    <link rel="import" href="webcomponents/properteditor/gameeditor-checkboxpropertyeditor.html">
+    <link rel="import" href="webcomponents/properteditor/gameeditor-animationpropertyeditor.html">
+    <link rel="import" href="webcomponents/properteditor/gameeditor-colorpropertyeditor.html">
+    <link rel="import" href="webcomponents/properteditor/gameeditor-twofieldpropertyeditor.html">
+    <link rel="import" href="webcomponents/properteditor/gameeditor-selectpropertyeditor.html">
+    <link rel="import" href="webcomponents/properteditor/gameeditor-fontpropertyeditor.html">
 
-    <link rel="import" href="webcomponents/tree/tree-item.html">
+    <link rel="import" href="webcomponents/tree/gameeditor-treeitem.html">
 
-    <link rel="import" href="webcomponents/global/global-separator.html">
+    <link rel="import" href="webcomponents/global/gameeditor-separator.html">
+    <link rel="import" href="webcomponents/global/gameeditor-tabbedpane.html">
 </head>
 <body onload="main()">
 <div class="grid flexVertical">
     <div class="gridItem border-1 propertyEditor shrink width-3 min-width-3" id="objectEditor">
 
-        <global-separator text="Editor" major="true"></global-separator>
-        <global-separator text="Common"></global-separator>
+        <gameeditor-separator text="Editor" major="true"></gameeditor-separator>
+        <gameeditor-separator text="Common"></gameeditor-separator>
 
-        <twofield-propertyeditor label1="Width" label2="Height" value1="11" value2="12"></twofield-propertyeditor>
+        <gameeditor-twofieldpropertyeditor label1="Width" label2="Height" value1="11" value2="12"></gameeditor-twofieldpropertyeditor>
 
-        <global-separator text="Section1"></global-separator>
+        <gameeditor-separator text="Section1"></gameeditor-separator>
 
-        <select-propertyeditor label="Color">
+        <gameeditor-selectpropertyeditor label="Color">
             <option>Value1</option>
             <option>Value2</option>
             <option>Value3</option>
-        </select-propertyeditor>
+        </gameeditor-selectpropertyeditor>
 
-        <textfield-propertyeditor label="Long text" value="Long text lalala"></textfield-propertyeditor>
+        <gameeditor-textfieldpropertyeditor label="Long text" value="Long text lalala"></gameeditor-textfieldpropertyeditor>
 
-        <checkbox-propertyeditor label="checkbox 2" value="true"></checkbox-propertyeditor>
+        <gameeditor-checkboxpropertyeditor label="checkbox 2" value="true"></gameeditor-checkboxpropertyeditor>
 
-        <textfield-propertyeditor label="test" value="17"></textfield-propertyeditor>
+        <gameeditor-textfieldpropertyeditor label="test" value="17"></gameeditor-textfieldpropertyeditor>
 
-        <textfield-propertyeditor label="test" value="18"></textfield-propertyeditor>
+        <gameeditor-textfieldpropertyeditor label="test" value="18"></gameeditor-textfieldpropertyeditor>
 
-        <animation-propertyeditor label="Image" url="https://www.google.de/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"></animation-propertyeditor>
+        <gameeditor-animationpropertyeditor label="Image" url="https://www.google.de/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"></gameeditor-animationpropertyeditor>
 
-        <color-propertyeditor label="test" value="#ff0000"></color-propertyeditor>
+        <gameeditor-colorpropertyeditor label="test" value="#ff0000"></gameeditor-colorpropertyeditor>
 
-        <font-propertyeditor label1="Font" label2="Size">
+        <gameeditor-fontpropertyeditor label1="Font" label2="Size">
             <option>ARIAL</option>
             <option>TAHOMA</option>
-        </font-propertyeditor>
+        </gameeditor-fontpropertyeditor>
 
     </div>
     <div class="gridItem width-8 border-1 grow flexHorizontal">
-        <div class="separator flexVertical shrink">
-            <input type="checkbox" value="Not selected"/>
-            <label>Snap to grid</label>
-            <label class="emoffset-4">Grid X:</label>
-            <input type="text" class="emwidth-2" value="5">
-            <label>Y:</label>
-            <input type="text" class="emwidth-2" value="5">
-            <button class="emwidth-6 emoffset-4" id="previewbutton">Preview!</button>
-        </div>
-        <canvas id="html5canvas" class="grow">
-        </canvas>
+        <gameeditor-tabbedpane class="grow">
+            <div class="separator flexVertical shrink">
+                <input type="checkbox" value="Not selected"/>
+                <label>Snap to grid</label>
+                <label class="emoffset-4">Grid X:</label>
+                <input type="text" class="emwidth-2" value="5">
+                <label>Y:</label>
+                <input type="text" class="emwidth-2" value="5">
+                <button class="emwidth-6 emoffset-4" id="previewbutton">Preview!</button>
+            </div>
+            <canvas id="html5canvas" class="grow">
+            </canvas>
+        </gameeditor-tabbedpane>
     </div>
     <div class="gridItem width-3 border-1 shrink min-width-3 objectTree" id="objecttree">
-        <tree-item level="1" text="Objects" separator="true"></tree-item>
-        <tree-item level="2" text="Item Level 2" selected="true"></tree-item>
-        <tree-item level="3" text="Item Level 3" draggable="true"></tree-item>
-        <tree-item level="2" text="Item Level 2"></tree-item>
+        <gameeditor-treeitem level="1" text="Objects" separator="true"></gameeditor-treeitem>
+        <gameeditor-treeitem level="2" text="Item Level 2" selected="true"></gameeditor-treeitem>
+        <gameeditor-treeitem level="3" text="Item Level 3" draggable="true"></gameeditor-treeitem>
+        <gameeditor-treeitem level="2" text="Item Level 2"></gameeditor-treeitem>
     </div>
 </div>
 

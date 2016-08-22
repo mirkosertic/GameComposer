@@ -1,17 +1,17 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="shared-styles.html">
 
-<dom-module id="textfield-propertyeditor">
+<dom-module id="gameeditor-colorpropertyeditor">
     <template>
         <style include="property-shared-styles"></style>
         <div class="field">
             <label for="inputfield">[[label]]</label>
-            <input type="text" id="inputfield" name="inputfield" value="{{value}}" on-blur="updateData">
+            <input type="color" id="inputfield" name="inputfield" value="{{value}}" on-change="updateData">
         </div>
     </template>
     <script>
         Polymer({
-            is: 'textfield-propertyeditor',
+            is: 'gameeditor-colorpropertyeditor',
 
             properties: {
                 label: {

@@ -99,8 +99,8 @@ public class GameObjectEditor extends ListingElement {
         }
     }
 
-    public GameObjectEditor(HTMLElement aHtmlElement, HTMLTemplateEngine aTemplateEngine) {
-        super(aHtmlElement, aTemplateEngine);
+    public GameObjectEditor(HTMLElement aHtmlElement) {
+        super(aHtmlElement);
     }
 
     public void setEditingObject(GameObject aObject) {
@@ -289,7 +289,7 @@ public class GameObjectEditor extends ListingElement {
 
     private <T> void addTextInputfieldPropertyEditor(String aLabel, Property<T> aProperty, HTMLInputBinder.Converter<T, String> aConverter) {
 
-        TextfieldPropertyEditorHTMLElement theElement = templateEngine.createNewComponent("textfield-propertyeditor");
+        TextfieldPropertyEditorHTMLElement theElement = TextfieldPropertyEditorHTMLElement.create();
         theElement.setLabel(aLabel);
         binder.add(theElement.bindTo(aProperty, aConverter));
 
@@ -298,7 +298,7 @@ public class GameObjectEditor extends ListingElement {
 
     private void addColorPropertyEditor(String aLabel, Property<Color> aProperty) {
 
-        ColorPropertyEditorHTMLElement theElement = templateEngine.createNewComponent("color-propertyeditor");
+        ColorPropertyEditorHTMLElement theElement = ColorPropertyEditorHTMLElement.create();
         theElement.setLabel(aLabel);
         binder.add(theElement.bindTo(aProperty));
 
@@ -307,7 +307,7 @@ public class GameObjectEditor extends ListingElement {
 
     private <T> void addLongStringPropertyEditor(String aLabel, Property<T> aProperty, HTMLInputBinder.Converter<T, String> aConverter) {
 
-        TextareaPropertyEditorHTMLElement theElement = templateEngine.createNewComponent("textarea-propertyeditor");
+        TextareaPropertyEditorHTMLElement theElement = TextareaPropertyEditorHTMLElement.create();
         theElement.setLabel(aLabel);
         binder.add(theElement.bindTo(aProperty, aConverter));
 
@@ -316,7 +316,7 @@ public class GameObjectEditor extends ListingElement {
 
     private void addBooleanPropertyEditor(String aLabel, Property<Boolean> aProperty) {
 
-        CheckboxPropertyEditorHTMLElement theElement = templateEngine.createNewComponent("checkbox-propertyeditor");
+        CheckboxPropertyEditorHTMLElement theElement = CheckboxPropertyEditorHTMLElement.create();
         theElement.setLabel(aLabel);
         binder.add(theElement.bindTo(aProperty));
 
@@ -325,7 +325,7 @@ public class GameObjectEditor extends ListingElement {
 
     private <T> void addSelectionEditor(String aLabel, Property<T> aProperty, T[] aValues) {
 
-        SelectPropertyEditorHTMLElement theElement = templateEngine.createNewComponent("select-propertyeditor");
+        SelectPropertyEditorHTMLElement theElement = SelectPropertyEditorHTMLElement.create();
         theElement.setLabel(aLabel);
         binder.add(theElement.bindTo(aProperty, aValues));
         htmlElement.appendChild(theElement);
@@ -333,7 +333,7 @@ public class GameObjectEditor extends ListingElement {
 
     private void addAnimationEditor(String aLabel, Property<Animation> aProperty, GameScene aScene) {
 
-        AnimationPropertyEditorHTMLElement theElement = templateEngine.createNewComponent("animation-propertyeditor");
+        AnimationPropertyEditorHTMLElement theElement = AnimationPropertyEditorHTMLElement.create();
         theElement.setLabel(aLabel);
         theElement.bindTo(aProperty, aScene);
 
@@ -342,7 +342,7 @@ public class GameObjectEditor extends ListingElement {
 
     private void addSizePropertyEditor(Property<Size> aProperty) {
 
-        TwofieldPropertyEditorHTMLElement theElement = templateEngine.createNewComponent("twofield-propertyeditor");
+        TwofieldPropertyEditorHTMLElement theElement = TwofieldPropertyEditorHTMLElement.create();
         theElement.setLabel1("Width");
         theElement.setLabel2("Height");
         binder.add(theElement.bindField1To(aProperty, new HTMLInputBinder.Converter<Size, String>() {
@@ -373,7 +373,7 @@ public class GameObjectEditor extends ListingElement {
 
     private void addPositionPropertyEditor(Property<Position> aProperty) {
 
-        TwofieldPropertyEditorHTMLElement theElement = templateEngine.createNewComponent("twofield-propertyeditor");
+        TwofieldPropertyEditorHTMLElement theElement = TwofieldPropertyEditorHTMLElement.create();
         theElement.setLabel1("X");
         theElement.setLabel2("Y");
         binder.add(theElement.bindField1To(aProperty, new HTMLInputBinder.Converter<Position, String>() {
@@ -404,7 +404,7 @@ public class GameObjectEditor extends ListingElement {
 
     private void addFontPropertyEditor(Property<Font> aProperty) {
 
-        FontPropertyEditorHTMLElement theElement = templateEngine.createNewComponent("font-propertyeditor");
+        FontPropertyEditorHTMLElement theElement = FontPropertyEditorHTMLElement.create();
         theElement.setLabel1("Font");
         theElement.setLabel2("Size");
         binder.add(theElement.bindTo(aProperty, Font.FontName.values()));

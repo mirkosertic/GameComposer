@@ -1,17 +1,17 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="shared-styles.html">
 
-<dom-module id="textarea-propertyeditor">
+<dom-module id="gameeditor-textfieldpropertyeditor">
     <template>
         <style include="property-shared-styles"></style>
         <div class="field">
-            <label for="text">[[label]]</label>
-            <textarea id="text" name="text" on-blur="updateData">{{value}}</textarea>
+            <label for="inputfield">[[label]]</label>
+            <input type="text" id="inputfield" name="inputfield" value="{{value}}" on-blur="updateData">
         </div>
     </template>
     <script>
         Polymer({
-            is: 'textarea-propertyeditor',
+            is: 'gameeditor-textfieldpropertyeditor',
 
             properties: {
                 label: {
@@ -25,7 +25,7 @@
             },
 
             updateData: function() {
-                this.value = this.$.text.value;
+                this.value = this.$.inputfield.value;
             },
 
             ready: function() {

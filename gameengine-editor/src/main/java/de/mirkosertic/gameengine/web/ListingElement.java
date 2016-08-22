@@ -23,17 +23,16 @@ import java.util.Set;
 public abstract class ListingElement {
 
     protected final HTMLElement htmlElement;
-    protected final HTMLTemplateEngine templateEngine;
     protected final Set<HTMLInputBinder> binder;
 
-    public ListingElement(HTMLElement aHtmlElement, HTMLTemplateEngine aTemplateEngine) {
+    public ListingElement(HTMLElement aHtmlElement) {
         htmlElement = aHtmlElement;
-        templateEngine = aTemplateEngine;
         binder = new HashSet<>();
     }
 
     protected HTMLElement addTitleLevel1(String aTitle) {
-        GlobalSeparatorHTMLElement theElement = templateEngine.createNewComponent("global-separator");
+
+        GlobalSeparatorHTMLElement theElement = GlobalSeparatorHTMLElement.create();
         theElement.setText(aTitle);
         theElement.setMajor(true);
         htmlElement.appendChild(theElement);
@@ -41,7 +40,7 @@ public abstract class ListingElement {
     }
 
     protected HTMLElement addTitleLevel2(String aTitle) {
-        GlobalSeparatorHTMLElement theElement = templateEngine.createNewComponent("global-separator");
+        GlobalSeparatorHTMLElement theElement = GlobalSeparatorHTMLElement.create();
         theElement.setText(aTitle);
         htmlElement.appendChild(theElement);
         return theElement;

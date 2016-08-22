@@ -18,10 +18,14 @@ package de.mirkosertic.gameengine.web;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.event.PropertyChanged;
+import org.teavm.jso.JSBody;
 import org.teavm.jso.JSProperty;
 import org.teavm.jso.dom.html.HTMLElement;
 
 public abstract class CheckboxPropertyEditorHTMLElement implements HTMLElement {
+
+    @JSBody(params = {}, script = "return document.createElement('gameeditor-checkboxpropertyeditor');")
+    public static native CheckboxPropertyEditorHTMLElement create();
 
     @JSProperty
     public abstract void setLabel(String aLabel);

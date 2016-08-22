@@ -20,10 +20,14 @@ import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.teavm.TeaVMTextureResource;
 import de.mirkosertic.gameengine.type.Animation;
 import de.mirkosertic.gameengine.type.ResourceName;
+import org.teavm.jso.JSBody;
 import org.teavm.jso.JSProperty;
 import org.teavm.jso.dom.html.HTMLElement;
 
 public abstract class AnimationPropertyEditorHTMLElement implements HTMLElement {
+
+    @JSBody(params = {}, script = "return document.createElement('gameeditor-animationpropertyeditor');")
+    public static native AnimationPropertyEditorHTMLElement create();
 
     @JSProperty
     public abstract void setLabel(String aLabel);

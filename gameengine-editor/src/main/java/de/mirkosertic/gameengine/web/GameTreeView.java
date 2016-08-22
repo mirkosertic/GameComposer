@@ -34,8 +34,8 @@ public class GameTreeView extends ListingElement {
     private final Map<Object, TreeItemHTMLElement> knownObjects;
     private final Window window;
 
-    public GameTreeView(HTMLElement aHtmlElement, HTMLTemplateEngine aTemplateEngine, GameObjectEditor aEditor, Window aWindow) {
-        super(aHtmlElement, aTemplateEngine);
+    public GameTreeView(HTMLElement aHtmlElement, GameObjectEditor aEditor, Window aWindow) {
+        super(aHtmlElement);
         editor = aEditor;
         knownObjects = new HashMap<>();
         window = aWindow;
@@ -111,7 +111,7 @@ public class GameTreeView extends ListingElement {
     }
 
     protected TreeItemHTMLElement addTreeItem(int aLevel) {
-        TreeItemHTMLElement theElement = templateEngine.createNewComponent("tree-item");
+        TreeItemHTMLElement theElement = TreeItemHTMLElement.create();
         theElement.setLevel(aLevel);
         htmlElement.appendChild(theElement);
         return theElement;
