@@ -1,17 +1,17 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="shared-styles.html">
 
-<dom-module id="color-propertyeditor">
+<dom-module id="gameeditor-checkboxpropertyeditor">
     <template>
         <style include="property-shared-styles"></style>
         <div class="field">
-            <label for="inputfield">[[label]]</label>
-            <input type="color" id="inputfield" name="inputfield" value="{{value}}" on-change="updateData">
+            <label for="checkbox">[[label]]</label>
+            <input type="checkbox" id="checkbox" name="checkbox" checked$="{{value}}" on-click="updateData">
         </div>
     </template>
     <script>
         Polymer({
-            is: 'color-propertyeditor',
+            is: 'gameeditor-checkboxpropertyeditor',
 
             properties: {
                 label: {
@@ -19,13 +19,13 @@
                     notify: true
                 },
                 value: {
-                    type: String,
+                    type: Boolean,
                     notify: true
                 }
             },
 
             updateData: function() {
-                this.value = this.$.inputfield.value;
+                this.value = this.$.checkbox.checked;
             },
 
             ready: function() {

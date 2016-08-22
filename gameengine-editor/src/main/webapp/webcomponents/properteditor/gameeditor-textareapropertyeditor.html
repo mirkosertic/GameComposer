@@ -1,17 +1,17 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="shared-styles.html">
 
-<dom-module id="checkbox-propertyeditor">
+<dom-module id="gameeditor-textareapropertyeditor">
     <template>
         <style include="property-shared-styles"></style>
         <div class="field">
-            <label for="checkbox">[[label]]</label>
-            <input type="checkbox" id="checkbox" name="checkbox" checked$="{{value}}" on-click="updateData">
+            <label for="text">[[label]]</label>
+            <textarea id="text" name="text" on-blur="updateData">{{value}}</textarea>
         </div>
     </template>
     <script>
         Polymer({
-            is: 'checkbox-propertyeditor',
+            is: 'gameeditor-textareapropertyeditor',
 
             properties: {
                 label: {
@@ -19,13 +19,13 @@
                     notify: true
                 },
                 value: {
-                    type: Boolean,
+                    type: String,
                     notify: true
                 }
             },
 
             updateData: function() {
-                this.value = this.$.checkbox.checked;
+                this.value = this.$.text.value;
             },
 
             ready: function() {
