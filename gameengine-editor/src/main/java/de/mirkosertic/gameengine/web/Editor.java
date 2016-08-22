@@ -26,15 +26,19 @@ public class Editor {
     private static final HTML5Document document = (HTML5Document) window.getDocument();
 
     public void boot(EditorProject aProject) {
-        EditorHTMLCanvasElement theCanvasElement = (EditorHTMLCanvasElement) document.getElementById("html5canvas");
+
+        SceneEditorHTMLElement theSceneEditor = SceneEditorHTMLElement.create();
 
         // Initialize object editor
+        TabbedPaneHTMLElement theTabbedPanne = (TabbedPaneHTMLElement) document.getElementById("editortabbedpane");
+        theTabbedPanne.addTab("Editor", theSceneEditor);
+
         HTMLElement thePropertyEditorElement = (HTMLElement) document.getElementById("objectEditor");
         HTMLElement theTreeElement = (HTMLElement) document.getElementById("objecttree");
         GameObjectEditor theObjectEditor = new GameObjectEditor(thePropertyEditorElement);
         GameTreeView theTreeView = new GameTreeView(theTreeElement, theObjectEditor, window);
 
-        GameEditor theGameEditor = new GameEditor(theCanvasElement, window, aProject) {
+        GameEditor theGameEditor = new GameEditor(theSceneEditor, window, aProject) {
 
             @Override
             protected void playScene(GameScene aGameScene) {

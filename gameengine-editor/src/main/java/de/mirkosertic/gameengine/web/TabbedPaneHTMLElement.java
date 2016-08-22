@@ -15,14 +15,12 @@
  */
 package de.mirkosertic.gameengine.web;
 
-import org.teavm.jso.JSProperty;
-import org.teavm.jso.dom.html.HTMLCanvasElement;
+import org.teavm.jso.dom.html.HTMLElement;
 
-public abstract class EditorHTMLCanvasElement implements HTMLCanvasElement {
+public abstract class TabbedPaneHTMLElement implements HTMLElement {
 
-    @JSProperty
-    public abstract int getOffsetLeft();
-
-    @JSProperty
-    public abstract int getOffsetTop();
+    public void addTab(String aTitle, HTMLElement aElement) {
+        clear();
+        appendChild(aElement);
+    }
 }
