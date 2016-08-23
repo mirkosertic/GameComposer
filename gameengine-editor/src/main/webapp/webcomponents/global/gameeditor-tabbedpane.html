@@ -36,47 +36,93 @@
             is: 'gameeditor-tabbedpane',
 
             properties: {
-                index: {
+                selectedtab: {
                     type: Number,
                     notify: true,
-                    value: 0
+                    value: -1
+
                 },
+                tabs: {
+                    type: Object,
+                    value: []
+                }
             },
 
             clearAll: function() {
-                while (this.$.buttons.hasChildNodes()) {
-                    this.$.buttons.removeChild(this.$.buttons.lastChild);
+                var theButtonsDom = Polymer.dom(this.$.buttons);
+                while (theButtonsDom.firstChild) {
+                    theButtonsDom.removeChild(theButtonsDom.firstChild);
                 }
+                this.tabs = [];
             },
 
             clearContent: function() {
-                while (this.hasChildNodes()) {
-                    this.removeChild(this.lastChild);
+                var theDom = Polymer.dom(this);
+                while (theDom.firstChild) {
+                    theDom.removeChild(theDom.firstChild);
                 }
             },
 
-            addTab: function(aTite, aElement) {
-                this.clearContent();
-
-                var theDiv = document.createElement("div");
-                theDiv.innerText = aTite;
-                if (this.index == 0) {
-                    theDiv.setAttribute("class", "button selected");
-                } else {
-                    theDiv.setAttribute("class", "button");
+            createClickHandler: function(aIndex) {
+                var theThis = this;
+                return function(e) {
+                    theThis.selectedtab = aIndex;
+                    theThis.rebuildTabs();
+                    theThis.setContent(theThis.tabs[aIndex].element);
                 }
-                var theCurrentIndex = this.index;
-                theDiv.addEventListener("click", function(e) {
-                    this.index = theCurrentIndex;
-                }, true);
+            },
 
-                Polymer.dom(this.$.buttons).appendChild(theDiv);
+            rebuildTabs: function() {
+
+                var theButtonsDom = Polymer.dom(this.$.buttons);
+                while (theButtonsDom.firstChild) {
+                    theButtonsDom.removeChild(theButtonsDom.firstChild);
+                }
+
+                for (var i=0;i<this.tabs.length;i++) {
+                    var theTab = this.tabs[i];
+
+                    var theDiv = document.createElement("div");
+                    theDiv.innerText = theTab.title;
+                    if (i == this.selectedtab) {
+                        theDiv.setAttribute("class", "button selected");
+                    } else {
+                        theDiv.setAttribute("class", "button");
+                    }
+
+                    theDiv.addEventListener("click", this.createClickHandler(i), true);
+
+                    Polymer.dom(this.$.buttons).appendChild(theDiv);
+                }
+            },
+
+            addTab: function(aTitle, aElement) {
+                this.tabs.push({
+                    title: aTitle,
+                    element: aElement
+                });
+
+                this.selectedtab = this.tabs.length - 1;
+
+                this.rebuildTabs();
+                this.setContent(aElement);
+
+                return this.selectedtab;
+            },
+
+            setContent: function(aElement) {
+                this.clearContent();
                 Polymer.dom(this).appendChild(aElement);
+            },
 
-                this.index++;
+            selectTab(aIndex) {
+                this.selectedtab = aIndex;
+                this.rebuildTabs();
+                this.setContent(this.tabs[aIndex].element);
             },
 
             ready: function() {
+                this.fire("ready", {});
             }
         });
     </script>
