@@ -31,12 +31,13 @@ public class Editor {
 
         // Initialize object editor
         TabbedPaneHTMLElement theTabbedPanne = (TabbedPaneHTMLElement) document.getElementById("editortabbedpane");
-        theTabbedPanne.clearAll();
-        theTabbedPanne.addTab("Editor", theSceneEditor);
+        TabbedPaneHTMLElement.Manager theManager = new TabbedPaneHTMLElement.Manager(theTabbedPanne);
+        theManager.clearAll();
+        theManager.addTab("Editor", theSceneEditor, "scene");
 
         HTMLElement thePropertyEditorElement = (HTMLElement) document.getElementById("objectEditor");
         HTMLElement theTreeElement = (HTMLElement) document.getElementById("objecttree");
-        GameObjectEditor theObjectEditor = new GameObjectEditor(thePropertyEditorElement, theTabbedPanne);
+        GameObjectEditor theObjectEditor = new GameObjectEditor(thePropertyEditorElement, theManager);
         GameTreeView theTreeView = new GameTreeView(theTreeElement, theObjectEditor, window);
 
         GameEditor theGameEditor = new GameEditor(theSceneEditor, window, aProject) {
@@ -55,9 +56,7 @@ public class Editor {
             }
         };
 
-        window.addEventListener("resize", evt -> {
-            theGameEditor.handleResize();
-        }, true);
+        window.addEventListener("resize", evt -> theGameEditor.handleResize(), true);
 
         theObjectEditor.clear();
     }
