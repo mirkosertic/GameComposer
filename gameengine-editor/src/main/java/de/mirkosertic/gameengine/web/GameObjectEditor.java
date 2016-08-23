@@ -99,8 +99,11 @@ public class GameObjectEditor extends ListingElement {
         }
     }
 
-    public GameObjectEditor(HTMLElement aHtmlElement) {
+    private final TabbedPaneHTMLElement tabbedPaneHTMLElement;
+
+    public GameObjectEditor(HTMLElement aHtmlElement, TabbedPaneHTMLElement aTabbedPane) {
         super(aHtmlElement);
+        tabbedPaneHTMLElement = aTabbedPane;
     }
 
     public void setEditingObject(GameObject aObject) {
@@ -134,6 +137,10 @@ public class GameObjectEditor extends ListingElement {
         addTitleLevel1("Event Sheet");
         addTitleLevel2("Common properties");
         addTextInputfieldPropertyEditor("Name", aObject.nameProperty(), new StringStringConverter());
+
+        EventsheetEditorHTMLElement theEventsheetEditor = EventsheetEditorHTMLElement.create();
+        theEventsheetEditor.bindTo(aObject);
+        tabbedPaneHTMLElement.addTab("Event sheet", theEventsheetEditor);
     }
 
     public void setEditingObject(GameObjectInstance aObject) {

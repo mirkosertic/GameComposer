@@ -40,9 +40,6 @@ public abstract class SelectPropertyEditorHTMLElement implements HTMLElement {
     @JSProperty
     public abstract int getIndex();
 
-    @JSBody(params = {"aElement"}, script = "Polymer.dom(this).appendChild(aElement);")
-    public abstract void addOption(HTMLOptionElement aElement);
-
     private <T> int indexOf(T aValue, T[] aValues) {
         for (int i=0;i<aValues.length;i++) {
             T theEntry = aValues[i];
@@ -62,7 +59,8 @@ public abstract class SelectPropertyEditorHTMLElement implements HTMLElement {
 
             HTMLOptionElement theOption = (HTMLOptionElement) getOwnerDocument().createElement("option");
             theOption.setInnerHTML(theValue.toString());
-            addOption(theOption);
+
+            Polymer.dom(this).appendChild(theOption);
         }
 
         setIndex(theCurrentIndex);
