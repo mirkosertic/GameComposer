@@ -99,9 +99,9 @@ public class GameObjectEditor extends ListingElement {
         }
     }
 
-    private final TabbedPaneHTMLElement tabbedPaneHTMLElement;
+    private final TabbedPaneHTMLElement.Manager tabbedPaneHTMLElement;
 
-    public GameObjectEditor(HTMLElement aHtmlElement, TabbedPaneHTMLElement aTabbedPane) {
+    public GameObjectEditor(HTMLElement aHtmlElement, TabbedPaneHTMLElement.Manager aTabbedPane) {
         super(aHtmlElement);
         tabbedPaneHTMLElement = aTabbedPane;
     }
@@ -140,7 +140,7 @@ public class GameObjectEditor extends ListingElement {
 
         EventsheetEditorHTMLElement theEventsheetEditor = EventsheetEditorHTMLElement.create();
         theEventsheetEditor.bindTo(aObject);
-        tabbedPaneHTMLElement.addTab("Event sheet", theEventsheetEditor);
+        tabbedPaneHTMLElement.addTab("Event sheet", theEventsheetEditor, aObject);
     }
 
     public void setEditingObject(GameObjectInstance aObject) {

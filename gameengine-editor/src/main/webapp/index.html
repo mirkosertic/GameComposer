@@ -99,10 +99,18 @@
         <gameeditor-treeitem level="3" text="Item Level 3" draggable="true"></gameeditor-treeitem>
         <gameeditor-treeitem level="2" text="Item Level 2"></gameeditor-treeitem>
     </div>
+</div>
 
-    <script>
-        /*var theTab = document.getElementById("editortabbedpane");
+<script>
+
+    /*
+    var theTab = document.getElementById("editortabbedpane");
+    theTab.addEventListener("ready", function (e) {
+        window.alert("lala");
         theTab.clearAll();
+
+        var theEditor1 = document.createElement("gameeditor-eventsheeteditor");
+        theTab.addTab("Test", theEditor1);
 
         var theEditor2 = document.createElement("gameeditor-eventsheeteditor");
         theTab.addTab("Eventsheet", theEditor2);
@@ -110,9 +118,8 @@
         var theRule = document.createElement("gameeditor-ruleeditor");
         theRule.rulename().value = 'Test';
         Polymer.dom(theEditor2).appendChild(theRule);
-        */
-    </script>
-</div>
+    });*/
+</script>
 
 </body>
 </html>

@@ -15,11 +15,41 @@
  */
 package de.mirkosertic.gameengine.web;
 
+import de.mirkosertic.gameengine.type.UUID;
+import org.teavm.jso.JSProperty;
 import org.teavm.jso.dom.html.HTMLElement;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class TabbedPaneHTMLElement implements HTMLElement {
 
+    public static class Manager {
+
+        private final TabbedPaneHTMLElement element;
+        private final Map<Object, Integer> knownObjects;
+
+        public Manager(TabbedPaneHTMLElement aElement) {
+            element = aElement;
+            knownObjects = new HashMap<>();
+        }
+
+        public void addTab(String aTitle, HTMLElement aElement, Object aOwner) {
+            if (knownObjects.containsKey(aOwner)) {
+                element.selectTab(knownObjects.get(aOwner));
+            } else {
+                knownObjects.put(aOwner, element.addTab(aTitle, aElement));
+            }
+        }
+
+        public void clearAll() {
+            element.clearAll();
+        }
+    }
+
     public abstract void clearAll();
 
-    public abstract void addTab(String aTitle, HTMLElement aElement);
+    public abstract int addTab(String aTitle, HTMLElement aElement);
+
+    public abstract void selectTab(int aIndex);
 }
