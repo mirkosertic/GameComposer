@@ -15,34 +15,31 @@
   -->
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="shared-styles.html">
+<link rel="import" href="gameeditor-ruleeditor.html">
 
-<dom-module id="gameeditor-textfieldpropertyeditor">
+<dom-module id="gameeditor-eventsheeteditor">
     <template>
-        <style include="property-shared-styles"></style>
-        <div class="field">
-            <label for="inputfield">[[label]]</label>
-            <input type="text" id="inputfield" name="inputfield" value="{{value}}" on-blur="updateData">
-        </div>
+        <style include="content-shared-styles">
+            :host {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                overflow-y: auto;
+                overflow-x: hidden;
+            }
+
+            gameeditor-ruleeditor {
+                flex-shrink: 1;
+            }
+        </style>
+        <content></content>
     </template>
     <script>
         Polymer({
-            is: 'gameeditor-textfieldpropertyeditor',
+            is: 'gameeditor-eventsheeteditor',
 
             properties: {
-                label: {
-                    type: String,
-                    notify: true,
-                    value: ""
-                },
-                value: {
-                    type: String,
-                    notify: true,
-                    value: ""
-                }
-            },
-
-            updateData: function() {
-                this.value = this.$.inputfield.value;
             },
 
             ready: function() {

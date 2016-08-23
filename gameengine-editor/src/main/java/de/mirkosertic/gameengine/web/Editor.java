@@ -36,7 +36,7 @@ public class Editor {
 
         HTMLElement thePropertyEditorElement = (HTMLElement) document.getElementById("objectEditor");
         HTMLElement theTreeElement = (HTMLElement) document.getElementById("objecttree");
-        GameObjectEditor theObjectEditor = new GameObjectEditor(thePropertyEditorElement);
+        GameObjectEditor theObjectEditor = new GameObjectEditor(thePropertyEditorElement, theTabbedPanne);
         GameTreeView theTreeView = new GameTreeView(theTreeElement, theObjectEditor, window);
 
         GameEditor theGameEditor = new GameEditor(theSceneEditor, window, aProject) {
