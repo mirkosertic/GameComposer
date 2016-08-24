@@ -26,6 +26,7 @@ import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.input.KeyEventCondition;
 import de.mirkosertic.gameengine.input.MouseEventCondition;
 import de.mirkosertic.gameengine.physic.ObjectCollisionCondition;
+import de.mirkosertic.gameengine.type.GameKeyCode;
 import org.teavm.jso.JSBody;
 import org.teavm.jso.dom.html.HTMLElement;
 
@@ -41,6 +42,9 @@ public abstract class RuleEditorHTMLElement implements HTMLElement {
         public abstract boolean matches(Condition aCondition);
 
         public abstract T create();
+
+        public void initEditorFor(T aCondition, HTMLElement aElement) {
+        }
     }
 
     @JSBody(params = {}, script = "return document.createElement('gameeditor-ruleeditor');")
@@ -50,9 +54,13 @@ public abstract class RuleEditorHTMLElement implements HTMLElement {
 
     public abstract TextfieldPropertyEditorHTMLElement rulename();
 
+    public abstract HTMLElement conditionproperties();
+
+    public abstract void clearconditionproperties();
+
     public List<HTMLInputBinder> bindTo(GameRule aRule) {
 
-        Map<String, ConditionMetaData<Condition>> theCreateFunctions = new HashMap<>();
+        final Map<String, ConditionMetaData<? extends Condition>> theCreateFunctions = new HashMap<>();
         theCreateFunctions.put("InstanceRemovedFromScene", new ConditionMetaData<Condition>() {
             @Override
             public GameObjectInstanceRemovedFromSceneCondition create() {
@@ -64,7 +72,7 @@ public abstract class RuleEditorHTMLElement implements HTMLElement {
                 return aCondition instanceof GameObjectInstanceRemovedFromSceneCondition;
             }
         });
-        theCreateFunctions.put("KeyEvent", new ConditionMetaData<Condition>() {
+        theCreateFunctions.put("KeyEvent", new ConditionMetaData<KeyEventCondition>() {
             @Override
             public KeyEventCondition create() {
                 return new KeyEventCondition();
@@ -73,6 +81,16 @@ public abstract class RuleEditorHTMLElement implements HTMLElement {
             @Override
             public boolean matches(Condition aCondition) {
                 return aCondition instanceof KeyEventCondition;
+            }
+
+            @Override
+            public void initEditorFor(KeyEventCondition aCondition, HTMLElement aElement) {
+
+                KeyEventConditionHTMLElement theElement = KeyEventConditionHTMLElement.create();
+                theElement.keycodeelement().bindTo(aCondition.keyCodeProperty(), GameKeyCode.values());
+                theElement.eventtypeelement().bindTo(aCondition.eventTypeProperty(), KeyEventCondition.KeyEventType.values());
+
+                Polymer.dom(aElement).appendChild(theElement);
             }
         });
         theCreateFunctions.put("InstanceAddedToScene", new ConditionMetaData<Condition>() {
@@ -145,12 +163,28 @@ public abstract class RuleEditorHTMLElement implements HTMLElement {
         List<HTMLInputBinder> theBinder = new ArrayList<>();
         theBinder.add(rulename().bindTo(aRule.nameProperty(), new GameObjectEditor.StringStringConverter()));
 
-        Property<String> theCondition = theCondition = new Property<>(String.class, null, "Condition", "");
-        for (Map.Entry<String, ConditionMetaData<Condition>> theEntry : theCreateFunctions.entrySet()) {
-            if (theEntry.getValue().matches(aRule.conditionProperty().get())) {
+        Condition theCurrentCondition = aRule.conditionProperty().get();
+
+        final Property<String> theCondition = new Property<>(String.class, null, "Condition", "");
+        for (Map.Entry<String, ConditionMetaData<?>> theEntry : theCreateFunctions.entrySet()) {
+            if (theEntry.getValue().matches(theCurrentCondition)) {
                 theCondition.set(theEntry.getKey());
+
+                clearconditionproperties();
+
+                ConditionMetaData<Condition> theMetaData = (ConditionMetaData<Condition>) theEntry.getValue();
+                theMetaData.initEditorFor(theCurrentCondition, conditionproperties());
             }
         }
+        theCondition.addChangeListener(aEvent -> {
+            ConditionMetaData<Condition> theMetaData = (ConditionMetaData<Condition>) theCreateFunctions.get(theCondition.get());
+
+            Condition theNewCondition = theMetaData.create();
+            aRule.conditionProperty().set(theNewCondition);
+
+            clearconditionproperties();
+            theMetaData.initEditorFor(theNewCondition, conditionproperties());
+        });
 
         theBinder.add(conditionselection().bindTo(theCondition, theCreateFunctions.keySet().toArray(new String[theCreateFunctions.keySet().size()])));
         return theBinder;
