@@ -18,6 +18,7 @@
 
 <link rel="import" href="../properteditor/gameeditor-selectpropertyeditor.html">
 <link rel="import" href="../properteditor/gameeditor-textfieldpropertyeditor.html">
+<link rel="import" href="gameeditor-keyeventcondition.html">
 
 <dom-module id="gameeditor-ruleeditor">
     <template>
@@ -52,8 +53,7 @@
         <div class="vertical">
             <div class="condition">
                 <gameeditor-selectpropertyeditor id="conditionselection" label="Condition"></gameeditor-selectpropertyeditor>
-                <div>
-
+                <div id="conditionproperties">
                 </div>
             </div>
             <div class="actions">Actions</div>
@@ -69,6 +69,17 @@
 
             rulename: function() {
                 return this.$.rulename;
+            },
+
+            clearconditionproperties: function() {
+                var theButtonsDom = Polymer.dom(this.$.conditionproperties);
+                while (theButtonsDom.firstChild) {
+                    theButtonsDom.removeChild(theButtonsDom.firstChild);
+                }
+            },
+
+            conditionproperties: function() {
+                return this.$.conditionproperties;
             },
 
             conditionselection: function() {
