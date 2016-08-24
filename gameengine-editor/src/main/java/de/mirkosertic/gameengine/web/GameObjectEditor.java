@@ -146,6 +146,7 @@ public class GameObjectEditor extends ListingElement {
     public void setEditingObject(GameObjectInstance aObject) {
         clear();
         addTitleLevel1("Game Object Instance");
+        addTitleLevel2("Common properties");
         addTextInputfieldPropertyEditor("Name", aObject.nameProperty(), new StringStringConverter());
         addPositionPropertyEditor(aObject.positionProperty());
         addBooleanPropertyEditor("Visible", aObject.visibleProperty());

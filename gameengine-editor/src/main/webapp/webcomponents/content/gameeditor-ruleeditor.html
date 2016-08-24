@@ -37,13 +37,25 @@
             }
 
             .condition {
-                margin: 0.2em;
+                margin: 0.4em;
                 flex-grow: 1;
+                padding-right: 30px;
+                border: 10px solid;
+                border-image: url(puzzleleft.png);
+                border-image-slice: 40 70 40 40 fill;
+                border-image-repeat: repeat;
             }
 
             .actions {
                 flex-grow: 2;
+                margin: 0.4em;
+                border: 10px solid;
+                padding-left: 10px;
+                border-image: url(puzzleright.png);
+                border-image-slice: 35 35 35 75 fill;
+                border-image-repeat: repeat;
             }
+
         </style>
 
         <div class="ruleName">
@@ -54,6 +66,10 @@
             <div class="condition">
                 <gameeditor-selectpropertyeditor id="conditionselection" label="Condition"></gameeditor-selectpropertyeditor>
                 <div id="conditionproperties">
+                    <gameeditor-textfieldpropertyeditor label="A" ></gameeditor-textfieldpropertyeditor>
+                    <gameeditor-textfieldpropertyeditor label="B" ></gameeditor-textfieldpropertyeditor>
+                    <gameeditor-textfieldpropertyeditor label="C" ></gameeditor-textfieldpropertyeditor>
+                    <gameeditor-textfieldpropertyeditor label="D" ></gameeditor-textfieldpropertyeditor>
                 </div>
             </div>
             <div class="actions">Actions</div>
