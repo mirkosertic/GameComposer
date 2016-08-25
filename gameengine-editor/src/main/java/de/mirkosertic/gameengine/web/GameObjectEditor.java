@@ -130,6 +130,8 @@ public class GameObjectEditor extends ListingElement {
         addTitleLevel2("Common properties");
         addTextInputfieldPropertyEditor("Name", aObject.nameProperty(), new StringStringConverter());
         addColorPropertyEditor("Background color", aObject.backgroundColorProperty());
+        addGameObjectSelectEditor("Camera", aObject.cameraObjectProperty(), aObject.getObjects());
+        addGameObjectSelectEditor("Player", aObject.defaultPlayerProperty(), aObject.getObjects());
     }
 
     public void setEditingObject(EventSheet aObject) {
@@ -139,7 +141,7 @@ public class GameObjectEditor extends ListingElement {
         addTextInputfieldPropertyEditor("Name", aObject.nameProperty(), new StringStringConverter());
 
         EventsheetEditorHTMLElement theEventsheetEditor = EventsheetEditorHTMLElement.create();
-        theEventsheetEditor.bindTo(aObject);
+        theEventsheetEditor.bindTo(aObject, tabbedPaneHTMLElement);
         tabbedPaneHTMLElement.addTab("Event sheet", theEventsheetEditor, aObject);
     }
 
@@ -336,6 +338,14 @@ public class GameObjectEditor extends ListingElement {
         SelectPropertyEditorHTMLElement theElement = SelectPropertyEditorHTMLElement.create();
         theElement.setLabel(aLabel);
         binder.add(theElement.bindTo(aProperty, aValues));
+        htmlElement.appendChild(theElement);
+    }
+
+    private <T> void addGameObjectSelectEditor(String aLabel, Property<GameObject> aProperty, GameObject[] aObjects) {
+
+        SelectPropertyEditorHTMLElement theElement = SelectPropertyEditorHTMLElement.create();
+        theElement.setLabel(aLabel);
+        binder.add(theElement.bindTo(aProperty, aObjects, aValue -> aValue.nameProperty().get()));
         htmlElement.appendChild(theElement);
     }
 

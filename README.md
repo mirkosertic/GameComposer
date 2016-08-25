@@ -25,6 +25,9 @@ The Electron Releases are available for download at the GitHub Releases section.
 
 ![Webeditor in Electron](https://raw.githubusercontent.com/mirkosertic/GameComposer/master/docs/images/electron.png)
 
+
+![Webeditor editing a LUA script](https://raw.githubusercontent.com/mirkosertic/GameComposer/master/docs/images/luawebeditor.png)
+
 GameEngine
 ----------
 

@@ -64,6 +64,11 @@ public abstract class CollisionPosition {
         return name;
     }
 
+    @Override
+    public String toString() {
+        return name;
+    }
+
     public abstract boolean detect(Position aInstance1, Position aInstance2);
 
     public static CollisionPosition valueOf(String aName) {

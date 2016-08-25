@@ -55,6 +55,8 @@
     <link rel="import" href="webcomponents/content/gameeditor-ruleeditor.html">
 
     <link rel="import" href="webcomponents/content/gameeditor-keyeventcondition.html">
+
+    <link rel="import" href="bower_components/juicy-ace-editor/juicy-ace-editor.html">
 </head>
 <body onload="main()">
 <div class="grid flexVertical">
@@ -118,6 +120,9 @@
         var theRule = document.createElement("gameeditor-ruleeditor");
         theRule.rulename().value = 'Test';
         Polymer.dom(theEditor2).appendChild(theRule);
+
+        //var theEditor3 = document.createElement("juicy-ace-editor");
+        //theTab.addTab("Ace", theEditor3);
     //});
 </script>
 

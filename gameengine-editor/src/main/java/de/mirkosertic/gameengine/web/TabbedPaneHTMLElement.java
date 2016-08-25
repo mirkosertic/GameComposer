@@ -15,8 +15,6 @@
  */
 package de.mirkosertic.gameengine.web;
 
-import de.mirkosertic.gameengine.type.UUID;
-import org.teavm.jso.JSProperty;
 import org.teavm.jso.dom.html.HTMLElement;
 
 import java.util.HashMap;
