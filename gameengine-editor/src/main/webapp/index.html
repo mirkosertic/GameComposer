@@ -17,7 +17,7 @@
             } else {
                 // polyfill web components
                 var e = document.createElement('script');
-                e.src = 'bower_components/webcomponentsjs/webcomponents-lite.min.js';
+                e.src = 'bower_components/webcomponentsjs/webcomponents.js';
                 document.head.appendChild(e);
             }
         })();
@@ -93,10 +93,10 @@
         </gameeditor-fontpropertyeditor>
 
     </div>
-    <div class="gridItem width-8 border-1 grow flexHorizontal">
-        <gameeditor-tabbedpane class="grow" id="editortabbedpane">
-        </gameeditor-tabbedpane>
-    </div>
+
+    <gameeditor-tabbedpane class="gridItem border-1 width-8 flexHorizontal" id="editortabbedpane">
+    </gameeditor-tabbedpane>
+
     <div class="gridItem width-3 border-1 shrink min-width-3 objectTree" id="objecttree">
         <gameeditor-treeitem level="1" text="Objects" separator="true"></gameeditor-treeitem>
         <gameeditor-treeitem level="2" text="Item Level 2" selected="true"></gameeditor-treeitem>
@@ -107,8 +107,8 @@
 
 <script>
 
-    var theTab = document.getElementById("editortabbedpane");
-    //theTab.addEventListener("ready", function (e) {
+/*    var theTab = document.getElementById("editortabbedpane");
+    theTab.addEventListener("ready", function (e) {
        theTab.clearAll();
 
         var theEditor1 = document.createElement("gameeditor-eventsheeteditor");
@@ -121,9 +121,9 @@
         theRule.rulename().value = 'Test';
         Polymer.dom(theEditor2).appendChild(theRule);
 
-        //var theEditor3 = document.createElement("juicy-ace-editor");
-        //theTab.addTab("Ace", theEditor3);
-    //});
+        var theEditor3 = document.createElement("juicy-ace-editor");
+        theTab.addTab("Ace", theEditor3);
+    });*/
 </script>
 
 </body>
