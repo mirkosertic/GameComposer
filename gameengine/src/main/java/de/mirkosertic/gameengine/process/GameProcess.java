@@ -19,7 +19,7 @@ import de.mirkosertic.gameengine.core.GameObjectInstance;
 
 public interface GameProcess {
 
-    static enum ProceedResult {
+    enum ProceedResult {
         STOPPED, CONTINUE_RUNNING
     }
 
