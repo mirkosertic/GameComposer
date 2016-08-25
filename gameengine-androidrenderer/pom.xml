@@ -78,7 +78,7 @@
 				<artifactId>android-maven-plugin</artifactId>
 				<configuration>
 					<sdk>
-						<platform>23</platform>
+						<platform>25</platform>
 					</sdk>
                     <androidManifestFile>AndroidManifest.xml</androidManifestFile>
                     <resourceDirectory>res</resourceDirectory>
