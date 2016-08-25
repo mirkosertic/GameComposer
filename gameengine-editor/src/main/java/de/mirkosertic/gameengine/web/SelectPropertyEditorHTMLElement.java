@@ -25,6 +25,12 @@ import org.teavm.jso.dom.html.HTMLOptionElement;
 
 public abstract class SelectPropertyEditorHTMLElement implements HTMLElement {
 
+    interface ToStringConverter<T> {
+        String convertToString(T aValue);
+    }
+
+    private static final ToStringConverter DEFAULT_TO_STRING_CONVERTER = aValue -> aValue.toString();
+
     @JSBody(params = {}, script = "return document.createElement('gameeditor-selectpropertyeditor');")
     public static native SelectPropertyEditorHTMLElement create();
 
@@ -51,6 +57,10 @@ public abstract class SelectPropertyEditorHTMLElement implements HTMLElement {
     }
 
     public <T> HTMLInputBinder bindTo(Property<T> aProperty, T[] aValues) {
+        return this.bindTo(aProperty, aValues, DEFAULT_TO_STRING_CONVERTER);
+    }
+
+    public <T> HTMLInputBinder bindTo(Property<T> aProperty, T[] aValues, ToStringConverter<T> aConverter) {
 
         int theCurrentIndex = indexOf(aProperty.get(), aValues);
 
@@ -58,7 +68,7 @@ public abstract class SelectPropertyEditorHTMLElement implements HTMLElement {
             T theValue = aValues[i];
 
             HTMLOptionElement theOption = (HTMLOptionElement) getOwnerDocument().createElement("option");
-            theOption.setInnerHTML(theValue.toString());
+            theOption.setInnerHTML(aConverter.convertToString(theValue));
 
             Polymer.dom(this).appendChild(theOption);
         }

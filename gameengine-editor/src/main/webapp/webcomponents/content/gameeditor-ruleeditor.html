@@ -19,6 +19,8 @@
 <link rel="import" href="../properteditor/gameeditor-selectpropertyeditor.html">
 <link rel="import" href="../properteditor/gameeditor-textfieldpropertyeditor.html">
 <link rel="import" href="gameeditor-keyeventcondition.html">
+<link rel="import" href="gameeditor-objectcollisioncondition.html">
+<link rel="import" href="gameeditor-runluascriptaction.html">
 
 <dom-module id="gameeditor-ruleeditor">
     <template>
@@ -72,7 +74,11 @@
                     <gameeditor-textfieldpropertyeditor label="D" ></gameeditor-textfieldpropertyeditor>
                 </div>
             </div>
-            <div class="actions">Actions</div>
+            <div class="actions">Actions
+                <div id="actionelements">
+                    <gameeditor-runluascriptaction></gameeditor-runluascriptaction>
+                </div>
+            </div>
         </div>
 
     </template>
@@ -89,6 +95,17 @@
 
             clearconditionproperties: function() {
                 var theButtonsDom = Polymer.dom(this.$.conditionproperties);
+                while (theButtonsDom.firstChild) {
+                    theButtonsDom.removeChild(theButtonsDom.firstChild);
+                }
+            },
+
+            actionelements: function() {
+                return this.$.actionelements;
+            },
+
+            clearactions: function() {
+                var theButtonsDom = Polymer.dom(this.$.actionelements);
                 while (theButtonsDom.firstChild) {
                     theButtonsDom.removeChild(theButtonsDom.firstChild);
                 }

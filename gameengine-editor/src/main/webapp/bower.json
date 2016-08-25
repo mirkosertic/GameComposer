@@ -18,5 +18,8 @@
   "resolutions": {
     "polymer": "^1.6.1",
     "webcomponentsjs": "^0.7.20"
+  },
+  "dependencies": {
+    "juicy-ace-editor": "^1.2.0"
   }
 }
