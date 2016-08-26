@@ -18,13 +18,42 @@
 
 <dom-module id="gameeditor-tabbedpane">
     <template>
-        <style include="global-shared-styles"></style>
+        <style include="global-shared-styles">
+            .tabpane {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                height: 100%;
+            }
+
+            .tabpanebuttons {
+                flex-direction: row;
+                display: flex;
+                line-height: 1.45em;
+                background-color: #e74c3c;
+            }
+
+            .tabpanebutton {
+                color: white;
+                margin-left: 1em;
+                padding: 0.2em;
+                background-color: #e74c3c;
+            }
+
+            .tabpanebutton:hover {
+                background-color: #4a5058;
+            }
+
+            .selected {
+                background-color: #4a5058;
+            }
+        </style>
 
         <div class="tabpane">
-            <div id="buttons" class="buttons">
-                <div class="button">Pane 1</div>
-                <div class="button selected">Pane 2</div>
-                <div class="button">Pane 3</div>
+            <div id="buttons" class="tabpanebuttons">
+                <div class="tabpanebutton">Pane 1</div>
+                <div class="tabpanebutton selected">Pane 2</div>
+                <div class="tabpanebutton">Pane 3</div>
             </div>
             <div id="con"></div>
                 <content id="content"></content>
@@ -85,15 +114,16 @@
                     var theDiv = document.createElement("div");
                     theDiv.innerText = theTab.title;
                     if (i == this.selectedtab) {
-                        theDiv.setAttribute("class", "button selected");
+                        theDiv.className = 'tabpanebutton selected';
                     } else {
-                        theDiv.setAttribute("class", "button");
+                        theDiv.className = 'tabpanebutton';
                     }
 
                     theDiv.addEventListener("click", this.createClickHandler(i), true);
 
                     Polymer.dom(this.$.buttons).appendChild(theDiv);
                 }
+//                Polymer.updateStyles();
             },
 
             addTab: function(aTitle, aElement) {
