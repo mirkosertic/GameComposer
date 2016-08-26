@@ -383,3 +383,21 @@ button:hover {
   z-index: 99;
   background-color: white;
 }
+.tabpanebuttons {
+  flex-direction: row;
+  display: flex;
+  line-height: 1.45em;
+  background-color: #e74c3c;
+}
+.tabpanebutton {
+  color: white;
+  margin-left: 1em;
+  padding: 0.2em;
+  background-color: #e74c3c;
+}
+.tabpanebutton:hover {
+  background-color: #4a5058;
+}
+.selected {
+  background-color: #4a5058;
+}

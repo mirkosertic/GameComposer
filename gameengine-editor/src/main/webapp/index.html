@@ -5,29 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" href="css/style.css"/>
     <script>
+
         // setup Polymer options
         window.Polymer = {lazyRegister: true, dom: 'shadow'};
 
         // load webcomponents polyfills
-        (function() {
+        var isShadowDOMPolyfill = (function() {
             if ('registerElement' in document
                     && 'import' in document.createElement('link')
                     && 'content' in document.createElement('template')) {
                 // browser has web components
+                return false;
             } else {
                 // polyfill web components
                 var e = document.createElement('script');
-                e.src = 'bower_components/webcomponentsjs/webcomponents.js';
+                e.src = 'bower_components/webcomponentsjs/webcomponents.min.js';
                 document.head.appendChild(e);
+                return true;
             }
         })();
 
         // load pre-caching service worker
         //if ('serviceWorker' in navigator) {
-//            window.addEventListener('load', function() {
-  //              navigator.serviceWorker.register('/service-worker.js');
-    //        });
-      //  }
+        //            window.addEventListener('load', function() {
+        //            navigator.serviceWorker.register('/service-worker.js');
+        //});
 
     </script>
     <script type="text/javascript" charset="utf-8" src="pixi-min-4.0.0-rc3.js"></script>
@@ -107,23 +109,16 @@
 
 <script>
 
-/*    var theTab = document.getElementById("editortabbedpane");
-    theTab.addEventListener("ready", function (e) {
-       theTab.clearAll();
-
-        var theEditor1 = document.createElement("gameeditor-eventsheeteditor");
-        theTab.addTab("Test", theEditor1);
-
-        var theEditor2 = document.createElement("gameeditor-eventsheeteditor");
-        theTab.addTab("Eventsheet", theEditor2);
-
-        var theRule = document.createElement("gameeditor-ruleeditor");
-        theRule.rulename().value = 'Test';
-        Polymer.dom(theEditor2).appendChild(theRule);
-
-        var theEditor3 = document.createElement("juicy-ace-editor");
-        theTab.addTab("Ace", theEditor3);
-    });*/
+    if (isShadowDOMPolyfill) {
+        // with the Polyfill, we have to wait till init lifecycle is finished
+        var theTab = document.getElementById("editortabbedpane");
+        theTab.addEventListener("ready", function (e) {
+            main();
+        });
+    } else {
+        // else we can just go ahead..
+        main();
+    }
 </script>
 
 </body>
