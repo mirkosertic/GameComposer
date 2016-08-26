@@ -20,6 +20,9 @@ import org.teavm.jso.JSProperty;
 
 public abstract class Container extends DisplayObject {
 
+    @JSBody(params = {}, script = "return new PIXI.Container();")
+    public static native Container createContainer();
+
     @JSProperty
     public abstract DisplayObject[] getChildren();
 
