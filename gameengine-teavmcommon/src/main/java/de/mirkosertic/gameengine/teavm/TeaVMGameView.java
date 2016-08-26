@@ -24,11 +24,11 @@ import de.mirkosertic.gameengine.core.GestureDetector;
 import de.mirkosertic.gameengine.generic.CSSCache;
 import de.mirkosertic.gameengine.generic.CSSUtils;
 import de.mirkosertic.gameengine.generic.GenericAbstractGameView;
+import de.mirkosertic.gameengine.teavm.pixi.Container;
 import de.mirkosertic.gameengine.teavm.pixi.DisplayObject;
 import de.mirkosertic.gameengine.teavm.pixi.Graphics;
 import de.mirkosertic.gameengine.teavm.pixi.Renderer;
 import de.mirkosertic.gameengine.teavm.pixi.Sprite;
-import de.mirkosertic.gameengine.teavm.pixi.Stage;
 import de.mirkosertic.gameengine.teavm.pixi.Style;
 import de.mirkosertic.gameengine.teavm.pixi.Text;
 import de.mirkosertic.gameengine.type.Angle;
@@ -45,7 +45,7 @@ public class TeaVMGameView extends GenericAbstractGameView<GameResource> {
 
     private final Renderer renderer;
     private final Map<String, DisplayObject> instances;
-    private Stage stage;
+    private Container stage;
     private TeaVMInstanceCache instanceCache;
     private CSSCache cssCache;
     private TeaVMEffectCanvas effectCanvas;
@@ -56,7 +56,7 @@ public class TeaVMGameView extends GenericAbstractGameView<GameResource> {
         renderer = aRenderer;
         cssCache = new CSSCache();
         instances = new HashMap<>();
-        stage = Stage.createStage(0);
+        stage = Container.createContainer();
         instanceCache = new TeaVMInstanceCache(stage);
         effectCanvas = new TeaVMEffectCanvas(instanceCache, renderer);
     }
@@ -70,7 +70,7 @@ public class TeaVMGameView extends GenericAbstractGameView<GameResource> {
         }
         instances.clear();
         stage.destroy();
-        stage = Stage.createStage(0);
+        stage = Container.createContainer();
         instanceCache = new TeaVMInstanceCache(stage);
         effectCanvas = new TeaVMEffectCanvas(instanceCache, renderer);
     }
