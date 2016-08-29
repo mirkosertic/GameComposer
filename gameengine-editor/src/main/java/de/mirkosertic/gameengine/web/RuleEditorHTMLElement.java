@@ -18,6 +18,7 @@ package de.mirkosertic.gameengine.web;
 import de.mirkosertic.gameengine.action.SystemTickCondition;
 import de.mirkosertic.gameengine.core.Action;
 import de.mirkosertic.gameengine.core.Condition;
+import de.mirkosertic.gameengine.core.DeleteGameObjectInstanceAction;
 import de.mirkosertic.gameengine.core.EventSheet;
 import de.mirkosertic.gameengine.core.GameObjectInstanceAddedToSceneCondition;
 import de.mirkosertic.gameengine.core.GameObjectInstanceLeftLayoutCondition;
@@ -194,6 +195,24 @@ public abstract class RuleEditorHTMLElement implements HTMLElement {
 
 
         Map<String, ActionMetaData<? extends Action>> theActionMetaData = new HashMap<>();
+        theActionMetaData.put("Delete Instance", new ActionMetaData<DeleteGameObjectInstanceAction>() {
+            @Override
+            public boolean matches(Action aAction) {
+                return aAction instanceof DeleteGameObjectInstanceAction;
+            }
+
+            @Override
+            public DeleteGameObjectInstanceAction create() {
+                return new DeleteGameObjectInstanceAction();
+            }
+
+            @Override
+            public void initEditorFor(DeleteGameObjectInstanceAction Action, HTMLElement aElement) {
+                DeleteGameObjectInstanceActionHTMLElement theElement = DeleteGameObjectInstanceActionHTMLElement.create();
+
+                Polymer.dom(aElement).appendChild(theElement);
+            }
+        });
         theActionMetaData.put("Run LUA Script", new ActionMetaData<RunScriptAction>() {
             @Override
             public boolean matches(Action aAction) {
@@ -210,10 +229,9 @@ public abstract class RuleEditorHTMLElement implements HTMLElement {
                 RunLuaScriptActionHTMLElement theElement = RunLuaScriptActionHTMLElement.create();
                 theElement.addEventListener("luaedit", evt -> {
                     Script theScript = aAction.scriptProperty().get();
+
                     AceEditorHTMLElement theEditor = AceEditorHTMLElement.create();
-                    theEditor.setAttribute("mode", "ace/mode/lua");
-                    theEditor.setAttribute("theme", "ace/theme/chrome");
-                    theEditor.setValue(theScript.script);
+                    theEditor.initWithScript(theScript);
 
                     aEditorTab.addTab("LUA Script", theEditor, aAction);
                     theEditor.addEventListener("change", evt1 -> aAction.scriptProperty().set(new Script(theEditor.getValue())));
