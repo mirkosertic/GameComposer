@@ -13,27 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.mirkosertic.gameengine.web;
+package de.mirkosertic.gameengine.web.electron;
 
-import de.mirkosertic.gameengine.type.Script;
 import org.teavm.jso.JSBody;
+import org.teavm.jso.JSObject;
 import org.teavm.jso.JSProperty;
-import org.teavm.jso.dom.html.HTMLElement;
 
-public abstract class AceEditorHTMLElement implements HTMLElement {
+public abstract class Remote implements JSObject {
 
-    @JSBody(params = {}, script = "return document.createElement(\"juicy-ace-editor\");")
-    public static native AceEditorHTMLElement create();
-
-    @JSProperty
-    public abstract void setValue(String aValue);
+    @JSBody(params = {"aModuleName"}, script = "return require(aModuleName);")
+    public static native <T extends org.teavm.jso.JSObject> T require(String aModuleName);
 
     @JSProperty
-    public abstract String getValue();
-
-    public void initWithScript(Script aScript) {
-        setAttribute("mode", "ace/mode/lua");
-        setAttribute("theme", "ace/theme/chrome");
-        setValue(aScript.script);
-    }
+    public abstract Dialog getDialog();
 }

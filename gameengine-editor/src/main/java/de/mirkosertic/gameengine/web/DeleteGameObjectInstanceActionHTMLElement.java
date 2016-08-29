@@ -15,25 +15,11 @@
  */
 package de.mirkosertic.gameengine.web;
 
-import de.mirkosertic.gameengine.type.Script;
 import org.teavm.jso.JSBody;
-import org.teavm.jso.JSProperty;
 import org.teavm.jso.dom.html.HTMLElement;
 
-public abstract class AceEditorHTMLElement implements HTMLElement {
+public abstract class DeleteGameObjectInstanceActionHTMLElement implements HTMLElement {
 
-    @JSBody(params = {}, script = "return document.createElement(\"juicy-ace-editor\");")
-    public static native AceEditorHTMLElement create();
-
-    @JSProperty
-    public abstract void setValue(String aValue);
-
-    @JSProperty
-    public abstract String getValue();
-
-    public void initWithScript(Script aScript) {
-        setAttribute("mode", "ace/mode/lua");
-        setAttribute("theme", "ace/theme/chrome");
-        setValue(aScript.script);
-    }
+    @JSBody(params = {}, script = "return document.createElement('gameeditor-deletegameobjectinstance');")
+    public static native DeleteGameObjectInstanceActionHTMLElement create();
 }
