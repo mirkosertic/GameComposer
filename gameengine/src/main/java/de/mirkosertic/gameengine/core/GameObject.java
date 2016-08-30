@@ -44,7 +44,7 @@ public class GameObject implements Reflectable<GameObjectClassInformation> {
     private final Property<Size> size;
     private final Property<Boolean> visible;
 
-    private final Map<Class<BehaviorTemplate>, BehaviorTemplate> componentTemplates;
+    private final Map<String, BehaviorTemplate> componentTemplates;
 
     public GameObject(GameScene aScene, String aName) {
         this(aScene, aName, de.mirkosertic.gameengine.type.UUID.randomUID());
@@ -102,17 +102,17 @@ public class GameObject implements Reflectable<GameObjectClassInformation> {
     }
 
     public void add(BehaviorTemplate aBehaviorTemplate) {
-        componentTemplates.put((Class<BehaviorTemplate>) aBehaviorTemplate.getClass(), aBehaviorTemplate);
+        componentTemplates.put(aBehaviorTemplate.getClass().getSimpleName(), aBehaviorTemplate);
         gameScene.getRuntime().getEventManager().fire(new GameObjectConfigurationChanged(this));
     }
 
     public void remove(BehaviorTemplate aBehaviorTemplate) {
-        componentTemplates.remove(aBehaviorTemplate.getClass());
+        componentTemplates.remove(aBehaviorTemplate.getClass().getSimpleName());
         gameScene.getRuntime().getEventManager().fire(new GameObjectConfigurationChanged(this));
     }
 
     public <T extends BehaviorTemplate> T getBehaviorTemplate(Class<T> aBehaviorClass) {
-        return (T) componentTemplates.get(aBehaviorClass);
+        return (T) componentTemplates.get(aBehaviorClass.getSimpleName());
     }
 
     @Override
