@@ -24,6 +24,8 @@ import de.mirkosertic.gameengine.teavm.TeaVMGenericPlayer;
 import de.mirkosertic.gameengine.web.electron.Dialog;
 import de.mirkosertic.gameengine.web.electron.DialogOptions;
 import de.mirkosertic.gameengine.web.electron.Electron;
+import de.mirkosertic.gameengine.web.electron.Menu;
+import de.mirkosertic.gameengine.web.electron.MenuItem;
 import de.mirkosertic.gameengine.web.electron.Remote;
 import de.mirkosertic.gameengine.web.electron.fs.FS;
 import de.mirkosertic.gameengine.web.github.GithubEditorProject;
@@ -45,6 +47,17 @@ public class WebUI {
             Electron theElectron = Electron.require();
             Remote theRemote = theElectron.getRemote();
             FS theFilesystem = theRemote.require("fs");
+
+            Menu theApplicationMenu = Menu.createMenu(theRemote);
+
+            Menu theFileMenu = Menu.createMenu(theRemote);
+            MenuItem theOpen = MenuItem.createMenuItem(theRemote, "Open");
+            theFileMenu.append(theOpen);
+
+            MenuItem theFileItem = MenuItem.createMenuItem(theRemote, "File", theFileMenu);
+            theApplicationMenu.append(theFileItem);
+
+            //Menu.setApplicationMenu(theRemote, theApplicationMenu);
 
             DialogOptions theOptions = DialogOptions.create();
             theOptions.setTitle("Select a file!");

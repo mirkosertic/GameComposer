@@ -16,10 +16,9 @@
 package de.mirkosertic.gameengine.web.electron;
 
 import org.teavm.jso.JSBody;
-import org.teavm.jso.JSObject;
 import org.teavm.jso.JSProperty;
 
-public abstract class Electron implements JSObject {
+public abstract class Electron implements Scope {
 
     @JSBody(params = {}, script = "return (window && window.process && window.process.type);")
     public static native boolean available();
