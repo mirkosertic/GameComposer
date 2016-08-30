@@ -51,7 +51,12 @@ public class WebUI {
             Menu theApplicationMenu = Menu.createMenu(theRemote);
 
             Menu theFileMenu = Menu.createMenu(theRemote);
-            MenuItem theOpen = MenuItem.createMenuItem(theRemote, "Open");
+            MenuItem theOpen = MenuItem.createMenuItem(theRemote, "Open", new MenuItem.ActionListener() {
+                @Override
+                public void run() {
+                    window.alert("Clicked!!!");
+                }
+            });
             theFileMenu.append(theOpen);
 
             MenuItem theFileItem = MenuItem.createMenuItem(theRemote, "File", theFileMenu);
