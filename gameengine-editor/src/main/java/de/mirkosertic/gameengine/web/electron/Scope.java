@@ -15,14 +15,7 @@
  */
 package de.mirkosertic.gameengine.web.electron;
 
-import org.teavm.jso.JSBody;
-import org.teavm.jso.JSProperty;
+import org.teavm.jso.JSObject;
 
-public abstract class Remote implements Scope {
-
-    @JSBody(params = {"aModuleName"}, script = "return require(aModuleName);")
-    public static native <T extends org.teavm.jso.JSObject> T require(String aModuleName);
-
-    @JSProperty
-    public abstract Dialog getDialog();
+public interface Scope extends JSObject {
 }

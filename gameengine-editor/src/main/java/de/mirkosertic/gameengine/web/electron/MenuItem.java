@@ -16,13 +16,13 @@
 package de.mirkosertic.gameengine.web.electron;
 
 import org.teavm.jso.JSBody;
-import org.teavm.jso.JSProperty;
+import org.teavm.jso.JSObject;
 
-public abstract class Remote implements Scope {
+public abstract class MenuItem implements JSObject {
 
-    @JSBody(params = {"aModuleName"}, script = "return require(aModuleName);")
-    public static native <T extends org.teavm.jso.JSObject> T require(String aModuleName);
+    @JSBody(params = {"aScope", "aLabel"}, script = "return new aScope.MenuItem({label: aLabel});")
+    public static native MenuItem createMenuItem(Scope aScope, String aLabel);
 
-    @JSProperty
-    public abstract Dialog getDialog();
+    @JSBody(params = {"aScope", "aLabel", "aSubmenu"}, script = "return new aScope.MenuItem({label: aLabel, submenu: aSubmenu});")
+    public static native MenuItem createMenuItem(Scope aScope, String aLabel, Menu aSubmenu);
 }
