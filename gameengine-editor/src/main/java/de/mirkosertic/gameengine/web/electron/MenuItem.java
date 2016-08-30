@@ -16,12 +16,22 @@
 package de.mirkosertic.gameengine.web.electron;
 
 import org.teavm.jso.JSBody;
+import org.teavm.jso.JSFunctor;
 import org.teavm.jso.JSObject;
 
 public abstract class MenuItem implements JSObject {
 
-    @JSBody(params = {"aScope", "aLabel"}, script = "return new aScope.MenuItem({label: aLabel});")
-    public static native MenuItem createMenuItem(Scope aScope, String aLabel);
+    @JSFunctor
+    public static interface ActionListener extends JSObject {
+
+        void run();
+    }
+
+    @JSBody(params = {"aScope", "aLabel", "aActionListener"}, script = "return new aScope.MenuItem({label: aLabel, click: aActionListener});")
+    public static native MenuItem createMenuItem(Scope aScope, String aLabel, ActionListener aActionListener);
+
+    @JSBody(params = {"aScope"}, script = "return new aScope.MenuItem({type: 'separator'});")
+    public static native MenuItem createReparator(Scope aScope);
 
     @JSBody(params = {"aScope", "aLabel", "aSubmenu"}, script = "return new aScope.MenuItem({label: aLabel, submenu: aSubmenu});")
     public static native MenuItem createMenuItem(Scope aScope, String aLabel, Menu aSubmenu);
