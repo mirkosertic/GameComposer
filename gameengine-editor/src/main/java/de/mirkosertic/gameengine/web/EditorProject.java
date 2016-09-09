@@ -19,8 +19,11 @@ import de.mirkosertic.gameengine.AbstractGameRuntimeFactory;
 import de.mirkosertic.gameengine.teavm.TeaVMGameLoader;
 import de.mirkosertic.gameengine.teavm.TeaVMGameResourceLoader;
 import de.mirkosertic.gameengine.teavm.TeaVMGameSceneLoader;
+import org.teavm.jso.browser.Window;
 
 public interface EditorProject {
+
+    Window window = Window.current();
 
     TeaVMGameSceneLoader createSceneLoader(TeaVMGameSceneLoader.GameSceneLoadedListener aListener,
             AbstractGameRuntimeFactory aRuntimeFactory);
@@ -29,7 +32,11 @@ public interface EditorProject {
 
     TeaVMGameResourceLoader createResourceLoaderFor(String aSceneID);
 
-    void setCurrentPreview(String aSceneDataAsJSON);
+    default public void setCurrentPreview(String aSceneDataAsJSON) {
+        window.getLocalStorage().setItem("previewscene", aSceneDataAsJSON);
+    }
 
-    String getPreviewDataAsJSON();
+    default public String getPreviewDataAsJSON() {
+        return window.getLocalStorage().getItem("previewscene");
+    }
 }
