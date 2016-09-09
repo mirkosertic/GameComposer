@@ -20,4 +20,6 @@ import org.teavm.jso.JSObject;
 public abstract class FS implements JSObject {
 
     public abstract Stats statSync(String aPath);
+
+    public abstract String readFileSync(String aPath, String aEncoding);
 }
