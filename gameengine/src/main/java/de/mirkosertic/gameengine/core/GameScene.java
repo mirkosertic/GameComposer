@@ -55,6 +55,7 @@ public class GameScene implements Reflectable<GameSceneClassInformation>, KeyVal
     private GameObject[] objects;
     private GameObjectInstance[] instances;
     private EventSheet[] eventSheets;
+    private Spritesheet[] spriteSheets;
 
     private GameSceneEffect[] preprocessorEffects;
     private GameSceneEffect[] postprocessorEffects;
@@ -79,6 +80,7 @@ public class GameScene implements Reflectable<GameSceneClassInformation>, KeyVal
         customProperties = new Property<>(CustomProperties.class, this, CUSTOM_PROPERTIES_PROPERTY, new CustomProperties(), theManager);
         instances = new GameObjectInstance[0];
         objects = new GameObject[0];
+        spriteSheets = new Spritesheet[0];
         eventSheets = new EventSheet[0];
         preprocessorEffects = new GameSceneEffect[0];
         postprocessorEffects = new GameSceneEffect[0];
@@ -203,6 +205,10 @@ public class GameScene implements Reflectable<GameSceneClassInformation>, KeyVal
 
     public EventSheet[] getEventSheets() {
         return eventSheets;
+    }
+
+    public Spritesheet[] getSpriteSheets() {
+        return spriteSheets;
     }
 
     public GameSceneEffect[] getPreprocessorEffects() {
@@ -334,6 +340,12 @@ public class GameScene implements Reflectable<GameSceneClassInformation>, KeyVal
         }
         theResult.put("eventsheets", theEventSheets);
 
+        List<Map<String, Object>> theSpriteSheets = new ArrayList<>();
+        for (Spritesheet theSheet : spriteSheets) {
+            theSpriteSheets.add(theSheet.serialize());
+        }
+        theResult.put("spritesheets", theSpriteSheets);
+
         theResult.put(LAYOUT_BOUNDS_PROPERTY, layoutBounds.get().serialize());
 
         List<Map<String, Object>> theEffects = new ArrayList<>();
@@ -374,6 +386,16 @@ public class GameScene implements Reflectable<GameSceneClassInformation>, KeyVal
             }
         }
         theScene.eventSheets = theEventSheetList.toArray(new EventSheet[theEventSheetList.size()]);
+
+        List<Spritesheet> theSpriteSheetList = new ArrayList<>();
+        List<Map<String, Object>> theSpriteSheets = (List<Map<String, Object>>) aSerializedData.get("spritesheets");
+        if (theSpriteSheets != null) {
+            for (Map<String, Object> theSheet : theSpriteSheets) {
+                theSpriteSheetList.add(Spritesheet.unmarshall(theScene, theSheet));
+            }
+        }
+
+        theScene.spriteSheets = theSpriteSheetList.toArray(new Spritesheet[theSpriteSheetList.size()]);
 
         String theCameraObject = (String) aSerializedData.get("cameraobjectid");
         if (theCameraObject != null) {

@@ -17,6 +17,7 @@ package de.mirkosertic.gameengine.teavm;
 
 import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.core.GameResourceLoader;
+import de.mirkosertic.gameengine.core.LoadedSpriteSheet;
 import de.mirkosertic.gameengine.teavm.pixi.Texture;
 import de.mirkosertic.gameengine.type.ResourceName;
 
@@ -40,6 +41,11 @@ public class TeaVMGameResourceLoader implements GameResourceLoader {
         return convert(theNewResourceName);
     }
 
+    @Override
+    public LoadedSpriteSheet loadSpriteSheet(ResourceName aResourceName) {
+        return new TeaVMLoadedSpriteSheet(sceneId,aResourceName);
+    }
+
     protected GameResource convert(ResourceName aResourceName) {
         if (aResourceName.name.endsWith(".wav")) {
             return new TeaVMSoundResource(aResourceName.name);
@@ -47,8 +53,8 @@ public class TeaVMGameResourceLoader implements GameResourceLoader {
 
         TeaVMTextureResource theResource = textureResources.get(aResourceName);
         if (theResource == null) {
-            Texture theTexure = Texture.createTextureFromImage(aResourceName.name);
-            theResource = new TeaVMTextureResource(theTexure, aResourceName.name);
+            Texture theTexture = Texture.createTextureFromImage(aResourceName.name);
+            theResource = new TeaVMTextureResource(theTexture, aResourceName.name);
             textureResources.put(aResourceName, theResource);
         }
 

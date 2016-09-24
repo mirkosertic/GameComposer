@@ -30,6 +30,14 @@ public class ResourceName implements Distributable {
         return name;
     }
 
+    public String getOnlyFileName() {
+        int p = name.lastIndexOf("/");
+        if (p>=0) {
+            return name.substring(p+1);
+        }
+        return name;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

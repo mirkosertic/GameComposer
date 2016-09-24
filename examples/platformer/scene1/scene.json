@@ -1,5 +1,11 @@
 {
   "cameraobjectid" : "-1997482371798076675",
+  "spritesheets": [
+    {
+      "name": "Spritesheet 1",
+      "jsonfile": "/assets/spritesheet.json"
+    }
+  ],
   "eventsheets" : [ {
     "name" : "Eventsheet first level",
     "rules" : [ {

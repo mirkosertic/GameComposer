@@ -59,7 +59,7 @@
         </plugins>
 	</build>
 
-    <profiles>
+<!--    <profiles>
         <profile>
             <id>platform-linux</id>
             <activation>
@@ -158,7 +158,7 @@
         </profile>
 
         <profile>
-            <id>platform-wubdiws</id>
+            <id>platform-windows</id>
             <activation>
                 <os>
                     <family>windows</family>
@@ -253,5 +253,5 @@
                 </plugins>
             </build>
         </profile>
-    </profiles>
+    </profiles>-->
 </project>

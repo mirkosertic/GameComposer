@@ -91,6 +91,10 @@ public abstract class PlaySceneStrategy {
             }
         } );
 
+        for (Spritesheet theSheet : aGameScene.getSpriteSheets()) {
+            theRuntime.getResourceCache().loadIntoCache(theSheet);
+        }
+
         loadingFinished(aGameScene);
 
         GameObject theCameraObject = aGameScene.cameraObjectProperty().get();

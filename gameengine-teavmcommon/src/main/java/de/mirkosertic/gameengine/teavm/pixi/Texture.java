@@ -23,5 +23,8 @@ public abstract class Texture implements JSObject {
     @JSBody(params = {"aResourceName"}, script = "return PIXI.Texture.fromImage(aResourceName);")
     public static native Texture createTextureFromImage(String aResourceName);
 
+    @JSBody(params = {"aFrameName"}, script = "return PIXI.Texture.fromFrame(aFrameName);")
+    public static native Texture createFromFrame(String aFrameName);
+
     public abstract void destroy();
 }
