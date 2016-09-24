@@ -18,20 +18,36 @@ package de.mirkosertic.gameengine.core;
 import de.mirkosertic.gameengine.type.ResourceName;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class GameResourceCache {
 
     private final Map<String, GameResource> cachedResources;
     private final GameResourceLoader resourceLoader;
+    private final List<LoadedSpriteSheet> loadedSpriteSheets;
 
     public GameResourceCache(GameResourceLoader aResourceLoader) {
         cachedResources = new HashMap<>();
         resourceLoader = aResourceLoader;
+        loadedSpriteSheets = new ArrayList<>();
+    }
+
+    public void loadIntoCache(Spritesheet aSheet) {
+        loadedSpriteSheets.add(resourceLoader.loadSpriteSheet(aSheet.jsonFileProperty().get()));
     }
 
     public <T extends GameResource> T getResourceFor(ResourceName aResourceName) throws IOException {
+
+        for (LoadedSpriteSheet theLoadedSheet : loadedSpriteSheets) {
+            T theResource = (T) theLoadedSheet.getResourceFor(aResourceName);
+            if (theResource != null) {
+                return theResource;
+            }
+        }
+
         T theResource = (T) cachedResources.get(aResourceName.name);
         if (theResource == null) {
             theResource = (T) resourceLoader.load(aResourceName);

@@ -18,6 +18,7 @@ package de.mirkosertic.gameengine.dragome;
 import java.io.IOException;
 
 import com.dragome.services.WebServiceLocator;
+import de.mirkosertic.gameengine.core.LoadedSpriteSheet;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -66,5 +67,10 @@ public class DragomeGameResourceLoader implements GameResourceLoader {
             Node theChild = theChilds.item(i);
             theChild.getParentNode().removeChild(theChild);
         }
+    }
+
+    @Override
+    public LoadedSpriteSheet loadSpriteSheet(ResourceName aResourceName) {
+        return LoadedSpriteSheet.EMPTY;
     }
 }

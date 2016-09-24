@@ -17,13 +17,14 @@ package de.mirkosertic.gameengine.core;
 
 import de.mirkosertic.gameengine.type.ResourceName;
 
-import java.io.IOException;
+public interface LoadedSpriteSheet<T extends GameResource> {
 
-public interface GameResourceLoader {
-    
-    GameResource load(ResourceName aResourceName) throws IOException;
+    LoadedSpriteSheet EMPTY = new LoadedSpriteSheet() {
+        @Override
+        public GameResource getResourceFor(ResourceName aResourceName) {
+            return null;
+        }
+    };
 
-    LoadedSpriteSheet loadSpriteSheet(ResourceName aResourceName);
-
-    void flush();
+    T getResourceFor(ResourceName aResourceName);
 }

@@ -17,6 +17,7 @@ package de.mirkosertic.gameengine.gwt;
 
 import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.core.GameResourceLoader;
+import de.mirkosertic.gameengine.core.LoadedSpriteSheet;
 import de.mirkosertic.gameengine.type.ResourceName;
 
 import java.io.IOException;
@@ -50,6 +51,11 @@ public class GWTGameResourceLoader implements GameResourceLoader {
         }
 
         return null;
+    }
+
+    @Override
+    public LoadedSpriteSheet loadSpriteSheet(ResourceName aResourceName) {
+        return LoadedSpriteSheet.EMPTY;
     }
 
     @Override
