@@ -17,14 +17,7 @@ package de.mirkosertic.gameengine.gwt;
 
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
-import de.mirkosertic.gameengine.core.Game;
-import de.mirkosertic.gameengine.core.GameLoop;
-import de.mirkosertic.gameengine.core.GameLoopFactory;
-import de.mirkosertic.gameengine.core.GameRuntime;
-import de.mirkosertic.gameengine.core.GameScene;
-import de.mirkosertic.gameengine.core.GameView;
-import de.mirkosertic.gameengine.core.GestureDetector;
-import de.mirkosertic.gameengine.core.PlaySceneStrategy;
+import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.generic.GenericAbstractGameView;
 import de.mirkosertic.gameengine.network.NetworkConnector;
 import de.mirkosertic.gameengine.type.*;
@@ -341,20 +334,24 @@ public class GWTRenderer implements EntryPoint {
 
     private void playScene(GameScene aGameScene) {
 
-        playSceneStrategy.playScene(aGameScene);
-        canvas.setFocus(true);
-
-        final GameLoop theCurrentLoop = playSceneStrategy.getRunningGameLoop();
-
-        AnimationScheduler.get().requestAnimationFrame(new AnimationScheduler.AnimationCallback() {
-
+        playSceneStrategy.playScene(aGameScene, new SuccessCallback() {
             @Override
-            public void execute(double v) {
-                theCurrentLoop.singleRun();
-                // Request another animation
-                if (!theCurrentLoop.isShutdown()) {
-                    AnimationScheduler.get().requestAnimationFrame(this);
-                }
+            public void success() {
+                canvas.setFocus(true);
+
+                final GameLoop theCurrentLoop = playSceneStrategy.getRunningGameLoop();
+
+                AnimationScheduler.get().requestAnimationFrame(new AnimationScheduler.AnimationCallback() {
+
+                    @Override
+                    public void execute(double v) {
+                        theCurrentLoop.singleRun();
+                        // Request another animation
+                        if (!theCurrentLoop.isShutdown()) {
+                            AnimationScheduler.get().requestAnimationFrame(this);
+                        }
+                    }
+                });
             }
         });
    }

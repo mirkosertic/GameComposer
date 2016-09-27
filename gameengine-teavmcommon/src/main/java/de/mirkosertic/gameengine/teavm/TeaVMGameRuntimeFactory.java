@@ -37,12 +37,12 @@ public class TeaVMGameRuntimeFactory extends AbstractGameRuntimeFactory {
         return new Logger() {
             @Override
             public void info(String aMessage) {
-                TeaVMLogger.info(aMessage);
+                TeaVMLogger.info(Thread.currentThread().getName() + ": " + aMessage);
             }
 
             @Override
             public void error(String aMessage) {
-                TeaVMLogger.error(aMessage);
+                TeaVMLogger.error(Thread.currentThread().getName() + ": " + aMessage);
             }
 
             @Override

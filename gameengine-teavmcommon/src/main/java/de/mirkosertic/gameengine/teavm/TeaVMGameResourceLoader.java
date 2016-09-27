@@ -18,6 +18,7 @@ package de.mirkosertic.gameengine.teavm;
 import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.core.GameResourceLoader;
 import de.mirkosertic.gameengine.core.LoadedSpriteSheet;
+import de.mirkosertic.gameengine.core.SuccessCallback;
 import de.mirkosertic.gameengine.teavm.pixi.Texture;
 import de.mirkosertic.gameengine.type.ResourceName;
 
@@ -42,8 +43,9 @@ public class TeaVMGameResourceLoader implements GameResourceLoader {
     }
 
     @Override
-    public LoadedSpriteSheet loadSpriteSheet(ResourceName aResourceName) {
-        return new TeaVMLoadedSpriteSheet(sceneId,aResourceName);
+    public LoadedSpriteSheet loadSpriteSheet(ResourceName aResourceName, SuccessCallback aCallback) {
+        ResourceName theNewResourceName = new ResourceName(sceneId + aResourceName.name.replace('\\', '/'));
+        return new TeaVMLoadedSpriteSheet(theNewResourceName, aCallback);
     }
 
     protected GameResource convert(ResourceName aResourceName) {

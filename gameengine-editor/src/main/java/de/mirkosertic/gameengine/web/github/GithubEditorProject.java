@@ -18,9 +18,12 @@ package de.mirkosertic.gameengine.web.github;
 import de.mirkosertic.gameengine.AbstractGameRuntimeFactory;
 import de.mirkosertic.gameengine.core.Game;
 import de.mirkosertic.gameengine.core.GameResource;
+import de.mirkosertic.gameengine.core.LoadedSpriteSheet;
+import de.mirkosertic.gameengine.core.SuccessCallback;
 import de.mirkosertic.gameengine.teavm.TeaVMGameLoader;
 import de.mirkosertic.gameengine.teavm.TeaVMGameResourceLoader;
 import de.mirkosertic.gameengine.teavm.TeaVMGameSceneLoader;
+import de.mirkosertic.gameengine.teavm.TeaVMLoadedSpriteSheet;
 import de.mirkosertic.gameengine.type.ResourceName;
 import de.mirkosertic.gameengine.web.EditorProject;
 import org.teavm.jso.ajax.XMLHttpRequest;
@@ -75,6 +78,12 @@ public class GithubEditorProject implements EditorProject {
             public GameResource load(ResourceName aResourceName) throws IOException {
                 ResourceName theNewResourceName = new ResourceName("https://raw.githubusercontent.com/" + username + "/" + repository + "/master" + relativePath + "/" + aSceneID + aResourceName.get());
                 return convert(theNewResourceName);
+            }
+
+            @Override
+            public LoadedSpriteSheet loadSpriteSheet(ResourceName aResourceName, SuccessCallback aCallback) {
+                ResourceName theNewResourceName = new ResourceName("https://raw.githubusercontent.com/" + username + "/" + repository + "/master" + relativePath + "/" + aSceneID + aResourceName.get());
+                return new TeaVMLoadedSpriteSheet(theNewResourceName, aCallback);
             }
         };
     }
