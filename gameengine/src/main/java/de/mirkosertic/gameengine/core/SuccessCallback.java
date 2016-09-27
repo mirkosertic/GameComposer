@@ -15,15 +15,6 @@
  */
 package de.mirkosertic.gameengine.core;
 
-import de.mirkosertic.gameengine.type.ResourceName;
-
-import java.io.IOException;
-
-public interface GameResourceLoader {
-    
-    GameResource load(ResourceName aResourceName) throws IOException;
-
-    LoadedSpriteSheet loadSpriteSheet(ResourceName aResourceName, SuccessCallback aCallback);
-
-    void flush();
+public interface SuccessCallback {
+    void success();
 }

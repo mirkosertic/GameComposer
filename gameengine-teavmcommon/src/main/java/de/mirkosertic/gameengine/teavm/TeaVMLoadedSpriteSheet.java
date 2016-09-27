@@ -17,6 +17,7 @@ package de.mirkosertic.gameengine.teavm;
 
 import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.core.LoadedSpriteSheet;
+import de.mirkosertic.gameengine.core.SuccessCallback;
 import de.mirkosertic.gameengine.teavm.pixi.Loader;
 import de.mirkosertic.gameengine.teavm.pixi.Texture;
 import de.mirkosertic.gameengine.type.ResourceName;
@@ -31,17 +32,15 @@ public class TeaVMLoadedSpriteSheet implements LoadedSpriteSheet {
     @JSBody(params = {"aObject"}, script = "return Object.keys(aObject);")
     private static native String[] keysOf(JSObject aObject);
 
-    private boolean loaded;
     private final Map<String, TeaVMTextureResource> knownResources;
     private final Loader loader;
 
-    public TeaVMLoadedSpriteSheet(String aSceneID, ResourceName aResourceName) {
+    public TeaVMLoadedSpriteSheet(ResourceName aResourceName, SuccessCallback aCallback) {
         knownResources = new HashMap<>();
         loader = Loader.create();
-        String thePath = aSceneID + aResourceName.name.replace('\\', '/');
+        String thePath = aResourceName.name.replace('\\', '/');
         loader.add(thePath);
         loader.load((aLoader, aResources) -> {
-            loaded = true;
             Loader.Resource theLoadedJSON = aResources.get(thePath);
             if (theLoadedJSON != null) {
                 Loader.SpritesheetJSON theJSON = (Loader.SpritesheetJSON) theLoadedJSON.getData();
@@ -50,9 +49,12 @@ public class TeaVMLoadedSpriteSheet implements LoadedSpriteSheet {
                     TeaVMTextureResource theResource = new TeaVMTextureResource(theTexture, theFrameID);
                     knownResources.put(theFrameID, theResource);
                 }
-                TeaVMLogger.info("Loading finished with " + knownResources.size() + " frames");
+
+               TeaVMLogger.info("Loading finished with " + knownResources.size() + " frames");
+
+                aCallback.success();
             } else {
-                TeaVMLogger.error("Loading not finiahed, json not found");
+                TeaVMLogger.error("Loading not finished, json not found");
             }
         });
     }

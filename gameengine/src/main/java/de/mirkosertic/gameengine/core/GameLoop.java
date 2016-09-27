@@ -98,6 +98,7 @@ public class GameLoop implements Runnable {
             // Initial state, we skip this to prevent computation errors
             lastInvocation = System.currentTimeMillis();
             // Instead, we fill fire the SceneStarted event
+
             runtime.getEventManager().fire(new SceneStarted());
             return;
         }
@@ -131,6 +132,7 @@ public class GameLoop implements Runnable {
                 }
 
                 lastInvocation = theCurrentTime;
+
             } catch (Exception e) {
                 runtime.getEventManager().fire(new SystemException(e));
             } finally {
