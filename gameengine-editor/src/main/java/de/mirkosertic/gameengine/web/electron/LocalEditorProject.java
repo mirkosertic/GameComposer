@@ -16,12 +16,11 @@
 package de.mirkosertic.gameengine.web.electron;
 
 import de.mirkosertic.gameengine.AbstractGameRuntimeFactory;
-import de.mirkosertic.gameengine.core.Game;
-import de.mirkosertic.gameengine.core.GameResource;
-import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.teavm.TeaVMGameLoader;
 import de.mirkosertic.gameengine.teavm.TeaVMGameResourceLoader;
 import de.mirkosertic.gameengine.teavm.TeaVMGameSceneLoader;
+import de.mirkosertic.gameengine.teavm.TeaVMLoadedSpriteSheet;
 import de.mirkosertic.gameengine.type.ResourceName;
 import de.mirkosertic.gameengine.web.EditorProject;
 import de.mirkosertic.gameengine.web.electron.fs.FS;
@@ -82,6 +81,21 @@ public class LocalEditorProject implements EditorProject {
 
                 ResourceName theNewResourceName = new ResourceName(theURL);
                 return convert(theNewResourceName);
+            }
+
+            @Override
+            public LoadedSpriteSheet loadSpriteSheet(ResourceName aResourceName, SuccessCallback aCallback) {
+
+                String theFile = localPath + "/" + aSceneID + aResourceName.name;
+                theFile = theFile.replace('\\', '/');
+                if (!theFile.startsWith("/")) {
+                    theFile = "/" + theFile;
+                }
+
+                String theURL = "file://" + theFile;
+
+                ResourceName theNewResourceName = new ResourceName(theURL);
+                return new TeaVMLoadedSpriteSheet(theNewResourceName, aCallback);
             }
         };
     }

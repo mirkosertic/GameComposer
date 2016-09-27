@@ -35,8 +35,8 @@ public class GameResourceCache {
         loadedSpriteSheets = new ArrayList<>();
     }
 
-    public void loadIntoCache(Spritesheet aSheet) {
-        loadedSpriteSheets.add(resourceLoader.loadSpriteSheet(aSheet.jsonFileProperty().get()));
+    public void loadIntoCache(Spritesheet aSheet, SuccessCallback aCallback) {
+        loadedSpriteSheets.add(resourceLoader.loadSpriteSheet(aSheet.jsonFileProperty().get(), aCallback));
     }
 
     public <T extends GameResource> T getResourceFor(ResourceName aResourceName) throws IOException {

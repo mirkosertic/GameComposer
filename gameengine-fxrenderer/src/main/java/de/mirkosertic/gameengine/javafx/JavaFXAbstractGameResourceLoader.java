@@ -18,6 +18,7 @@ package de.mirkosertic.gameengine.javafx;
 import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.core.GameResourceLoader;
 import de.mirkosertic.gameengine.core.LoadedSpriteSheet;
+import de.mirkosertic.gameengine.core.SuccessCallback;
 import de.mirkosertic.gameengine.type.ResourceName;
 
 import java.io.IOException;
@@ -56,7 +57,7 @@ public abstract class JavaFXAbstractGameResourceLoader implements GameResourceLo
     }
 
     @Override
-    public LoadedSpriteSheet loadSpriteSheet(ResourceName aResourceName) {
+    public LoadedSpriteSheet loadSpriteSheet(ResourceName aResourceName, SuccessCallback aSuccessCallback) {
         return LoadedSpriteSheet.EMPTY;
     }
 }

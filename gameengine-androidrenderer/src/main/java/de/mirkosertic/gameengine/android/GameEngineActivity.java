@@ -23,12 +23,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
-import de.mirkosertic.gameengine.core.Game;
-import de.mirkosertic.gameengine.core.GameLoopFactory;
-import de.mirkosertic.gameengine.core.GameRuntime;
-import de.mirkosertic.gameengine.core.GameScene;
-import de.mirkosertic.gameengine.core.GestureDetector;
-import de.mirkosertic.gameengine.core.PlaySceneStrategy;
+import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.network.NetworkConnector;
 import de.mirkosertic.gameengine.type.Size;
@@ -220,7 +215,11 @@ public class GameEngineActivity extends Activity {
     }
 
     private void playScene(GameScene aGameScene) {
-        playSceneStrategy.playScene(aGameScene);
+        playSceneStrategy.playScene(aGameScene, new SuccessCallback() {
+            @Override
+            public void success() {
+            }
+        });
     }
 
     @Override

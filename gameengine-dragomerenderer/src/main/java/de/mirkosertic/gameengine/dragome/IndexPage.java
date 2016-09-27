@@ -196,9 +196,13 @@ public class IndexPage extends DefaultVisualActivity {
     }
 
     private void playScene(GameScene aGameScene) {
-        playSceneStrategy.playScene(aGameScene);
-        runSingleStep(playSceneStrategy.getRunningGameLoop());
+        playSceneStrategy.playScene(aGameScene, new SuccessCallback() {
+            @Override
+            public void success() {
+                runSingleStep(playSceneStrategy.getRunningGameLoop());
 
-        DragomeLogger.info("Scene initialized");
+                DragomeLogger.info("Scene initialized");
+            }
+        });
     }
 }
