@@ -63,9 +63,10 @@ public class TeaVMGameRuntimeFactory extends AbstractGameRuntimeFactory {
 
     @Override
     protected ThreadingManager createThreadingManager() {
-        if (multithreaded) {
-            return new TeaVMThreadingManager();
-        }
+//        if (multithreaded) {
+//            return new TeaVMThreadingManager();
+//        }
+        // No Green Treads -> No real performance improvements
         return new NoThreadingThreadingManager();
     }
 

@@ -73,12 +73,18 @@ public class Position implements Reflectable<PositionClassInformation>, Distribu
 
     @ReflectiveMethod
     public Position changeX(Float aNewX) {
-        return new Position(aNewX, y);
+        if (aNewX != x) {
+            return new Position(aNewX, y);
+        }
+        return this;
     }
 
     @ReflectiveMethod
     public Position changeY(Float aNewY) {
-        return new Position(x, aNewY);
+        if (aNewY != y) {
+            return new Position(x, aNewY);
+        }
+        return this;
     }
 
     @ReflectiveMethod
