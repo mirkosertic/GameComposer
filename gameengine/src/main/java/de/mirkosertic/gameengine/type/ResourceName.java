@@ -22,8 +22,21 @@ public class ResourceName implements Distributable {
 
     public final String name;
 
+    private final String fileName;
+
     public ResourceName(String aName) {
         name = aName;
+
+        if (name != null) {
+            int p = name.lastIndexOf("/");
+            if (p >= 0) {
+                fileName = name.substring(p + 1);
+            } else {
+                fileName = name;
+            }
+        } else {
+            fileName = null;
+        }
     }
 
     public String get() {
@@ -31,11 +44,7 @@ public class ResourceName implements Distributable {
     }
 
     public String getOnlyFileName() {
-        int p = name.lastIndexOf("/");
-        if (p>=0) {
-            return name.substring(p+1);
-        }
-        return name;
+        return fileName;
     }
 
     @Override

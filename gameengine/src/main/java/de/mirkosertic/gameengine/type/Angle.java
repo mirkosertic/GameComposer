@@ -27,6 +27,7 @@ public class Angle implements Reflectable, Distributable {
     public final int angleInDegrees;
 
     public static final Angle ZERO = new Angle(0);
+    private Angle inverted;
 
     public Angle(int aAngleInDegrees) {
         while (aAngleInDegrees < 0) {
@@ -46,7 +47,10 @@ public class Angle implements Reflectable, Distributable {
 
     @ReflectiveMethod
     public Angle invert() {
-        return new Angle(-angleInDegrees);
+        if (inverted == null) {
+            inverted = new Angle(-angleInDegrees);
+        }
+        return inverted;
     }
 
     @ReflectiveMethod
