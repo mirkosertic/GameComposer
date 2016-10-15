@@ -37,6 +37,21 @@ import java.util.Map;
 
 public class StarfieldGameSceneEffect implements GameSceneEffect {
 
+    public static class Star {
+
+        private Position position;
+        private String id;
+
+        public Star(Position aPosition, String aId) {
+            position = aPosition;
+            id = aId;
+        }
+
+        public void evolvePosition(float theMovement, int aWidth) {
+            position = position.changeX((position.x + theMovement) % aWidth);
+        }
+    }
+
     private static final StarfieldGameSceneEffectClassInformation CIINSTANCE = new StarfieldGameSceneEffectClassInformation();
 
     public static final String TYPE_VALUE = "StarfieldGameSceneEffect";
@@ -51,7 +66,7 @@ public class StarfieldGameSceneEffect implements GameSceneEffect {
     private final Property<Color> color;
     private final Property<Float> starSpeed;
 
-    private Position[] stars;
+    private Star[] stars;
 
     private Size currentSize;
 
@@ -59,7 +74,7 @@ public class StarfieldGameSceneEffect implements GameSceneEffect {
 
         scene = aParent;
 
-        stars = new Position[0];
+        stars = new Star[0];
 
         numberOfStars = new Property<>(Integer.class, this, NUMBER_OF_STARS_PROPERTY, 30, aEventManager);
         starSpeed = new Property<>(Float.class, this, STAR_SPEED_PROPERTY, 7f, aEventManager);
@@ -108,8 +123,8 @@ public class StarfieldGameSceneEffect implements GameSceneEffect {
     public void render(EffectCanvas aEffectCanvas, CameraBehavior aCameraBehavior) {
         Color theStarColor = color.get();
         for (int i=0;i<stars.length;i++) {
-            Position thePosition = stars[i];
-            aEffectCanvas.drawSingleDot("star_" + i, thePosition, theStarColor, 0);
+            Position thePosition = stars[i].position;
+            aEffectCanvas.drawSingleDot(stars[i].id, thePosition, theStarColor, 0);
         }
     }
 
@@ -124,28 +139,23 @@ public class StarfieldGameSceneEffect implements GameSceneEffect {
     }
 
     public GameProcess.ProceedResult proceedGame(long aGameTime, long aElapsedTimeSinceLastLoop) {
-        Position[] theEvolvedPositions = new Position[stars.length];
-
         float theMovement = starSpeed.get() / 1000 * aElapsedTimeSinceLastLoop;
 
         for (int i=0;i<stars.length;i++) {
-            Position thePosition = stars[i];
-            theEvolvedPositions[i] = thePosition.changeX((thePosition.x + theMovement) % currentSize.width);
+            stars[i].evolvePosition(theMovement, currentSize.width);
         }
-
-        stars = theEvolvedPositions;
 
         return GameProcess.ProceedResult.CONTINUE_RUNNING;
     }
 
     private void setScreenSize(Size aSize) {
-        Position[] theStars = new Position[numberOfStars.get()];
+        Star[] theStars = new Star[numberOfStars.get()];
         long theMaximum = aSize.width * aSize.height;
         for (int i=0;i<numberOfStars.get();i++) {
             long theRandonPos = (long)(Math.random() * theMaximum);
             long theY = (int)(theRandonPos / aSize.width);
             long theX = theRandonPos % aSize.width;
-            theStars[i] = new Position(theX, theY);
+            theStars[i] = new Star(new Position(theX, theY), "s" + i);
         }
         stars = theStars;
         currentSize = aSize;
