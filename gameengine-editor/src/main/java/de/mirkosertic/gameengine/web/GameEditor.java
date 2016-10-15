@@ -350,4 +350,10 @@ public class GameEditor {
             TeaVMWindow.requestAnimationFrame(aTimeDelta -> runSingleStep(aGameLoop));
         }
     }
+
+    public void shutdownRunningGameLoop() {
+        if (runSceneStrategy != null && runSceneStrategy.hasGameLoop()) {
+            runSceneStrategy.getRunningGameLoop().shutdown();
+        }
+    }
 }

@@ -173,9 +173,9 @@ public abstract class RuleEditorHTMLElement implements HTMLElement {
 
                 ObjectCollisionConditionHTMLElement theElement = ObjectCollisionConditionHTMLElement.create();
                 theElement.primaryelement().bindTo(aCondition.primaryObjectProperty(), aEventSheet.getGameScene().getObjects(),
-                        aValue -> aValue.nameProperty().get().toString());
+                        aValue -> aValue.nameProperty().get());
                 theElement.secondaryelement().bindTo(aCondition.secondaryObjectProperty(), aEventSheet.getGameScene().getObjects(),
-                        aValue -> aValue.nameProperty().get().toString());
+                        aValue -> aValue.nameProperty().get());
                 theElement.positionelement().bindTo(aCondition.positionProperty(), CollisionPosition.values());
 
                 Polymer.dom(aElement).appendChild(theElement);
@@ -233,7 +233,21 @@ public abstract class RuleEditorHTMLElement implements HTMLElement {
                     AceEditorHTMLElement theEditor = AceEditorHTMLElement.create();
                     theEditor.initWithScript(theScript);
 
-                    aEditorTab.addTab("LUA Script", theEditor, aAction);
+                    aEditorTab.addTab("LUA Script", new TabbedPaneHTMLElement.TabHandler() {
+                        @Override
+                        public HTMLElement getElement() {
+                            return theEditor;
+                        }
+
+                        @Override
+                        public Object getOwner() {
+                            return aAction;
+                        }
+
+                        @Override
+                        public void handleClosed() {
+                        }
+                    });
                     theEditor.addEventListener("change", evt1 -> aAction.scriptProperty().set(new Script(theEditor.getValue())));
                 });
 
