@@ -40,6 +40,14 @@
                 background-color: #e74c3c;
             }
 
+            .closebutton {
+                width: 18px;
+                height: 18px;
+                display: inline-block;
+                vertical-align: middle;
+                content: url("close.png");
+            }
+
             .tabpanebutton:hover {
                 background-color: #4a5058;
             }
@@ -51,7 +59,7 @@
 
         <div class="tabpane">
             <div id="buttons" class="tabpanebuttons">
-                <div class="tabpanebutton">Pane 1</div>
+                <div class="tabpanebutton"><span>Pane 1</span><img class="closebutton"></div>
                 <div class="tabpanebutton selected">Pane 2</div>
                 <div class="tabpanebutton">Pane 3</div>
             </div>
@@ -101,6 +109,13 @@
                 }
             },
 
+            createDeleteClickHandler: function(aIndex) {
+                var theThis = this;
+                return function(e) {
+                    theThis.fire("tabclose", {tabindex: aIndex});
+                }
+            },
+
             rebuildTabs: function() {
 
                 var theButtonsDom = Polymer.dom(this.$.buttons);
@@ -109,10 +124,15 @@
                 }
 
                 for (var i=0;i<this.tabs.length;i++) {
-                    var theTab = this.tabs[i];
+                    var theTab = this.tabs[i]
 
                     var theDiv = document.createElement("div");
-                    theDiv.innerText = theTab.title;
+                    var theDivContent = document.createElement("span");
+                    theDivContent.innerText = theTab.title;
+                    var theCloseButton = document.createElement("img");
+                    theCloseButton.className = 'closebutton';
+                    theDiv.appendChild(theDivContent);
+                    theDiv.appendChild(theCloseButton);
                     if (i == this.selectedtab) {
                         theDiv.className = 'tabpanebutton selected';
                     } else {
@@ -120,6 +140,7 @@
                     }
 
                     theDiv.addEventListener("click", this.createClickHandler(i), true);
+                    theCloseButton.addEventListener("click", this.createDeleteClickHandler(i), true);
 
                     Polymer.dom(this.$.buttons).appendChild(theDiv);
                 }
@@ -149,6 +170,12 @@
                 this.selectedtab = aIndex;
                 this.rebuildTabs();
                 this.setContent(this.tabs[aIndex].element);
+            },
+
+            removeTab(aIndex) {
+                this.selectedtab--;
+                this.tabs.splice(aIndex, 1);
+                this.rebuildTabs();
             },
 
             ready: function() {
