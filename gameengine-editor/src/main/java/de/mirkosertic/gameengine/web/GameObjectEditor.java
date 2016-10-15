@@ -142,7 +142,21 @@ public class GameObjectEditor extends ListingElement {
 
         EventsheetEditorHTMLElement theEventsheetEditor = EventsheetEditorHTMLElement.create();
         theEventsheetEditor.bindTo(aObject, tabbedPaneHTMLElement);
-        tabbedPaneHTMLElement.addTab("Event sheet", theEventsheetEditor, aObject);
+        tabbedPaneHTMLElement.addTab("Event sheet", new TabbedPaneHTMLElement.TabHandler() {
+            @Override
+            public HTMLElement getElement() {
+                return theEventsheetEditor;
+            }
+
+            @Override
+            public Object getOwner() {
+                return aObject;
+            }
+
+            @Override
+            public void handleClosed() {
+            }
+        });
     }
 
     public void setEditingObject(GameObjectInstance aObject) {

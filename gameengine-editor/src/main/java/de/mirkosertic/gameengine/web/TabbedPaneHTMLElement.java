@@ -15,39 +15,104 @@
  */
 package de.mirkosertic.gameengine.web;
 
+import org.teavm.jso.JSObject;
+import org.teavm.jso.JSProperty;
+import org.teavm.jso.dom.events.Event;
+import org.teavm.jso.dom.events.EventListener;
 import org.teavm.jso.dom.html.HTMLElement;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class TabbedPaneHTMLElement implements HTMLElement {
+
+    public interface TabEvent extends Event {
+
+        @JSProperty
+        TabEventDetail getDetail();
+    }
+
+    public interface TabEventDetail extends JSObject {
+
+        @JSProperty
+        int getTabindex();
+    }
+
+    public interface TabHandler {
+
+        HTMLElement getElement();
+
+        Object getOwner();
+
+        void handleClosed();
+    }
 
     public static class Manager {
 
         private final TabbedPaneHTMLElement element;
-        private final Map<Object, Integer> knownObjects;
+        private final List<TabHandler> knownObjects;
 
         public Manager(TabbedPaneHTMLElement aElement) {
             element = aElement;
-            knownObjects = new HashMap<>();
+            knownObjects = new ArrayList<>();
+            aElement.addEventListener("tabclose", new EventListener<TabEvent>() {
+                @Override
+                public void handleEvent(TabEvent aEvent) {
+                    removeTab(aEvent.getDetail().getTabindex());
+                }
+            });
         }
 
-        public void addTab(String aTitle, HTMLElement aElement, Object aOwner) {
-            if (knownObjects.containsKey(aOwner)) {
-                element.selectTab(knownObjects.get(aOwner));
+        public void removeTab(int aIndex) {
+            element.removeTab(aIndex);
+
+            TabHandler theHandler = knownObjects.get(aIndex);
+            theHandler.handleClosed();
+
+            knownObjects.remove(aIndex);
+
+            if (knownObjects.size() > 0) {
+                if (aIndex > 0) {
+                    element.selectTab(aIndex - 1);
+                } else {
+                    element.selectTab(0);
+                }
             } else {
-                knownObjects.put(aOwner, element.addTab(aTitle, aElement));
+                clearAll();
             }
         }
 
+        public void addTab(String aTitle, TabHandler aTabHandler) {
+            for (int i=0;i<knownObjects.size();i++) {
+                TabHandler theHandler = knownObjects.get(i);
+                if (theHandler.getOwner() == aTabHandler.getOwner()) {
+                    element.selectTab(i);
+                    return;
+                }
+            }
+
+            element.addTab(aTitle, aTabHandler.getElement());
+            knownObjects.add(aTabHandler);
+        }
+
         public void clearAll() {
+            for (int i=0;i<knownObjects.size();i++) {
+                TabHandler theHandler = knownObjects.get(i);
+                theHandler.handleClosed();
+            }
+            knownObjects.clear();
             element.clearAll();
+            element.clearContent();
         }
     }
 
     public abstract void clearAll();
 
+    public abstract void clearContent();
+
     public abstract int addTab(String aTitle, HTMLElement aElement);
 
     public abstract void selectTab(int aIndex);
+
+    public abstract void removeTab(int aIndex);
 }

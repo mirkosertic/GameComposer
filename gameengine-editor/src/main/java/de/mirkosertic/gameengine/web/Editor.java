@@ -63,20 +63,19 @@ public class Editor {
 
     public void boot(EditorProject aProject) {
 
-        SceneEditorHTMLElement theSceneEditor = SceneEditorHTMLElement.create();
+        final SceneEditorHTMLElement theSceneEditor = SceneEditorHTMLElement.create();
 
         // Initialize object editor
         TabbedPaneHTMLElement theTabbedPanne = (TabbedPaneHTMLElement) document.getElementById("editortabbedpane");
         TabbedPaneHTMLElement.Manager theManager = new TabbedPaneHTMLElement.Manager(theTabbedPanne);
         theManager.clearAll();
-        theManager.addTab("Editor", theSceneEditor, "scene");
 
         HTMLElement thePropertyEditorElement = (HTMLElement) document.getElementById("objectEditor");
         HTMLElement theTreeElement = (HTMLElement) document.getElementById("objecttree");
         GameObjectEditor theObjectEditor = new GameObjectEditor(thePropertyEditorElement, theManager);
         GameTreeView theTreeView = new GameTreeView(theTreeElement, theObjectEditor, window);
 
-        GameEditor theGameEditor = new GameEditor(theSceneEditor, window, aProject) {
+        final GameEditor theGameEditor = new GameEditor(theSceneEditor, window, aProject) {
 
             @Override
             protected void playScene(GameScene aGameScene) {
@@ -95,6 +94,23 @@ public class Editor {
         window.addEventListener("resize", evt -> theGameEditor.handleResize(), true);
 
         theObjectEditor.clear();
+
+        theManager.addTab("Editor", new TabbedPaneHTMLElement.TabHandler() {
+            @Override
+            public HTMLElement getElement() {
+                return theSceneEditor;
+            }
+
+            @Override
+            public Object getOwner() {
+                return "scene";
+            }
+
+            @Override
+            public void handleClosed() {
+                theGameEditor.shutdownRunningGameLoop();
+            }
+        });
     }
 
     private void openLocalProject(FS aFilesystem, Remote aRemote) {
