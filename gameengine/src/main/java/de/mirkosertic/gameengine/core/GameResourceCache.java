@@ -15,10 +15,10 @@
  */
 package de.mirkosertic.gameengine.core;
 
+import de.mirkosertic.gameengine.ArrayUtils;
 import de.mirkosertic.gameengine.type.ResourceName;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,16 +27,18 @@ public class GameResourceCache {
 
     private final Map<String, GameResource> cachedResources;
     private final GameResourceLoader resourceLoader;
-    private final List<LoadedSpriteSheet> loadedSpriteSheets;
+    private LoadedSpriteSheet[] loadedSpriteSheets;
 
     public GameResourceCache(GameResourceLoader aResourceLoader) {
         cachedResources = new HashMap<>();
         resourceLoader = aResourceLoader;
-        loadedSpriteSheets = new ArrayList<>();
+        loadedSpriteSheets = new LoadedSpriteSheet[0];
     }
 
     public void loadIntoCache(Spritesheet aSheet, SuccessCallback aCallback) {
-        loadedSpriteSheets.add(resourceLoader.loadSpriteSheet(aSheet.jsonFileProperty().get(), aCallback));
+        List<LoadedSpriteSheet> theSheets = ArrayUtils.asList(loadedSpriteSheets);
+        theSheets.add(resourceLoader.loadSpriteSheet(aSheet.jsonFileProperty().get(), aCallback));
+        loadedSpriteSheets = theSheets.toArray(new LoadedSpriteSheet[theSheets.size()]);
     }
 
     public <T extends GameResource> T getResourceFor(ResourceName aResourceName) throws IOException {
