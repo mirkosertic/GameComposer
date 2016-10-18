@@ -18,6 +18,7 @@ package de.mirkosertic.gameengine.web;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.teavm.TeaVMTextureResource;
+import de.mirkosertic.gameengine.teavm.pixi.Texture;
 import de.mirkosertic.gameengine.type.Animation;
 import de.mirkosertic.gameengine.type.ResourceName;
 import org.teavm.jso.JSBody;
@@ -35,11 +36,7 @@ public abstract class AnimationPropertyEditorHTMLElement implements HTMLElement 
     @JSProperty
     public abstract String getLabel();
 
-    @JSProperty
-    public abstract void setUrl(String aURL);
-
-    @JSProperty
-    public abstract String getUrl();
+    public abstract void setTexture(Texture aTexture);
 
     public void bindTo(Property<Animation> aProperty, GameScene aScene) {
 
@@ -48,7 +45,7 @@ public abstract class AnimationPropertyEditorHTMLElement implements HTMLElement 
             ResourceName theResourceName = theCurrentAnimation.getResourceByIndex(0);
             try {
                 TeaVMTextureResource aTexture = aScene.getRuntime().getResourceCache().getResourceFor(theResourceName);
-                setUrl(aTexture.getUrl());
+                setTexture(aTexture.getTexture());
             } catch (Exception e) {
                 aScene.getRuntime().getLogger().error("Error loading " + theResourceName.name);
             }

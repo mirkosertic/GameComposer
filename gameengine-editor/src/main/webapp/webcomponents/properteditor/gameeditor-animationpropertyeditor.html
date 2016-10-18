@@ -22,7 +22,7 @@
 
         <span class="field">
             <label for="image">[[label]]</label>
-            <img id="image" class="width-8" src="{{url}}">
+            <img id="image" class="width-8">
         </span>
 
     </template>
@@ -34,11 +34,15 @@
                 label: {
                     type: String,
                     notify: true
-                },
-                url: {
-                    type: String,
-                    notify: true
                 }
+            },
+
+            setTexture: function(aTexture) {
+                this.$.image.style.backgroundImage = 'url(' + aTexture.baseTexture.imageUrl + ')';
+                this.$.image.style.backgroundPositionX = -aTexture.frame.x+'px';
+                this.$.image.style.backgroundPositionY = -aTexture.frame.y+'px';
+                this.$.image.style.width = aTexture.frame.width+'px';
+                this.$.image.style.height = aTexture.frame.height+'px';
             },
 
             ready: function() {
