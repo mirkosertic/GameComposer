@@ -20,7 +20,7 @@
     <template>
         <style include="tree-shared-styles"></style>
 
-        <div draggable="{{draggable}}" class$="{{computeStyle(level, selected, separator)}}">{{text}}</div>
+        <div draggable="{{draggable}}" class$="{{computeStyle(level, selected, separator)}}">{{text}}<img id="deletebutton" class="deletebutton" src="close.png"></div>
     </template>
     <script>
         Polymer({
@@ -60,6 +60,11 @@
                     return "level" + level + " selected";
                 }
                 return "level" + level;
+            },
+
+            addDeleteListener: function(aListener) {
+                this.$.deletebutton.style.visibility = 'visible';
+                this.$.deletebutton.addEventListener("click", aListener);
             },
 
             ready: function() {

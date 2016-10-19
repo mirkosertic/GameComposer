@@ -107,6 +107,12 @@ public class GameTreeView extends ListingElement {
                 select(theElement);
                 editor.setEditingObject(theInstance);
             });
+            theElement.addDeleteListener(evt -> {
+                aGameScene.removeGameObjectInstance(theInstance);
+
+                onGameSceneLoaded(aGameScene);
+                select(oldSelection);
+            });
         }
     }
 

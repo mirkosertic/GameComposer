@@ -20,6 +20,8 @@ import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.event.PropertyChanged;
 import org.teavm.jso.JSBody;
 import org.teavm.jso.JSProperty;
+import org.teavm.jso.dom.events.Event;
+import org.teavm.jso.dom.events.EventListener;
 import org.teavm.jso.dom.html.HTMLElement;
 
 public abstract class TreeItemHTMLElement implements HTMLElement {
@@ -58,6 +60,8 @@ public abstract class TreeItemHTMLElement implements HTMLElement {
     public abstract boolean isSeparator();
 
     public abstract void scrollIntoView(boolean aParam);
+
+    public abstract void addDeleteListener(EventListener<Event> aListener);
 
     public HTMLInputBinder bindTo(Property<String> aProperty) {
         setText(aProperty.get());
