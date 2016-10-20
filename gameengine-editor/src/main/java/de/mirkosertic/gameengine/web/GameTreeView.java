@@ -56,8 +56,27 @@ public class GameTreeView extends ListingElement {
         oldSelection = aElement;
     }
 
+    public void reloadSceneOnObjectDeletion(GameScene aScene, TreeItemHTMLElement aDeletedElement) {
+        if (oldSelection == aDeletedElement) {
+            oldSelection=null;
+        }
+        onGameSceneLoaded(aScene);
+        if (oldSelection != null) {
+            select(oldSelection);
+        }
+    }
+
     public void onGameSceneLoaded(GameScene aGameScene) {
         clear();
+
+        TreeItemHTMLElement theGameElement = addTreeItem(1);
+        theGameElement.setSeparator(true);
+        binder.add(theGameElement.bindTo(aGameScene.getGame().nameProperty()));
+        knownObjects.put(aGameScene, theGameElement);
+        theGameElement.addEventListener("click", evt -> {
+            select(theGameElement);
+            editor.setEditingObject(aGameScene.getGame());
+        });
 
         TreeItemHTMLElement theSceneElement = addTreeItem(1);
         theSceneElement.setSeparator(true);
@@ -86,6 +105,11 @@ public class GameTreeView extends ListingElement {
                     window.getLocalStorage().setItem(Constants.DND_OBJECT_ID, theObject.uuidProperty().get());
                 }
             });
+
+            theElement.addDeleteListener(evt -> {
+                aGameScene.removeGameObject(theObject);
+                reloadSceneOnObjectDeletion(aGameScene, theElement);
+            });
         }
         addTitleLevel2("Eventsheets");
         for (EventSheet theSheet : aGameScene.getEventSheets()) {
@@ -96,6 +120,11 @@ public class GameTreeView extends ListingElement {
             theElement.addEventListener("click", evt -> {
                 select(theElement);
                 editor.setEditingObject(theSheet);
+            });
+            theElement.addDeleteListener(evt -> {
+                aGameScene.removeEventSheet(theSheet);
+
+                reloadSceneOnObjectDeletion(aGameScene, theElement);
             });
         }
         addTitleLevel2("Instances");
@@ -110,8 +139,7 @@ public class GameTreeView extends ListingElement {
             theElement.addDeleteListener(evt -> {
                 aGameScene.removeGameObjectInstance(theInstance);
 
-                onGameSceneLoaded(aGameScene);
-                select(oldSelection);
+                reloadSceneOnObjectDeletion(aGameScene, theElement);
             });
         }
     }
