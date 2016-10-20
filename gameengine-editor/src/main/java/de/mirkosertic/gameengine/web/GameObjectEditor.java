@@ -23,6 +23,7 @@ import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.CameraBehaviorTemplate;
 import de.mirkosertic.gameengine.camera.CameraType;
 import de.mirkosertic.gameengine.core.EventSheet;
+import de.mirkosertic.gameengine.core.Game;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameScene;
@@ -122,6 +123,18 @@ public class GameObjectEditor extends ListingElement {
         addSubComponent(aObject.getBehaviorTemplate(ConstantMovementBehaviorTemplate.class));
         addSubComponent(aObject.getBehaviorTemplate(PhysicsBehaviorTemplate.class));
         addSubComponent(aObject.getBehaviorTemplate(SpriteBehaviorTemplate.class), aObject.getGameScene());
+    }
+
+    public void setEditingObject(Game aObject) {
+        clear();
+        addTitleLevel1("Game");
+        addTitleLevel2("Common properties");
+        addTextInputfieldPropertyEditor("Name", aObject.nameProperty(), new StringStringConverter());
+        addBooleanPropertyEditor("Enable Debug", aObject.enableDebugProperty());
+        addBooleanPropertyEditor("Enable WebGL", aObject.enableWebGLProperty());
+        addBooleanPropertyEditor("Enable Networking", aObject.enableNetworkingProperty());
+        addTextInputfieldPropertyEditor("Firebase URL", aObject.fireBaseURLProperty(), new StringStringConverter());
+        addTextInputfieldPropertyEditor("Default Scene", aObject.defaultSceneProperty(), new StringStringConverter());
     }
 
     public void setEditingObject(GameScene aObject) {
