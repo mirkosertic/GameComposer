@@ -7,5 +7,6 @@
   "enableNetworking" : "true",
   "enablewebgl" : "true",
   "name" : "Rotating actor example",
-  "defaultscene" : "scene1"
+  "defaultscene" : "scene1",
+  "scenes": ["scene1"]
 }

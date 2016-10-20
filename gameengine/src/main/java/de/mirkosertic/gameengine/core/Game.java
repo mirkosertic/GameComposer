@@ -20,7 +20,9 @@ import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.type.CustomProperties;
 import de.mirkosertic.gameengine.type.Reflectable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Game implements Reflectable {
@@ -44,6 +46,8 @@ public class Game implements Reflectable {
     private final Property<Boolean> enableNetworking;
     private final Property<String> fireBaseURL;
 
+    private final List<String> scenes;
+
     public Game() {
         name = new Property<>(String.class, this, NAME_PROPERTY, (String) null);
         defaultScene = new Property<>(String.class, this, DEFAULT_SCENE_PROPERTY, (String) null);
@@ -53,6 +57,8 @@ public class Game implements Reflectable {
 
         enableNetworking = new Property<>(Boolean.class, this, ENABLE_NETWORKING_PROPERTY, Boolean.FALSE);
         fireBaseURL = new Property<>(String.class, this, FIREBASE_URL, "https://glowing-heat-2189.firebaseio.com");
+
+        scenes = new ArrayList<>();
     }
 
     @ReflectiveField
@@ -89,6 +95,7 @@ public class Game implements Reflectable {
         if (aSceneName.equals(defaultScene.get())) {
             defaultScene.set(null);
         }
+        scenes.remove(aSceneName);
     }
 
     @ReflectiveField
@@ -110,6 +117,7 @@ public class Game implements Reflectable {
         theResult.put("enableDebug", Boolean.toString(enableDebug.get()));
         theResult.put("enableNetworking", Boolean.toString(enableNetworking.get()));
         theResult.put("firebaseURL", fireBaseURL.get());
+        theResult.put("scenes", scenes.toArray(new String[scenes.size()]));
         return theResult;
     }
 
@@ -138,6 +146,13 @@ public class Game implements Reflectable {
         String theFirebaseURL = (String) aSerializedData.get("firebaseURL");
         if (theFirebaseURL != null) {
             theResult.fireBaseURL.setQuietly(theFirebaseURL);
+        }
+
+        List<String> theScenes = (List<String>) aSerializedData.get("scenes");
+        if (theScenes != null) {
+            for (String theScene : theScenes) {
+                theResult.scenes.add(theScene);
+            }
         }
 
         return theResult;
