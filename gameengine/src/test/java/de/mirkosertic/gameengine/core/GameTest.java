@@ -1,14 +1,13 @@
 package de.mirkosertic.gameengine.core;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.junit.Assert.*;
 
 public class GameTest {
 
@@ -56,12 +55,13 @@ public class GameTest {
         theGame.defaultSceneProperty().set("scene1");
         theGame.customPropertiesProperty().get().set("key", "value");
         Map<String, Object> theData = theGame.serialize();
-        assertEquals(7, theData.size());
+        assertEquals(8, theData.size());
         assertEquals("Testgame", theData.get(Game.NAME_PROPERTY));
         assertEquals("scene1", theData.get("defaultscene"));
         assertEquals("true", theData.get("enablewebgl"));
         assertEquals("false", theData.get("enableDebug"));
         assertEquals("false", theData.get("enableNetworking"));
+        assertEquals(0, ((String[])theData.get("scenes")).length);
         assertEquals("https://glowing-heat-2189.firebaseio.com", theData.get("firebaseURL"));
 
         Map<String, String> theProps = (Map<String, String>) theData.get("customProperties");
@@ -98,5 +98,14 @@ public class GameTest {
         assertTrue(theGame.enableDebugProperty().get());
         assertFalse(theGame.enableNetworkingProperty().get());
         assertEquals("https://glowing-heat-2189.firebaseio.com", theGame.fireBaseURLProperty().get());
+    }
+
+    @Test
+    public void testRoundtripJSON() throws IOException {
+        ObjectMapper theMapper = new ObjectMapper();
+
+        Game theGame = new Game();
+        String theJSON = theMapper.writeValueAsString(theGame.serialize());
+        Game theOtherGame = Game.deserialize(theMapper.readValue(theJSON, Map.class));
     }
 }
