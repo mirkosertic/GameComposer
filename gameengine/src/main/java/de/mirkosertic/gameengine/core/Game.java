@@ -98,6 +98,10 @@ public class Game implements Reflectable {
         scenes.remove(aSceneName);
     }
 
+    public String[] getKnownScenes() {
+        return scenes.toArray(new String[scenes.size()]);
+    }
+
     @ReflectiveField
     public Property<CustomProperties> customPropertiesProperty() {
         return customProperties;

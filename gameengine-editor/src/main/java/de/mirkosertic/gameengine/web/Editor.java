@@ -15,8 +15,13 @@
  */
 package de.mirkosertic.gameengine.web;
 
+import de.mirkosertic.gameengine.core.EventSheet;
+import de.mirkosertic.gameengine.core.Game;
+import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.teavm.TeaVMGameRuntimeFactory;
+import de.mirkosertic.gameengine.teavm.TeaVMLogger;
 import de.mirkosertic.gameengine.web.electron.Dialog;
 import de.mirkosertic.gameengine.web.electron.DialogOptions;
 import de.mirkosertic.gameengine.web.electron.Electron;
@@ -39,6 +44,10 @@ public class Editor {
 
     @JSBody(params = "aValue", script = "return (typeof aValue !== 'undefined');")
     public static native boolean isDefined(JSObject aValue);
+
+    private TabbedPaneHTMLElement.Manager tabbedPageManager;
+    private GameObjectEditor objectEditor;
+    private EditorState editorState;
 
     public Editor() {
         if (Electron.available()) {
@@ -63,39 +72,107 @@ public class Editor {
 
     public void boot(EditorProject aProject) {
 
-        final SceneEditorHTMLElement theSceneEditor = SceneEditorHTMLElement.create();
+        TeaVMGameRuntimeFactory theRuntimeFactory = new TeaVMGameRuntimeFactory(
+                !window.getLocation().getFullURL().contains("nothreading"),
+                window.getLocation().getFullURL().contains("profiling")) {
+
+            @Override
+            public void loadingFinished(GameScene aLoadesScene) {
+                // No Action Manager
+            }
+        };
+
+        TabbedPaneHTMLElement theTabbedPanne = (TabbedPaneHTMLElement) document.getElementById("editortabbedpane");
+
+        tabbedPageManager = new TabbedPaneHTMLElement.Manager(theTabbedPanne);
+        tabbedPageManager.clearAll();
+
+        window.addEventListener("resize", evt -> tabbedPageManager.notifyResize(), true);
+
+        editorState = new EditorState(aProject, theRuntimeFactory);
 
         // Initialize object editor
-        TabbedPaneHTMLElement theTabbedPanne = (TabbedPaneHTMLElement) document.getElementById("editortabbedpane");
-        TabbedPaneHTMLElement.Manager theManager = new TabbedPaneHTMLElement.Manager(theTabbedPanne);
-        theManager.clearAll();
-
         HTMLElement thePropertyEditorElement = (HTMLElement) document.getElementById("objectEditor");
         HTMLElement theTreeElement = (HTMLElement) document.getElementById("objecttree");
-        GameObjectEditor theObjectEditor = new GameObjectEditor(thePropertyEditorElement, theManager);
-        GameTreeView theTreeView = new GameTreeView(theTreeElement, theObjectEditor, window);
 
-        final GameEditor theGameEditor = new GameEditor(theSceneEditor, window, aProject) {
+        GameTreeView theTreeView = new GameTreeView(theTreeElement, window, editorState, new GameTreeView.EventHandler() {
+            @Override
+            public void setEditingObject(Game aGame) {
+                objectEditor.setEditingObject(aGame);
+            }
+
+            @Override
+            public void setEditingObject(GameScene aScene) {
+                objectEditor.setEditingObject(aScene);
+                openSceneInEditor(aScene);
+            }
+
+            @Override
+            public void setEditingObject(GameObject aObject) {
+                objectEditor.setEditingObject(aObject);
+            }
+
+            @Override
+            public void setEditingObject(EventSheet aSheet) {
+                objectEditor.setEditingObject(aSheet);
+            }
+
+            @Override
+            public void setEditingObject(GameObjectInstance aInstance) {
+                objectEditor.setEditingObject(aInstance);
+            }
+        });
+
+        objectEditor = new GameObjectEditor(thePropertyEditorElement, new GameObjectEditor.EventHandler() {
+            @Override
+            public void setEditingObject(EventSheet aEventSheet) {
+                theTreeView.setEditingObject(aEventSheet);
+                objectEditor.setEditingObject(aEventSheet);
+
+                openEventSheetInEditor(aEventSheet);
+            }
+        });
+
+
+        editorState.load(new EditorState.LoadingListener() {
+
+            @Override
+            public void onGameLoaded(EditorState aEditorState) {
+                theTreeView.onGameLoaded();
+            }
+
+            @Override
+            public void onSceneLoaded(EditorState aState, String aSceneID) {
+                theTreeView.onGameSceneLoaded();
+            }
+
+            @Override
+            public void onSceneLoadingError(EditorState aState, String aSceneID, Throwable aThrowable) {
+                TeaVMLogger.error("Error loading scene " + aSceneID);
+            }
+        });
+
+        objectEditor.clear();
+    }
+
+    private void openSceneInEditor(GameScene aScene) {
+
+        SceneEditorHTMLElement theSceneEditor = SceneEditorHTMLElement.create();
+        final GameSceneEditor theGameEditor = new GameSceneEditor(theSceneEditor, window, editorState) {
 
             @Override
             protected void playScene(GameScene aGameScene) {
-                theTreeView.onGameSceneLoaded(aGameScene);
                 super.playScene(aGameScene);
             }
 
             @Override
             protected void setSelectedInstance(GameObjectInstance aInstance) {
                 super.setSelectedInstance(aInstance);
-                theObjectEditor.setEditingObject(aInstance);
-                theTreeView.setEditingObject(aInstance);
+                objectEditor.setEditingObject(aInstance);
             }
         };
 
-        window.addEventListener("resize", evt -> theGameEditor.handleResize(), true);
-
-        theObjectEditor.clear();
-
-        theManager.addTab("Editor", new TabbedPaneHTMLElement.TabHandler() {
+        tabbedPageManager.addTab("Editor", new TabbedPaneHTMLElement.TabHandler() {
             @Override
             public HTMLElement getElement() {
                 return theSceneEditor;
@@ -109,6 +186,35 @@ public class Editor {
             @Override
             public void handleClosed() {
                 theGameEditor.shutdownRunningGameLoop();
+            }
+
+            @Override
+            public void handleResize() {
+                theGameEditor.handleResize();
+            }
+        });
+    }
+
+    private void openEventSheetInEditor(EventSheet aEventSheet) {
+        EventsheetEditorHTMLElement theEventsheetEditor = EventsheetEditorHTMLElement.create();
+        theEventsheetEditor.bindTo(aEventSheet, tabbedPageManager);
+        tabbedPageManager.addTab("Event sheet", new TabbedPaneHTMLElement.TabHandler() {
+            @Override
+            public HTMLElement getElement() {
+                return theEventsheetEditor;
+            }
+
+            @Override
+            public Object getOwner() {
+                return aEventSheet;
+            }
+
+            @Override
+            public void handleClosed() {
+            }
+
+            @Override
+            public void handleResize() {
             }
         });
     }

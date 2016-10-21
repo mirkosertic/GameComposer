@@ -45,6 +45,8 @@ public abstract class TabbedPaneHTMLElement implements HTMLElement {
         Object getOwner();
 
         void handleClosed();
+
+        void handleResize();
     }
 
     public static class Manager {
@@ -103,6 +105,12 @@ public abstract class TabbedPaneHTMLElement implements HTMLElement {
             knownObjects.clear();
             element.clearAll();
             element.clearContent();
+        }
+
+        public void notifyResize() {
+            for (TabHandler aHandler : knownObjects) {
+                aHandler.handleResize();
+            }
         }
     }
 
