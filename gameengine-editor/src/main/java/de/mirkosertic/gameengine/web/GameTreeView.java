@@ -16,6 +16,7 @@
 package de.mirkosertic.gameengine.web;
 
 import de.mirkosertic.gameengine.core.EventSheet;
+import de.mirkosertic.gameengine.core.Game;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameScene;
@@ -29,16 +30,28 @@ import java.util.Map;
 
 public class GameTreeView extends ListingElement {
 
-    private final GameObjectEditor editor;
+    public interface EventHandler {
+
+        void setEditingObject(Game aGame);
+        void setEditingObject(GameScene aScene);
+        void setEditingObject(GameObject aObject);
+        void setEditingObject(EventSheet aSheet);
+        void setEditingObject(GameObjectInstance aInstance);
+    }
+
     private TreeItemHTMLElement oldSelection;
     private final Map<Object, TreeItemHTMLElement> knownObjects;
     private final Window window;
+    private final EditorState editorState;
+    private final EventHandler eventHandler;
+    private String currentScene;
 
-    public GameTreeView(HTMLElement aHtmlElement, GameObjectEditor aEditor, Window aWindow) {
+    public GameTreeView(HTMLElement aHtmlElement, Window aWindow, EditorState aEditorState, EventHandler aEventHandler) {
         super(aHtmlElement);
-        editor = aEditor;
         knownObjects = new HashMap<>();
         window = aWindow;
+        editorState = aEditorState;
+        eventHandler = aEventHandler;
     }
 
     @Override
@@ -60,87 +73,111 @@ public class GameTreeView extends ListingElement {
         if (oldSelection == aDeletedElement) {
             oldSelection=null;
         }
-        onGameSceneLoaded(aScene);
+
+        onGameSceneLoaded();
+
         if (oldSelection != null) {
             select(oldSelection);
         }
     }
 
-    public void onGameSceneLoaded(GameScene aGameScene) {
+    public void onGameLoaded() {
         clear();
 
         TreeItemHTMLElement theGameElement = addTreeItem(1);
         theGameElement.setSeparator(true);
-        binder.add(theGameElement.bindTo(aGameScene.getGame().nameProperty()));
-        knownObjects.put(aGameScene, theGameElement);
+        binder.add(theGameElement.bindTo(editorState.getLoadedGame().nameProperty()));
         theGameElement.addEventListener("click", evt -> {
             select(theGameElement);
-            editor.setEditingObject(aGameScene.getGame());
+            eventHandler.setEditingObject(editorState.getLoadedGame());
         });
 
-        TreeItemHTMLElement theSceneElement = addTreeItem(1);
-        theSceneElement.setSeparator(true);
-        binder.add(theSceneElement.bindTo(aGameScene.nameProperty()));
-        knownObjects.put(aGameScene, theSceneElement);
-        theSceneElement.addEventListener("click", evt -> {
-            select(theSceneElement);
-            editor.setEditingObject(aGameScene);
-        });
+        if (oldSelection != null) {
+            select(oldSelection);
+        }
+    }
 
-        addTitleLevel2("Objects");
-        for (GameObject theObject : aGameScene.getObjects()) {
+    public void onGameSceneLoaded() {
 
-            TreeItemHTMLElement theElement = addTreeItem(1);
-            theElement.setDraggable(true);
-            binder.add(theElement.bindTo(theObject.nameProperty()));
-            knownObjects.put(theObject, theElement);
-            theElement.addEventListener("click", evt -> {
-                select(theElement);
-                editor.setEditingObject(theObject);
+        onGameLoaded();
+
+        for (String theSceneID : editorState.getLoadedScenes()) {
+            GameScene theScene = editorState.getGameSceneById(theSceneID);
+
+            TreeItemHTMLElement theGameElement = addTreeItem(1);
+            theGameElement.setSeparator(true);
+            binder.add(theGameElement.bindTo(theScene.nameProperty()));
+            knownObjects.put(theScene, theGameElement);
+            theGameElement.addEventListener("click", evt -> {
+                select(theGameElement);
+                currentScene = theSceneID;
+
+                eventHandler.setEditingObject(theScene);
+
+                onGameSceneLoaded();
             });
-            theElement.addEventListener("dragstart", new EventListener<TeaVMDragEvent>() {
-                @Override
-                public void handleEvent(TeaVMDragEvent aEvent) {
-                    aEvent.getDataTransfer().setData(Constants.DND_OBJECT_ID, theObject.uuidProperty().get());
-                    window.getLocalStorage().setItem(Constants.DND_OBJECT_ID, theObject.uuidProperty().get());
+
+            if (currentScene != null && currentScene.equals(theSceneID)) {
+                addTitleLevel2("Objects");
+                for (GameObject theObject : theScene.getObjects()) {
+
+                    TreeItemHTMLElement theElement = addTreeItem(1);
+                    theElement.setDraggable(true);
+                    binder.add(theElement.bindTo(theObject.nameProperty()));
+                    knownObjects.put(theObject, theElement);
+                    theElement.addEventListener("click", evt -> {
+                        select(theElement);
+                        eventHandler.setEditingObject(theObject);
+                    });
+                    theElement.addEventListener("dragstart", new EventListener<TeaVMDragEvent>() {
+                        @Override
+                        public void handleEvent(TeaVMDragEvent aEvent) {
+                            aEvent.getDataTransfer().setData(Constants.DND_OBJECT_ID, theObject.uuidProperty().get());
+                            window.getLocalStorage().setItem(Constants.DND_OBJECT_ID, theObject.uuidProperty().get());
+                        }
+                    });
+
+                    theElement.addDeleteListener(evt -> {
+                        theScene.removeGameObject(theObject);
+                        reloadSceneOnObjectDeletion(theScene, theElement);
+                    });
                 }
-            });
+                addTitleLevel2("Eventsheets");
+                for (EventSheet theSheet : theScene.getEventSheets()) {
+                    TreeItemHTMLElement theElement = addTreeItem(1);
+                    knownObjects.put(theSheet, theElement);
+                    binder.add(theElement.bindTo(theSheet.nameProperty()));
 
-            theElement.addDeleteListener(evt -> {
-                aGameScene.removeGameObject(theObject);
-                reloadSceneOnObjectDeletion(aGameScene, theElement);
-            });
+                    theElement.addEventListener("click", evt -> {
+                        select(theElement);
+                        eventHandler.setEditingObject(theSheet);
+                    });
+                    theElement.addDeleteListener(evt -> {
+                        theScene.removeEventSheet(theSheet);
+
+                        reloadSceneOnObjectDeletion(theScene, theElement);
+                    });
+                }
+                addTitleLevel2("Instances");
+                for (GameObjectInstance theInstance : theScene.getInstances()) {
+                    TreeItemHTMLElement theElement = addTreeItem(1);
+                    knownObjects.put(theInstance, theElement);
+                    binder.add(theElement.bindTo(theInstance.nameProperty()));
+                    theElement.addEventListener("click", evt -> {
+                        select(theElement);
+                        eventHandler.setEditingObject(theInstance);
+                    });
+                    theElement.addDeleteListener(evt -> {
+                        theScene.removeGameObjectInstance(theInstance);
+
+                        reloadSceneOnObjectDeletion(theScene, theElement);
+                    });
+                }
+            }
         }
-        addTitleLevel2("Eventsheets");
-        for (EventSheet theSheet : aGameScene.getEventSheets()) {
-            TreeItemHTMLElement theElement = addTreeItem(1);
-            knownObjects.put(theSheet, theElement);
-            binder.add(theElement.bindTo(theSheet.nameProperty()));
 
-            theElement.addEventListener("click", evt -> {
-                select(theElement);
-                editor.setEditingObject(theSheet);
-            });
-            theElement.addDeleteListener(evt -> {
-                aGameScene.removeEventSheet(theSheet);
-
-                reloadSceneOnObjectDeletion(aGameScene, theElement);
-            });
-        }
-        addTitleLevel2("Instances");
-        for (GameObjectInstance theInstance : aGameScene.getInstances()) {
-            TreeItemHTMLElement theElement = addTreeItem(1);
-            knownObjects.put(theInstance, theElement);
-            binder.add(theElement.bindTo(theInstance.nameProperty()));
-            theElement.addEventListener("click", evt -> {
-                select(theElement);
-                editor.setEditingObject(theInstance);
-            });
-            theElement.addDeleteListener(evt -> {
-                aGameScene.removeGameObjectInstance(theInstance);
-
-                reloadSceneOnObjectDeletion(aGameScene, theElement);
-            });
+        if (oldSelection != null) {
+            select(oldSelection);
         }
     }
 
