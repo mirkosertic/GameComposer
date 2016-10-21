@@ -55,3 +55,4 @@ before_install:
   #32- Android Support Library, revision 19.1
   - android list sdk --all
   - echo "y" | android update sdk -u -a -t 1,3,5,6,29,30,37,31
+  - android update sdk --no-ui --obsolete --force
