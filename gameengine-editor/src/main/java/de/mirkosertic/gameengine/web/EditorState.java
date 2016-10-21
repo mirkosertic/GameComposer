@@ -21,7 +21,6 @@ import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.teavm.TeaVMGameLoader;
 import de.mirkosertic.gameengine.teavm.TeaVMGameResourceLoader;
 import de.mirkosertic.gameengine.teavm.TeaVMGameSceneLoader;
-import de.mirkosertic.gameengine.teavm.TeaVMLogger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,6 +32,8 @@ public class EditorState {
     public interface LoadingListener {
 
         void onGameLoaded(EditorState aState);
+
+        void onGameLoadingError(Throwable aThrowable);
 
         void onSceneLoaded(EditorState aState, String aSceneID);
 
@@ -77,7 +78,7 @@ public class EditorState {
 
             @Override
             public void onGameLoadedError(Throwable aError) {
-                TeaVMLogger.error("Failed to load scene : " + aError);
+                aListener.onGameLoadingError(aError);
             }
         });
         theGameLoader.loadFromServer();
