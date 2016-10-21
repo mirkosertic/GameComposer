@@ -98,8 +98,7 @@ public abstract class TabbedPaneHTMLElement implements HTMLElement {
         }
 
         public void clearAll() {
-            for (int i=0;i<knownObjects.size();i++) {
-                TabHandler theHandler = knownObjects.get(i);
+            for (TabHandler theHandler : knownObjects) {
                 theHandler.handleClosed();
             }
             knownObjects.clear();
@@ -111,6 +110,17 @@ public abstract class TabbedPaneHTMLElement implements HTMLElement {
             for (TabHandler aHandler : knownObjects) {
                 aHandler.handleResize();
             }
+        }
+
+        public boolean ensureSelected(Object aObject) {
+            for (int i=0;i<knownObjects.size();i++) {
+                TabHandler theHandler = knownObjects.get(i);
+                if (theHandler.getOwner() == aObject) {
+                    element.selectTab(i);
+                    return true;
+                }
+            }
+            return false;
         }
     }
 

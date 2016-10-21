@@ -61,10 +61,6 @@ import org.teavm.jso.dom.html.HTMLElement;
 
 public class GameObjectEditor extends ListingElement {
 
-    public interface EventHandler {
-        void setEditingObject(EventSheet aEventSheet);
-    }
-
     public static class FloatStringConverter implements HTMLInputBinder.Converter<Float, String> {
 
         @Override
@@ -104,11 +100,8 @@ public class GameObjectEditor extends ListingElement {
         }
     }
 
-    private final EventHandler eventHandler;
-
-    public GameObjectEditor(HTMLElement aHtmlElement, EventHandler aEventHandler) {
+    public GameObjectEditor(HTMLElement aHtmlElement) {
         super(aHtmlElement);
-        eventHandler = aEventHandler;
     }
 
     public void setEditingObject(GameObject aObject) {
@@ -138,7 +131,7 @@ public class GameObjectEditor extends ListingElement {
         addBooleanPropertyEditor("Enable WebGL", aObject.enableWebGLProperty());
         addBooleanPropertyEditor("Enable Networking", aObject.enableNetworkingProperty());
         addTextInputfieldPropertyEditor("Firebase URL", aObject.fireBaseURLProperty(), new StringStringConverter());
-        addTextInputfieldPropertyEditor("Default Scene", aObject.defaultSceneProperty(), new StringStringConverter());
+        addSelectionEditor("Default Scene", aObject.defaultSceneProperty(), aObject.getKnownScenes());
     }
 
     public void setEditingObject(GameScene aObject) {
@@ -156,8 +149,6 @@ public class GameObjectEditor extends ListingElement {
         addTitleLevel1("Event Sheet");
         addTitleLevel2("Common properties");
         addTextInputfieldPropertyEditor("Name", aObject.nameProperty(), new StringStringConverter());
-
-        eventHandler.setEditingObject(aObject);
     }
 
     public void setEditingObject(GameObjectInstance aObject) {
