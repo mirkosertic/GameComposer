@@ -247,6 +247,10 @@ public abstract class RuleEditorHTMLElement implements HTMLElement {
                         @Override
                         public void handleClosed() {
                         }
+
+                        @Override
+                        public void handleResize() {
+                        }
                     });
                     theEditor.addEventListener("change", evt1 -> aAction.scriptProperty().set(new Script(theEditor.getValue())));
                 });

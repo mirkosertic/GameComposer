@@ -61,6 +61,10 @@ import org.teavm.jso.dom.html.HTMLElement;
 
 public class GameObjectEditor extends ListingElement {
 
+    public interface EventHandler {
+        void setEditingObject(EventSheet aEventSheet);
+    }
+
     public static class FloatStringConverter implements HTMLInputBinder.Converter<Float, String> {
 
         @Override
@@ -100,11 +104,11 @@ public class GameObjectEditor extends ListingElement {
         }
     }
 
-    private final TabbedPaneHTMLElement.Manager tabbedPaneHTMLElement;
+    private final EventHandler eventHandler;
 
-    public GameObjectEditor(HTMLElement aHtmlElement, TabbedPaneHTMLElement.Manager aTabbedPane) {
+    public GameObjectEditor(HTMLElement aHtmlElement, EventHandler aEventHandler) {
         super(aHtmlElement);
-        tabbedPaneHTMLElement = aTabbedPane;
+        eventHandler = aEventHandler;
     }
 
     public void setEditingObject(GameObject aObject) {
@@ -153,23 +157,7 @@ public class GameObjectEditor extends ListingElement {
         addTitleLevel2("Common properties");
         addTextInputfieldPropertyEditor("Name", aObject.nameProperty(), new StringStringConverter());
 
-        EventsheetEditorHTMLElement theEventsheetEditor = EventsheetEditorHTMLElement.create();
-        theEventsheetEditor.bindTo(aObject, tabbedPaneHTMLElement);
-        tabbedPaneHTMLElement.addTab("Event sheet", new TabbedPaneHTMLElement.TabHandler() {
-            @Override
-            public HTMLElement getElement() {
-                return theEventsheetEditor;
-            }
-
-            @Override
-            public Object getOwner() {
-                return aObject;
-            }
-
-            @Override
-            public void handleClosed() {
-            }
-        });
+        eventHandler.setEditingObject(aObject);
     }
 
     public void setEditingObject(GameObjectInstance aObject) {

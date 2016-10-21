@@ -15,17 +15,22 @@
  */
 package de.mirkosertic.gameengine.web;
 
-import de.mirkosertic.gameengine.AbstractGameRuntimeFactory;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
-import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.core.Game;
+import de.mirkosertic.gameengine.core.GameLoop;
+import de.mirkosertic.gameengine.core.GameLoopFactory;
+import de.mirkosertic.gameengine.core.GameObject;
+import de.mirkosertic.gameengine.core.GameObjectInstance;
+import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.GameView;
+import de.mirkosertic.gameengine.core.GestureDetector;
+import de.mirkosertic.gameengine.core.PlaySceneStrategy;
 import de.mirkosertic.gameengine.network.DefaultNetworkConnector;
 import de.mirkosertic.gameengine.physic.DisableDynamicPhysics;
 import de.mirkosertic.gameengine.physic.EnableDynamicPhysics;
 import de.mirkosertic.gameengine.teavm.TeaVMDragEvent;
-import de.mirkosertic.gameengine.teavm.TeaVMGameLoader;
-import de.mirkosertic.gameengine.teavm.TeaVMGameRuntimeFactory;
-import de.mirkosertic.gameengine.teavm.TeaVMGameSceneLoader;
 import de.mirkosertic.gameengine.teavm.TeaVMGameView;
 import de.mirkosertic.gameengine.teavm.TeaVMLogger;
 import de.mirkosertic.gameengine.teavm.TeaVMMap;
@@ -39,11 +44,11 @@ import org.teavm.jso.browser.Window;
 import org.teavm.jso.dom.events.EventListener;
 import org.teavm.jso.json.JSON;
 
-public class GameEditor {
+public class GameSceneEditor {
 
     private final SceneEditorHTMLElement sceneEditorHTMLElement;
     private final Window window;
-    private Game game;
+
     private PlaySceneStrategy runSceneStrategy;
 
     private GameObjectInstance draggingInstance;
@@ -51,13 +56,13 @@ public class GameEditor {
 
     private GameObjectInstance dndCreateInstance;
 
-    private final EditorProject project;
+    private EditorState editorState;
 
-    public GameEditor(SceneEditorHTMLElement aSceneEditor, Window aWindow, EditorProject aEditorProject) {
+    public GameSceneEditor(SceneEditorHTMLElement aSceneEditor, Window aWindow, EditorState aEditorState) {
 
         sceneEditorHTMLElement = aSceneEditor;
         window = aWindow;
-        project = aEditorProject;
+        editorState = aEditorState;
 
         GameLoopFactory theGameLoopFactory = new GameLoopFactory();
 
@@ -81,80 +86,39 @@ public class GameEditor {
             break;
         }
 
-        AbstractGameRuntimeFactory theRuntimeFactory = new TeaVMGameRuntimeFactory(
-                !aWindow.getLocation().getFullURL().contains("nothreading"),
-                aWindow.getLocation().getFullURL().contains("profiling")) {
+        runSceneStrategy = new PlaySceneStrategy(editorState.getRuntimeFactory(), theGameLoopFactory, new DefaultNetworkConnector()) {
+
+            private TeaVMGameView gameView;
 
             @Override
-            public void loadingFinished(GameScene aLoadesScene) {
-                // No Action Manager
+            protected void loadOtherScene(String aSceneId) {
+            }
+
+            @Override
+            protected Size getScreenSize() {
+                return new Size(aSceneEditor.currentCanvas().getClientWidth(), aSceneEditor.currentCanvas().getClientHeight());
+            }
+
+            @Override
+            protected GameView getOrCreateCurrentGameView(GameRuntime aGameRuntime, CameraBehavior aCamera, GestureDetector aGestureDetector) {
+                if (gameView == null) {
+                    gameView = new GameEditorGameView(aGameRuntime, aCamera, aGestureDetector, theRenderer);
+                } else {
+                    gameView.prepareNewScene(aGameRuntime, aCamera, aGestureDetector);
+                }
+                gameView.setSize(getScreenSize());
+                return gameView;
+            }
+
+            @Override
+            public void handleResize() {
+                Size theCurrentSize = getScreenSize();
+                getRunningGameLoop().getScene().getRuntime().getEventManager().fire(new SetScreenResolution(theCurrentSize));
+                gameView.setSize(theCurrentSize);
             }
         };
 
-        TeaVMGameSceneLoader theSceneLoader = project.createSceneLoader(new TeaVMGameSceneLoader.GameSceneLoadedListener() {
-            @Override
-            public void onGameSceneLoaded(GameScene aScene) {
-                playScene(aScene);
-            }
-
-            @Override
-            public void onGameSceneLoadedError(Throwable aError) {
-                TeaVMLogger.error("Failed to load scene : " + aError.getMessage());
-            }
-        }, theRuntimeFactory);
-
-
-        TeaVMGameLoader theGameLoader = project.createGameLoader(new TeaVMGameLoader.GameLoadedListener() {
-            @Override
-            public void onGameLoaded(Game aGame) {
-
-                game = aGame;
-
-                runSceneStrategy = new PlaySceneStrategy(theRuntimeFactory, theGameLoopFactory, new DefaultNetworkConnector()) {
-
-                    private TeaVMGameView gameView;
-
-                    @Override
-                    protected void loadOtherScene(String aSceneId) {
-                    }
-
-                    @Override
-                    protected Size getScreenSize() {
-                        return new Size(aSceneEditor.currentCanvas().getClientWidth(), aSceneEditor.currentCanvas().getClientHeight());
-                    }
-
-                    @Override
-                    protected GameView getOrCreateCurrentGameView(GameRuntime aGameRuntime, CameraBehavior aCamera, GestureDetector aGestureDetector) {
-                        if (gameView == null) {
-                            gameView = new GameEditorGameView(aGameRuntime, aCamera, aGestureDetector, theRenderer);
-                        } else {
-                            gameView.prepareNewScene(aGameRuntime, aCamera, aGestureDetector);
-                        }
-                        gameView.setSize(getScreenSize());
-                        return gameView;
-                    }
-
-                    @Override
-                    public void handleResize() {
-                        Size theCurrentSize = getScreenSize();
-                        getRunningGameLoop().getScene().getRuntime().getEventManager().fire(new SetScreenResolution(theCurrentSize));
-                        gameView.setSize(theCurrentSize);
-                    }
-                };
-
-                String theSceneId = aGame.defaultSceneProperty().get();
-
-                TeaVMLogger.info("Loading scene " + theSceneId);
-                theSceneLoader.loadFromServer(game, theSceneId, project.createResourceLoaderFor(theSceneId));
-            }
-
-            @Override
-            public void onGameLoadedError(Throwable aError) {
-                TeaVMLogger.error("Failed to load scene : " + aError);
-            }
-        });
-
-        theGameLoader.loadFromServer();
+        initializeForGame(editorState.getLoadedGame());
 
         EditorHTMLCanvasElement theCanvas = aSceneEditor.currentCanvas();
         theCanvas.addEventListener("click", evt -> onMouseClick((TeaVMMouseEvent) evt));
@@ -193,6 +157,16 @@ public class GameEditor {
         sceneEditorHTMLElement.addEventListener("preview", evt -> onPreview());
     }
 
+    private void initializeForGame(Game aGame) {
+
+        String theDefaultScene = aGame.defaultSceneProperty().get();
+        if (theDefaultScene != null) {
+            TeaVMLogger.info("playing scene " + theDefaultScene);
+            GameScene theScene = editorState.getGameSceneById(theDefaultScene);
+            playScene(theScene);
+        }
+    }
+
     public void handleResize() {
         if (runSceneStrategy.hasGameLoop()) {
             runSceneStrategy.handleResize();
@@ -208,7 +182,7 @@ public class GameEditor {
         JSObject theJSForm = TeaVMMap.toJS(runSceneStrategy.getRunningGameLoop().getScene().serialize());
         String theJSON = JSON.stringify(theJSForm);
 
-        project.setCurrentPreview(theJSON);
+        editorState.getEditorProject().setCurrentPreview(theJSON);
 
         window.open("preview.html", "_blank");
     }
