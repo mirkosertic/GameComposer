@@ -48,6 +48,7 @@ public class Editor {
     private TabbedPaneHTMLElement.Manager tabbedPageManager;
     private GameObjectEditor objectEditor;
     private EditorState editorState;
+    private GameTreeView treeView;
 
     public Editor() {
         if (Electron.available()) {
@@ -95,14 +96,20 @@ public class Editor {
         HTMLElement thePropertyEditorElement = (HTMLElement) document.getElementById("objectEditor");
         HTMLElement theTreeElement = (HTMLElement) document.getElementById("objecttree");
 
-        GameTreeView theTreeView = new GameTreeView(theTreeElement, window, editorState, new GameTreeView.EventHandler() {
+        treeView = new GameTreeView(theTreeElement, window, editorState, new GameTreeView.EventHandler() {
             @Override
             public void setEditingObject(Game aGame) {
+
+                TeaVMLogger.info("Editing game " + aGame.nameProperty().get());
+
                 objectEditor.setEditingObject(aGame);
             }
 
             @Override
             public void setEditingObject(GameScene aScene) {
+
+                TeaVMLogger.info("Editing scene " + aScene.nameProperty().get());
+
                 objectEditor.setEditingObject(aScene);
                 openSceneInEditor(aScene);
             }
@@ -115,6 +122,8 @@ public class Editor {
             @Override
             public void setEditingObject(EventSheet aSheet) {
                 objectEditor.setEditingObject(aSheet);
+
+                openEventSheetInEditor(aSheet);
             }
 
             @Override
@@ -123,32 +132,28 @@ public class Editor {
             }
         });
 
-        objectEditor = new GameObjectEditor(thePropertyEditorElement, new GameObjectEditor.EventHandler() {
-            @Override
-            public void setEditingObject(EventSheet aEventSheet) {
-                theTreeView.setEditingObject(aEventSheet);
-                objectEditor.setEditingObject(aEventSheet);
-
-                openEventSheetInEditor(aEventSheet);
-            }
-        });
-
+        objectEditor = new GameObjectEditor(thePropertyEditorElement);
 
         editorState.load(new EditorState.LoadingListener() {
 
             @Override
             public void onGameLoaded(EditorState aEditorState) {
-                theTreeView.onGameLoaded();
+                treeView.onGameLoaded();
             }
 
             @Override
             public void onSceneLoaded(EditorState aState, String aSceneID) {
-                theTreeView.onGameSceneLoaded();
+                treeView.onGameSceneLoaded();
             }
 
             @Override
             public void onSceneLoadingError(EditorState aState, String aSceneID, Throwable aThrowable) {
                 TeaVMLogger.error("Error loading scene " + aSceneID);
+            }
+
+            @Override
+            public void onGameLoadingError(Throwable aThrowable) {
+                TeaVMLogger.error("Error loading game " + aThrowable.getMessage());
             }
         });
 
@@ -157,22 +162,22 @@ public class Editor {
 
     private void openSceneInEditor(GameScene aScene) {
 
+        if (tabbedPageManager.ensureSelected(aScene)) {
+            return;
+        }
+
         SceneEditorHTMLElement theSceneEditor = SceneEditorHTMLElement.create();
         final GameSceneEditor theGameEditor = new GameSceneEditor(theSceneEditor, window, editorState) {
-
-            @Override
-            protected void playScene(GameScene aGameScene) {
-                super.playScene(aGameScene);
-            }
 
             @Override
             protected void setSelectedInstance(GameObjectInstance aInstance) {
                 super.setSelectedInstance(aInstance);
                 objectEditor.setEditingObject(aInstance);
+                treeView.setEditingObject(aInstance);
             }
         };
 
-        tabbedPageManager.addTab("Editor", new TabbedPaneHTMLElement.TabHandler() {
+        tabbedPageManager.addTab("Scene", new TabbedPaneHTMLElement.TabHandler() {
             @Override
             public HTMLElement getElement() {
                 return theSceneEditor;
@@ -180,7 +185,7 @@ public class Editor {
 
             @Override
             public Object getOwner() {
-                return "scene";
+                return aScene;
             }
 
             @Override
@@ -193,9 +198,16 @@ public class Editor {
                 theGameEditor.handleResize();
             }
         });
+
+        theGameEditor.playScene(aScene);
     }
 
     private void openEventSheetInEditor(EventSheet aEventSheet) {
+
+        if (tabbedPageManager.ensureSelected(aEventSheet)){
+            return;
+        }
+
         EventsheetEditorHTMLElement theEventsheetEditor = EventsheetEditorHTMLElement.create();
         theEventsheetEditor.bindTo(aEventSheet, tabbedPageManager);
         tabbedPageManager.addTab("Event sheet", new TabbedPaneHTMLElement.TabHandler() {

@@ -17,25 +17,11 @@ package de.mirkosertic.gameengine.web;
 
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
-import de.mirkosertic.gameengine.core.Game;
-import de.mirkosertic.gameengine.core.GameLoop;
-import de.mirkosertic.gameengine.core.GameLoopFactory;
-import de.mirkosertic.gameengine.core.GameObject;
-import de.mirkosertic.gameengine.core.GameObjectInstance;
-import de.mirkosertic.gameengine.core.GameRuntime;
-import de.mirkosertic.gameengine.core.GameScene;
-import de.mirkosertic.gameengine.core.GameView;
-import de.mirkosertic.gameengine.core.GestureDetector;
-import de.mirkosertic.gameengine.core.PlaySceneStrategy;
+import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.network.DefaultNetworkConnector;
 import de.mirkosertic.gameengine.physic.DisableDynamicPhysics;
 import de.mirkosertic.gameengine.physic.EnableDynamicPhysics;
-import de.mirkosertic.gameengine.teavm.TeaVMDragEvent;
-import de.mirkosertic.gameengine.teavm.TeaVMGameView;
-import de.mirkosertic.gameengine.teavm.TeaVMLogger;
-import de.mirkosertic.gameengine.teavm.TeaVMMap;
-import de.mirkosertic.gameengine.teavm.TeaVMMouseEvent;
-import de.mirkosertic.gameengine.teavm.TeaVMWindow;
+import de.mirkosertic.gameengine.teavm.*;
 import de.mirkosertic.gameengine.teavm.pixi.Renderer;
 import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Size;
@@ -49,14 +35,14 @@ public class GameSceneEditor {
     private final SceneEditorHTMLElement sceneEditorHTMLElement;
     private final Window window;
 
-    private PlaySceneStrategy runSceneStrategy;
+    private final PlaySceneStrategy runSceneStrategy;
 
     private GameObjectInstance draggingInstance;
     private Position draggingMouseWorldPosition;
 
     private GameObjectInstance dndCreateInstance;
 
-    private EditorState editorState;
+    private final EditorState editorState;
 
     public GameSceneEditor(SceneEditorHTMLElement aSceneEditor, Window aWindow, EditorState aEditorState) {
 
@@ -118,8 +104,6 @@ public class GameSceneEditor {
             }
         };
 
-        initializeForGame(editorState.getLoadedGame());
-
         EditorHTMLCanvasElement theCanvas = aSceneEditor.currentCanvas();
         theCanvas.addEventListener("click", evt -> onMouseClick((TeaVMMouseEvent) evt));
         theCanvas.addEventListener("mousedown", evt -> onMousePressed((TeaVMMouseEvent) evt));
@@ -157,23 +141,13 @@ public class GameSceneEditor {
         sceneEditorHTMLElement.addEventListener("preview", evt -> onPreview());
     }
 
-    private void initializeForGame(Game aGame) {
-
-        String theDefaultScene = aGame.defaultSceneProperty().get();
-        if (theDefaultScene != null) {
-            TeaVMLogger.info("playing scene " + theDefaultScene);
-            GameScene theScene = editorState.getGameSceneById(theDefaultScene);
-            playScene(theScene);
-        }
-    }
-
     public void handleResize() {
         if (runSceneStrategy.hasGameLoop()) {
             runSceneStrategy.handleResize();
         }
     }
 
-    protected void playScene(GameScene aGameScene) {
+    public void playScene(GameScene aGameScene) {
         runSceneStrategy.playScene(aGameScene, () -> runSingleStep(runSceneStrategy.getRunningGameLoop()));
     }
 
