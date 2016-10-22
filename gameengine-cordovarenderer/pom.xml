@@ -59,7 +59,7 @@
         </plugins>
 	</build>
 
-<!--    <profiles>
+    <profiles>
         <profile>
             <id>platform-linux</id>
             <activation>
@@ -253,5 +253,5 @@
                 </plugins>
             </build>
         </profile>
-    </profiles>-->
+    </profiles>
 </project>
