@@ -10,6 +10,7 @@ android:
     - platform-tools
     - build-tools-24.0.2
     - android-24
+    - android-23
 env:
   global:
     - "MAVEN_OPTS=-Xmx2536m -XX:MaxPermSize=1024m -XX:+CMSClassUnloadingEnabled -XX:-UseGCOverheadLimit"
