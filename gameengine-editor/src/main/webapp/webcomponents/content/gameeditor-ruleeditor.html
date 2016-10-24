@@ -18,9 +18,7 @@
 
 <link rel="import" href="../properteditor/gameeditor-selectpropertyeditor.html">
 <link rel="import" href="../properteditor/gameeditor-textfieldpropertyeditor.html">
-<link rel="import" href="gameeditor-keyeventcondition.html">
 <link rel="import" href="gameeditor-deletegameobjectinstanceaction.html">
-<link rel="import" href="gameeditor-objectcollisioncondition.html">
 <link rel="import" href="gameeditor-runluascriptaction.html">
 
 <dom-module id="gameeditor-ruleeditor">
@@ -62,7 +60,6 @@
 
         <div class="vertical">
             <div class="condition">
-                <gameeditor-selectpropertyeditor id="conditionselection" label="Condition"></gameeditor-selectpropertyeditor>
                 <div id="conditionproperties">
                     <gameeditor-textfieldpropertyeditor label="A" ></gameeditor-textfieldpropertyeditor>
                     <gameeditor-textfieldpropertyeditor label="B" ></gameeditor-textfieldpropertyeditor>
@@ -109,10 +106,6 @@
 
             conditionproperties: function() {
                 return this.$.conditionproperties;
-            },
-
-            conditionselection: function() {
-                return this.$.conditionselection;
             },
 
             ready: function() {

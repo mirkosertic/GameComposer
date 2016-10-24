@@ -39,7 +39,7 @@ public abstract class TextareaPropertyEditorHTMLElement implements HTMLElement {
     @JSProperty
     public abstract String getValue();
 
-    public <T> HTMLInputBinder bindTo(Property<T> aProperty, HTMLInputBinder.Converter<T, String> aConverter) {
+    public <T> HTMLInputBinder bindTo(Property<T> aProperty, ObjectConverter<T> aConverter) {
         setValue(aConverter.convertFrom(aProperty.get()));
         addEventListener("value-changed", aEvent -> aProperty.set(aConverter.convertTo(getValue())));
         GameEventListener<PropertyChanged> theListener = aEvent -> setValue(aConverter.convertFrom(aProperty.get()));

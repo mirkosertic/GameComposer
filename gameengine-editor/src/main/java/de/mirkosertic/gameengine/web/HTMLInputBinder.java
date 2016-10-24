@@ -21,13 +21,6 @@ import de.mirkosertic.gameengine.event.PropertyChanged;
 
 public class HTMLInputBinder {
 
-    public interface Converter<T, V> {
-
-        V convertFrom(T aValue);
-
-        T convertTo(V aValue);
-    }
-
     private final GameEventListener<PropertyChanged> listener;
     private final Property property;
 

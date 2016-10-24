@@ -20,8 +20,10 @@ import de.mirkosertic.gameengine.core.Game;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.teavm.TeaVMGameRuntimeFactory;
 import de.mirkosertic.gameengine.teavm.TeaVMLogger;
+import de.mirkosertic.gameengine.type.Script;
 import de.mirkosertic.gameengine.web.electron.Dialog;
 import de.mirkosertic.gameengine.web.electron.DialogOptions;
 import de.mirkosertic.gameengine.web.electron.Electron;
@@ -209,7 +211,7 @@ public class Editor {
         }
 
         EventsheetEditorHTMLElement theEventsheetEditor = EventsheetEditorHTMLElement.create();
-        theEventsheetEditor.bindTo(aEventSheet, tabbedPageManager);
+        theEventsheetEditor.bindTo(aEventSheet, this);
         tabbedPageManager.addTab("Event sheet", new TabbedPaneHTMLElement.TabHandler() {
             @Override
             public HTMLElement getElement() {
@@ -247,5 +249,34 @@ public class Editor {
                 boot(new LocalEditorProject(aFilesystem, thePath));
             }
         }
+    }
+
+    public void editLUAScriptProperty(Property<Script> aScriptProperty) {
+        Script theScript = aScriptProperty.get();
+
+        AceEditorHTMLElement theEditor = AceEditorHTMLElement.create();
+        theEditor.initWithScript(theScript);
+
+        tabbedPageManager.addTab("LUA Script", new TabbedPaneHTMLElement.TabHandler() {
+            @Override
+            public HTMLElement getElement() {
+                return theEditor;
+            }
+
+            @Override
+            public Object getOwner() {
+                return aScriptProperty;
+            }
+
+            @Override
+            public void handleClosed() {
+            }
+
+            @Override
+            public void handleResize() {
+            }
+        });
+        theEditor.addEventListener("change", evt1 -> aScriptProperty.set(new Script(theEditor.getValue())));
+
     }
 }

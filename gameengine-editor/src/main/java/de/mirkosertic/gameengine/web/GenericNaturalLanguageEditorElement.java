@@ -24,18 +24,24 @@ import org.teavm.jso.dom.html.HTMLOptionsCollection;
 import org.teavm.jso.dom.html.HTMLSelectElement;
 import org.teavm.jso.dom.xml.Document;
 
-public abstract class GenericRuleEditorElement implements HTMLElement {
+public abstract class GenericNaturalLanguageEditorElement implements HTMLElement {
 
     private static final Document DOCUMENT = Window.current().getDocument();
 
     @JSBody(params = {}, script = "return document.createElement('p');")
-    public static native GenericRuleEditorElement create();
+    public static native GenericNaturalLanguageEditorElement create();
 
     public void addText(String aText) {
         appendChild(DOCUMENT.createTextNode(aText));
     }
 
-    public <T> void addSelection(Property<T> aProperty, T[] aAllowedValues, HTMLInputBinder.Converter<T, String> aConverter) {
+    public <T> void addInput(Property<T> aProperty, ObjectToStringConverter<T> aConverter) {
+        HTMLSelectElement theInputElement = (HTMLSelectElement) DOCUMENT.createElement("input");
+        theInputElement.setValue(aConverter.convertFrom(aProperty.get()));
+        appendChild(theInputElement);
+    }
+
+    public <T> void addSelection(Property<T> aProperty, T[] aAllowedValues, ObjectToStringConverter<T> aConverter) {
         HTMLSelectElement theSelectElement = (HTMLSelectElement) DOCUMENT.createElement("select");
         HTMLOptionsCollection theOptions = theSelectElement.getOptions();
         T theCurrentValue = aProperty.get();
