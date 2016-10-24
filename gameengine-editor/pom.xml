@@ -34,12 +34,37 @@
             </plugin>
 
             <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <id>bowerinstall</id>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <phase>process-resources</phase>
+                        <configuration>
+                            <target>
+                                <exec executable="bower" dir="src/main/webapp">
+                                    <arg value="install"/>
+                                    <arg value="--config.directory=${project.build.directory}/bower/bower_components"/>
+                                </exec>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <configuration>
                     <webResources>
                         <resource>
                             <directory>${project.build.directory}/generated/js</directory>
+                        </resource>
+                        <resource>
+                            <directory>${project.build.directory}/bower</directory>
                         </resource>
                     </webResources>
                 </configuration>

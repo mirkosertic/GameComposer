@@ -1,5 +1,5 @@
 {
-  "name": "gameengineeditor",
+  "name": "gameengineteavmrenderer",
   "homepage": "https://github.com/mirkosertic/GameComposer",
   "authors": [
     "Mirko Sertic <mirko.sertic@web.de>"
@@ -16,11 +16,8 @@
     "tests"
   ],
   "dependencies": {
-    "polymer": "^1.6.1",
-    "webcomponentsjs": "^0.7.20",
-    "juicy-ace-editor": "^1.2.0",
-    "firebase": "^3.5.1",
+    "howler.js": "howler#^2.0.1",
     "pixi.js": "pixi#^4.1.0",
-    "howler.js": "howler#^2.0.1"
+    "firebase": "^3.5.1"
   }
 }
