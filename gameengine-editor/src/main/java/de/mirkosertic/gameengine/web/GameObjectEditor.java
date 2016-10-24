@@ -61,7 +61,7 @@ import org.teavm.jso.dom.html.HTMLElement;
 
 public class GameObjectEditor extends ListingElement {
 
-    public static class FloatStringConverter implements HTMLInputBinder.Converter<Float, String> {
+    public static class FloatStringConverter implements ObjectConverter<Float> {
 
         @Override
         public String convertFrom(Float aValue) {
@@ -74,7 +74,7 @@ public class GameObjectEditor extends ListingElement {
         }
     }
 
-    public static class StringStringConverter implements HTMLInputBinder.Converter<String, String> {
+    public static class StringStringConverter implements ObjectConverter<String> {
 
         @Override
         public String convertFrom(String aValue) {
@@ -87,7 +87,7 @@ public class GameObjectEditor extends ListingElement {
         }
     }
 
-    public static class IntegerStringConverter implements HTMLInputBinder.Converter<Integer, String> {
+    public static class IntegerStringConverter implements ObjectConverter<Integer> {
 
         @Override
         public String convertFrom(Integer aValue) {
@@ -158,7 +158,7 @@ public class GameObjectEditor extends ListingElement {
         addTextInputfieldPropertyEditor("Name", aObject.nameProperty(), new StringStringConverter());
         addPositionPropertyEditor(aObject.positionProperty());
         addBooleanPropertyEditor("Visible", aObject.visibleProperty());
-        addTextInputfieldPropertyEditor("Rotation", aObject.rotationAngleProperty(), new HTMLInputBinder.Converter<Angle, String>() {
+        addTextInputfieldPropertyEditor("Rotation", aObject.rotationAngleProperty(), new ObjectConverter<Angle>() {
 
             @Override
             public String convertFrom(Angle aValue) {
@@ -205,7 +205,7 @@ public class GameObjectEditor extends ListingElement {
         addFontPropertyEditor(aComponent.fontProperty());
         addBooleanPropertyEditor("Is LUA Script", aComponent.isScriptProperty());
         addLongStringPropertyEditor("Text Expression", aComponent.textExpressionProperty(),
-            new HTMLInputBinder.Converter<TextExpression, String>() {
+            new ObjectConverter<TextExpression>() {
                 @Override
                 public String convertFrom(TextExpression aValue) {
                     return aValue.expression;
@@ -224,7 +224,7 @@ public class GameObjectEditor extends ListingElement {
             return;
         }
         addTitleLevel2("Player score");
-        addTextInputfieldPropertyEditor("Score", aComponent.scoreValueProperty(), new HTMLInputBinder.Converter<ScoreValue, String>() {
+        addTextInputfieldPropertyEditor("Score", aComponent.scoreValueProperty(), new ObjectConverter<ScoreValue>() {
             @Override
             public String convertFrom(ScoreValue aValue) {
                 return Long.toString(aValue.score);
@@ -242,7 +242,7 @@ public class GameObjectEditor extends ListingElement {
             return;
         }
         addTitleLevel2("Constant movement");
-        addTextInputfieldPropertyEditor("Movement speed", aComponent.speedProperty(), new HTMLInputBinder.Converter<Speed, String>() {
+        addTextInputfieldPropertyEditor("Movement speed", aComponent.speedProperty(), new ObjectConverter<Speed>() {
             @Override
             public String convertFrom(Speed aValue) {
                 return Long.toString(aValue.speed);
@@ -253,7 +253,7 @@ public class GameObjectEditor extends ListingElement {
                 return new Speed(Long.parseLong(aValue));
             }
         });
-        addTextInputfieldPropertyEditor("Rotation speed", aComponent.rotationSpeedProperty(), new HTMLInputBinder.Converter<Speed, String>() {
+        addTextInputfieldPropertyEditor("Rotation speed", aComponent.rotationSpeedProperty(), new ObjectConverter<Speed>() {
             @Override
             public String convertFrom(Speed aValue) {
                 return Long.toString(aValue.speed);
@@ -303,7 +303,7 @@ public class GameObjectEditor extends ListingElement {
         addAnimationEditor("Animation", aComponent.currentAnimationProperty(), aGameScene);
     }
 
-    private <T> void addTextInputfieldPropertyEditor(String aLabel, Property<T> aProperty, HTMLInputBinder.Converter<T, String> aConverter) {
+    private <T> void addTextInputfieldPropertyEditor(String aLabel, Property<T> aProperty, ObjectConverter<T> aConverter) {
 
         TextfieldPropertyEditorHTMLElement theElement = TextfieldPropertyEditorHTMLElement.create();
         theElement.setLabel(aLabel);
@@ -321,7 +321,7 @@ public class GameObjectEditor extends ListingElement {
         htmlElement.appendChild(theElement);
     }
 
-    private <T> void addLongStringPropertyEditor(String aLabel, Property<T> aProperty, HTMLInputBinder.Converter<T, String> aConverter) {
+    private <T> void addLongStringPropertyEditor(String aLabel, Property<T> aProperty, ObjectConverter<T> aConverter) {
 
         TextareaPropertyEditorHTMLElement theElement = TextareaPropertyEditorHTMLElement.create();
         theElement.setLabel(aLabel);
@@ -369,7 +369,7 @@ public class GameObjectEditor extends ListingElement {
         TwofieldPropertyEditorHTMLElement theElement = TwofieldPropertyEditorHTMLElement.create();
         theElement.setLabel1("Width");
         theElement.setLabel2("Height");
-        binder.add(theElement.bindField1To(aProperty, new HTMLInputBinder.Converter<Size, String>() {
+        binder.add(theElement.bindField1To(aProperty, new ObjectConverter<Size>() {
             @Override
             public String convertFrom(Size aValue) {
                 return Integer.toString(aValue.width);
@@ -380,7 +380,7 @@ public class GameObjectEditor extends ListingElement {
                 return aProperty.get().changeWidth(Integer.parseInt(aValue));
             }
         }));
-        binder.add(theElement.bindField2To(aProperty, new HTMLInputBinder.Converter<Size, String>() {
+        binder.add(theElement.bindField2To(aProperty, new ObjectConverter<Size>() {
             @Override
             public String convertFrom(Size aValue) {
                 return Integer.toString(aValue.height);
@@ -400,7 +400,7 @@ public class GameObjectEditor extends ListingElement {
         TwofieldPropertyEditorHTMLElement theElement = TwofieldPropertyEditorHTMLElement.create();
         theElement.setLabel1("X");
         theElement.setLabel2("Y");
-        binder.add(theElement.bindField1To(aProperty, new HTMLInputBinder.Converter<Position, String>() {
+        binder.add(theElement.bindField1To(aProperty, new ObjectConverter<Position>() {
             @Override
             public String convertFrom(Position aValue) {
                 return Integer.toString((int) aValue.x);
@@ -411,7 +411,7 @@ public class GameObjectEditor extends ListingElement {
                 return aProperty.get().changeX((float) Integer.parseInt(aValue));
             }
         }));
-        binder.add(theElement.bindField2To(aProperty, new HTMLInputBinder.Converter<Position, String>() {
+        binder.add(theElement.bindField2To(aProperty, new ObjectConverter<Position>() {
             @Override
             public String convertFrom(Position aValue) {
                 return Integer.toString((int) aValue.y);
