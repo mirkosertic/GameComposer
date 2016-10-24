@@ -25,14 +25,12 @@ import de.mirkosertic.gameengine.core.GameObjectInstanceLeftLayoutCondition;
 import de.mirkosertic.gameengine.core.GameObjectInstanceRemovedFromSceneCondition;
 import de.mirkosertic.gameengine.core.GameRule;
 import de.mirkosertic.gameengine.core.SceneStartedCondition;
-import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.input.KeyEventCondition;
 import de.mirkosertic.gameengine.input.MouseEventCondition;
 import de.mirkosertic.gameengine.physic.ObjectCollisionCondition;
 import de.mirkosertic.gameengine.script.RunScriptAction;
 import de.mirkosertic.gameengine.type.CollisionPosition;
 import de.mirkosertic.gameengine.type.GameKeyCode;
-import de.mirkosertic.gameengine.type.Script;
 import org.teavm.jso.JSBody;
 import org.teavm.jso.dom.html.HTMLElement;
 
@@ -66,8 +64,6 @@ public abstract class RuleEditorHTMLElement implements HTMLElement {
     @JSBody(params = {}, script = "return document.createElement('gameeditor-ruleeditor');")
     public static native RuleEditorHTMLElement create();
 
-    public abstract SelectPropertyEditorHTMLElement conditionselection();
-
     public abstract TextfieldPropertyEditorHTMLElement rulename();
 
     public abstract HTMLElement conditionproperties();
@@ -78,10 +74,10 @@ public abstract class RuleEditorHTMLElement implements HTMLElement {
 
     public abstract void clearactions();
 
-    public List<HTMLInputBinder> bindTo(GameRule aRule, EventSheet aEventSheet,  TabbedPaneHTMLElement.Manager aEditorTab) {
+    public List<HTMLInputBinder> bindTo(GameRule aRule, EventSheet aEventSheet,  Editor aEditor) {
 
         final Map<String, ConditionMetaData<? extends Condition>> theConditionMetaData = new HashMap<>();
-        theConditionMetaData.put("InstanceRemovedFromScene", new ConditionMetaData<Condition>() {
+        theConditionMetaData.put("InstanceRemovedFromScene", new ConditionMetaData<GameObjectInstanceRemovedFromSceneCondition>() {
             @Override
             public GameObjectInstanceRemovedFromSceneCondition create() {
                 return new GameObjectInstanceRemovedFromSceneCondition();
@@ -90,6 +86,18 @@ public abstract class RuleEditorHTMLElement implements HTMLElement {
             @Override
             public boolean matches(Condition aCondition) {
                 return aCondition instanceof GameObjectInstanceRemovedFromSceneCondition;
+            }
+
+            @Override
+            public void initEditorFor(GameObjectInstanceRemovedFromSceneCondition aCondition, HTMLElement aElement) {
+
+                GenericNaturalLanguageEditorElement theElement = GenericNaturalLanguageEditorElement.create();
+
+                theElement.addText("If object of type ");
+                theElement.addSelection(aCondition.gameObjectProperty(), aEventSheet.getGameScene().getObjects(), t -> t.nameProperty().get());
+                theElement.addText(" was removed from scene");
+
+                Polymer.dom(aElement).appendChild(theElement);
             }
         });
         theConditionMetaData.put("KeyEvent", new ConditionMetaData<KeyEventCondition>() {
@@ -106,14 +114,19 @@ public abstract class RuleEditorHTMLElement implements HTMLElement {
             @Override
             public void initEditorFor(KeyEventCondition aCondition, HTMLElement aElement) {
 
-                KeyEventConditionHTMLElement theElement = KeyEventConditionHTMLElement.create();
-                theElement.keycodeelement().bindTo(aCondition.keyCodeProperty(), GameKeyCode.values());
-                theElement.eventtypeelement().bindTo(aCondition.eventTypeProperty(), KeyEventCondition.KeyEventType.values());
+                GenericNaturalLanguageEditorElement theElement = GenericNaturalLanguageEditorElement.create();
+
+                theElement.addText("If key ");
+                theElement.addSelection(aCondition.keyCodeProperty(), GameKeyCode.values(),
+                        aValue -> aValue.name());
+                theElement.addText(" is ");;
+                theElement.addSelection(aCondition.eventTypeProperty(), KeyEventCondition.KeyEventType.values(),
+                        aValue -> aValue.name());
 
                 Polymer.dom(aElement).appendChild(theElement);
             }
         });
-        theConditionMetaData.put("InstanceAddedToScene", new ConditionMetaData<Condition>() {
+        theConditionMetaData.put("InstanceAddedToScene", new ConditionMetaData<GameObjectInstanceAddedToSceneCondition>() {
             @Override
             public GameObjectInstanceAddedToSceneCondition create() {
                 return new GameObjectInstanceAddedToSceneCondition();
@@ -123,8 +136,20 @@ public abstract class RuleEditorHTMLElement implements HTMLElement {
             public boolean matches(Condition aCondition) {
                 return aCondition instanceof GameObjectInstanceAddedToSceneCondition;
             }
+
+            @Override
+            public void initEditorFor(GameObjectInstanceAddedToSceneCondition aCondition, HTMLElement aElement) {
+                GenericNaturalLanguageEditorElement theElement = GenericNaturalLanguageEditorElement.create();
+
+                theElement.addText("If object of type ");
+                theElement.addSelection(aCondition.gameObjectProperty(), aEventSheet.getGameScene().getObjects(), t -> t.nameProperty().get());
+                theElement.addText(" was added to the scene");
+
+                Polymer.dom(aElement).appendChild(theElement);
+
+            }
         });
-        theConditionMetaData.put("SystemTick", new ConditionMetaData<Condition>() {
+        theConditionMetaData.put("SystemTick", new ConditionMetaData<SystemTickCondition>() {
             @Override
             public SystemTickCondition create() {
                 return new SystemTickCondition();
@@ -134,8 +159,19 @@ public abstract class RuleEditorHTMLElement implements HTMLElement {
             public boolean matches(Condition aCondition) {
                 return aCondition instanceof SystemTickCondition;
             }
+
+            @Override
+            public void initEditorFor(SystemTickCondition aCondition, HTMLElement aElement) {
+                GenericNaturalLanguageEditorElement theElement = GenericNaturalLanguageEditorElement.create();
+
+                theElement.addText("Every ");
+                theElement.addInput(aCondition.everyTicksProperty(), t -> Long.toString(t));
+                theElement.addText(" system ticks");
+
+                Polymer.dom(aElement).appendChild(theElement);
+            }
         });
-        theConditionMetaData.put("SceneStarted", new ConditionMetaData<Condition>() {
+        theConditionMetaData.put("SceneStarted", new ConditionMetaData<SceneStartedCondition>() {
             @Override
             public SceneStartedCondition create() {
                 return new SceneStartedCondition();
@@ -145,8 +181,16 @@ public abstract class RuleEditorHTMLElement implements HTMLElement {
             public boolean matches(Condition aCondition) {
                 return aCondition instanceof SceneStartedCondition;
             }
+
+            @Override
+            public void initEditorFor(SceneStartedCondition aCondition, HTMLElement aElement) {
+                GenericNaturalLanguageEditorElement theElement = GenericNaturalLanguageEditorElement.create();
+                theElement.addText("If the scene was started");
+
+                Polymer.dom(aElement).appendChild(theElement);
+            }
         });
-        theConditionMetaData.put("MouseEvent", new ConditionMetaData<Condition>() {
+        theConditionMetaData.put("MouseEvent", new ConditionMetaData<MouseEventCondition>() {
             @Override
             public MouseEventCondition create() {
                 return new MouseEventCondition();
@@ -155,6 +199,19 @@ public abstract class RuleEditorHTMLElement implements HTMLElement {
             @Override
             public boolean matches(Condition aCondition) {
                 return aCondition instanceof MouseEventCondition;
+            }
+
+            @Override
+            public void initEditorFor(MouseEventCondition aCondition, HTMLElement aElement) {
+                GenericNaturalLanguageEditorElement theElement = GenericNaturalLanguageEditorElement.create();
+                theElement.addText("If a mouse event of type ");
+                theElement.addSelection(aCondition.eventTypeProperty(), MouseEventCondition.MouseEventType.values(), t -> t.name());
+                theElement.addText(" filtered by ");
+                theElement.addSelection(aCondition.filterTypeProperty(), MouseEventCondition.FilterType.values(), t -> t.name());
+                theElement.addText(" occours on object of type ");
+                theElement.addSelection(aCondition.objectTypeProperty(), aEventSheet.getGameScene().getObjects(), t -> t.nameProperty().get());
+
+                Polymer.dom(aElement).appendChild(theElement);
             }
         });
         theConditionMetaData.put("ObjectCollision", new ConditionMetaData<ObjectCollisionCondition>() {
@@ -171,17 +228,19 @@ public abstract class RuleEditorHTMLElement implements HTMLElement {
             @Override
             public void initEditorFor(ObjectCollisionCondition aCondition, HTMLElement aElement) {
 
-                ObjectCollisionConditionHTMLElement theElement = ObjectCollisionConditionHTMLElement.create();
-                theElement.primaryelement().bindTo(aCondition.primaryObjectProperty(), aEventSheet.getGameScene().getObjects(),
-                        aValue -> aValue.nameProperty().get());
-                theElement.secondaryelement().bindTo(aCondition.secondaryObjectProperty(), aEventSheet.getGameScene().getObjects(),
-                        aValue -> aValue.nameProperty().get());
-                theElement.positionelement().bindTo(aCondition.positionProperty(), CollisionPosition.values());
+                GenericNaturalLanguageEditorElement theElement = GenericNaturalLanguageEditorElement.create();
+
+                theElement.addText("If object of type ");
+                theElement.addSelection(aCondition.primaryObjectProperty(), aEventSheet.getGameScene().getObjects(), t -> t.nameProperty().get());
+                theElement.addText(" collides with object of type ");
+                theElement.addSelection(aCondition.secondaryObjectProperty(), aEventSheet.getGameScene().getObjects(), t -> t.nameProperty().get());
+                theElement.addText(" at ");
+                theElement.addSelection(aCondition.positionProperty(), CollisionPosition.values(), t -> t.name());
 
                 Polymer.dom(aElement).appendChild(theElement);
             }
         });
-        theConditionMetaData.put("InstanceLeftLayout", new ConditionMetaData<Condition>() {
+        theConditionMetaData.put("InstanceLeftLayout", new ConditionMetaData<GameObjectInstanceLeftLayoutCondition>() {
             @Override
             public GameObjectInstanceLeftLayoutCondition create() {
                 return new GameObjectInstanceLeftLayoutCondition();
@@ -190,6 +249,16 @@ public abstract class RuleEditorHTMLElement implements HTMLElement {
             @Override
             public boolean matches(Condition aCondition) {
                 return aCondition instanceof GameObjectInstanceLeftLayoutCondition;
+            }
+
+            @Override
+            public void initEditorFor(GameObjectInstanceLeftLayoutCondition aCondition, HTMLElement aElement) {
+                GenericNaturalLanguageEditorElement theElement = GenericNaturalLanguageEditorElement.create();
+                theElement.addText("If game object of type ");
+                theElement.addSelection(aCondition.gameObjectProperty(), aEventSheet.getGameScene().getObjects(), t -> t.nameProperty().get());
+                theElement.addText(" left the scene layout");
+
+                Polymer.dom(aElement).appendChild(theElement);
             }
         });
 
@@ -228,31 +297,7 @@ public abstract class RuleEditorHTMLElement implements HTMLElement {
             public void initEditorFor(RunScriptAction aAction, HTMLElement aElement) {
                 RunLuaScriptActionHTMLElement theElement = RunLuaScriptActionHTMLElement.create();
                 theElement.addEventListener("luaedit", evt -> {
-                    Script theScript = aAction.scriptProperty().get();
-
-                    AceEditorHTMLElement theEditor = AceEditorHTMLElement.create();
-                    theEditor.initWithScript(theScript);
-
-                    aEditorTab.addTab("LUA Script", new TabbedPaneHTMLElement.TabHandler() {
-                        @Override
-                        public HTMLElement getElement() {
-                            return theEditor;
-                        }
-
-                        @Override
-                        public Object getOwner() {
-                            return aAction;
-                        }
-
-                        @Override
-                        public void handleClosed() {
-                        }
-
-                        @Override
-                        public void handleResize() {
-                        }
-                    });
-                    theEditor.addEventListener("change", evt1 -> aAction.scriptProperty().set(new Script(theEditor.getValue())));
+                    aEditor.editLUAScriptProperty(aAction.scriptProperty());
                 });
 
                 Polymer.dom(aElement).appendChild(theElement);
@@ -264,11 +309,8 @@ public abstract class RuleEditorHTMLElement implements HTMLElement {
 
         Condition theCurrentCondition = aRule.conditionProperty().get();
 
-        final Property<String> theCondition = new Property<>(String.class, null, "Condition", "");
         for (Map.Entry<String, ConditionMetaData<?>> theEntry : theConditionMetaData.entrySet()) {
             if (theEntry.getValue().matches(theCurrentCondition)) {
-                theCondition.set(theEntry.getKey());
-
                 clearconditionproperties();
 
                 ConditionMetaData<Condition> theMetaData = (ConditionMetaData<Condition>) theEntry.getValue();
@@ -276,18 +318,6 @@ public abstract class RuleEditorHTMLElement implements HTMLElement {
 
             }
         }
-
-        theCondition.addChangeListener(aEvent -> {
-            ConditionMetaData<Condition> theMetaData = (ConditionMetaData<Condition>) theConditionMetaData.get(theCondition.get());
-
-            Condition theNewCondition = theMetaData.create();
-            aRule.conditionProperty().set(theNewCondition);
-
-            clearconditionproperties();
-            theMetaData.initEditorFor(theNewCondition, conditionproperties());
-        });
-
-        theBinder.add(conditionselection().bindTo(theCondition, theConditionMetaData.keySet().toArray(new String[theConditionMetaData.keySet().size()])));
 
         clearactions();
 

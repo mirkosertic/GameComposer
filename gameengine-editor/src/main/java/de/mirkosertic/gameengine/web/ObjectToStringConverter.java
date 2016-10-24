@@ -15,17 +15,7 @@
  */
 package de.mirkosertic.gameengine.web;
 
-import org.teavm.jso.JSBody;
-import org.teavm.jso.dom.html.HTMLElement;
+public interface ObjectToStringConverter<T> {
 
-public abstract class ObjectCollisionConditionHTMLElement implements HTMLElement {
-
-    @JSBody(params = {}, script = "return document.createElement('gameeditor-objectcollisioncondition');")
-    public static native ObjectCollisionConditionHTMLElement create();
-
-    public abstract SelectPropertyEditorHTMLElement primaryelement();
-
-    public abstract SelectPropertyEditorHTMLElement secondaryelement();
-
-    public abstract SelectPropertyEditorHTMLElement positionelement();
+    String convertFrom(T aValue);
 }

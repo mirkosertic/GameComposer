@@ -15,15 +15,7 @@
  */
 package de.mirkosertic.gameengine.web;
 
-import org.teavm.jso.JSBody;
-import org.teavm.jso.dom.html.HTMLElement;
+public interface ObjectConverter<T> extends ObjectToStringConverter<T> {
 
-public abstract class KeyEventConditionHTMLElement implements HTMLElement {
-
-    @JSBody(params = {}, script = "return document.createElement('gameeditor-keyeventcondition');")
-    public static native KeyEventConditionHTMLElement create();
-
-    public abstract SelectPropertyEditorHTMLElement keycodeelement();
-
-    public abstract SelectPropertyEditorHTMLElement eventtypeelement();
+    T convertTo(String aValue);
 }

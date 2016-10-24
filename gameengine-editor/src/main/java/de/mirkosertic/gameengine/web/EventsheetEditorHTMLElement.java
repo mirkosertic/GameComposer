@@ -28,13 +28,13 @@ public abstract class EventsheetEditorHTMLElement implements HTMLElement {
     @JSBody(params = {}, script = "return document.createElement('gameeditor-eventsheeteditor');")
     public static native EventsheetEditorHTMLElement create();
 
-    public List<HTMLInputBinder> bindTo(EventSheet aEventsheet,  TabbedPaneHTMLElement.Manager aTabbedPane) {
+    public List<HTMLInputBinder> bindTo(EventSheet aEventsheet,  Editor aEditor) {
         List<HTMLInputBinder> theResult = new ArrayList<>();
         for (GameRule theRule : aEventsheet.getRules()) {
             RuleEditorHTMLElement theRuleEditor = RuleEditorHTMLElement.create();
             Polymer.dom(this).appendChild(theRuleEditor);
 
-            theResult.addAll(theRuleEditor.bindTo(theRule, aEventsheet, aTabbedPane));
+            theResult.addAll(theRuleEditor.bindTo(theRule, aEventsheet, aEditor));
         }
         return theResult;
     }
