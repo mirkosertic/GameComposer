@@ -17,5 +17,6 @@ env:
 before_install:
   - "npm install electron-packager -g"
   - "npm install cordova -g"
+  - "npm install bower -g"
   - "env"
   - "echo 'MAVEN_OPTS = $MAVEN_OPTS'"
