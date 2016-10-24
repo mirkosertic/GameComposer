@@ -152,6 +152,22 @@
                         <version>1.8</version>
                         <executions>
                             <execution>
+                                <id>bowerinstall</id>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <phase>process-resources</phase>
+                                <configuration>
+                                    <target>
+                                        <exec executable="bower" dir="src/main/webapp">
+                                            <arg value="install"/>
+                                            <arg value="--config.directory=${project.build.directory}/bower/bower_components"/>
+                                        </exec>
+                                    </target>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>electronpackager</id>
                                 <phase>package</phase>
                                 <configuration>
                                     <target>
@@ -197,6 +213,23 @@
                         <version>1.8</version>
                         <executions>
                             <execution>
+                                <id>bowerinstall</id>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <phase>process-resources</phase>
+                                <configuration>
+                                    <target>
+                                        <exec executable="bower.cmd" dir="src/main/webapp">
+                                            <arg value="install"/>
+                                            <arg value="--config.directory=${project.build.directory}/bower/bower_components"/>
+                                        </exec>
+                                    </target>
+                                </configuration>
+                            </execution>
+
+                            <execution>
+                                <id>electronpackager</id>
                                 <phase>package</phase>
                                 <configuration>
                                     <target>
