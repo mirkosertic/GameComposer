@@ -18,8 +18,10 @@ package de.mirkosertic.gameengine.web;
 import de.mirkosertic.gameengine.event.Property;
 import org.teavm.jso.JSBody;
 import org.teavm.jso.browser.Window;
+import org.teavm.jso.dom.events.Event;
+import org.teavm.jso.dom.events.EventListener;
 import org.teavm.jso.dom.html.HTMLElement;
-import org.teavm.jso.dom.html.HTMLOptionElement;
+import org.teavm.jso.dom.html.HTMLLinkElement;
 import org.teavm.jso.dom.html.HTMLOptionsCollection;
 import org.teavm.jso.dom.html.HTMLSelectElement;
 import org.teavm.jso.dom.xml.Document;
@@ -43,15 +45,14 @@ public abstract class GenericNaturalLanguageEditorElement implements HTMLElement
 
     public <T> void addSelection(Property<T> aProperty, T[] aAllowedValues, ObjectToStringConverter<T> aConverter) {
         HTMLSelectElement theSelectElement = (HTMLSelectElement) DOCUMENT.createElement("select");
-        HTMLOptionsCollection theOptions = theSelectElement.getOptions();
         T theCurrentValue = aProperty.get();
         for (T theValue : aAllowedValues) {
-            HTMLOptionElement theOption = (HTMLOptionElement)DOCUMENT.createElement("option");
-            theOption.setText(aConverter.convertFrom(theValue));
-            if (theCurrentValue == theValue) {
+            EditorHTMLOptionElement theOption = EditorHTMLOptionElement.create(aConverter.convertFrom(theValue));
+            if (theCurrentValue == theValue || theValue.equals(theCurrentValue)) {
                 theOption.setSelected(true);
             }
-            theOptions.add(theOption);
+
+            Polymer.dom(theSelectElement).appendChild(theOption);
         }
         theSelectElement.addEventListener("change", aEvent -> {
             if (theSelectElement.getSelectedIndex() >= 0) {
@@ -59,5 +60,12 @@ public abstract class GenericNaturalLanguageEditorElement implements HTMLElement
             }
         });
         appendChild(theSelectElement);
+    }
+
+    public void addAction(String aText, EventListener<Event> aEventListener) {
+        HTMLLinkElement theElement = (HTMLLinkElement)DOCUMENT.createElement("a");
+        theElement.addEventListener("click", aEventListener);
+        theElement.appendChild(DOCUMENT.createTextNode(aText));
+        appendChild(theElement);
     }
 }

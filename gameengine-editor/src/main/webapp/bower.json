@@ -16,7 +16,7 @@
     "tests"
   ],
   "dependencies": {
-    "polymer": "^1.6.1",
+    "polymer": "^1.7.0",
     "webcomponentsjs": "^0.7.20",
     "ace-builds": "~1.2.0",
     "firebase": "2.2.2",

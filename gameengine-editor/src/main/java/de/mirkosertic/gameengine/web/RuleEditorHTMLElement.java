@@ -16,22 +16,20 @@
 package de.mirkosertic.gameengine.web;
 
 import de.mirkosertic.gameengine.action.SystemTickCondition;
-import de.mirkosertic.gameengine.core.Action;
-import de.mirkosertic.gameengine.core.Condition;
-import de.mirkosertic.gameengine.core.DeleteGameObjectInstanceAction;
-import de.mirkosertic.gameengine.core.EventSheet;
-import de.mirkosertic.gameengine.core.GameObjectInstanceAddedToSceneCondition;
-import de.mirkosertic.gameengine.core.GameObjectInstanceLeftLayoutCondition;
-import de.mirkosertic.gameengine.core.GameObjectInstanceRemovedFromSceneCondition;
-import de.mirkosertic.gameengine.core.GameRule;
-import de.mirkosertic.gameengine.core.SceneStartedCondition;
+import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.input.KeyEventCondition;
 import de.mirkosertic.gameengine.input.MouseEventCondition;
 import de.mirkosertic.gameengine.physic.ObjectCollisionCondition;
+import de.mirkosertic.gameengine.process.KillProcessesForInstanceAction;
 import de.mirkosertic.gameengine.script.RunScriptAction;
+import de.mirkosertic.gameengine.sound.PlaySoundAction;
 import de.mirkosertic.gameengine.type.CollisionPosition;
 import de.mirkosertic.gameengine.type.GameKeyCode;
+import de.mirkosertic.gameengine.type.Position;
+import de.mirkosertic.gameengine.type.ResourceName;
 import org.teavm.jso.JSBody;
+import org.teavm.jso.dom.events.Event;
+import org.teavm.jso.dom.events.EventListener;
 import org.teavm.jso.dom.html.HTMLElement;
 
 import java.util.ArrayList;
@@ -47,8 +45,7 @@ public abstract class RuleEditorHTMLElement implements HTMLElement {
 
         public abstract T create();
 
-        public void initEditorFor(T aCondition, HTMLElement aElement) {
-        }
+        public abstract void initEditorFor(T aCondition, HTMLElement aElement);
     }
 
     abstract class ActionMetaData<T extends Action> {
@@ -57,8 +54,7 @@ public abstract class RuleEditorHTMLElement implements HTMLElement {
 
         public abstract T create();
 
-        public void initEditorFor(T Action, HTMLElement aElement) {
-        }
+        public abstract void initEditorFor(T aAction, HTMLElement aElement);
     }
 
     @JSBody(params = {}, script = "return document.createElement('gameeditor-ruleeditor');")
@@ -277,7 +273,103 @@ public abstract class RuleEditorHTMLElement implements HTMLElement {
 
             @Override
             public void initEditorFor(DeleteGameObjectInstanceAction Action, HTMLElement aElement) {
-                DeleteGameObjectInstanceActionHTMLElement theElement = DeleteGameObjectInstanceActionHTMLElement.create();
+                GenericNaturalLanguageEditorElement theElement = GenericNaturalLanguageEditorElement.create();
+                theElement.addText("then delete the affected instances");
+
+                Polymer.dom(aElement).appendChild(theElement);
+            }
+        });
+        theActionMetaData.put("Run scene", new ActionMetaData<RunSceneAction>() {
+            @Override
+            public boolean matches(Action aAction) {
+                return aAction instanceof RunSceneAction;
+            }
+
+            @Override
+            public RunSceneAction create() {
+                return new RunSceneAction();
+            }
+
+            @Override
+            public void initEditorFor(RunSceneAction aAction, HTMLElement aElement) {
+                GenericNaturalLanguageEditorElement theElement = GenericNaturalLanguageEditorElement.create();
+                theElement.addText("then run scene ");
+                theElement.addSelection(aAction.gameSceneProperty(), aEventSheet.getGameScene().getGame().getKnownScenes(), aValue -> aValue);
+                Polymer.dom(aElement).appendChild(theElement);
+            }
+        });
+        theActionMetaData.put("Play sound", new ActionMetaData<PlaySoundAction>() {
+            @Override
+            public boolean matches(Action aAction) {
+                return aAction instanceof PlaySoundAction;
+            }
+
+            @Override
+            public PlaySoundAction create() {
+                return new PlaySoundAction();
+            }
+
+            @Override
+            public void initEditorFor(PlaySoundAction aAction, HTMLElement aElement) {
+                GenericNaturalLanguageEditorElement theElement = GenericNaturalLanguageEditorElement.create();
+                theElement.addText("then play sound ");
+                theElement.addInput(aAction.resourceNameProperty(), new ObjectConverter<ResourceName>() {
+                    @Override
+                    public ResourceName convertTo(String aValue) {
+                        return new ResourceName(aValue);
+                    }
+
+                    @Override
+                    public String convertFrom(ResourceName aValue) {
+                        return aValue.get();
+                    }
+                });
+                Polymer.dom(aElement).appendChild(theElement);
+            }
+        });
+        theActionMetaData.put("Spawn game object instance", new ActionMetaData<SpawnGameObjectInstanceAction>() {
+            @Override
+            public boolean matches(Action aAction) {
+                return aAction instanceof SpawnGameObjectInstanceAction;
+            }
+
+            @Override
+            public SpawnGameObjectInstanceAction create() {
+                return new SpawnGameObjectInstanceAction();
+            }
+
+            @Override
+            public void initEditorFor(SpawnGameObjectInstanceAction aAction, HTMLElement aElement) {
+                GenericNaturalLanguageEditorElement theElement = GenericNaturalLanguageEditorElement.create();
+
+                theElement.addText("then spawn an object of type ");
+                theElement.addSelection(aAction.gameObjectProperty(), aEventSheet.getGameScene().getObjects(), aValue -> aValue.nameProperty().get());
+                theElement.addText("next to reference object ");
+                theElement.addSelection(aAction.referenceObjectProperty(), aEventSheet.getGameScene().getObjects(), aValue -> aValue.nameProperty().get());
+                theElement.addText(" with x offset ");
+                theElement.addInput(aAction.offsetProperty(), new ObjectConverter<Position>() {
+                    @Override
+                    public Position convertTo(String aValue) {
+                        return aAction.offsetProperty().get().changeX(Float.parseFloat(aValue));
+                    }
+
+                    @Override
+                    public String convertFrom(Position aValue) {
+                        return Integer.toString((int) aValue.x);
+                    }
+                });
+                theElement.addText(" and y offset ");
+                theElement.addInput(aAction.offsetProperty(), new ObjectConverter<Position>() {
+                    @Override
+                    public Position convertTo(String aValue) {
+                        return aAction.offsetProperty().get().changeY(Float.parseFloat(aValue));
+                    }
+
+                    @Override
+                    public String convertFrom(Position aValue) {
+                        return Integer.toString((int) aValue.y);
+                    }
+                });
 
                 Polymer.dom(aElement).appendChild(theElement);
             }
@@ -295,10 +387,29 @@ public abstract class RuleEditorHTMLElement implements HTMLElement {
 
             @Override
             public void initEditorFor(RunScriptAction aAction, HTMLElement aElement) {
-                RunLuaScriptActionHTMLElement theElement = RunLuaScriptActionHTMLElement.create();
-                theElement.addEventListener("luaedit", evt -> {
-                    aEditor.editLUAScriptProperty(aAction.scriptProperty());
-                });
+
+                GenericNaturalLanguageEditorElement theElement = GenericNaturalLanguageEditorElement.create();
+                theElement.addText("then execute the following ");
+                theElement.addAction("LUA Script", evt -> aEditor.editLUAScriptProperty(aAction.scriptProperty()));
+
+                Polymer.dom(aElement).appendChild(theElement);
+            }
+        });
+        theActionMetaData.put("Kill all running processes for instance", new ActionMetaData<KillProcessesForInstanceAction>() {
+            @Override
+            public boolean matches(Action aAction) {
+                return aAction instanceof KillProcessesForInstanceAction;
+            }
+
+            @Override
+            public KillProcessesForInstanceAction create() {
+                return new KillProcessesForInstanceAction();
+            }
+
+            @Override
+            public void initEditorFor(KillProcessesForInstanceAction aAction, HTMLElement aElement) {
+                GenericNaturalLanguageEditorElement theElement = GenericNaturalLanguageEditorElement.create();
+                theElement.addText("then kill all running processes for the instances");
 
                 Polymer.dom(aElement).appendChild(theElement);
             }

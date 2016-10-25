@@ -16,11 +16,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="shared-styles.html">
 
-<link rel="import" href="../properteditor/gameeditor-selectpropertyeditor.html">
-<link rel="import" href="../properteditor/gameeditor-textfieldpropertyeditor.html">
-<link rel="import" href="gameeditor-deletegameobjectinstanceaction.html">
-<link rel="import" href="gameeditor-runluascriptaction.html">
-
 <dom-module id="gameeditor-ruleeditor">
     <template>
         <style include="content-shared-styles">
@@ -61,15 +56,10 @@
         <div class="vertical">
             <div class="condition">
                 <div id="conditionproperties">
-                    <gameeditor-textfieldpropertyeditor label="A" ></gameeditor-textfieldpropertyeditor>
-                    <gameeditor-textfieldpropertyeditor label="B" ></gameeditor-textfieldpropertyeditor>
-                    <gameeditor-textfieldpropertyeditor label="C" ></gameeditor-textfieldpropertyeditor>
-                    <gameeditor-textfieldpropertyeditor label="D" ></gameeditor-textfieldpropertyeditor>
                 </div>
             </div>
-            <div class="actions">Actions
+            <div class="actions">
                 <div id="actionelements">
-                    <gameeditor-runluascriptaction></gameeditor-runluascriptaction>
                 </div>
             </div>
         </div>
