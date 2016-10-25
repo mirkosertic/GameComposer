@@ -59,7 +59,7 @@
 
         <div class="tabpane">
             <div id="buttons" class="tabpanebuttons">
-                <div class="tabpanebutton"><span>Pane 1</span><img class="closebutton"></div>
+                <div class="tabpanebutton"><span>Pane 1</span><img src="" class="closebutton"></div>
                 <div class="tabpanebutton selected">Pane 2</div>
                 <div class="tabpanebutton">Pane 3</div>
             </div>
@@ -131,8 +131,8 @@
                     theDivContent.innerText = theTab.title;
                     var theCloseButton = document.createElement("img");
                     theCloseButton.className = 'closebutton';
-                    theDiv.appendChild(theDivContent);
-                    theDiv.appendChild(theCloseButton);
+                    Polymer.dom(theDiv).appendChild(theDivContent);
+                    Polymer.dom(theDiv).appendChild(theCloseButton);
                     if (i == this.selectedtab) {
                         theDiv.className = 'tabpanebutton selected';
                     } else {

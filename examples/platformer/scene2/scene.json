@@ -37,6 +37,7 @@
         "position" : "EVERYWHERE",
         "type" : "ObjectCollisionCondition"
       },
+      "name" : "Jump to next level if duke hits the sign",
       "actions" : [ {
         "gameScene" : "scene1",
         "type" : "RunSceneAction"

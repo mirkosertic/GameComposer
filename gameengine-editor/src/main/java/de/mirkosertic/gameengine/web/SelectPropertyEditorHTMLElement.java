@@ -21,7 +21,6 @@ import de.mirkosertic.gameengine.event.PropertyChanged;
 import org.teavm.jso.JSBody;
 import org.teavm.jso.JSProperty;
 import org.teavm.jso.dom.html.HTMLElement;
-import org.teavm.jso.dom.html.HTMLOptionElement;
 
 public abstract class SelectPropertyEditorHTMLElement implements HTMLElement {
 
@@ -49,7 +48,7 @@ public abstract class SelectPropertyEditorHTMLElement implements HTMLElement {
     private <T> int indexOf(T aValue, T[] aValues) {
         for (int i=0;i<aValues.length;i++) {
             T theEntry = aValues[i];
-            if (theEntry == aValue) {
+            if (theEntry == aValue || theEntry.equals(aValue)) {
                 return i;
             }
         }
@@ -67,8 +66,7 @@ public abstract class SelectPropertyEditorHTMLElement implements HTMLElement {
         for (int i=0; i<aValues.length; i++) {
             T theValue = aValues[i];
 
-            HTMLOptionElement theOption = (HTMLOptionElement) getOwnerDocument().createElement("option");
-            theOption.setInnerHTML(aConverter.convertToString(theValue));
+            EditorHTMLOptionElement theOption = EditorHTMLOptionElement.create(aConverter.convertToString(theValue));
 
             Polymer.dom(this).appendChild(theOption);
         }
