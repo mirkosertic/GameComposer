@@ -22,7 +22,6 @@ import de.mirkosertic.gameengine.type.Font;
 import org.teavm.jso.JSBody;
 import org.teavm.jso.JSProperty;
 import org.teavm.jso.dom.html.HTMLElement;
-import org.teavm.jso.dom.html.HTMLOptionElement;
 
 public abstract class FontPropertyEditorHTMLElement implements HTMLElement {
 
@@ -54,7 +53,7 @@ public abstract class FontPropertyEditorHTMLElement implements HTMLElement {
     public abstract String getSize();
 
     @JSBody(params = {"aElement"}, script = "Polymer.dom(this).appendChild(aElement);")
-    public abstract void addOption(HTMLOptionElement aElement);
+    public abstract void addOption(EditorHTMLOptionElement aElement);
 
     private <T> int indexOf(T aValue, T[] aValues) {
         for (int i=0;i<aValues.length;i++) {
@@ -72,8 +71,7 @@ public abstract class FontPropertyEditorHTMLElement implements HTMLElement {
 
         for (int i=0; i<aValues.length; i++) {
             Font.FontName theValue = aValues[i];
-            HTMLOptionElement theOption = (HTMLOptionElement) getOwnerDocument().createElement("option");
-            theOption.setInnerHTML(theValue.toString());
+            EditorHTMLOptionElement theOption = EditorHTMLOptionElement.create(theValue.toString());
             addOption(theOption);
         }
 

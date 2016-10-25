@@ -401,3 +401,10 @@ button:hover {
 .selected {
   background-color: #4a5058;
 }
+.closebutton {
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+  vertical-align: middle;
+  content: url("../webcomponents/global/close.png");
+}
