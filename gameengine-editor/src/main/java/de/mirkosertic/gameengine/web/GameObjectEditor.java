@@ -176,7 +176,7 @@ public class GameObjectEditor extends ListingElement {
             addEffectComponent(theEffect);
         }
 
-        for (GameSceneEffect theEffect : aObject.getPreprocessorEffects()) {
+        for (GameSceneEffect theEffect : aObject.getPostprocessorEffects()) {
             addEffectComponent(theEffect);
         }
     }
