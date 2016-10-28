@@ -18,15 +18,19 @@ package de.mirkosertic.gameengine.web;
 import de.mirkosertic.gameengine.arcade.ConstantMovement;
 import de.mirkosertic.gameengine.arcade.ConstantMovementBehavior;
 import de.mirkosertic.gameengine.arcade.ConstantMovementBehaviorTemplate;
+import de.mirkosertic.gameengine.arcaderacer.ArcadeRacerGameSceneEffect;
 import de.mirkosertic.gameengine.camera.Camera;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.CameraBehaviorTemplate;
 import de.mirkosertic.gameengine.camera.CameraType;
+import de.mirkosertic.gameengine.core.Behavior;
+import de.mirkosertic.gameengine.core.BehaviorTemplate;
 import de.mirkosertic.gameengine.core.EventSheet;
 import de.mirkosertic.gameengine.core.Game;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.GameSceneEffect;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.physic.Physics;
 import de.mirkosertic.gameengine.physic.PhysicsBehavior;
@@ -43,6 +47,7 @@ import de.mirkosertic.gameengine.playerscore.PlayerScoreBehaviorTemplate;
 import de.mirkosertic.gameengine.sprite.Sprite;
 import de.mirkosertic.gameengine.sprite.SpriteBehavior;
 import de.mirkosertic.gameengine.sprite.SpriteBehaviorTemplate;
+import de.mirkosertic.gameengine.starfield.StarfieldGameSceneEffect;
 import de.mirkosertic.gameengine.text.Text;
 import de.mirkosertic.gameengine.text.TextBehavior;
 import de.mirkosertic.gameengine.text.TextBehaviorTemplate;
@@ -74,6 +79,19 @@ public class GameObjectEditor extends ListingElement {
         }
     }
 
+    public static class DoubleStringConverter implements ObjectConverter<Double> {
+
+        @Override
+        public String convertFrom(Double aValue) {
+            return Double.toString(aValue);
+        }
+
+        @Override
+        public Double convertTo(String aValue) {
+            return Double.parseDouble(aValue);
+        }
+    }
+
     public static class StringStringConverter implements ObjectConverter<String> {
 
         @Override
@@ -102,6 +120,17 @@ public class GameObjectEditor extends ListingElement {
 
     public GameObjectEditor(HTMLElement aHtmlElement) {
         super(aHtmlElement);
+    }
+
+    private void selectParentOf(Object aDeletedObject) {
+        if (aDeletedObject instanceof Behavior) {
+            Behavior theBehavior = (Behavior) aDeletedObject;
+            setEditingObject(theBehavior.getInstance());
+        }
+        if (aDeletedObject instanceof BehaviorTemplate) {
+            BehaviorTemplate theTemplate = (BehaviorTemplate) aDeletedObject;
+            setEditingObject(theTemplate.getOwner());
+        }
     }
 
     public void setEditingObject(GameObject aObject) {
@@ -142,6 +171,48 @@ public class GameObjectEditor extends ListingElement {
         addColorPropertyEditor("Background color", aObject.backgroundColorProperty());
         addGameObjectSelectEditor("Camera", aObject.cameraObjectProperty(), aObject.getObjects());
         addGameObjectSelectEditor("Player", aObject.defaultPlayerProperty(), aObject.getObjects());
+
+        for (GameSceneEffect theEffect : aObject.getPreprocessorEffects()) {
+            addEffectComponent(theEffect);
+        }
+
+        for (GameSceneEffect theEffect : aObject.getPreprocessorEffects()) {
+            addEffectComponent(theEffect);
+        }
+    }
+
+    public void addEffectComponent(GameSceneEffect aEffect) {
+        if (aEffect instanceof StarfieldGameSceneEffect) {
+            addComponent((StarfieldGameSceneEffect) aEffect);
+        }
+        if (aEffect instanceof ArcadeRacerGameSceneEffect) {
+            addComponent((ArcadeRacerGameSceneEffect) aEffect);
+        }
+    }
+
+
+    public void addComponent(StarfieldGameSceneEffect aEffect) {
+        GlobalSeparatorHTMLElement theElement = addTitleLevel2("Starfield effect");
+        addTextInputfieldPropertyEditor("Number of stars", aEffect.numberofStars(), new IntegerStringConverter());
+        addColorPropertyEditor("Star color", aEffect.color());
+        addTextInputfieldPropertyEditor("Star movement speed", aEffect.starSpeed(), new FloatStringConverter());
+        theElement.addDeleteListener((aEvent) -> {
+            aEffect.delete();
+            setEditingObject(aEffect.getScene());
+        });
+    }
+
+    public void addComponent(ArcadeRacerGameSceneEffect aEffect) {
+        GlobalSeparatorHTMLElement theElement = addTitleLevel2("Arcade racer");
+        addTextInputfieldPropertyEditor("Speed", aEffect.speed(), new DoubleStringConverter());
+        addTextInputfieldPropertyEditor("Field of view", aEffect.fieldOfView(), new IntegerStringConverter());
+        addTextInputfieldPropertyEditor("View depth", aEffect.viewDepth(), new IntegerStringConverter());
+        addTextInputfieldPropertyEditor("Distance to camera", aEffect.distanceCamera(), new IntegerStringConverter());
+        addTextInputfieldPropertyEditor("Camera height", aEffect.cameraHeight(), new DoubleStringConverter());
+        theElement.addDeleteListener((aEvent) -> {
+            aEffect.delete();
+            setEditingObject(aEffect.getScene());
+        });
     }
 
     public void setEditingObject(EventSheet aObject) {
@@ -186,22 +257,30 @@ public class GameObjectEditor extends ListingElement {
         if (aComponent == null) {
             return;
         }
-        addTitleLevel2("Camera");
+        GlobalSeparatorHTMLElement theElement = addTitleLevel2("Camera");
         addSelectionEditor("Type", aComponent.typeProperty(), CameraType.values());
+        theElement.addDeleteListener((aEvent) -> {
+            aComponent.delete();
+            selectParentOf(aComponent);
+        });
     }
 
     private void addSubComponent(Static aComponent) {
         if (aComponent == null) {
             return;
         }
-        addTitleLevel2("Static");
+        GlobalSeparatorHTMLElement theElement = addTitleLevel2("Static");
+        theElement.addDeleteListener((aEvent) -> {
+            aComponent.delete();
+            selectParentOf(aComponent);
+        });
     }
 
     private void addSubComponent(Text aComponent) {
         if (aComponent == null) {
             return;
         }
-        addTitleLevel2("Text");
+        GlobalSeparatorHTMLElement theElement = addTitleLevel2("Text");
         addFontPropertyEditor(aComponent.fontProperty());
         addBooleanPropertyEditor("Is LUA Script", aComponent.isScriptProperty());
         addLongStringPropertyEditor("Text Expression", aComponent.textExpressionProperty(),
@@ -217,13 +296,17 @@ public class GameObjectEditor extends ListingElement {
                 }
             });
         addColorPropertyEditor("Text color", aComponent.colorProperty());
+        theElement.addDeleteListener((aEvent) -> {
+            aComponent.delete();
+            selectParentOf(aComponent);
+        });
     }
 
     private void addSubComponent(PlayerScore aComponent) {
         if (aComponent == null) {
             return;
         }
-        addTitleLevel2("Player score");
+        GlobalSeparatorHTMLElement theElement = addTitleLevel2("Player score");
         addTextInputfieldPropertyEditor("Score", aComponent.scoreValueProperty(), new ObjectConverter<ScoreValue>() {
             @Override
             public String convertFrom(ScoreValue aValue) {
@@ -235,13 +318,17 @@ public class GameObjectEditor extends ListingElement {
                 return new ScoreValue(Long.parseLong(aValue));
             }
         });
+        theElement.addDeleteListener((aEvent) -> {
+            aComponent.delete();
+            selectParentOf(aComponent);
+        });
     }
 
     private void addSubComponent(ConstantMovement aComponent) {
         if (aComponent == null) {
             return;
         }
-        addTitleLevel2("Constant movement");
+        GlobalSeparatorHTMLElement theElement = addTitleLevel2("Constant movement");
         addTextInputfieldPropertyEditor("Movement speed", aComponent.speedProperty(), new ObjectConverter<Speed>() {
             @Override
             public String convertFrom(Speed aValue) {
@@ -264,6 +351,10 @@ public class GameObjectEditor extends ListingElement {
                 return new Speed(Long.parseLong(aValue));
             }
         });
+        theElement.addDeleteListener((aEvent) -> {
+            aComponent.delete();
+            selectParentOf(aComponent);
+        });
     }
 
     private void addSubComponent(Platform aComponent) {
@@ -271,12 +362,16 @@ public class GameObjectEditor extends ListingElement {
             return;
         }
 
-        addTitleLevel2("Platformer");
+        GlobalSeparatorHTMLElement theElement = addTitleLevel2("Platformer");
         addSelectionEditor("Move left", aComponent.moveLeftKeyProperty(), GameKeyCode.values());
         addSelectionEditor("Move right", aComponent.moveRightKeyProperty(), GameKeyCode.values());
         addSelectionEditor("Jump", aComponent.jumpKeyProperty(), GameKeyCode.values());
         addTextInputfieldPropertyEditor("Jump impulse.", aComponent.jumpImpulseProperty(), new FloatStringConverter());
         addTextInputfieldPropertyEditor("Left/rigt impulse.", aComponent.leftRightImpulseProperty(), new FloatStringConverter());
+        theElement.addDeleteListener((aEvent) -> {
+            aComponent.delete();
+            selectParentOf(aComponent);
+        });
     }
 
     private void addSubComponent(Physics aComponent) {
@@ -284,13 +379,17 @@ public class GameObjectEditor extends ListingElement {
             return;
         }
 
-        addTitleLevel2("Physics");
+        GlobalSeparatorHTMLElement theElement = addTitleLevel2("Physics");
         addBooleanPropertyEditor("Active", aComponent.activeProperty());
         addBooleanPropertyEditor("Fixed rotation", aComponent.fixedRotationProperty());
         addTextInputfieldPropertyEditor("Density", aComponent.densityProperty(), new FloatStringConverter());
         addTextInputfieldPropertyEditor("Friction", aComponent.frictionProperty(), new FloatStringConverter());
         addTextInputfieldPropertyEditor("Restitution", aComponent.restitutionProperty(), new FloatStringConverter());
         addTextInputfieldPropertyEditor("Gravity", aComponent.gravityScaleProperty(), new FloatStringConverter());
+        theElement.addDeleteListener((aEvent) -> {
+            aComponent.delete();
+            selectParentOf(aComponent);
+        });
     }
 
     private void addSubComponent(Sprite aComponent, GameScene aGameScene) {
@@ -298,9 +397,13 @@ public class GameObjectEditor extends ListingElement {
             return;
         }
 
-        addTitleLevel2("Sprite");
+        GlobalSeparatorHTMLElement theElement = addTitleLevel2("Sprite");
         addTextInputfieldPropertyEditor("Speed", aComponent.speedProperty(), new IntegerStringConverter());
         addAnimationEditor("Animation", aComponent.currentAnimationProperty(), aGameScene);
+        theElement.addDeleteListener((aEvent) -> {
+            aComponent.delete();
+            selectParentOf(aComponent);
+        });
     }
 
     private <T> void addTextInputfieldPropertyEditor(String aLabel, Property<T> aProperty, ObjectConverter<T> aConverter) {

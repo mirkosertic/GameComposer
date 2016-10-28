@@ -34,4 +34,6 @@ public interface GameSceneEffect {
     void render(EffectCanvas aEffectCanvas, CameraBehavior aCameraBehavior);
 
     GameScene getScene();
+
+    void delete();
 }

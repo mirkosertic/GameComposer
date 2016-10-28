@@ -20,7 +20,7 @@
     <template>
         <style include="global-shared-styles"></style>
 
-        <div class$="{{computeStyle(major)}}">{{text}}</div>
+        <div class$="{{computeStyle(major)}}">{{text}}<img id="deletebutton" class="deletebutton" src="close.png"></div>
     </template>
     <script>
         Polymer({
@@ -43,6 +43,11 @@
                     return "separator";
                 }
                 return "separatorlight";
+            },
+
+            addDeleteListener: function(aListener) {
+                this.$.deletebutton.style.visibility = 'visible';
+                this.$.deletebutton.addEventListener("click", aListener);
             },
 
             ready: function() {
