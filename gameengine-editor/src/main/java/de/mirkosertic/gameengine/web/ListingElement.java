@@ -30,7 +30,7 @@ public abstract class ListingElement {
         binder = new HashSet<>();
     }
 
-    protected HTMLElement addTitleLevel1(String aTitle) {
+    protected GlobalSeparatorHTMLElement addTitleLevel1(String aTitle) {
 
         GlobalSeparatorHTMLElement theElement = GlobalSeparatorHTMLElement.create();
         theElement.setText(aTitle);
@@ -39,7 +39,7 @@ public abstract class ListingElement {
         return theElement;
     }
 
-    protected HTMLElement addTitleLevel2(String aTitle) {
+    protected GlobalSeparatorHTMLElement addTitleLevel2(String aTitle) {
         GlobalSeparatorHTMLElement theElement = GlobalSeparatorHTMLElement.create();
         theElement.setText(aTitle);
         htmlElement.appendChild(theElement);

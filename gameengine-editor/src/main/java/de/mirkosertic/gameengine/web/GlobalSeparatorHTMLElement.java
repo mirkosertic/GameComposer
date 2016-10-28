@@ -17,6 +17,8 @@ package de.mirkosertic.gameengine.web;
 
 import org.teavm.jso.JSBody;
 import org.teavm.jso.JSProperty;
+import org.teavm.jso.dom.events.Event;
+import org.teavm.jso.dom.events.EventListener;
 import org.teavm.jso.dom.html.HTMLElement;
 
 public abstract class GlobalSeparatorHTMLElement implements HTMLElement {
@@ -35,4 +37,6 @@ public abstract class GlobalSeparatorHTMLElement implements HTMLElement {
 
     @JSProperty
     public abstract boolean isMajor();
+
+    public abstract void addDeleteListener(EventListener<Event> aListener);
 }

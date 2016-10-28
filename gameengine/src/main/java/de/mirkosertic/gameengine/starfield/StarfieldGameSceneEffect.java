@@ -171,4 +171,9 @@ public class StarfieldGameSceneEffect implements GameSceneEffect {
 
         return theResult;
     }
+
+    @Override
+    public void delete() {
+        scene.removeEffect(this);
+    }
 }

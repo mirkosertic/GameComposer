@@ -317,4 +317,9 @@ public class ArcadeRacerGameSceneEffect implements GameSceneEffect {
         gameTime = aGameTime;
         return GameProcess.ProceedResult.CONTINUE_RUNNING;
     }
+
+    @Override
+    public void delete() {
+        gameScene.removeEffect(this);
+    }
 }
