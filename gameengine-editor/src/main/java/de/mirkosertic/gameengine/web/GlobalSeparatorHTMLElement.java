@@ -15,9 +15,9 @@
  */
 package de.mirkosertic.gameengine.web;
 
+import de.mirkosertic.gameengine.teavm.TeaVMMouseEvent;
 import org.teavm.jso.JSBody;
 import org.teavm.jso.JSProperty;
-import org.teavm.jso.dom.events.Event;
 import org.teavm.jso.dom.events.EventListener;
 import org.teavm.jso.dom.html.HTMLElement;
 
@@ -38,5 +38,7 @@ public abstract class GlobalSeparatorHTMLElement implements HTMLElement {
     @JSProperty
     public abstract boolean isMajor();
 
-    public abstract void addDeleteListener(EventListener<Event> aListener);
+    public abstract void addDeleteListener(EventListener<TeaVMMouseEvent> aListener);
+
+    public abstract void addContextMenuListener(EventListener<TeaVMMouseEvent> aListener);
 }

@@ -18,9 +18,9 @@ package de.mirkosertic.gameengine.web;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.event.PropertyChanged;
+import de.mirkosertic.gameengine.teavm.TeaVMMouseEvent;
 import org.teavm.jso.JSBody;
 import org.teavm.jso.JSProperty;
-import org.teavm.jso.dom.events.Event;
 import org.teavm.jso.dom.events.EventListener;
 import org.teavm.jso.dom.html.HTMLElement;
 
@@ -61,7 +61,7 @@ public abstract class TreeItemHTMLElement implements HTMLElement {
 
     public abstract void scrollIntoView(boolean aParam);
 
-    public abstract void addDeleteListener(EventListener<Event> aListener);
+    public abstract void addDeleteListener(EventListener<TeaVMMouseEvent> aListener);
 
     public HTMLInputBinder bindTo(Property<String> aProperty) {
         setText(aProperty.get());
