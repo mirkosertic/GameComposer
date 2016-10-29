@@ -15,17 +15,11 @@
  */
 package de.mirkosertic.gameengine.teavm;
 
-import org.teavm.jso.JSObject;
 import org.teavm.jso.JSProperty;
+import org.teavm.jso.dom.events.MouseEvent;
 
-public interface TeaVMMouseEvent extends JSObject {
+public interface TeaVMMouseEvent extends MouseEvent {
 
     @JSProperty
     int getWhich();
-
-    @JSProperty("clientX")
-    int getClientX();
-
-    @JSProperty("clientY")
-    int getClientY();
 }

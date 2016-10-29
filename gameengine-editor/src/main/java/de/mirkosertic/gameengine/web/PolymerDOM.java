@@ -21,4 +21,6 @@ import org.teavm.jso.dom.html.HTMLElement;
 public abstract class PolymerDOM implements JSObject {
 
     public abstract void appendChild(HTMLElement aElement);
+
+    public abstract void removeChild(HTMLElement aElemet);
 }

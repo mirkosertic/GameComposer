@@ -23,24 +23,9 @@ import de.mirkosertic.gameengine.camera.Camera;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.CameraBehaviorTemplate;
 import de.mirkosertic.gameengine.camera.CameraType;
-import de.mirkosertic.gameengine.core.Behavior;
-import de.mirkosertic.gameengine.core.BehaviorTemplate;
-import de.mirkosertic.gameengine.core.EventSheet;
-import de.mirkosertic.gameengine.core.Game;
-import de.mirkosertic.gameengine.core.GameObject;
-import de.mirkosertic.gameengine.core.GameObjectInstance;
-import de.mirkosertic.gameengine.core.GameScene;
-import de.mirkosertic.gameengine.core.GameSceneEffect;
+import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.event.Property;
-import de.mirkosertic.gameengine.physic.Physics;
-import de.mirkosertic.gameengine.physic.PhysicsBehavior;
-import de.mirkosertic.gameengine.physic.PhysicsBehaviorTemplate;
-import de.mirkosertic.gameengine.physic.Platform;
-import de.mirkosertic.gameengine.physic.PlatformBehavior;
-import de.mirkosertic.gameengine.physic.PlatformBehaviorTemplate;
-import de.mirkosertic.gameengine.physic.Static;
-import de.mirkosertic.gameengine.physic.StaticBehavior;
-import de.mirkosertic.gameengine.physic.StaticBehaviorTemplate;
+import de.mirkosertic.gameengine.physic.*;
 import de.mirkosertic.gameengine.playerscore.PlayerScore;
 import de.mirkosertic.gameengine.playerscore.PlayerScoreBehavior;
 import de.mirkosertic.gameengine.playerscore.PlayerScoreBehaviorTemplate;
@@ -51,17 +36,7 @@ import de.mirkosertic.gameengine.starfield.StarfieldGameSceneEffect;
 import de.mirkosertic.gameengine.text.Text;
 import de.mirkosertic.gameengine.text.TextBehavior;
 import de.mirkosertic.gameengine.text.TextBehaviorTemplate;
-import de.mirkosertic.gameengine.type.Angle;
-import de.mirkosertic.gameengine.type.Animation;
-import de.mirkosertic.gameengine.type.Color;
-import de.mirkosertic.gameengine.type.Font;
-import de.mirkosertic.gameengine.type.GameKeyCode;
-import de.mirkosertic.gameengine.type.Position;
-import de.mirkosertic.gameengine.type.PositionAnchor;
-import de.mirkosertic.gameengine.type.ScoreValue;
-import de.mirkosertic.gameengine.type.Size;
-import de.mirkosertic.gameengine.type.Speed;
-import de.mirkosertic.gameengine.type.TextExpression;
+import de.mirkosertic.gameengine.type.*;
 import org.teavm.jso.dom.html.HTMLElement;
 
 public class GameObjectEditor extends ListingElement {
@@ -135,7 +110,7 @@ public class GameObjectEditor extends ListingElement {
 
     public void setEditingObject(GameObject aObject) {
         clear();
-        addTitleLevel1("Game Object");
+        GlobalSeparatorHTMLElement theEditor = addTitleLevel1("Game Object");
         addTitleLevel2("Common properties");
         addTextInputfieldPropertyEditor("Name", aObject.nameProperty(), new StringStringConverter());
         addSizePropertyEditor(aObject.sizeProperty());
@@ -149,6 +124,12 @@ public class GameObjectEditor extends ListingElement {
         addSubComponent(aObject.getBehaviorTemplate(ConstantMovementBehaviorTemplate.class));
         addSubComponent(aObject.getBehaviorTemplate(PhysicsBehaviorTemplate.class));
         addSubComponent(aObject.getBehaviorTemplate(SpriteBehaviorTemplate.class), aObject.getGameScene());
+
+        theEditor.addContextMenuListener(evt -> {
+            GlobalContextMenuHTMLElement theContextMenu = GlobalContextMenuHTMLElement.create();
+            theContextMenu.setTitle("Add new");
+            theContextMenu.showAt(evt);
+        });
     }
 
     public void setEditingObject(Game aObject) {

@@ -20,7 +20,7 @@
     <template>
         <style include="global-shared-styles"></style>
 
-        <div class$="{{computeStyle(major)}}">{{text}}<img id="deletebutton" class="deletebutton" src="close.png"></div>
+        <div class$="{{computeStyle(major)}}"><img id="contextmenu" class="contextmenu" src="menu.png">{{text}}<img id="deletebutton" class="deletebutton" src="close.png"></div>
     </template>
     <script>
         Polymer({
@@ -46,8 +46,15 @@
             },
 
             addDeleteListener: function(aListener) {
+                this.$.deletebutton.style.display = 'inline';
                 this.$.deletebutton.style.visibility = 'visible';
                 this.$.deletebutton.addEventListener("click", aListener);
+            },
+
+            addContextMenuListener: function(aListener) {
+                this.$.contextmenu.style.display = 'inline';
+                this.$.contextmenu.style.visibility = 'visible';
+                this.$.contextmenu.addEventListener("click", aListener);
             },
 
             ready: function() {
