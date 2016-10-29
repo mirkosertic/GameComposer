@@ -14,11 +14,20 @@
   ~ limitations under the License.
   -->
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="shared-styles.html">
 
-<dom-module id="global-shared-styles">
+<dom-module id="gameeditor-contextmenu">
     <template>
-        <style>
-            .separator {
+        <style include="global-shared-styles">
+            :host {
+                position: absolute;
+                border: 1px solid white;
+            }
+
+            .contextmenupopup {
+            }
+
+            .contextmenutitle {
                 color: white;
                 font-family: 'Open Sans', sans-serif;
                 background-color: #e74c3c;
@@ -28,31 +37,27 @@
                 line-height: 1.6em;
                 vertical-align: middle;
             }
-
-            .separatorlight {
-                color: white;
-                font-family: 'Open Sans', sans-serif;
-                background-color: #4a5058;
-                padding: 0.1em;
-                padding-left: 0.3em;
-                height: 1.6em;
-                line-height: 1.6em;
-                vertical-align: middle;
-            }
-
-            .deletebutton {
-                vertical-align: middle;
-                float: right;
-                visibility: hidden;
-                display: none;
-            }
-
-            .contextmenu {
-                vertical-align: middle;
-                float: left;
-                visibility: hidden;
-                display: none;
-            }
         </style>
+
+        <div class="contextmenupopup">
+            <div class="contextmenutitle">{{title}}</div>
+            <content id="content"></content>
+        </div>
     </template>
+    <script>
+        Polymer({
+            is: 'gameeditor-contextmenu',
+
+            properties: {
+                title: {
+                    type: String,
+                    notify: true
+                },
+            },
+
+            ready: function() {
+            }
+
+        });
+    </script>
 </dom-module>
