@@ -173,6 +173,7 @@ public class GameTreeView extends ListingElement {
                     theItem.addEventListener("click", aClickEvent -> {
                         theElement.hide();
                         Spritesheet theObject = theScene.createNewSpriteSheet();
+                        theObject.nameProperty().set("Sprite sheet #" + theScene.getSpriteSheets().length);
 
                         reloadSceneOnObjectDeletion(theScene, null);
 
@@ -204,10 +205,11 @@ public class GameTreeView extends ListingElement {
                     theElement.setTitle("Add new");
 
                     ContextMenuItemHTMLElement theItem = ContextMenuItemHTMLElement.create();
-                    theItem.setText("Sprite sheet");
+                    theItem.setText("Event sheet");
                     theItem.addEventListener("click", aClickEvent -> {
                         theElement.hide();
                         EventSheet theObject = theScene.createNewEventSheet();
+                        theObject.nameProperty().set("Event sheet #" + theScene.getEventSheets().length);
 
                         reloadSceneOnObjectDeletion(theScene, null);
 
