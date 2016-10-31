@@ -29,10 +29,4 @@ public abstract class ContextMenuItemHTMLElement implements HTMLElement {
 
     @JSProperty
     public abstract String getText();
-
-    @JSProperty
-    public abstract void setMajor(boolean aValue);
-
-    @JSProperty
-    public abstract boolean isMajor();
 }

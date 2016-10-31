@@ -124,9 +124,12 @@ public class GameTreeView extends ListingElement {
                 GlobalSeparatorHTMLElement theObjects = addTitleLevel2("Objects");
                 theObjects.addContextMenuListener(aContextMenuEvent -> {
                     ContextMenuHTMLElement theElement = ContextMenuHTMLElement.create();
+                    theElement.setTitle("Add new");
+
                     ContextMenuItemHTMLElement theItem = ContextMenuItemHTMLElement.create();
                     theItem.setText("Game object");
                     theItem.addEventListener("click", aClickEvent -> {
+                        theElement.hide();
                         GameObject theObject = theScene.createNewGameObject("NEW OBJECT");
 
                         reloadSceneOnObjectDeletion(theScene, null);
@@ -163,9 +166,12 @@ public class GameTreeView extends ListingElement {
                 GlobalSeparatorHTMLElement theSpriteSheets = addTitleLevel2("Sprite sheets");
                 theSpriteSheets.addContextMenuListener(aContextMenuEvent -> {
                     ContextMenuHTMLElement theElement = ContextMenuHTMLElement.create();
+                    theElement.setTitle("Add new");
+
                     ContextMenuItemHTMLElement theItem = ContextMenuItemHTMLElement.create();
                     theItem.setText("Sprite sheet");
                     theItem.addEventListener("click", aClickEvent -> {
+                        theElement.hide();
                         Spritesheet theObject = theScene.createNewSpriteSheet();
 
                         reloadSceneOnObjectDeletion(theScene, null);
@@ -195,9 +201,12 @@ public class GameTreeView extends ListingElement {
                 GlobalSeparatorHTMLElement theEventSheets = addTitleLevel2("Eventsheets");
                 theEventSheets.addContextMenuListener(aContextMenuEvent -> {
                     ContextMenuHTMLElement theElement = ContextMenuHTMLElement.create();
+                    theElement.setTitle("Add new");
+
                     ContextMenuItemHTMLElement theItem = ContextMenuItemHTMLElement.create();
                     theItem.setText("Sprite sheet");
                     theItem.addEventListener("click", aClickEvent -> {
+                        theElement.hide();
                         EventSheet theObject = theScene.createNewEventSheet();
 
                         reloadSceneOnObjectDeletion(theScene, null);
