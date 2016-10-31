@@ -1,8 +1,6 @@
 language: android
 jdk:
   - oraclejdk8
-node_js:
-  - "6"
 android:
   components:
     - tools # to get the new `repository-11.xml`
@@ -14,9 +12,10 @@ android:
 env:
   global:
     - "MAVEN_OPTS=-Xmx2536m -XX:MaxPermSize=1024m -XX:+CMSClassUnloadingEnabled -XX:-UseGCOverheadLimit"
+    - "TRAVIS_NODE_VERSION=6"
 before_install:
-  - "npm install n -g"
-  - "n stable"
+  - "rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && (cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`) && source ~/.nvm/nvm.sh && nvm install $TRAVIS_NODE_VERSION"
+  - "npm install"
   - "npm install electron-packager -g"
   - "npm install cordova -g"
   - "npm install bower -g"
