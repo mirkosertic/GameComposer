@@ -15,6 +15,7 @@
  */
 package de.mirkosertic.gameengine.web;
 
+import com.sun.webkit.ContextMenuItem;
 import de.mirkosertic.gameengine.arcade.ConstantMovement;
 import de.mirkosertic.gameengine.arcade.ConstantMovementBehavior;
 import de.mirkosertic.gameengine.arcade.ConstantMovementBehaviorTemplate;
@@ -448,6 +449,7 @@ public class GameObjectEditor extends ListingElement {
                     ContextMenuItemHTMLElement theItem = ContextMenuItemHTMLElement.create();
                     theItem.setText(theEntry.getKey());
                     theItem.addEventListener("click", aEvent -> {
+                        theContextMenu.hide();
                         theEntry.getValue().create(aObject);
                     }, false);
                     theContextMenu.add(theItem);
