@@ -20,7 +20,9 @@ import de.mirkosertic.gameengine.core.Game;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.Spritesheet;
 import de.mirkosertic.gameengine.teavm.TeaVMDragEvent;
+import de.mirkosertic.gameengine.teavm.TeaVMMouseEvent;
 import org.teavm.jso.browser.Window;
 import org.teavm.jso.dom.events.EventListener;
 import org.teavm.jso.dom.html.HTMLElement;
@@ -36,6 +38,7 @@ public class GameTreeView extends ListingElement {
         void setEditingObject(GameScene aScene);
         void setEditingObject(GameObject aObject);
         void setEditingObject(EventSheet aSheet);
+        void setEditingObject(Spritesheet aSheet);
         void setEditingObject(GameObjectInstance aInstance);
     }
 
@@ -118,7 +121,22 @@ public class GameTreeView extends ListingElement {
             });
 
             if (currentScene != null && currentScene.equals(theSceneID)) {
-                addTitleLevel2("Objects");
+                GlobalSeparatorHTMLElement theObjects = addTitleLevel2("Objects");
+                theObjects.addContextMenuListener(aContextMenuEvent -> {
+                    ContextMenuHTMLElement theElement = ContextMenuHTMLElement.create();
+                    ContextMenuItemHTMLElement theItem = ContextMenuItemHTMLElement.create();
+                    theItem.setText("Game object");
+                    theItem.addEventListener("click", aClickEvent -> {
+                        GameObject theObject = theScene.createNewGameObject("NEW OBJECT");
+
+                        reloadSceneOnObjectDeletion(theScene, null);
+
+                        setEditingObject(theObject);
+                        eventHandler.setEditingObject(theObject);
+                    });
+                    theElement.add(theItem);
+                    theElement.showAt(aContextMenuEvent);
+                });
                 for (GameObject theObject : theScene.getObjects()) {
 
                     TreeItemHTMLElement theElement = addTreeItem(1);
@@ -142,7 +160,54 @@ public class GameTreeView extends ListingElement {
                         reloadSceneOnObjectDeletion(theScene, theElement);
                     });
                 }
-                addTitleLevel2("Eventsheets");
+                GlobalSeparatorHTMLElement theSpriteSheets = addTitleLevel2("Sprite sheets");
+                theSpriteSheets.addContextMenuListener(aContextMenuEvent -> {
+                    ContextMenuHTMLElement theElement = ContextMenuHTMLElement.create();
+                    ContextMenuItemHTMLElement theItem = ContextMenuItemHTMLElement.create();
+                    theItem.setText("Sprite sheet");
+                    theItem.addEventListener("click", aClickEvent -> {
+                        Spritesheet theObject = theScene.createNewSpriteSheet();
+
+                        reloadSceneOnObjectDeletion(theScene, null);
+
+                        setEditingObject(theObject);
+                        eventHandler.setEditingObject(theObject);
+                    });
+                    theElement.add(theItem);
+                    theElement.showAt(aContextMenuEvent);
+                });
+                for (Spritesheet theSheet : theScene.getSpriteSheets()) {
+                    TreeItemHTMLElement theElement = addTreeItem(1);
+                    knownObjects.put(theSheet, theElement);
+                    binder.add(theElement.bindTo(theSheet.nameProperty()));
+
+                    theElement.addEventListener("click", evt -> {
+                        select(theElement);
+                        eventHandler.setEditingObject(theSheet);
+                    });
+                    theElement.addDeleteListener(evt -> {
+                        theScene.removeSpriteSheet(theSheet);
+
+                        reloadSceneOnObjectDeletion(theScene, theElement);
+                    });
+                }
+
+                GlobalSeparatorHTMLElement theEventSheets = addTitleLevel2("Eventsheets");
+                theEventSheets.addContextMenuListener(aContextMenuEvent -> {
+                    ContextMenuHTMLElement theElement = ContextMenuHTMLElement.create();
+                    ContextMenuItemHTMLElement theItem = ContextMenuItemHTMLElement.create();
+                    theItem.setText("Sprite sheet");
+                    theItem.addEventListener("click", aClickEvent -> {
+                        EventSheet theObject = theScene.createNewEventSheet();
+
+                        reloadSceneOnObjectDeletion(theScene, null);
+
+                        setEditingObject(theObject);
+                        eventHandler.setEditingObject(theObject);
+                    });
+                    theElement.add(theItem);
+                    theElement.showAt(aContextMenuEvent);
+                });
                 for (EventSheet theSheet : theScene.getEventSheets()) {
                     TreeItemHTMLElement theElement = addTreeItem(1);
                     knownObjects.put(theSheet, theElement);
