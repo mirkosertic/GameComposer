@@ -45,4 +45,8 @@ public abstract class ContextMenuHTMLElement implements HTMLElement {
             Polymer.dom(theWindow.getDocument().getBody()).removeChild(ContextMenuHTMLElement.this);
         }, false);
     }
+
+    public void hide() {
+        Polymer.dom(Window.current().getDocument().getBody()).removeChild(this);
+    }
 }
