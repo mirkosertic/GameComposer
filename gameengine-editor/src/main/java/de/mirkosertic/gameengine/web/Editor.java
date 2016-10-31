@@ -20,6 +20,7 @@ import de.mirkosertic.gameengine.core.Game;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.Spritesheet;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.teavm.TeaVMGameRuntimeFactory;
 import de.mirkosertic.gameengine.teavm.TeaVMLogger;
@@ -126,6 +127,11 @@ public class Editor {
                 objectEditor.setEditingObject(aSheet);
 
                 openEventSheetInEditor(aSheet);
+            }
+
+            @Override
+            public void setEditingObject(Spritesheet aSheet) {
+                objectEditor.setEditingObject(aSheet);
             }
 
             @Override
@@ -277,6 +283,5 @@ public class Editor {
             }
         });
         theEditor.addEventListener("change", evt1 -> aScriptProperty.set(new Script(theEditor.getValue())));
-
     }
 }

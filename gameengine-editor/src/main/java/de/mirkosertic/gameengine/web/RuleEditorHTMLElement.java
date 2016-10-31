@@ -16,7 +16,17 @@
 package de.mirkosertic.gameengine.web;
 
 import de.mirkosertic.gameengine.action.SystemTickCondition;
-import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.core.Action;
+import de.mirkosertic.gameengine.core.Condition;
+import de.mirkosertic.gameengine.core.DeleteGameObjectInstanceAction;
+import de.mirkosertic.gameengine.core.EventSheet;
+import de.mirkosertic.gameengine.core.GameObjectInstanceAddedToSceneCondition;
+import de.mirkosertic.gameengine.core.GameObjectInstanceLeftLayoutCondition;
+import de.mirkosertic.gameengine.core.GameObjectInstanceRemovedFromSceneCondition;
+import de.mirkosertic.gameengine.core.GameRule;
+import de.mirkosertic.gameengine.core.RunSceneAction;
+import de.mirkosertic.gameengine.core.SceneStartedCondition;
+import de.mirkosertic.gameengine.core.SpawnGameObjectInstanceAction;
 import de.mirkosertic.gameengine.input.KeyEventCondition;
 import de.mirkosertic.gameengine.input.MouseEventCondition;
 import de.mirkosertic.gameengine.physic.ObjectCollisionCondition;
@@ -28,8 +38,6 @@ import de.mirkosertic.gameengine.type.GameKeyCode;
 import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.ResourceName;
 import org.teavm.jso.JSBody;
-import org.teavm.jso.dom.events.Event;
-import org.teavm.jso.dom.events.EventListener;
 import org.teavm.jso.dom.html.HTMLElement;
 
 import java.util.ArrayList;

@@ -23,9 +23,25 @@ import de.mirkosertic.gameengine.camera.Camera;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.CameraBehaviorTemplate;
 import de.mirkosertic.gameengine.camera.CameraType;
-import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.core.Behavior;
+import de.mirkosertic.gameengine.core.BehaviorTemplate;
+import de.mirkosertic.gameengine.core.EventSheet;
+import de.mirkosertic.gameengine.core.Game;
+import de.mirkosertic.gameengine.core.GameObject;
+import de.mirkosertic.gameengine.core.GameObjectInstance;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.GameSceneEffect;
+import de.mirkosertic.gameengine.core.Spritesheet;
 import de.mirkosertic.gameengine.event.Property;
-import de.mirkosertic.gameengine.physic.*;
+import de.mirkosertic.gameengine.physic.Physics;
+import de.mirkosertic.gameengine.physic.PhysicsBehavior;
+import de.mirkosertic.gameengine.physic.PhysicsBehaviorTemplate;
+import de.mirkosertic.gameengine.physic.Platform;
+import de.mirkosertic.gameengine.physic.PlatformBehavior;
+import de.mirkosertic.gameengine.physic.PlatformBehaviorTemplate;
+import de.mirkosertic.gameengine.physic.Static;
+import de.mirkosertic.gameengine.physic.StaticBehavior;
+import de.mirkosertic.gameengine.physic.StaticBehaviorTemplate;
 import de.mirkosertic.gameengine.playerscore.PlayerScore;
 import de.mirkosertic.gameengine.playerscore.PlayerScoreBehavior;
 import de.mirkosertic.gameengine.playerscore.PlayerScoreBehaviorTemplate;
@@ -36,8 +52,21 @@ import de.mirkosertic.gameengine.starfield.StarfieldGameSceneEffect;
 import de.mirkosertic.gameengine.text.Text;
 import de.mirkosertic.gameengine.text.TextBehavior;
 import de.mirkosertic.gameengine.text.TextBehaviorTemplate;
-import de.mirkosertic.gameengine.type.*;
+import de.mirkosertic.gameengine.type.Angle;
+import de.mirkosertic.gameengine.type.Animation;
+import de.mirkosertic.gameengine.type.Color;
+import de.mirkosertic.gameengine.type.Font;
+import de.mirkosertic.gameengine.type.GameKeyCode;
+import de.mirkosertic.gameengine.type.Position;
+import de.mirkosertic.gameengine.type.PositionAnchor;
+import de.mirkosertic.gameengine.type.ScoreValue;
+import de.mirkosertic.gameengine.type.Size;
+import de.mirkosertic.gameengine.type.Speed;
+import de.mirkosertic.gameengine.type.TextExpression;
 import org.teavm.jso.dom.html.HTMLElement;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class GameObjectEditor extends ListingElement {
 
@@ -93,8 +122,224 @@ public class GameObjectEditor extends ListingElement {
         }
     }
 
+    interface ObjectEditorHelper<T> {
+
+        boolean contains(T aObject);
+
+        void addOptionEditor(T aObject);
+
+        void create(T aObject);
+    }
+
+
+    private final Map<String, ObjectEditorHelper<GameObject>> availableTemplates;
+    private final Map<String, ObjectEditorHelper<GameScene>> availableEffects;
+
     public GameObjectEditor(HTMLElement aHtmlElement) {
         super(aHtmlElement);
+
+        availableTemplates = new HashMap<>();
+        availableTemplates.put("Camera", new ObjectEditorHelper<GameObject>() {
+            @Override
+            public boolean contains(GameObject aObject) {
+                return aObject.getBehaviorTemplate(CameraBehaviorTemplate.class) != null;
+            }
+
+            @Override
+            public void addOptionEditor(GameObject aObject) {
+                addSubComponent(aObject.getBehaviorTemplate(CameraBehaviorTemplate.class), true);
+            }
+
+            @Override
+            public void create(GameObject aObject) {
+                aObject.getGameScene().addBehaviorToObject(aObject, new CameraBehaviorTemplate(aObject.getGameScene().getRuntime().getEventManager(),
+                        aObject));
+                addOptionEditor(aObject);
+            }
+        });
+        availableTemplates.put("Player", new ObjectEditorHelper<GameObject>() {
+            @Override
+            public boolean contains(GameObject aObject) {
+                return aObject.getBehaviorTemplate(PlayerScoreBehaviorTemplate.class) != null;
+            }
+
+            @Override
+            public void addOptionEditor(GameObject aObject) {
+                addSubComponent(aObject.getBehaviorTemplate(PlayerScoreBehaviorTemplate.class), true);
+            }
+
+            @Override
+            public void create(GameObject aObject) {
+                aObject.getGameScene().addBehaviorToObject(aObject, new PlayerScoreBehaviorTemplate(aObject.getGameScene().getRuntime().getEventManager(),
+                        aObject));
+                addOptionEditor(aObject);
+            }
+        });
+        availableTemplates.put("Static", new ObjectEditorHelper<GameObject>() {
+            @Override
+            public boolean contains(GameObject aObject) {
+                return aObject.getBehaviorTemplate(StaticBehaviorTemplate.class) != null;
+            }
+
+            @Override
+            public void addOptionEditor(GameObject aObject) {
+                addSubComponent(aObject.getBehaviorTemplate(StaticBehaviorTemplate.class), true);
+            }
+
+            @Override
+            public void create(GameObject aObject) {
+                aObject.getGameScene().addBehaviorToObject(aObject, new StaticBehaviorTemplate(aObject.getGameScene().getRuntime().getEventManager(),
+                        aObject));
+                addOptionEditor(aObject);
+            }
+        });
+        availableTemplates.put("Text", new ObjectEditorHelper<GameObject>() {
+            @Override
+            public boolean contains(GameObject aObject) {
+                return aObject.getBehaviorTemplate(TextBehaviorTemplate.class) != null;
+            }
+
+            @Override
+            public void addOptionEditor(GameObject aObject) {
+                addSubComponent(aObject.getBehaviorTemplate(TextBehaviorTemplate.class), true);
+            }
+
+            @Override
+            public void create(GameObject aObject) {
+                aObject.getGameScene().addBehaviorToObject(aObject, new TextBehaviorTemplate(aObject.getGameScene().getRuntime().getEventManager(),
+                        aObject));
+                addOptionEditor(aObject);
+            }
+        });
+        availableTemplates.put("Platformer", new ObjectEditorHelper<GameObject>() {
+            @Override
+            public boolean contains(GameObject aObject) {
+                return aObject.getBehaviorTemplate(PlatformBehaviorTemplate.class) != null;
+            }
+
+            @Override
+            public void addOptionEditor(GameObject aObject) {
+                addSubComponent(aObject.getBehaviorTemplate(PlatformBehaviorTemplate.class), true);
+            }
+
+            @Override
+            public void create(GameObject aObject) {
+                aObject.getGameScene().addBehaviorToObject(aObject, new PlatformBehaviorTemplate(aObject.getGameScene().getRuntime().getEventManager(),
+                        aObject));
+                addOptionEditor(aObject);
+            }
+        });
+        availableTemplates.put("Constant movement", new ObjectEditorHelper<GameObject>() {
+            @Override
+            public boolean contains(GameObject aObject) {
+                return aObject.getBehaviorTemplate(ConstantMovementBehaviorTemplate.class) != null;
+            }
+
+            @Override
+            public void addOptionEditor(GameObject aObject) {
+                addSubComponent(aObject.getBehaviorTemplate(ConstantMovementBehaviorTemplate.class), true);
+            }
+
+            @Override
+            public void create(GameObject aObject) {
+                aObject.getGameScene().addBehaviorToObject(aObject, new ConstantMovementBehaviorTemplate(aObject.getGameScene().getRuntime().getEventManager(),
+                        aObject));
+                addOptionEditor(aObject);
+            }
+        });
+        availableTemplates.put("Physics", new ObjectEditorHelper<GameObject>() {
+            @Override
+            public boolean contains(GameObject aObject) {
+                return aObject.getBehaviorTemplate(PhysicsBehaviorTemplate.class) != null;
+            }
+
+            @Override
+            public void addOptionEditor(GameObject aObject) {
+                addSubComponent(aObject.getBehaviorTemplate(PhysicsBehaviorTemplate.class), true);
+            }
+
+            @Override
+            public void create(GameObject aObject) {
+                aObject.getGameScene().addBehaviorToObject(aObject, new PhysicsBehaviorTemplate(aObject.getGameScene().getRuntime().getEventManager(),
+                        aObject));
+                addOptionEditor(aObject);
+            }
+        });
+        availableTemplates.put("Sprite", new ObjectEditorHelper<GameObject>() {
+            @Override
+            public boolean contains(GameObject aObject) {
+                return aObject.getBehaviorTemplate(SpriteBehaviorTemplate.class) != null;
+            }
+
+            @Override
+            public void addOptionEditor(GameObject aObject) {
+                addSubComponent(aObject.getBehaviorTemplate(SpriteBehaviorTemplate.class),
+                        aObject.getGameScene(), true);
+            }
+
+            @Override
+            public void create(GameObject aObject) {
+                aObject.getGameScene().addBehaviorToObject(aObject, new SpriteBehaviorTemplate(aObject.getGameScene().getRuntime().getEventManager(),
+                        aObject));
+                addOptionEditor(aObject);
+            }
+        });
+
+        availableEffects = new HashMap<>();
+        availableEffects.put("Starfield", new ObjectEditorHelper<GameScene>() {
+            @Override
+            public boolean contains(GameScene aObject) {
+                for (GameSceneEffect theEffect : aObject.getPreprocessorEffects()) {
+                    if (theEffect instanceof StarfieldGameSceneEffect) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            @Override
+            public void addOptionEditor(GameScene aObject) {
+                for (GameSceneEffect theEffect : aObject.getPreprocessorEffects()) {
+                    if (theEffect instanceof StarfieldGameSceneEffect) {
+                        addComponent((StarfieldGameSceneEffect) theEffect);
+                    }
+                }
+            }
+
+            @Override
+            public void create(GameScene aObject) {
+                StarfieldGameSceneEffect theEffect = new StarfieldGameSceneEffect(aObject, aObject.getRuntime().getEventManager());
+                aObject.addEffect(theEffect);
+                addOptionEditor(aObject);
+            }
+        });
+        availableEffects.put("Arcade racer", new ObjectEditorHelper<GameScene>() {
+            @Override
+            public boolean contains(GameScene aObject) {
+                for (GameSceneEffect theEffect : aObject.getPreprocessorEffects()) {
+                    if (theEffect instanceof ArcadeRacerGameSceneEffect) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            @Override
+            public void addOptionEditor(GameScene aObject) {
+                for (GameSceneEffect theEffect : aObject.getPreprocessorEffects()) {
+                    if (theEffect instanceof ArcadeRacerGameSceneEffect) {
+                        addComponent((ArcadeRacerGameSceneEffect) theEffect);
+                    }
+                }
+            }
+
+            @Override
+            public void create(GameScene aObject) {
+                ArcadeRacerGameSceneEffect theEffect = new ArcadeRacerGameSceneEffect(aObject, aObject.getRuntime().getEventManager());
+                aObject.addEffect(theEffect);
+                addOptionEditor(aObject);
+            }
+        });
     }
 
     private void selectParentOf(Object aDeletedObject) {
@@ -106,30 +351,6 @@ public class GameObjectEditor extends ListingElement {
             BehaviorTemplate theTemplate = (BehaviorTemplate) aDeletedObject;
             setEditingObject(theTemplate.getOwner());
         }
-    }
-
-    public void setEditingObject(GameObject aObject) {
-        clear();
-        GlobalSeparatorHTMLElement theEditor = addTitleLevel1("Game Object");
-        addTitleLevel2("Common properties");
-        addTextInputfieldPropertyEditor("Name", aObject.nameProperty(), new StringStringConverter());
-        addSizePropertyEditor(aObject.sizeProperty());
-        addBooleanPropertyEditor("Visible", aObject.visibleProperty());
-
-        addSubComponent(aObject.getBehaviorTemplate(CameraBehaviorTemplate.class));
-        addSubComponent(aObject.getBehaviorTemplate(PlayerScoreBehaviorTemplate.class));
-        addSubComponent(aObject.getBehaviorTemplate(StaticBehaviorTemplate.class));
-        addSubComponent(aObject.getBehaviorTemplate(TextBehaviorTemplate.class));
-        addSubComponent(aObject.getBehaviorTemplate(PlatformBehaviorTemplate.class));
-        addSubComponent(aObject.getBehaviorTemplate(ConstantMovementBehaviorTemplate.class));
-        addSubComponent(aObject.getBehaviorTemplate(PhysicsBehaviorTemplate.class));
-        addSubComponent(aObject.getBehaviorTemplate(SpriteBehaviorTemplate.class), aObject.getGameScene());
-
-        theEditor.addContextMenuListener(evt -> {
-            GlobalContextMenuHTMLElement theContextMenu = GlobalContextMenuHTMLElement.create();
-            theContextMenu.setTitle("Add new");
-            theContextMenu.showAt(evt);
-        });
     }
 
     public void setEditingObject(Game aObject) {
@@ -146,54 +367,32 @@ public class GameObjectEditor extends ListingElement {
 
     public void setEditingObject(GameScene aObject) {
         clear();
-        addTitleLevel1("Game Scene");
+        GlobalSeparatorHTMLElement theEditor = addTitleLevel1("Game Scene");
         addTitleLevel2("Common properties");
         addTextInputfieldPropertyEditor("Name", aObject.nameProperty(), new StringStringConverter());
         addColorPropertyEditor("Background color", aObject.backgroundColorProperty());
         addGameObjectSelectEditor("Camera", aObject.cameraObjectProperty(), aObject.getObjects());
         addGameObjectSelectEditor("Player", aObject.defaultPlayerProperty(), aObject.getObjects());
 
-        for (GameSceneEffect theEffect : aObject.getPreprocessorEffects()) {
-            addEffectComponent(theEffect);
-        }
-
-        for (GameSceneEffect theEffect : aObject.getPostprocessorEffects()) {
-            addEffectComponent(theEffect);
-        }
+        initializeAndBuildContextMenu(theEditor, aObject, availableEffects);
     }
 
-    public void addEffectComponent(GameSceneEffect aEffect) {
-        if (aEffect instanceof StarfieldGameSceneEffect) {
-            addComponent((StarfieldGameSceneEffect) aEffect);
-        }
-        if (aEffect instanceof ArcadeRacerGameSceneEffect) {
-            addComponent((ArcadeRacerGameSceneEffect) aEffect);
-        }
+    public void setEditingObject(GameObject aObject) {
+        clear();
+        GlobalSeparatorHTMLElement theEditor = addTitleLevel1("Game Object");
+        addTitleLevel2("Common properties");
+        addTextInputfieldPropertyEditor("Name", aObject.nameProperty(), new StringStringConverter());
+        addSizePropertyEditor(aObject.sizeProperty());
+        addBooleanPropertyEditor("Visible", aObject.visibleProperty());
+
+        initializeAndBuildContextMenu(theEditor, aObject, availableTemplates);
     }
 
-
-    public void addComponent(StarfieldGameSceneEffect aEffect) {
-        GlobalSeparatorHTMLElement theElement = addTitleLevel2("Starfield effect");
-        addTextInputfieldPropertyEditor("Number of stars", aEffect.numberofStars(), new IntegerStringConverter());
-        addColorPropertyEditor("Star color", aEffect.color());
-        addTextInputfieldPropertyEditor("Star movement speed", aEffect.starSpeed(), new FloatStringConverter());
-        theElement.addDeleteListener((aEvent) -> {
-            aEffect.delete();
-            setEditingObject(aEffect.getScene());
-        });
-    }
-
-    public void addComponent(ArcadeRacerGameSceneEffect aEffect) {
-        GlobalSeparatorHTMLElement theElement = addTitleLevel2("Arcade racer");
-        addTextInputfieldPropertyEditor("Speed", aEffect.speed(), new DoubleStringConverter());
-        addTextInputfieldPropertyEditor("Field of view", aEffect.fieldOfView(), new IntegerStringConverter());
-        addTextInputfieldPropertyEditor("View depth", aEffect.viewDepth(), new IntegerStringConverter());
-        addTextInputfieldPropertyEditor("Distance to camera", aEffect.distanceCamera(), new IntegerStringConverter());
-        addTextInputfieldPropertyEditor("Camera height", aEffect.cameraHeight(), new DoubleStringConverter());
-        theElement.addDeleteListener((aEvent) -> {
-            aEffect.delete();
-            setEditingObject(aEffect.getScene());
-        });
+    public void setEditingObject(Spritesheet aSheet) {
+        clear();
+        addTitleLevel1("Sprite Sheet");
+        addTitleLevel2("Common properties");
+        addTextInputfieldPropertyEditor("Name", aSheet.nameProperty(), new StringStringConverter());
     }
 
     public void setEditingObject(EventSheet aObject) {
@@ -224,40 +423,93 @@ public class GameObjectEditor extends ListingElement {
         });
         addSelectionEditor("Anchor", aObject.positionAnchorProperty(), PositionAnchor.values());
 
-        addSubComponent(aObject.getBehavior(CameraBehavior.class));
-        addSubComponent(aObject.getBehavior(PlayerScoreBehavior.class));
-        addSubComponent(aObject.getBehavior(StaticBehavior.class));
-        addSubComponent(aObject.getBehavior(TextBehavior.class));
-        addSubComponent(aObject.getBehavior(PlatformBehavior.class));
-        addSubComponent(aObject.getBehavior(ConstantMovementBehavior.class));
-        addSubComponent(aObject.getBehavior(PhysicsBehavior.class));
-        addSubComponent(aObject.getBehavior(SpriteBehavior.class), aObject.getOwnerGameObject().getGameScene());
+        addSubComponent(aObject.getBehavior(CameraBehavior.class), false);
+        addSubComponent(aObject.getBehavior(PlayerScoreBehavior.class), false);
+        addSubComponent(aObject.getBehavior(StaticBehavior.class), false);
+        addSubComponent(aObject.getBehavior(TextBehavior.class), false);
+        addSubComponent(aObject.getBehavior(PlatformBehavior.class), false);
+        addSubComponent(aObject.getBehavior(ConstantMovementBehavior.class), false);
+        addSubComponent(aObject.getBehavior(PhysicsBehavior.class), false);
+        addSubComponent(aObject.getBehavior(SpriteBehavior.class), aObject.getOwnerGameObject().getGameScene(), false);
     }
 
-    private void addSubComponent(Camera aComponent) {
+    public <T> void initializeAndBuildContextMenu(GlobalSeparatorHTMLElement aEditor, T aObject, Map<String, ObjectEditorHelper<T>> aOptions) {
+
+        for (Map.Entry<String, ObjectEditorHelper<T>> theEntry : aOptions.entrySet()) {
+            theEntry.getValue().addOptionEditor(aObject);
+        }
+
+        aEditor.addContextMenuListener(aClickEvent -> {
+            ContextMenuHTMLElement theContextMenu = ContextMenuHTMLElement.create();
+            theContextMenu.setTitle("Add new");
+
+            for (Map.Entry<String, ObjectEditorHelper<T>> theEntry : aOptions.entrySet()) {
+                if (!theEntry.getValue().contains(aObject)) {
+                    ContextMenuItemHTMLElement theItem = ContextMenuItemHTMLElement.create();
+                    theItem.setText(theEntry.getKey());
+                    theItem.addEventListener("click", aEvent -> {
+                        theEntry.getValue().create(aObject);
+                    }, false);
+                    theContextMenu.add(theItem);
+                }
+            }
+
+            theContextMenu.showAt(aClickEvent);
+        });
+    }
+
+    public void addComponent(StarfieldGameSceneEffect aEffect) {
+        GlobalSeparatorHTMLElement theElement = addTitleLevel2("Starfield effect");
+        addTextInputfieldPropertyEditor("Number of stars", aEffect.numberofStars(), new IntegerStringConverter());
+        addColorPropertyEditor("Star color", aEffect.color());
+        addTextInputfieldPropertyEditor("Star movement speed", aEffect.starSpeed(), new FloatStringConverter());
+        theElement.addDeleteListener((aEvent) -> {
+            aEffect.delete();
+            setEditingObject(aEffect.getScene());
+        });
+    }
+
+    public void addComponent(ArcadeRacerGameSceneEffect aEffect) {
+        GlobalSeparatorHTMLElement theElement = addTitleLevel2("Arcade racer");
+        addTextInputfieldPropertyEditor("Speed", aEffect.speed(), new DoubleStringConverter());
+        addTextInputfieldPropertyEditor("Field of view", aEffect.fieldOfView(), new IntegerStringConverter());
+        addTextInputfieldPropertyEditor("View depth", aEffect.viewDepth(), new IntegerStringConverter());
+        addTextInputfieldPropertyEditor("Distance to camera", aEffect.distanceCamera(), new IntegerStringConverter());
+        addTextInputfieldPropertyEditor("Camera height", aEffect.cameraHeight(), new DoubleStringConverter());
+        theElement.addDeleteListener((aEvent) -> {
+            aEffect.delete();
+            setEditingObject(aEffect.getScene());
+        });
+    }
+
+    private void addSubComponent(Camera aComponent, boolean aDeletable) {
         if (aComponent == null) {
             return;
         }
         GlobalSeparatorHTMLElement theElement = addTitleLevel2("Camera");
         addSelectionEditor("Type", aComponent.typeProperty(), CameraType.values());
-        theElement.addDeleteListener((aEvent) -> {
-            aComponent.delete();
-            selectParentOf(aComponent);
-        });
+        if (aDeletable) {
+            theElement.addDeleteListener((aEvent) -> {
+                aComponent.delete();
+                selectParentOf(aComponent);
+            });
+        }
     }
 
-    private void addSubComponent(Static aComponent) {
+    private void addSubComponent(Static aComponent, boolean aDeletable) {
         if (aComponent == null) {
             return;
         }
         GlobalSeparatorHTMLElement theElement = addTitleLevel2("Static");
-        theElement.addDeleteListener((aEvent) -> {
-            aComponent.delete();
-            selectParentOf(aComponent);
-        });
+        if (aDeletable) {
+            theElement.addDeleteListener((aEvent) -> {
+                aComponent.delete();
+                selectParentOf(aComponent);
+            });
+        }
     }
 
-    private void addSubComponent(Text aComponent) {
+    private void addSubComponent(Text aComponent, boolean aDeletable) {
         if (aComponent == null) {
             return;
         }
@@ -277,13 +529,15 @@ public class GameObjectEditor extends ListingElement {
                 }
             });
         addColorPropertyEditor("Text color", aComponent.colorProperty());
-        theElement.addDeleteListener((aEvent) -> {
-            aComponent.delete();
-            selectParentOf(aComponent);
-        });
+        if (aDeletable) {
+            theElement.addDeleteListener((aEvent) -> {
+                aComponent.delete();
+                selectParentOf(aComponent);
+            });
+        }
     }
 
-    private void addSubComponent(PlayerScore aComponent) {
+    private void addSubComponent(PlayerScore aComponent, boolean aDeletable) {
         if (aComponent == null) {
             return;
         }
@@ -299,13 +553,15 @@ public class GameObjectEditor extends ListingElement {
                 return new ScoreValue(Long.parseLong(aValue));
             }
         });
-        theElement.addDeleteListener((aEvent) -> {
-            aComponent.delete();
-            selectParentOf(aComponent);
-        });
+        if (aDeletable) {
+            theElement.addDeleteListener((aEvent) -> {
+                aComponent.delete();
+                selectParentOf(aComponent);
+            });
+        }
     }
 
-    private void addSubComponent(ConstantMovement aComponent) {
+    private void addSubComponent(ConstantMovement aComponent, boolean aDeletable) {
         if (aComponent == null) {
             return;
         }
@@ -332,13 +588,15 @@ public class GameObjectEditor extends ListingElement {
                 return new Speed(Long.parseLong(aValue));
             }
         });
-        theElement.addDeleteListener((aEvent) -> {
-            aComponent.delete();
-            selectParentOf(aComponent);
-        });
+        if (aDeletable) {
+            theElement.addDeleteListener((aEvent) -> {
+                aComponent.delete();
+                selectParentOf(aComponent);
+            });
+        }
     }
 
-    private void addSubComponent(Platform aComponent) {
+    private void addSubComponent(Platform aComponent, boolean aDeletable) {
         if (aComponent == null) {
             return;
         }
@@ -349,13 +607,15 @@ public class GameObjectEditor extends ListingElement {
         addSelectionEditor("Jump", aComponent.jumpKeyProperty(), GameKeyCode.values());
         addTextInputfieldPropertyEditor("Jump impulse.", aComponent.jumpImpulseProperty(), new FloatStringConverter());
         addTextInputfieldPropertyEditor("Left/rigt impulse.", aComponent.leftRightImpulseProperty(), new FloatStringConverter());
-        theElement.addDeleteListener((aEvent) -> {
-            aComponent.delete();
-            selectParentOf(aComponent);
-        });
+        if (aDeletable) {
+            theElement.addDeleteListener((aEvent) -> {
+                aComponent.delete();
+                selectParentOf(aComponent);
+            });
+        }
     }
 
-    private void addSubComponent(Physics aComponent) {
+    private void addSubComponent(Physics aComponent, boolean aDeletable) {
         if (aComponent == null) {
             return;
         }
@@ -367,13 +627,15 @@ public class GameObjectEditor extends ListingElement {
         addTextInputfieldPropertyEditor("Friction", aComponent.frictionProperty(), new FloatStringConverter());
         addTextInputfieldPropertyEditor("Restitution", aComponent.restitutionProperty(), new FloatStringConverter());
         addTextInputfieldPropertyEditor("Gravity", aComponent.gravityScaleProperty(), new FloatStringConverter());
-        theElement.addDeleteListener((aEvent) -> {
-            aComponent.delete();
-            selectParentOf(aComponent);
-        });
+        if (aDeletable) {
+            theElement.addDeleteListener((aEvent) -> {
+                aComponent.delete();
+                selectParentOf(aComponent);
+            });
+        }
     }
 
-    private void addSubComponent(Sprite aComponent, GameScene aGameScene) {
+    private void addSubComponent(Sprite aComponent, GameScene aGameScene, boolean aDeletable) {
         if (aComponent == null) {
             return;
         }
@@ -381,10 +643,12 @@ public class GameObjectEditor extends ListingElement {
         GlobalSeparatorHTMLElement theElement = addTitleLevel2("Sprite");
         addTextInputfieldPropertyEditor("Speed", aComponent.speedProperty(), new IntegerStringConverter());
         addAnimationEditor("Animation", aComponent.currentAnimationProperty(), aGameScene);
-        theElement.addDeleteListener((aEvent) -> {
-            aComponent.delete();
-            selectParentOf(aComponent);
-        });
+        if (aDeletable) {
+            theElement.addDeleteListener((aEvent) -> {
+                aComponent.delete();
+                selectParentOf(aComponent);
+            });
+        }
     }
 
     private <T> void addTextInputfieldPropertyEditor(String aLabel, Property<T> aProperty, ObjectConverter<T> aConverter) {

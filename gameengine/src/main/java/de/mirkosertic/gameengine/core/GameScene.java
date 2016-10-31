@@ -301,11 +301,29 @@ public class GameScene implements Reflectable<GameSceneClassInformation>, KeyVal
         return theSheet;
     }
 
+    public Spritesheet createNewSpriteSheet() {
+        Spritesheet theSheet = new Spritesheet(this);
+        List<Spritesheet> theSheets = ArrayUtils.asList(spriteSheets);
+        theSheets.add(theSheet);
+        spriteSheets = theSheets.toArray(new Spritesheet[theSheets.size()]);
+
+        gameRuntime.getEventManager().fire(new SpriteSheetAddedToScene(theSheet));
+        return theSheet;
+    }
+
     public void removeEventSheet(EventSheet aEventSheet) {
         List<EventSheet> theSheets = ArrayUtils.asList(eventSheets);
         if (theSheets.remove(aEventSheet)) {
             eventSheets = theSheets.toArray(new EventSheet[theSheets.size()]);
             gameRuntime.getEventManager().fire(new EventSheetRemovedFromScene(aEventSheet));
+        }
+    }
+
+    public void removeSpriteSheet(Spritesheet aSpriteSheet) {
+        List<Spritesheet> theSheets = ArrayUtils.asList(spriteSheets);
+        if (theSheets.remove(aSpriteSheet)) {
+            spriteSheets = theSheets.toArray(new Spritesheet[theSheets.size()]);
+            gameRuntime.getEventManager().fire(new SpriteSheetRemovedFromScene(aSpriteSheet));
         }
     }
 

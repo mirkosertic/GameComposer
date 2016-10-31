@@ -21,10 +21,10 @@ import org.teavm.jso.JSProperty;
 import org.teavm.jso.browser.Window;
 import org.teavm.jso.dom.html.HTMLElement;
 
-public abstract class GlobalContextMenuHTMLElement implements HTMLElement {
+public abstract class ContextMenuHTMLElement implements HTMLElement {
 
     @JSBody(params = {}, script = "return document.createElement('gameeditor-contextmenu');")
-    public static native GlobalContextMenuHTMLElement create();
+    public static native ContextMenuHTMLElement create();
 
     @JSProperty
     public abstract void setTitle(String aTitle);
@@ -32,13 +32,17 @@ public abstract class GlobalContextMenuHTMLElement implements HTMLElement {
     @JSProperty
     public abstract String getTitle();
 
+    public void add(ContextMenuItemHTMLElement aItem) {
+        Polymer.dom(this).appendChild(aItem);
+    }
+
     public void showAt(TeaVMMouseEvent aMouseEvent) {
         getStyle().setProperty("left", aMouseEvent.getClientX() - 5+"");
         getStyle().setProperty("top", aMouseEvent.getClientY() - 5+"");
         Window theWindow = Window.current();
         Polymer.dom(theWindow.getDocument().getBody()).appendChild(this);
         addEventListener("mouseleave", e -> {
-            Polymer.dom(theWindow.getDocument().getBody()).removeChild(GlobalContextMenuHTMLElement.this);
+            Polymer.dom(theWindow.getDocument().getBody()).removeChild(ContextMenuHTMLElement.this);
         }, false);
     }
 }
