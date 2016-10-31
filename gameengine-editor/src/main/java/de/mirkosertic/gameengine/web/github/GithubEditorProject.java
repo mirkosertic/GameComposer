@@ -32,6 +32,8 @@ import java.io.IOException;
 
 public class GithubEditorProject implements EditorProject {
 
+    // http://mdswanson.com/blog/2011/07/23/digging-around-the-github-api-take-2.html
+
     private final String username;
     private final String repository;
     private final String relativePath;

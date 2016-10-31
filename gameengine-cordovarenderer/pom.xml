@@ -134,19 +134,9 @@
                                             <classifier>armv7</classifier>
                                         </artifact>
                                         <artifact>
-                                            <file>${project.build.directory}/${project.cordova.directory}/platforms/android/build/outputs/apk/android-armv7-debug-unaligned.apk</file>
-                                            <type>apk</type>
-                                            <classifier>armv7-unaligned</classifier>
-                                        </artifact>
-                                        <artifact>
                                             <file>${project.build.directory}/${project.cordova.directory}/platforms/android/build/outputs/apk/android-x86-debug.apk</file>
                                             <type>apk</type>
                                             <classifier>x86</classifier>
-                                        </artifact>
-                                        <artifact>
-                                            <file>${project.build.directory}/${project.cordova.directory}/platforms/android/build/outputs/apk/android-x86-debug-unaligned.apk</file>
-                                            <type>apk</type>
-                                            <classifier>x86-unaligned</classifier>
                                         </artifact>
                                     </artifacts>
                                 </configuration>
@@ -231,19 +221,9 @@
                                             <classifier>armv7</classifier>
                                         </artifact>
                                         <artifact>
-                                            <file>${project.build.directory}/${project.cordova.directory}/platforms/android/build/outputs/apk/android-armv7-debug-unaligned.apk</file>
-                                            <type>apk</type>
-                                            <classifier>armv7-unaligned</classifier>
-                                        </artifact>
-                                        <artifact>
                                             <file>${project.build.directory}/${project.cordova.directory}/platforms/android/build/outputs/apk/android-x86-debug.apk</file>
                                             <type>apk</type>
                                             <classifier>x86</classifier>
-                                        </artifact>
-                                        <artifact>
-                                            <file>${project.build.directory}/${project.cordova.directory}/platforms/android/build/outputs/apk/android-x86-debug-unaligned.apk</file>
-                                            <type>apk</type>
-                                            <classifier>x86-unaligned</classifier>
                                         </artifact>
                                     </artifacts>
                                 </configuration>
