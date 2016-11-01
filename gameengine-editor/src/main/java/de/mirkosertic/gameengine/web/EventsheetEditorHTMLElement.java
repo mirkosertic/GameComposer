@@ -30,11 +30,17 @@ public abstract class EventsheetEditorHTMLElement implements HTMLElement {
 
     public List<HTMLInputBinder> bindTo(EventSheet aEventsheet,  Editor aEditor) {
         List<HTMLInputBinder> theResult = new ArrayList<>();
+
+        RuleEditorHTMLElement.EventListener theListener = (aElement, aRule) -> {
+            aEventsheet.removeRule(aRule);
+            Polymer.dom(EventsheetEditorHTMLElement.this).removeChild(aElement);
+        };
+
         for (GameRule theRule : aEventsheet.getRules()) {
             RuleEditorHTMLElement theRuleEditor = RuleEditorHTMLElement.create();
             Polymer.dom(this).appendChild(theRuleEditor);
 
-            theResult.addAll(theRuleEditor.bindTo(theRule, aEventsheet, aEditor));
+            theResult.addAll(theRuleEditor.bindTo(theRule, aEventsheet, aEditor, theListener));
         }
         return theResult;
     }

@@ -21,8 +21,8 @@ import org.teavm.jso.browser.Window;
 import org.teavm.jso.dom.events.Event;
 import org.teavm.jso.dom.events.EventListener;
 import org.teavm.jso.dom.html.HTMLElement;
+import org.teavm.jso.dom.html.HTMLImageElement;
 import org.teavm.jso.dom.html.HTMLLinkElement;
-import org.teavm.jso.dom.html.HTMLOptionsCollection;
 import org.teavm.jso.dom.html.HTMLSelectElement;
 import org.teavm.jso.dom.xml.Document;
 
@@ -32,6 +32,14 @@ public abstract class GenericNaturalLanguageEditorElement implements HTMLElement
 
     @JSBody(params = {}, script = "return document.createElement('p');")
     public static native GenericNaturalLanguageEditorElement create();
+
+    public HTMLImageElement addDeleteImage() {
+        HTMLImageElement theElement = (HTMLImageElement) DOCUMENT.createElement("img");
+        theElement.setSrc("webcomponents/content/global/close.png");
+        theElement.setAttribute("class", "genericdeleteaction");
+        appendChild(theElement);
+        return theElement;
+    }
 
     public void addText(String aText) {
         appendChild(DOCUMENT.createTextNode(aText));

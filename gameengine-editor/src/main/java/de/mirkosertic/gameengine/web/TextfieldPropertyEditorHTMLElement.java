@@ -18,8 +18,10 @@ package de.mirkosertic.gameengine.web;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.event.PropertyChanged;
+import de.mirkosertic.gameengine.teavm.TeaVMMouseEvent;
 import org.teavm.jso.JSBody;
 import org.teavm.jso.JSProperty;
+import org.teavm.jso.dom.events.EventListener;
 import org.teavm.jso.dom.html.HTMLElement;
 
 public abstract class TextfieldPropertyEditorHTMLElement implements HTMLElement {
@@ -38,6 +40,8 @@ public abstract class TextfieldPropertyEditorHTMLElement implements HTMLElement 
 
     @JSProperty
     public abstract String getValue();
+
+    public abstract void addDeleteListener(EventListener<TeaVMMouseEvent> aListener);
 
     public <T> HTMLInputBinder bindTo(Property<T> aProperty, ObjectConverter<T> aConverter) {
         setValue(aConverter.convertFrom(aProperty.get()));
