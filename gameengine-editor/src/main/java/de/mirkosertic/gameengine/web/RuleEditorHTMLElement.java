@@ -33,6 +33,7 @@ import de.mirkosertic.gameengine.physic.ObjectCollisionCondition;
 import de.mirkosertic.gameengine.process.KillProcessesForInstanceAction;
 import de.mirkosertic.gameengine.script.RunScriptAction;
 import de.mirkosertic.gameengine.sound.PlaySoundAction;
+import de.mirkosertic.gameengine.teavm.TeaVMMouseEvent;
 import de.mirkosertic.gameengine.type.CollisionPosition;
 import de.mirkosertic.gameengine.type.GameKeyCode;
 import de.mirkosertic.gameengine.type.Position;
@@ -46,6 +47,10 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class RuleEditorHTMLElement implements HTMLElement {
+
+    interface EventListener {
+        void deleteRule(RuleEditorHTMLElement aElement, GameRule aRule);
+    }
 
     abstract class ConditionMetaData<T extends Condition> {
 
@@ -78,10 +83,14 @@ public abstract class RuleEditorHTMLElement implements HTMLElement {
 
     public abstract void clearactions();
 
-    public List<HTMLInputBinder> bindTo(GameRule aRule, EventSheet aEventSheet,  Editor aEditor) {
+    public abstract HTMLElement addactionmenu();
+
+    public abstract HTMLElement changeconditionmenu();
+
+    public List<HTMLInputBinder> bindTo(GameRule aRule, EventSheet aEventSheet,  Editor aEditor, EventListener aListener) {
 
         final Map<String, ConditionMetaData<? extends Condition>> theConditionMetaData = new HashMap<>();
-        theConditionMetaData.put("InstanceRemovedFromScene", new ConditionMetaData<GameObjectInstanceRemovedFromSceneCondition>() {
+        theConditionMetaData.put("Instance removed from scene", new ConditionMetaData<GameObjectInstanceRemovedFromSceneCondition>() {
             @Override
             public GameObjectInstanceRemovedFromSceneCondition create() {
                 return new GameObjectInstanceRemovedFromSceneCondition();
@@ -104,7 +113,7 @@ public abstract class RuleEditorHTMLElement implements HTMLElement {
                 Polymer.dom(aElement).appendChild(theElement);
             }
         });
-        theConditionMetaData.put("KeyEvent", new ConditionMetaData<KeyEventCondition>() {
+        theConditionMetaData.put("Key event", new ConditionMetaData<KeyEventCondition>() {
             @Override
             public KeyEventCondition create() {
                 return new KeyEventCondition();
@@ -130,7 +139,7 @@ public abstract class RuleEditorHTMLElement implements HTMLElement {
                 Polymer.dom(aElement).appendChild(theElement);
             }
         });
-        theConditionMetaData.put("InstanceAddedToScene", new ConditionMetaData<GameObjectInstanceAddedToSceneCondition>() {
+        theConditionMetaData.put("Instance added to scene", new ConditionMetaData<GameObjectInstanceAddedToSceneCondition>() {
             @Override
             public GameObjectInstanceAddedToSceneCondition create() {
                 return new GameObjectInstanceAddedToSceneCondition();
@@ -153,7 +162,7 @@ public abstract class RuleEditorHTMLElement implements HTMLElement {
 
             }
         });
-        theConditionMetaData.put("SystemTick", new ConditionMetaData<SystemTickCondition>() {
+        theConditionMetaData.put("System tick", new ConditionMetaData<SystemTickCondition>() {
             @Override
             public SystemTickCondition create() {
                 return new SystemTickCondition();
@@ -175,7 +184,7 @@ public abstract class RuleEditorHTMLElement implements HTMLElement {
                 Polymer.dom(aElement).appendChild(theElement);
             }
         });
-        theConditionMetaData.put("SceneStarted", new ConditionMetaData<SceneStartedCondition>() {
+        theConditionMetaData.put("Scene started", new ConditionMetaData<SceneStartedCondition>() {
             @Override
             public SceneStartedCondition create() {
                 return new SceneStartedCondition();
@@ -194,7 +203,7 @@ public abstract class RuleEditorHTMLElement implements HTMLElement {
                 Polymer.dom(aElement).appendChild(theElement);
             }
         });
-        theConditionMetaData.put("MouseEvent", new ConditionMetaData<MouseEventCondition>() {
+        theConditionMetaData.put("Mouse event", new ConditionMetaData<MouseEventCondition>() {
             @Override
             public MouseEventCondition create() {
                 return new MouseEventCondition();
@@ -218,7 +227,7 @@ public abstract class RuleEditorHTMLElement implements HTMLElement {
                 Polymer.dom(aElement).appendChild(theElement);
             }
         });
-        theConditionMetaData.put("ObjectCollision", new ConditionMetaData<ObjectCollisionCondition>() {
+        theConditionMetaData.put("Object collision", new ConditionMetaData<ObjectCollisionCondition>() {
             @Override
             public ObjectCollisionCondition create() {
                 return new ObjectCollisionCondition();
@@ -244,7 +253,7 @@ public abstract class RuleEditorHTMLElement implements HTMLElement {
                 Polymer.dom(aElement).appendChild(theElement);
             }
         });
-        theConditionMetaData.put("InstanceLeftLayout", new ConditionMetaData<GameObjectInstanceLeftLayoutCondition>() {
+        theConditionMetaData.put("Instance left layout", new ConditionMetaData<GameObjectInstanceLeftLayoutCondition>() {
             @Override
             public GameObjectInstanceLeftLayoutCondition create() {
                 return new GameObjectInstanceLeftLayoutCondition();
@@ -280,8 +289,12 @@ public abstract class RuleEditorHTMLElement implements HTMLElement {
             }
 
             @Override
-            public void initEditorFor(DeleteGameObjectInstanceAction Action, HTMLElement aElement) {
+            public void initEditorFor(DeleteGameObjectInstanceAction aAction, HTMLElement aElement) {
                 GenericNaturalLanguageEditorElement theElement = GenericNaturalLanguageEditorElement.create();
+                theElement.addDeleteImage().addEventListener("click", evt -> {
+                    aRule.removeAction(aAction);
+                    Polymer.dom(aElement).removeChild(theElement);
+                });
                 theElement.addText("then delete the affected instances");
 
                 Polymer.dom(aElement).appendChild(theElement);
@@ -301,6 +314,10 @@ public abstract class RuleEditorHTMLElement implements HTMLElement {
             @Override
             public void initEditorFor(RunSceneAction aAction, HTMLElement aElement) {
                 GenericNaturalLanguageEditorElement theElement = GenericNaturalLanguageEditorElement.create();
+                theElement.addDeleteImage().addEventListener("click", evt -> {
+                    aRule.removeAction(aAction);
+                    Polymer.dom(aElement).removeChild(theElement);
+                });
                 theElement.addText("then run scene ");
                 theElement.addSelection(aAction.gameSceneProperty(), aEventSheet.getGameScene().getGame().getKnownScenes(), aValue -> aValue);
                 Polymer.dom(aElement).appendChild(theElement);
@@ -320,6 +337,11 @@ public abstract class RuleEditorHTMLElement implements HTMLElement {
             @Override
             public void initEditorFor(PlaySoundAction aAction, HTMLElement aElement) {
                 GenericNaturalLanguageEditorElement theElement = GenericNaturalLanguageEditorElement.create();
+                theElement.addDeleteImage().addEventListener("click", evt -> {
+                    aRule.removeAction(aAction);
+                    Polymer.dom(aElement).removeChild(theElement);
+                });
+
                 theElement.addText("then play sound ");
                 theElement.addInput(aAction.resourceNameProperty(), new ObjectConverter<ResourceName>() {
                     @Override
@@ -349,6 +371,10 @@ public abstract class RuleEditorHTMLElement implements HTMLElement {
             @Override
             public void initEditorFor(SpawnGameObjectInstanceAction aAction, HTMLElement aElement) {
                 GenericNaturalLanguageEditorElement theElement = GenericNaturalLanguageEditorElement.create();
+                theElement.addDeleteImage().addEventListener("click", evt -> {
+                    aRule.removeAction(aAction);
+                    Polymer.dom(aElement).removeChild(theElement);
+                });
 
                 theElement.addText("then spawn an object of type ");
                 theElement.addSelection(aAction.gameObjectProperty(), aEventSheet.getGameScene().getObjects(), aValue -> aValue.nameProperty().get());
@@ -397,6 +423,11 @@ public abstract class RuleEditorHTMLElement implements HTMLElement {
             public void initEditorFor(RunScriptAction aAction, HTMLElement aElement) {
 
                 GenericNaturalLanguageEditorElement theElement = GenericNaturalLanguageEditorElement.create();
+                theElement.addDeleteImage().addEventListener("click", evt -> {
+                    aRule.removeAction(aAction);
+                    Polymer.dom(aElement).removeChild(theElement);
+                });
+
                 theElement.addText("then execute the following ");
                 theElement.addAction("LUA Script", evt -> aEditor.editLUAScriptProperty(aAction.scriptProperty()));
 
@@ -417,13 +448,74 @@ public abstract class RuleEditorHTMLElement implements HTMLElement {
             @Override
             public void initEditorFor(KillProcessesForInstanceAction aAction, HTMLElement aElement) {
                 GenericNaturalLanguageEditorElement theElement = GenericNaturalLanguageEditorElement.create();
-                theElement.addText("then kill all running processes for the instances");
+                theElement.addDeleteImage().addEventListener("click", evt -> {
+                    aRule.removeAction(aAction);
+                    Polymer.dom(aElement).removeChild(theElement);
+                });
+
+                theElement.addText("then kill all running processes for the affected instances");
 
                 Polymer.dom(aElement).appendChild(theElement);
             }
         });
 
         List<HTMLInputBinder> theBinder = new ArrayList<>();
+        rulename().addDeleteListener(evt -> {
+            aListener.deleteRule(this, aRule);
+        });
+
+        changeconditionmenu().addEventListener("click", aClickEvent -> {
+            ContextMenuHTMLElement theContextMenu = ContextMenuHTMLElement.create();
+            theContextMenu.setTitle("Change condition to");
+
+            for (Map.Entry<String, ConditionMetaData<? extends Condition>> theEntry : theConditionMetaData.entrySet()) {
+                ConditionMetaData theMetaData = theEntry.getValue();
+                if (!theMetaData.matches(aRule.conditionProperty().get())) {
+                    ContextMenuItemHTMLElement theItem = ContextMenuItemHTMLElement.create();
+                    theItem.setText(theEntry.getKey());
+                    theItem.addEventListener("click", (aEvent) -> {
+
+                        theContextMenu.hide();
+
+                        Condition theNewCondition = theMetaData.create();
+                        aRule.conditionProperty().set(theNewCondition);
+
+                        clearconditionproperties();
+
+                        theMetaData.initEditorFor(theNewCondition, conditionproperties());
+                    });
+
+                    theContextMenu.add(theItem);
+                }
+            }
+
+            theContextMenu.showAt((TeaVMMouseEvent) aClickEvent);
+        });
+
+        addactionmenu().addEventListener("click", aClickEvent -> {
+            ContextMenuHTMLElement theContextMenu = ContextMenuHTMLElement.create();
+            theContextMenu.setTitle("Add action of type");
+
+            for (Map.Entry<String, ActionMetaData<? extends Action>> theEntry : theActionMetaData.entrySet()) {
+                ContextMenuItemHTMLElement theItem = ContextMenuItemHTMLElement.create();
+                theItem.setText(theEntry.getKey());
+                theItem.addEventListener("click", (aEvent) -> {
+
+                    theContextMenu.hide();
+
+                    ActionMetaData theMeta = theEntry.getValue();
+                    Action theAction = theMeta.create();
+                    aRule.addAction(theAction);
+
+                    theMeta.initEditorFor(theAction, actionelements());
+                });
+
+                theContextMenu.add(theItem);
+            }
+
+            theContextMenu.showAt((TeaVMMouseEvent) aClickEvent);
+        });
+
         theBinder.add(rulename().bindTo(aRule.nameProperty(), new GameObjectEditor.StringStringConverter()));
 
         Condition theCurrentCondition = aRule.conditionProperty().get();

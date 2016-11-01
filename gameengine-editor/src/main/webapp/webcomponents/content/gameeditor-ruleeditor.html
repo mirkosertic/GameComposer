@@ -55,10 +55,12 @@
 
         <div class="vertical">
             <div class="condition">
+                <img id="changeconditionmenu" class="contextmenu" src="menu.png">
                 <div id="conditionproperties">
                 </div>
             </div>
             <div class="actions">
+                <img id="addactionmenu" class="contextmenu" src="menu.png">
                 <div id="actionelements">
                 </div>
             </div>
@@ -85,6 +87,14 @@
 
             actionelements: function() {
                 return this.$.actionelements;
+            },
+
+            addactionmenu: function() {
+                return this.$.addactionmenu;
+            },
+
+            changeconditionmenu: function() {
+                return this.$.changeconditionmenu;
             },
 
             clearactions: function() {
