@@ -38,71 +38,18 @@
     <script type="text/javascript" charset="utf-8" src="teavm/runtime.js"></script>
     <script type="text/javascript" charset="utf-8" src="teavm/classes.js"></script>
 
-    <link rel="import" href="webcomponents/properteditor/gameeditor-textfieldpropertyeditor.html">
-    <link rel="import" href="webcomponents/properteditor/gameeditor-textareapropertyeditor.html">
-    <link rel="import" href="webcomponents/properteditor/gameeditor-checkboxpropertyeditor.html">
-    <link rel="import" href="webcomponents/properteditor/gameeditor-animationpropertyeditor.html">
-    <link rel="import" href="webcomponents/properteditor/gameeditor-colorpropertyeditor.html">
-    <link rel="import" href="webcomponents/properteditor/gameeditor-twofieldpropertyeditor.html">
-    <link rel="import" href="webcomponents/properteditor/gameeditor-selectpropertyeditor.html">
-    <link rel="import" href="webcomponents/properteditor/gameeditor-fontpropertyeditor.html">
-
-    <link rel="import" href="webcomponents/tree/gameeditor-treeitem.html">
-
-    <link rel="import" href="webcomponents/global/gameeditor-separator.html">
-    <link rel="import" href="webcomponents/global/gameeditor-tabbedpane.html">
-    <link rel="import" href="webcomponents/global/gameeditor-contextmenu.html">
-
-    <link rel="import" href="webcomponents/content/gameeditor-sceneeditor.html">
-    <link rel="import" href="webcomponents/content/gameeditor-eventsheeteditor.html">
-    <link rel="import" href="webcomponents/content/gameeditor-ruleeditor.html">
-
-    <link rel="import" href="bower_components/juicy-ace-editor/juicy-ace-editor.html">
+    <link rel="import" href="gameeditor-allcomponents-vulcanized.html">
 </head>
 <body>
 <div class="grid flexVertical">
+
     <div class="gridItem border-1 propertyEditor shrink width-3 min-width-3" id="objectEditor">
-
-        <gameeditor-separator text="Editor" major="true"></gameeditor-separator>
-        <gameeditor-separator text="Common"></gameeditor-separator>
-
-        <gameeditor-twofieldpropertyeditor label1="Width" label2="Height" value1="11" value2="12"></gameeditor-twofieldpropertyeditor>
-
-        <gameeditor-separator text="Section1"></gameeditor-separator>
-
-        <gameeditor-selectpropertyeditor label="Color">
-            <option>Value1</option>
-            <option>Value2</option>
-            <option>Value3</option>
-        </gameeditor-selectpropertyeditor>
-
-        <gameeditor-textfieldpropertyeditor label="Long text" value="Long text lalala"></gameeditor-textfieldpropertyeditor>
-
-        <gameeditor-checkboxpropertyeditor label="checkbox 2" value="true"></gameeditor-checkboxpropertyeditor>
-
-        <gameeditor-textfieldpropertyeditor label="test" value="17"></gameeditor-textfieldpropertyeditor>
-
-        <gameeditor-textfieldpropertyeditor label="test" value="18"></gameeditor-textfieldpropertyeditor>
-
-        <gameeditor-animationpropertyeditor label="Image" url="https://www.google.de/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"></gameeditor-animationpropertyeditor>
-
-        <gameeditor-colorpropertyeditor label="test" value="#ff0000"></gameeditor-colorpropertyeditor>
-
-        <gameeditor-fontpropertyeditor label1="Font" label2="Size">
-            <option>ARIAL</option>
-            <option>TAHOMA</option>
-        </gameeditor-fontpropertyeditor>
-
     </div>
 
     <gameeditor-tabbedpane class="gridItem border-1 width-8 flexHorizontal" id="editortabbedpane">
     </gameeditor-tabbedpane>
 
     <div class="gridItem width-3 border-1 shrink min-width-3 objectTree" id="objecttree">
-        <gameeditor-treeitem level="1" text="Objects" separator="true"></gameeditor-treeitem>
-        <gameeditor-treeitem level="2" text="Item Level 2" selected="true"></gameeditor-treeitem>
-        <gameeditor-treeitem level="3" text="Item Level 3" draggable="true"></gameeditor-treeitem>
-        <gameeditor-treeitem level="2" text="Item Level 2"></gameeditor-treeitem>
     </div>
 </div>
 

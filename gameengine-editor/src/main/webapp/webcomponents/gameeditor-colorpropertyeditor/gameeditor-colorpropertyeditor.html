@@ -14,19 +14,44 @@
   ~ limitations under the License.
   -->
 <link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="shared-styles.html">
 
-<dom-module id="gameeditor-textareapropertyeditor">
+<dom-module id="gameeditor-colorpropertyeditor">
     <template>
-        <style include="property-shared-styles"></style>
+        <style>
+            .field {
+                background-color: white;
+                width: 100%;
+                border: 2px solid #33373c;
+                text-align: center;
+            }
+
+            .field label {
+                display: block;
+                background-color: #bdc3c7;
+                color: black;
+                text-align: left;
+                padding-left: 2px;
+            }
+
+            .field input[type=color] {
+                border: none;
+                width: 100%;
+                padding-left: 2px;
+                box-sizing: border-box;
+                -webkit-appearance: none;
+                z-index: 99;
+                background-color: white;
+            }
+
+        </style>
         <div class="field">
-            <label for="text">[[label]]</label>
-            <textarea id="text" name="text" on-blur="updateData">{{value}}</textarea>
+            <label for="inputfield">[[label]]</label>
+            <input type="color" id="inputfield" name="inputfield" value="{{value}}" on-change="updateData">
         </div>
     </template>
     <script>
         Polymer({
-            is: 'gameeditor-textareapropertyeditor',
+            is: 'gameeditor-colorpropertyeditor',
 
             properties: {
                 label: {
@@ -40,7 +65,7 @@
             },
 
             updateData: function() {
-                this.value = this.$.text.value;
+                this.value = this.$.inputfield.value;
             },
 
             ready: function() {

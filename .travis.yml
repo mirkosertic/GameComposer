@@ -19,5 +19,6 @@ before_install:
   - "npm install electron-packager -g"
   - "npm install cordova -g"
   - "npm install bower -g"
+  - "npm install vulcanize -g"
   - "env"
   - "echo 'MAVEN_OPTS = $MAVEN_OPTS'"

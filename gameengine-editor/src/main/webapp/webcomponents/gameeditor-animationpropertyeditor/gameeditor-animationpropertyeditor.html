@@ -14,11 +14,29 @@
   ~ limitations under the License.
   -->
 <link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="shared-styles.html">
 
 <dom-module id="gameeditor-animationpropertyeditor">
     <template>
-        <style include="property-shared-styles"></style>
+        <style>
+            .field {
+                background-color: white;
+                width: 100%;
+                border: 2px solid #33373c;
+                text-align: center;
+            }
+
+            .field label {
+                display: block;
+                background-color: #bdc3c7;
+                color: black;
+                text-align: left;
+                padding-left: 2px;
+            }
+
+            .width-8 {
+                width: 100%;
+            }
+        </style>
 
         <span class="field">
             <label for="image">[[label]]</label>
@@ -47,7 +65,6 @@
 
             ready: function() {
             }
-
         });
     </script>
 </dom-module>

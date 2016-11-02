@@ -14,11 +14,41 @@
   ~ limitations under the License.
   -->
 <link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="shared-styles.html">
 
 <dom-module id="gameeditor-textfieldpropertyeditor">
     <template>
-        <style include="property-shared-styles"></style>
+        <style>
+            .field {
+                background-color: white;
+                width: 100%;
+                border: 2px solid #33373c;
+                text-align: center;
+            }
+
+            .field label {
+                display: block;
+                background-color: #bdc3c7;
+                color: black;
+                text-align: left;
+                padding-left: 2px;
+            }
+
+            .field input[type=text] {
+                border: none;
+                width: 100%;
+                padding-left: 2px;
+                box-sizing: border-box;
+                -webkit-appearance: none;
+                z-index: 99;
+                background-color: white;
+            }
+
+            .deletebutton {
+                vertical-align: middle;
+                float: right;
+                visibility: hidden;
+            }
+        </style>
         <div class="field">
             <label for="inputfield">[[label]]<img id="deletebutton" class="deletebutton" src="close.png"></label>
             <input type="text" id="inputfield" name="inputfield" value="{{value}}" on-blur="updateData">
