@@ -15,7 +15,7 @@
   -->
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
-<dom-module id="tree-shared-styles">
+<dom-module id="gameeditor-treeitem">
     <template>
         <style>
             .level1 {
@@ -69,7 +69,58 @@
                 float: right;
                 visibility: hidden;
             }
-
         </style>
+
+        <div draggable="{{draggable}}" class$="{{computeStyle(level, selected, separator)}}">{{text}}<img id="deletebutton" class="deletebutton" src="close.png"></div>
     </template>
+    <script>
+        Polymer({
+            is: 'gameeditor-treeitem',
+
+            properties: {
+                text: {
+                    type: String,
+                    notify: true
+                },
+                level: {
+                    type: Number,
+                    notify: true
+                },
+                selected: {
+                    type: Boolean,
+                    notify: true,
+                    value: false
+                },
+                draggable: {
+                    type: Boolean,
+                    notify: true,
+                    value: false
+                },
+                separator: {
+                    type: Boolean,
+                    notify: true,
+                    value: false
+                }
+            },
+
+            computeStyle: function(level, selected, separator) {
+                if (separator) {
+                    return "separator";
+                }
+                if (selected) {
+                    return "level" + level + " selected";
+                }
+                return "level" + level;
+            },
+
+            addDeleteListener: function(aListener) {
+                this.$.deletebutton.style.visibility = 'visible';
+                this.$.deletebutton.addEventListener("click", aListener);
+            },
+
+            ready: function() {
+            }
+
+        });
+    </script>
 </dom-module>

@@ -14,11 +14,43 @@
   ~ limitations under the License.
   -->
 <link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="shared-styles.html">
 
 <dom-module id="gameeditor-fontpropertyeditor">
     <template>
-        <style include="property-shared-styles"></style>
+        <style>
+            .field {
+                background-color: white;
+                width: 100%;
+                border: 2px solid #33373c;
+                text-align: center;
+            }
+
+            .field label {
+                display: block;
+                background-color: #bdc3c7;
+                color: black;
+                text-align: left;
+                padding-left: 2px;
+            }
+
+            .width-2 {
+                width: 25%;
+            }
+
+            .width-6 {
+                width: 75%;
+            }
+
+            .field input[type=text] {
+                border: none;
+                width: 100%;
+                padding-left: 2px;
+                box-sizing: border-box;
+                -webkit-appearance: none;
+                z-index: 99;
+                background-color: white;
+            }
+        </style>
 
         <div class="field width-6">
             <label for="value1">[[label1]]</label>

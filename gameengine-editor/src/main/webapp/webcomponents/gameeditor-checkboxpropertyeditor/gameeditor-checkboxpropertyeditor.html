@@ -15,22 +15,9 @@
   -->
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
-<dom-module id="property-shared-styles">
+<dom-module id="gameeditor-checkboxpropertyeditor">
     <template>
         <style>
-
-            .width-2 {
-                width: 25%;
-            }
-
-            .width-4 {
-                width: 50%;
-            }
-
-            .width-6 {
-                width: 75%;
-            }
-
             .field {
                 background-color: white;
                 width: 100%;
@@ -45,26 +32,34 @@
                 text-align: left;
                 padding-left: 2px;
             }
-
-            .field input[type=text],
-            .field input[type=color],
-            .field input[type=range],
-            .field select,
-            .field textarea {
-                border: none;
-                width: 100%;
-                padding-left: 2px;
-                box-sizing: border-box;
-                -webkit-appearance: none;
-                z-index: 99;
-                background-color: white;
-            }
-
-            .deletebutton {
-                vertical-align: middle;
-                float: right;
-                visibility: hidden;
-            }
         </style>
+        <div class="field">
+            <label for="checkbox">[[label]]</label>
+            <input type="checkbox" id="checkbox" name="checkbox" checked$="{{value}}" on-click="updateData">
+        </div>
     </template>
+    <script>
+        Polymer({
+            is: 'gameeditor-checkboxpropertyeditor',
+
+            properties: {
+                label: {
+                    type: String,
+                    notify: true
+                },
+                value: {
+                    type: Boolean,
+                    notify: true
+                }
+            },
+
+            updateData: function() {
+                this.value = this.$.checkbox.checked;
+            },
+
+            ready: function() {
+            }
+
+        });
+    </script>
 </dom-module>

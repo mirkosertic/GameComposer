@@ -14,17 +14,63 @@
   ~ limitations under the License.
   -->
 <link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="shared-styles.html">
 
 <dom-module id="gameeditor-sceneeditor">
     <template>
-        <style include="content-shared-styles">
+        <style>
             :host {
                 width: 100%;
                 height: 100%;
                 display: flex;
                 flex-direction: column;
             }
+
+            .separator {
+                color: white;
+                font-family: 'Open Sans', sans-serif;
+                background-color: #4a5058;
+                padding: 0.1em;
+                padding-left: 0.3em;
+                height: 1.6em;
+                line-height: 1.6em;
+                vertical-align: middle;
+            }
+
+            .flexVertical {
+                flex-direction: row;
+                display: flex;
+            }
+
+            .shrink {
+                flex-shrink: 1;
+            }
+
+            .grow {
+                flex-grow: 1;
+            }
+
+            .emwidth-2 {
+                width: 2em;
+            }
+
+            .emoffset-4 {
+                margin-left: 4em;
+            }
+
+            .emwidth-6 {
+                width: 6em;
+            }
+
+            button {
+                border: 1px solid #1abc9c;
+                background-color: #1abc9c;
+                color: white;
+                font-weight: bold;
+            }
+            button:hover {
+                background-color: #1dd2af;
+            }
+
         </style>
 
         <div class="separator flexVertical shrink">
