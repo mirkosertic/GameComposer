@@ -14,11 +14,10 @@
   ~ limitations under the License.
   -->
 <link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="shared-styles.html">
 
 <dom-module id="gameeditor-tabbedpane">
     <template>
-        <style include="global-shared-styles">
+        <style>
             .tabpane {
                 display: flex;
                 flex-direction: column;
@@ -45,7 +44,6 @@
                 height: 18px;
                 display: inline-block;
                 vertical-align: middle;
-                content: url("close.png");
             }
 
             .tabpanebutton:hover {
@@ -130,6 +128,7 @@
                     var theDivContent = document.createElement("span");
                     theDivContent.innerText = theTab.title;
                     var theCloseButton = document.createElement("img");
+                    theCloseButton.src = "close.png";
                     theCloseButton.className = 'closebutton';
                     Polymer.dom(theDiv).appendChild(theDivContent);
                     Polymer.dom(theDiv).appendChild(theCloseButton);

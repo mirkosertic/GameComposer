@@ -14,26 +14,31 @@
   ~ limitations under the License.
   -->
 <link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="shared-styles.html">
 
-<dom-module id="gameeditor-contextmenuitem">
+<dom-module id="gameeditor-eventsheeteditor">
     <template>
-        <style include="global-shared-styles"></style>
-        <div class="contextmenuitem">{{text}}</div>
+        <style>
+            :host {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                overflow-y: auto;
+                overflow-x: hidden;
+            }
+        </style>
+        <content></content>
     </template>
     <script>
         Polymer({
-            is: 'gameeditor-contextmenuitem',
+            is: 'gameeditor-eventsheeteditor',
 
             properties: {
-                text: {
-                    type: String,
-                    notify: true
-                }
             },
 
             ready: function() {
             }
+
         });
     </script>
 </dom-module>

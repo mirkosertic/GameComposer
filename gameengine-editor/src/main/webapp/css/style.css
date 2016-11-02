@@ -243,145 +243,13 @@ body {
   color: white;
   font-family: 'Open Sans', sans-serif;
 }
-.input {
-  border: 1px solid #33373c;
-}
-label {
-  color: white;
-}
-.separator {
-  color: white;
-  font-family: 'Open Sans', sans-serif;
-  background-color: #4a5058;
-  padding: 0.1em;
-  padding-left: 0.3em;
-  height: 1.6em;
-  line-height: 1.6em;
-  vertical-align: middle;
-}
-.separator .border-1 {
-  border: 1px solid #ffffff;
-}
-.separatorlight {
-  color: white;
-  font-family: 'Open Sans', sans-serif;
-  background-color: #4a5058;
-  padding: 0.1em;
-  padding-left: 0.3em;
-  height: 1.6em;
-  line-height: 1.6em;
-  vertical-align: middle;
-  background-color: #565d65;
-}
-.separatorlight .border-1 {
-  border: 1px solid #ffffff;
-}
-button {
-  border: 1px solid #1abc9c;
-  background-color: #1abc9c;
-  color: white;
-  font-weight: bold;
-}
-button:hover {
-  background-color: #1dd2af;
-}
 .propertyEditor {
   overflow-y: auto;
   overflow-x: hidden;
 }
-.propertyEditor .propertyEditor,
-.propertyEditor gameeditor-textfieldpropertyeditor,
-.propertyEditor gameeditor-textareapropertyeditor,
-.propertyEditor gameeditor-checkboxpropertyeditor,
-.propertyEditor gameeditor-animationpropertyeditor,
-.propertyEditor gameeditor-colorpropertyeditor,
-.propertyEditor gameeditor-twofieldpropertyeditor,
-.propertyEditor gameeditor-selectpropertyeditor,
-.propertyEditor gameeditor-fontpropertyeditor {
-  padding: 0.1em;
-  display: flex;
-  flex-flow: row;
-  overflow: visible;
-}
-.propertyEditor .propertyEditor label,
-.propertyEditor gameeditor-textfieldpropertyeditor label,
-.propertyEditor gameeditor-textareapropertyeditor label,
-.propertyEditor gameeditor-checkboxpropertyeditor label,
-.propertyEditor gameeditor-animationpropertyeditor label,
-.propertyEditor gameeditor-colorpropertyeditor label,
-.propertyEditor gameeditor-twofieldpropertyeditor label,
-.propertyEditor gameeditor-selectpropertyeditor label,
-.propertyEditor gameeditor-fontpropertyeditor label {
-  font-size: small;
-  padding-right: 0.2em;
-  align-self: center;
-  display: flex;
-  text-align: left;
-  vertical-align: middle;
-  padding-left: 0.2em;
-  flex-shrink: 5;
-}
-.propertyEditor .propertyEditor input[type=text],
-.propertyEditor gameeditor-textfieldpropertyeditor input[type=text],
-.propertyEditor gameeditor-textareapropertyeditor input[type=text],
-.propertyEditor gameeditor-checkboxpropertyeditor input[type=text],
-.propertyEditor gameeditor-animationpropertyeditor input[type=text],
-.propertyEditor gameeditor-colorpropertyeditor input[type=text],
-.propertyEditor gameeditor-twofieldpropertyeditor input[type=text],
-.propertyEditor gameeditor-selectpropertyeditor input[type=text],
-.propertyEditor gameeditor-fontpropertyeditor input[type=text] {
-  flex-grow: 10;
-}
-.propertyEditor .propertyEditor input[type=color],
-.propertyEditor gameeditor-textfieldpropertyeditor input[type=color],
-.propertyEditor gameeditor-textareapropertyeditor input[type=color],
-.propertyEditor gameeditor-checkboxpropertyeditor input[type=color],
-.propertyEditor gameeditor-animationpropertyeditor input[type=color],
-.propertyEditor gameeditor-colorpropertyeditor input[type=color],
-.propertyEditor gameeditor-twofieldpropertyeditor input[type=color],
-.propertyEditor gameeditor-selectpropertyeditor input[type=color],
-.propertyEditor gameeditor-fontpropertyeditor input[type=color] {
-  flex-grow: 10;
-}
-.propertyEditor .propertyEditor select,
-.propertyEditor gameeditor-textfieldpropertyeditor select,
-.propertyEditor gameeditor-textareapropertyeditor select,
-.propertyEditor gameeditor-checkboxpropertyeditor select,
-.propertyEditor gameeditor-animationpropertyeditor select,
-.propertyEditor gameeditor-colorpropertyeditor select,
-.propertyEditor gameeditor-twofieldpropertyeditor select,
-.propertyEditor gameeditor-selectpropertyeditor select,
-.propertyEditor gameeditor-fontpropertyeditor select {
-  flex-grow: 10;
-}
 .objectTree {
   overflow-y: auto;
   overflow-x: hidden;
-}
-.field {
-  background-color: white;
-  width: 100%;
-  border: 2px solid #33373c;
-  text-align: center;
-}
-.field label {
-  display: block;
-  background-color: #bdc3c7;
-  color: black;
-  text-align: left;
-}
-.field input[type=text],
-.field input[type=color],
-.field input[type=range],
-.field select,
-.field textarea {
-  border: none;
-  width: 100%;
-  padding-left: 2px;
-  box-sizing: border-box;
-  -webkit-appearance: none;
-  z-index: 99;
-  background-color: white;
 }
 .tabpanebuttons {
   flex-direction: row;
@@ -397,14 +265,4 @@ button:hover {
 }
 .tabpanebutton:hover {
   background-color: #4a5058;
-}
-.selected {
-  background-color: #4a5058;
-}
-.closebutton {
-  width: 18px;
-  height: 18px;
-  display: inline-block;
-  vertical-align: middle;
-  content: url("../webcomponents/global/close.png");
 }
