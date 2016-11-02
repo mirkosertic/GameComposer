@@ -18,11 +18,16 @@
 <dom-module id="gameeditor-fontpropertyeditor">
     <template>
         <style>
+            :host {
+                width: 100%;
+                margin: 1px;
+                flex-shrink: 1;
+            }
+
             .field {
                 background-color: white;
                 border: 2px solid #33373c;
                 text-align: center;
-                display: table-cell;
             }
 
             .field label {

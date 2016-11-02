@@ -35,8 +35,7 @@ public abstract class GenericNaturalLanguageEditorElement implements HTMLElement
 
     public HTMLImageElement addDeleteImage() {
         HTMLImageElement theElement = (HTMLImageElement) DOCUMENT.createElement("img");
-        theElement.setSrc("webcomponents/content/global/close.png");
-        theElement.setAttribute("class", "genericdeleteaction");
+        theElement.setAttribute("class", "genericdeletebutton");
         appendChild(theElement);
         return theElement;
     }
