@@ -47,10 +47,18 @@
                 vertical-align: middle;
                 float: right;
                 visibility: hidden;
+                display: none;
+                content: url("close.png");
+            }
+
+            .deletebutton:after {
+                content: url("close.png");
+                width: 18px;
+                height: 18px;
             }
         </style>
         <div class="field">
-            <label for="inputfield">[[label]]<img id="deletebutton" class="deletebutton" src="close.png"></label>
+            <label for="inputfield">[[label]]<img id="deletebutton" class="deletebutton"></label>
             <input type="text" id="inputfield" name="inputfield" value="{{value}}" on-blur="updateData">
         </div>
     </template>
