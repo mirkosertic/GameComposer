@@ -18,6 +18,7 @@
 <dom-module id="gameeditor-tabbedpane">
     <template>
         <style>
+
             .tabpane {
                 display: flex;
                 flex-direction: column;
@@ -40,10 +41,14 @@
             }
 
             .closebutton {
+                vertical-align: middle;
+                content: url("close.png");
+            }
+
+            .closebutton:after {
                 width: 18px;
                 height: 18px;
-                display: inline-block;
-                vertical-align: middle;
+                content: url("close.png");
             }
 
             .tabpanebutton:hover {
@@ -57,9 +62,6 @@
 
         <div class="tabpane">
             <div id="buttons" class="tabpanebuttons">
-                <div class="tabpanebutton"><span>Pane 1</span><img src="" class="closebutton"></div>
-                <div class="tabpanebutton selected">Pane 2</div>
-                <div class="tabpanebutton">Pane 3</div>
             </div>
             <div id="con"></div>
                 <content id="content"></content>
@@ -128,7 +130,6 @@
                     var theDivContent = document.createElement("span");
                     theDivContent.innerText = theTab.title;
                     var theCloseButton = document.createElement("img");
-                    theCloseButton.src = "close.png";
                     theCloseButton.className = 'closebutton';
                     Polymer.dom(theDiv).appendChild(theDivContent);
                     Polymer.dom(theDiv).appendChild(theCloseButton);

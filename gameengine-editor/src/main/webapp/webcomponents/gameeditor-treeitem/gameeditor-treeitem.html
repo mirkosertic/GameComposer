@@ -68,10 +68,17 @@
                 vertical-align: middle;
                 float: right;
                 visibility: hidden;
+                content: url("close.png");
+            }
+
+            .deletebutton:after {
+                content: url("close.png");
+                width: 18px;
+                height: 18px;
             }
         </style>
 
-        <div draggable="{{draggable}}" class$="{{computeStyle(level, selected, separator)}}">{{text}}<img id="deletebutton" class="deletebutton" src="close.png"></div>
+        <div draggable="{{draggable}}" class$="{{computeStyle(level, selected, separator)}}">{{text}}<img id="deletebutton" class="deletebutton"></div>
     </template>
     <script>
         Polymer({

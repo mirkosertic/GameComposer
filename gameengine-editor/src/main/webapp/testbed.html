@@ -1,0 +1,66 @@
+<!--
+  ~ Copyright 2016 Mirko Sertic
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~       http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<html>
+<head>
+    <title>GameEngine WebEditor</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="css/style.css"/>
+    <script>
+
+        // setup Polymer options
+        window.Polymer = {lazyRegister: true, dom: 'shadow'};
+
+        // load webcomponents polyfills
+        var isShadowDOMPolyfill = (function() {
+            if ('registerElement' in document
+                    && 'import' in document.createElement('link')
+                    && 'content' in document.createElement('template')) {
+                // browser has web components
+                return false;
+            } else {
+                // polyfill web components
+                var e = document.createElement('script');
+                e.src = 'bower_components/webcomponentsjs/webcomponents.min.js';
+                document.head.appendChild(e);
+                return true;
+            }
+        })();
+
+        // load pre-caching service worker
+        //if ('serviceWorker' in navigator) {
+        //            window.addEventListener('load', function() {
+        //            navigator.serviceWorker.register('/service-worker.js');
+        //});
+
+    </script>
+    <script type="text/javascript" charset="utf-8" src="bower_components/pixi.js/bin/pixi.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="bower_components/howler.js/dist/howler.core.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="bower_components/firebase/firebase.js"></script>
+    <script type="text/javascript" charset="utf-8" src="teavm/runtime.js"></script>
+    <script type="text/javascript" charset="utf-8" src="teavm/classes.js"></script>
+
+    <link rel="import" href="gameeditor-allcomponents.html">
+</head>
+<body>
+<div class="grid flexVertical">
+
+    <div class="gridItem border-1 propertyEditor shrink width-3 min-width-3" id="objectEditor">
+        <gameeditor-twofieldpropertyeditor label1="X" label2="Y"></gameeditor-twofieldpropertyeditor>
+    </div>
+</div>
+</body>
+</html>
