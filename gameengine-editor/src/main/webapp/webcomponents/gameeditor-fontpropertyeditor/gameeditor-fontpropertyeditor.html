@@ -20,7 +20,6 @@
         <style>
             :host {
                 width: 100%;
-                margin: 1px;
                 flex-shrink: 1;
             }
 
@@ -28,6 +27,7 @@
                 background-color: white;
                 border: 2px solid #33373c;
                 text-align: center;
+                display: table-cell;
             }
 
             .field label {
@@ -55,6 +55,16 @@
                 z-index: 99;
                 background-color: white;
             }
+
+            .field select {
+                border: none;
+                width: 100%;
+                padding-left: 2px;
+                box-sizing: border-box;
+                -webkit-appearance: none;
+                z-index: 99;
+                background-color: white;
+            }
         </style>
 
         <div class="field width-6">
@@ -64,7 +74,7 @@
         </div>
 
         <div class="field width-2">
-            <label for="field2">[[label2]]</label>
+            <label for="value2">[[label2]]</label>
             <input type="text" id="value2" name="value2" value="{{size}}" on-blur="updateDataValue2">
         </div>
 
