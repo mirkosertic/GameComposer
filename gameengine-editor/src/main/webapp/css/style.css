@@ -251,6 +251,15 @@ body {
   overflow-y: auto;
   overflow-x: hidden;
 }
+.genericdeletebutton {
+  vertical-align: middle;
+  content: url("../webcomponents/gameeditor-treeitem/close.png");
+}
+.genericdeletebutton:after {
+  content: url("../webcomponents/gameeditor-treeitem/close.png");
+  width: 18px;
+  height: 18px;
+}
 .tabpanebuttons {
   flex-direction: row;
   display: flex;
@@ -264,5 +273,17 @@ body {
   background-color: #e74c3c;
 }
 .tabpanebutton:hover {
+  background-color: #4a5058;
+}
+.closebutton {
+  vertical-align: middle;
+  content: url("../webcomponents/gameeditor-treeitem/close.png");
+}
+.closebutton:after {
+  width: 18px;
+  height: 18px;
+  content: url("../webcomponents/gameeditor-treeitem/close.png");
+}
+.selected {
   background-color: #4a5058;
 }
