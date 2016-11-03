@@ -49,12 +49,18 @@
 
             .genericdeletebutton {
                 vertical-align: middle;
-                content: url("close.png");
-            }
-            .genericdeletebutton:after {
-                content: url("close.png");
+                background-image: url("close.png");
+                display: inline;
                 width: 18px;
                 height: 18px;
+            }
+
+            .menubutton {
+                vertical-align: middle;
+                background-image: url("menu.png");
+                display: inline;
+                width: 24px;
+                height: 24px;
             }
         </style>
 
@@ -64,12 +70,12 @@
 
         <div class="vertical">
             <div class="condition">
-                <img id="changeconditionmenu" class="contextmenu" src="menu.png">
+                <div id="changeconditionmenu" class="contextmenu"></div>
                 <div id="conditionproperties">
                 </div>
             </div>
             <div class="actions">
-                <img id="addactionmenu" class="contextmenu" src="menu.png">
+                <div id="addactionmenu" class="contextmenu"></div>
                 <div id="actionelements">
                 </div>
             </div>
