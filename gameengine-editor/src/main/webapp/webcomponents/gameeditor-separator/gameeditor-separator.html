@@ -45,11 +45,8 @@
                 float: right;
                 visibility: hidden;
                 display: none;
-                content: url("close.png");
-            }
-
-            .deletebutton:after {
-                content: url("close.png");
+                background-image: url("close.png");
+                display: inline;
                 width: 18px;
                 height: 18px;
             }
@@ -59,17 +56,13 @@
                 float: left;
                 visibility: hidden;
                 display: none;
-                content: url("menu.png");
-            }
-
-            .contextmenu:after {
                 width: 24px;
                 height: 24px;
-                content: url("menu.png");
+                background-image: url("menu.png");
             }
 
         </style>
-        <div class$="{{computeStyle(major)}}"><img id="contextmenu" class="contextmenu">{{text}}<img id="deletebutton" class="deletebutton"></div>
+        <div class$="{{computeStyle(major)}}"><div id="contextmenu" class="contextmenu"></div>{{text}}<div id="deletebutton" class="deletebutton"></div></div>
     </template>
     <script>
         Polymer({
