@@ -103,47 +103,8 @@ body {
 
 .genericdeletebutton {
   vertical-align: middle;
-  content: url("../webcomponents/gameeditor-treeitem/close.png");
-}
-
-.genericdeletebutton:after {
-  content: url("../webcomponents/gameeditor-treeitem/close.png");
+  background-image: url("../webcomponents/gameeditor-treeitem/close.png");
+  display: inline;
   width: 18px;
   height: 18px;
-}
-
-// Don't know why but without native webcomponent support
-// we are getting into trouble with dynamically created plain html elements
-// and their styles not correctly resolved within their polymer style module
-.tabpanebuttons {
-  flex-direction: row;
-  display: flex;
-  line-height: 1.45em;
-  background-color: #e74c3c;
-}
-
-.tabpanebutton {
-  color: white;
-  margin-left: 1em;
-  padding: 0.2em;
-  background-color: #e74c3c;
-}
-
-.tabpanebutton:hover {
-  background-color: #4a5058;
-}
-
-.closebutton {
-  vertical-align: middle;
-  content: url("../webcomponents/gameeditor-treeitem/close.png");
-}
-
-.closebutton:after {
-  width: 18px;
-  height: 18px;
-  content: url("../webcomponents/gameeditor-treeitem/close.png");
-}
-
-.selected {
-  background-color: #4a5058;
 }

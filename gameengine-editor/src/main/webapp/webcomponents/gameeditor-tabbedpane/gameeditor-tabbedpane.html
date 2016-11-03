@@ -15,11 +15,12 @@
   -->
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
+<link rel="import" href="gameeditor-tabbedpanetab.html">
+
 <dom-module id="gameeditor-tabbedpane">
     <template>
         <style>
-
-            .tabpane {
+            :host {
                 display: flex;
                 flex-direction: column;
                 width: 100%;
@@ -27,46 +28,15 @@
             }
 
             .tabpanebuttons {
-                flex-direction: row;
                 display: flex;
-                line-height: 1.45em;
+                flex-direction: row;
                 background-color: #e74c3c;
-            }
-
-            .tabpanebutton {
-                color: white;
-                margin-left: 1em;
-                padding: 0.2em;
-                background-color: #e74c3c;
-            }
-
-            .closebutton {
-                vertical-align: middle;
-                content: url("close.png");
-            }
-
-            .closebutton:after {
-                width: 18px;
-                height: 18px;
-                content: url("close.png");
-            }
-
-            .tabpanebutton:hover {
-                background-color: #4a5058;
-            }
-
-            .selected {
-                background-color: #4a5058;
             }
         </style>
 
-        <div class="tabpane">
-            <div id="buttons" class="tabpanebuttons">
-            </div>
-            <div id="con"></div>
-                <content id="content"></content>
-            </div>
+        <div id="buttons" class="tabpanebuttons">
         </div>
+        <content id="content"></content>
     </template>
     <script>
         Polymer({
@@ -126,25 +96,15 @@
                 for (var i=0;i<this.tabs.length;i++) {
                     var theTab = this.tabs[i]
 
-                    var theDiv = document.createElement("div");
-                    var theDivContent = document.createElement("span");
-                    theDivContent.innerText = theTab.title;
-                    var theCloseButton = document.createElement("img");
-                    theCloseButton.className = 'closebutton';
-                    Polymer.dom(theDiv).appendChild(theDivContent);
-                    Polymer.dom(theDiv).appendChild(theCloseButton);
-                    if (i == this.selectedtab) {
-                        theDiv.className = 'tabpanebutton selected';
-                    } else {
-                        theDiv.className = 'tabpanebutton';
-                    }
+                    var theElement = document.createElement("gameeditor-tabbedpanetab");
+                    theElement.title = theTab.title;
+                    theElement.selected = (i == this.selectedtab);
 
-                    theDiv.addEventListener("click", this.createClickHandler(i), true);
-                    theCloseButton.addEventListener("click", this.createDeleteClickHandler(i), true);
+                    theElement.addEventListener("click", this.createClickHandler(i), true);
+                    theElement.addEventListener("tabclose", this.createDeleteClickHandler(i), true);
 
-                    Polymer.dom(this.$.buttons).appendChild(theDiv);
+                    theButtonsDom.appendChild(theElement);
                 }
-//                Polymer.updateStyles();
             },
 
             addTab: function(aTitle, aElement) {
