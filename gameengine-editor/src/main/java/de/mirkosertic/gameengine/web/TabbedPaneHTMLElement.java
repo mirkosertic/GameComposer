@@ -72,16 +72,6 @@ public abstract class TabbedPaneHTMLElement implements HTMLElement {
             theHandler.handleClosed();
 
             knownObjects.remove(aIndex);
-
-            if (knownObjects.size() > 0) {
-                if (aIndex > 0) {
-                    element.selectTab(aIndex - 1);
-                } else {
-                    element.selectTab(0);
-                }
-            } else {
-                clearAll();
-            }
         }
 
         public void addTab(String aTitle, TabHandler aTabHandler) {
