@@ -23,12 +23,21 @@ import org.teavm.jso.browser.Window;
 
 public interface EditorProject {
 
+    interface FilesystemCallback {
+
+        void onError(EditorProject aProject);
+
+        void onSuccess(EditorProject aProject, Filesystem aFilesystem);
+    }
+
     TeaVMGameSceneLoader createSceneLoader(TeaVMGameSceneLoader.GameSceneLoadedListener aListener,
             AbstractGameRuntimeFactory aRuntimeFactory);
 
     TeaVMGameLoader createGameLoader(TeaVMGameLoader.GameLoadedListener aListener);
 
     TeaVMGameResourceLoader createResourceLoaderFor(String aSceneID);
+
+    void openFileSystem(FilesystemCallback aCallback);
 
     default public void setCurrentPreview(String aSceneDataAsJSON) {
         Window.current().getLocalStorage().setItem("previewscene", aSceneDataAsJSON);
