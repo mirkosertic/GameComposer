@@ -82,6 +82,7 @@
             createDeleteClickHandler: function(aIndex) {
                 var theThis = this;
                 return function(e) {
+                    e.stopPropagation();
                     theThis.fire("tabclose", {tabindex: aIndex});
                 }
             },
@@ -101,7 +102,7 @@
                     theElement.selected = (i == this.selectedtab);
 
                     theElement.addEventListener("click", this.createClickHandler(i), true);
-                    theElement.addEventListener("tabclose", this.createDeleteClickHandler(i), true);
+                    theElement.addEventListener("singletabclose", this.createDeleteClickHandler(i), true);
 
                     theButtonsDom.appendChild(theElement);
                 }
@@ -135,12 +136,17 @@
             removeTab(aIndex) {
                 this.selectedtab--;
                 this.tabs.splice(aIndex, 1);
-                this.rebuildTabs();
+                if (this.tabs.length == 0) {
+                    this.clearAll();
+                    this.clearContent();
+                    this.selectedtab = -1;
+                } else {
+                    if (this.selectedtab < 0) {
+                        this.selectedtab = this.tabs.length - 1;
+                    }
+                    this.selectTab(this.selectedtab);
+                }
             },
-
-            ready: function() {
-                this.fire("ready", {});
-            }
         });
     </script>
 </dom-module>

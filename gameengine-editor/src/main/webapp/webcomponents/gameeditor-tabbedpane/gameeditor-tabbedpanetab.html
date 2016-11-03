@@ -76,8 +76,9 @@
                 return "tabpanebutton";
             },
 
-            fireCloseEvent: function() {
-                this.fire("tabclose", {tab: this});
+            fireCloseEvent: function(aEvent) {
+                aEvent.stopPropagation();
+                this.fire("singletabclose", {tab: this});
             },
         });
     </script>

@@ -15,10 +15,8 @@
   -->
 <html>
 <head>
-    <title>GameEngine WebEditor</title>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link rel="stylesheet" href="css/style.css"/>
     <script>
 
         // setup Polymer options
@@ -34,7 +32,7 @@
             } else {
                 // polyfill web components
                 var e = document.createElement('script');
-                e.src = 'bower_components/webcomponentsjs/webcomponents.min.js';
+                e.src = '../../bower_components/webcomponentsjs/webcomponents.min.js';
                 document.head.appendChild(e);
                 return true;
             }
@@ -47,21 +45,19 @@
         //});
 
     </script>
-    <script type="text/javascript" charset="utf-8" src="bower_components/pixi.js/bin/pixi.min.js"></script>
-    <script type="text/javascript" charset="utf-8" src="bower_components/howler.js/dist/howler.core.min.js"></script>
-    <script type="text/javascript" charset="utf-8" src="bower_components/firebase/firebase.js"></script>
-    <script type="text/javascript" charset="utf-8" src="teavm/runtime.js"></script>
-    <script type="text/javascript" charset="utf-8" src="teavm/classes.js"></script>
 
-    <link rel="import" href="gameeditor-allcomponents.html">
+    <link rel="import" href="gameeditor-tabbedpane.html">
 </head>
 <body>
-<div class="grid flexVertical">
-
-    <div class="gridItem border-1 propertyEditor shrink width-3 min-width-3" id="objectEditor">
-        <gameeditor-textfieldpropertyeditor label="text"></gameeditor-textfieldpropertyeditor>
-        <gameeditor-twofieldpropertyeditor label1="X" label2="Y"></gameeditor-twofieldpropertyeditor>
-    </div>
-</div>
+    <gameeditor-tabbedpane id="test"></gameeditor-tabbedpane>
+    <script>
+        window.setTimeout(function() {
+            document.getElementById("test").addTab("Tab1", document.createTextNode("Text1"));
+            document.getElementById("test").addTab("Tab2", document.createTextNode("Text2"));
+            document.getElementById("test").addEventListener("tabclose", function(e) {
+                document.getElementById("test").removeTab(e.detail.tabindex);
+            });
+        }, 5000);
+    </script>
 </body>
 </html>
