@@ -93,7 +93,7 @@ public class GithubEditorProject implements EditorProject {
 
     @Override
     public void openFileSystem(EditorProject.FilesystemCallback aCallback) {
-        IndexedDBFilesystem.open("github_" + username + "/" + repository, new IndexedDBFilesystem.Callback() {
+        IndexedDBFilesystem.open("github_" + username + "_" + repository, new IndexedDBFilesystem.Callback() {
             @Override
             public void onError() {
                 aCallback.onError(GithubEditorProject.this);
