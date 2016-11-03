@@ -16,11 +16,16 @@
 package de.mirkosertic.gameengine.web.github;
 
 import de.mirkosertic.gameengine.web.Filesystem;
+import org.teavm.jso.JSBody;
 import org.teavm.jso.indexeddb.IDBDatabase;
 import org.teavm.jso.indexeddb.IDBFactory;
 import org.teavm.jso.indexeddb.IDBOpenDBRequest;
 
 public class IndexedDBFilesystem implements Filesystem {
+
+    @JSBody(params = {}, script = "return window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || "
+            + "window.msIndexedDB;")
+    static native IDBFactory getIDBFactory();
 
     public interface Callback {
 
@@ -38,7 +43,7 @@ public class IndexedDBFilesystem implements Filesystem {
     }
 
     public static void open(String aDatabaseName, Callback aCallback) {
-        IDBFactory theFactory = IDBFactory.getInstance();
+        IDBFactory theFactory = getIDBFactory();
         IDBOpenDBRequest theRequest = theFactory.open(aDatabaseName, 1);
         theRequest.setOnUpgradeNeeded(aEvent -> theRequest.getResult().createObjectStore(FILE_DATASTORE));
         theRequest.setOnError(() -> aCallback.onError());
