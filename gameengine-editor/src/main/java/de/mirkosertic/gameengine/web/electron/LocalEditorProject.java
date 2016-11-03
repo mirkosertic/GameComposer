@@ -16,7 +16,11 @@
 package de.mirkosertic.gameengine.web.electron;
 
 import de.mirkosertic.gameengine.AbstractGameRuntimeFactory;
-import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.core.Game;
+import de.mirkosertic.gameengine.core.GameResource;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.LoadedSpriteSheet;
+import de.mirkosertic.gameengine.core.SuccessCallback;
 import de.mirkosertic.gameengine.teavm.TeaVMGameLoader;
 import de.mirkosertic.gameengine.teavm.TeaVMGameResourceLoader;
 import de.mirkosertic.gameengine.teavm.TeaVMGameSceneLoader;
@@ -98,5 +102,10 @@ public class LocalEditorProject implements EditorProject {
                 return new TeaVMLoadedSpriteSheet(theNewResourceName, aCallback);
             }
         };
+    }
+
+    @Override
+    public void openFileSystem(FilesystemCallback aCallback) {
+        throw new IllegalArgumentException("Not implemented!");
     }
 }

@@ -90,4 +90,19 @@ public class GithubEditorProject implements EditorProject {
             }
         };
     }
+
+    @Override
+    public void openFileSystem(EditorProject.FilesystemCallback aCallback) {
+        IndexedDBFilesystem.open("github_" + username + "/" + repository, new IndexedDBFilesystem.Callback() {
+            @Override
+            public void onError() {
+                aCallback.onError(GithubEditorProject.this);
+            }
+
+            @Override
+            public void onSuccess(IndexedDBFilesystem aFilesystem) {
+                aCallback.onSuccess(GithubEditorProject.this, aFilesystem);
+            }
+        });
+    }
 }
