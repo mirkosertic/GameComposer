@@ -15,16 +15,14 @@
  */
 package de.mirkosertic.gameengine.gwt;
 
-import de.mirkosertic.gameengine.core.GameResource;
-import de.mirkosertic.gameengine.core.GameResourceLoader;
-import de.mirkosertic.gameengine.core.LoadedSpriteSheet;
-import de.mirkosertic.gameengine.core.SuccessCallback;
-import de.mirkosertic.gameengine.type.ResourceName;
-
-import java.io.IOException;
 import com.google.gwt.media.client.Audio;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.RootPanel;
+import de.mirkosertic.gameengine.core.GameResourceLoader;
+import de.mirkosertic.gameengine.core.LoadedSpriteSheet;
+import de.mirkosertic.gameengine.type.ResourceName;
+
+import java.io.IOException;
 
 public class GWTGameResourceLoader implements GameResourceLoader {
 
@@ -37,26 +35,24 @@ public class GWTGameResourceLoader implements GameResourceLoader {
     }
 
     @Override
-    public GameResource load(ResourceName aResourceName) throws IOException {
+    public void load(ResourceName aResourceName, Listener aListener) throws IOException {
         if (aResourceName.name.endsWith(".png")) {
             Image theImage = new Image();
             theImage.setVisible(false);
             theImage.setUrl(baseDirectory + aResourceName.name.replace('\\', '/'));
             RootPanel.get(holderId).add(theImage);
-            return new GWTBitmapResource(theImage);
+            aListener.handle(new GWTBitmapResource(theImage));
         }
         if (aResourceName.name.endsWith(".wav")) {
             Audio theAudio = Audio.createIfSupported();
             theAudio.setSrc(baseDirectory + aResourceName.name.replace('\\', '/'));
-            return new GWTAudioResource(theAudio);
+            aListener.handle(new GWTAudioResource(theAudio));
         }
-
-        return null;
     }
 
     @Override
-    public LoadedSpriteSheet loadSpriteSheet(ResourceName aResourceName, SuccessCallback aSuccessCallback) {
-        return LoadedSpriteSheet.EMPTY;
+    public void loadSpriteSheet(ResourceName aResourceName, SpritesheetListener aListener) {
+        aListener.handle(LoadedSpriteSheet.EMPTY);
     }
 
     @Override

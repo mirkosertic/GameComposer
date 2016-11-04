@@ -17,8 +17,6 @@ package de.mirkosertic.gameengine.teavm;
 
 import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.core.GameResourceLoader;
-import de.mirkosertic.gameengine.core.LoadedSpriteSheet;
-import de.mirkosertic.gameengine.core.SuccessCallback;
 import de.mirkosertic.gameengine.teavm.pixi.Texture;
 import de.mirkosertic.gameengine.type.ResourceName;
 
@@ -37,21 +35,23 @@ public class TeaVMGameResourceLoader implements GameResourceLoader {
     }
 
     @Override
-    public GameResource load(ResourceName aResourceName) throws IOException {
+    public void load(ResourceName aResourceName, Listener aListener) throws IOException {
         ResourceName theNewResourceName = new ResourceName(sceneId + aResourceName.name.replace('\\', '/'));
-        return convert(theNewResourceName);
+        aListener.handle(convert(theNewResourceName));
     }
 
     @Override
-    public LoadedSpriteSheet loadSpriteSheet(ResourceName aResourceName, SuccessCallback aCallback) {
+    public void loadSpriteSheet(ResourceName aResourceName, SpritesheetListener aListener) {
         ResourceName theNewResourceName = new ResourceName(sceneId + aResourceName.name.replace('\\', '/'));
-        return new TeaVMLoadedSpriteSheet(theNewResourceName, aCallback);
+        new TeaVMLoadedSpriteSheet(theNewResourceName, aSpriteSheet -> aListener.handle(aSpriteSheet));
     }
 
     protected GameResource convert(ResourceName aResourceName) {
         if (aResourceName.name.endsWith(".wav")) {
             return new TeaVMSoundResource(aResourceName.name);
         }
+
+        TeaVMLogger.info("Loading resource " + aResourceName.get());
 
         TeaVMTextureResource theResource = textureResources.get(aResourceName);
         if (theResource == null) {

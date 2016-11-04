@@ -13,27 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.mirkosertic.gameengine.web.github;
+package de.mirkosertic.gameengine.web.indexeddb;
 
-public class AuthenticationOptions {
+import org.teavm.jso.JSObject;
 
-    private final String username;
-    private final String password;
+public interface IndexedDB extends JSObject {
 
-    public AuthenticationOptions(String aUsername, String aPassword) {
-        username = aUsername;
-        password = aPassword;
-    }
+    IndexedDBObjectStore createObjectStore(String aObjectStoreName);
 
-    public AuthenticationOptions() {
-        this(null, null);
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
+    IndexedDBTransaction transaction(String aStoreName, String aMode);
 }

@@ -65,8 +65,7 @@ public class EditAnimationPropertyEditor implements PropertyEditor<Animation> {
         GameScene theGameScene = item.getTemplate().getGameScene();
         GameResourceLoader theLoader = item.getPersistenceManager().createResourceLoaderFor(theGameScene);
         try {
-            JavaFXBitmapResource theResource = (JavaFXBitmapResource) theLoader.load(aValue.computeCurrentFrame(0, 5));
-            imageView.setImage(theResource);
+            theLoader.load(aValue.computeCurrentFrame(0, 5), aResource -> imageView.setImage((JavaFXBitmapResource) aResource));
         } catch (Exception e) {
             e.printStackTrace();
         }

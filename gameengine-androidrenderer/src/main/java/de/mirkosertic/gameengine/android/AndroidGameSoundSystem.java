@@ -17,7 +17,9 @@ package de.mirkosertic.gameengine.android;
 
 import android.media.AudioManager;
 import android.media.SoundPool;
+import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.core.GameResourceCache;
+import de.mirkosertic.gameengine.core.GameResourceLoader;
 import de.mirkosertic.gameengine.sound.GameSoundSystem;
 import de.mirkosertic.gameengine.type.ResourceName;
 
@@ -48,23 +50,25 @@ public class AndroidGameSoundSystem implements GameSoundSystem<AndroidStreamIden
         loadedSounds = new HashMap<>();
     }
 
-    private synchronized AndroidSoundIdentifier loadSound(ResourceName aResourceName) throws IOException {
-        AndroidSoundResource theSound = resourceCache.getResourceFor(aResourceName);
-        AndroidSoundIdentifier theIdentifier = loadedSounds.get(theSound.resourceName);
-        if (theIdentifier == null) {
-            int theSoundID = soundPool.load(theSound.fileDescriptor, 1);
-            theIdentifier = new AndroidSoundIdentifier(theSoundID);
-            loadedSounds.put(theSound.resourceName, theIdentifier);
-        }
-        return theIdentifier;
-    }
-
     @Override
-    public AndroidStreamIdentifier play(ResourceName aResourceName) {
+    public void play(final ResourceName aResourceName, final Listener<AndroidStreamIdentifier> aListener) {
         try {
-            AndroidSoundIdentifier theSoundIdentifer = loadSound(aResourceName);
-            int theStreamID = soundPool.play(theSoundIdentifer.identifier, 1f, 1f, 1, 0, 1f);
-            return new AndroidStreamIdentifier(theStreamID);
+            resourceCache.getResourceFor(aResourceName, new GameResourceLoader.Listener() {
+                @Override
+                public void handle(GameResource aResource) {
+                    AndroidSoundResource theResource = (AndroidSoundResource) aResource;
+                    AndroidSoundIdentifier theIdentifier = loadedSounds.get(theResource.resourceName);
+                    if (theIdentifier == null) {
+                        int theSoundID = soundPool.load(theResource.fileDescriptor, 1);
+                        theIdentifier = new AndroidSoundIdentifier(theSoundID);
+                        loadedSounds.put(theResource.resourceName, theIdentifier);
+                    }
+
+                    int theStreamID = soundPool.play(theIdentifier.identifier, 1f, 1f, 1, 0, 1f);
+                    aListener.handle(new AndroidStreamIdentifier(theStreamID));
+
+                }
+            });
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -15,24 +15,7 @@
  */
 package de.mirkosertic.gameengine.web;
 
-import org.teavm.jso.browser.Window;
+import org.teavm.jso.JSObject;
 
-public interface EditorProject {
-
-    interface Callback {
-
-        void onError(EditorProject aProject);
-
-        void onSuccess(EditorProject aProject, ResourceLoaderFactory aResourceLoaderFactory);
-    }
-
-    void initializeLoader(Callback aCallback);
-
-    default public void setCurrentPreview(String aSceneDataAsJSON) {
-        Window.current().getLocalStorage().setItem("previewscene", aSceneDataAsJSON);
-    }
-
-    default public String getPreviewDataAsJSON() {
-        return Window.current().getLocalStorage().getItem("previewscene");
-    }
+public interface Blob extends JSObject {
 }

@@ -35,31 +35,38 @@ public class GameResourceCache {
         loadedSpriteSheets = new LoadedSpriteSheet[0];
     }
 
-    public void loadIntoCache(Spritesheet aSheet, SuccessCallback aCallback) {
-        List<LoadedSpriteSheet> theSheets = ArrayUtils.asList(loadedSpriteSheets);
-        theSheets.add(resourceLoader.loadSpriteSheet(aSheet.jsonFileProperty().get(), aCallback));
-        loadedSpriteSheets = theSheets.toArray(new LoadedSpriteSheet[theSheets.size()]);
+    public void loadIntoCache(Spritesheet aSheet, final SuccessCallback aCallback) {
+        resourceLoader.loadSpriteSheet(aSheet.jsonFileProperty().get(),
+                new GameResourceLoader.SpritesheetListener<GameResource>() {
+                    @Override
+                    public void handle(LoadedSpriteSheet<GameResource> aSpriteSheet) {
+                        List<LoadedSpriteSheet> theSheets = ArrayUtils.asList(loadedSpriteSheets);
+                        theSheets.add(aSpriteSheet);
+                        loadedSpriteSheets = theSheets.toArray(new LoadedSpriteSheet[theSheets.size()]);
+                        aCallback.success();
+                    }
+                });
     }
 
-    public <T extends GameResource> T getResourceFor(ResourceName aResourceName) throws IOException {
+    public <T extends GameResource> void getResourceFor(final ResourceName aResourceName, final GameResourceLoader.Listener aListener) throws IOException {
 
         for (LoadedSpriteSheet theLoadedSheet : loadedSpriteSheets) {
             T theResource = (T) theLoadedSheet.getResourceFor(aResourceName);
             if (theResource != null) {
-                return theResource;
+                aListener.handle(theResource);
             }
         }
 
         T theResource = (T) cachedResources.get(aResourceName.name);
         if (theResource == null) {
-            theResource = (T) resourceLoader.load(aResourceName);
-            if (theResource == null) {
-                throw new IOException("Cannot load resource " + aResourceName.name);
-            }
-            cachedResources.put(aResourceName.name, theResource);
-            return theResource;
+            resourceLoader.load(aResourceName, new GameResourceLoader.Listener() {
+                @Override
+                public void handle(GameResource aResource) {
+                    aListener.handle(aResource);
+                    cachedResources.put(aResourceName.name, aResource);
+                }
+            });
         }
-        return theResource;
     }
 
     public void flush() {

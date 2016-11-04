@@ -20,6 +20,7 @@ import de.mirkosertic.gameengine.camera.Callback;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameResource;
+import de.mirkosertic.gameengine.core.GameResourceLoader;
 import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.core.GameSceneEffect;
@@ -121,6 +122,9 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
         return aInstance.visibleProperty().get();
     }
 
+    protected void touched(GameObjectInstance aInstance) {
+    }
+
     @Override
     public void renderGame(final long aGameTime, final long aElapsedTimeSinceLastLoop, final GameScene aScene, RuntimeStatistics aStatistics) {
 
@@ -148,12 +152,14 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
             }
 
             @Override
-            public void process(GameObjectInstance aValue, Position aPositionOnScreen, Size aSize) {
+            public void process(final GameObjectInstance aValue, final Position aPositionOnScreen, Size aSize) {
+
+                touched(aValue);
 
                 float theHalfWidth = aSize.width / 2;
                 float theHalfHeight = aSize.height / 2;
 
-                Position theCenterOffset = new Position(theHalfWidth, theHalfHeight);
+                final Position theCenterOffset = new Position(theHalfWidth, theHalfHeight);
 
                 Angle theAngle = aValue.rotationAngleProperty().get();
 
@@ -167,10 +173,13 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
                     ResourceName theSpriteResource = theSpriteBehavior.computeCurrentFrame(aGameTime);
                     if (theSpriteResource != null) {
                         try {
-                            S theGameResource = gameRuntime.getResourceCache()
-                                    .getResourceFor(theSpriteResource);
-
-                            drawImage(aValue, aPositionOnScreen, theCenterOffset, theGameResource);
+                            gameRuntime.getResourceCache()
+                                    .getResourceFor(theSpriteResource, new GameResourceLoader.Listener() {
+                                        @Override
+                                        public void handle(final GameResource aResource) {
+                                            drawImage(aValue, aPositionOnScreen, theCenterOffset, (S) aResource);
+                                        }
+                                    });
 
                             theSomethingRendered = true;
 
