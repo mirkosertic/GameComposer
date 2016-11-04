@@ -17,7 +17,6 @@ package de.mirkosertic.gameengine.teavm;
 
 import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.core.LoadedSpriteSheet;
-import de.mirkosertic.gameengine.core.SuccessCallback;
 import de.mirkosertic.gameengine.teavm.pixi.Loader;
 import de.mirkosertic.gameengine.teavm.pixi.Texture;
 import de.mirkosertic.gameengine.type.ResourceName;
@@ -29,13 +28,17 @@ import java.util.Map;
 
 public class TeaVMLoadedSpriteSheet implements LoadedSpriteSheet {
 
+    public interface Listener {
+        void handle(TeaVMLoadedSpriteSheet aSpriteSheet);
+    }
+
     @JSBody(params = {"aObject"}, script = "return Object.keys(aObject);")
     private static native String[] keysOf(JSObject aObject);
 
     private final Map<String, TeaVMTextureResource> knownResources;
     private final Loader loader;
 
-    public TeaVMLoadedSpriteSheet(ResourceName aResourceName, SuccessCallback aCallback) {
+    public TeaVMLoadedSpriteSheet(ResourceName aResourceName, Listener aCallback) {
         knownResources = new HashMap<>();
         loader = Loader.create();
         String thePath = aResourceName.name.replace('\\', '/');
@@ -50,9 +53,9 @@ public class TeaVMLoadedSpriteSheet implements LoadedSpriteSheet {
                     knownResources.put(theFrameID, theResource);
                 }
 
-               TeaVMLogger.info("Loading finished with " + knownResources.size() + " frames");
+                TeaVMLogger.info("Loading finished with " + knownResources.size() + " frames");
 
-                aCallback.success();
+                aCallback.handle(this);
             } else {
                 TeaVMLogger.error("Loading not finished, json not found");
             }

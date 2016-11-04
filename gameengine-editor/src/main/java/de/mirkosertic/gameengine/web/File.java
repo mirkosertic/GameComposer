@@ -13,33 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.mirkosertic.gameengine.web.github;
+package de.mirkosertic.gameengine.web;
 
 import org.teavm.jso.JSObject;
 import org.teavm.jso.JSProperty;
 
 public interface File extends JSObject {
 
-    String DIR_TYPE = "dir";
+    @JSProperty
+    String getFilename();
 
     @JSProperty
-    String getName();
+    Blob getContent();
 
     @JSProperty
-    String getPath();
-
-    @JSProperty
-    String getType();
-
-    @JSProperty
-    String getUrl();
-
-    @JSProperty
-    long getSize();
-
-    @JSProperty
-    String getDownload_url();
-
-    @JSProperty
-    String getSha();
+    String getStatus();
 }

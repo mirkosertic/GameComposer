@@ -44,11 +44,13 @@ public class EditorState {
     private final Map<String, GameScene> loadedScenes;
     private final EditorProject editorProject;
     private final AbstractGameRuntimeFactory runtimeFactory;
+    private final ResourceLoaderFactory resourceLoaderFactory;
 
-    public EditorState(EditorProject aProject, AbstractGameRuntimeFactory aRuntimeFactory) {
+    public EditorState(EditorProject aProject, AbstractGameRuntimeFactory aRuntimeFactory, ResourceLoaderFactory aResourceLoaderFactory) {
         loadedScenes = new HashMap<>();
         editorProject = aProject;
         runtimeFactory = aRuntimeFactory;
+        resourceLoaderFactory = aResourceLoaderFactory;
     }
 
     public EditorProject getEditorProject() {
@@ -68,7 +70,7 @@ public class EditorState {
     }
 
     public void load(LoadingListener aListener) {
-        TeaVMGameLoader theGameLoader = editorProject.createGameLoader(new TeaVMGameLoader.GameLoadedListener() {
+        TeaVMGameLoader theGameLoader = resourceLoaderFactory.createGameLoader(new TeaVMGameLoader.GameLoadedListener() {
             @Override
             public void onGameLoaded(Game aGame) {
                 loadedGame = aGame;
@@ -87,8 +89,8 @@ public class EditorState {
     private void loadScenes(LoadingListener aLoadingListener) {
         String[] theKnownScenes = loadedGame.getKnownScenes();
         for (String theScene : theKnownScenes) {
-            TeaVMGameResourceLoader theLoader = editorProject.createResourceLoaderFor(theScene);
-            TeaVMGameSceneLoader theSceneLoader = editorProject.createSceneLoader(
+            TeaVMGameResourceLoader theLoader = resourceLoaderFactory.createResourceLoaderFor(theScene);
+            TeaVMGameSceneLoader theSceneLoader = resourceLoaderFactory.createSceneLoader(
                     new TeaVMGameSceneLoader.GameSceneLoadedListener() {
                         @Override
                         public void onGameSceneLoaded(GameScene aScene) {

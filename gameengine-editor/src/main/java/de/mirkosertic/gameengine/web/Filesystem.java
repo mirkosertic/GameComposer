@@ -16,4 +16,22 @@
 package de.mirkosertic.gameengine.web;
 
 public interface Filesystem {
+
+    interface FileProcessor {
+
+        void process(File aFile);
+
+        void doesNotExist(String aFileName);
+    }
+
+    interface DataUrlCallback {
+
+        void handle(String aValue);
+    }
+
+    void openFile(String aFileName, FileProcessor aProcessor);
+
+    void storeFile(String aFileName, Blob aBlob, FileProcessor aProcessor);
+
+    void asDataURL(File aFile, DataUrlCallback aCallback);
 }

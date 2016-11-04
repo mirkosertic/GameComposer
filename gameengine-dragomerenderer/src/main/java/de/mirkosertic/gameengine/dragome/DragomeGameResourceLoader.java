@@ -15,18 +15,18 @@
  */
 package de.mirkosertic.gameengine.dragome;
 
-import java.io.IOException;
-
 import com.dragome.services.WebServiceLocator;
-import de.mirkosertic.gameengine.core.*;
+import com.dragome.web.html.dom.DomHandler;
+import de.mirkosertic.gameengine.core.GameResourceLoader;
+import de.mirkosertic.gameengine.core.GameResourceType;
+import de.mirkosertic.gameengine.core.LoadedSpriteSheet;
+import de.mirkosertic.gameengine.type.ResourceName;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.dragome.web.html.dom.DomHandler;
-
-import de.mirkosertic.gameengine.type.ResourceName;
+import java.io.IOException;
 
 public class DragomeGameResourceLoader implements GameResourceLoader {
 
@@ -44,17 +44,17 @@ public class DragomeGameResourceLoader implements GameResourceLoader {
     }
 
     @Override
-    public GameResource load(ResourceName aResourceName) throws IOException {
+    public void load(ResourceName aResourceName, Listener aListener) throws IOException {
         String theResourceName = sceneId + aResourceName.name;
         if (aResourceName.name.endsWith(".wav")) {
-            return new DragomeGameResource(theResourceName, GameResourceType.SOUND, null);
+            aListener.handle(new DragomeGameResource(theResourceName, GameResourceType.SOUND, null));
         }
 
         Element theImage = document.createElement("img");
         theImage.setAttribute("src", theResourceName);
         cacheElement.appendChild(theImage);
 
-        return new DragomeGameResource(theResourceName, GameResourceType.BITMAP, theImage);
+        aListener.handle(new DragomeGameResource(theResourceName, GameResourceType.BITMAP, theImage));
     }
 
     @Override
@@ -67,7 +67,7 @@ public class DragomeGameResourceLoader implements GameResourceLoader {
     }
 
     @Override
-    public LoadedSpriteSheet loadSpriteSheet(ResourceName aResourceName, SuccessCallback aSuccessCallback) {
-        return LoadedSpriteSheet.EMPTY;
+    public void loadSpriteSheet(ResourceName aResourceName, SpritesheetListener aListener) {
+        aListener.handle(LoadedSpriteSheet.EMPTY);
     }
 }

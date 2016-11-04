@@ -44,28 +44,36 @@ public class WebUI {
 
     public static void main(String[] args) {
 
+        TeaVMLogger.info("Starting web editor");
+
         EditorProject theProject = getDefaultProject();
 
-        theProject.openFileSystem(new EditorProject.FilesystemCallback() {
+        theProject.initializeLoader(new EditorProject.Callback() {
             @Override
             public void onError(EditorProject aProject) {
-                TeaVMLogger.info("Error creating indexeddb filesystem!");
+                TeaVMLogger.error("Error creating indexeddb filesystem!");
             }
 
             @Override
-            public void onSuccess(EditorProject aProject, Filesystem aFilesystem) {
-                initializeWithFileSystem(aFilesystem, theProject);
+            public void onSuccess(EditorProject aProject, ResourceLoaderFactory aResourceLoaderFactory) {
+                TeaVMLogger.info("ResourceLoader created");
+                initializeWithResourceLoaderFactory(aResourceLoaderFactory, aProject);
             }
         });
     }
 
-    private static void initializeWithFileSystem(Filesystem aFilesystem, EditorProject aProject) {
+    private static void initializeWithResourceLoaderFactory(ResourceLoaderFactory aResourceLoaderFactory, EditorProject aProject) {
         if (WINDOW.getLocation().getPathName().endsWith("/index.html")) {
 
+            TeaVMLogger.info("Starting editor");
+
             Editor theEditor = new Editor();
-            theEditor.boot(aProject);
+            theEditor.boot(aProject, aResourceLoaderFactory);
 
         } else {
+
+            TeaVMLogger.info("Starting preview");
+
             HTMLCanvasElement theCanvasElement = (HTMLCanvasElement) WINDOW.getDocument().getElementById("html5canvas");
             TeaVMGenericPlayer thePlayer = new TeaVMGenericPlayer() {
                 @Override
@@ -81,17 +89,17 @@ public class WebUI {
                             }
                         };
                     }
-                    return aProject.createSceneLoader(createSceneLoaderListener(), aRuntimeFactory);
+                    return aResourceLoaderFactory.createSceneLoader(createSceneLoaderListener(), aRuntimeFactory);
                 }
 
                 @Override
                 protected TeaVMGameLoader createGameLoader(TeaVMGameLoader.GameLoadedListener aListener) {
-                    return aProject.createGameLoader(aListener);
+                    return aResourceLoaderFactory.createGameLoader(aListener);
                 }
 
                 @Override
                 protected TeaVMGameResourceLoader createResourceLoader(String aSceneID) {
-                    return aProject.createResourceLoaderFor(aSceneID);
+                    return aResourceLoaderFactory.createResourceLoaderFor(aSceneID);
                 }
 
                 @Override
