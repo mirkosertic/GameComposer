@@ -51,8 +51,6 @@ public class TeaVMGameResourceLoader implements GameResourceLoader {
             return new TeaVMSoundResource(aResourceName.name);
         }
 
-        TeaVMLogger.info("Loading resource " + aResourceName.get());
-
         TeaVMTextureResource theResource = textureResources.get(aResourceName);
         if (theResource == null) {
             Texture theTexture = Texture.createTextureFromImage(aResourceName.name);
