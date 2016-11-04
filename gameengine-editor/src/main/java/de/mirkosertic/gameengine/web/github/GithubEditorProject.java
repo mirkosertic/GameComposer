@@ -15,20 +15,8 @@
  */
 package de.mirkosertic.gameengine.web.github;
 
-import de.mirkosertic.gameengine.AbstractGameRuntimeFactory;
-import de.mirkosertic.gameengine.core.Game;
-import de.mirkosertic.gameengine.core.GameResource;
-import de.mirkosertic.gameengine.core.LoadedSpriteSheet;
-import de.mirkosertic.gameengine.core.SuccessCallback;
-import de.mirkosertic.gameengine.teavm.TeaVMGameLoader;
-import de.mirkosertic.gameengine.teavm.TeaVMGameResourceLoader;
-import de.mirkosertic.gameengine.teavm.TeaVMGameSceneLoader;
-import de.mirkosertic.gameengine.teavm.TeaVMLoadedSpriteSheet;
-import de.mirkosertic.gameengine.type.ResourceName;
 import de.mirkosertic.gameengine.web.EditorProject;
-import org.teavm.jso.ajax.XMLHttpRequest;
-
-import java.io.IOException;
+import de.mirkosertic.gameengine.web.indexeddb.IndexedDBFilesystem;
 
 public class GithubEditorProject implements EditorProject {
 
@@ -45,54 +33,7 @@ public class GithubEditorProject implements EditorProject {
         relativePath = aRelativePath;
     }
 
-    @Override
-    public TeaVMGameSceneLoader createSceneLoader(TeaVMGameSceneLoader.GameSceneLoadedListener aListener,
-            AbstractGameRuntimeFactory aRuntimeFactory) {
-        return new TeaVMGameSceneLoader(aListener, aRuntimeFactory) {
-            @Override
-            public void loadFromServer(Game aGame, String aSceneName, TeaVMGameResourceLoader aResourceLoader) {
-                final XMLHttpRequest theRequest = XMLHttpRequest.create();
-                theRequest.overrideMimeType("text/plain");
-                theRequest.open("GET", "https://raw.githubusercontent.com/" + username + "/" + repository + "/master" + relativePath + "/" + aSceneName + "/scene.json");
-                theRequest.onComplete(() -> listener.onGameSceneLoaded(parse(aGame, theRequest.getResponseText(), aResourceLoader)));
-                theRequest.send();
-            }
-        };
-    }
-
-    @Override
-    public TeaVMGameLoader createGameLoader(TeaVMGameLoader.GameLoadedListener aListener) {
-        return new TeaVMGameLoader(aListener) {
-            @Override
-            public void loadFromServer() {
-                final XMLHttpRequest theRequest = XMLHttpRequest.create();
-                theRequest.overrideMimeType("text/plain");
-                theRequest.open("GET", "https://raw.githubusercontent.com/" + username + "/" + repository + "/master" + relativePath + "/game.json");
-                theRequest.onComplete(() -> listener.onGameLoaded(parse(theRequest.getResponseText())));
-                theRequest.send();
-            }
-        };
-    }
-
-    @Override
-    public TeaVMGameResourceLoader createResourceLoaderFor(String aSceneID) {
-        return new TeaVMGameResourceLoader(aSceneID) {
-            @Override
-            public GameResource load(ResourceName aResourceName) throws IOException {
-                ResourceName theNewResourceName = new ResourceName("https://raw.githubusercontent.com/" + username + "/" + repository + "/master" + relativePath + "/" + aSceneID + aResourceName.get());
-                return convert(theNewResourceName);
-            }
-
-            @Override
-            public LoadedSpriteSheet loadSpriteSheet(ResourceName aResourceName, SuccessCallback aCallback) {
-                ResourceName theNewResourceName = new ResourceName("https://raw.githubusercontent.com/" + username + "/" + repository + "/master" + relativePath + "/" + aSceneID + aResourceName.get());
-                return new TeaVMLoadedSpriteSheet(theNewResourceName, aCallback);
-            }
-        };
-    }
-
-    @Override
-    public void openFileSystem(EditorProject.FilesystemCallback aCallback) {
+    public void initializeLoader(Callback aCallback) {
         IndexedDBFilesystem.open("github_" + username + "_" + repository, new IndexedDBFilesystem.Callback() {
             @Override
             public void onError() {
@@ -101,7 +42,8 @@ public class GithubEditorProject implements EditorProject {
 
             @Override
             public void onSuccess(IndexedDBFilesystem aFilesystem) {
-                aCallback.onSuccess(GithubEditorProject.this, aFilesystem);
+                String theBaseURL = "https://raw.githubusercontent.com/" + username + "/" + repository + "/master" + relativePath;
+                aCallback.onSuccess(GithubEditorProject.this, new GithubResourceLoaderFactory(theBaseURL, aFilesystem));
             }
         });
     }

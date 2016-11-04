@@ -13,25 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.mirkosertic.gameengine.core;
+package de.mirkosertic.gameengine.web.indexeddb;
 
-import de.mirkosertic.gameengine.type.ResourceName;
+import org.teavm.jso.JSObject;
+import org.teavm.jso.JSProperty;
 
-import java.io.IOException;
+public interface IndexedDBRequest extends JSObject {
 
-public interface GameResourceLoader {
+    @JSProperty
+    void setOnerror(IndexedDBEventHandler aEventHandler);
 
-    public interface Listener {
-        void handle(GameResource aResource);
-    }
-
-    public interface SpritesheetListener<T extends GameResource> {
-        void handle(LoadedSpriteSheet<T> aSpriteSheet);
-    }
-
-    void load(ResourceName aResourceName, Listener aListener) throws IOException;
-
-    <T extends GameResource> void loadSpriteSheet(ResourceName aResourceName, SpritesheetListener<T> aListener);
-
-    void flush();
+    @JSProperty
+    void setOnsuccess(IndexedDBEventHandler aEventHandler);
 }

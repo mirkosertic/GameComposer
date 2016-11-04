@@ -15,21 +15,8 @@
  */
 package de.mirkosertic.gameengine.web.electron;
 
-import de.mirkosertic.gameengine.AbstractGameRuntimeFactory;
-import de.mirkosertic.gameengine.core.Game;
-import de.mirkosertic.gameengine.core.GameResource;
-import de.mirkosertic.gameengine.core.GameScene;
-import de.mirkosertic.gameengine.core.LoadedSpriteSheet;
-import de.mirkosertic.gameengine.core.SuccessCallback;
-import de.mirkosertic.gameengine.teavm.TeaVMGameLoader;
-import de.mirkosertic.gameengine.teavm.TeaVMGameResourceLoader;
-import de.mirkosertic.gameengine.teavm.TeaVMGameSceneLoader;
-import de.mirkosertic.gameengine.teavm.TeaVMLoadedSpriteSheet;
-import de.mirkosertic.gameengine.type.ResourceName;
 import de.mirkosertic.gameengine.web.EditorProject;
 import de.mirkosertic.gameengine.web.electron.fs.FS;
-
-import java.io.IOException;
 
 public class LocalEditorProject implements EditorProject {
 
@@ -41,71 +28,7 @@ public class LocalEditorProject implements EditorProject {
         fs = aFS;
     }
 
-    @Override
-    public TeaVMGameSceneLoader createSceneLoader(TeaVMGameSceneLoader.GameSceneLoadedListener aListener,
-            AbstractGameRuntimeFactory aRuntimeFactory) {
-        return new TeaVMGameSceneLoader(aListener, aRuntimeFactory) {
-            @Override
-            public void loadFromServer(Game aGame, String aSceneName, TeaVMGameResourceLoader aResourceLoader) {
-                String theFile = localPath + "/" + aSceneName + "/scene.json";
-                String theData = fs.readFileSync(theFile, "utf8");
-
-                GameScene theScene = parse(aGame, theData, aResourceLoader);
-                listener.onGameSceneLoaded(theScene);
-            }
-        };
-    }
-
-    @Override
-    public TeaVMGameLoader createGameLoader(TeaVMGameLoader.GameLoadedListener aListener) {
-        return new TeaVMGameLoader(aListener) {
-            @Override
-            public void loadFromServer() {
-                String theFile = localPath + "/game.json";
-                String theData = fs.readFileSync(theFile, "utf8");
-                Game theGame = parse(theData);
-                listener.onGameLoaded(theGame);
-            }
-        };
-    }
-
-    @Override
-    public TeaVMGameResourceLoader createResourceLoaderFor(String aSceneID) {
-        return new TeaVMGameResourceLoader(aSceneID) {
-            @Override
-            public GameResource load(ResourceName aResourceName) throws IOException {
-
-                String theFile = localPath + "/" + aSceneID + aResourceName.name;
-                theFile = theFile.replace('\\', '/');
-                if (!theFile.startsWith("/")) {
-                    theFile = "/" + theFile;
-                }
-
-                String theURL = "file://" + theFile;
-
-                ResourceName theNewResourceName = new ResourceName(theURL);
-                return convert(theNewResourceName);
-            }
-
-            @Override
-            public LoadedSpriteSheet loadSpriteSheet(ResourceName aResourceName, SuccessCallback aCallback) {
-
-                String theFile = localPath + "/" + aSceneID + aResourceName.name;
-                theFile = theFile.replace('\\', '/');
-                if (!theFile.startsWith("/")) {
-                    theFile = "/" + theFile;
-                }
-
-                String theURL = "file://" + theFile;
-
-                ResourceName theNewResourceName = new ResourceName(theURL);
-                return new TeaVMLoadedSpriteSheet(theNewResourceName, aCallback);
-            }
-        };
-    }
-
-    @Override
-    public void openFileSystem(FilesystemCallback aCallback) {
-        throw new IllegalArgumentException("Not implemented!");
+    public void initializeLoader(Callback aCallback) {
+        aCallback.onSuccess(this, new LocalResourceLoaderFactory(fs, localPath));
     }
 }

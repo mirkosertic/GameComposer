@@ -19,10 +19,8 @@ import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.graphics.BitmapFactory;
 import android.os.ParcelFileDescriptor;
-import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.core.GameResourceLoader;
 import de.mirkosertic.gameengine.core.LoadedSpriteSheet;
-import de.mirkosertic.gameengine.core.SuccessCallback;
 import de.mirkosertic.gameengine.type.ResourceName;
 
 import java.io.File;
@@ -43,10 +41,10 @@ public class AndroidGameResourceLoader implements GameResourceLoader {
     }
 
     @Override
-    public GameResource load(ResourceName aResourceName) throws IOException {
+    public void load(ResourceName aResourceName, Listener aListener) throws IOException {
         if (aResourceName.name.endsWith(".png")) {
             InputStream theStream = assetManager.open(prefix + aResourceName.name);
-            return new AndroidBitmapResource(BitmapFactory.decodeStream(theStream));
+            aListener.handle(new AndroidBitmapResource(BitmapFactory.decodeStream(theStream)));
         }
         if (aResourceName.name.endsWith(".wav")) {
             File theCachedFile = new File(cacheDir, prefix + aResourceName.name);
@@ -62,15 +60,13 @@ public class AndroidGameResourceLoader implements GameResourceLoader {
             }
             theFos.close();
             AssetFileDescriptor theFileDescriptor = new AssetFileDescriptor(ParcelFileDescriptor.open(theCachedFile, ParcelFileDescriptor.MODE_READ_ONLY ), 0, -1);
-            return new AndroidSoundResource(new ResourceName(prefix + aResourceName.name), theFileDescriptor);
+            aListener.handle(new AndroidSoundResource(new ResourceName(prefix + aResourceName.name), theFileDescriptor));
         }
-
-        return null;
     }
 
     @Override
-    public LoadedSpriteSheet loadSpriteSheet(ResourceName aResourceName, SuccessCallback aSuccessCallback) {
-        return LoadedSpriteSheet.EMPTY;
+    public void loadSpriteSheet(ResourceName aResourceName, SpritesheetListener aListener) {
+        aListener.handle(LoadedSpriteSheet.EMPTY);
     }
 
     @Override

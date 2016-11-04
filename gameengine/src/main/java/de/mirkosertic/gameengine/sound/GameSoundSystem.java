@@ -19,7 +19,11 @@ import de.mirkosertic.gameengine.type.ResourceName;
 
 public interface GameSoundSystem<T> {
 
-    T play(ResourceName aResourceName);
+    interface Listener<T> {
+        void handle(T aValue);
+    }
+
+    void play(ResourceName aResourceName, Listener<T> aListener);
 
     void stop(T aSoundObject);
 }

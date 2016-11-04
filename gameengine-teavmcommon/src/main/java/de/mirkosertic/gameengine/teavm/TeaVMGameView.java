@@ -83,6 +83,11 @@ public class TeaVMGameView extends GenericAbstractGameView<GameResource> {
     }
 
     @Override
+    protected void touched(GameObjectInstance aInstance) {
+        instanceCache.touch(aInstance.uuidProperty().get());
+    }
+
+    @Override
     protected EffectCanvas createEffectCanvas() {
         return effectCanvas;
     }

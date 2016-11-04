@@ -53,6 +53,10 @@ public class TeaVMInstanceCache {
         return (T) theResult;
     }
 
+    public void touch(String aObjectID) {
+        touchedInstances.add(aObjectID);
+    }
+
     public void clearTouchedInstances() {
         touchedInstances.clear();
     }

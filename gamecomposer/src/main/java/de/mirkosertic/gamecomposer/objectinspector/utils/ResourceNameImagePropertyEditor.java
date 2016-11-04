@@ -25,17 +25,15 @@ import de.mirkosertic.gameengine.sprite.Sprite;
 import de.mirkosertic.gameengine.sprite.SpriteBehavior;
 import de.mirkosertic.gameengine.sprite.SpriteBehaviorTemplate;
 import de.mirkosertic.gameengine.type.ResourceName;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
-
-import java.io.File;
 import org.controlsfx.control.PropertySheet;
 import org.controlsfx.property.editor.PropertyEditor;
+
+import java.io.File;
 
 public class ResourceNameImagePropertyEditor implements PropertyEditor<ResourceName> {
 
@@ -54,11 +52,7 @@ public class ResourceNameImagePropertyEditor implements PropertyEditor<ResourceN
         imageView = new ImageView();
 
         selectResource = new Hyperlink("Select resource");
-        selectResource.setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent event) {
-                selectResource();
-            }
-        });
+        selectResource.setOnAction(event -> selectResource());
 
         editor = new VBox();
         editor.getChildren().addAll(imageView, selectResource);
@@ -107,8 +101,7 @@ public class ResourceNameImagePropertyEditor implements PropertyEditor<ResourceN
         GameScene theGameScene = getGameScene();
         GameResourceLoader theLoader = item.getPersistenceManager().createResourceLoaderFor(theGameScene);
         try {
-            JavaFXBitmapResource theResource = (JavaFXBitmapResource) theLoader.load(aValue);
-            imageView.setImage(theResource);
+            theLoader.load(aValue, aResource -> imageView.setImage((JavaFXBitmapResource) aResource));
         } catch (Exception e) {
             e.printStackTrace();
         }

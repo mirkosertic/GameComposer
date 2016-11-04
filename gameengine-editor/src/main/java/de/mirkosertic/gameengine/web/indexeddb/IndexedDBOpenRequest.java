@@ -13,9 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.mirkosertic.gameengine.web.github;
+package de.mirkosertic.gameengine.web.indexeddb;
 
-public interface FileVisitor {
+import org.teavm.jso.JSProperty;
 
-    void visit(File aFile, int aStatuscode, String aETag);
+public interface IndexedDBOpenRequest extends IndexedDBRequest {
+
+    @JSProperty
+    void setOnupgradeneeded(IndexedDBEventHandler aEventHandler);
+
+    @JSProperty
+    IndexedDB getResult();
 }

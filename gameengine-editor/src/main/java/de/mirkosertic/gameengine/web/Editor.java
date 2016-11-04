@@ -29,6 +29,7 @@ import de.mirkosertic.gameengine.web.electron.Dialog;
 import de.mirkosertic.gameengine.web.electron.DialogOptions;
 import de.mirkosertic.gameengine.web.electron.Electron;
 import de.mirkosertic.gameengine.web.electron.LocalEditorProject;
+import de.mirkosertic.gameengine.web.electron.LocalResourceLoaderFactory;
 import de.mirkosertic.gameengine.web.electron.Menu;
 import de.mirkosertic.gameengine.web.electron.MenuItem;
 import de.mirkosertic.gameengine.web.electron.Remote;
@@ -74,7 +75,7 @@ public class Editor {
         }
     }
 
-    public void boot(EditorProject aProject) {
+    public void boot(EditorProject aProject, ResourceLoaderFactory aResourceLoaderFactory) {
 
         TeaVMGameRuntimeFactory theRuntimeFactory = new TeaVMGameRuntimeFactory(
                 !window.getLocation().getFullURL().contains("nothreading"),
@@ -93,7 +94,7 @@ public class Editor {
 
         window.addEventListener("resize", evt -> tabbedPageManager.notifyResize(), true);
 
-        editorState = new EditorState(aProject, theRuntimeFactory);
+        editorState = new EditorState(aProject, theRuntimeFactory, aResourceLoaderFactory);
 
         // Initialize object editor
         HTMLElement thePropertyEditorElement = (HTMLElement) document.getElementById("objectEditor");
@@ -252,7 +253,7 @@ public class Editor {
             JSArray<JSString> theResults = (JSArray<JSString>) aPaths;
             if (theResults.getLength() == 1) {
                 String thePath = theResults.get(0).stringValue();
-                boot(new LocalEditorProject(aFilesystem, thePath));
+                boot(new LocalEditorProject(aFilesystem, thePath), new LocalResourceLoaderFactory(aFilesystem, thePath));
             }
         }
     }

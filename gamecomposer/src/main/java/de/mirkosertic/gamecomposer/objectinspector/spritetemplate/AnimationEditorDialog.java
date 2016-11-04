@@ -101,8 +101,7 @@ public class AnimationEditorDialog {
                     setGraphic(addAnimationButton);
                 } else {
                     try {
-                        JavaFXBitmapResource theResource = (JavaFXBitmapResource) resourceLoader.load(aItem);
-                        imageView.setImage(theResource);
+                        resourceLoader.load(aItem, aResource -> imageView.setImage((JavaFXBitmapResource) aResource));
 
                         setGraphic(singleResourceNode);
                     } catch (Exception e) {

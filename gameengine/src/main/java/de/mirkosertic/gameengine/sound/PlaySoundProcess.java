@@ -18,7 +18,6 @@ package de.mirkosertic.gameengine.sound;
 import de.mirkosertic.gameengine.process.AbstractGameProcess;
 import de.mirkosertic.gameengine.type.ResourceName;
 
-//TODO: Add notifier to platform specific sound system to remove processes for already played sounds
 public class PlaySoundProcess extends AbstractGameProcess {
 
     private final GameSoundSystem gameSoundSystem;
@@ -37,7 +36,12 @@ public class PlaySoundProcess extends AbstractGameProcess {
     }
 
     private void playSound() {
-        soundObject = gameSoundSystem.play(resourceName);
+        gameSoundSystem.play(resourceName, new GameSoundSystem.Listener() {
+            @Override
+            public void handle(Object aValue) {
+                soundObject = aValue;
+            }
+        });
     }
 
     @Override

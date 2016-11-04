@@ -15,24 +15,26 @@
  */
 package de.mirkosertic.gameengine.web;
 
-import org.teavm.jso.browser.Window;
+import org.teavm.jso.JSBody;
+import org.teavm.jso.JSFunctor;
+import org.teavm.jso.JSObject;
+import org.teavm.jso.JSProperty;
 
-public interface EditorProject {
+public abstract class FileReader implements JSObject {
 
-    interface Callback {
-
-        void onError(EditorProject aProject);
-
-        void onSuccess(EditorProject aProject, ResourceLoaderFactory aResourceLoaderFactory);
+    @JSFunctor
+    public interface Listener extends JSObject {
+        void handle();
     }
 
-    void initializeLoader(Callback aCallback);
+    @JSBody(params = {}, script = "return new FileReader();")
+    public static native FileReader create();
 
-    default public void setCurrentPreview(String aSceneDataAsJSON) {
-        Window.current().getLocalStorage().setItem("previewscene", aSceneDataAsJSON);
-    }
+    @JSProperty
+    public abstract void setOnload(Listener aListener);
 
-    default public String getPreviewDataAsJSON() {
-        return Window.current().getLocalStorage().getItem("previewscene");
-    }
+    @JSProperty
+    public abstract String getResult();
+
+    public abstract void readAsDataURL(Blob aBlob);
 }

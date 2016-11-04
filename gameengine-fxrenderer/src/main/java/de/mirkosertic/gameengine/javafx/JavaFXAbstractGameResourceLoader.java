@@ -15,10 +15,8 @@
  */
 package de.mirkosertic.gameengine.javafx;
 
-import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.core.GameResourceLoader;
 import de.mirkosertic.gameengine.core.LoadedSpriteSheet;
-import de.mirkosertic.gameengine.core.SuccessCallback;
 import de.mirkosertic.gameengine.type.ResourceName;
 
 import java.io.IOException;
@@ -29,27 +27,26 @@ public abstract class JavaFXAbstractGameResourceLoader implements GameResourceLo
     protected abstract InputStream getInputStreamFor(ResourceName aResourceName) throws IOException;
 
     @Override
-    public GameResource load(ResourceName aResourceName) throws IOException {
+    public void load(ResourceName aResourceName, Listener aListener) throws IOException {
         InputStream theStream = getInputStreamFor(aResourceName);
         if (theStream == null) {
-            return null;
+            return;
         }
         if (aResourceName.name.toLowerCase().endsWith(".png")) {
-            return new JavaFXBitmapResource(theStream);
+            aListener.handle(new JavaFXBitmapResource(theStream));
         }
         try {
             if (aResourceName.name.toLowerCase().endsWith(".au")) {
-                return new JavaFXAudioResource(theStream);
+                aListener.handle(new JavaFXAudioResource(theStream));
             }
             if (aResourceName.name.toLowerCase().endsWith(".wav")) {
-                return new JavaFXAudioResource(theStream);
+                aListener.handle(new JavaFXAudioResource(theStream));
             }
         } catch (IOException e) {
             throw e;
         } catch (Exception e) {
             throw new IOException(e);
         }
-        return null;
     }
 
     @Override
@@ -57,7 +54,7 @@ public abstract class JavaFXAbstractGameResourceLoader implements GameResourceLo
     }
 
     @Override
-    public LoadedSpriteSheet loadSpriteSheet(ResourceName aResourceName, SuccessCallback aSuccessCallback) {
-        return LoadedSpriteSheet.EMPTY;
+    public void loadSpriteSheet(ResourceName aResourceName, SpritesheetListener aListener) {
+        aListener.handle(LoadedSpriteSheet.EMPTY);
     }
 }
