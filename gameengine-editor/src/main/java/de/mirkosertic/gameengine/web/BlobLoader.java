@@ -15,7 +15,6 @@
  */
 package de.mirkosertic.gameengine.web;
 
-import de.mirkosertic.gameengine.web.Blob;
 import org.teavm.jso.ajax.XMLHttpRequest;
 
 public class BlobLoader {

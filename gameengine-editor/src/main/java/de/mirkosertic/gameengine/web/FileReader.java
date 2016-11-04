@@ -34,6 +34,9 @@ public abstract class FileReader implements JSObject {
     public abstract void setOnload(Listener aListener);
 
     @JSProperty
+    public abstract void setOnerror(Listener aListener);
+
+    @JSProperty
     public abstract String getResult();
 
     public abstract void readAsDataURL(Blob aBlob);
