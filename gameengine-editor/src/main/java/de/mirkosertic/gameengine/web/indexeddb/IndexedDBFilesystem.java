@@ -94,6 +94,7 @@ public class IndexedDBFilesystem implements Filesystem {
                 cachedURLs.put(aFile.getFilename(), theResult);
                 aCallback.handle(theResult);
             });
+            theReader.setOnerror(() -> TeaVMLogger.error("Error loading dataurl for " + aFile.getFilename()));
             theReader.readAsDataURL(aFile.getContent());
         }
     }

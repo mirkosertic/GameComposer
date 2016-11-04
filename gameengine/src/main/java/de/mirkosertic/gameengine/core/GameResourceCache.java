@@ -54,6 +54,7 @@ public class GameResourceCache {
             T theResource = (T) theLoadedSheet.getResourceFor(aResourceName);
             if (theResource != null) {
                 aListener.handle(theResource);
+                return;
             }
         }
 
@@ -66,6 +67,8 @@ public class GameResourceCache {
                     cachedResources.put(aResourceName.name, aResource);
                 }
             });
+        } else {
+            aListener.handle(theResource);
         }
     }
 
