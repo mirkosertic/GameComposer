@@ -20,15 +20,40 @@ import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.core.GestureDetector;
 import de.mirkosertic.gameengine.teavm.TeaVMGameView;
+import de.mirkosertic.gameengine.teavm.pixi.Container;
+import de.mirkosertic.gameengine.teavm.pixi.Filter;
 import de.mirkosertic.gameengine.teavm.pixi.Renderer;
+import de.mirkosertic.gameengine.teavm.pixi.Uniforms;
+import org.teavm.jso.JSBody;
+import org.teavm.jso.core.JSArray;
 
 public class GameEditorGameView extends TeaVMGameView {
+
+    public static abstract class GridUniforms implements Uniforms {
+
+        @JSBody(params = {}, script = "return {};")
+        public static native GridUniforms create();
+    }
 
     public GameEditorGameView(GameRuntime aGameRuntime,
             CameraBehavior aCameraBehavior,
             GestureDetector aGestureDetector,
             Renderer aRenderer) {
         super(aGameRuntime, aCameraBehavior, aGestureDetector, aRenderer);
+
+        // http://www.awwwards.com/a-gentle-introduction-to-shaders-with-pixi-js.html
+
+        Container theStage = getStage();
+        Filter theFilter = Filter.createFilter("", "precision mediump float;\n" +
+                "\n" +
+                "varying vec2 vTextureCoord;//The coordinates of the current pixel\n" +
+                "uniform sampler2D uSampler;//The image data\n" +
+                "\n" +
+                "void main(void) {\n" +
+                "   gl_FragColor = texture2D(uSampler, vTextureCoord);\n" +
+                "   gl_FragColor.r = 0.0;\n" +
+                "}", GridUniforms.create());
+        //theStage.setFilters(JSArray.of(theFilter));
     }
 
     @Override
