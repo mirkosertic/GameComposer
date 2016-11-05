@@ -81,7 +81,7 @@ public class LocalResourceLoaderFactory implements ResourceLoaderFactory {
                 String theURL = "file://" + theFile;
 
                 ResourceName theNewResourceName = new ResourceName(theURL);
-                aListener.handle(convert(theNewResourceName));
+                aListener.handle(convert(theNewResourceName, theNewResourceName));
             }
 
             @Override

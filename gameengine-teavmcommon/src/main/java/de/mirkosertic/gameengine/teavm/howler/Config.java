@@ -27,4 +27,6 @@ public abstract class Config implements JSObject {
     @JSProperty
     public abstract void setSrc(String[] aSources);
 
+    @JSProperty
+    public abstract void setFormat(String[] aFormats);
 }
