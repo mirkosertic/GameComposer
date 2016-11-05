@@ -17,6 +17,7 @@ package de.mirkosertic.gameengine.teavm.pixi;
 
 import org.teavm.jso.JSObject;
 import org.teavm.jso.JSProperty;
+import org.teavm.jso.core.JSArray;
 
 public abstract class DisplayObject implements JSObject {
 
@@ -48,4 +49,7 @@ public abstract class DisplayObject implements JSObject {
 
     @JSProperty
     public abstract void setAlpha(float alpha);
+
+    @JSProperty
+    public abstract void setFilters(JSArray<Filter> aFilters);
 }
