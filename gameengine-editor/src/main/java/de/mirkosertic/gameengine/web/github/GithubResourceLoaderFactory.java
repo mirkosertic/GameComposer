@@ -154,7 +154,7 @@ public class GithubResourceLoaderFactory implements ResourceLoaderFactory {
                         // We are done here
                         TeaVMLogger.info("Loaded " + aFile.getFilename() + " from cache");
 
-                        fileSystem.asDataURL(aFile, aValue -> aListener.handle(convert(new ResourceName(aValue))));
+                        fileSystem.asDataURL(aFile, aValue -> aListener.handle(convert(aResourceName, new ResourceName(aValue))));
                     }
 
                     @Override
@@ -167,7 +167,7 @@ public class GithubResourceLoaderFactory implements ResourceLoaderFactory {
                             public void process(File aFile) {
                                 TeaVMLogger.info("Written and Loaded " + aFile.getFilename() + " from cache");
 
-                                fileSystem.asDataURL(aFile, aValue -> aListener.handle(convert(new ResourceName(aValue))));
+                                fileSystem.asDataURL(aFile, aValue -> aListener.handle(convert(aResourceName, new ResourceName(aValue))));
                             }
 
                             @Override

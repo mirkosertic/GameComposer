@@ -37,7 +37,7 @@ public class TeaVMGameResourceLoader implements GameResourceLoader {
     @Override
     public void load(ResourceName aResourceName, Listener aListener) throws IOException {
         ResourceName theNewResourceName = new ResourceName(sceneId + aResourceName.name.replace('\\', '/'));
-        aListener.handle(convert(theNewResourceName));
+        aListener.handle(convert(theNewResourceName, theNewResourceName));
     }
 
     @Override
@@ -46,8 +46,8 @@ public class TeaVMGameResourceLoader implements GameResourceLoader {
         new TeaVMLoadedSpriteSheet(theNewResourceName, aSpriteSheet -> aListener.handle(aSpriteSheet));
     }
 
-    protected GameResource convert(ResourceName aResourceName) {
-        if (aResourceName.name.endsWith(".wav")) {
+    protected GameResource convert(ResourceName aOriginalResourceName, ResourceName aResourceName) {
+        if (aOriginalResourceName.name.endsWith(".wav")) {
             return new TeaVMSoundResource(aResourceName.name);
         }
 
