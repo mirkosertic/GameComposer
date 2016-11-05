@@ -35,6 +35,12 @@ class TeaVMGameSoundSystem implements GameSoundSystem<TeaVMSound> {
         howls = new HashMap<>();
     }
 
+    private String guessFormat(ResourceName aResourceName) {
+        String theName = aResourceName.name;
+        int p = theName.lastIndexOf(".");
+        return theName.substring(p+1);
+    }
+
     @Override
     public void play(ResourceName aResourceName, Listener<TeaVMSound> aListener) {
         try {
@@ -46,6 +52,7 @@ class TeaVMGameSoundSystem implements GameSoundSystem<TeaVMSound> {
                     if (theHowl == null) {
                         Config theConfig = Config.createConfig();
                         theConfig.setSrc(new String[] {theResource.getName()});
+                        theConfig.setFormat(new String[] {guessFormat(aResourceName)});
                         theHowl = Howl.createHowl(theConfig);
                         howls.put(theResource.getName(), theHowl);
                     }
