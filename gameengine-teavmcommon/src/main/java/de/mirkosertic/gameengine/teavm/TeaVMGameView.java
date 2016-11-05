@@ -223,4 +223,8 @@ public class TeaVMGameView extends GenericAbstractGameView<GameResource> {
 
         renderer.resize(aSize.width, aSize.height);
     }
+
+    protected Container getStage() {
+        return stage;
+    }
 }
