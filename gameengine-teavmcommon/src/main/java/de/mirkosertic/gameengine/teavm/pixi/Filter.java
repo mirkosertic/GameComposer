@@ -16,9 +16,13 @@
 package de.mirkosertic.gameengine.teavm.pixi;
 
 import org.teavm.jso.JSBody;
+import org.teavm.jso.JSProperty;
 
 public abstract class Filter implements Shader {
 
     @JSBody(params = {"aVertexSrc","aFragmentSrc","aUniforms"}, script = "return new PIXI.Filter(aVertexSrc,aFragmentSrc,aUniforms);")
     public static native Filter createFilter(String aVertexSrc, String aFragmentSrc, Uniforms aUniforms);
+
+    @JSProperty
+    public abstract <T extends Uniforms> T getUniforms();
 }
