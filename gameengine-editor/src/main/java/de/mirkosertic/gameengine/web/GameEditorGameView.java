@@ -22,7 +22,6 @@ import de.mirkosertic.gameengine.teavm.pixi.Filter;
 import de.mirkosertic.gameengine.teavm.pixi.Renderer;
 import de.mirkosertic.gameengine.teavm.pixi.Uniforms;
 import de.mirkosertic.gameengine.type.Position;
-import de.mirkosertic.gameengine.type.Size;
 import org.teavm.jso.JSBody;
 import org.teavm.jso.core.JSArray;
 
@@ -72,7 +71,7 @@ public class GameEditorGameView extends TeaVMGameView {
                  "}"+
                 "\n" +
                 "void main(void) {\n" +
-                "   if ((int(mod(xoffset + vTextureCoord.x * width, 64.0)) == 0) || (int(mod(yoffset + vTextureCoord.y * height, 64.0)) == 0)) {\n" +
+                "   if ((int(mod(xoffset + gl_FragCoord.x + 0.5, width)) == 0) || (int(mod(yoffset - gl_FragCoord.y - 0.5, height)) == 0)) {\n" +
                 "       gl_FragColor.r = 1.0;\n" +
                 "       gl_FragColor.g = 1.0;\n" +
                 "       gl_FragColor.b = 1.0;\n" +
@@ -85,12 +84,11 @@ public class GameEditorGameView extends TeaVMGameView {
 
     @Override
     public void renderGame(long aGameTime, long aElapsedTimeSinceLastLoop, GameScene aScene, RuntimeStatistics aStatistics) {
-        Size theCurrentScreenSize = getCurrentScreenSize();
         Position theCamera = getCameraBehavior().getInstance().positionProperty().get();
         GridUniforms.setXOffset(gridFilter, theCamera.x);
         GridUniforms.setYOffset(gridFilter, theCamera.y);
-        GridUniforms.setWidth(gridFilter, (float) theCurrentScreenSize.width);
-        GridUniforms.setHeight(gridFilter, (float) theCurrentScreenSize.height);
+        GridUniforms.setWidth(gridFilter, 64f);
+        GridUniforms.setHeight(gridFilter, 64f);
         super.renderGame(aGameTime, aElapsedTimeSinceLastLoop, aScene, aStatistics);
     }
 
