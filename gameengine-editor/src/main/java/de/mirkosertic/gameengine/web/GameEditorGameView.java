@@ -16,14 +16,13 @@
 package de.mirkosertic.gameengine.web;
 
 import de.mirkosertic.gameengine.camera.CameraBehavior;
-import de.mirkosertic.gameengine.core.GameObjectInstance;
-import de.mirkosertic.gameengine.core.GameRuntime;
-import de.mirkosertic.gameengine.core.GestureDetector;
+import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.teavm.TeaVMGameView;
-import de.mirkosertic.gameengine.teavm.pixi.Container;
 import de.mirkosertic.gameengine.teavm.pixi.Filter;
 import de.mirkosertic.gameengine.teavm.pixi.Renderer;
 import de.mirkosertic.gameengine.teavm.pixi.Uniforms;
+import de.mirkosertic.gameengine.type.Position;
+import de.mirkosertic.gameengine.type.Size;
 import org.teavm.jso.JSBody;
 import org.teavm.jso.core.JSArray;
 
@@ -31,9 +30,24 @@ public class GameEditorGameView extends TeaVMGameView {
 
     public static abstract class GridUniforms implements Uniforms {
 
-        @JSBody(params = {}, script = "return {};")
-        public static native GridUniforms create();
+        @JSBody(params = {"aXOffset", "aYOffset", "aWidth", "aHeight"}, script = "return {width: {type: 'f', value: aWidth}, height: {type: 'f', value: aHeight}, xoffset: {type: 'f', value: aYOffset}, yoffset: {type: 'f', value: aXOffset}};")
+        public static native GridUniforms create(float aXOffset, float aYOffset, float aWidth, float aHright);
+
+        @JSBody(params = {"aFilter", "aValue"}, script = "aFilter.uniforms.width = aValue;")
+        public static native void setWidth(Filter aFilter, float aValue);
+
+        @JSBody(params = {"aFilter", "aValue"}, script = "aFilter.uniforms.height = aValue;")
+        public static native void setHeight(Filter aFilter, float aValue);
+
+        @JSBody(params = {"aFilter", "aValue"}, script = "aFilter.uniforms.xoffset = aValue;")
+        public static native void setXOffset(Filter aFilter, float aValue);
+
+        @JSBody(params = {"aFilter", "aValue"}, script = "aFilter.uniforms.yoffset = aValue;")
+        public static native void setYOffset(Filter aFilter, float aValue);
+
     }
+
+    private final Filter gridFilter;
 
     public GameEditorGameView(GameRuntime aGameRuntime,
             CameraBehavior aCameraBehavior,
@@ -42,18 +56,42 @@ public class GameEditorGameView extends TeaVMGameView {
         super(aGameRuntime, aCameraBehavior, aGestureDetector, aRenderer);
 
         // http://www.awwwards.com/a-gentle-introduction-to-shaders-with-pixi-js.html
+        //http://stackoverflow.com/questions/17339149/webgl-how-do-i-get-the-position-of-every-pixel-in-fragment-shader
 
-        Container theStage = getStage();
-        Filter theFilter = Filter.createFilter("", "precision mediump float;\n" +
+        gridFilter = Filter.createFilter("", "precision mediump float;\n" +
                 "\n" +
                 "varying vec2 vTextureCoord;//The coordinates of the current pixel\n" +
                 "uniform sampler2D uSampler;//The image data\n" +
+                "uniform float xoffset;\n" +
+                "uniform float yoffset;\n" +
+                "uniform float width;\n" +
+                "uniform float height;\n" +
+                "\n" +
+                "int func_mod(int x, int y) {\n" +
+                "    return int(float(x)-float(y)*floor(float(x)/float(y)));\n" +
+                 "}"+
                 "\n" +
                 "void main(void) {\n" +
-                "   gl_FragColor = texture2D(uSampler, vTextureCoord);\n" +
-                "   gl_FragColor.r = 0.0;\n" +
-                "}", GridUniforms.create());
-        //theStage.setFilters(JSArray.of(theFilter));
+                "   if ((int(mod(xoffset + vTextureCoord.x * width, 64.0)) == 0) || (int(mod(yoffset + vTextureCoord.y * height, 64.0)) == 0)) {\n" +
+                "       gl_FragColor.r = 1.0;\n" +
+                "       gl_FragColor.g = 1.0;\n" +
+                "       gl_FragColor.b = 1.0;\n" +
+                "   } else {\n" +
+                "       gl_FragColor = texture2D(uSampler, vTextureCoord);\n" +
+                "  }\n" +
+                "}", GridUniforms.create(0, 0, 10f, 10f));
+        getStage().setFilters(JSArray.of(gridFilter));
+    }
+
+    @Override
+    public void renderGame(long aGameTime, long aElapsedTimeSinceLastLoop, GameScene aScene, RuntimeStatistics aStatistics) {
+        Size theCurrentScreenSize = getCurrentScreenSize();
+        Position theCamera = getCameraBehavior().getInstance().positionProperty().get();
+        GridUniforms.setXOffset(gridFilter, theCamera.x);
+        GridUniforms.setYOffset(gridFilter, theCamera.y);
+        GridUniforms.setWidth(gridFilter, (float) theCurrentScreenSize.width);
+        GridUniforms.setHeight(gridFilter, (float) theCurrentScreenSize.height);
+        super.renderGame(aGameTime, aElapsedTimeSinceLastLoop, aScene, aStatistics);
     }
 
     @Override
