@@ -159,8 +159,11 @@ public class GameTreeView extends ListingElement {
                     });
 
                     theElement.addDeleteListener(evt -> {
+
                         theScene.removeGameObject(theObject);
                         reloadSceneOnObjectDeletion(theScene, theElement);
+
+                        Toast.info("Object deleted.");
                     });
                 }
                 GlobalSeparatorHTMLElement theSpriteSheets = addTitleLevel2("Sprite sheets");
@@ -196,6 +199,8 @@ public class GameTreeView extends ListingElement {
                         theScene.removeSpriteSheet(theSheet);
 
                         reloadSceneOnObjectDeletion(theScene, theElement);
+
+                        Toast.info("Sprite sheet deleted.");
                     });
                 }
 
@@ -232,6 +237,8 @@ public class GameTreeView extends ListingElement {
                         theScene.removeEventSheet(theSheet);
 
                         reloadSceneOnObjectDeletion(theScene, theElement);
+
+                        Toast.info("Event sheet deleted.");
                     });
                 }
                 addTitleLevel2("Instances");
@@ -247,6 +254,8 @@ public class GameTreeView extends ListingElement {
                         theScene.removeGameObjectInstance(theInstance);
 
                         reloadSceneOnObjectDeletion(theScene, theElement);
+
+                        Toast.info("Object instance deleted.");
                     });
                 }
             }

@@ -34,6 +34,8 @@ public abstract class EventsheetEditorHTMLElement implements HTMLElement {
         RuleEditorHTMLElement.EventListener theListener = (aElement, aRule) -> {
             aEventsheet.removeRule(aRule);
             Polymer.dom(EventsheetEditorHTMLElement.this).removeChild(aElement);
+
+            Toast.info("Rule deleted.");
         };
 
         for (GameRule theRule : aEventsheet.getRules()) {
