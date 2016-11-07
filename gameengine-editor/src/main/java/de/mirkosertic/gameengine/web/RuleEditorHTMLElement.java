@@ -294,6 +294,8 @@ public abstract class RuleEditorHTMLElement implements HTMLElement {
                 theElement.addDeleteImage().addEventListener("click", evt -> {
                     aRule.removeAction(aAction);
                     Polymer.dom(aElement).removeChild(theElement);
+
+                    Toast.info("Action deleted.");
                 });
                 theElement.addText("then delete the affected instances");
 
@@ -317,6 +319,8 @@ public abstract class RuleEditorHTMLElement implements HTMLElement {
                 theElement.addDeleteImage().addEventListener("click", evt -> {
                     aRule.removeAction(aAction);
                     Polymer.dom(aElement).removeChild(theElement);
+
+                    Toast.info("Action deleted.");
                 });
                 theElement.addText("then run scene ");
                 theElement.addSelection(aAction.gameSceneProperty(), aEventSheet.getGameScene().getGame().getKnownScenes(), aValue -> aValue);
@@ -340,6 +344,8 @@ public abstract class RuleEditorHTMLElement implements HTMLElement {
                 theElement.addDeleteImage().addEventListener("click", evt -> {
                     aRule.removeAction(aAction);
                     Polymer.dom(aElement).removeChild(theElement);
+
+                    Toast.info("Action deleted.");
                 });
 
                 theElement.addText("then play sound ");
@@ -374,6 +380,8 @@ public abstract class RuleEditorHTMLElement implements HTMLElement {
                 theElement.addDeleteImage().addEventListener("click", evt -> {
                     aRule.removeAction(aAction);
                     Polymer.dom(aElement).removeChild(theElement);
+
+                    Toast.info("Action deleted.");
                 });
 
                 theElement.addText("then spawn an object of type ");
@@ -426,6 +434,8 @@ public abstract class RuleEditorHTMLElement implements HTMLElement {
                 theElement.addDeleteImage().addEventListener("click", evt -> {
                     aRule.removeAction(aAction);
                     Polymer.dom(aElement).removeChild(theElement);
+
+                    Toast.info("Action deleted.");
                 });
 
                 theElement.addText("then execute the following ");
@@ -451,6 +461,8 @@ public abstract class RuleEditorHTMLElement implements HTMLElement {
                 theElement.addDeleteImage().addEventListener("click", evt -> {
                     aRule.removeAction(aAction);
                     Polymer.dom(aElement).removeChild(theElement);
+
+                    Toast.info("Action deleted.");
                 });
 
                 theElement.addText("then kill all running processes for the affected instances");
