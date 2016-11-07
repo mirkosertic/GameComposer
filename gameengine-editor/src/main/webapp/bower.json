@@ -21,6 +21,7 @@
     "ace-builds": "~1.2.0",
     "firebase": "2.2.2",
     "pixi.js": "pixi#^4.1.0",
-    "howler.js": "howler#^2.0.1"
+    "howler.js": "howler#^2.0.1",
+    "toastr": "^2.1.3"
   }
 }

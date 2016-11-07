@@ -468,6 +468,8 @@ public class GameObjectEditor extends ListingElement {
         theElement.addDeleteListener((aEvent) -> {
             aEffect.delete();
             setEditingObject(aEffect.getScene());
+
+            Toast.info("Behavior deleted.");
         });
     }
 
@@ -481,6 +483,8 @@ public class GameObjectEditor extends ListingElement {
         theElement.addDeleteListener((aEvent) -> {
             aEffect.delete();
             setEditingObject(aEffect.getScene());
+
+            Toast.info("Behavior deleted.");
         });
     }
 
@@ -494,6 +498,8 @@ public class GameObjectEditor extends ListingElement {
             theElement.addDeleteListener((aEvent) -> {
                 aComponent.delete();
                 selectParentOf(aComponent);
+
+                Toast.info("Behavior deleted.");
             });
         }
     }
@@ -507,6 +513,8 @@ public class GameObjectEditor extends ListingElement {
             theElement.addDeleteListener((aEvent) -> {
                 aComponent.delete();
                 selectParentOf(aComponent);
+
+                Toast.info("Behavior deleted.");
             });
         }
     }
@@ -535,6 +543,8 @@ public class GameObjectEditor extends ListingElement {
             theElement.addDeleteListener((aEvent) -> {
                 aComponent.delete();
                 selectParentOf(aComponent);
+
+                Toast.info("Behavior deleted.");
             });
         }
     }
@@ -559,6 +569,8 @@ public class GameObjectEditor extends ListingElement {
             theElement.addDeleteListener((aEvent) -> {
                 aComponent.delete();
                 selectParentOf(aComponent);
+
+                Toast.info("Behavior deleted.");
             });
         }
     }
@@ -594,6 +606,8 @@ public class GameObjectEditor extends ListingElement {
             theElement.addDeleteListener((aEvent) -> {
                 aComponent.delete();
                 selectParentOf(aComponent);
+
+                Toast.info("Behavior deleted.");
             });
         }
     }
@@ -613,6 +627,8 @@ public class GameObjectEditor extends ListingElement {
             theElement.addDeleteListener((aEvent) -> {
                 aComponent.delete();
                 selectParentOf(aComponent);
+
+                Toast.info("Behavior deleted.");
             });
         }
     }
@@ -633,6 +649,8 @@ public class GameObjectEditor extends ListingElement {
             theElement.addDeleteListener((aEvent) -> {
                 aComponent.delete();
                 selectParentOf(aComponent);
+
+                Toast.info("Behavior deleted.");
             });
         }
     }
@@ -649,6 +667,8 @@ public class GameObjectEditor extends ListingElement {
             theElement.addDeleteListener((aEvent) -> {
                 aComponent.delete();
                 selectParentOf(aComponent);
+
+                Toast.info("Behavior deleted.");
             });
         }
     }
