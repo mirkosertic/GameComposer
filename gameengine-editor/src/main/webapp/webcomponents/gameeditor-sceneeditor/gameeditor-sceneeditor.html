@@ -32,6 +32,7 @@
                 padding: 0.1em;
                 padding-left: 0.3em;
                 height: 1.6em;
+                min-height: 1.6em;
                 line-height: 1.6em;
                 vertical-align: middle;
             }
@@ -77,9 +78,9 @@
             <input type="checkbox" value="Not selected"/>
             <label>Snap to grid</label>
             <label class="emoffset-4">Grid X:</label>
-            <input type="text" class="emwidth-2" value="5">
+            <input id="gridWidth" type="text" class="emwidth-2" value="0">
             <label>Y:</label>
-            <input type="text" class="emwidth-2" value="5">
+            <input id="gridHeight" type="text" class="emwidth-2" value="0">
             <button class="emwidth-6 emoffset-4" id="previewbutton" on-click="handlePreview">Preview!</button>
         </div>
         <canvas id="htmlcanvas" class="grow"></canvas>
@@ -93,6 +94,14 @@
 
             currentCanvas: function() {
                 return this.$.htmlcanvas;
+            },
+
+            gridWidth: function() {
+                return this.$.gridWidth;
+            },
+
+            gridHeight: function() {
+                return this.$.gridHeight;
             },
 
             handlePreview: function(e, detail) {
