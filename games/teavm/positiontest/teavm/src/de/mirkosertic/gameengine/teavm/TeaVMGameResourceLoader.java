@@ -1,3 +1,18 @@
+/*
+ * Copyright 2016 Mirko Sertic
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.mirkosertic.gameengine.teavm;
 
 import de.mirkosertic.gameengine.core.GameResource;
@@ -20,16 +35,26 @@ public class TeaVMGameResourceLoader implements GameResourceLoader {
     }
 
     @Override
-    public GameResource load(ResourceName aResourceName) throws IOException {
-        String theResourceName = sceneId + aResourceName.name.replace('\\', '/');
-        if (aResourceName.name.endsWith(".wav")) {
-            return new TeaVMSoundResource(theResourceName);
+    public void load(ResourceName aResourceName, Listener aListener) throws IOException {
+        ResourceName theNewResourceName = new ResourceName(sceneId + aResourceName.name.replace('\\', '/'));
+        aListener.handle(convert(theNewResourceName, theNewResourceName));
+    }
+
+    @Override
+    public void loadSpriteSheet(ResourceName aResourceName, SpritesheetListener aListener) {
+        ResourceName theNewResourceName = new ResourceName(sceneId + aResourceName.name.replace('\\', '/'));
+        new TeaVMLoadedSpriteSheet(theNewResourceName, aSpriteSheet -> aListener.handle(aSpriteSheet));
+    }
+
+    protected GameResource convert(ResourceName aOriginalResourceName, ResourceName aResourceName) {
+        if (aOriginalResourceName.name.endsWith(".wav")) {
+            return new TeaVMSoundResource(aResourceName.name);
         }
 
         TeaVMTextureResource theResource = textureResources.get(aResourceName);
         if (theResource == null) {
-            Texture theTexure = Texture.createTextureFromImage(theResourceName);
-            theResource = new TeaVMTextureResource(theTexure);
+            Texture theTexture = Texture.createTextureFromImage(aResourceName.name);
+            theResource = new TeaVMTextureResource(theTexture, aResourceName.name);
             textureResources.put(aResourceName, theResource);
         }
 

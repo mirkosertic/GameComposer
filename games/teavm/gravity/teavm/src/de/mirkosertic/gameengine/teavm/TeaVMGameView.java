@@ -1,3 +1,18 @@
+/*
+ * Copyright 2016 Mirko Sertic
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.mirkosertic.gameengine.teavm;
 
 import de.mirkosertic.gameengine.camera.CameraBehavior;
@@ -9,11 +24,11 @@ import de.mirkosertic.gameengine.core.GestureDetector;
 import de.mirkosertic.gameengine.generic.CSSCache;
 import de.mirkosertic.gameengine.generic.CSSUtils;
 import de.mirkosertic.gameengine.generic.GenericAbstractGameView;
+import de.mirkosertic.gameengine.teavm.pixi.Container;
 import de.mirkosertic.gameengine.teavm.pixi.DisplayObject;
 import de.mirkosertic.gameengine.teavm.pixi.Graphics;
 import de.mirkosertic.gameengine.teavm.pixi.Renderer;
 import de.mirkosertic.gameengine.teavm.pixi.Sprite;
-import de.mirkosertic.gameengine.teavm.pixi.Stage;
 import de.mirkosertic.gameengine.teavm.pixi.Style;
 import de.mirkosertic.gameengine.teavm.pixi.Text;
 import de.mirkosertic.gameengine.type.Angle;
@@ -26,11 +41,11 @@ import de.mirkosertic.gameengine.type.Size;
 import java.util.HashMap;
 import java.util.Map;
 
-class TeaVMGameView extends GenericAbstractGameView<GameResource> {
+public class TeaVMGameView extends GenericAbstractGameView<GameResource> {
 
     private final Renderer renderer;
     private final Map<String, DisplayObject> instances;
-    private Stage stage;
+    private Container stage;
     private TeaVMInstanceCache instanceCache;
     private CSSCache cssCache;
     private TeaVMEffectCanvas effectCanvas;
@@ -41,7 +56,7 @@ class TeaVMGameView extends GenericAbstractGameView<GameResource> {
         renderer = aRenderer;
         cssCache = new CSSCache();
         instances = new HashMap<>();
-        stage = Stage.createStage(0);
+        stage = Container.createContainer();
         instanceCache = new TeaVMInstanceCache(stage);
         effectCanvas = new TeaVMEffectCanvas(instanceCache, renderer);
     }
@@ -55,7 +70,7 @@ class TeaVMGameView extends GenericAbstractGameView<GameResource> {
         }
         instances.clear();
         stage.destroy();
-        stage = Stage.createStage(0);
+        stage = Container.createContainer();
         instanceCache = new TeaVMInstanceCache(stage);
         effectCanvas = new TeaVMEffectCanvas(instanceCache, renderer);
     }
@@ -65,6 +80,11 @@ class TeaVMGameView extends GenericAbstractGameView<GameResource> {
         renderer.setBackgroundColor(CSSUtils.toInt(aScene.backgroundColorProperty().get()));
         instanceCache.clearTouchedInstances();
         return true;
+    }
+
+    @Override
+    protected void touched(GameObjectInstance aInstance) {
+        instanceCache.touch(aInstance.uuidProperty().get());
     }
 
     @Override
@@ -82,16 +102,19 @@ class TeaVMGameView extends GenericAbstractGameView<GameResource> {
             final GameResource aResource) {
 
         String theInstanceID = aInstance.uuidProperty().get();
-        Sprite theCurrentObject = instanceCache.getOrCreate(theInstanceID, new TeaVMInstanceCache.Producer<Sprite>() {
-            @Override
-            public Sprite create() {
-                TeaVMTextureResource theTexture = (TeaVMTextureResource) aResource;
-                Sprite theSprite =  Sprite.createSprite(theTexture.getTexture());
-                theSprite.getScale().set(1, 1);
-                theSprite.getPivot().set(aCenterOffset.x, aCenterOffset.y);
-                return theSprite;
-            }
+        Sprite theCurrentObject = instanceCache.getOrCreate(theInstanceID, () -> {
+            TeaVMTextureResource theTexture = (TeaVMTextureResource) aResource;
+            Sprite theSprite =  Sprite.createSprite(theTexture.getTexture());
+            theSprite.getScale().set(1, 1);
+            theSprite.getPivot().set(aCenterOffset.x, aCenterOffset.y);
+            return theSprite;
         }, 0);
+
+        if (aInstance.visibleProperty().get()) {
+            theCurrentObject.setAlpha(1f);
+        } else {
+            theCurrentObject.setAlpha(0.3f);
+        }
 
         // Update the position and all the other stuff
         theCurrentObject.getPosition().set(aPositionOnScreen.x + aCenterOffset.x, aPositionOnScreen.y + aCenterOffset.y);
@@ -99,21 +122,25 @@ class TeaVMGameView extends GenericAbstractGameView<GameResource> {
     }
 
     @Override
-    protected void drawText(String aInstanceID, Position aPosition, Angle aAngle, final Position aCenterOffset, Font aFont, Color aColor, final String aText,
-            Size aSize) {
+    protected void drawText(String aID, Position aPosition, Angle aAngle, final Position aCenterOffset, Font aFont, Color aColor, final String aText,
+            Size aSize, boolean aVisible) {
 
-        Text theCurrentObject = instanceCache.getOrCreate(aInstanceID, new TeaVMInstanceCache.Producer<Text>() {
-            @Override
-            public Text create() {
-                Text theText = Text.createText(aText);
-                theText.getScale().set(1, 1);
-                theText.getPivot().set(aCenterOffset.x, aCenterOffset.y);
-                return theText;
-            }
-        }, 0);
+       Text theCurrentObject = instanceCache.getOrCreate(aID, () -> {
+           Text theText = Text.createText(aText);
+           theText.getScale().set(1, 1);
+           theText.getPivot().set(aCenterOffset.x, aCenterOffset.y);
+           return theText;
+       }, 0);
+
+        if (aVisible) {
+            theCurrentObject.setAlpha(1f);
+        } else {
+            theCurrentObject.setAlpha(0.3f);
+        }
 
         Style theStyle = theCurrentObject.getStyle();
-        theStyle.setFont(cssCache.toFont(aFont));
+        theStyle.setFontFamily(CSSUtils.toFontFamily(aFont));
+        theStyle.setFontSize(aFont.size+"px");
         theStyle.setFill(cssCache.toColor(aColor));
         theStyle.setStroke(cssCache.toColor(aColor));
         theCurrentObject.setText(aText);
@@ -128,19 +155,22 @@ class TeaVMGameView extends GenericAbstractGameView<GameResource> {
             final Size aSize) {
 
         String theInstanceID = aInstance.uuidProperty().get();
-        Graphics theCurrentObject = instanceCache.getOrCreate(theInstanceID, new TeaVMInstanceCache.Producer<Graphics>() {
-            @Override
-            public Graphics create() {
-                Graphics theCurrentObject = Graphics.createGraphics();
-                theCurrentObject.getScale().set(1, 1);
-                theCurrentObject.getPivot().set(aCenterOffset.x, aCenterOffset.y);
-                theCurrentObject.setWidth(aSize.width);
-                theCurrentObject.setHeight(aSize.height);
-                theCurrentObject.lineStyle(1, CSSUtils.toInt(aColor), 1f);
-                theCurrentObject.drawRect(0, 0, aSize.width, aSize.height);
-                return theCurrentObject;
-            }
+        Graphics theCurrentObject = instanceCache.getOrCreate(theInstanceID, () -> {
+            Graphics theCurrentObject1 = Graphics.createGraphics();
+            theCurrentObject1.getScale().set(1, 1);
+            theCurrentObject1.getPivot().set(aCenterOffset.x, aCenterOffset.y);
+            theCurrentObject1.setWidth(aSize.width);
+            theCurrentObject1.setHeight(aSize.height);
+            theCurrentObject1.lineStyle(1, CSSUtils.toInt(aColor), 1f);
+            theCurrentObject1.drawRect(0, 0, aSize.width, aSize.height);
+            return theCurrentObject1;
         }, 0);
+
+        if (aInstance.visibleProperty().get()) {
+            theCurrentObject.setAlpha(1f);
+        } else {
+            theCurrentObject.setAlpha(0.3f);
+        }
 
         // Update the position and all the other stuff
         theCurrentObject.getPosition().set(aPositionOnScreen.x + aCenterOffset.x, aPositionOnScreen.y + aCenterOffset.y);
@@ -192,5 +222,9 @@ class TeaVMGameView extends GenericAbstractGameView<GameResource> {
         super.setCurrentScreenSize(aSize);
 
         renderer.resize(aSize.width, aSize.height);
+    }
+
+    protected Container getStage() {
+        return stage;
     }
 }

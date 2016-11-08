@@ -1,3 +1,18 @@
+/*
+ * Copyright 2016 Mirko Sertic
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.mirkosertic.gameengine.core;
 
 import de.mirkosertic.gameengine.annotations.ReflectiveField;
@@ -29,7 +44,7 @@ public class GameObject implements Reflectable<GameObjectClassInformation> {
     private final Property<Size> size;
     private final Property<Boolean> visible;
 
-    private final Map<Class<BehaviorTemplate>, BehaviorTemplate> componentTemplates;
+    private final Map<String, BehaviorTemplate> componentTemplates;
 
     public GameObject(GameScene aScene, String aName) {
         this(aScene, aName, de.mirkosertic.gameengine.type.UUID.randomUID());
@@ -87,17 +102,17 @@ public class GameObject implements Reflectable<GameObjectClassInformation> {
     }
 
     public void add(BehaviorTemplate aBehaviorTemplate) {
-        componentTemplates.put((Class<BehaviorTemplate>) aBehaviorTemplate.getClass(), aBehaviorTemplate);
+        componentTemplates.put(aBehaviorTemplate.getClass().getSimpleName(), aBehaviorTemplate);
         gameScene.getRuntime().getEventManager().fire(new GameObjectConfigurationChanged(this));
     }
 
     public void remove(BehaviorTemplate aBehaviorTemplate) {
-        componentTemplates.remove(aBehaviorTemplate.getClass());
+        componentTemplates.remove(aBehaviorTemplate.getClass().getSimpleName());
         gameScene.getRuntime().getEventManager().fire(new GameObjectConfigurationChanged(this));
     }
 
     public <T extends BehaviorTemplate> T getBehaviorTemplate(Class<T> aBehaviorClass) {
-        return (T) componentTemplates.get(aBehaviorClass);
+        return (T) componentTemplates.get(aBehaviorClass.getSimpleName());
     }
 
     @Override

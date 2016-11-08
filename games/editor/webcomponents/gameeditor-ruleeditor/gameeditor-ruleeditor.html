@@ -1,0 +1,130 @@
+<!--
+  ~ Copyright 2016 Mirko Sertic
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~       http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="gameeditor-ruleeditor">
+    <template>
+        <style>
+            :host {
+                width: 100%;
+                flex-shrink: 1;
+            }
+
+            .vertical {
+                display: flex;
+                flex-direction: row;
+            }
+
+            .ruleName {
+                margin: 0.3em;
+            }
+
+            .condition {
+                margin: 0.4em;
+                flex-grow: 1;
+                padding-right: 30px;
+
+                border-style: solid; border-width: 4px 34px 4px 3px; -moz-border-image: url(puzzleleft.png) 13 78 22 13 repeat stretch; -webkit-border-image: url(puzzleleft.png) 13 78 22 13 repeat stretch; -o-border-image: url(puzzleleft.png) 13 78 22 13 repeat stretch; border-image: url(puzzleleft.png) 13 78 22 13 fill repeat stretch;            }
+
+            .actions {
+                flex-grow: 2;
+                margin: 0.4em;
+                padding-left: 10px;
+
+                border-style: solid; border-width: 0px 0px 4px 38px; -moz-border-image: url(puzzleright.png) 7 17 11 71 repeat stretch; -webkit-border-image: url(puzzleright.png) 7 17 11 71 repeat stretch; -o-border-image: url(puzzleright.png) 7 17 11 71 repeat stretch; border-image: url(puzzleright.png) 7 17 11 71 fill repeat stretch;
+            }
+
+            .genericdeletebutton {
+                vertical-align: middle;
+                background-image: url("close.png");
+                display: inline-block;
+                width: 18px;
+                height: 18px;
+            }
+
+            .menubutton {
+                vertical-align: middle;
+                background-image: url("menu.png");
+                width: 24px;
+                height: 24px;
+            }
+        </style>
+
+        <div class="ruleName">
+            <gameeditor-textfieldpropertyeditor label="Rule name" id="rulename"></gameeditor-textfieldpropertyeditor>
+        </div>
+
+        <div class="vertical">
+            <div class="condition">
+                <div id="changeconditionmenu" class="menubutton"></div>
+                <div id="conditionproperties">
+                </div>
+            </div>
+            <div class="actions">
+                <div id="addactionmenu" class="menubutton"></div>
+                <div id="actionelements">
+                </div>
+            </div>
+        </div>
+
+    </template>
+    <script>
+        Polymer({
+            is: 'gameeditor-ruleeditor',
+
+            properties: {
+            },
+
+            rulename: function() {
+                return this.$.rulename;
+            },
+
+            clearconditionproperties: function() {
+                var theButtonsDom = Polymer.dom(this.$.conditionproperties);
+                while (theButtonsDom.firstChild) {
+                    theButtonsDom.removeChild(theButtonsDom.firstChild);
+                }
+            },
+
+            actionelements: function() {
+                return this.$.actionelements;
+            },
+
+            addactionmenu: function() {
+                return this.$.addactionmenu;
+            },
+
+            changeconditionmenu: function() {
+                return this.$.changeconditionmenu;
+            },
+
+            clearactions: function() {
+                var theButtonsDom = Polymer.dom(this.$.actionelements);
+                while (theButtonsDom.firstChild) {
+                    theButtonsDom.removeChild(theButtonsDom.firstChild);
+                }
+            },
+
+            conditionproperties: function() {
+                return this.$.conditionproperties;
+            },
+
+            ready: function() {
+            }
+
+        });
+    </script>
+</dom-module>

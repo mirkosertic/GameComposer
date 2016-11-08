@@ -4,106 +4,71 @@
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" href="css/style.css"/>
+    <link rel="stylesheet" href="bower_components/toastr/toastr.min.css"/>
     <script>
+
         // setup Polymer options
         window.Polymer = {lazyRegister: true, dom: 'shadow'};
 
         // load webcomponents polyfills
-        (function() {
+        var isShadowDOMPolyfill = (function() {
             if ('registerElement' in document
                     && 'import' in document.createElement('link')
                     && 'content' in document.createElement('template')) {
                 // browser has web components
+                return false;
             } else {
                 // polyfill web components
                 var e = document.createElement('script');
-                e.src = 'bower_components/webcomponentsjs/webcomponents-lite.min.js';
+                e.src = 'bower_components/webcomponentsjs/webcomponents.min.js';
                 document.head.appendChild(e);
+                return true;
             }
         })();
 
         // load pre-caching service worker
         //if ('serviceWorker' in navigator) {
-//            window.addEventListener('load', function() {
-  //              navigator.serviceWorker.register('/service-worker.js');
-    //        });
-      //  }
+        //            window.addEventListener('load', function() {
+        //            navigator.serviceWorker.register('/service-worker.js');
+        //});
 
     </script>
-    <script type="text/javascript" charset="utf-8" src="pixi-min-4.0.0-rc3.js"></script>
-    <script type="text/javascript" charset="utf-8" src="howler.core.min-2.0.0.js"></script>
-    <script type="text/javascript" charset="utf-8" src="firebase-2.2.2.js"></script>
+    <script type="text/javascript" charset="utf-8" src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="bower_components/pixi.js/bin/pixi.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="bower_components/howler.js/dist/howler.core.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="bower_components/firebase/firebase.js"></script>
+    <script type="text/javascript" charset="utf-8" src="bower_components/toastr/toastr.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="teavm/runtime.js"></script>
     <script type="text/javascript" charset="utf-8" src="teavm/classes.js"></script>
 
-    <link rel="import" href="webcomponents/properteditor/textfield-propertyeditor.html">
-    <link rel="import" href="webcomponents/properteditor/textarea-propertyeditor.html">
-    <link rel="import" href="webcomponents/properteditor/checkbox-propertyeditor.html">
-    <link rel="import" href="webcomponents/properteditor/animation-propertyeditor.html">
-    <link rel="import" href="webcomponents/properteditor/color-propertyeditor.html">
-    <link rel="import" href="webcomponents/properteditor/twofield-propertyeditor.html">
-    <link rel="import" href="webcomponents/properteditor/select-propertyeditor.html">
-    <link rel="import" href="webcomponents/properteditor/font-propertyeditor.html">
-
-    <link rel="import" href="webcomponents/tree/tree-item.html">
-
-    <link rel="import" href="webcomponents/global/global-separator.html">
+    <link rel="import" href="gameeditor-allcomponents-vulcanized.html">
 </head>
-<body onload="main()">
+<body>
 <div class="grid flexVertical">
+
     <div class="gridItem border-1 propertyEditor shrink width-3 min-width-3" id="objectEditor">
-
-        <global-separator text="Editor" major="true"></global-separator>
-        <global-separator text="Common"></global-separator>
-
-        <twofield-propertyeditor label1="Width" label2="Height" value1="11" value2="12"></twofield-propertyeditor>
-
-        <global-separator text="Section1"></global-separator>
-
-        <select-propertyeditor label="Color">
-            <option>Value1</option>
-            <option>Value2</option>
-            <option>Value3</option>
-        </select-propertyeditor>
-
-        <textfield-propertyeditor label="Long text" value="Long text lalala"></textfield-propertyeditor>
-
-        <checkbox-propertyeditor label="checkbox 2" value="true"></checkbox-propertyeditor>
-
-        <textfield-propertyeditor label="test" value="17"></textfield-propertyeditor>
-
-        <textfield-propertyeditor label="test" value="18"></textfield-propertyeditor>
-
-        <animation-propertyeditor label="Image" url="https://www.google.de/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"></animation-propertyeditor>
-
-        <color-propertyeditor label="test" value="#ff0000"></color-propertyeditor>
-
-        <font-propertyeditor label1="Font" label2="Size">
-            <option>ARIAL</option>
-            <option>TAHOMA</option>
-        </font-propertyeditor>
-
     </div>
-    <div class="gridItem width-8 border-1 grow flexHorizontal">
-        <div class="separator flexVertical shrink">
-            <input type="checkbox" value="Not selected"/>
-            <label>Snap to grid</label>
-            <label class="emoffset-4">Grid X:</label>
-            <input type="text" class="emwidth-2" value="5">
-            <label>Y:</label>
-            <input type="text" class="emwidth-2" value="5">
-            <button class="emwidth-6 emoffset-4" id="previewbutton">Preview!</button>
-        </div>
-        <canvas id="html5canvas" class="grow">
-        </canvas>
-    </div>
+
+    <gameeditor-tabbedpane class="gridItem border-1 width-8 flexHorizontal" id="editortabbedpane">
+    </gameeditor-tabbedpane>
+
     <div class="gridItem width-3 border-1 shrink min-width-3 objectTree" id="objecttree">
-        <tree-item level="1" text="Objects" separator="true"></tree-item>
-        <tree-item level="2" text="Item Level 2" selected="true"></tree-item>
-        <tree-item level="3" text="Item Level 3" draggable="true"></tree-item>
-        <tree-item level="2" text="Item Level 2"></tree-item>
     </div>
 </div>
+
+<script>
+
+    if (isShadowDOMPolyfill) {
+        // with the Polyfill, we have to wait till init lifecycle is finished
+        var theTab = document.getElementById("editortabbedpane");
+        theTab.addEventListener("ready", function (e) {
+            main();
+        });
+    } else {
+        // else we can just go ahead..
+        main();
+    }
+</script>
 
 </body>
 </html>

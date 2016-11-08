@@ -1,0 +1,101 @@
+<!--
+  ~ Copyright 2016 Mirko Sertic
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~       http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="gameeditor-textfieldpropertyeditor">
+    <template>
+        <style>
+            :host {
+                width: 100%;
+                display: flex;
+                flex-direction: row;
+            }
+
+            .field {
+                background-color: white;
+                border: 2px solid #33373c;
+                text-align: center;
+                display: inline-block;
+                flex-grow: 1;
+            }
+
+            .field label {
+                display: block;
+                background-color: #bdc3c7;
+                color: black;
+                text-align: left;
+                padding-left: 2px;
+            }
+
+            .field input[type=text] {
+                border: none;
+                width: 100%;
+                padding-left: 2px;
+                box-sizing: border-box;
+                -webkit-appearance: none;
+                z-index: 99;
+                background-color: white;
+            }
+
+            .deletebutton {
+                vertical-align: middle;
+                float: right;
+                visibility: hidden;
+                display: none;
+                background-image: url("close.png");
+                width: 18px;
+                height: 18px;
+            }
+
+        </style>
+        <div class="field">
+            <label for="inputfield">[[label]]<div id="deletebutton" class="deletebutton"></div></label>
+            <input type="text" id="inputfield" name="inputfield" value="{{value}}" on-blur="updateData">
+        </div>
+    </template>
+    <script>
+        Polymer({
+            is: 'gameeditor-textfieldpropertyeditor',
+
+            properties: {
+                label: {
+                    type: String,
+                    notify: true,
+                    value: ""
+                },
+                value: {
+                    type: String,
+                    notify: true,
+                    value: ""
+                }
+            },
+
+            updateData: function() {
+                this.value = this.$.inputfield.value;
+            },
+
+            addDeleteListener: function(aListener) {
+                this.$.deletebutton.style.display = 'inline';
+                this.$.deletebutton.style.visibility = 'visible';
+                this.$.deletebutton.addEventListener("click", aListener);
+            },
+
+            ready: function() {
+            }
+
+        });
+    </script>
+</dom-module>

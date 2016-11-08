@@ -1,9 +1,25 @@
+/*
+ * Copyright 2016 Mirko Sertic
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.mirkosertic.gameengine.arcaderacer;
 
 import de.mirkosertic.gameengine.annotations.ReflectiveField;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
 import de.mirkosertic.gameengine.core.GameResource;
+import de.mirkosertic.gameengine.core.GameResourceLoader;
 import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.core.GameSceneEffect;
@@ -126,7 +142,7 @@ public class ArcadeRacerGameSceneEffect implements GameSceneEffect {
     }
 
     @Override
-    public void render(EffectCanvas aEffectCanvas, CameraBehavior aCameraBehavior) {
+    public void render(final EffectCanvas aEffectCanvas, CameraBehavior aCameraBehavior) {
 
         int theOldTrackDataX[] = null;
         int theOldTrackDataY[] = null;
@@ -163,7 +179,7 @@ public class ArcadeRacerGameSceneEffect implements GameSceneEffect {
         // Now we draw the track
         for (int theZ = theFarestZ; theZ >= theNearestZ; theZ--) {
 
-            String theElementIdentifier = "te" + theZ + "_";
+            final String theElementIdentifier = "te" + theZ + "_";
 
             TrackElement theTrackElement = track.getTrackElementForPosition(theZ);
             double theAngle = Math.toRadians(theTrackElement.angle);
@@ -222,14 +238,25 @@ public class ArcadeRacerGameSceneEffect implements GameSceneEffect {
                     } else {
                         // Texture
                         try {
-                            GameResource theTexture = gameScene.getRuntime().getResourceCache().getResourceFor(theSegment.texture);
+                            final int theFinalOldTrackDataX[] = theOldTrackDataX;
+                            final int theFinalOldTrackDataY[] = theOldTrackDataY;
 
-                            aEffectCanvas.fillRectangle(theElementIdentifier + "t_" + i, theTexture,
-                                    theOldTrackDataX[i*2], theOldTrackDataY[i*2],
-                                    theOldTrackDataX[i*2+1], theOldTrackDataY[i*2+1],
-                                    theNewTrackDataX[i*2+1], theNewTrackDataY[i*2+1],
-                                    theNewTrackDataX[i*2], theNewTrackDataY[i*2],
-                                    0, 0, 1, 0, 1, 1, 0, 1, theZ);
+                            final int theFinalI = i;
+                            final int theFinalZ = theZ;
+
+                            gameScene.getRuntime().getResourceCache().getResourceFor(theSegment.texture,
+                                    new GameResourceLoader.Listener() {
+                                        @Override
+                                        public void handle(GameResource aResource) {
+                                            aEffectCanvas.fillRectangle(theElementIdentifier + "t_" + theFinalI, aResource,
+                                                    theFinalOldTrackDataX[theFinalI*2], theFinalOldTrackDataY[theFinalI*2],
+                                                    theFinalOldTrackDataX[theFinalI*2+1], theFinalOldTrackDataY[theFinalI*2+1],
+                                                    theFinalOldTrackDataX[theFinalI*2+1], theFinalOldTrackDataY[theFinalI*2+1],
+                                                    theFinalOldTrackDataX[theFinalI*2], theFinalOldTrackDataY[theFinalI*2],
+                                                    0, 0, 1, 0, 1, 1, 0, 1, theFinalZ);
+
+                                        }
+                                    });
 
                         } catch (IOException e) {
                             // Color
@@ -264,19 +291,29 @@ public class ArcadeRacerGameSceneEffect implements GameSceneEffect {
                 double theBottomRightX = (theSprite.positionX + theSprite.width / 2) * theCosAngle - (theSceneHeight) * theSinAngle;
                 double theBottomRightY = (theSprite.positionX + theSprite.width / 2) * theSinAngle + (theSceneHeight) * theCosAngle;
 
-                Point2D theTopLeft  = theCamera.project(theTopLeftX, theTopLeftY , theSceneZ);
-                Point2D theTopRight  = theCamera.project(theTopRightX, theTopRightY , theSceneZ);
-                Point2D theBottomLeft  = theCamera.project(theBottomLeftX, theBottomLeftY , theSceneZ);
-                Point2D theBottomRight  = theCamera.project(theBottomRightX, theBottomRightY , theSceneZ);
+                final Point2D theTopLeft  = theCamera.project(theTopLeftX, theTopLeftY , theSceneZ);
+                final Point2D theTopRight  = theCamera.project(theTopRightX, theTopRightY , theSceneZ);
+                final Point2D theBottomLeft  = theCamera.project(theBottomLeftX, theBottomLeftY , theSceneZ);
+                final Point2D theBottomRight  = theCamera.project(theBottomRightX, theBottomRightY , theSceneZ);
 
                 if (theBottomRight.x >=0 && theTopLeft.x < screenSize.width) {
                     //
                     ResourceName theResourceName = theSprite.computeCurrentView(gameTime);
                     try {
-                        GameResource theResource = gameScene.getRuntime().getResourceCache().getResourceFor(theResourceName);
-                        aEffectCanvas.fillRectangle(theElementIdentifier + "s_" + i, theResource,
-                                theTopLeft.x + theXoffset, theTopLeft.y, theTopRight.x + theXoffset, theTopRight.y, theBottomRight.x + theXoffset, theBottomRight.y,theBottomLeft.x + theXoffset, theBottomLeft.y,
-                                0, 0, 1, 0, 1, 1, 0, 1, theZ - 2);
+                        final int theFinalXOffset = theXoffset;
+                        final int theFinalZ = theZ;
+                        final int theFinalI = i;
+
+                        gameScene.getRuntime().getResourceCache().getResourceFor(theResourceName,
+                                new GameResourceLoader.Listener() {
+                                    @Override
+                                    public void handle(GameResource aResource) {
+                                        aEffectCanvas.fillRectangle(theElementIdentifier + "s_" + theFinalI, aResource,
+                                                theTopLeft.x + theFinalXOffset, theTopLeft.y, theTopRight.x + theFinalXOffset, theTopRight.y, theBottomRight.x + theFinalXOffset, theBottomRight.y,theBottomLeft.x + theFinalXOffset, theBottomLeft.y,
+                                                0, 0, 1, 0, 1, 1, 0, 1, theFinalZ - 2);
+
+                                    }
+                                });
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
@@ -301,5 +338,10 @@ public class ArcadeRacerGameSceneEffect implements GameSceneEffect {
         positionOnTrack.set(positionOnTrack.get() + speed.get() / 1000 * aElapsedTimeSinceLastLoop);
         gameTime = aGameTime;
         return GameProcess.ProceedResult.CONTINUE_RUNNING;
+    }
+
+    @Override
+    public void delete() {
+        gameScene.removeEffect(this);
     }
 }

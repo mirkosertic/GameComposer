@@ -1,0 +1,98 @@
+<!--
+  ~ Copyright 2016 Mirko Sertic
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~       http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="gameeditor-twofieldpropertyeditor">
+    <template>
+        <style>
+            :host {
+                width: 100%;
+                display: flex;
+                flex-direction: row;
+            }
+
+            .field {
+                flex-grow: 1;
+                background-color: white;
+                border: 2px solid #33373c;
+                text-align: center;
+                display: table-cell;
+            }
+
+            .field label {
+                display: block;
+                background-color: #bdc3c7;
+                color: black;
+                text-align: left;
+                padding-left: 2px;
+            }
+
+            .field input[type=text] {
+                border: none;
+                width: 100%;
+                padding-left: 2px;
+                box-sizing: border-box;
+                -webkit-appearance: none;
+                z-index: 99;
+                background-color: white;
+            }
+        </style>
+        <div class="field width-2">
+            <label for="field1">[[label1]]</label>
+            <input type="text" id="field1" name="field1" value="{{value1}}" on-blur="updateData1">
+        </div>
+        <div class="field width-2">
+            <label for="field2">[[label2]]</label>
+            <input type="text" id="field2" name="field2" value="{{value2}}" on-blur="updateData2">
+        </div>
+    </template>
+    <script>
+        Polymer({
+            is: 'gameeditor-twofieldpropertyeditor',
+
+            properties: {
+                label1: {
+                    type: String,
+                    notify: true
+                },
+                label2: {
+                    type: String,
+                    notify: true
+                },
+                value1: {
+                    type: String,
+                    notify: true
+                },
+                value2: {
+                    type: String,
+                    notify: true
+                }
+            },
+
+            updateData1: function() {
+                this.value1 = this.$.field1.value;
+            },
+
+            updateData2: function() {
+                this.value2 = this.$.field2.value;
+            },
+
+            ready: function() {
+            }
+
+        });
+    </script>
+</dom-module>

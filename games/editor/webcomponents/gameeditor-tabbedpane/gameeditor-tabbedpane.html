@@ -1,0 +1,152 @@
+<!--
+  ~ Copyright 2016 Mirko Sertic
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~       http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="gameeditor-tabbedpanetab.html">
+
+<dom-module id="gameeditor-tabbedpane">
+    <template>
+        <style>
+            :host {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                height: 100%;
+            }
+
+            .tabpanebuttons {
+                display: flex;
+                flex-direction: row;
+                background-color: #e74c3c;
+            }
+        </style>
+
+        <div id="buttons" class="tabpanebuttons">
+        </div>
+        <content id="content"></content>
+    </template>
+    <script>
+        Polymer({
+            is: 'gameeditor-tabbedpane',
+
+            properties: {
+                selectedtab: {
+                    type: Number,
+                    notify: true,
+                    value: -1
+
+                },
+                tabs: {
+                    type: Object,
+                    value: []
+                }
+            },
+
+            clearAll: function() {
+                var theButtonsDom = Polymer.dom(this.$.buttons);
+                while (theButtonsDom.firstChild) {
+                    theButtonsDom.removeChild(theButtonsDom.firstChild);
+                }
+                this.tabs = [];
+            },
+
+            clearContent: function() {
+                var theDom = Polymer.dom(this);
+                while (theDom.firstChild) {
+                    theDom.removeChild(theDom.firstChild);
+                }
+            },
+
+            createClickHandler: function(aIndex) {
+                var theThis = this;
+                return function(e) {
+                    theThis.selectedtab = aIndex;
+                    theThis.rebuildTabs();
+                    theThis.setContent(theThis.tabs[aIndex].element);
+                }
+            },
+
+            createDeleteClickHandler: function(aIndex) {
+                var theThis = this;
+                return function(e) {
+                    e.stopPropagation();
+                    theThis.fire("tabclose", {tabindex: aIndex});
+                }
+            },
+
+            rebuildTabs: function() {
+
+                var theButtonsDom = Polymer.dom(this.$.buttons);
+                while (theButtonsDom.firstChild) {
+                    theButtonsDom.removeChild(theButtonsDom.firstChild);
+                }
+
+                for (var i=0;i<this.tabs.length;i++) {
+                    var theTab = this.tabs[i]
+
+                    var theElement = document.createElement("gameeditor-tabbedpanetab");
+                    theElement.title = theTab.title;
+                    theElement.selected = (i == this.selectedtab);
+
+                    theElement.addEventListener("click", this.createClickHandler(i), true);
+                    theElement.addEventListener("singletabclose", this.createDeleteClickHandler(i), true);
+
+                    theButtonsDom.appendChild(theElement);
+                }
+            },
+
+            addTab: function(aTitle, aElement) {
+                this.tabs.push({
+                    title: aTitle,
+                    element: aElement
+                });
+
+                this.selectedtab = this.tabs.length - 1;
+
+                this.rebuildTabs();
+                this.setContent(aElement);
+
+                return this.selectedtab;
+            },
+
+            setContent: function(aElement) {
+                this.clearContent();
+                Polymer.dom(this).appendChild(aElement);
+            },
+
+            selectTab(aIndex) {
+                this.selectedtab = aIndex;
+                this.rebuildTabs();
+                this.setContent(this.tabs[aIndex].element);
+            },
+
+            removeTab(aIndex) {
+                this.selectedtab--;
+                this.tabs.splice(aIndex, 1);
+                if (this.tabs.length == 0) {
+                    this.clearAll();
+                    this.clearContent();
+                    this.selectedtab = -1;
+                } else {
+                    if (this.selectedtab < 0) {
+                        this.selectedtab = this.tabs.length - 1;
+                    }
+                    this.selectTab(this.selectedtab);
+                }
+            },
+        });
+    </script>
+</dom-module>

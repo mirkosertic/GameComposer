@@ -1,10 +1,26 @@
+/*
+ * Copyright 2016 Mirko Sertic
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.mirkosertic.gameengine.generic;
 
-import de.mirkosertic.gameengine.camera.Callback;
 import de.mirkosertic.gameengine.Version;
+import de.mirkosertic.gameengine.camera.Callback;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameResource;
+import de.mirkosertic.gameengine.core.GameResourceLoader;
 import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.core.GameSceneEffect;
@@ -14,12 +30,12 @@ import de.mirkosertic.gameengine.core.RuntimeStatistics;
 import de.mirkosertic.gameengine.scriptengine.LUAScriptEngine;
 import de.mirkosertic.gameengine.sprite.SpriteBehavior;
 import de.mirkosertic.gameengine.text.TextBehavior;
-import de.mirkosertic.gameengine.type.PositionAnchor;
 import de.mirkosertic.gameengine.type.Angle;
 import de.mirkosertic.gameengine.type.Color;
 import de.mirkosertic.gameengine.type.EffectCanvas;
 import de.mirkosertic.gameengine.type.Font;
 import de.mirkosertic.gameengine.type.Position;
+import de.mirkosertic.gameengine.type.PositionAnchor;
 import de.mirkosertic.gameengine.type.ResourceName;
 import de.mirkosertic.gameengine.type.Size;
 import de.mirkosertic.gameengine.type.TextExpression;
@@ -91,7 +107,7 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
 
     protected abstract void drawImage(GameObjectInstance aInstance, Position aPositionOnScreen, Position aCenterOffset, S aResource);
 
-    protected abstract void drawText(String aObjectUUID, Position aPositionOnScreen, Angle aAngle, Position aCenterOffset, de.mirkosertic.gameengine.type.Font aFont, de.mirkosertic.gameengine.type.Color aColor, String aText, Size aSize);
+    protected abstract void drawText(String aID, Position aPositionOnScreen, Angle aAngle, Position aCenterOffset, de.mirkosertic.gameengine.type.Font aFont, de.mirkosertic.gameengine.type.Color aColor, String aText, Size aSize, boolean aVisible);
 
     protected abstract void drawRect(GameObjectInstance aInstance, Position aPositionOnScreen, Position aCenterOffset, Color aColor, Size aSize);
 
@@ -101,6 +117,13 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
     }
 
     protected abstract EffectCanvas createEffectCanvas();
+
+    protected boolean includeInRendering(GameObjectInstance aInstance) {
+        return aInstance.visibleProperty().get();
+    }
+
+    protected void touched(GameObjectInstance aInstance) {
+    }
 
     @Override
     public void renderGame(final long aGameTime, final long aElapsedTimeSinceLastLoop, final GameScene aScene, RuntimeStatistics aStatistics) {
@@ -122,13 +145,21 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
         gameRuntime.getLogger().timeEnd("preprocessorEffects");
 
         int theNumberOfInstances = cameraBehavior.processVisibleInstances(new Callback() {
+
             @Override
-            public void process(GameObjectInstance aValue, Position aPositionOnScreen, Size aSize) {
+            public boolean accepts(GameObjectInstance aInstance) {
+                return includeInRendering(aInstance);
+            }
+
+            @Override
+            public void process(final GameObjectInstance aValue, final Position aPositionOnScreen, Size aSize) {
+
+                touched(aValue);
 
                 float theHalfWidth = aSize.width / 2;
                 float theHalfHeight = aSize.height / 2;
 
-                Position theCenterOffset = new Position(theHalfWidth, theHalfHeight);
+                final Position theCenterOffset = new Position(theHalfWidth, theHalfHeight);
 
                 Angle theAngle = aValue.rotationAngleProperty().get();
 
@@ -142,10 +173,13 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
                     ResourceName theSpriteResource = theSpriteBehavior.computeCurrentFrame(aGameTime);
                     if (theSpriteResource != null) {
                         try {
-                            S theGameResource = gameRuntime.getResourceCache()
-                                    .getResourceFor(theSpriteResource);
-
-                            drawImage(aValue, aPositionOnScreen, theCenterOffset, theGameResource);
+                            gameRuntime.getResourceCache()
+                                    .getResourceFor(theSpriteResource, new GameResourceLoader.Listener() {
+                                        @Override
+                                        public void handle(final GameResource aResource) {
+                                            drawImage(aValue, aPositionOnScreen, theCenterOffset, (S) aResource);
+                                        }
+                                    });
 
                             theSomethingRendered = true;
 
@@ -192,7 +226,7 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
                     }
 
                     drawText(aValue.uuidProperty().get(), aPositionOnScreen, aValue.rotationAngleProperty().get(), theCenterOffset, theTextBehavior.fontProperty().get(),
-                            theTextBehavior.colorProperty().get(), theTextToDraw, aSize);
+                            theTextBehavior.colorProperty().get(), theTextToDraw, aSize, aValue.visibleProperty().get());
 
 
                     theSomethingRendered = true;
@@ -238,7 +272,7 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
     private void drawTextAt(String aID, Position aPosition, Position aCenterOffset, Size aSize, Font aFont, Color aColor, String aText) {
 
         beforeInstance(null, aPosition, aCenterOffset, Angle.ZERO);
-        drawText(aID, aPosition, Angle.ZERO, aCenterOffset, aFont, aColor, aText, aSize);
+        drawText(aID, aPosition, Angle.ZERO, aCenterOffset, aFont, aColor, aText, aSize, true);
         afterInstance(null, aPosition);
     }
 

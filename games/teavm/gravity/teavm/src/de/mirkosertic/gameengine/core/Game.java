@@ -1,3 +1,18 @@
+/*
+ * Copyright 2016 Mirko Sertic
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.mirkosertic.gameengine.core;
 
 import de.mirkosertic.gameengine.annotations.ReflectiveField;
@@ -5,7 +20,9 @@ import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.type.CustomProperties;
 import de.mirkosertic.gameengine.type.Reflectable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Game implements Reflectable {
@@ -29,6 +46,8 @@ public class Game implements Reflectable {
     private final Property<Boolean> enableNetworking;
     private final Property<String> fireBaseURL;
 
+    private final List<String> scenes;
+
     public Game() {
         name = new Property<>(String.class, this, NAME_PROPERTY, (String) null);
         defaultScene = new Property<>(String.class, this, DEFAULT_SCENE_PROPERTY, (String) null);
@@ -38,6 +57,8 @@ public class Game implements Reflectable {
 
         enableNetworking = new Property<>(Boolean.class, this, ENABLE_NETWORKING_PROPERTY, Boolean.FALSE);
         fireBaseURL = new Property<>(String.class, this, FIREBASE_URL, "https://glowing-heat-2189.firebaseio.com");
+
+        scenes = new ArrayList<>();
     }
 
     @ReflectiveField
@@ -74,6 +95,11 @@ public class Game implements Reflectable {
         if (aSceneName.equals(defaultScene.get())) {
             defaultScene.set(null);
         }
+        scenes.remove(aSceneName);
+    }
+
+    public String[] getKnownScenes() {
+        return scenes.toArray(new String[scenes.size()]);
     }
 
     @ReflectiveField
@@ -95,6 +121,7 @@ public class Game implements Reflectable {
         theResult.put("enableDebug", Boolean.toString(enableDebug.get()));
         theResult.put("enableNetworking", Boolean.toString(enableNetworking.get()));
         theResult.put("firebaseURL", fireBaseURL.get());
+        theResult.put("scenes", scenes.toArray(new String[scenes.size()]));
         return theResult;
     }
 
@@ -123,6 +150,13 @@ public class Game implements Reflectable {
         String theFirebaseURL = (String) aSerializedData.get("firebaseURL");
         if (theFirebaseURL != null) {
             theResult.fireBaseURL.setQuietly(theFirebaseURL);
+        }
+
+        List<String> theScenes = (List<String>) aSerializedData.get("scenes");
+        if (theScenes != null) {
+            for (String theScene : theScenes) {
+                theResult.scenes.add(theScene);
+            }
         }
 
         return theResult;

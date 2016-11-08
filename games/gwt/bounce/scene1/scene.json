@@ -9,6 +9,7 @@
         "position" : "EVERYWHERE",
         "type" : "ObjectCollisionCondition"
       },
+      "name": "Object collision",
       "actions" : [ {
         "type" : "RunScriptAction",
         "script" : {

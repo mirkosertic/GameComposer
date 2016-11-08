@@ -1,3 +1,18 @@
+/*
+ * Copyright 2016 Mirko Sertic
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.mirkosertic.gameengine.core;
 
 import de.mirkosertic.gameengine.ArrayUtils;
@@ -40,6 +55,7 @@ public class GameScene implements Reflectable<GameSceneClassInformation>, KeyVal
     private GameObject[] objects;
     private GameObjectInstance[] instances;
     private EventSheet[] eventSheets;
+    private Spritesheet[] spriteSheets;
 
     private GameSceneEffect[] preprocessorEffects;
     private GameSceneEffect[] postprocessorEffects;
@@ -64,6 +80,7 @@ public class GameScene implements Reflectable<GameSceneClassInformation>, KeyVal
         customProperties = new Property<>(CustomProperties.class, this, CUSTOM_PROPERTIES_PROPERTY, new CustomProperties(), theManager);
         instances = new GameObjectInstance[0];
         objects = new GameObject[0];
+        spriteSheets = new Spritesheet[0];
         eventSheets = new EventSheet[0];
         preprocessorEffects = new GameSceneEffect[0];
         postprocessorEffects = new GameSceneEffect[0];
@@ -190,6 +207,10 @@ public class GameScene implements Reflectable<GameSceneClassInformation>, KeyVal
         return eventSheets;
     }
 
+    public Spritesheet[] getSpriteSheets() {
+        return spriteSheets;
+    }
+
     public GameSceneEffect[] getPreprocessorEffects() {
         return preprocessorEffects;
     }
@@ -280,11 +301,29 @@ public class GameScene implements Reflectable<GameSceneClassInformation>, KeyVal
         return theSheet;
     }
 
+    public Spritesheet createNewSpriteSheet() {
+        Spritesheet theSheet = new Spritesheet(this);
+        List<Spritesheet> theSheets = ArrayUtils.asList(spriteSheets);
+        theSheets.add(theSheet);
+        spriteSheets = theSheets.toArray(new Spritesheet[theSheets.size()]);
+
+        gameRuntime.getEventManager().fire(new SpriteSheetAddedToScene(theSheet));
+        return theSheet;
+    }
+
     public void removeEventSheet(EventSheet aEventSheet) {
         List<EventSheet> theSheets = ArrayUtils.asList(eventSheets);
         if (theSheets.remove(aEventSheet)) {
             eventSheets = theSheets.toArray(new EventSheet[theSheets.size()]);
             gameRuntime.getEventManager().fire(new EventSheetRemovedFromScene(aEventSheet));
+        }
+    }
+
+    public void removeSpriteSheet(Spritesheet aSpriteSheet) {
+        List<Spritesheet> theSheets = ArrayUtils.asList(spriteSheets);
+        if (theSheets.remove(aSpriteSheet)) {
+            spriteSheets = theSheets.toArray(new Spritesheet[theSheets.size()]);
+            gameRuntime.getEventManager().fire(new SpriteSheetRemovedFromScene(aSpriteSheet));
         }
     }
 
@@ -318,6 +357,12 @@ public class GameScene implements Reflectable<GameSceneClassInformation>, KeyVal
             theEventSheets.add(theSheet.serialize());
         }
         theResult.put("eventsheets", theEventSheets);
+
+        List<Map<String, Object>> theSpriteSheets = new ArrayList<>();
+        for (Spritesheet theSheet : spriteSheets) {
+            theSpriteSheets.add(theSheet.serialize());
+        }
+        theResult.put("spritesheets", theSpriteSheets);
 
         theResult.put(LAYOUT_BOUNDS_PROPERTY, layoutBounds.get().serialize());
 
@@ -359,6 +404,16 @@ public class GameScene implements Reflectable<GameSceneClassInformation>, KeyVal
             }
         }
         theScene.eventSheets = theEventSheetList.toArray(new EventSheet[theEventSheetList.size()]);
+
+        List<Spritesheet> theSpriteSheetList = new ArrayList<>();
+        List<Map<String, Object>> theSpriteSheets = (List<Map<String, Object>>) aSerializedData.get("spritesheets");
+        if (theSpriteSheets != null) {
+            for (Map<String, Object> theSheet : theSpriteSheets) {
+                theSpriteSheetList.add(Spritesheet.unmarshall(theScene, theSheet));
+            }
+        }
+
+        theScene.spriteSheets = theSpriteSheetList.toArray(new Spritesheet[theSpriteSheetList.size()]);
 
         String theCameraObject = (String) aSerializedData.get("cameraobjectid");
         if (theCameraObject != null) {

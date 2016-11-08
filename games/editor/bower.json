@@ -1,12 +1,12 @@
 {
-  "name": "Gameengine Editor",
+  "name": "gameengineeditor",
   "homepage": "https://github.com/mirkosertic/GameComposer",
   "authors": [
     "Mirko Sertic <mirko.sertic@web.de>"
   ],
   "description": "",
   "main": "index.html",
-  "license": "MIT",
+  "license": "APLv2",
   "private": true,
   "ignore": [
     "**/.*",
@@ -15,8 +15,13 @@
     "test",
     "tests"
   ],
-  "resolutions": {
-    "polymer": "^1.6.1",
-    "webcomponentsjs": "^0.7.20"
+  "dependencies": {
+    "polymer": "^1.7.0",
+    "webcomponentsjs": "^0.7.20",
+    "ace-builds": "~1.2.0",
+    "firebase": "2.2.2",
+    "pixi.js": "pixi#^4.1.0",
+    "howler.js": "howler#^2.0.1",
+    "toastr": "^2.1.3"
   }
 }

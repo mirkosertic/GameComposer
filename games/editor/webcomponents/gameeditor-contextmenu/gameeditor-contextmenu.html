@@ -1,0 +1,69 @@
+<!--
+  ~ Copyright 2016 Mirko Sertic
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~       http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="gameeditor-contextmenu">
+    <template>
+        <style>
+            :host {
+                position: absolute;
+                border: 1px solid white;
+            }
+
+            .contextmenupopup {
+            }
+
+            .contextmenutitle {
+                color: white;
+                font-family: 'Open Sans', sans-serif;
+                background-color: #e74c3c;
+                padding: 0.1em;
+                padding-left: 0.3em;
+                height: 1.6em;
+                line-height: 1.6em;
+                vertical-align: middle;
+            }
+        </style>
+
+        <div id="menu" class="contextmenupopup">
+            <div class="contextmenutitle">{{title}}</div>
+        </div>
+    </template>
+    <script>
+        Polymer({
+            is: 'gameeditor-contextmenu',
+
+            properties: {
+                title: {
+                    type: String,
+                    notify: true
+                },
+            },
+
+            ready: function() {
+            },
+
+            attached: function() {
+
+                var theItems = this.$.menu;
+
+                this.getEffectiveChildren().forEach(function(item) {
+                    theItems.appendChild(item);
+                });
+            },
+        });
+    </script>
+</dom-module>

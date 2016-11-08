@@ -1,0 +1,126 @@
+<!--
+  ~ Copyright 2016 Mirko Sertic
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~       http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="gameeditor-fontpropertyeditor">
+    <template>
+        <style>
+            :host {
+                width: 100%;
+                flex-shrink: 1;
+            }
+
+            .field {
+                background-color: white;
+                border: 2px solid #33373c;
+                text-align: center;
+                display: table-cell;
+            }
+
+            .field label {
+                display: block;
+                background-color: #bdc3c7;
+                color: black;
+                text-align: left;
+                padding-left: 2px;
+            }
+
+            .width-2 {
+                width: 25%;
+            }
+
+            .width-6 {
+                width: 75%;
+            }
+
+            .field input[type=text] {
+                border: none;
+                width: 100%;
+                padding-left: 2px;
+                box-sizing: border-box;
+                -webkit-appearance: none;
+                z-index: 99;
+                background-color: white;
+            }
+
+            .field select {
+                border: none;
+                width: 100%;
+                padding-left: 2px;
+                box-sizing: border-box;
+                -webkit-appearance: none;
+                z-index: 99;
+                background-color: white;
+            }
+        </style>
+
+        <div class="field width-6">
+            <label for="value1">[[label1]]</label>
+            <select id="value1" on-change="updateDataValue1">
+            </select>
+        </div>
+
+        <div class="field width-2">
+            <label for="value2">[[label2]]</label>
+            <input type="text" id="value2" name="value2" value="{{size}}" on-blur="updateDataValue2">
+        </div>
+
+    </template>
+    <script>
+        Polymer({
+            is: 'gameeditor-fontpropertyeditor',
+
+            properties: {
+                label1: {
+                    type: String,
+                    notify: true
+                },
+                label2: {
+                    type: String,
+                    notify: true
+                },
+                size: {
+                    type: String,
+                    notify: true
+                },
+                index: {
+                    type: Number,
+                    notify: true
+                }
+            },
+
+            updateDataValue1: function() {
+                this.index = this.$.value1.selectedIndex;
+            },
+
+            updateDataValue2: function() {
+                this.size = this.$.value2.value;
+            },
+
+            attached: function() {
+
+                var theSelection = this.$.value1;
+
+                // Attach Child Nodes to the select box
+                this.getEffectiveChildren().forEach(function(item) {
+                    theSelection.appendChild(item);
+                });
+
+                theSelection.selectedIndex = this.index;
+            },
+        });
+    </script>
+</dom-module>

@@ -1,10 +1,20 @@
+/*
+ * Copyright 2016 Mirko Sertic
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.mirkosertic.gameengine.teavm;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import org.teavm.jso.JSBody;
 import org.teavm.jso.JSIndexer;
 import org.teavm.jso.JSObject;
@@ -13,24 +23,74 @@ import org.teavm.jso.core.JSBoolean;
 import org.teavm.jso.core.JSNumber;
 import org.teavm.jso.core.JSString;
 
+import java.util.*;
+
 public class TeaVMMap implements Map<String, Object> {
+
+    @JSBody(
+            params = {"aObject"},
+            script = "return Object.prototype.toString.call(aObject) === '[object Array]';"
+    )
+    public static native boolean isArray(JSObject aObject);
 
     public abstract static class JSDelegate implements JSObject {
 
+        @JSBody(
+                params = {},
+                script = "return {};"
+        )
+        public static native JSDelegate create();
+
         @JSIndexer
         public abstract JSObject get(String aKey);
+
+        @JSIndexer
+        public abstract void set(String aKey, JSObject aOject);
 
         @JSBody(
                 params = {"aObject"},
                 script = "return typeof aObject;"
         )
         public abstract String getTypeOf(JSObject aObject);
+    }
 
-        @JSBody(
-                params = {"aObject"},
-                script = "return Object.prototype.toString.call(aObject) === '[object Array]';"
-        )
-        public abstract boolean isArray(JSObject aObject);
+    public static JSObject toJS(Map<String, Object> aMap) {
+        JSDelegate theResult = JSDelegate.create();
+        return fill(aMap, theResult);
+    }
+
+    private static JSObject convert(Object aObject) {
+        if (aObject instanceof String) {
+            return JSString.valueOf((String) aObject);
+        }
+        if (aObject instanceof Boolean) {
+            return JSBoolean.valueOf((boolean) aObject);
+        }
+        if (aObject instanceof Integer) {
+            return JSNumber.valueOf((int) aObject);
+        }
+        if (aObject instanceof Map) {
+            JSDelegate theResult = JSDelegate.create();
+            fill((Map<String, Object>) aObject, theResult);
+            return theResult;
+        }
+        if (aObject instanceof List) {
+            List theList = (List) aObject;
+            JSArray theArray = JSArray.create(theList.size());
+            for (int i=0;i<theList.size();i++) {
+                theArray.set(i, convert(theList.get(i)));
+            }
+            return theArray;
+        }
+        throw new IllegalArgumentException("Unbekannter Typ : " + aObject.getClass());
+    }
+
+    private static JSDelegate fill(Map<String, Object> aMap, JSDelegate aDelegate) {
+        for (Map.Entry<String, Object> theEntry : aMap.entrySet()) {
+            Object theValue = theEntry.getValue();
+            aDelegate.set(theEntry.getKey(), convert(theValue));
+        }
+        return aDelegate;
     }
 
     private final JSDelegate source;
@@ -73,7 +133,7 @@ public class TeaVMMap implements Map<String, Object> {
         case "boolean":
             return ((JSBoolean) aValue).booleanValue();
         case "object":
-            if (source.isArray(aValue)) {
+            if (isArray(aValue)) {
                 JSArray theArray = (JSArray) aValue;
                 List<Object> theResult = new ArrayList<>();
                 for (int i=0;i<theArray.getLength();i++) {

@@ -243,143 +243,18 @@ body {
   color: white;
   font-family: 'Open Sans', sans-serif;
 }
-.input {
-  border: 1px solid #33373c;
-}
-label {
-  color: white;
-}
-.separator {
-  color: white;
-  font-family: 'Open Sans', sans-serif;
-  background-color: #4a5058;
-  padding: 0.1em;
-  padding-left: 0.3em;
-  height: 1.6em;
-  line-height: 1.6em;
-  vertical-align: middle;
-}
-.separator .border-1 {
-  border: 1px solid #ffffff;
-}
-.separatorlight {
-  color: white;
-  font-family: 'Open Sans', sans-serif;
-  background-color: #4a5058;
-  padding: 0.1em;
-  padding-left: 0.3em;
-  height: 1.6em;
-  line-height: 1.6em;
-  vertical-align: middle;
-  background-color: #565d65;
-}
-.separatorlight .border-1 {
-  border: 1px solid #ffffff;
-}
-button {
-  border: 1px solid #1abc9c;
-  background-color: #1abc9c;
-  color: white;
-  font-weight: bold;
-}
-button:hover {
-  background-color: #1dd2af;
-}
 .propertyEditor {
   overflow-y: auto;
   overflow-x: hidden;
-}
-.propertyEditor .propertyEditor,
-.propertyEditor textfield-propertyeditor,
-.propertyEditor textarea-propertyeditor,
-.propertyEditor checkbox-propertyeditor,
-.propertyEditor animation-propertyeditor,
-.propertyEditor color-propertyeditor,
-.propertyEditor twofield-propertyeditor,
-.propertyEditor select-propertyeditor,
-.propertyEditor font-propertyeditor {
-  padding: 0.1em;
-  display: flex;
-  flex-flow: row;
-  overflow: visible;
-}
-.propertyEditor .propertyEditor label,
-.propertyEditor textfield-propertyeditor label,
-.propertyEditor textarea-propertyeditor label,
-.propertyEditor checkbox-propertyeditor label,
-.propertyEditor animation-propertyeditor label,
-.propertyEditor color-propertyeditor label,
-.propertyEditor twofield-propertyeditor label,
-.propertyEditor select-propertyeditor label,
-.propertyEditor font-propertyeditor label {
-  font-size: small;
-  padding-right: 0.2em;
-  align-self: center;
-  display: flex;
-  text-align: left;
-  vertical-align: middle;
-  padding-left: 0.2em;
-  flex-shrink: 5;
-}
-.propertyEditor .propertyEditor input[type=text],
-.propertyEditor textfield-propertyeditor input[type=text],
-.propertyEditor textarea-propertyeditor input[type=text],
-.propertyEditor checkbox-propertyeditor input[type=text],
-.propertyEditor animation-propertyeditor input[type=text],
-.propertyEditor color-propertyeditor input[type=text],
-.propertyEditor twofield-propertyeditor input[type=text],
-.propertyEditor select-propertyeditor input[type=text],
-.propertyEditor font-propertyeditor input[type=text] {
-  flex-grow: 10;
-}
-.propertyEditor .propertyEditor input[type=color],
-.propertyEditor textfield-propertyeditor input[type=color],
-.propertyEditor textarea-propertyeditor input[type=color],
-.propertyEditor checkbox-propertyeditor input[type=color],
-.propertyEditor animation-propertyeditor input[type=color],
-.propertyEditor color-propertyeditor input[type=color],
-.propertyEditor twofield-propertyeditor input[type=color],
-.propertyEditor select-propertyeditor input[type=color],
-.propertyEditor font-propertyeditor input[type=color] {
-  flex-grow: 10;
-}
-.propertyEditor .propertyEditor select,
-.propertyEditor textfield-propertyeditor select,
-.propertyEditor textarea-propertyeditor select,
-.propertyEditor checkbox-propertyeditor select,
-.propertyEditor animation-propertyeditor select,
-.propertyEditor color-propertyeditor select,
-.propertyEditor twofield-propertyeditor select,
-.propertyEditor select-propertyeditor select,
-.propertyEditor font-propertyeditor select {
-  flex-grow: 10;
 }
 .objectTree {
   overflow-y: auto;
   overflow-x: hidden;
 }
-.field {
-  background-color: white;
-  width: 100%;
-  border: 2px solid #33373c;
-  text-align: center;
-}
-.field label {
-  display: block;
-  background-color: #bdc3c7;
-  color: black;
-  text-align: left;
-}
-.field input[type=text],
-.field input[type=color],
-.field input[type=range],
-.field select,
-.field textarea {
-  border: none;
-  width: 100%;
-  padding-left: 2px;
-  box-sizing: border-box;
-  -webkit-appearance: none;
-  z-index: 99;
-  background-color: white;
+.genericdeletebutton {
+  vertical-align: middle;
+  background-image: url("../webcomponents/gameeditor-treeitem/close.png");
+  display: inline;
+  width: 18px;
+  height: 18px;
 }
