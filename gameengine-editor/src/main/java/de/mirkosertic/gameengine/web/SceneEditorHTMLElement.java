@@ -15,7 +15,9 @@
  */
 package de.mirkosertic.gameengine.web;
 
+import de.mirkosertic.gameengine.type.Position;
 import org.teavm.jso.JSBody;
+import org.teavm.jso.browser.Window;
 import org.teavm.jso.dom.html.HTMLElement;
 import org.teavm.jso.dom.html.HTMLInputElement;
 
@@ -29,4 +31,32 @@ public abstract class SceneEditorHTMLElement implements HTMLElement {
     public abstract HTMLInputElement gridWidth();
 
     public abstract HTMLInputElement gridHeight();
+
+    public abstract HTMLInputElement snapToGrid();
+
+    public Position eventuallySnapToGrid(Position aPosition) {
+        if (snapToGrid().isChecked()) {
+            int theGridWidth = Integer.valueOf(gridWidth().getValue());
+            int theGridHeight = Integer.valueOf(gridHeight().getValue());
+
+            int theXMod = (int) aPosition.x % theGridWidth;
+            int theYMod = (int) aPosition.y % theGridHeight;
+
+            float theNewX;
+            if (theXMod < theGridWidth / 2) {
+                theNewX = aPosition.x - theXMod;
+            } else {
+                theNewX = (((int) (aPosition.x / theGridWidth)) + 1 ) * theGridWidth;
+            }
+            float theNewY;
+            if (theYMod < theGridHeight / 2) {
+                theNewY = aPosition.y - theYMod;
+            } else {
+                theNewY = (((int) (aPosition.y / theGridHeight)) + 1 ) * theGridHeight;
+            }
+
+            return new Position(theNewX, theNewY);
+        }
+        return aPosition;
+    }
 }

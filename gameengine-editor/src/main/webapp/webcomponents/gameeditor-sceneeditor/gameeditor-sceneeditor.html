@@ -75,7 +75,7 @@
         </style>
 
         <div class="separator flexVertical shrink">
-            <input type="checkbox" value="Not selected"/>
+            <input id="snaptogrid" type="checkbox" value="Not selected"/>
             <label>Snap to grid</label>
             <label class="emoffset-4">Grid X:</label>
             <input id="gridWidth" type="text" class="emwidth-2" value="0">
@@ -89,15 +89,18 @@
         Polymer({
             is: 'gameeditor-sceneeditor',
 
-            properties: {
-            },
+            properties: {},
 
-            currentCanvas: function() {
+            currentCanvas: function () {
                 return this.$.htmlcanvas;
             },
 
-            gridWidth: function() {
+            gridWidth: function () {
                 return this.$.gridWidth;
+            },
+
+            snapToGrid: function () {
+                return this.$.snaptogrid;
             },
 
             gridHeight: function() {
