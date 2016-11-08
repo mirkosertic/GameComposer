@@ -20,11 +20,12 @@
         <style>
             :host {
                 width: 100%;
-                flex-shrink: 1;
+                display: flex;
                 flex-direction: row;
             }
 
             .field {
+                flex-grow: 1;
                 background-color: white;
                 border: 2px solid #33373c;
                 text-align: center;
@@ -47,10 +48,6 @@
                 -webkit-appearance: none;
                 z-index: 99;
                 background-color: white;
-            }
-
-            .width-2 {
-                width: 50%;
             }
         </style>
         <div class="field width-2">

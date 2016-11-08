@@ -17,6 +17,7 @@ package de.mirkosertic.gameengine.web;
 
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.teavm.TeaVMGameView;
 import de.mirkosertic.gameengine.teavm.pixi.Filter;
 import de.mirkosertic.gameengine.teavm.pixi.Renderer;
@@ -48,11 +49,17 @@ public class GameEditorGameView extends TeaVMGameView {
 
     private final Filter gridFilter;
 
+    private final Property<Integer> gridWidth;
+    private final Property<Integer> gridHeight;
+
     public GameEditorGameView(GameRuntime aGameRuntime,
             CameraBehavior aCameraBehavior,
             GestureDetector aGestureDetector,
             Renderer aRenderer) {
         super(aGameRuntime, aCameraBehavior, aGestureDetector, aRenderer);
+
+        gridWidth = new Property<Integer>(Integer.class, this, "gridWidth", 64);
+        gridHeight = new Property<Integer>(Integer.class, this, "gridHeight", 64);
 
         // http://www.awwwards.com/a-gentle-introduction-to-shaders-with-pixi-js.html
         //http://stackoverflow.com/questions/17339149/webgl-how-do-i-get-the-position-of-every-pixel-in-fragment-shader
@@ -82,13 +89,21 @@ public class GameEditorGameView extends TeaVMGameView {
         getStage().setFilters(JSArray.of(gridFilter));
     }
 
+    public Property<Integer> gridWidth() {
+        return gridWidth;
+    }
+
+    public Property<Integer> gridHeight() {
+        return gridHeight;
+    }
+
     @Override
     public void renderGame(long aGameTime, long aElapsedTimeSinceLastLoop, GameScene aScene, RuntimeStatistics aStatistics) {
         Position theCamera = getCameraBehavior().getInstance().positionProperty().get();
         GridUniforms.setXOffset(gridFilter, theCamera.x);
         GridUniforms.setYOffset(gridFilter, theCamera.y);
-        GridUniforms.setWidth(gridFilter, 64f);
-        GridUniforms.setHeight(gridFilter, 64f);
+        GridUniforms.setWidth(gridFilter, (float) gridWidth.get());
+        GridUniforms.setHeight(gridFilter, (float) gridHeight.get());
         super.renderGame(aGameTime, aElapsedTimeSinceLastLoop, aScene, aStatistics);
     }
 

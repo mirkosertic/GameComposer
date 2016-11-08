@@ -17,6 +17,7 @@ package de.mirkosertic.gameengine.web;
 
 import org.teavm.jso.JSBody;
 import org.teavm.jso.dom.html.HTMLElement;
+import org.teavm.jso.dom.html.HTMLInputElement;
 
 public abstract class SceneEditorHTMLElement implements HTMLElement {
 
@@ -24,4 +25,8 @@ public abstract class SceneEditorHTMLElement implements HTMLElement {
     public static native SceneEditorHTMLElement create();
 
     public abstract EditorHTMLCanvasElement currentCanvas();
+
+    public abstract HTMLInputElement gridWidth();
+
+    public abstract HTMLInputElement gridHeight();
 }
