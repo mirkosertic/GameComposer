@@ -85,37 +85,7 @@ public class GameSceneEditor {
             break;
         }
 
-        runSceneStrategy = new PlaySceneStrategy(editorState.getRuntimeFactory(), theGameLoopFactory, new DefaultNetworkConnector()) {
-
-            private TeaVMGameView gameView;
-
-            @Override
-            protected void loadOtherScene(String aSceneId) {
-            }
-
-            @Override
-            protected Size getScreenSize() {
-                return new Size(aSceneEditor.currentCanvas().getClientWidth(), aSceneEditor.currentCanvas().getClientHeight());
-            }
-
-            @Override
-            protected GameView getOrCreateCurrentGameView(GameRuntime aGameRuntime, CameraBehavior aCamera, GestureDetector aGestureDetector) {
-                if (gameView == null) {
-                    gameView = new GameEditorGameView(aGameRuntime, aCamera, aGestureDetector, theRenderer);
-                } else {
-                    gameView.prepareNewScene(aGameRuntime, aCamera, aGestureDetector);
-                }
-                gameView.setSize(getScreenSize());
-                return gameView;
-            }
-
-            @Override
-            public void handleResize() {
-                Size theCurrentSize = getScreenSize();
-                getRunningGameLoop().getScene().getRuntime().getEventManager().fire(new SetScreenResolution(theCurrentSize));
-                gameView.setSize(theCurrentSize);
-            }
-        };
+        runSceneStrategy = new GameSceneEditorPlaySceneStrategy(editorState.getRuntimeFactory(), theGameLoopFactory, aSceneEditor, theRenderer);
 
         EditorHTMLCanvasElement theCanvas = aSceneEditor.currentCanvas();
         theCanvas.addEventListener("click", evt -> onMouseClick((TeaVMMouseEvent) evt));

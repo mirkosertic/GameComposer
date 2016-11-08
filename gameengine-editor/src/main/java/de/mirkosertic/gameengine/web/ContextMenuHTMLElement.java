@@ -37,8 +37,8 @@ public abstract class ContextMenuHTMLElement implements HTMLElement {
     }
 
     public void showAt(TeaVMMouseEvent aMouseEvent) {
-        getStyle().setProperty("left", aMouseEvent.getClientX() - 5+"");
-        getStyle().setProperty("top", aMouseEvent.getClientY() - 5+"");
+        getStyle().setProperty("left", aMouseEvent.getClientX() - 20+"");
+        getStyle().setProperty("top", aMouseEvent.getClientY() - 20+"");
         Window theWindow = Window.current();
         Polymer.dom(theWindow.getDocument().getBody()).appendChild(this);
         addEventListener("mouseleave", e -> {
