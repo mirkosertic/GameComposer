@@ -30,7 +30,7 @@ public class GameEditorGameView extends TeaVMGameView {
 
     public static abstract class GridUniforms implements Uniforms {
 
-        @JSBody(params = {"aXOffset", "aYOffset", "aWidth", "aHeight"}, script = "return {width: {type: 'f', value: aWidth}, height: {type: 'f', value: aHeight}, xoffset: {type: 'f', value: aYOffset}, yoffset: {type: 'f', value: aXOffset}};")
+        @JSBody(params = {"aXOffset", "aYOffset", "aWidth", "aHeight"}, script = "return {width: {type: 'f', value: aWidth}, height: {type: 'f', value: aHeight}, xoffset: {type: 'f', value: aYOffset}, yoffset: {type: 'f', value: aXOffset}, screenHeight: {type: 'f', value: 0}};")
         public static native GridUniforms create(float aXOffset, float aYOffset, float aWidth, float aHright);
 
         @JSBody(params = {"aFilter", "aValue"}, script = "aFilter.uniforms.width = aValue;")
@@ -44,6 +44,9 @@ public class GameEditorGameView extends TeaVMGameView {
 
         @JSBody(params = {"aFilter", "aValue"}, script = "aFilter.uniforms.yoffset = aValue;")
         public static native void setYOffset(Filter aFilter, float aValue);
+
+        @JSBody(params = {"aFilter", "aValue"}, script = "aFilter.uniforms.screenHeight = aValue;")
+        public static native void setScrenHeight(Filter aFilter, float aValue);
 
     }
 
@@ -72,13 +75,14 @@ public class GameEditorGameView extends TeaVMGameView {
                 "uniform float yoffset;\n" +
                 "uniform float width;\n" +
                 "uniform float height;\n" +
+                "uniform float screenHeight;\n" +
                 "\n" +
                 "int func_mod(int x, int y) {\n" +
                 "    return int(float(x)-float(y)*floor(float(x)/float(y)));\n" +
                  "}"+
                 "\n" +
                 "void main(void) {\n" +
-                "   if ((int(mod(xoffset + gl_FragCoord.x + 0.5, width)) == 0) || (int(mod(yoffset - gl_FragCoord.y - 0.5, height)) == 0)) {\n" +
+                "   if ((int(mod(xoffset + gl_FragCoord.x + 0.5, width)) == 0) || (int(mod(yoffset + (screenHeight - gl_FragCoord.y) - 0.5, height)) == 0)) {\n" +
                 "       gl_FragColor.r = 1.0;\n" +
                 "       gl_FragColor.g = 1.0;\n" +
                 "       gl_FragColor.b = 1.0;\n" +
@@ -104,6 +108,7 @@ public class GameEditorGameView extends TeaVMGameView {
         GridUniforms.setYOffset(gridFilter, theCamera.y);
         GridUniforms.setWidth(gridFilter, (float) gridWidth.get());
         GridUniforms.setHeight(gridFilter, (float) gridHeight.get());
+        GridUniforms.setScrenHeight(gridFilter, (float) getCurrentScreenSize().height);
         super.renderGame(aGameTime, aElapsedTimeSinceLastLoop, aScene, aStatistics);
     }
 
