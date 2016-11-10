@@ -16,28 +16,12 @@
 package de.mirkosertic.gameengine.web;
 
 import de.mirkosertic.gameengine.camera.CameraBehavior;
-import de.mirkosertic.gameengine.camera.SetScreenResolution;
-import de.mirkosertic.gameengine.core.GameLoop;
-import de.mirkosertic.gameengine.core.GameLoopFactory;
-import de.mirkosertic.gameengine.core.GameObject;
-import de.mirkosertic.gameengine.core.GameObjectInstance;
-import de.mirkosertic.gameengine.core.GameRuntime;
-import de.mirkosertic.gameengine.core.GameScene;
-import de.mirkosertic.gameengine.core.GameView;
-import de.mirkosertic.gameengine.core.GestureDetector;
-import de.mirkosertic.gameengine.core.PlaySceneStrategy;
-import de.mirkosertic.gameengine.network.DefaultNetworkConnector;
+import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.physic.DisableDynamicPhysics;
 import de.mirkosertic.gameengine.physic.EnableDynamicPhysics;
-import de.mirkosertic.gameengine.teavm.TeaVMDragEvent;
-import de.mirkosertic.gameengine.teavm.TeaVMGameView;
-import de.mirkosertic.gameengine.teavm.TeaVMLogger;
-import de.mirkosertic.gameengine.teavm.TeaVMMap;
-import de.mirkosertic.gameengine.teavm.TeaVMMouseEvent;
-import de.mirkosertic.gameengine.teavm.TeaVMWindow;
+import de.mirkosertic.gameengine.teavm.*;
 import de.mirkosertic.gameengine.teavm.pixi.Renderer;
 import de.mirkosertic.gameengine.type.Position;
-import de.mirkosertic.gameengine.type.Size;
 import org.teavm.jso.JSObject;
 import org.teavm.jso.browser.Window;
 import org.teavm.jso.dom.events.EventListener;
@@ -48,7 +32,7 @@ public class GameSceneEditor {
     private final SceneEditorHTMLElement sceneEditorHTMLElement;
     private final Window window;
 
-    private final PlaySceneStrategy runSceneStrategy;
+    private final GameSceneEditorPlaySceneStrategy runSceneStrategy;
 
     private GameObjectInstance draggingInstance;
     private Position draggingMouseWorldPosition;
@@ -224,6 +208,9 @@ public class GameSceneEditor {
         if (runSceneStrategy.hasGameLoop()) {
 
             if (draggingInstance != null) {
+
+                draggingInstance.positionProperty().set(sceneEditorHTMLElement.eventuallySnapToGrid(draggingInstance.positionProperty().get()));
+
                 runSceneStrategy.getRunningGameLoop().getScene().getRuntime().getEventManager().fire(new EnableDynamicPhysics(draggingInstance));
             }
             draggingMouseWorldPosition = null;
@@ -266,9 +253,8 @@ public class GameSceneEditor {
     private void onDragDropped(TeaVMDragEvent aEvent) {
         if (dndCreateInstance != null) {
             aEvent.preventDefault();
-            //if (snapToGrid.isSelected()) {
-              //  dndCreateInstance.positionProperty().set(gameView.snapToGrid(dndCreateInstance.positionProperty().get()));
-            //}
+
+            dndCreateInstance.positionProperty().set(sceneEditorHTMLElement.eventuallySnapToGrid(dndCreateInstance.positionProperty().get()));
 
             runSceneStrategy.getRunningGameLoop().getScene().getRuntime().getEventManager().fire(new EnableDynamicPhysics(dndCreateInstance));
             dndCreateInstance = null;
