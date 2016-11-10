@@ -147,6 +147,10 @@
                     this.selectTab(this.selectedtab);
                 }
             },
+
+            ready: function() {
+                this.fire("ready", {});
+            }
         });
     </script>
 </dom-module>
