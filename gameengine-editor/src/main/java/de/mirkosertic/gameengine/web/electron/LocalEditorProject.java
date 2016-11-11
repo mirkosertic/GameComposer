@@ -29,6 +29,6 @@ public class LocalEditorProject implements EditorProject {
     }
 
     public void initializeLoader(Callback aCallback) {
-        aCallback.onSuccess(this, new LocalResourceLoaderFactory(fs, localPath));
+        aCallback.onSuccess(this, new LocalResourceAccessor(fs, localPath));
     }
 }

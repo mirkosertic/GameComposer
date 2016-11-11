@@ -15,6 +15,8 @@
  */
 package de.mirkosertic.gameengine.web.electron;
 
+import java.io.IOException;
+
 import de.mirkosertic.gameengine.AbstractGameRuntimeFactory;
 import de.mirkosertic.gameengine.core.Game;
 import de.mirkosertic.gameengine.core.GameScene;
@@ -23,19 +25,23 @@ import de.mirkosertic.gameengine.teavm.TeaVMGameResourceLoader;
 import de.mirkosertic.gameengine.teavm.TeaVMGameSceneLoader;
 import de.mirkosertic.gameengine.teavm.TeaVMLoadedSpriteSheet;
 import de.mirkosertic.gameengine.type.ResourceName;
-import de.mirkosertic.gameengine.web.ResourceLoaderFactory;
+import de.mirkosertic.gameengine.web.Blob;
+import de.mirkosertic.gameengine.web.ResourceAccessor;
 import de.mirkosertic.gameengine.web.electron.fs.FS;
 
-import java.io.IOException;
-
-public class LocalResourceLoaderFactory implements ResourceLoaderFactory {
+public class LocalResourceAccessor implements ResourceAccessor {
 
     private final FS fs;
     private final String localPath;
 
-    public LocalResourceLoaderFactory(FS aFS, String aLocalPath) {
+    public LocalResourceAccessor(FS aFS, String aLocalPath) {
         fs = aFS;
         localPath = aLocalPath;
+    }
+
+    @Override
+    public void persistFile(String aFileName, Blob aContent, CompleteCallback aCallback) {
+        throw new IllegalStateException("Not implemented!");
     }
 
     @Override

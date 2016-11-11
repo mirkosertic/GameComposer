@@ -15,7 +15,12 @@
  */
 package de.mirkosertic.gameengine.web;
 
+import org.teavm.jso.JSBody;
 import org.teavm.jso.JSObject;
+import org.teavm.jso.core.JSString;
 
-public interface Blob extends JSObject {
+public abstract class Blob implements JSObject {
+
+    @JSBody(params = {"aObject"}, script = "return new Blob([aObject], {type : 'application/json'});")
+    public static native Blob createJSONBlob(JSString aObject);
 }
