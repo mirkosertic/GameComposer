@@ -15,6 +15,9 @@
  */
 package de.mirkosertic.gameengine.web;
 
+import org.teavm.jso.browser.Window;
+import org.teavm.jso.dom.html.HTMLCanvasElement;
+
 import de.mirkosertic.gameengine.core.Game;
 import de.mirkosertic.gameengine.teavm.TeaVMGameLoader;
 import de.mirkosertic.gameengine.teavm.TeaVMGameResourceLoader;
@@ -23,8 +26,6 @@ import de.mirkosertic.gameengine.teavm.TeaVMGameSceneLoader;
 import de.mirkosertic.gameengine.teavm.TeaVMGenericPlayer;
 import de.mirkosertic.gameengine.teavm.TeaVMLogger;
 import de.mirkosertic.gameengine.web.github.GithubEditorProject;
-import org.teavm.jso.browser.Window;
-import org.teavm.jso.dom.html.HTMLCanvasElement;
 
 public class WebUI {
 
@@ -55,14 +56,14 @@ public class WebUI {
             }
 
             @Override
-            public void onSuccess(EditorProject aProject, ResourceLoaderFactory aResourceLoaderFactory) {
+            public void onSuccess(EditorProject aProject, ResourceAccessor aResourceLoaderFactory) {
                 TeaVMLogger.info("ResourceLoader created");
                 initializeWithResourceLoaderFactory(aResourceLoaderFactory, aProject);
             }
         });
     }
 
-    private static void initializeWithResourceLoaderFactory(ResourceLoaderFactory aResourceLoaderFactory, EditorProject aProject) {
+    private static void initializeWithResourceLoaderFactory(ResourceAccessor aResourceLoaderFactory, EditorProject aProject) {
         if (WINDOW.getLocation().getPathName().endsWith("/index.html")) {
 
             TeaVMLogger.info("Starting editor");

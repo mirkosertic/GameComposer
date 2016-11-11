@@ -15,17 +15,27 @@
  */
 package de.mirkosertic.gameengine.web;
 
-import de.mirkosertic.gameengine.camera.CameraBehavior;
-import de.mirkosertic.gameengine.core.*;
-import de.mirkosertic.gameengine.physic.DisableDynamicPhysics;
-import de.mirkosertic.gameengine.physic.EnableDynamicPhysics;
-import de.mirkosertic.gameengine.teavm.*;
-import de.mirkosertic.gameengine.teavm.pixi.Renderer;
-import de.mirkosertic.gameengine.type.Position;
 import org.teavm.jso.JSObject;
 import org.teavm.jso.browser.Window;
 import org.teavm.jso.dom.events.EventListener;
 import org.teavm.jso.json.JSON;
+
+import de.mirkosertic.gameengine.camera.CameraBehavior;
+import de.mirkosertic.gameengine.core.GameLoop;
+import de.mirkosertic.gameengine.core.GameLoopFactory;
+import de.mirkosertic.gameengine.core.GameObject;
+import de.mirkosertic.gameengine.core.GameObjectInstance;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.physic.DisableDynamicPhysics;
+import de.mirkosertic.gameengine.physic.EnableDynamicPhysics;
+import de.mirkosertic.gameengine.teavm.TeaVMDragEvent;
+import de.mirkosertic.gameengine.teavm.TeaVMGameView;
+import de.mirkosertic.gameengine.teavm.TeaVMLogger;
+import de.mirkosertic.gameengine.teavm.TeaVMMap;
+import de.mirkosertic.gameengine.teavm.TeaVMMouseEvent;
+import de.mirkosertic.gameengine.teavm.TeaVMWindow;
+import de.mirkosertic.gameengine.teavm.pixi.Renderer;
+import de.mirkosertic.gameengine.type.Position;
 
 public class GameSceneEditor {
 
@@ -119,13 +129,24 @@ public class GameSceneEditor {
     }
 
     private void onPreview() {
+        GameScene theScene = runSceneStrategy.getRunningGameLoop().getScene();
+        editorState.saveScene(theScene, new EditorState.WriteListener() {
+            @Override
+            public void written() {
 
-        JSObject theJSForm = TeaVMMap.toJS(runSceneStrategy.getRunningGameLoop().getScene().serialize());
-        String theJSON = JSON.stringify(theJSForm);
+                JSObject theJSForm = TeaVMMap.toJS(theScene.serialize());
+                String theJSON = JSON.stringify(theJSForm);
 
-        editorState.getEditorProject().setCurrentPreview(theJSON);
+                editorState.getEditorProject().setCurrentPreview(theJSON);
 
-        window.open("preview.html", "_blank");
+                window.open("preview.html", "_blank");
+            }
+
+            @Override
+            public void error(String aMessage) {
+                Toast.error("Error writing data : " + aMessage);
+            }
+        });
     }
 
     private void onMouseClick(TeaVMMouseEvent aEvent) {

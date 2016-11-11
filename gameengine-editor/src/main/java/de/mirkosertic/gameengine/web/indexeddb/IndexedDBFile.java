@@ -15,11 +15,12 @@
  */
 package de.mirkosertic.gameengine.web.indexeddb;
 
-import de.mirkosertic.gameengine.web.Blob;
-import de.mirkosertic.gameengine.web.File;
 import org.teavm.jso.JSBody;
 import org.teavm.jso.JSObject;
 import org.teavm.jso.core.JSString;
+
+import de.mirkosertic.gameengine.web.Blob;
+import de.mirkosertic.gameengine.web.File;
 
 public abstract class IndexedDBFile implements File {
 
@@ -29,4 +30,7 @@ public abstract class IndexedDBFile implements File {
 
     @JSBody(params = {"aFileName", "aBlob"}, script = "return {filename: aFileName, content: aBlob, status: 'cached'};")
     public static native IndexedDBFile createCached(String aFileName, Blob aBlob);
+
+    @JSBody(params = {"aFileName", "aBlob"}, script = "return {filename: aFileName, content: aBlob, status: 'changed'};")
+    public static native IndexedDBFile createChanged(String aFileName, Blob aBlob);
 }

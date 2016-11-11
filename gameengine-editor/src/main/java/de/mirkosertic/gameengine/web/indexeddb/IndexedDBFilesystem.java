@@ -15,16 +15,17 @@
  */
 package de.mirkosertic.gameengine.web.indexeddb;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.teavm.jso.JSBody;
+import org.teavm.jso.JSObject;
+
 import de.mirkosertic.gameengine.teavm.TeaVMLogger;
 import de.mirkosertic.gameengine.web.Blob;
 import de.mirkosertic.gameengine.web.File;
 import de.mirkosertic.gameengine.web.FileReader;
 import de.mirkosertic.gameengine.web.Filesystem;
-import org.teavm.jso.JSBody;
-import org.teavm.jso.JSObject;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class IndexedDBFilesystem implements Filesystem {
 
@@ -73,10 +74,19 @@ public class IndexedDBFilesystem implements Filesystem {
 
     @Override
     public void storeFile(String aFileName, Blob aBlob, FileProcessor aProcessor) {
-
         IndexedDBTransaction theTransction = database.transaction(FILE_DATASTORE, "readwrite");
         IndexedDBObjectStore theObjectStore = theTransction.objectStore(FILE_DATASTORE);
         IndexedDBFile theFile = IndexedDBFile.createCached(aFileName, aBlob);
+        IndexedDBRequest theRequest = theObjectStore.put(theFile, IndexedDBFile.createFileKey(aFileName));
+        theRequest.setOnerror(() -> TeaVMLogger.error("Error storing file " + aFileName));
+        theRequest.setOnsuccess(() -> aProcessor.process(theFile));
+    }
+
+    @Override
+    public void updateFile(String aFileName, Blob aBlob, FileProcessor aProcessor) {
+        IndexedDBTransaction theTransction = database.transaction(FILE_DATASTORE, "readwrite");
+        IndexedDBObjectStore theObjectStore = theTransction.objectStore(FILE_DATASTORE);
+        IndexedDBFile theFile = IndexedDBFile.createChanged(aFileName, aBlob);
         IndexedDBRequest theRequest = theObjectStore.put(theFile, IndexedDBFile.createFileKey(aFileName));
         theRequest.setOnerror(() -> TeaVMLogger.error("Error storing file " + aFileName));
         theRequest.setOnsuccess(() -> aProcessor.process(theFile));

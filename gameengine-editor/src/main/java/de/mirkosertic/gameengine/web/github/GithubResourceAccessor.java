@@ -15,6 +15,10 @@
  */
 package de.mirkosertic.gameengine.web.github;
 
+import java.io.IOException;
+
+import org.teavm.jso.ajax.XMLHttpRequest;
+
 import de.mirkosertic.gameengine.AbstractGameRuntimeFactory;
 import de.mirkosertic.gameengine.core.Game;
 import de.mirkosertic.gameengine.teavm.TeaVMGameLoader;
@@ -23,24 +27,37 @@ import de.mirkosertic.gameengine.teavm.TeaVMGameSceneLoader;
 import de.mirkosertic.gameengine.teavm.TeaVMLoadedSpriteSheet;
 import de.mirkosertic.gameengine.teavm.TeaVMLogger;
 import de.mirkosertic.gameengine.type.ResourceName;
+import de.mirkosertic.gameengine.web.Blob;
 import de.mirkosertic.gameengine.web.BlobLoader;
 import de.mirkosertic.gameengine.web.File;
 import de.mirkosertic.gameengine.web.Filesystem;
-import de.mirkosertic.gameengine.web.ResourceLoaderFactory;
-import org.teavm.jso.ajax.XMLHttpRequest;
+import de.mirkosertic.gameengine.web.ResourceAccessor;
 
-import java.io.IOException;
-
-public class GithubResourceLoaderFactory implements ResourceLoaderFactory {
+public class GithubResourceAccessor implements ResourceAccessor {
 
     private final String baseURL;
     private final BlobLoader blobLoader;
     private final Filesystem fileSystem;
 
-    public GithubResourceLoaderFactory(String aBaseURL, Filesystem aFileSystem) {
+    public GithubResourceAccessor(String aBaseURL, Filesystem aFileSystem) {
         baseURL = aBaseURL;
         fileSystem = aFileSystem;
         blobLoader = new BlobLoader();
+    }
+
+    @Override
+    public void persistFile(String aFileName, Blob aContent, CompleteCallback aCallback) {
+        fileSystem.updateFile(aFileName, aContent, new Filesystem.FileProcessor() {
+            @Override
+            public void process(File aFile) {
+                aCallback.fileWritten();
+            }
+
+            @Override
+            public void doesNotExist(String aFileName) {
+                aCallback.error("Error writing file " + aFileName);
+            }
+        });
     }
 
     @Override

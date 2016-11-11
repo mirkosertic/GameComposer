@@ -15,19 +15,31 @@
  */
 package de.mirkosertic.gameengine.web;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.teavm.jso.JSObject;
+import org.teavm.jso.core.JSString;
+import org.teavm.jso.json.JSON;
+
 import de.mirkosertic.gameengine.AbstractGameRuntimeFactory;
 import de.mirkosertic.gameengine.core.Game;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.teavm.TeaVMGameLoader;
 import de.mirkosertic.gameengine.teavm.TeaVMGameResourceLoader;
 import de.mirkosertic.gameengine.teavm.TeaVMGameSceneLoader;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import de.mirkosertic.gameengine.teavm.TeaVMMap;
 
 public class EditorState {
+
+    public interface WriteListener {
+
+        void written();
+
+        void error(String aMessage);
+    }
 
     public interface LoadingListener {
 
@@ -44,13 +56,13 @@ public class EditorState {
     private final Map<String, GameScene> loadedScenes;
     private final EditorProject editorProject;
     private final AbstractGameRuntimeFactory runtimeFactory;
-    private final ResourceLoaderFactory resourceLoaderFactory;
+    private final ResourceAccessor resourceAccessor;
 
-    public EditorState(EditorProject aProject, AbstractGameRuntimeFactory aRuntimeFactory, ResourceLoaderFactory aResourceLoaderFactory) {
+    public EditorState(EditorProject aProject, AbstractGameRuntimeFactory aRuntimeFactory, ResourceAccessor aResourceAccessor) {
         loadedScenes = new HashMap<>();
         editorProject = aProject;
         runtimeFactory = aRuntimeFactory;
-        resourceLoaderFactory = aResourceLoaderFactory;
+        resourceAccessor = aResourceAccessor;
     }
 
     public EditorProject getEditorProject() {
@@ -69,8 +81,64 @@ public class EditorState {
         return loadedScenes.get(aSceneId);
     }
 
+    public void saveGame(WriteListener aListener) {
+        JSObject theJSForm = TeaVMMap.toJS(loadedGame.serialize());
+        String theJSON = JSON.stringify(theJSForm);
+
+        Blob theBlob = Blob.createJSONBlob(JSString.valueOf(theJSON));
+        resourceAccessor.persistFile("/game.json", theBlob, new ResourceAccessor.CompleteCallback() {
+            @Override
+            public void fileWritten() {
+                aListener.written();
+            }
+
+            @Override
+            public void error(String aMessage) {
+                aListener.error(aMessage);
+            }
+        });
+    }
+
+    private String getIDForScene(GameScene aGameScene) {
+        for (Map.Entry<String, GameScene> theEntry : loadedScenes.entrySet()) {
+            if (theEntry.getValue() == aGameScene) {
+                return theEntry.getKey();
+            }
+        }
+        throw new IllegalStateException("Unknown game scane");
+    }
+
+    public void saveScene(GameScene aScene, WriteListener aListener) {
+        saveGame(new WriteListener() {
+            @Override
+            public void written() {
+                JSObject theJSForm = TeaVMMap.toJS(aScene.serialize());
+                String theJSON = JSON.stringify(theJSForm);
+                Blob theBlob = Blob.createJSONBlob(JSString.valueOf(theJSON));
+
+                resourceAccessor.persistFile("/" + getIDForScene(aScene) + "/scene.json", theBlob,
+                    new ResourceAccessor.CompleteCallback() {
+                        @Override
+                        public void fileWritten() {
+                            aListener.written();
+                        }
+
+                        @Override
+                        public void error(String aMessage) {
+                            aListener.error(aMessage);
+                        }
+                });
+            }
+
+            @Override
+            public void error(String aMessage) {
+                aListener.error(aMessage);
+            }
+        });
+    }
+
     public void load(LoadingListener aListener) {
-        TeaVMGameLoader theGameLoader = resourceLoaderFactory.createGameLoader(new TeaVMGameLoader.GameLoadedListener() {
+        TeaVMGameLoader theGameLoader = resourceAccessor.createGameLoader(new TeaVMGameLoader.GameLoadedListener() {
             @Override
             public void onGameLoaded(Game aGame) {
                 loadedGame = aGame;
@@ -89,8 +157,8 @@ public class EditorState {
     private void loadScenes(LoadingListener aLoadingListener) {
         String[] theKnownScenes = loadedGame.getKnownScenes();
         for (String theScene : theKnownScenes) {
-            TeaVMGameResourceLoader theLoader = resourceLoaderFactory.createResourceLoaderFor(theScene);
-            TeaVMGameSceneLoader theSceneLoader = resourceLoaderFactory.createSceneLoader(
+            TeaVMGameResourceLoader theLoader = resourceAccessor.createResourceLoaderFor(theScene);
+            TeaVMGameSceneLoader theSceneLoader = resourceAccessor.createSceneLoader(
                     new TeaVMGameSceneLoader.GameSceneLoadedListener() {
                         @Override
                         public void onGameSceneLoaded(GameScene aScene) {
