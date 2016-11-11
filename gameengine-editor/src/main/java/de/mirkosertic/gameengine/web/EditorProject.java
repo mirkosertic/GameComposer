@@ -23,7 +23,7 @@ public interface EditorProject {
 
         void onError(EditorProject aProject);
 
-        void onSuccess(EditorProject aProject, ResourceLoaderFactory aResourceLoaderFactory);
+        void onSuccess(EditorProject aProject, ResourceAccessor aResourceAccessor);
     }
 
     void initializeLoader(Callback aCallback);

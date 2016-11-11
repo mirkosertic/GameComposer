@@ -102,7 +102,7 @@
                             <runtime>SEPARATE</runtime>
                             <!-- Whether TeaVM should produce minified JavaScript. Can reduce JavaScript file size more than
                                  two times -->
-                            <minifying>true</minifying>
+                            <minifying>false</minifying>
                             <optimizationLevel>FULL</optimizationLevel>
                             <!-- Whether TeaVM should produce debug information for its built-in debugger -->
                             <debugInformationGenerated>true</debugInformationGenerated>

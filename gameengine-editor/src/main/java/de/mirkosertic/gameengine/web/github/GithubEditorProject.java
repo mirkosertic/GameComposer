@@ -43,7 +43,7 @@ public class GithubEditorProject implements EditorProject {
             @Override
             public void onSuccess(IndexedDBFilesystem aFilesystem) {
                 String theBaseURL = "https://raw.githubusercontent.com/" + username + "/" + repository + "/master" + relativePath;
-                aCallback.onSuccess(GithubEditorProject.this, new GithubResourceLoaderFactory(theBaseURL, aFilesystem));
+                aCallback.onSuccess(GithubEditorProject.this, new GithubResourceAccessor(theBaseURL, aFilesystem));
             }
         });
     }

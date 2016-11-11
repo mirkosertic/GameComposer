@@ -33,5 +33,7 @@ public interface Filesystem {
 
     void storeFile(String aFileName, Blob aBlob, FileProcessor aProcessor);
 
+    void updateFile(String aFileName, Blob aBlob, FileProcessor aProcessor);
+
     void asDataURL(File aFile, DataUrlCallback aCallback);
 }

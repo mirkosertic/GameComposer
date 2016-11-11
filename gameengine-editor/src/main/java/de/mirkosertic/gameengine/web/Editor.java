@@ -15,6 +15,13 @@
  */
 package de.mirkosertic.gameengine.web;
 
+import org.teavm.jso.JSBody;
+import org.teavm.jso.JSObject;
+import org.teavm.jso.browser.Window;
+import org.teavm.jso.core.JSArray;
+import org.teavm.jso.core.JSString;
+import org.teavm.jso.dom.html.HTMLElement;
+
 import de.mirkosertic.gameengine.core.EventSheet;
 import de.mirkosertic.gameengine.core.Game;
 import de.mirkosertic.gameengine.core.GameObject;
@@ -29,17 +36,11 @@ import de.mirkosertic.gameengine.web.electron.Dialog;
 import de.mirkosertic.gameengine.web.electron.DialogOptions;
 import de.mirkosertic.gameengine.web.electron.Electron;
 import de.mirkosertic.gameengine.web.electron.LocalEditorProject;
-import de.mirkosertic.gameengine.web.electron.LocalResourceLoaderFactory;
+import de.mirkosertic.gameengine.web.electron.LocalResourceAccessor;
 import de.mirkosertic.gameengine.web.electron.Menu;
 import de.mirkosertic.gameengine.web.electron.MenuItem;
 import de.mirkosertic.gameengine.web.electron.Remote;
 import de.mirkosertic.gameengine.web.electron.fs.FS;
-import org.teavm.jso.JSBody;
-import org.teavm.jso.JSObject;
-import org.teavm.jso.browser.Window;
-import org.teavm.jso.core.JSArray;
-import org.teavm.jso.core.JSString;
-import org.teavm.jso.dom.html.HTMLElement;
 
 public class Editor {
 
@@ -75,7 +76,7 @@ public class Editor {
         }
     }
 
-    public void boot(EditorProject aProject, ResourceLoaderFactory aResourceLoaderFactory) {
+    public void boot(EditorProject aProject, ResourceAccessor aResourceLoaderFactory) {
 
         TeaVMGameRuntimeFactory theRuntimeFactory = new TeaVMGameRuntimeFactory(
                 !window.getLocation().getFullURL().contains("nothreading"),
@@ -253,7 +254,7 @@ public class Editor {
             JSArray<JSString> theResults = (JSArray<JSString>) aPaths;
             if (theResults.getLength() == 1) {
                 String thePath = theResults.get(0).stringValue();
-                boot(new LocalEditorProject(aFilesystem, thePath), new LocalResourceLoaderFactory(aFilesystem, thePath));
+                boot(new LocalEditorProject(aFilesystem, thePath), new LocalResourceAccessor(aFilesystem, thePath));
             }
         }
     }

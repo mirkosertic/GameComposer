@@ -1,13 +1,19 @@
 package de.mirkosertic.gameengine.core;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import org.junit.Test;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class GameTest {
 
@@ -61,7 +67,7 @@ public class GameTest {
         assertEquals("true", theData.get("enablewebgl"));
         assertEquals("false", theData.get("enableDebug"));
         assertEquals("false", theData.get("enableNetworking"));
-        assertEquals(0, ((String[])theData.get("scenes")).length);
+        assertEquals(0, ((List<String>)theData.get("scenes")).size());
         assertEquals("https://glowing-heat-2189.firebaseio.com", theData.get("firebaseURL"));
 
         Map<String, String> theProps = (Map<String, String>) theData.get("customProperties");
