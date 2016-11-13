@@ -16,16 +16,12 @@
 package de.mirkosertic.gameengine.web;
 
 import de.mirkosertic.gameengine.AbstractGameRuntimeFactory;
+import de.mirkosertic.gameengine.core.Promise;
 import de.mirkosertic.gameengine.teavm.TeaVMGameLoader;
 import de.mirkosertic.gameengine.teavm.TeaVMGameResourceLoader;
 import de.mirkosertic.gameengine.teavm.TeaVMGameSceneLoader;
 
 public interface ResourceAccessor {
-
-    interface CompleteCallback {
-        void fileWritten();
-        void error(String aMessage);
-    }
 
     TeaVMGameSceneLoader createSceneLoader(TeaVMGameSceneLoader.GameSceneLoadedListener aListener,
             AbstractGameRuntimeFactory aRuntimeFactory);
@@ -34,5 +30,5 @@ public interface ResourceAccessor {
 
     TeaVMGameResourceLoader createResourceLoaderFor(String aSceneID);
 
-    void persistFile(String aFileName, Blob aContent, CompleteCallback aCallback);
+    Promise<File, String> persistFile(String aFileName, Blob aContent);
 }

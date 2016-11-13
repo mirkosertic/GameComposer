@@ -23,7 +23,6 @@ import javafx.scene.Node;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
-
 import org.controlsfx.control.PropertySheet;
 import org.controlsfx.property.editor.PropertyEditor;
 
@@ -64,10 +63,8 @@ public class EditAnimationPropertyEditor implements PropertyEditor<Animation> {
         item.setValue(aValue);
         GameScene theGameScene = item.getTemplate().getGameScene();
         GameResourceLoader theLoader = item.getPersistenceManager().createResourceLoaderFor(theGameScene);
-        try {
-            theLoader.load(aValue.computeCurrentFrame(0, 5), aResource -> imageView.setImage((JavaFXBitmapResource) aResource));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        theLoader.load(aValue.computeCurrentFrame(0, 5)).thenContinue(aResult -> {
+            imageView.setImage((JavaFXBitmapResource) aResult);
+        });
     }
 }

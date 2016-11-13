@@ -15,8 +15,10 @@
  */
 package de.mirkosertic.gameengine.javafx;
 
+import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.core.GameResourceLoader;
 import de.mirkosertic.gameengine.core.LoadedSpriteSheet;
+import de.mirkosertic.gameengine.core.Promise;
 import de.mirkosertic.gameengine.type.ResourceName;
 
 import java.io.IOException;
@@ -27,26 +29,30 @@ public abstract class JavaFXAbstractGameResourceLoader implements GameResourceLo
     protected abstract InputStream getInputStreamFor(ResourceName aResourceName) throws IOException;
 
     @Override
-    public void load(ResourceName aResourceName, Listener aListener) throws IOException {
-        InputStream theStream = getInputStreamFor(aResourceName);
-        if (theStream == null) {
-            return;
-        }
-        if (aResourceName.name.toLowerCase().endsWith(".png")) {
-            aListener.handle(new JavaFXBitmapResource(theStream));
-        }
-        try {
-            if (aResourceName.name.toLowerCase().endsWith(".au")) {
-                aListener.handle(new JavaFXAudioResource(theStream));
+    public Promise<GameResource, String> load(ResourceName aResourceName) {
+        return new Promise<>((Promise.Executor) (aResolver, aRejector) -> {
+            try {
+                InputStream theStream = getInputStreamFor(aResourceName);
+                if (theStream == null) {
+                    aRejector.reject("Not found : " + aResourceName.name);
+                    return;
+                }
+                if (aResourceName.name.toLowerCase().endsWith(".png")) {
+                    aResolver.resolve(new JavaFXBitmapResource(theStream));
+                }
+
+                if (aResourceName.name.toLowerCase().endsWith(".au")) {
+                    aResolver.resolve(new JavaFXAudioResource(theStream));
+                }
+                if (aResourceName.name.toLowerCase().endsWith(".wav")) {
+                    aResolver.resolve(new JavaFXAudioResource(theStream));
+                }
+            } catch (IOException e) {
+                aRejector.reject(e.getMessage());
+            } catch (Exception e) {
+                aRejector.reject(e.getMessage());
             }
-            if (aResourceName.name.toLowerCase().endsWith(".wav")) {
-                aListener.handle(new JavaFXAudioResource(theStream));
-            }
-        } catch (IOException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new IOException(e);
-        }
+        });
     }
 
     @Override
@@ -54,7 +60,7 @@ public abstract class JavaFXAbstractGameResourceLoader implements GameResourceLo
     }
 
     @Override
-    public void loadSpriteSheet(ResourceName aResourceName, SpritesheetListener aListener) {
-        aListener.handle(LoadedSpriteSheet.EMPTY);
+    public Promise<LoadedSpriteSheet, String> loadSpriteSheet(ResourceName aResourceName) {
+        return new Promise<>((Promise.Executor) (aResolver, aRejector) -> aResolver.resolve(LoadedSpriteSheet.EMPTY));
     }
 }

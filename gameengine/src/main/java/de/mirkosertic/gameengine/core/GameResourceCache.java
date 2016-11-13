@@ -18,7 +18,6 @@ package de.mirkosertic.gameengine.core;
 import de.mirkosertic.gameengine.ArrayUtils;
 import de.mirkosertic.gameengine.type.ResourceName;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,40 +35,48 @@ public class GameResourceCache {
     }
 
     public void loadIntoCache(Spritesheet aSheet, final SuccessCallback aCallback) {
-        resourceLoader.loadSpriteSheet(aSheet.jsonFileProperty().get(),
-                new GameResourceLoader.SpritesheetListener<GameResource>() {
-                    @Override
-                    public void handle(LoadedSpriteSheet<GameResource> aSpriteSheet) {
-                        List<LoadedSpriteSheet> theSheets = ArrayUtils.asList(loadedSpriteSheets);
-                        theSheets.add(aSpriteSheet);
-                        loadedSpriteSheets = theSheets.toArray(new LoadedSpriteSheet[theSheets.size()]);
-                        aCallback.success();
-                    }
-                });
+        resourceLoader.loadSpriteSheet(aSheet.jsonFileProperty().get()).thenContinue(new Promise.NoReturnHandler<LoadedSpriteSheet>() {
+            @Override
+            public void process(LoadedSpriteSheet aResult) {
+                List<LoadedSpriteSheet> theSheets = ArrayUtils.asList(loadedSpriteSheets);
+                theSheets.add(aResult);
+                loadedSpriteSheets = theSheets.toArray(new LoadedSpriteSheet[theSheets.size()]);
+                aCallback.success();
+            }
+        });
     }
 
-    public <T extends GameResource> void getResourceFor(final ResourceName aResourceName, final GameResourceLoader.Listener aListener) throws IOException {
+    public <T extends GameResource> Promise<T, String> getResourceFor(final ResourceName aResourceName) {
 
-        for (LoadedSpriteSheet theLoadedSheet : loadedSpriteSheets) {
-            T theResource = (T) theLoadedSheet.getResourceFor(aResourceName);
-            if (theResource != null) {
-                aListener.handle(theResource);
-                return;
-            }
-        }
-
-        T theResource = (T) cachedResources.get(aResourceName.name);
-        if (theResource == null) {
-            resourceLoader.load(aResourceName, new GameResourceLoader.Listener() {
-                @Override
-                public void handle(GameResource aResource) {
-                    aListener.handle(aResource);
-                    cachedResources.put(aResourceName.name, aResource);
+        return new Promise<T, String>(new Promise.Executor() {
+            @Override
+            public void process(final PromiseResolver aResolver, final PromiseRejector aRejector) {
+                for (LoadedSpriteSheet theLoadedSheet : loadedSpriteSheets) {
+                    T theResource = (T) theLoadedSheet.getResourceFor(aResourceName);
+                    if (theResource != null) {
+                        aResolver.resolve(theResource);
+                        return;
+                    }
                 }
-            });
-        } else {
-            aListener.handle(theResource);
-        }
+
+                T theResource = (T) cachedResources.get(aResourceName.name);
+                if (theResource == null) {
+                    resourceLoader.load(aResourceName).thenContinue(new Promise.NoReturnHandler<GameResource>() {
+                        @Override
+                        public void process(GameResource aResult) {
+                            aResolver.resolve(aResult);
+                        }
+                    }).catchError(new Promise.ErrorHandler<String>() {
+                        @Override
+                        public void process(String aResult) {
+                            aRejector.reject(aResult);
+                        }
+                    });
+                } else {
+                    aResolver.resolve(theResource);
+                }
+            }
+        });
     }
 
     public void flush() {

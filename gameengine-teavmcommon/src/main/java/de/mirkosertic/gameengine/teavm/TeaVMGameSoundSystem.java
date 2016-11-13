@@ -15,8 +15,8 @@
  */
 package de.mirkosertic.gameengine.teavm;
 
-import de.mirkosertic.gameengine.core.GameResourceType;
 import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.Promise;
 import de.mirkosertic.gameengine.sound.GameSoundSystem;
 import de.mirkosertic.gameengine.teavm.howler.Config;
 import de.mirkosertic.gameengine.teavm.howler.Howl;
@@ -42,27 +42,21 @@ class TeaVMGameSoundSystem implements GameSoundSystem<TeaVMSound> {
     }
 
     @Override
-    public void play(ResourceName aResourceName, Listener<TeaVMSound> aListener) {
-        try {
-            runtime.getResourceCache().getResourceFor(aResourceName, aResource -> {
-                if (aResource.getType() == GameResourceType.SOUND) {
-                    TeaVMSoundResource theResource = (TeaVMSoundResource) aResource;
+    public Promise<TeaVMSound, String> play(ResourceName aResourceName) {
+        return new Promise<>((Promise.Executor) (aResolver, aRejector) -> runtime.getResourceCache().getResourceFor(aResourceName).thenContinue(aResult -> {
+            TeaVMSoundResource theResource = (TeaVMSoundResource) aResult;
 
-                    Howl theHowl = howls.get(theResource.getName());
-                    if (theHowl == null) {
-                        Config theConfig = Config.createConfig();
-                        theConfig.setSrc(new String[] {theResource.getName()});
-                        theConfig.setFormat(new String[] {guessFormat(aResourceName)});
-                        theHowl = Howl.createHowl(theConfig);
-                        howls.put(theResource.getName(), theHowl);
-                    }
+            Howl theHowl = howls.get(theResource.getName());
+            if (theHowl == null) {
+                Config theConfig = Config.createConfig();
+                theConfig.setSrc(new String[] {theResource.getName()});
+                theConfig.setFormat(new String[] {guessFormat(aResourceName)});
+                theHowl = Howl.createHowl(theConfig);
+                howls.put(theResource.getName(), theHowl);
+            }
 
-                    aListener.handle(new TeaVMSound(theHowl, theHowl.play()));
-                }
-            });
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+            aResolver.resolve(new TeaVMSound(theHowl, theHowl.play()));
+        }));
     }
 
     @Override

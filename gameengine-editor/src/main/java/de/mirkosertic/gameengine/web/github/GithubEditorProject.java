@@ -15,7 +15,9 @@
  */
 package de.mirkosertic.gameengine.web.github;
 
+import de.mirkosertic.gameengine.core.Promise;
 import de.mirkosertic.gameengine.web.EditorProject;
+import de.mirkosertic.gameengine.web.ResourceAccessor;
 import de.mirkosertic.gameengine.web.indexeddb.IndexedDBFilesystem;
 
 public class GithubEditorProject implements EditorProject {
@@ -34,18 +36,10 @@ public class GithubEditorProject implements EditorProject {
         relativePath = aRelativePath;
     }
 
-    public void initializeLoader(Callback aCallback) {
-        IndexedDBFilesystem.open("github_" + username + "_" + repository, new IndexedDBFilesystem.Callback() {
-            @Override
-            public void onError() {
-                aCallback.onError(GithubEditorProject.this);
-            }
-
-            @Override
-            public void onSuccess(IndexedDBFilesystem aFilesystem) {
-                String theBaseURL = "https://raw.githubusercontent.com/" + username + "/" + repository + "/master" + relativePath;
-                aCallback.onSuccess(GithubEditorProject.this, new GithubResourceAccessor(theBaseURL, aFilesystem));
-            }
+    public Promise<ResourceAccessor, String> initializeLoader() {
+        return IndexedDBFilesystem.open("github_" + username + "_" + repository).thenContinue((Promise.Handler<IndexedDBFilesystem, ResourceAccessor>) aResult -> {
+            String theBaseURL = "https://raw.githubusercontent.com/" + username + "/" + repository + "/master" + relativePath;
+            return new GithubResourceAccessor(theBaseURL, aResult);
         });
     }
 }
