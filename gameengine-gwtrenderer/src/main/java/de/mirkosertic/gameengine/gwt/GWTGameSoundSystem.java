@@ -16,9 +16,8 @@
 package de.mirkosertic.gameengine.gwt;
 
 import com.google.gwt.media.client.Audio;
-import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.core.GameResourceCache;
-import de.mirkosertic.gameengine.core.GameResourceLoader;
+import de.mirkosertic.gameengine.core.Promise;
 import de.mirkosertic.gameengine.sound.GameSoundSystem;
 import de.mirkosertic.gameengine.type.ResourceName;
 
@@ -31,19 +30,12 @@ public class GWTGameSoundSystem implements GameSoundSystem<Audio> {
     }
 
     @Override
-    public void play(ResourceName aResourceName, final Listener<Audio> aListener) {
-        try {
-            resourceCache.getResourceFor(aResourceName, new GameResourceLoader.Listener() {
-                @Override
-                public void handle(GameResource aResource) {
-                    Audio theAudio = ((GWTAudioResource) aResource).getAudio();
-                    theAudio.play();
-                    aListener.handle(theAudio);
-                }
-            });
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public Promise<Audio, String> play(ResourceName aResourceName) {
+        return new Promise<>((Promise.Executor) (aResolver, aRejector) -> resourceCache.getResourceFor(aResourceName).thenContinue(aResult -> {
+            Audio theAudio = ((GWTAudioResource) aResult).getAudio();
+            theAudio.play();
+            aResolver.resolve(theAudio);
+        }));
     }
 
     @Override

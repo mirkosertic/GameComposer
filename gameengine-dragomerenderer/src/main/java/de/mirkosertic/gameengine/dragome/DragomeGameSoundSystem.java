@@ -16,10 +16,7 @@
 package de.mirkosertic.gameengine.dragome;
 
 import com.dragome.commons.javascript.ScriptHelper;
-import de.mirkosertic.gameengine.core.GameResource;
-import de.mirkosertic.gameengine.core.GameResourceCache;
-import de.mirkosertic.gameengine.core.GameResourceLoader;
-import de.mirkosertic.gameengine.core.GameResourceType;
+import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.sound.GameSoundSystem;
 import de.mirkosertic.gameengine.type.ResourceName;
 
@@ -32,23 +29,24 @@ public class DragomeGameSoundSystem implements GameSoundSystem<DragomeSound> {
     }
 
     @Override
-    public void play(ResourceName aResourceName, Listener<DragomeSound> aListener) {
-        try {
-            resourceCache.getResourceFor(aResourceName, new GameResourceLoader.Listener() {
-                @Override
-                public void handle(GameResource aResource) {
-                    if (aResource.getType() == GameResourceType.SOUND) {
-                        DragomeGameResource theResource = (DragomeGameResource) aResource;
-                        ScriptHelper.put("sn", theResource.getName(), this);
-                        ScriptHelper.evalNoResult("new Audio(sn).play()", this);
+    public Promise<DragomeSound, String> play(ResourceName aResourceName) {
+        return new Promise<>(new Promise.Executor() {
+            @Override
+            public void process(PromiseResolver aResolver, PromiseRejector aRejector) {
+                resourceCache.getResourceFor(aResourceName).thenContinue(new Promise.NoReturnHandler<GameResource>() {
+                    @Override
+                    public void process(GameResource aResult) {
+                        if (aResult.getType() == GameResourceType.SOUND) {
+                            DragomeGameResource theResource = (DragomeGameResource) aResult;
+                            ScriptHelper.put("sn", theResource.getName(), this);
+                            ScriptHelper.evalNoResult("new Audio(sn).play()", this);
 
-                        aListener.handle(new DragomeSound());
+                            aResolver.resolve(new DragomeSound());
+                        }
                     }
-                }
-            });
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+                });
+            }
+        });
     }
 
     @Override

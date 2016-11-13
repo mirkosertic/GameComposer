@@ -15,23 +15,15 @@
  */
 package de.mirkosertic.gameengine.web.github;
 
-import java.io.IOException;
-
-import org.teavm.jso.ajax.XMLHttpRequest;
-
 import de.mirkosertic.gameengine.AbstractGameRuntimeFactory;
 import de.mirkosertic.gameengine.core.Game;
-import de.mirkosertic.gameengine.teavm.TeaVMGameLoader;
-import de.mirkosertic.gameengine.teavm.TeaVMGameResourceLoader;
-import de.mirkosertic.gameengine.teavm.TeaVMGameSceneLoader;
-import de.mirkosertic.gameengine.teavm.TeaVMLoadedSpriteSheet;
-import de.mirkosertic.gameengine.teavm.TeaVMLogger;
+import de.mirkosertic.gameengine.core.GameResource;
+import de.mirkosertic.gameengine.core.LoadedSpriteSheet;
+import de.mirkosertic.gameengine.core.Promise;
+import de.mirkosertic.gameengine.teavm.*;
 import de.mirkosertic.gameengine.type.ResourceName;
-import de.mirkosertic.gameengine.web.Blob;
-import de.mirkosertic.gameengine.web.BlobLoader;
-import de.mirkosertic.gameengine.web.File;
-import de.mirkosertic.gameengine.web.Filesystem;
-import de.mirkosertic.gameengine.web.ResourceAccessor;
+import de.mirkosertic.gameengine.web.*;
+import org.teavm.jso.ajax.XMLHttpRequest;
 
 public class GithubResourceAccessor implements ResourceAccessor {
 
@@ -46,18 +38,8 @@ public class GithubResourceAccessor implements ResourceAccessor {
     }
 
     @Override
-    public void persistFile(String aFileName, Blob aContent, CompleteCallback aCallback) {
-        fileSystem.updateFile(aFileName, aContent, new Filesystem.FileProcessor() {
-            @Override
-            public void process(File aFile) {
-                aCallback.fileWritten();
-            }
-
-            @Override
-            public void doesNotExist(String aFileName) {
-                aCallback.error("Error writing file " + aFileName);
-            }
-        });
+    public Promise<File, String> persistFile(String aFileName, Blob aContent) {
+        return fileSystem.updateFile(aFileName, aContent);
     }
 
     @Override
@@ -68,41 +50,25 @@ public class GithubResourceAccessor implements ResourceAccessor {
             public void loadFromServer(Game aGame, String aSceneName, TeaVMGameResourceLoader aResourceLoader) {
 
                 String theFileName = "/" + aSceneName + "/scene.json";
-                fileSystem.openFile(theFileName, new Filesystem.FileProcessor() {
-
-                    @Override
-                    public void process(File aFile) {
-                        fileSystem.asDataURL(aFile, aValue -> {
+                fileSystem.openFile(theFileName).thenContinue(aResult -> {
+                    fileSystem.asDataURL(aResult, aValue -> {
+                        XMLHttpRequest theRequest = XMLHttpRequest.create();
+                        theRequest.overrideMimeType("text/plain");
+                        theRequest.open("GET", aValue);
+                        theRequest.onComplete(() -> listener.onGameSceneLoaded(parse(aGame, theRequest.getResponseText(), aResourceLoader)));
+                        theRequest.send();
+                    });
+                }).catchError(aResult -> {
+                    String theURL = baseURL + theFileName;
+                    blobLoader.load(theURL, (aURL, aBlob) -> fileSystem.storeFile(theFileName, aBlob).thenContinue(aResult1 -> {
+                        fileSystem.asDataURL(aResult1, aValue -> {
                             XMLHttpRequest theRequest = XMLHttpRequest.create();
                             theRequest.overrideMimeType("text/plain");
                             theRequest.open("GET", aValue);
                             theRequest.onComplete(() -> listener.onGameSceneLoaded(parse(aGame, theRequest.getResponseText(), aResourceLoader)));
                             theRequest.send();
                         });
-                    }
-
-                    @Override
-                    public void doesNotExist(String aFileName) {
-
-                        String theURL = baseURL + theFileName;
-                        blobLoader.load(theURL, (aURL, aBlob) -> fileSystem.storeFile(theFileName, aBlob, new Filesystem.FileProcessor() {
-                            @Override
-                            public void process(File aFile) {
-                                fileSystem.asDataURL(aFile, aValue -> {
-                                    XMLHttpRequest theRequest = XMLHttpRequest.create();
-                                    theRequest.overrideMimeType("text/plain");
-                                    theRequest.open("GET", aValue);
-                                    theRequest.onComplete(() -> listener.onGameSceneLoaded(parse(aGame, theRequest.getResponseText(), aResourceLoader)));
-                                    theRequest.send();
-                                });
-                            }
-
-                            @Override
-                            public void doesNotExist(String aFileName1) {
-                                TeaVMLogger.error("Error writing file " + aFileName1);
-                            }
-                        }));
-                    }
+                    }).catchError(aResult1 -> TeaVMLogger.error("Error writing file : " + aResult1)));
                 });
             }
         };
@@ -114,42 +80,25 @@ public class GithubResourceAccessor implements ResourceAccessor {
             @Override
             public void loadFromServer() {
                 String theFileName = "/game.json";
-                fileSystem.openFile(theFileName, new Filesystem.FileProcessor() {
-
-                    @Override
-                    public void process(File aFile) {
-                        fileSystem.asDataURL(aFile, aValue -> {
+                fileSystem.openFile(theFileName).thenContinue(aResult -> {
+                    fileSystem.asDataURL(aResult, aValue -> {
+                        final XMLHttpRequest theRequest = XMLHttpRequest.create();
+                        theRequest.overrideMimeType("text/plain");
+                        theRequest.open("GET", aValue);
+                        theRequest.onComplete(() -> listener.onGameLoaded(parse(theRequest.getResponseText())));
+                        theRequest.send();
+                    });
+                }).catchError(aResult -> {
+                    String theURL = baseURL + theFileName;
+                    blobLoader.load(theURL, (aURL, aBlob) -> fileSystem.storeFile(theFileName, aBlob).thenContinue(aResult1 -> {
+                        fileSystem.asDataURL(aResult1, aValue -> {
                             final XMLHttpRequest theRequest = XMLHttpRequest.create();
                             theRequest.overrideMimeType("text/plain");
                             theRequest.open("GET", aValue);
                             theRequest.onComplete(() -> listener.onGameLoaded(parse(theRequest.getResponseText())));
                             theRequest.send();
                         });
-                    }
-
-                    @Override
-                    public void doesNotExist(String aFileName) {
-
-                        String theURL = baseURL + theFileName;
-
-                        blobLoader.load(theURL, (aURL, aBlob) -> fileSystem.storeFile(theFileName, aBlob, new Filesystem.FileProcessor() {
-                            @Override
-                            public void process(File aFile) {
-                                fileSystem.asDataURL(aFile, aValue -> {
-                                    final XMLHttpRequest theRequest = XMLHttpRequest.create();
-                                    theRequest.overrideMimeType("text/plain");
-                                    theRequest.open("GET", aValue);
-                                    theRequest.onComplete(() -> listener.onGameLoaded(parse(theRequest.getResponseText())));
-                                    theRequest.send();
-                                });
-                            }
-
-                            @Override
-                            public void doesNotExist(String aFileName1) {
-                                TeaVMLogger.error("Error writing file " + aFileName1);
-                            }
-                        }));
-                    }
+                    }).catchError(aResult1 -> TeaVMLogger.error("Error writing file : " + aResult1)));
                 });
             }
         };
@@ -160,44 +109,28 @@ public class GithubResourceAccessor implements ResourceAccessor {
         return new TeaVMGameResourceLoader(aSceneID) {
 
             @Override
-            public void load(ResourceName aResourceName, Listener aListener) throws IOException {
+            public Promise<GameResource, String> load(ResourceName aResourceName) {
+                return new Promise<>((Promise.Executor) (aResolver, aRejector) -> {
+                    String theFileName = "/" + aSceneID + aResourceName.get();
 
-                String theFileName = "/" + aSceneID + aResourceName.get();
+                    fileSystem.openFile(theFileName).thenContinue(aResult -> {
+                        TeaVMLogger.info("Loaded " + aResult.getFilename() + " from cache");
 
-                fileSystem.openFile(theFileName, new Filesystem.FileProcessor() {
-
-                    @Override
-                    public void process(File aFile) {
-                        // We are done here
-                        TeaVMLogger.info("Loaded " + aFile.getFilename() + " from cache");
-
-                        fileSystem.asDataURL(aFile, aValue -> aListener.handle(convert(aResourceName, new ResourceName(aValue))));
-                    }
-
-                    @Override
-                    public void doesNotExist(String aFileName) {
-
+                        fileSystem.asDataURL(aResult, aValue -> aResolver.resolve(convert(aResourceName, new ResourceName(aValue))));
+                    }).catchError(aResult -> {
                         String theURL = baseURL + theFileName;
 
-                        blobLoader.load(theURL, (aURL, aBlob) -> fileSystem.storeFile(theFileName, aBlob, new Filesystem.FileProcessor() {
-                            @Override
-                            public void process(File aFile) {
-                                TeaVMLogger.info("Written and Loaded " + aFile.getFilename() + " from cache");
+                        blobLoader.load(theURL, (aURL, aBlob) -> fileSystem.storeFile(theFileName, aBlob).thenContinue(aResult1 -> {
+                            TeaVMLogger.info("Written and Loaded " + aResult1.getFilename() + " from cache");
 
-                                fileSystem.asDataURL(aFile, aValue -> aListener.handle(convert(aResourceName, new ResourceName(aValue))));
-                            }
-
-                            @Override
-                            public void doesNotExist(String aFileName1) {
-                                TeaVMLogger.error("Error writing file " + aFileName1);
-                            }
-                        }));
-                    }
+                            fileSystem.asDataURL(aResult1, aValue -> aResolver.resolve(convert(aResourceName, new ResourceName(aValue))));
+                        }).catchError(aResult1 -> TeaVMLogger.error("Error writing file : " + aResult1)));
+                    });
                 });
             }
 
             @Override
-            public void loadSpriteSheet(ResourceName aResourceName, SpritesheetListener aListener) {
+            public Promise<LoadedSpriteSheet, String> loadSpriteSheet(ResourceName aResourceName) {
 
                 String theFileName = "/" + aSceneID + aResourceName.get();
 
@@ -205,7 +138,7 @@ public class GithubResourceAccessor implements ResourceAccessor {
 
                 ResourceName theNewResourceName = new ResourceName(baseURL + theFileName);
 
-                new TeaVMLoadedSpriteSheet(theNewResourceName, aSpriteSheet -> aListener.handle(aSpriteSheet));
+                return new Promise<>((Promise.Executor) (aResolver, aRejector) -> new TeaVMLoadedSpriteSheet(theNewResourceName, aSpriteSheet -> aResolver.resolve(aSpriteSheet)));
             }
         };
     }

@@ -15,17 +15,15 @@
  */
 package de.mirkosertic.gameengine.web.electron;
 
-import java.io.IOException;
-
 import de.mirkosertic.gameengine.AbstractGameRuntimeFactory;
-import de.mirkosertic.gameengine.core.Game;
-import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.teavm.TeaVMGameLoader;
 import de.mirkosertic.gameengine.teavm.TeaVMGameResourceLoader;
 import de.mirkosertic.gameengine.teavm.TeaVMGameSceneLoader;
 import de.mirkosertic.gameengine.teavm.TeaVMLoadedSpriteSheet;
 import de.mirkosertic.gameengine.type.ResourceName;
 import de.mirkosertic.gameengine.web.Blob;
+import de.mirkosertic.gameengine.web.File;
 import de.mirkosertic.gameengine.web.ResourceAccessor;
 import de.mirkosertic.gameengine.web.electron.fs.FS;
 
@@ -40,7 +38,7 @@ public class LocalResourceAccessor implements ResourceAccessor {
     }
 
     @Override
-    public void persistFile(String aFileName, Blob aContent, CompleteCallback aCallback) {
+    public Promise<File, String> persistFile(String aFileName, Blob aContent) {
         throw new IllegalStateException("Not implemented!");
     }
 
@@ -76,22 +74,23 @@ public class LocalResourceAccessor implements ResourceAccessor {
     public TeaVMGameResourceLoader createResourceLoaderFor(String aSceneID) {
         return new TeaVMGameResourceLoader(aSceneID) {
             @Override
-            public void load(ResourceName aResourceName, Listener aListener) throws IOException {
+            public Promise<GameResource, String> load(ResourceName aResourceName) {
+                return new Promise<>((Promise.Executor) (aResolver, aRejector) -> {
+                    String theFile = localPath + "/" + aSceneID + aResourceName.name;
+                    theFile = theFile.replace('\\', '/');
+                    if (!theFile.startsWith("/")) {
+                        theFile = "/" + theFile;
+                    }
 
-                String theFile = localPath + "/" + aSceneID + aResourceName.name;
-                theFile = theFile.replace('\\', '/');
-                if (!theFile.startsWith("/")) {
-                    theFile = "/" + theFile;
-                }
+                    String theURL = "file://" + theFile;
 
-                String theURL = "file://" + theFile;
-
-                ResourceName theNewResourceName = new ResourceName(theURL);
-                aListener.handle(convert(theNewResourceName, theNewResourceName));
+                    ResourceName theNewResourceName = new ResourceName(theURL);
+                    aResolver.resolve(convert(theNewResourceName, theNewResourceName));
+                });
             }
 
             @Override
-            public void loadSpriteSheet(ResourceName aResourceName, SpritesheetListener aListener) {
+            public Promise<LoadedSpriteSheet, String> loadSpriteSheet(ResourceName aResourceName) {
 
                 String theFile = localPath + "/" + aSceneID + aResourceName.name;
                 theFile = theFile.replace('\\', '/');
@@ -101,8 +100,10 @@ public class LocalResourceAccessor implements ResourceAccessor {
 
                 String theURL = "file://" + theFile;
 
-                ResourceName theNewResourceName = new ResourceName(theURL);
-                new TeaVMLoadedSpriteSheet(theNewResourceName, aSpriteSheet -> aListener.handle(aSpriteSheet));
+                return new Promise<>((Promise.Executor) (aResolver, aRejector) -> {
+                    ResourceName theNewResourceName = new ResourceName(theURL);
+                    new TeaVMLoadedSpriteSheet(theNewResourceName, aSpriteSheet -> aResolver.resolve(aSpriteSheet));
+                });
             }
         };
     }

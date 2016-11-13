@@ -100,10 +100,8 @@ public class ResourceNameImagePropertyEditor implements PropertyEditor<ResourceN
         value = aValue;
         GameScene theGameScene = getGameScene();
         GameResourceLoader theLoader = item.getPersistenceManager().createResourceLoaderFor(theGameScene);
-        try {
-            theLoader.load(aValue, aResource -> imageView.setImage((JavaFXBitmapResource) aResource));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        theLoader.load(aValue).thenContinue(aResult -> {
+            imageView.setImage((JavaFXBitmapResource) aResult);
+        });
     }
 }

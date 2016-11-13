@@ -18,29 +18,11 @@ package de.mirkosertic.gameengine.generic;
 import de.mirkosertic.gameengine.Version;
 import de.mirkosertic.gameengine.camera.Callback;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
-import de.mirkosertic.gameengine.core.GameObjectInstance;
-import de.mirkosertic.gameengine.core.GameResource;
-import de.mirkosertic.gameengine.core.GameResourceLoader;
-import de.mirkosertic.gameengine.core.GameRuntime;
-import de.mirkosertic.gameengine.core.GameScene;
-import de.mirkosertic.gameengine.core.GameSceneEffect;
-import de.mirkosertic.gameengine.core.GameView;
-import de.mirkosertic.gameengine.core.GestureDetector;
-import de.mirkosertic.gameengine.core.RuntimeStatistics;
+import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.scriptengine.LUAScriptEngine;
 import de.mirkosertic.gameengine.sprite.SpriteBehavior;
 import de.mirkosertic.gameengine.text.TextBehavior;
-import de.mirkosertic.gameengine.type.Angle;
-import de.mirkosertic.gameengine.type.Color;
-import de.mirkosertic.gameengine.type.EffectCanvas;
-import de.mirkosertic.gameengine.type.Font;
-import de.mirkosertic.gameengine.type.Position;
-import de.mirkosertic.gameengine.type.PositionAnchor;
-import de.mirkosertic.gameengine.type.ResourceName;
-import de.mirkosertic.gameengine.type.Size;
-import de.mirkosertic.gameengine.type.TextExpression;
-
-import java.io.IOException;
+import de.mirkosertic.gameengine.type.*;
 
 public abstract class GenericAbstractGameView<S extends GameResource> implements GameView {
 
@@ -170,22 +152,22 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
                 SpriteBehavior theSpriteBehavior = aValue.getBehavior(SpriteBehavior.class);
                 if (theSpriteBehavior != null) {
 
-                    ResourceName theSpriteResource = theSpriteBehavior.computeCurrentFrame(aGameTime);
+                    final ResourceName theSpriteResource = theSpriteBehavior.computeCurrentFrame(aGameTime);
                     if (theSpriteResource != null) {
-                        try {
-                            gameRuntime.getResourceCache()
-                                    .getResourceFor(theSpriteResource, new GameResourceLoader.Listener() {
-                                        @Override
-                                        public void handle(final GameResource aResource) {
-                                            drawImage(aValue, aPositionOnScreen, theCenterOffset, (S) aResource);
-                                        }
-                                    });
+                        gameRuntime.getResourceCache()
+                                .getResourceFor(theSpriteResource).thenContinue(new Promise.NoReturnHandler<GameResource>() {
+                            @Override
+                            public void process(GameResource aResult) {
+                                drawImage(aValue, aPositionOnScreen, theCenterOffset, (S) aResult);
+                            }
+                        }).catchError(new Promise.ErrorHandler<String>() {
+                            @Override
+                            public void process(String aResult) {
+                                gameRuntime.getLogger().error("Error while rendering sprite " + theSpriteResource.name);
+                            }
+                        });
 
-                            theSomethingRendered = true;
-
-                        } catch (IOException e) {
-                            gameRuntime.getLogger().error("Error while rendering sprite " + theSpriteResource.name);
-                        }
+                        theSomethingRendered = true;
                     }
                 }
                 TextBehavior theTextBehavior = aValue.getBehavior(TextBehavior.class);

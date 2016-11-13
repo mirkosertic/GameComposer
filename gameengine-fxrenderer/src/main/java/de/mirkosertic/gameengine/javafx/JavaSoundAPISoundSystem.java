@@ -17,6 +17,7 @@ package de.mirkosertic.gameengine.javafx;
 
 import de.mirkosertic.gameengine.core.GameResourceCache;
 import de.mirkosertic.gameengine.core.GameResourceType;
+import de.mirkosertic.gameengine.core.Promise;
 import de.mirkosertic.gameengine.sound.GameSoundSystem;
 import de.mirkosertic.gameengine.type.ResourceName;
 
@@ -31,23 +32,19 @@ public class JavaSoundAPISoundSystem implements GameSoundSystem<Clip> {
     }
 
     @Override
-    public void play(ResourceName aResourceName, Listener<Clip> aListener) {
-        try {
-            resourceCache.getResourceFor(aResourceName, aResource -> {
-                if (aResource.getType() == GameResourceType.SOUND) {
-                    Clip theClip = null;
-                    try {
-                        theClip = ((JavaFXAudioResource) aResource).createClip();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    theClip.start();
-                    aListener.handle(theClip);
+    public Promise<Clip, String> play(ResourceName aResourceName) {
+        return new Promise<>((Promise.Executor) (aResolver, aRejector) -> resourceCache.getResourceFor(aResourceName).thenContinue(aResult -> {
+            if (aResult.getType() == GameResourceType.SOUND) {
+                Clip theClip = null;
+                try {
+                    theClip = ((JavaFXAudioResource) aResult).createClip();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            });
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+                theClip.start();
+                aResolver.resolve(theClip);
+            }
+        }));
     }
 
     @Override

@@ -15,6 +15,8 @@
  */
 package de.mirkosertic.gameengine.web;
 
+import de.mirkosertic.gameengine.core.Promise;
+
 public interface Filesystem {
 
     interface FileProcessor {
@@ -29,11 +31,11 @@ public interface Filesystem {
         void handle(String aValue);
     }
 
-    void openFile(String aFileName, FileProcessor aProcessor);
+    Promise<File, String> openFile(String aFileName);
 
-    void storeFile(String aFileName, Blob aBlob, FileProcessor aProcessor);
+    Promise<File, String> storeFile(String aFileName, Blob aBlob);
 
-    void updateFile(String aFileName, Blob aBlob, FileProcessor aProcessor);
+    Promise<File, String> updateFile(String aFileName, Blob aBlob);
 
     void asDataURL(File aFile, DataUrlCallback aCallback);
 }

@@ -15,7 +15,9 @@
  */
 package de.mirkosertic.gameengine.web.electron;
 
+import de.mirkosertic.gameengine.core.Promise;
 import de.mirkosertic.gameengine.web.EditorProject;
+import de.mirkosertic.gameengine.web.ResourceAccessor;
 import de.mirkosertic.gameengine.web.electron.fs.FS;
 
 public class LocalEditorProject implements EditorProject {
@@ -28,7 +30,8 @@ public class LocalEditorProject implements EditorProject {
         fs = aFS;
     }
 
-    public void initializeLoader(Callback aCallback) {
-        aCallback.onSuccess(this, new LocalResourceAccessor(fs, localPath));
+    @Override
+    public Promise<ResourceAccessor, String> initializeLoader() {
+        return new Promise<>((Promise.Executor) (aResolver, aRejector) -> aResolver.resolve(new LocalResourceAccessor(fs, localPath)));
     }
 }

@@ -15,31 +15,24 @@
  */
 package de.mirkosertic.gameengine.web;
 
+import de.mirkosertic.gameengine.AbstractGameRuntimeFactory;
+import de.mirkosertic.gameengine.core.Game;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.Promise;
+import de.mirkosertic.gameengine.teavm.TeaVMGameLoader;
+import de.mirkosertic.gameengine.teavm.TeaVMGameResourceLoader;
+import de.mirkosertic.gameengine.teavm.TeaVMGameSceneLoader;
+import de.mirkosertic.gameengine.teavm.TeaVMMap;
+import org.teavm.jso.JSObject;
+import org.teavm.jso.core.JSString;
+import org.teavm.jso.json.JSON;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.teavm.jso.JSObject;
-import org.teavm.jso.core.JSString;
-import org.teavm.jso.json.JSON;
-
-import de.mirkosertic.gameengine.AbstractGameRuntimeFactory;
-import de.mirkosertic.gameengine.core.Game;
-import de.mirkosertic.gameengine.core.GameScene;
-import de.mirkosertic.gameengine.teavm.TeaVMGameLoader;
-import de.mirkosertic.gameengine.teavm.TeaVMGameResourceLoader;
-import de.mirkosertic.gameengine.teavm.TeaVMGameSceneLoader;
-import de.mirkosertic.gameengine.teavm.TeaVMMap;
-
 public class EditorState {
-
-    public interface WriteListener {
-
-        void written();
-
-        void error(String aMessage);
-    }
 
     public interface LoadingListener {
 
@@ -81,22 +74,12 @@ public class EditorState {
         return loadedScenes.get(aSceneId);
     }
 
-    public void saveGame(WriteListener aListener) {
+    public Promise<File, String> saveGame() {
         JSObject theJSForm = TeaVMMap.toJS(loadedGame.serialize());
         String theJSON = JSON.stringify(theJSForm);
 
         Blob theBlob = Blob.createJSONBlob(JSString.valueOf(theJSON));
-        resourceAccessor.persistFile("/game.json", theBlob, new ResourceAccessor.CompleteCallback() {
-            @Override
-            public void fileWritten() {
-                aListener.written();
-            }
-
-            @Override
-            public void error(String aMessage) {
-                aListener.error(aMessage);
-            }
-        });
+        return resourceAccessor.persistFile("/game.json", theBlob);
     }
 
     private String getIDForScene(GameScene aGameScene) {
@@ -108,33 +91,24 @@ public class EditorState {
         throw new IllegalStateException("Unknown game scane");
     }
 
-    public void saveScene(GameScene aScene, WriteListener aListener) {
-        saveGame(new WriteListener() {
-            @Override
-            public void written() {
-                JSObject theJSForm = TeaVMMap.toJS(aScene.serialize());
-                String theJSON = JSON.stringify(theJSForm);
-                Blob theBlob = Blob.createJSONBlob(JSString.valueOf(theJSON));
+    public Promise<GameScene, String> saveScene(GameScene aScene) {
+        Promise<File, String> theScenePromise = new Promise<>((Promise.Executor) (aResolver, aRejector) -> {
+            JSObject theJSForm = TeaVMMap.toJS(aScene.serialize());
+            String theJSON = JSON.stringify(theJSForm);
+            Blob theBlob = Blob.createJSONBlob(JSString.valueOf(theJSON));
 
-                resourceAccessor.persistFile("/" + getIDForScene(aScene) + "/scene.json", theBlob,
-                    new ResourceAccessor.CompleteCallback() {
-                        @Override
-                        public void fileWritten() {
-                            aListener.written();
-                        }
-
-                        @Override
-                        public void error(String aMessage) {
-                            aListener.error(aMessage);
-                        }
-                });
-            }
-
-            @Override
-            public void error(String aMessage) {
-                aListener.error(aMessage);
-            }
+            resourceAccessor.persistFile("/" + getIDForScene(aScene) + "/scene.json", theBlob).thenContinue(aResolver::resolve).catchError(aRejector::reject);
         });
+
+        Promise<GameScene, String> theResult = new Promise<>();
+
+        Promise<File, String> theGamePromise = saveGame();
+        Promise<Promise[], Void> theAll = Promise.all(theScenePromise, theGamePromise);
+        theAll.thenContinue(aResult -> {
+            theResult.resolve(aScene);
+        }).catchError(aResult -> theResult.reject("Error whilw saving data"));
+
+        return theResult;
     }
 
     public void load(LoadingListener aListener) {

@@ -13,20 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.mirkosertic.gameengine.web;
+package de.mirkosertic.gameengine.core;
 
-import de.mirkosertic.gameengine.core.Promise;
-import org.teavm.jso.browser.Window;
+public interface PromiseRejector<V> {
 
-public interface EditorProject {
-
-    Promise<ResourceAccessor, String> initializeLoader();
-
-    default public void setCurrentPreview(String aSceneDataAsJSON) {
-        Window.current().getLocalStorage().setItem("previewscene", aSceneDataAsJSON);
-    }
-
-    default public String getPreviewDataAsJSON() {
-        return Window.current().getLocalStorage().getItem("previewscene");
-    }
+    void reject(V aReason);
 }
