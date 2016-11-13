@@ -15,29 +15,22 @@
  */
 package de.mirkosertic.gameengine.web.indexeddb;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.teavm.jso.JSBody;
-import org.teavm.jso.JSObject;
-
+import de.mirkosertic.gameengine.core.Promise;
 import de.mirkosertic.gameengine.teavm.TeaVMLogger;
 import de.mirkosertic.gameengine.web.Blob;
 import de.mirkosertic.gameengine.web.File;
 import de.mirkosertic.gameengine.web.FileReader;
 import de.mirkosertic.gameengine.web.Filesystem;
+import org.teavm.jso.JSBody;
+import org.teavm.jso.JSObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class IndexedDBFilesystem implements Filesystem {
 
     @JSBody(params = {"aObject"}, script = "return typeof aObject === 'undefined';")
     static native boolean isUndefined(JSObject aObject);
-
-    public interface Callback {
-
-        void onError();
-
-        void onSuccess(IndexedDBFilesystem aFilesystem);
-    }
 
     private static final String FILE_DATASTORE = "files";
 
@@ -49,47 +42,55 @@ public class IndexedDBFilesystem implements Filesystem {
         cachedURLs = new HashMap<>();
     }
 
-    public static void open(String aDatabaseName, Callback aCallback) {
-        IndexedDBFactory theFactory = IndexedDBFactory.getFactory();
-        IndexedDBOpenRequest theRequest = theFactory.open(aDatabaseName, 1);
-        theRequest.setOnupgradeneeded(() -> theRequest.getResult().createObjectStore(FILE_DATASTORE));
-        theRequest.setOnerror(() -> aCallback.onError());
-        theRequest.setOnsuccess(() -> aCallback.onSuccess(new IndexedDBFilesystem(theRequest.getResult())));
-    }
-
-    @Override
-    public void openFile(String aFileName, FileProcessor aProcessor) {
-        IndexedDBTransaction theTransction = database.transaction(FILE_DATASTORE, "readonly");
-        IndexedDBObjectStore theObjectStore = theTransction.objectStore(FILE_DATASTORE);
-        IndexedDBGetRequest theRequest = theObjectStore.get(IndexedDBFile.createFileKey(aFileName));
-        theRequest.setOnerror(() -> TeaVMLogger.error("Error storing file " + aFileName));
-        theRequest.setOnsuccess(() -> {
-            if (isUndefined(theRequest.getResult())) {
-                aProcessor.doesNotExist(aFileName);
-            } else {
-                aProcessor.process((IndexedDBFile) theRequest.getResult());
-            }
+    public static Promise<IndexedDBFilesystem, String> open(String aDatabaseName) {
+        return new Promise<>((aResolver, aRejector) -> {
+            IndexedDBFactory theFactory = IndexedDBFactory.getFactory();
+            IndexedDBOpenRequest theRequest = theFactory.open(aDatabaseName, 1);
+            theRequest.setOnupgradeneeded(() -> theRequest.getResult().createObjectStore(FILE_DATASTORE));
+            theRequest.setOnerror(() -> aRejector.reject("Error opening IndexedDB"));
+            theRequest.setOnsuccess(() -> aResolver.resolve(new IndexedDBFilesystem(theRequest.getResult())));
         });
     }
 
     @Override
-    public void storeFile(String aFileName, Blob aBlob, FileProcessor aProcessor) {
-        IndexedDBTransaction theTransction = database.transaction(FILE_DATASTORE, "readwrite");
-        IndexedDBObjectStore theObjectStore = theTransction.objectStore(FILE_DATASTORE);
-        IndexedDBFile theFile = IndexedDBFile.createCached(aFileName, aBlob);
-        IndexedDBRequest theRequest = theObjectStore.put(theFile, IndexedDBFile.createFileKey(aFileName));
-        theRequest.setOnerror(() -> TeaVMLogger.error("Error storing file " + aFileName));
-        theRequest.setOnsuccess(() -> aProcessor.process(theFile));
+    public Promise<File, String> openFile(String aFileName) {
+        return new Promise<>((Promise.Executor) (aResolver, aRejector) -> {
+            IndexedDBTransaction theTransction = database.transaction(FILE_DATASTORE, "readonly");
+            IndexedDBObjectStore theObjectStore = theTransction.objectStore(FILE_DATASTORE);
+            IndexedDBGetRequest theRequest = theObjectStore.get(IndexedDBFile.createFileKey(aFileName));
+            theRequest.setOnerror(() -> aRejector.reject("Error storing file " + aFileName));
+            theRequest.setOnsuccess(() -> {
+                if (isUndefined(theRequest.getResult())) {
+                    aRejector.reject("File " + aFileName + " does not exist");
+                } else {
+                    aResolver.resolve(theRequest.getResult());
+                }
+            });
+        });
     }
 
     @Override
-    public void updateFile(String aFileName, Blob aBlob, FileProcessor aProcessor) {
-        IndexedDBTransaction theTransction = database.transaction(FILE_DATASTORE, "readwrite");
-        IndexedDBObjectStore theObjectStore = theTransction.objectStore(FILE_DATASTORE);
-        IndexedDBFile theFile = IndexedDBFile.createChanged(aFileName, aBlob);
-        IndexedDBRequest theRequest = theObjectStore.put(theFile, IndexedDBFile.createFileKey(aFileName));
-        theRequest.setOnerror(() -> TeaVMLogger.error("Error storing file " + aFileName));
-        theRequest.setOnsuccess(() -> aProcessor.process(theFile));
+    public Promise<File, String> storeFile(String aFileName, Blob aBlob) {
+        return new Promise<>((Promise.Executor) (aResolver, aRejector) -> {
+            IndexedDBTransaction theTransction = database.transaction(FILE_DATASTORE, "readwrite");
+            IndexedDBObjectStore theObjectStore = theTransction.objectStore(FILE_DATASTORE);
+            IndexedDBFile theFile = IndexedDBFile.createCached(aFileName, aBlob);
+            IndexedDBRequest theRequest = theObjectStore.put(theFile, IndexedDBFile.createFileKey(aFileName));
+            theRequest.setOnerror(() -> aRejector.reject("Error storing file " + aFileName));
+            theRequest.setOnsuccess(() -> aResolver.resolve(theFile));
+        });
+    }
+
+    @Override
+    public Promise<File, String> updateFile(String aFileName, Blob aBlob) {
+        return new Promise<>((Promise.Executor) (aResolver, aRejector) -> {
+            IndexedDBTransaction theTransction = database.transaction(FILE_DATASTORE, "readwrite");
+            IndexedDBObjectStore theObjectStore = theTransction.objectStore(FILE_DATASTORE);
+            IndexedDBFile theFile = IndexedDBFile.createChanged(aFileName, aBlob);
+            IndexedDBRequest theRequest = theObjectStore.put(theFile, IndexedDBFile.createFileKey(aFileName));
+            theRequest.setOnerror(() -> aRejector.reject("Error storing file " + aFileName));
+            theRequest.setOnsuccess(() -> aResolver.resolve(theFile));
+        });
     }
 
     @Override

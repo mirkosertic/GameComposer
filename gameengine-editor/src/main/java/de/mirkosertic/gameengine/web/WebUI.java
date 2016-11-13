@@ -15,17 +15,11 @@
  */
 package de.mirkosertic.gameengine.web;
 
+import de.mirkosertic.gameengine.core.Game;
+import de.mirkosertic.gameengine.teavm.*;
+import de.mirkosertic.gameengine.web.github.GithubEditorProject;
 import org.teavm.jso.browser.Window;
 import org.teavm.jso.dom.html.HTMLCanvasElement;
-
-import de.mirkosertic.gameengine.core.Game;
-import de.mirkosertic.gameengine.teavm.TeaVMGameLoader;
-import de.mirkosertic.gameengine.teavm.TeaVMGameResourceLoader;
-import de.mirkosertic.gameengine.teavm.TeaVMGameRuntimeFactory;
-import de.mirkosertic.gameengine.teavm.TeaVMGameSceneLoader;
-import de.mirkosertic.gameengine.teavm.TeaVMGenericPlayer;
-import de.mirkosertic.gameengine.teavm.TeaVMLogger;
-import de.mirkosertic.gameengine.web.github.GithubEditorProject;
 
 public class WebUI {
 
@@ -49,18 +43,9 @@ public class WebUI {
 
         EditorProject theProject = getDefaultProject();
 
-        theProject.initializeLoader(new EditorProject.Callback() {
-            @Override
-            public void onError(EditorProject aProject) {
-                TeaVMLogger.error("Error creating indexeddb filesystem!");
-            }
-
-            @Override
-            public void onSuccess(EditorProject aProject, ResourceAccessor aResourceLoaderFactory) {
-                TeaVMLogger.info("ResourceLoader created");
-                initializeWithResourceLoaderFactory(aResourceLoaderFactory, aProject);
-            }
-        });
+        theProject.initializeLoader().thenContinue(aResult -> {
+            initializeWithResourceLoaderFactory(aResult, theProject);
+        }).catchError(aResult -> TeaVMLogger.error("Error creating indexeddb filesystem!"));
     }
 
     private static void initializeWithResourceLoaderFactory(ResourceAccessor aResourceLoaderFactory, EditorProject aProject) {

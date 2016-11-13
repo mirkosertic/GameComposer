@@ -18,24 +18,14 @@ package de.mirkosertic.gameengine.arcaderacer;
 import de.mirkosertic.gameengine.annotations.ReflectiveField;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
-import de.mirkosertic.gameengine.core.GameResource;
-import de.mirkosertic.gameengine.core.GameResourceLoader;
-import de.mirkosertic.gameengine.core.GameRuntime;
-import de.mirkosertic.gameengine.core.GameScene;
-import de.mirkosertic.gameengine.core.GameSceneEffect;
-import de.mirkosertic.gameengine.core.GameSceneEffectType;
+import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.process.GameProcess;
 import de.mirkosertic.gameengine.process.StartProcess;
-import de.mirkosertic.gameengine.type.ClassInformation;
-import de.mirkosertic.gameengine.type.Color;
-import de.mirkosertic.gameengine.type.EffectCanvas;
-import de.mirkosertic.gameengine.type.ResourceName;
-import de.mirkosertic.gameengine.type.Size;
+import de.mirkosertic.gameengine.type.*;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -237,36 +227,33 @@ public class ArcadeRacerGameSceneEffect implements GameSceneEffect {
                                 theSegment.color, theZ);
                     } else {
                         // Texture
-                        try {
-                            final int theFinalOldTrackDataX[] = theOldTrackDataX;
-                            final int theFinalOldTrackDataY[] = theOldTrackDataY;
+                        final int theFinalOldTrackDataX[] = theOldTrackDataX;
+                        final int theFinalOldTrackDataY[] = theOldTrackDataY;
 
-                            final int theFinalI = i;
-                            final int theFinalZ = theZ;
+                        final int theFinalI = i;
+                        final int theFinalZ = theZ;
 
-                            gameScene.getRuntime().getResourceCache().getResourceFor(theSegment.texture,
-                                    new GameResourceLoader.Listener() {
-                                        @Override
-                                        public void handle(GameResource aResource) {
-                                            aEffectCanvas.fillRectangle(theElementIdentifier + "t_" + theFinalI, aResource,
-                                                    theFinalOldTrackDataX[theFinalI*2], theFinalOldTrackDataY[theFinalI*2],
-                                                    theFinalOldTrackDataX[theFinalI*2+1], theFinalOldTrackDataY[theFinalI*2+1],
-                                                    theFinalOldTrackDataX[theFinalI*2+1], theFinalOldTrackDataY[theFinalI*2+1],
-                                                    theFinalOldTrackDataX[theFinalI*2], theFinalOldTrackDataY[theFinalI*2],
-                                                    0, 0, 1, 0, 1, 1, 0, 1, theFinalZ);
-
-                                        }
-                                    });
-
-                        } catch (IOException e) {
-                            // Color
-                            aEffectCanvas.fillRectangle(theElementIdentifier + "t_" + i,
-                                    theOldTrackDataX[i*2], theOldTrackDataY[i*2],
-                                    theOldTrackDataX[i*2+1], theOldTrackDataY[i*2+1],
-                                    theNewTrackDataX[i*2+1], theNewTrackDataY[i*2+1],
-                                    theNewTrackDataX[i*2], theNewTrackDataY[i*2],
-                                    Color.WHITE, theZ);
-                        }
+                        gameScene.getRuntime().getResourceCache().getResourceFor(theSegment.texture).thenContinue(new Promise.NoReturnHandler<GameResource>() {
+                            @Override
+                            public void process(GameResource aResult) {
+                                aEffectCanvas.fillRectangle(theElementIdentifier + "t_" + theFinalI, aResult,
+                                        theFinalOldTrackDataX[theFinalI*2], theFinalOldTrackDataY[theFinalI*2],
+                                        theFinalOldTrackDataX[theFinalI*2+1], theFinalOldTrackDataY[theFinalI*2+1],
+                                        theFinalOldTrackDataX[theFinalI*2+1], theFinalOldTrackDataY[theFinalI*2+1],
+                                        theFinalOldTrackDataX[theFinalI*2], theFinalOldTrackDataY[theFinalI*2],
+                                        0, 0, 1, 0, 1, 1, 0, 1, theFinalZ);
+                            }
+                        }).catchError(new Promise.ErrorHandler<String>() {
+                            @Override
+                            public void process(String aResult) {
+                                aEffectCanvas.fillRectangle(theElementIdentifier + "t_" + theFinalI,
+                                        theFinalOldTrackDataX[theFinalI*2], theFinalOldTrackDataY[theFinalI*2],
+                                        theFinalOldTrackDataX[theFinalI*2+1], theFinalOldTrackDataY[theFinalI*2+1],
+                                        theFinalOldTrackDataX[theFinalI*2+1], theFinalOldTrackDataX[theFinalI*2+1],
+                                        theFinalOldTrackDataX[theFinalI*2], theFinalOldTrackDataX[theFinalI*2],
+                                        Color.WHITE, theFinalZ);
+                            }
+                        });
                     }
                 }
 
@@ -299,24 +286,23 @@ public class ArcadeRacerGameSceneEffect implements GameSceneEffect {
                 if (theBottomRight.x >=0 && theTopLeft.x < screenSize.width) {
                     //
                     ResourceName theResourceName = theSprite.computeCurrentView(gameTime);
-                    try {
-                        final int theFinalXOffset = theXoffset;
-                        final int theFinalZ = theZ;
-                        final int theFinalI = i;
+                    final int theFinalXOffset = theXoffset;
+                    final int theFinalZ = theZ;
+                    final int theFinalI = i;
 
-                        gameScene.getRuntime().getResourceCache().getResourceFor(theResourceName,
-                                new GameResourceLoader.Listener() {
-                                    @Override
-                                    public void handle(GameResource aResource) {
-                                        aEffectCanvas.fillRectangle(theElementIdentifier + "s_" + theFinalI, aResource,
-                                                theTopLeft.x + theFinalXOffset, theTopLeft.y, theTopRight.x + theFinalXOffset, theTopRight.y, theBottomRight.x + theFinalXOffset, theBottomRight.y,theBottomLeft.x + theFinalXOffset, theBottomLeft.y,
-                                                0, 0, 1, 0, 1, 1, 0, 1, theFinalZ - 2);
-
-                                    }
-                                });
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
+                    gameScene.getRuntime().getResourceCache().getResourceFor(theResourceName).thenContinue(new Promise.NoReturnHandler<GameResource>() {
+                        @Override
+                        public void process(GameResource aResult) {
+                            aEffectCanvas.fillRectangle(theElementIdentifier + "s_" + theFinalI, aResult,
+                                    theTopLeft.x + theFinalXOffset, theTopLeft.y, theTopRight.x + theFinalXOffset, theTopRight.y, theBottomRight.x + theFinalXOffset, theBottomRight.y,theBottomLeft.x + theFinalXOffset, theBottomLeft.y,
+                                    0, 0, 1, 0, 1, 1, 0, 1, theFinalZ - 2);
+                        }
+                    }).catchError(new Promise.ErrorHandler<String>() {
+                        @Override
+                        public void process(String aResult) {
+                            throw new RuntimeException(aResult);
+                        }
+                    });
                 }
             }
 

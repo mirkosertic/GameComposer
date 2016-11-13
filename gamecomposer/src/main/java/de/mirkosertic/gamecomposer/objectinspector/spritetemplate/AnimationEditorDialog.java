@@ -34,13 +34,13 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
-import javax.inject.Inject;
 import org.controlsfx.control.GridCell;
 import org.controlsfx.control.GridView;
 import org.controlsfx.control.HiddenSidesPane;
 import org.controlsfx.validation.ValidationSupport;
 import org.controlsfx.validation.Validator;
+
+import javax.inject.Inject;
 
 public class AnimationEditorDialog {
 
@@ -100,13 +100,9 @@ public class AnimationEditorDialog {
                 if (aItem == ADD_RESOURCE_MARKER) {
                     setGraphic(addAnimationButton);
                 } else {
-                    try {
-                        resourceLoader.load(aItem, aResource -> imageView.setImage((JavaFXBitmapResource) aResource));
-
-                        setGraphic(singleResourceNode);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    resourceLoader.load(aItem).thenContinue(aResult -> {
+                        imageView.setImage((JavaFXBitmapResource) aResult);
+                    });
                 }
             }
         }

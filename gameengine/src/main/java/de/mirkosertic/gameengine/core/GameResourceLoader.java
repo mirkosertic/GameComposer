@@ -17,21 +17,11 @@ package de.mirkosertic.gameengine.core;
 
 import de.mirkosertic.gameengine.type.ResourceName;
 
-import java.io.IOException;
-
 public interface GameResourceLoader {
 
-    public interface Listener {
-        void handle(GameResource aResource);
-    }
+    Promise<GameResource, String> load(ResourceName aResourceName);
 
-    public interface SpritesheetListener<T extends GameResource> {
-        void handle(LoadedSpriteSheet<T> aSpriteSheet);
-    }
-
-    void load(ResourceName aResourceName, Listener aListener) throws IOException;
-
-    <T extends GameResource> void loadSpriteSheet(ResourceName aResourceName, SpritesheetListener<T> aListener);
+    Promise<LoadedSpriteSheet, String> loadSpriteSheet(ResourceName aResourceName);
 
     void flush();
 }

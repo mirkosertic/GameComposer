@@ -15,15 +15,12 @@
  */
 package de.mirkosertic.gameengine.sound;
 
+import de.mirkosertic.gameengine.core.Promise;
 import de.mirkosertic.gameengine.type.ResourceName;
 
 public interface GameSoundSystem<T> {
 
-    interface Listener<T> {
-        void handle(T aValue);
-    }
-
-    void play(ResourceName aResourceName, Listener<T> aListener);
+    Promise<T, String> play(ResourceName aResourceName);
 
     void stop(T aSoundObject);
 }

@@ -18,11 +18,8 @@ package de.mirkosertic.gameengine.gwt;
 import com.google.gwt.media.client.Audio;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.RootPanel;
-import de.mirkosertic.gameengine.core.GameResourceLoader;
-import de.mirkosertic.gameengine.core.LoadedSpriteSheet;
+import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.type.ResourceName;
-
-import java.io.IOException;
 
 public class GWTGameResourceLoader implements GameResourceLoader {
 
@@ -35,24 +32,32 @@ public class GWTGameResourceLoader implements GameResourceLoader {
     }
 
     @Override
-    public void load(ResourceName aResourceName, Listener aListener) throws IOException {
-        if (aResourceName.name.endsWith(".png")) {
-            Image theImage = new Image();
-            theImage.setVisible(false);
-            theImage.setUrl(baseDirectory + aResourceName.name.replace('\\', '/'));
-            RootPanel.get(holderId).add(theImage);
-            aListener.handle(new GWTBitmapResource(theImage));
-        }
-        if (aResourceName.name.endsWith(".wav")) {
-            Audio theAudio = Audio.createIfSupported();
-            theAudio.setSrc(baseDirectory + aResourceName.name.replace('\\', '/'));
-            aListener.handle(new GWTAudioResource(theAudio));
-        }
+    public Promise<GameResource, String> load(ResourceName aResourceName) {
+
+        return new Promise<>((Promise.Executor) (aResolver, aRejector) -> {
+            if (aResourceName.name.endsWith(".png")) {
+                Image theImage = new Image();
+                theImage.setVisible(false);
+                theImage.setUrl(baseDirectory + aResourceName.name.replace('\\', '/'));
+                RootPanel.get(holderId).add(theImage);
+                aResolver.resolve(new GWTBitmapResource(theImage));
+            }
+            if (aResourceName.name.endsWith(".wav")) {
+                Audio theAudio = Audio.createIfSupported();
+                theAudio.setSrc(baseDirectory + aResourceName.name.replace('\\', '/'));
+                aRejector.reject(new GWTAudioResource(theAudio));
+            }
+        });
     }
 
     @Override
-    public void loadSpriteSheet(ResourceName aResourceName, SpritesheetListener aListener) {
-        aListener.handle(LoadedSpriteSheet.EMPTY);
+    public Promise<LoadedSpriteSheet, String> loadSpriteSheet(ResourceName aResourceName) {
+        return new Promise<>(new Promise.Executor() {
+            @Override
+            public void process(PromiseResolver aResolver, PromiseRejector aRejector) {
+                aResolver.resolve(LoadedSpriteSheet.EMPTY);
+            }
+        });
     }
 
     @Override

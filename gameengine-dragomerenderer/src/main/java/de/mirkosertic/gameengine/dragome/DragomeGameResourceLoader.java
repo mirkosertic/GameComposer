@@ -17,16 +17,12 @@ package de.mirkosertic.gameengine.dragome;
 
 import com.dragome.services.WebServiceLocator;
 import com.dragome.web.html.dom.DomHandler;
-import de.mirkosertic.gameengine.core.GameResourceLoader;
-import de.mirkosertic.gameengine.core.GameResourceType;
-import de.mirkosertic.gameengine.core.LoadedSpriteSheet;
+import de.mirkosertic.gameengine.core.*;
 import de.mirkosertic.gameengine.type.ResourceName;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import java.io.IOException;
 
 public class DragomeGameResourceLoader implements GameResourceLoader {
 
@@ -44,17 +40,19 @@ public class DragomeGameResourceLoader implements GameResourceLoader {
     }
 
     @Override
-    public void load(ResourceName aResourceName, Listener aListener) throws IOException {
-        String theResourceName = sceneId + aResourceName.name;
-        if (aResourceName.name.endsWith(".wav")) {
-            aListener.handle(new DragomeGameResource(theResourceName, GameResourceType.SOUND, null));
-        }
+    public Promise<GameResource, String> load(ResourceName aResourceName) {
+        return new Promise<>((Promise.Executor) (aResolver, aRejector) -> {
+            String theResourceName = sceneId + aResourceName.name;
+            if (aResourceName.name.endsWith(".wav")) {
+                aResolver.resolve(new DragomeGameResource(theResourceName, GameResourceType.SOUND, null));
+            }
 
-        Element theImage = document.createElement("img");
-        theImage.setAttribute("src", theResourceName);
-        cacheElement.appendChild(theImage);
+            Element theImage = document.createElement("img");
+            theImage.setAttribute("src", theResourceName);
+            cacheElement.appendChild(theImage);
 
-        aListener.handle(new DragomeGameResource(theResourceName, GameResourceType.BITMAP, theImage));
+            aResolver.resolve(new DragomeGameResource(theResourceName, GameResourceType.BITMAP, theImage));
+        });
     }
 
     @Override
@@ -67,7 +65,12 @@ public class DragomeGameResourceLoader implements GameResourceLoader {
     }
 
     @Override
-    public void loadSpriteSheet(ResourceName aResourceName, SpritesheetListener aListener) {
-        aListener.handle(LoadedSpriteSheet.EMPTY);
+    public Promise<LoadedSpriteSheet, String> loadSpriteSheet(ResourceName aResourceName) {
+        return new Promise<>(new Promise.Executor() {
+            @Override
+            public void process(PromiseResolver aResolver, PromiseRejector aRejector) {
+                aResolver.resolve(LoadedSpriteSheet.EMPTY);
+            }
+        });
     }
 }
