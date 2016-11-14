@@ -15,11 +15,10 @@
  */
 package de.mirkosertic.gameengine.web.github;
 
-import org.teavm.jso.ajax.XMLHttpRequest;
-
 import de.mirkosertic.gameengine.AbstractGameRuntimeFactory;
 import de.mirkosertic.gameengine.core.Game;
 import de.mirkosertic.gameengine.core.GameResource;
+import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.core.LoadedSpriteSheet;
 import de.mirkosertic.gameengine.core.Promise;
 import de.mirkosertic.gameengine.teavm.TeaVMGameLoader;
@@ -33,6 +32,7 @@ import de.mirkosertic.gameengine.web.BlobLoader;
 import de.mirkosertic.gameengine.web.File;
 import de.mirkosertic.gameengine.web.Filesystem;
 import de.mirkosertic.gameengine.web.ResourceAccessor;
+import org.teavm.jso.ajax.XMLHttpRequest;
 
 public class GithubResourceAccessor implements ResourceAccessor {
 
@@ -52,69 +52,75 @@ public class GithubResourceAccessor implements ResourceAccessor {
     }
 
     @Override
-    public TeaVMGameSceneLoader createSceneLoader(TeaVMGameSceneLoader.GameSceneLoadedListener aListener,
-            AbstractGameRuntimeFactory aRuntimeFactory) {
-        return new TeaVMGameSceneLoader(aListener, aRuntimeFactory) {
+    public TeaVMGameSceneLoader createSceneLoader(AbstractGameRuntimeFactory aRuntimeFactory) {
+        return new TeaVMGameSceneLoader(aRuntimeFactory) {
             @Override
-            public void loadFromServer(Game aGame, String aSceneName, TeaVMGameResourceLoader aResourceLoader) {
+            public Promise<GameScene, String> loadFromServer(Game aGame, String aSceneName, TeaVMGameResourceLoader aResourceLoader) {
 
-                String theFileName = "/" + aSceneName + "/scene.json";
-                fileSystem.openFile(theFileName).thenContinue(aResult -> {
-                    fileSystem.asDataURL(aResult).thenContinue(aDataURL -> {
-                        XMLHttpRequest theRequest = XMLHttpRequest.create();
-                        theRequest.overrideMimeType("text/plain");
-                        theRequest.open("GET", aDataURL);
-                        theRequest.onComplete(() -> listener.onGameSceneLoaded(parse(aGame, theRequest.getResponseText(), aResourceLoader)));
-                        theRequest.send();
-                    });
-                }).catchError((aResult, aOptionalRejectedException) -> {
-                    String theURL = baseURL + theFileName;
-                    blobLoader.load(theURL).thenContinue(aBlob -> {
-                        fileSystem.storeFile(theFileName, aBlob).thenContinue(aFile -> {
-                            fileSystem.asDataURL(aFile).thenContinue(aDataURL -> {
-                                XMLHttpRequest theRequest = XMLHttpRequest.create();
-                                theRequest.overrideMimeType("text/plain");
-                                theRequest.open("GET", aDataURL);
-                                theRequest.onComplete(() -> listener.onGameSceneLoaded(parse(aGame, theRequest.getResponseText(), aResourceLoader)));
-                                theRequest.send();
-                            });
+                return new Promise<>((Promise.Executor) (aResolver, aRejector) -> {
+                    String theFileName = "/" + aSceneName + "/scene.json";
+                    fileSystem.openFile(theFileName).thenContinue(aResult -> {
+                        fileSystem.asDataURL(aResult).thenContinue(aDataURL -> {
+                            XMLHttpRequest theRequest = XMLHttpRequest.create();
+                            theRequest.overrideMimeType("text/plain");
+                            theRequest.open("GET", aDataURL);
+                            theRequest.onComplete(() -> aResolver.resolve(parse(aGame, theRequest.getResponseText(), aResourceLoader)));
+                            theRequest.send();
                         });
-                    }).catchError((aErrorMessage, aOptionalRejectedException1) -> TeaVMLogger.error("Error writing file : " + aErrorMessage));
+                    }).catchError((aResult, aOptionalRejectedException) -> {
+                        String theURL = baseURL + theFileName;
+                        blobLoader.load(theURL).thenContinue(aBlob -> {
+                            fileSystem.storeFile(theFileName, aBlob).thenContinue(aFile -> {
+                                fileSystem.asDataURL(aFile).thenContinue(aDataURL -> {
+                                    XMLHttpRequest theRequest = XMLHttpRequest.create();
+                                    theRequest.overrideMimeType("text/plain");
+                                    theRequest.open("GET", aDataURL);
+                                    theRequest.onComplete(() -> aResolver.resolve(parse(aGame, theRequest.getResponseText(), aResourceLoader)));
+                                    theRequest.send();
+                                });
+                            });
+                        }).catchError((aErrorMessage, aOptionalRejectedException1) -> TeaVMLogger.error("Error writing file : " + aErrorMessage));
+                    });
+
                 });
             }
         };
     }
 
     @Override
-    public TeaVMGameLoader createGameLoader(TeaVMGameLoader.GameLoadedListener aListener) {
-        return new TeaVMGameLoader(aListener) {
+    public TeaVMGameLoader createGameLoader() {
+        return new TeaVMGameLoader() {
             @Override
-            public void loadFromServer() {
-                String theFileName = "/game.json";
-                fileSystem.openFile(theFileName).thenContinue(aResult -> {
+            public Promise<Game, String> loadFromServer() {
+                return new Promise<>((Promise.Executor) (aResolver, aRejector) -> {
 
-                    fileSystem.asDataURL(aResult).thenContinue(aDataURL -> {
-                        final XMLHttpRequest theRequest = XMLHttpRequest.create();
-                        theRequest.overrideMimeType("text/plain");
-                        theRequest.open("GET", aDataURL);
-                        theRequest.onComplete(() -> listener.onGameLoaded(parse(theRequest.getResponseText())));
-                        theRequest.send();
-                    });
+                    String theFileName = "/game.json";
+                    fileSystem.openFile(theFileName).thenContinue(aResult -> {
 
-                }).catchError((aResult, aOptionalRejectedException) -> {
-                    String theURL = baseURL + theFileName;
-
-                    blobLoader.load(theURL).thenContinue(aBlob -> {
-                        fileSystem.storeFile(theFileName, aBlob).thenContinue(aFile -> {
-                            fileSystem.asDataURL(aFile).thenContinue(aDataURL -> {
-                                final XMLHttpRequest theRequest = XMLHttpRequest.create();
-                                theRequest.overrideMimeType("text/plain");
-                                theRequest.open("GET", aDataURL);
-                                theRequest.onComplete(() -> listener.onGameLoaded(parse(theRequest.getResponseText())));
-                                theRequest.send();
-                            });
+                        fileSystem.asDataURL(aResult).thenContinue(aDataURL -> {
+                            final XMLHttpRequest theRequest = XMLHttpRequest.create();
+                            theRequest.overrideMimeType("text/plain");
+                            theRequest.open("GET", aDataURL);
+                            theRequest.onComplete(() -> aResolver.resolve(parse(theRequest.getResponseText())));
+                            theRequest.send();
                         });
-                    }).catchError((aErrorMessage, aOptionalRejectedException1) -> TeaVMLogger.error("Error writing file : " + aErrorMessage));
+
+                    }).catchError((aResult, aOptionalRejectedException) -> {
+                        String theURL = baseURL + theFileName;
+
+                        blobLoader.load(theURL).thenContinue(aBlob -> {
+                            fileSystem.storeFile(theFileName, aBlob).thenContinue(aFile -> {
+
+                                fileSystem.asDataURL(aFile).thenContinue(aDataURL -> {
+                                    final XMLHttpRequest theRequest = XMLHttpRequest.create();
+                                    theRequest.overrideMimeType("text/plain");
+                                    theRequest.open("GET", aDataURL);
+                                    theRequest.onComplete(() -> aResolver.resolve(parse(theRequest.getResponseText())));
+                                    theRequest.send();
+                                });
+                            });
+                        }).catchError((aErrorMessage, aOptionalRejectedException1) -> TeaVMLogger.error("Error writing file : " + aErrorMessage));
+                    });
                 });
             }
         };
