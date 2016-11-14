@@ -15,6 +15,14 @@
  */
 package de.mirkosertic.gameengine.android;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Map;
+
+import org.apache.commons.io.IOUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.content.res.AssetManager;
 import android.os.Bundle;
@@ -23,19 +31,18 @@ import android.view.MotionEvent;
 import android.view.View;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
-import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.core.Game;
+import de.mirkosertic.gameengine.core.GameLoopFactory;
+import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.GestureDetector;
+import de.mirkosertic.gameengine.core.PlaySceneStrategy;
+import de.mirkosertic.gameengine.core.Promise;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.network.NetworkConnector;
 import de.mirkosertic.gameengine.type.Size;
 import de.mirkosertic.gameengine.type.TouchIdentifier;
 import de.mirkosertic.gameengine.type.TouchPosition;
-import org.apache.commons.io.IOUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Map;
 
 public class GameEngineActivity extends Activity {
 
@@ -215,9 +222,9 @@ public class GameEngineActivity extends Activity {
     }
 
     private void playScene(GameScene aGameScene) {
-        playSceneStrategy.playScene(aGameScene, new SuccessCallback() {
+        playSceneStrategy.playScene(aGameScene).thenContinue(new Promise.NoReturnHandler<GameScene>() {
             @Override
-            public void success() {
+            public void process(GameScene aResult) {
             }
         });
     }

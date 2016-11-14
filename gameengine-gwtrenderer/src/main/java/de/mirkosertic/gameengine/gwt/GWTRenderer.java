@@ -15,45 +15,48 @@
  */
 package de.mirkosertic.gameengine.gwt;
 
-import de.mirkosertic.gameengine.camera.CameraBehavior;
-import de.mirkosertic.gameengine.camera.SetScreenResolution;
-import de.mirkosertic.gameengine.core.*;
-import de.mirkosertic.gameengine.generic.GenericAbstractGameView;
-import de.mirkosertic.gameengine.network.NetworkConnector;
-import de.mirkosertic.gameengine.type.*;
-import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import com.google.gwt.animation.client.AnimationScheduler;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.dom.client.Touch;
 import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyPressEvent;
-import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
-import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
-import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.dom.client.TouchCancelEvent;
-import com.google.gwt.event.dom.client.TouchCancelHandler;
 import com.google.gwt.event.dom.client.TouchEndEvent;
-import com.google.gwt.event.dom.client.TouchEndHandler;
 import com.google.gwt.event.dom.client.TouchMoveEvent;
-import com.google.gwt.event.dom.client.TouchMoveHandler;
 import com.google.gwt.event.dom.client.TouchStartEvent;
-import com.google.gwt.event.dom.client.TouchStartHandler;
-import com.google.gwt.event.logical.shared.ResizeEvent;
-import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
+
+import de.mirkosertic.gameengine.camera.CameraBehavior;
+import de.mirkosertic.gameengine.camera.SetScreenResolution;
+import de.mirkosertic.gameengine.core.Game;
+import de.mirkosertic.gameengine.core.GameLoop;
+import de.mirkosertic.gameengine.core.GameLoopFactory;
+import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.GameView;
+import de.mirkosertic.gameengine.core.GestureDetector;
+import de.mirkosertic.gameengine.core.PlaySceneStrategy;
+import de.mirkosertic.gameengine.core.Promise;
+import de.mirkosertic.gameengine.generic.GenericAbstractGameView;
+import de.mirkosertic.gameengine.network.NetworkConnector;
+import de.mirkosertic.gameengine.type.GameKeyCode;
+import de.mirkosertic.gameengine.type.GameKeyCodeUtils;
+import de.mirkosertic.gameengine.type.Position;
+import de.mirkosertic.gameengine.type.Size;
+import de.mirkosertic.gameengine.type.TouchIdentifier;
+import de.mirkosertic.gameengine.type.TouchPosition;
+import thothbot.parallax.core.client.gl2.WebGLRenderingContext;
 
 public class GWTRenderer implements EntryPoint {
 
@@ -178,12 +181,9 @@ public class GWTRenderer implements EntryPoint {
         overlayCanvas.setStyleName("overlayCanvas");
         RootPanel.get(holderId).add(overlayCanvas);
 
-        Window.addResizeHandler(new ResizeHandler() {
-            @Override
-            public void onResize(ResizeEvent event) {
-                if (playSceneStrategy.hasGameLoop()) {
-                    playSceneStrategy.handleResize();
-                }
+        Window.addResizeHandler(event -> {
+            if (playSceneStrategy.hasGameLoop()) {
+                playSceneStrategy.handleResize();
             }
         });
 
@@ -191,60 +191,15 @@ public class GWTRenderer implements EntryPoint {
 
         // Keylistener must only be registered once, or strange things will happen
         // They delegate to the event manager of the currently loaded scene
-        RootPanel.get().addHandler(new KeyDownHandler() {
-            @Override
-            public void onKeyDown(KeyDownEvent aEvent) {
-                handleOnKeyDownEvent(aEvent);
-            }
-        }, KeyDownEvent.getType());
-        RootPanel.get().addHandler(new KeyUpHandler() {
-            @Override
-            public void onKeyUp(KeyUpEvent aEvent) {
-                handleOnKeyUpEvent(aEvent);
-            }
-        }, KeyUpEvent.getType());
-        RootPanel.get().addHandler(new KeyPressHandler() {
-            @Override
-            public void onKeyPress(KeyPressEvent aEvent) {
-                handleOnKeyPressedEvent(aEvent);
-            }
-        }, KeyPressEvent.getType());
-        RootPanel.get().addHandler(new TouchStartHandler() {
-            @Override
-            public void onTouchStart(TouchStartEvent aEvent) {
-                handleOnTouchStart(aEvent);
-            }
-        }, TouchStartEvent.getType());
-        RootPanel.get().addHandler(new TouchEndHandler() {
-            @Override
-            public void onTouchEnd(TouchEndEvent aEvent) {
-                handleOnTouchEnd(aEvent);
-            }
-        }, TouchEndEvent.getType());
-        RootPanel.get().addHandler(new TouchMoveHandler() {
-            @Override
-            public void onTouchMove(TouchMoveEvent aEvent) {
-                handleOnTouchMoved(aEvent);
-            }
-        }, TouchMoveEvent.getType());
-        RootPanel.get().addHandler(new TouchCancelHandler() {
-            @Override
-            public void onTouchCancel(TouchCancelEvent aEvent) {
-                handleOnTouchCanceled(aEvent);
-            }
-        }, TouchCancelEvent.getType());
-        RootPanel.get().addHandler(new MouseDownHandler() {
-            @Override
-            public void onMouseDown(MouseDownEvent aEvent) {
-                handleMouseDown(aEvent);
-            }
-        }, MouseDownEvent.getType());
-        RootPanel.get().addHandler(new MouseUpHandler() {
-            @Override
-            public void onMouseUp(MouseUpEvent aEvent) {
-                handleMouseUp(aEvent);
-            }
-        }, MouseUpEvent.getType());
+        RootPanel.get().addHandler(this::handleOnKeyDownEvent, KeyDownEvent.getType());
+        RootPanel.get().addHandler(this::handleOnKeyUpEvent, KeyUpEvent.getType());
+        RootPanel.get().addHandler(this::handleOnKeyPressedEvent, KeyPressEvent.getType());
+        RootPanel.get().addHandler(this::handleOnTouchStart, TouchStartEvent.getType());
+        RootPanel.get().addHandler(this::handleOnTouchEnd, TouchEndEvent.getType());
+        RootPanel.get().addHandler(this::handleOnTouchMoved, TouchMoveEvent.getType());
+        RootPanel.get().addHandler(this::handleOnTouchCanceled, TouchCancelEvent.getType());
+        RootPanel.get().addHandler(this::handleMouseDown, MouseDownEvent.getType());
+        RootPanel.get().addHandler(this::handleMouseUp, MouseUpEvent.getType());
 
         // This must be done or no events are fired at all
         RootPanel.get().sinkEvents(Event.KEYEVENTS);
@@ -333,10 +288,10 @@ public class GWTRenderer implements EntryPoint {
     }
 
     private void playScene(GameScene aGameScene) {
-
-        playSceneStrategy.playScene(aGameScene, new SuccessCallback() {
+        playSceneStrategy.playScene(aGameScene).thenContinue(new Promise.NoReturnHandler<GameScene>() {
             @Override
-            public void success() {
+            public void process(GameScene aResult) {
+
                 canvas.setFocus(true);
 
                 final GameLoop theCurrentLoop = playSceneStrategy.getRunningGameLoop();
