@@ -69,6 +69,7 @@ public class GameResourceCache {
                     resourceLoader.load(aResourceName).thenContinue(new Promise.NoReturnHandler<GameResource>() {
                         @Override
                         public void process(GameResource aResult) {
+                            cachedResources.put(aResourceName.name, aResult);
                             aResolver.resolve(aResult);
                         }
                     }).catchError(new Promise.ErrorHandler<String>() {
