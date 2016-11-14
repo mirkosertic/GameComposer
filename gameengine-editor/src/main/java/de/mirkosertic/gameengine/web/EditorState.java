@@ -19,7 +19,6 @@ import de.mirkosertic.gameengine.AbstractGameRuntimeFactory;
 import de.mirkosertic.gameengine.core.Game;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.core.Promise;
-import de.mirkosertic.gameengine.teavm.TeaVMGameLoader;
 import de.mirkosertic.gameengine.teavm.TeaVMGameResourceLoader;
 import de.mirkosertic.gameengine.teavm.TeaVMGameSceneLoader;
 import de.mirkosertic.gameengine.teavm.TeaVMMap;
@@ -88,7 +87,7 @@ public class EditorState {
                 return theEntry.getKey();
             }
         }
-        throw new IllegalStateException("Unknown game scane");
+        throw new IllegalStateException("Unknown game scene");
     }
 
     public Promise<GameScene, String> saveScene(GameScene aScene) {
@@ -113,40 +112,23 @@ public class EditorState {
     }
 
     public void load(LoadingListener aListener) {
-        TeaVMGameLoader theGameLoader = resourceAccessor.createGameLoader(new TeaVMGameLoader.GameLoadedListener() {
-            @Override
-            public void onGameLoaded(Game aGame) {
-                loadedGame = aGame;
-                aListener.onGameLoaded(EditorState.this);
-                loadScenes(aListener);
-            }
-
-            @Override
-            public void onGameLoadedError(Throwable aError) {
-                aListener.onGameLoadingError(aError);
-            }
-        });
-        theGameLoader.loadFromServer();
+        resourceAccessor.createGameLoader().loadFromServer().thenContinue(
+                aResult -> {
+                    loadedGame = aResult;
+                    aListener.onGameLoaded(EditorState.this);
+                    loadScenes(aListener);
+                }).catchError((aResult, aOptionalException) -> aListener.onGameLoadingError(aOptionalException));
     }
 
     private void loadScenes(LoadingListener aLoadingListener) {
         String[] theKnownScenes = loadedGame.getKnownScenes();
         for (String theScene : theKnownScenes) {
             TeaVMGameResourceLoader theLoader = resourceAccessor.createResourceLoaderFor(theScene);
-            TeaVMGameSceneLoader theSceneLoader = resourceAccessor.createSceneLoader(
-                    new TeaVMGameSceneLoader.GameSceneLoadedListener() {
-                        @Override
-                        public void onGameSceneLoaded(GameScene aScene) {
-                            loadedScenes.put(theScene, aScene);
-                            aLoadingListener.onSceneLoaded(EditorState.this, theScene);
-                        }
-
-                        @Override
-                        public void onGameSceneLoadedError(Throwable aThrowable) {
-                            aLoadingListener.onSceneLoadingError(EditorState.this, theScene, aThrowable);
-                        }
-                    }, runtimeFactory);
-            theSceneLoader.loadFromServer(loadedGame, theScene, theLoader);
+            TeaVMGameSceneLoader theSceneLoader = resourceAccessor.createSceneLoader(runtimeFactory);
+            theSceneLoader.loadFromServer(loadedGame, theScene, theLoader).thenContinue(aResult -> {
+                loadedScenes.put(theScene, aResult);
+                aLoadingListener.onSceneLoaded(EditorState.this, theScene);
+            }).catchError((aResult, aOptionalException) -> aLoadingListener.onSceneLoadingError(EditorState.this, theScene, aOptionalException));
         }
     }
 

@@ -23,10 +23,9 @@ import de.mirkosertic.gameengine.teavm.TeaVMGameSceneLoader;
 
 public interface ResourceAccessor {
 
-    TeaVMGameSceneLoader createSceneLoader(TeaVMGameSceneLoader.GameSceneLoadedListener aListener,
-            AbstractGameRuntimeFactory aRuntimeFactory);
+    TeaVMGameSceneLoader createSceneLoader(AbstractGameRuntimeFactory aRuntimeFactory);
 
-    TeaVMGameLoader createGameLoader(TeaVMGameLoader.GameLoadedListener aListener);
+    TeaVMGameLoader createGameLoader();
 
     TeaVMGameResourceLoader createResourceLoaderFor(String aSceneID);
 
