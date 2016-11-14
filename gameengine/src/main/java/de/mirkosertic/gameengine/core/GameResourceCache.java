@@ -15,12 +15,12 @@
  */
 package de.mirkosertic.gameengine.core;
 
-import de.mirkosertic.gameengine.ArrayUtils;
-import de.mirkosertic.gameengine.type.ResourceName;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import de.mirkosertic.gameengine.ArrayUtils;
+import de.mirkosertic.gameengine.type.ResourceName;
 
 public class GameResourceCache {
 
@@ -34,14 +34,19 @@ public class GameResourceCache {
         loadedSpriteSheets = new LoadedSpriteSheet[0];
     }
 
-    public void loadIntoCache(Spritesheet aSheet, final SuccessCallback aCallback) {
-        resourceLoader.loadSpriteSheet(aSheet.jsonFileProperty().get()).thenContinue(new Promise.NoReturnHandler<LoadedSpriteSheet>() {
+    public Promise<Spritesheet, String> loadIntoCache(final Spritesheet aSheet) {
+        return new Promise<>(new Promise.Executor() {
             @Override
-            public void process(LoadedSpriteSheet aResult) {
-                List<LoadedSpriteSheet> theSheets = ArrayUtils.asList(loadedSpriteSheets);
-                theSheets.add(aResult);
-                loadedSpriteSheets = theSheets.toArray(new LoadedSpriteSheet[theSheets.size()]);
-                aCallback.success();
+            public void process(final PromiseResolver aResolver, PromiseRejector aRejector) {
+                resourceLoader.loadSpriteSheet(aSheet.jsonFileProperty().get()).thenContinue(new Promise.NoReturnHandler<LoadedSpriteSheet>() {
+                    @Override
+                    public void process(LoadedSpriteSheet aResult) {
+                        List<LoadedSpriteSheet> theSheets = ArrayUtils.asList(loadedSpriteSheets);
+                        theSheets.add(aResult);
+                        loadedSpriteSheets = theSheets.toArray(new LoadedSpriteSheet[theSheets.size()]);
+                        aResolver.resolve(aSheet);
+                    }
+                });
             }
         });
     }

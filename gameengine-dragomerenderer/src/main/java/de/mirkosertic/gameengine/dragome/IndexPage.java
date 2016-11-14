@@ -15,6 +15,11 @@
  */
 package de.mirkosertic.gameengine.dragome;
 
+import org.w3c.dom.events.EventListener;
+import org.w3c.dom.events.KeyboardEvent;
+import org.w3c.dom.events.MouseEvent;
+import org.w3c.dom.html.HTMLCanvasElement;
+
 import com.dragome.services.WebServiceLocator;
 import com.dragome.view.DefaultVisualActivity;
 import com.dragome.web.annotations.PageAlias;
@@ -22,17 +27,19 @@ import com.dragome.web.enhancers.jsdelegate.JsCast;
 
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
-import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.core.Game;
+import de.mirkosertic.gameengine.core.GameLoop;
+import de.mirkosertic.gameengine.core.GameLoopFactory;
+import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.GameView;
+import de.mirkosertic.gameengine.core.GestureDetector;
+import de.mirkosertic.gameengine.core.PlaySceneStrategy;
 import de.mirkosertic.gameengine.event.SystemException;
 import de.mirkosertic.gameengine.network.NetworkConnector;
 import de.mirkosertic.gameengine.type.GameKeyCode;
 import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Size;
-import org.w3c.dom.events.Event;
-import org.w3c.dom.events.EventListener;
-import org.w3c.dom.events.KeyboardEvent;
-import org.w3c.dom.events.MouseEvent;
-import org.w3c.dom.html.HTMLCanvasElement;
 
 @PageAlias(alias= "index")
 public class IndexPage extends DefaultVisualActivity {
@@ -126,29 +133,23 @@ public class IndexPage extends DefaultVisualActivity {
         DragomeLogger.info("Loading game...");
         theLoader.loadFromServer();
 
-        EventListener theGlobalEventListener = new EventListener() {
-            @Override
-            public void handleEvent(Event aEvent) {
-                switch (aEvent.getType()) {
-                    case "keydown":
-                    case "keypress":
-                    case "keyup":
-                        handleSingleKeyboardEvent(JsCast.castTo(aEvent,KeyboardEvent.class));
-                        break;
-                    case "mousedown":
-                    case "mouseup":
-                        handleSingleMouseEvent(JsCast.castTo(aEvent,MouseEvent.class));
-                        break;
-                }
+        EventListener theGlobalEventListener = aEvent -> {
+            switch (aEvent.getType()) {
+                case "keydown":
+                case "keypress":
+                case "keyup":
+                    handleSingleKeyboardEvent(JsCast.castTo(aEvent,KeyboardEvent.class));
+                    break;
+                case "mousedown":
+                case "mouseup":
+                    handleSingleMouseEvent(JsCast.castTo(aEvent,MouseEvent.class));
+                    break;
             }
         };
 
-        window.onResize(new Runnable() {
-            @Override
-            public void run() {
-                if (playSceneStrategy.hasGameLoop()) {
-                    playSceneStrategy.handleResize();
-                }
+        window.onResize(() -> {
+            if (playSceneStrategy.hasGameLoop()) {
+                playSceneStrategy.handleResize();
             }
         });
 
@@ -186,23 +187,15 @@ public class IndexPage extends DefaultVisualActivity {
     private void runSingleStep(final GameLoop aGameLoop) {
         if (!aGameLoop.isShutdown()) {
             aGameLoop.singleRun();
-            window.requestAnimationFrame(new Runnable() {
-                @Override
-                public void run() {
-                    runSingleStep(aGameLoop);
-                }
-            });
+            window.requestAnimationFrame(() -> runSingleStep(aGameLoop));
         }
     }
 
     private void playScene(GameScene aGameScene) {
-        playSceneStrategy.playScene(aGameScene, new SuccessCallback() {
-            @Override
-            public void success() {
-                runSingleStep(playSceneStrategy.getRunningGameLoop());
+        playSceneStrategy.playScene(aGameScene).thenContinue(aResult -> {
+            runSingleStep(playSceneStrategy.getRunningGameLoop());
 
-                DragomeLogger.info("Scene initialized");
-            }
+            DragomeLogger.info("Scene initialized");
         });
     }
 }

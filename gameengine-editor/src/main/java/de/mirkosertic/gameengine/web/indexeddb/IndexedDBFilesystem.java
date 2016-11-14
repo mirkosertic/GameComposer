@@ -15,17 +15,18 @@
  */
 package de.mirkosertic.gameengine.web.indexeddb;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.teavm.jso.JSBody;
+import org.teavm.jso.JSObject;
+
 import de.mirkosertic.gameengine.core.Promise;
 import de.mirkosertic.gameengine.teavm.TeaVMLogger;
 import de.mirkosertic.gameengine.web.Blob;
 import de.mirkosertic.gameengine.web.File;
 import de.mirkosertic.gameengine.web.FileReader;
 import de.mirkosertic.gameengine.web.Filesystem;
-import org.teavm.jso.JSBody;
-import org.teavm.jso.JSObject;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class IndexedDBFilesystem implements Filesystem {
 
@@ -94,19 +95,21 @@ public class IndexedDBFilesystem implements Filesystem {
     }
 
     @Override
-    public void asDataURL(File aFile, DataUrlCallback aCallback) {
-        String theCached = cachedURLs.get(aFile.getFilename());
-        if (theCached != null) {
-            aCallback.handle(theCached);
-        } else {
-            FileReader theReader = FileReader.create();
-            theReader.setOnload(() -> {
-                String theResult = theReader.getResult();
-                cachedURLs.put(aFile.getFilename(), theResult);
-                aCallback.handle(theResult);
-            });
-            theReader.setOnerror(() -> TeaVMLogger.error("Error loading dataurl for " + aFile.getFilename()));
-            theReader.readAsDataURL(aFile.getContent());
-        }
+    public Promise<String, String> asDataURL(File aFile) {
+        return new Promise<>((Promise.Executor) (aResolver, aRejector) -> {
+            String theCached = cachedURLs.get(aFile.getFilename());
+            if (theCached != null) {
+                aResolver.resolve(theCached);
+            } else {
+                FileReader theReader = FileReader.create();
+                theReader.setOnload(() -> {
+                    String theResult = theReader.getResult();
+                    cachedURLs.put(aFile.getFilename(), theResult);
+                    aResolver.resolve(theResult);
+                });
+                theReader.setOnerror(() -> TeaVMLogger.error("Error loading dataurl for " + aFile.getFilename()));
+                theReader.readAsDataURL(aFile.getContent());
+            }
+        });
     }
 }
