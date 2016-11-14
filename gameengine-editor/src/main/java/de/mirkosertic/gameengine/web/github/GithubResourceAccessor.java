@@ -136,8 +136,6 @@ public class GithubResourceAccessor implements ResourceAccessor {
                     String theFileName = "/" + aSceneID + aResourceName.get();
 
                     fileSystem.openFile(theFileName).thenContinue(aResult -> {
-                        TeaVMLogger.info("Loaded " + aResult.getFilename() + " from cache");
-
                         fileSystem.asDataURL(aResult).thenContinue(aResult1 -> {
                             aResolver.resolve(convert(aResourceName, new ResourceName(aResult1)));
                         });
