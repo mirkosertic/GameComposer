@@ -16,7 +16,11 @@
 package de.mirkosertic.gameengine.web.electron;
 
 import de.mirkosertic.gameengine.AbstractGameRuntimeFactory;
-import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.core.Game;
+import de.mirkosertic.gameengine.core.GameResource;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.LoadedSpriteSheet;
+import de.mirkosertic.gameengine.core.Promise;
 import de.mirkosertic.gameengine.teavm.TeaVMGameLoader;
 import de.mirkosertic.gameengine.teavm.TeaVMGameResourceLoader;
 import de.mirkosertic.gameengine.teavm.TeaVMGameSceneLoader;
@@ -43,29 +47,32 @@ public class LocalResourceAccessor implements ResourceAccessor {
     }
 
     @Override
-    public TeaVMGameSceneLoader createSceneLoader(TeaVMGameSceneLoader.GameSceneLoadedListener aListener,
-            AbstractGameRuntimeFactory aRuntimeFactory) {
-        return new TeaVMGameSceneLoader(aListener, aRuntimeFactory) {
+    public TeaVMGameSceneLoader createSceneLoader(AbstractGameRuntimeFactory aRuntimeFactory) {
+        return new TeaVMGameSceneLoader(aRuntimeFactory) {
             @Override
-            public void loadFromServer(Game aGame, String aSceneName, TeaVMGameResourceLoader aResourceLoader) {
-                String theFile = localPath + "/" + aSceneName + "/scene.json";
-                String theData = fs.readFileSync(theFile, "utf8");
+            public Promise<GameScene, String> loadFromServer(Game aGame, String aSceneName, TeaVMGameResourceLoader aResourceLoader) {
+                return new Promise<>((Promise.Executor) (aResolver, aRejector) -> {
+                    String theFile = localPath + "/" + aSceneName + "/scene.json";
+                    String theData = fs.readFileSync(theFile, "utf8");
 
-                GameScene theScene = parse(aGame, theData, aResourceLoader);
-                listener.onGameSceneLoaded(theScene);
+                    GameScene theScene = parse(aGame, theData, aResourceLoader);
+                    aResolver.resolve(theScene);
+                });
             }
         };
     }
 
     @Override
-    public TeaVMGameLoader createGameLoader(TeaVMGameLoader.GameLoadedListener aListener) {
-        return new TeaVMGameLoader(aListener) {
+    public TeaVMGameLoader createGameLoader() {
+        return new TeaVMGameLoader() {
             @Override
-            public void loadFromServer() {
-                String theFile = localPath + "/game.json";
-                String theData = fs.readFileSync(theFile, "utf8");
-                Game theGame = parse(theData);
-                listener.onGameLoaded(theGame);
+            public Promise<Game, String> loadFromServer() {
+                return new Promise<>((aResolver, aRejector) -> {
+                    String theFile = localPath + "/game.json";
+                    String theData = fs.readFileSync(theFile, "utf8");
+                    Game theGame = parse(theData);
+                    aResolver.resolve(theGame);
+                });
             }
         };
     }

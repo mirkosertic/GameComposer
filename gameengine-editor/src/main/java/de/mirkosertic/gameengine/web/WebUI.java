@@ -16,7 +16,14 @@
 package de.mirkosertic.gameengine.web;
 
 import de.mirkosertic.gameengine.core.Game;
-import de.mirkosertic.gameengine.teavm.*;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.Promise;
+import de.mirkosertic.gameengine.teavm.TeaVMGameLoader;
+import de.mirkosertic.gameengine.teavm.TeaVMGameResourceLoader;
+import de.mirkosertic.gameengine.teavm.TeaVMGameRuntimeFactory;
+import de.mirkosertic.gameengine.teavm.TeaVMGameSceneLoader;
+import de.mirkosertic.gameengine.teavm.TeaVMGenericPlayer;
+import de.mirkosertic.gameengine.teavm.TeaVMLogger;
 import de.mirkosertic.gameengine.web.github.GithubEditorProject;
 import org.teavm.jso.browser.Window;
 import org.teavm.jso.dom.html.HTMLCanvasElement;
@@ -67,20 +74,22 @@ public class WebUI {
 
                     String thePreviewData = aProject.getPreviewDataAsJSON();
                     if (thePreviewData != null) {
-                        return new TeaVMGameSceneLoader(createSceneLoaderListener(), aRuntimeFactory) {
+                        return new TeaVMGameSceneLoader(aRuntimeFactory) {
                             @Override
-                            public void loadFromServer(Game aGame, String aSceneName, TeaVMGameResourceLoader aResourceLoader) {
-                                String thePreviewData = WINDOW.getLocalStorage().getItem("previewscene");
-                                listener.onGameSceneLoaded(parse(aGame, thePreviewData, aResourceLoader));
+                            public Promise<GameScene, String> loadFromServer(Game aGame, String aSceneName, TeaVMGameResourceLoader aResourceLoader) {
+                                return new Promise<>((Promise.Executor) (aResolver, aRejector) -> {
+                                    String thePreviewData1 = WINDOW.getLocalStorage().getItem("previewscene");
+                                    aResolver.resolve(parse(aGame, thePreviewData1, aResourceLoader));
+                                });
                             }
                         };
                     }
-                    return aResourceLoaderFactory.createSceneLoader(createSceneLoaderListener(), aRuntimeFactory);
+                    return aResourceLoaderFactory.createSceneLoader(aRuntimeFactory);
                 }
 
                 @Override
-                protected TeaVMGameLoader createGameLoader(TeaVMGameLoader.GameLoadedListener aListener) {
-                    return aResourceLoaderFactory.createGameLoader(aListener);
+                protected TeaVMGameLoader createGameLoader() {
+                    return aResourceLoaderFactory.createGameLoader();
                 }
 
                 @Override
