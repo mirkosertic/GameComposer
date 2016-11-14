@@ -15,6 +15,12 @@
  */
 package de.mirkosertic.gameengine.teavm;
 
+import org.teavm.jso.browser.Window;
+import org.teavm.jso.core.JSArrayReader;
+import org.teavm.jso.dom.events.EventTarget;
+import org.teavm.jso.dom.html.HTMLCanvasElement;
+import org.teavm.jso.dom.html.HTMLDocument;
+
 import de.mirkosertic.gameengine.Version;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
@@ -34,11 +40,6 @@ import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Size;
 import de.mirkosertic.gameengine.type.TouchIdentifier;
 import de.mirkosertic.gameengine.type.TouchPosition;
-import org.teavm.jso.browser.Window;
-import org.teavm.jso.core.JSArrayReader;
-import org.teavm.jso.dom.events.EventTarget;
-import org.teavm.jso.dom.html.HTMLCanvasElement;
-import org.teavm.jso.dom.html.HTMLDocument;
 
 public class TeaVMGenericPlayer {
 
@@ -184,14 +185,14 @@ public class TeaVMGenericPlayer {
 
                 String theSceneId = aGame.defaultSceneProperty().get();
 
-                TeaVMLogger.info("Loading scene " + theSceneId);
-                sceneLoader.loadFromServer(game, theSceneId, createResourceLoader(theSceneId));
-            }
+                    TeaVMLogger.info("Loading scene " + theSceneId);
+                    sceneLoader.loadFromServer(game, theSceneId, createResourceLoader(theSceneId));
+                }
 
-            @Override
-            public void onGameLoadedError(Throwable aError) {
-                TeaVMLogger.error("Failed to load scene : " + aError);
-            }
+                @Override
+                public void onGameLoadedError(Throwable aError) {
+                    TeaVMLogger.error("Failed to load scene : " + aError);
+                }
         }).loadFromServer();
 
         EventTarget documentEventTarget = document;
@@ -305,6 +306,8 @@ public class TeaVMGenericPlayer {
     }
 
     private void playScene(GameScene aGameScene) {
-        runSceneStrategy.playScene(aGameScene, () -> runSingleStep(runSceneStrategy.getRunningGameLoop()));
+        runSceneStrategy.playScene(aGameScene).thenContinue(aResult -> {
+            runSingleStep(runSceneStrategy.getRunningGameLoop());
+        });
     }
 }

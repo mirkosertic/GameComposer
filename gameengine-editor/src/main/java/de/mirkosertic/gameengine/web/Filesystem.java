@@ -19,23 +19,11 @@ import de.mirkosertic.gameengine.core.Promise;
 
 public interface Filesystem {
 
-    interface FileProcessor {
-
-        void process(File aFile);
-
-        void doesNotExist(String aFileName);
-    }
-
-    interface DataUrlCallback {
-
-        void handle(String aValue);
-    }
-
     Promise<File, String> openFile(String aFileName);
 
     Promise<File, String> storeFile(String aFileName, Blob aBlob);
 
     Promise<File, String> updateFile(String aFileName, Blob aBlob);
 
-    void asDataURL(File aFile, DataUrlCallback aCallback);
+    Promise<String, String> asDataURL(File aFile);
 }

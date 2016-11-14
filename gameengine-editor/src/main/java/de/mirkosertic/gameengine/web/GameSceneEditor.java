@@ -15,17 +15,27 @@
  */
 package de.mirkosertic.gameengine.web;
 
-import de.mirkosertic.gameengine.camera.CameraBehavior;
-import de.mirkosertic.gameengine.core.*;
-import de.mirkosertic.gameengine.physic.DisableDynamicPhysics;
-import de.mirkosertic.gameengine.physic.EnableDynamicPhysics;
-import de.mirkosertic.gameengine.teavm.*;
-import de.mirkosertic.gameengine.teavm.pixi.Renderer;
-import de.mirkosertic.gameengine.type.Position;
 import org.teavm.jso.JSObject;
 import org.teavm.jso.browser.Window;
 import org.teavm.jso.dom.events.EventListener;
 import org.teavm.jso.json.JSON;
+
+import de.mirkosertic.gameengine.camera.CameraBehavior;
+import de.mirkosertic.gameengine.core.GameLoop;
+import de.mirkosertic.gameengine.core.GameLoopFactory;
+import de.mirkosertic.gameengine.core.GameObject;
+import de.mirkosertic.gameengine.core.GameObjectInstance;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.physic.DisableDynamicPhysics;
+import de.mirkosertic.gameengine.physic.EnableDynamicPhysics;
+import de.mirkosertic.gameengine.teavm.TeaVMDragEvent;
+import de.mirkosertic.gameengine.teavm.TeaVMGameView;
+import de.mirkosertic.gameengine.teavm.TeaVMLogger;
+import de.mirkosertic.gameengine.teavm.TeaVMMap;
+import de.mirkosertic.gameengine.teavm.TeaVMMouseEvent;
+import de.mirkosertic.gameengine.teavm.TeaVMWindow;
+import de.mirkosertic.gameengine.teavm.pixi.Renderer;
+import de.mirkosertic.gameengine.type.Position;
 
 public class GameSceneEditor {
 
@@ -115,7 +125,9 @@ public class GameSceneEditor {
     }
 
     public void playScene(GameScene aGameScene) {
-        runSceneStrategy.playScene(aGameScene, () -> runSingleStep(runSceneStrategy.getRunningGameLoop()));
+        runSceneStrategy.playScene(aGameScene).thenContinue(aResult -> {
+            runSingleStep(runSceneStrategy.getRunningGameLoop());
+        });
     }
 
     private void onPreview() {
