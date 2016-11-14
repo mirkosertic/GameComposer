@@ -139,7 +139,7 @@ public class GameSceneEditor {
             editorState.getEditorProject().setCurrentPreview(theJSON);
 
             window.open("preview.html", "_blank");
-        }).catchError(aResult -> Toast.error("Error writing data : " + aResult));
+        }).catchError((aResult, aOptionalRejectedException) -> Toast.error("Error writing data : " + aResult));
     }
 
     private void onMouseClick(TeaVMMouseEvent aEvent) {

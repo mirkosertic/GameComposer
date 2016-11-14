@@ -97,7 +97,8 @@ public class EditorState {
             String theJSON = JSON.stringify(theJSForm);
             Blob theBlob = Blob.createJSONBlob(JSString.valueOf(theJSON));
 
-            resourceAccessor.persistFile("/" + getIDForScene(aScene) + "/scene.json", theBlob).thenContinue(aResolver::resolve).catchError(aRejector::reject);
+            resourceAccessor.persistFile("/" + getIDForScene(aScene) + "/scene.json", theBlob).thenContinue(aResolver::resolve).catchError(
+                    (aResult, aOptionalRejectedException) -> aRejector.reject(aResult, aOptionalRejectedException));
         });
 
         Promise<GameScene, String> theResult = new Promise<>();
@@ -106,7 +107,7 @@ public class EditorState {
         Promise<Promise[], Void> theAll = Promise.all(theScenePromise, theGamePromise);
         theAll.thenContinue(aResult -> {
             theResult.resolve(aScene);
-        }).catchError(aResult -> theResult.reject("Error whilw saving data"));
+        }).catchError((aResult, aOptionalRejectedException) -> theResult.reject("Error while saving data", aOptionalRejectedException));
 
         return theResult;
     }
