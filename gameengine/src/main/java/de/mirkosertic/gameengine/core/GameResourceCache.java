@@ -73,8 +73,8 @@ public class GameResourceCache {
                         }
                     }).catchError(new Promise.ErrorHandler<String>() {
                         @Override
-                        public void process(String aResult) {
-                            aRejector.reject(aResult);
+                        public void process(String aResult, Exception aOptionalRejectedException) {
+                            aRejector.reject(aResult, aOptionalRejectedException);
                         }
                     });
                 } else {

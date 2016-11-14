@@ -17,5 +17,5 @@ package de.mirkosertic.gameengine.core;
 
 public interface PromiseRejector<V> {
 
-    void reject(V aReason);
+    void reject(V aReason, Exception aOptionalException);
 }

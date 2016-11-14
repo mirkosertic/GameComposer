@@ -48,7 +48,7 @@ public class IndexedDBFilesystem implements Filesystem {
             IndexedDBFactory theFactory = IndexedDBFactory.getFactory();
             IndexedDBOpenRequest theRequest = theFactory.open(aDatabaseName, 1);
             theRequest.setOnupgradeneeded(() -> theRequest.getResult().createObjectStore(FILE_DATASTORE));
-            theRequest.setOnerror(() -> aRejector.reject("Error opening IndexedDB"));
+            theRequest.setOnerror(() -> aRejector.reject("Error opening IndexedDB", null));
             theRequest.setOnsuccess(() -> aResolver.resolve(new IndexedDBFilesystem(theRequest.getResult())));
         });
     }
@@ -59,10 +59,10 @@ public class IndexedDBFilesystem implements Filesystem {
             IndexedDBTransaction theTransction = database.transaction(FILE_DATASTORE, "readonly");
             IndexedDBObjectStore theObjectStore = theTransction.objectStore(FILE_DATASTORE);
             IndexedDBGetRequest theRequest = theObjectStore.get(IndexedDBFile.createFileKey(aFileName));
-            theRequest.setOnerror(() -> aRejector.reject("Error storing file " + aFileName));
+            theRequest.setOnerror(() -> aRejector.reject("Error storing file " + aFileName, null));
             theRequest.setOnsuccess(() -> {
                 if (isUndefined(theRequest.getResult())) {
-                    aRejector.reject("File " + aFileName + " does not exist");
+                    aRejector.reject("File " + aFileName + " does not exist", null);
                 } else {
                     aResolver.resolve(theRequest.getResult());
                 }
@@ -77,7 +77,7 @@ public class IndexedDBFilesystem implements Filesystem {
             IndexedDBObjectStore theObjectStore = theTransction.objectStore(FILE_DATASTORE);
             IndexedDBFile theFile = IndexedDBFile.createCached(aFileName, aBlob);
             IndexedDBRequest theRequest = theObjectStore.put(theFile, IndexedDBFile.createFileKey(aFileName));
-            theRequest.setOnerror(() -> aRejector.reject("Error storing file " + aFileName));
+            theRequest.setOnerror(() -> aRejector.reject("Error storing file " + aFileName, null));
             theRequest.setOnsuccess(() -> aResolver.resolve(theFile));
         });
     }
@@ -89,7 +89,7 @@ public class IndexedDBFilesystem implements Filesystem {
             IndexedDBObjectStore theObjectStore = theTransction.objectStore(FILE_DATASTORE);
             IndexedDBFile theFile = IndexedDBFile.createChanged(aFileName, aBlob);
             IndexedDBRequest theRequest = theObjectStore.put(theFile, IndexedDBFile.createFileKey(aFileName));
-            theRequest.setOnerror(() -> aRejector.reject("Error storing file " + aFileName));
+            theRequest.setOnerror(() -> aRejector.reject("Error storing file " + aFileName, null));
             theRequest.setOnsuccess(() -> aResolver.resolve(theFile));
         });
     }

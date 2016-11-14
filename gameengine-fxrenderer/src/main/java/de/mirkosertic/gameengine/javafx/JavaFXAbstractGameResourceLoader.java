@@ -34,7 +34,7 @@ public abstract class JavaFXAbstractGameResourceLoader implements GameResourceLo
             try {
                 InputStream theStream = getInputStreamFor(aResourceName);
                 if (theStream == null) {
-                    aRejector.reject("Not found : " + aResourceName.name);
+                    aRejector.reject("Not found : " + aResourceName.name, null);
                     return;
                 }
                 if (aResourceName.name.toLowerCase().endsWith(".png")) {
@@ -48,9 +48,9 @@ public abstract class JavaFXAbstractGameResourceLoader implements GameResourceLo
                     aResolver.resolve(new JavaFXAudioResource(theStream));
                 }
             } catch (IOException e) {
-                aRejector.reject(e.getMessage());
+                aRejector.reject(e.getMessage(), e);
             } catch (Exception e) {
-                aRejector.reject(e.getMessage());
+                aRejector.reject(e.getMessage(), e);
             }
         });
     }

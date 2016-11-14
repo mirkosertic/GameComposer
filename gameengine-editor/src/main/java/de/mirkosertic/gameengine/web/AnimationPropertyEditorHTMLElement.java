@@ -45,7 +45,7 @@ public abstract class AnimationPropertyEditorHTMLElement implements HTMLElement 
             ResourceName theResourceName = theCurrentAnimation.getResourceByIndex(0);
             aScene.getRuntime().getResourceCache().getResourceFor(theResourceName).thenContinue(aResult -> {
                 setTexture(((TeaVMTextureResource) aResult).getTexture());
-            }).catchError(aResult -> aScene.getRuntime().getLogger().error("Error loading " + theResourceName.name));
+            }).catchError((aResult, aOptionalRejectedException) -> aScene.getRuntime().getLogger().error("Error loading " + theResourceName.name));
         }
     }
 }
