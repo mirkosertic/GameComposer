@@ -45,7 +45,7 @@ public class WebUI {
 
         theProject.initializeLoader().thenContinue(aResult -> {
             initializeWithResourceLoaderFactory(aResult, theProject);
-        }).catchError(aResult -> TeaVMLogger.error("Error creating indexeddb filesystem!"));
+        }).catchError((aResult, aOptionalRejectedException) -> TeaVMLogger.error("Error creating indexeddb filesystem!"));
     }
 
     private static void initializeWithResourceLoaderFactory(ResourceAccessor aResourceLoaderFactory, EditorProject aProject) {

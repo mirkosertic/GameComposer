@@ -39,14 +39,15 @@ public class Promise<T,V> implements PromiseResolver<T>, PromiseRejector<V> {
     }
 
     public interface ErrorHandler<X> {
-        void process(X aResult);
+        void process(X aResult, Exception aOptionalException);
     }
 
     private State state;
     private T resolvedValue;
     private V rejectedReason;
-    private final List<ErrorHandler<V>> rejectFilters;
-    private final List<NoReturnHandler<T>> resolveFilters;
+    private Exception optionalRejectedException;
+
+    private final List<Promise<T,V>> followups;
 
     public Promise() {
         this(new Executor<T, V>() {
@@ -58,8 +59,7 @@ public class Promise<T,V> implements PromiseResolver<T>, PromiseRejector<V> {
 
     public Promise(Executor aExecutor) {
         state = State.pending;
-        rejectFilters = new ArrayList<>();
-        resolveFilters = new ArrayList<>();
+        followups = new ArrayList<>();
         aExecutor.process(this, this);
     }
 
@@ -75,21 +75,32 @@ public class Promise<T,V> implements PromiseResolver<T>, PromiseRejector<V> {
         return rejectedReason;
     }
 
+    public Exception getOptionalRejectedException() {
+        return optionalRejectedException;
+    }
+
     @Override
     public void resolve(T aValue) {
+        if (state != State.pending) {
+            throw new IllegalStateException("Only pending promises can be resolved");
+        }
         state = State.resolved;
         resolvedValue = aValue;
-        for (NoReturnHandler<T> theFilter : resolveFilters) {
-            theFilter.process(resolvedValue);
+        for (Promise<T,V> theFollowUp : followups) {
+            theFollowUp.resolve(aValue);
         }
     }
 
     @Override
-    public void reject(V aReason) {
+    public void reject(V aReason, Exception aOptionalExceptiopn) {
+        if (state != State.pending) {
+            throw new IllegalStateException("Only pending promises can be rejected");
+        }
         state = State.rejected;
         rejectedReason = aReason;
-        for (ErrorHandler<V> theFilter : rejectFilters) {
-            theFilter.process(aReason);
+        optionalRejectedException = aOptionalExceptiopn;
+        for (Promise<T,V> theFollowUp: followups) {
+            theFollowUp.reject(aReason, aOptionalExceptiopn);
         }
     }
 
@@ -97,10 +108,17 @@ public class Promise<T,V> implements PromiseResolver<T>, PromiseRejector<V> {
         final Promise<X, V> theNewPromise = new Promise<>();
         switch (state) {
             case pending:
-                resolveFilters.add(new NoReturnHandler<T>() {
+                addFollowUp(new Promise<T, V>() {
                     @Override
-                    public void process(T aResult) {
-                        theNewPromise.resolve(aFilter.process(aResult));
+                    public void resolve(T aValue) {
+                        theNewPromise.resolve(aFilter.process(aValue));
+                        super.resolve(aValue);
+                    }
+
+                    @Override
+                    public void reject(V aReason, Exception aOptionalRejectedException) {
+                        super.reject(aReason, aOptionalRejectedException);
+                        Promise.this.reject(aReason, aOptionalRejectedException);
                     }
                 });
                 break;
@@ -108,39 +126,75 @@ public class Promise<T,V> implements PromiseResolver<T>, PromiseRejector<V> {
                 theNewPromise.resolve(aFilter.process(resolvedValue));
                 break;
             case rejected:
-                theNewPromise.reject(rejectedReason);
+                theNewPromise.reject(rejectedReason, optionalRejectedException);
                 break;
         }
         return theNewPromise;
     }
 
-    public Promise<T, V> thenContinue(NoReturnHandler<T> aFilter) {
+    public Promise<T, V> thenContinue(final NoReturnHandler<T> aFilter) {
         switch (state) {
             case pending:
-                resolveFilters.add(aFilter);
-                break;
+                return addFollowUp(new Promise<T, V>() {
+                    @Override
+                    public void resolve(T aValue) {
+                        aFilter.process(aValue);
+                        super.resolve(aValue);
+                    }
+
+                    @Override
+                    public void reject(V aReason, Exception aOptionalRejectedException) {
+                        super.reject(aReason, aOptionalRejectedException);
+                        Promise.this.reject(aReason, aOptionalRejectedException);
+                    }
+                });
             case resolved:
-                aFilter.process(resolvedValue);
-                break;
+                Promise<T,V> theResult = new Promise<T, V>() {
+                    @Override
+                    public void resolve(T aValue) {
+                        aFilter.process(aValue);
+                        super.resolve(aValue);
+                    }
+
+                    @Override
+                    public void reject(V aReason, Exception aOptionalRejectedException) {
+                        super.reject(aReason, aOptionalRejectedException);
+                        Promise.this.reject(aReason, aOptionalRejectedException);
+                    }
+                };
+                theResult.resolve(resolvedValue);
+                return theResult;
             case rejected:
-                // Nothing to do
-                break;
+                Promise<T,V> thePromise = new Promise<>();
+                thePromise.reject(rejectedReason, optionalRejectedException);
+                return thePromise;
         }
-        return this;
+        throw new IllegalStateException();
     }
 
-    public void catchError(ErrorHandler<V> aFilter) {
+    public void catchError(final ErrorHandler<V> aFilter) {
         switch (state) {
             case pending:
-                rejectFilters.add(aFilter);
+                addFollowUp(new Promise<T, V>() {
+                    @Override
+                    public void reject(V aReason, Exception aOptionalRejectedException) {
+                        aFilter.process(aReason, aOptionalRejectedException);
+                        super.reject(aReason, aOptionalRejectedException);
+                    }
+                });
                 break;
             case rejected:
-                aFilter.process(rejectedReason);
+                aFilter.process(rejectedReason, optionalRejectedException);
                 break;
             case resolved:
                 // Nothing to do
                 break;
         }
+    }
+
+    private Promise<T,V> addFollowUp(Promise<T,V> aFollowUp) {
+        followups.add(aFollowUp);
+        return aFollowUp;
     }
 
     public static Promise<Promise[], Void> all(final Promise... aPromise) {
@@ -166,8 +220,8 @@ public class Promise<T,V> implements PromiseResolver<T>, PromiseRejector<V> {
                 }
             }).catchError(new ErrorHandler() {
                 @Override
-                public void process(Object aResult) {
-                    theUnionPromise.reject(null);
+                public void process(Object aResult, Exception aOptionalException) {
+                    theUnionPromise.reject(null, aOptionalException);
                 }
             });
         }

@@ -18,11 +18,27 @@ package de.mirkosertic.gameengine.generic;
 import de.mirkosertic.gameengine.Version;
 import de.mirkosertic.gameengine.camera.Callback;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
-import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.core.GameObjectInstance;
+import de.mirkosertic.gameengine.core.GameResource;
+import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.GameSceneEffect;
+import de.mirkosertic.gameengine.core.GameView;
+import de.mirkosertic.gameengine.core.GestureDetector;
+import de.mirkosertic.gameengine.core.Promise;
+import de.mirkosertic.gameengine.core.RuntimeStatistics;
 import de.mirkosertic.gameengine.scriptengine.LUAScriptEngine;
 import de.mirkosertic.gameengine.sprite.SpriteBehavior;
 import de.mirkosertic.gameengine.text.TextBehavior;
-import de.mirkosertic.gameengine.type.*;
+import de.mirkosertic.gameengine.type.Angle;
+import de.mirkosertic.gameengine.type.Color;
+import de.mirkosertic.gameengine.type.EffectCanvas;
+import de.mirkosertic.gameengine.type.Font;
+import de.mirkosertic.gameengine.type.Position;
+import de.mirkosertic.gameengine.type.PositionAnchor;
+import de.mirkosertic.gameengine.type.ResourceName;
+import de.mirkosertic.gameengine.type.Size;
+import de.mirkosertic.gameengine.type.TextExpression;
 
 public abstract class GenericAbstractGameView<S extends GameResource> implements GameView {
 
@@ -162,7 +178,7 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
                             }
                         }).catchError(new Promise.ErrorHandler<String>() {
                             @Override
-                            public void process(String aResult) {
+                            public void process(String aResult, Exception aOptionalRejectedException) {
                                 gameRuntime.getLogger().error("Error while rendering sprite " + theSpriteResource.name);
                             }
                         });

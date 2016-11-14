@@ -19,7 +19,12 @@ import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.graphics.BitmapFactory;
 import android.os.ParcelFileDescriptor;
-import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.core.GameResource;
+import de.mirkosertic.gameengine.core.GameResourceLoader;
+import de.mirkosertic.gameengine.core.LoadedSpriteSheet;
+import de.mirkosertic.gameengine.core.Promise;
+import de.mirkosertic.gameengine.core.PromiseRejector;
+import de.mirkosertic.gameengine.core.PromiseResolver;
 import de.mirkosertic.gameengine.type.ResourceName;
 
 import java.io.File;
@@ -65,7 +70,7 @@ public class AndroidGameResourceLoader implements GameResourceLoader {
                         aResolver.resolve(new AndroidSoundResource(new ResourceName(prefix + aResourceName.name), theFileDescriptor));
                     }
                 } catch (Exception e) {
-                    aRejector.reject(e.getMessage());
+                    aRejector.reject(e.getMessage(), e);
                 }
             }
         });

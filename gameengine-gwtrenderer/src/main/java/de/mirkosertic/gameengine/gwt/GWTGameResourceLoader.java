@@ -18,7 +18,10 @@ package de.mirkosertic.gameengine.gwt;
 import com.google.gwt.media.client.Audio;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.RootPanel;
-import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.core.GameResource;
+import de.mirkosertic.gameengine.core.GameResourceLoader;
+import de.mirkosertic.gameengine.core.LoadedSpriteSheet;
+import de.mirkosertic.gameengine.core.Promise;
 import de.mirkosertic.gameengine.type.ResourceName;
 
 public class GWTGameResourceLoader implements GameResourceLoader {
@@ -45,19 +48,14 @@ public class GWTGameResourceLoader implements GameResourceLoader {
             if (aResourceName.name.endsWith(".wav")) {
                 Audio theAudio = Audio.createIfSupported();
                 theAudio.setSrc(baseDirectory + aResourceName.name.replace('\\', '/'));
-                aRejector.reject(new GWTAudioResource(theAudio));
+                aRejector.reject(new GWTAudioResource(theAudio), null);
             }
         });
     }
 
     @Override
     public Promise<LoadedSpriteSheet, String> loadSpriteSheet(ResourceName aResourceName) {
-        return new Promise<>(new Promise.Executor() {
-            @Override
-            public void process(PromiseResolver aResolver, PromiseRejector aRejector) {
-                aResolver.resolve(LoadedSpriteSheet.EMPTY);
-            }
-        });
+        return new Promise<>((Promise.Executor) (aResolver, aRejector) -> aResolver.resolve(LoadedSpriteSheet.EMPTY));
     }
 
     @Override

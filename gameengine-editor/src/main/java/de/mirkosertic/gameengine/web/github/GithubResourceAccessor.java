@@ -67,7 +67,7 @@ public class GithubResourceAccessor implements ResourceAccessor {
                         theRequest.onComplete(() -> listener.onGameSceneLoaded(parse(aGame, theRequest.getResponseText(), aResourceLoader)));
                         theRequest.send();
                     });
-                }).catchError(aResult -> {
+                }).catchError((aResult, aOptionalRejectedException) -> {
                     String theURL = baseURL + theFileName;
                     blobLoader.load(theURL).thenContinue(aBlob -> {
                         fileSystem.storeFile(theFileName, aBlob).thenContinue(aFile -> {
@@ -79,7 +79,7 @@ public class GithubResourceAccessor implements ResourceAccessor {
                                 theRequest.send();
                             });
                         });
-                    }).catchError(aErrorMessage -> TeaVMLogger.error("Error writing file : " + aErrorMessage));
+                    }).catchError((aErrorMessage, aOptionalRejectedException1) -> TeaVMLogger.error("Error writing file : " + aErrorMessage));
                 });
             }
         };
@@ -101,7 +101,7 @@ public class GithubResourceAccessor implements ResourceAccessor {
                         theRequest.send();
                     });
 
-                }).catchError(aResult -> {
+                }).catchError((aResult, aOptionalRejectedException) -> {
                     String theURL = baseURL + theFileName;
 
                     blobLoader.load(theURL).thenContinue(aBlob -> {
@@ -114,7 +114,7 @@ public class GithubResourceAccessor implements ResourceAccessor {
                                 theRequest.send();
                             });
                         });
-                    }).catchError(aErrorMessage -> TeaVMLogger.error("Error writing file : " + aErrorMessage));
+                    }).catchError((aErrorMessage, aOptionalRejectedException1) -> TeaVMLogger.error("Error writing file : " + aErrorMessage));
                 });
             }
         };
@@ -136,7 +136,7 @@ public class GithubResourceAccessor implements ResourceAccessor {
                             aResolver.resolve(convert(aResourceName, new ResourceName(aResult1)));
                         });
 
-                    }).catchError(aResult -> {
+                    }).catchError((aResult, aOptionalRejectedException) -> {
                         String theURL = baseURL + theFileName;
 
                         blobLoader.load(theURL).thenContinue(aResult1 -> {
@@ -145,7 +145,7 @@ public class GithubResourceAccessor implements ResourceAccessor {
                                     aResolver.resolve(convert(aResourceName, new ResourceName(aDataURL)));
                                 });
                             });
-                        }).catchError(aErrorMessage -> TeaVMLogger.error("Error writing file : " + aErrorMessage));
+                        }).catchError((aErrorMessage, aOptionalRejectedException1) -> TeaVMLogger.error("Error writing file : " + aErrorMessage));
                     });
                 });
             }

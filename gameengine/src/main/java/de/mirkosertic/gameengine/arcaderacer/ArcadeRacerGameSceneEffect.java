@@ -18,13 +18,22 @@ package de.mirkosertic.gameengine.arcaderacer;
 import de.mirkosertic.gameengine.annotations.ReflectiveField;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
-import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.core.GameResource;
+import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.GameSceneEffect;
+import de.mirkosertic.gameengine.core.GameSceneEffectType;
+import de.mirkosertic.gameengine.core.Promise;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.process.GameProcess;
 import de.mirkosertic.gameengine.process.StartProcess;
-import de.mirkosertic.gameengine.type.*;
+import de.mirkosertic.gameengine.type.ClassInformation;
+import de.mirkosertic.gameengine.type.Color;
+import de.mirkosertic.gameengine.type.EffectCanvas;
+import de.mirkosertic.gameengine.type.ResourceName;
+import de.mirkosertic.gameengine.type.Size;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -245,7 +254,7 @@ public class ArcadeRacerGameSceneEffect implements GameSceneEffect {
                             }
                         }).catchError(new Promise.ErrorHandler<String>() {
                             @Override
-                            public void process(String aResult) {
+                            public void process(String aResult, Exception aOptionalRejectedException) {
                                 aEffectCanvas.fillRectangle(theElementIdentifier + "t_" + theFinalI,
                                         theFinalOldTrackDataX[theFinalI*2], theFinalOldTrackDataY[theFinalI*2],
                                         theFinalOldTrackDataX[theFinalI*2+1], theFinalOldTrackDataY[theFinalI*2+1],
@@ -299,8 +308,8 @@ public class ArcadeRacerGameSceneEffect implements GameSceneEffect {
                         }
                     }).catchError(new Promise.ErrorHandler<String>() {
                         @Override
-                        public void process(String aResult) {
-                            throw new RuntimeException(aResult);
+                        public void process(String aResult, Exception aOptionalRejectedException) {
+                            throw new RuntimeException(aResult, aOptionalRejectedException);
                         }
                     });
                 }
