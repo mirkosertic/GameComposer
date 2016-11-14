@@ -18,6 +18,7 @@ package de.mirkosertic.gameengine.teavm;
 import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.core.LoadedSpriteSheet;
 import de.mirkosertic.gameengine.teavm.pixi.Loader;
+import de.mirkosertic.gameengine.teavm.pixi.*;
 import de.mirkosertic.gameengine.teavm.pixi.Texture;
 import de.mirkosertic.gameengine.type.ResourceName;
 import org.teavm.jso.JSBody;
@@ -43,6 +44,12 @@ public class TeaVMLoadedSpriteSheet implements LoadedSpriteSheet {
         loader = Loader.create();
         String thePath = aResourceName.name.replace('\\', '/');
         loader.add(thePath);
+        loader.pre(new LoaderMiddleware() {
+            @Override
+            public void handle(LoaderResource aResource, LoaderCallchain aChain) {
+                LoaderCallchain.next(aChain);
+            }
+        });
         loader.load((aLoader, aResources) -> {
             Loader.Resource theLoadedJSON = aResources.get(thePath);
             if (theLoadedJSON != null) {

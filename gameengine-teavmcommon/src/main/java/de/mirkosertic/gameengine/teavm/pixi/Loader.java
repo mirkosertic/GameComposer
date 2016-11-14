@@ -44,6 +44,8 @@ public abstract class Loader implements JSObject {
     @JSBody(params = {}, script = "return new PIXI.loaders.Loader();")
     public static native Loader create();
 
+    public abstract Loader pre(LoaderMiddleware aMiddleware);
+
     public abstract void add(String aResourceName);
 
     public abstract void load(LoadHandler aHandler);
