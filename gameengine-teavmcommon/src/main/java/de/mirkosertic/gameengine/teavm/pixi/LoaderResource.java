@@ -30,7 +30,10 @@ public abstract class LoaderResource extends EventEmitter {
     public abstract String getUrl();
 
     @JSProperty
-    public abstract void setUrl();
+    public abstract void setUrl(String aUrl);
+
+    @JSProperty
+    public abstract void setIsJson(boolean aValue);
 
     public abstract void complete();
 }
