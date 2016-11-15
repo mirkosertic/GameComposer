@@ -21,9 +21,9 @@ import org.teavm.jso.JSObject;
 public abstract class EventEmitter implements JSObject {
 
     @JSFunctor
-    public abstract interface Handler extends JSObject {
+    public interface Handler extends JSObject {
 
-        public void handle();
+        void handle();
     }
 
     public abstract void on(String aEvent, Handler aHandler);

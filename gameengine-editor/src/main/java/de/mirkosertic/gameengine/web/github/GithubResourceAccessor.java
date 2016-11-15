@@ -29,6 +29,7 @@ import de.mirkosertic.gameengine.teavm.TeaVMLogger;
 import de.mirkosertic.gameengine.teavm.pixi.Loader;
 import de.mirkosertic.gameengine.teavm.pixi.LoaderResource;
 import de.mirkosertic.gameengine.teavm.pixi.SpritesheetJSONResource;
+import de.mirkosertic.gameengine.teavm.pixi.LoaderCallchain;
 import de.mirkosertic.gameengine.type.ResourceName;
 import de.mirkosertic.gameengine.web.Blob;
 import de.mirkosertic.gameengine.web.BlobLoader;
@@ -122,19 +123,20 @@ public class GithubResourceAccessor implements ResourceAccessor {
         };
     }
 
-    private void updateResource(LoaderResource aResource, String aDataUri, ResourceName aOriginalResourceName) {
-        TeaVMLogger.info("Loading Data URI " + aDataUri);
-        if (aOriginalResourceName.name.endsWith(".json")) {
+    private void updateResource(LoaderResource aResource, String aDataUri, String aOriginalFileName, LoaderCallchain aChain) {
+        TeaVMLogger.info("Loading Data URI for " + aOriginalFileName);
+        if (aOriginalFileName.endsWith(".json")) {
             blobLoader.loadAsText(aDataUri).thenContinue(aResult -> {
                 aResource.setData(JSON.parse(aResult));
                 aResource.setIsJson(true);
-                aResource.complete();
+                LoaderCallchain.next(aChain);
             });
         } else {
+            // Data ist bei Bildern ein Image Element
             HTMLImageElement theImageElement = (HTMLImageElement) Window.current().getDocument().createElement("img");
             theImageElement.setSrc(aDataUri);
             aResource.setData(theImageElement);
-            aResource.complete();
+            LoaderCallchain.next(aChain);
         }
     }
 
@@ -173,39 +175,42 @@ public class GithubResourceAccessor implements ResourceAccessor {
 
                 TeaVMLogger.info("Continuing spritesheet loading for " + theFileName);
 
-                ResourceName theNewResourceName = new ResourceName(baseURL + theFileName);
-
                 Loader theLoader = Loader.create();
                 theLoader.pre((aResource, aChain) -> {
+
+                    String theResourceFilename = aResource.getUrl().substring(baseURL.length());
+
+                    TeaVMLogger.info("Loading resource with caching loader : " + theResourceFilename);
+
                     // Implement cache interaction here to retrieve loaded pngs etc.
-                    fileSystem.openFile(theFileName).thenContinue(aStoresFile -> {
+                    fileSystem.openFile(theResourceFilename).thenContinue(aStoresFile -> {
                         fileSystem.asDataURL(aStoresFile).thenContinue(aDataURI -> {
-                            updateResource(aResource, aDataURI, aResourceName);
+                            updateResource(aResource, aDataURI, theResourceFilename, aChain);
                         });
                     }).catchError((aFileName, aOptionalException) -> {
                         // Not cached, so needs to be loaded into cache
-                        String theURL = baseURL + theFileName;
-                        blobLoader.load(theURL).thenContinue(aLoadedBlob -> {
-                            fileSystem.storeFile(theFileName, aLoadedBlob).thenContinue(
+
+                        TeaVMLogger.info("Resource not cached " + aResource.getUrl());
+
+                        blobLoader.load(aResource.getUrl()).thenContinue(aLoadedBlob -> {
+                            fileSystem.storeFile(theResourceFilename, aLoadedBlob).thenContinue(
                                     aStoredFile -> {
                                         fileSystem.asDataURL(aStoredFile).thenContinue(
                                                 aDataURI -> {
-                                                    updateResource(aResource, aDataURI, aResourceName);
-                                        });
-                            });
+                                                    updateResource(aResource, aDataURI, theResourceFilename, aChain);
+                                                });
+                                    });
                         });
                     });
 
-                    TeaVMLogger.info("Loading resource with caching loader : " + aResource.getUrl());
-
-                    // If a resource was loaded, write it to the local file system
                     aResource.on("complete", () -> {
-                        // Data ist bei Bildern ein Image Element
-                        TeaVMLogger.info("Resource loaded " + aResource.getUrl());
+                        TeaVMLogger.info("Resource loaded " + theResourceFilename);
                     });
                 });
 
                 return new Promise<>((Promise.Executor) (aResolver, aRejector) -> {
+
+                    ResourceName theNewResourceName = new ResourceName(baseURL + theFileName);
                     final String thePath = theNewResourceName.name.replace('\\', '/');
                     theLoader.add(thePath);
                     theLoader.load((aLoader, aResources) -> {
