@@ -19,6 +19,10 @@ import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.core.GameResourceLoader;
 import de.mirkosertic.gameengine.core.LoadedSpriteSheet;
 import de.mirkosertic.gameengine.core.Promise;
+import de.mirkosertic.gameengine.teavm.pixi.Loader;
+import de.mirkosertic.gameengine.teavm.pixi.LoaderCallchain;
+import de.mirkosertic.gameengine.teavm.pixi.LoaderResource;
+import de.mirkosertic.gameengine.teavm.pixi.SpritesheetJSONResource;
 import de.mirkosertic.gameengine.teavm.pixi.Texture;
 import de.mirkosertic.gameengine.type.ResourceName;
 
@@ -44,8 +48,22 @@ public class TeaVMGameResourceLoader implements GameResourceLoader {
     @Override
     public Promise<LoadedSpriteSheet, String> loadSpriteSheet(ResourceName aResourceName) {
         return new Promise<>((Promise.Executor) (aResolver, aRejector) -> {
+
             ResourceName theNewResourceName = new ResourceName(sceneId + aResourceName.name.replace('\\', '/'));
-            new TeaVMLoadedSpriteSheet(theNewResourceName, aSpriteSheet -> aResolver.resolve(aSpriteSheet));
+
+            Loader theLoader = Loader.create();
+            final String thePath = theNewResourceName.name.replace('\\', '/');
+            theLoader.add(thePath);
+            theLoader.pre((aResource, aChain) -> {
+                // This does nothing
+                LoaderCallchain.next(aChain);
+            });
+            theLoader.load((aLoader, aResources) -> {
+                LoaderResource theLoadedJSON = aResources.get(thePath);
+                if (theLoadedJSON != null) {
+                    aResolver.resolve(new TeaVMLoadedSpriteSheet((SpritesheetJSONResource) theLoadedJSON.getData()));
+                }
+            });
         });
     }
 

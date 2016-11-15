@@ -17,8 +17,7 @@ package de.mirkosertic.gameengine.teavm;
 
 import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.core.LoadedSpriteSheet;
-import de.mirkosertic.gameengine.teavm.pixi.Loader;
-import de.mirkosertic.gameengine.teavm.pixi.*;
+import de.mirkosertic.gameengine.teavm.pixi.SpritesheetJSONResource;
 import de.mirkosertic.gameengine.teavm.pixi.Texture;
 import de.mirkosertic.gameengine.type.ResourceName;
 import org.teavm.jso.JSBody;
@@ -29,44 +28,20 @@ import java.util.Map;
 
 public class TeaVMLoadedSpriteSheet implements LoadedSpriteSheet {
 
-    public interface Listener {
-        void handle(TeaVMLoadedSpriteSheet aSpriteSheet);
-    }
-
     @JSBody(params = {"aObject"}, script = "return Object.keys(aObject);")
     private static native String[] keysOf(JSObject aObject);
 
     private final Map<String, TeaVMTextureResource> knownResources;
-    private final Loader loader;
 
-    public TeaVMLoadedSpriteSheet(ResourceName aResourceName, Listener aCallback) {
+    public TeaVMLoadedSpriteSheet(SpritesheetJSONResource aJSON) {
         knownResources = new HashMap<>();
-        loader = Loader.create();
-        String thePath = aResourceName.name.replace('\\', '/');
-        loader.add(thePath);
-        loader.pre(new LoaderMiddleware() {
-            @Override
-            public void handle(LoaderResource aResource, LoaderCallchain aChain) {
-                LoaderCallchain.next(aChain);
-            }
-        });
-        loader.load((aLoader, aResources) -> {
-            Loader.Resource theLoadedJSON = aResources.get(thePath);
-            if (theLoadedJSON != null) {
-                Loader.SpritesheetJSON theJSON = (Loader.SpritesheetJSON) theLoadedJSON.getData();
-                for (String theFrameID : keysOf(theJSON.getFrames())) {
-                    Texture theTexture = Texture.createFromFrame(theFrameID);
-                    TeaVMTextureResource theResource = new TeaVMTextureResource(theTexture, theFrameID);
-                    knownResources.put(theFrameID, theResource);
-                }
+        for (String theFrameID : keysOf(aJSON.getFrames())) {
+            Texture theTexture = Texture.createFromFrame(theFrameID);
+            TeaVMTextureResource theResource = new TeaVMTextureResource(theTexture, theFrameID);
+            knownResources.put(theFrameID, theResource);
+        }
 
-                TeaVMLogger.info("Loading finished with " + knownResources.size() + " frames");
-
-                aCallback.handle(this);
-            } else {
-                TeaVMLogger.error("Loading not finished, json not found");
-            }
-        });
+        TeaVMLogger.info("Loading finished with " + knownResources.size() + " frames");
     }
 
     @Override

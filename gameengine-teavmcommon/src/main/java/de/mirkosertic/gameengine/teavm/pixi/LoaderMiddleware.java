@@ -15,7 +15,8 @@
  */
 package de.mirkosertic.gameengine.teavm.pixi;
 
-import org.teavm.jso.*;
+import org.teavm.jso.JSFunctor;
+import org.teavm.jso.JSObject;
 
 // https://github.com/englercj/resource-loader/blob/master/src/middlewares/caching/memory.js
 // https://pixijs.github.io/docs/PIXI.loaders.Loader.html
