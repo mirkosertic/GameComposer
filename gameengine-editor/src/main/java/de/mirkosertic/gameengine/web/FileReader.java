@@ -40,4 +40,6 @@ public abstract class FileReader implements JSObject {
     public abstract String getResult();
 
     public abstract void readAsDataURL(Blob aBlob);
+
+    public abstract void readAsText(Blob aBlob);
 }

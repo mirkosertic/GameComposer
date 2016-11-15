@@ -26,9 +26,7 @@ import de.mirkosertic.gameengine.teavm.TeaVMGameResourceLoader;
 import de.mirkosertic.gameengine.teavm.TeaVMGameSceneLoader;
 import de.mirkosertic.gameengine.teavm.TeaVMLoadedSpriteSheet;
 import de.mirkosertic.gameengine.teavm.TeaVMLogger;
-import de.mirkosertic.gameengine.teavm.pixi.EventEmitter;
 import de.mirkosertic.gameengine.teavm.pixi.Loader;
-import de.mirkosertic.gameengine.teavm.pixi.LoaderCallchain;
 import de.mirkosertic.gameengine.teavm.pixi.LoaderResource;
 import de.mirkosertic.gameengine.teavm.pixi.SpritesheetJSONResource;
 import de.mirkosertic.gameengine.type.ResourceName;
@@ -37,7 +35,9 @@ import de.mirkosertic.gameengine.web.BlobLoader;
 import de.mirkosertic.gameengine.web.File;
 import de.mirkosertic.gameengine.web.Filesystem;
 import de.mirkosertic.gameengine.web.ResourceAccessor;
-import org.teavm.jso.ajax.XMLHttpRequest;
+import org.teavm.jso.browser.Window;
+import org.teavm.jso.dom.html.HTMLImageElement;
+import org.teavm.jso.json.JSON;
 
 public class GithubResourceAccessor implements ResourceAccessor {
 
@@ -66,22 +66,18 @@ public class GithubResourceAccessor implements ResourceAccessor {
                     String theFileName = "/" + aSceneName + "/scene.json";
                     fileSystem.openFile(theFileName).thenContinue(aResult -> {
                         fileSystem.asDataURL(aResult).thenContinue(aDataURL -> {
-                            XMLHttpRequest theRequest = XMLHttpRequest.create();
-                            theRequest.overrideMimeType("text/plain");
-                            theRequest.open("GET", aDataURL);
-                            theRequest.onComplete(() -> aResolver.resolve(parse(aGame, theRequest.getResponseText(), aResourceLoader)));
-                            theRequest.send();
+                            blobLoader.loadAsText(aDataURL).thenContinue(aResult1 -> {
+                                aResolver.resolve(parse(aGame, aResult1, aResourceLoader));
+                            });
                         });
                     }).catchError((aResult, aOptionalRejectedException) -> {
                         String theURL = baseURL + theFileName;
                         blobLoader.load(theURL).thenContinue(aBlob -> {
                             fileSystem.storeFile(theFileName, aBlob).thenContinue(aFile -> {
                                 fileSystem.asDataURL(aFile).thenContinue(aDataURL -> {
-                                    XMLHttpRequest theRequest = XMLHttpRequest.create();
-                                    theRequest.overrideMimeType("text/plain");
-                                    theRequest.open("GET", aDataURL);
-                                    theRequest.onComplete(() -> aResolver.resolve(parse(aGame, theRequest.getResponseText(), aResourceLoader)));
-                                    theRequest.send();
+                                    blobLoader.loadAsText(aDataURL).thenContinue(aResult1 -> {
+                                        aResolver.resolve(parse(aGame, aResult1, aResourceLoader));
+                                    });
                                 });
                             });
                         }).catchError((aErrorMessage, aOptionalRejectedException1) -> TeaVMLogger.error("Error writing file : " + aErrorMessage));
@@ -103,11 +99,9 @@ public class GithubResourceAccessor implements ResourceAccessor {
                     fileSystem.openFile(theFileName).thenContinue(aResult -> {
 
                         fileSystem.asDataURL(aResult).thenContinue(aDataURL -> {
-                            final XMLHttpRequest theRequest = XMLHttpRequest.create();
-                            theRequest.overrideMimeType("text/plain");
-                            theRequest.open("GET", aDataURL);
-                            theRequest.onComplete(() -> aResolver.resolve(parse(theRequest.getResponseText())));
-                            theRequest.send();
+                            blobLoader.loadAsText(aDataURL).thenContinue(aResult1 -> {
+                                aResolver.resolve(parse(aResult1));
+                            });
                         });
 
                     }).catchError((aResult, aOptionalRejectedException) -> {
@@ -115,13 +109,10 @@ public class GithubResourceAccessor implements ResourceAccessor {
 
                         blobLoader.load(theURL).thenContinue(aBlob -> {
                             fileSystem.storeFile(theFileName, aBlob).thenContinue(aFile -> {
-
                                 fileSystem.asDataURL(aFile).thenContinue(aDataURL -> {
-                                    final XMLHttpRequest theRequest = XMLHttpRequest.create();
-                                    theRequest.overrideMimeType("text/plain");
-                                    theRequest.open("GET", aDataURL);
-                                    theRequest.onComplete(() -> aResolver.resolve(parse(theRequest.getResponseText())));
-                                    theRequest.send();
+                                    blobLoader.loadAsText(aDataURL).thenContinue(aResult1 -> {
+                                        aResolver.resolve(parse(aResult1));
+                                    });
                                 });
                             });
                         }).catchError((aErrorMessage, aOptionalRejectedException1) -> TeaVMLogger.error("Error writing file : " + aErrorMessage));
@@ -129,6 +120,22 @@ public class GithubResourceAccessor implements ResourceAccessor {
                 });
             }
         };
+    }
+
+    private void updateResource(LoaderResource aResource, String aDataUri, ResourceName aOriginalResourceName) {
+        TeaVMLogger.info("Loading Data URI " + aDataUri);
+        if (aOriginalResourceName.name.endsWith(".json")) {
+            blobLoader.loadAsText(aDataUri).thenContinue(aResult -> {
+                aResource.setData(JSON.parse(aResult));
+                aResource.setIsJson(true);
+                aResource.complete();
+            });
+        } else {
+            HTMLImageElement theImageElement = (HTMLImageElement) Window.current().getDocument().createElement("img");
+            theImageElement.setSrc(aDataUri);
+            aResource.setData(theImageElement);
+            aResource.complete();
+        }
     }
 
     @Override
@@ -171,17 +178,31 @@ public class GithubResourceAccessor implements ResourceAccessor {
                 Loader theLoader = Loader.create();
                 theLoader.pre((aResource, aChain) -> {
                     // Implement cache interaction here to retrieve loaded pngs etc.
+                    fileSystem.openFile(theFileName).thenContinue(aStoresFile -> {
+                        fileSystem.asDataURL(aStoresFile).thenContinue(aDataURI -> {
+                            updateResource(aResource, aDataURI, aResourceName);
+                        });
+                    }).catchError((aFileName, aOptionalException) -> {
+                        // Not cached, so needs to be loaded into cache
+                        String theURL = baseURL + theFileName;
+                        blobLoader.load(theURL).thenContinue(aLoadedBlob -> {
+                            fileSystem.storeFile(theFileName, aLoadedBlob).thenContinue(
+                                    aStoredFile -> {
+                                        fileSystem.asDataURL(aStoredFile).thenContinue(
+                                                aDataURI -> {
+                                                    updateResource(aResource, aDataURI, aResourceName);
+                                        });
+                            });
+                        });
+                    });
 
                     TeaVMLogger.info("Loading resource with caching loader : " + aResource.getUrl());
 
                     // If a resource was loaded, write it to the local file system
-                    final LoaderResource theResource = (LoaderResource) aResource;
                     aResource.on("complete", () -> {
                         // Data ist bei Bildern ein Image Element
-                        TeaVMLogger.info("Resource loaded " + theResource.getUrl());
+                        TeaVMLogger.info("Resource loaded " + aResource.getUrl());
                     });
-
-                    LoaderCallchain.next(aChain);
                 });
 
                 return new Promise<>((Promise.Executor) (aResolver, aRejector) -> {
