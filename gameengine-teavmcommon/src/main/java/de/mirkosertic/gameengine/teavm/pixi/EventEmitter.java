@@ -18,12 +18,13 @@ package de.mirkosertic.gameengine.teavm.pixi;
 import org.teavm.jso.JSFunctor;
 import org.teavm.jso.JSObject;
 
-public interface LoaderPromise extends JSObject {
+public abstract class EventEmitter implements JSObject {
 
     @JSFunctor
-    interface Handler extends JSObject {
-        void run();
+    public abstract interface Handler extends JSObject {
+
+        public void handle();
     }
 
-    void once(Handler aHandler);
+    public abstract void on(String aEvent, Handler aHandler);
 }

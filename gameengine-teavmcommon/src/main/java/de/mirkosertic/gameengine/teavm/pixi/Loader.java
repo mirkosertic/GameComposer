@@ -15,25 +15,17 @@
  */
 package de.mirkosertic.gameengine.teavm.pixi;
 
-import org.teavm.jso.*;
+import org.teavm.jso.JSBody;
+import org.teavm.jso.JSFunctor;
+import org.teavm.jso.JSIndexer;
+import org.teavm.jso.JSObject;
 
-public abstract class Loader implements JSObject {
+public abstract class Loader extends EventEmitter {
 
     public interface Resources extends JSObject {
 
         @JSIndexer
-        Resource get(String aKey);
-    }
-
-    public interface Resource extends JSObject {
-        @JSProperty
-        JSObject getData();
-    }
-
-    public interface SpritesheetJSON extends JSObject {
-
-        @JSProperty
-        JSObject getFrames();
+        LoaderResource get(String aKey);
     }
 
     @JSFunctor
