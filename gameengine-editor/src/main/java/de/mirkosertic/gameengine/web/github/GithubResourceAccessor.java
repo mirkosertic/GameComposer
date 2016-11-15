@@ -26,6 +26,11 @@ import de.mirkosertic.gameengine.teavm.TeaVMGameResourceLoader;
 import de.mirkosertic.gameengine.teavm.TeaVMGameSceneLoader;
 import de.mirkosertic.gameengine.teavm.TeaVMLoadedSpriteSheet;
 import de.mirkosertic.gameengine.teavm.TeaVMLogger;
+import de.mirkosertic.gameengine.teavm.pixi.EventEmitter;
+import de.mirkosertic.gameengine.teavm.pixi.Loader;
+import de.mirkosertic.gameengine.teavm.pixi.LoaderCallchain;
+import de.mirkosertic.gameengine.teavm.pixi.LoaderResource;
+import de.mirkosertic.gameengine.teavm.pixi.SpritesheetJSONResource;
 import de.mirkosertic.gameengine.type.ResourceName;
 import de.mirkosertic.gameengine.web.Blob;
 import de.mirkosertic.gameengine.web.BlobLoader;
@@ -163,7 +168,32 @@ public class GithubResourceAccessor implements ResourceAccessor {
 
                 ResourceName theNewResourceName = new ResourceName(baseURL + theFileName);
 
-                return new Promise<>((Promise.Executor) (aResolver, aRejector) -> new TeaVMLoadedSpriteSheet(theNewResourceName, aSpriteSheet -> aResolver.resolve(aSpriteSheet)));
+                Loader theLoader = Loader.create();
+                theLoader.pre((aResource, aChain) -> {
+                    // Implement cache interaction here to retrieve loaded pngs etc.
+
+                    TeaVMLogger.info("Loading resource with caching loader : " + aResource.getUrl());
+
+                    // If a resource was loaded, write it to the local file system
+                    final LoaderResource theResource = (LoaderResource) aResource;
+                    aResource.on("complete", () -> {
+                        // Data ist bei Bildern ein Image Element
+                        TeaVMLogger.info("Resource loaded " + theResource.getUrl());
+                    });
+
+                    LoaderCallchain.next(aChain);
+                });
+
+                return new Promise<>((Promise.Executor) (aResolver, aRejector) -> {
+                    final String thePath = theNewResourceName.name.replace('\\', '/');
+                    theLoader.add(thePath);
+                    theLoader.load((aLoader, aResources) -> {
+                        LoaderResource theLoadedJSON = aResources.get(thePath);
+                        if (theLoadedJSON != null) {
+                            aResolver.resolve(new TeaVMLoadedSpriteSheet((SpritesheetJSONResource) theLoadedJSON.getData()));
+                        }
+                    });
+                });
             }
         };
     }

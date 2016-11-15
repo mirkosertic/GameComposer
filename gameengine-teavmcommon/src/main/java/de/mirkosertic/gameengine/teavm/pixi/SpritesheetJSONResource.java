@@ -18,19 +18,8 @@ package de.mirkosertic.gameengine.teavm.pixi;
 import org.teavm.jso.JSObject;
 import org.teavm.jso.JSProperty;
 
-public abstract class LoaderResource extends EventEmitter {
+public interface SpritesheetJSONResource extends JSObject {
 
     @JSProperty
-    public abstract JSObject getData();
-
-    @JSProperty
-    public abstract void setData(JSObject aData);
-
-    @JSProperty
-    public abstract String getUrl();
-
-    @JSProperty
-    public abstract void setUrl();
-
-    public abstract void complete();
+    JSObject getFrames();
 }
