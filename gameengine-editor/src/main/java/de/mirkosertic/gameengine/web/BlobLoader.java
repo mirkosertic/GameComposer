@@ -15,13 +15,22 @@
  */
 package de.mirkosertic.gameengine.web;
 
-import org.teavm.jso.ajax.XMLHttpRequest;
-
 import de.mirkosertic.gameengine.core.Promise;
+import org.teavm.jso.ajax.XMLHttpRequest;
 
 public class BlobLoader {
 
     public BlobLoader() {
+    }
+
+    public Promise<String, String> loadAsText(String aURL) {
+        return new Promise<>((Promise.Executor) (aResolver, aRejector) -> {
+            final XMLHttpRequest theRequest = XMLHttpRequest.create();
+            theRequest.overrideMimeType("text/plain");
+            theRequest.open("GET", aURL);
+            theRequest.onComplete(() -> aResolver.resolve(theRequest.getResponseText()));
+            theRequest.send();
+        });
     }
 
     public Promise<Blob, String> load(String aURL) {
