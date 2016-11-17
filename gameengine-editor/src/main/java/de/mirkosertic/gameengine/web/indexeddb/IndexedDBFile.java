@@ -19,8 +19,8 @@ import org.teavm.jso.JSBody;
 import org.teavm.jso.JSObject;
 import org.teavm.jso.core.JSString;
 
-import de.mirkosertic.gameengine.web.Blob;
-import de.mirkosertic.gameengine.web.File;
+import de.mirkosertic.gameengine.web.html5.Blob;
+import de.mirkosertic.gameengine.web.html5.File;
 
 public abstract class IndexedDBFile implements File {
 

@@ -13,17 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.mirkosertic.gameengine.web;
+package de.mirkosertic.gameengine.web.html5;
 
-import org.teavm.jso.JSBody;
-import org.teavm.jso.dom.html.HTMLElement;
-import org.teavm.jso.dom.xml.Document;
+import org.teavm.jso.JSObject;
+import org.teavm.jso.JSProperty;
 
-public interface HTML5Document extends Document {
+public interface File extends JSObject {
 
-    @JSBody(params = { "aNode" , "aResolve"}, script = "return this.importNode(aNode, aResolve)")
-    HTMLElement importNode(HTMLElement aNode, boolean aResolve );
+    @JSProperty
+    String getFilename();
 
-    @JSBody(params = { "aElement" }, script = "return aElement.innerHTML")
-    String toHTML(HTMLElement aElement);
+    @JSProperty Blob getContent();
+
+    @JSProperty
+    String getStatus();
 }

@@ -16,6 +16,8 @@
 package de.mirkosertic.gameengine.web;
 
 import de.mirkosertic.gameengine.core.Promise;
+import de.mirkosertic.gameengine.web.html5.Blob;
+import de.mirkosertic.gameengine.web.html5.File;
 
 public interface Filesystem {
 
