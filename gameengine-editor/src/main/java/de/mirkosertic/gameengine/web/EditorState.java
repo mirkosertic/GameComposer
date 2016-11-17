@@ -22,6 +22,8 @@ import de.mirkosertic.gameengine.core.Promise;
 import de.mirkosertic.gameengine.teavm.TeaVMGameResourceLoader;
 import de.mirkosertic.gameengine.teavm.TeaVMGameSceneLoader;
 import de.mirkosertic.gameengine.teavm.TeaVMMap;
+import de.mirkosertic.gameengine.web.html5.Blob;
+import de.mirkosertic.gameengine.web.html5.File;
 import org.teavm.jso.JSObject;
 import org.teavm.jso.core.JSString;
 import org.teavm.jso.json.JSON;

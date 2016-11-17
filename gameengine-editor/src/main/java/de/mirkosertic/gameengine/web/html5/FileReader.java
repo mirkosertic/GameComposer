@@ -13,19 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.mirkosertic.gameengine.web;
+package de.mirkosertic.gameengine.web.html5;
 
+import org.teavm.jso.JSBody;
+import org.teavm.jso.JSFunctor;
 import org.teavm.jso.JSObject;
 import org.teavm.jso.JSProperty;
 
-public interface File extends JSObject {
+public abstract class FileReader implements JSObject {
+
+    @JSFunctor
+    public interface Listener extends JSObject {
+        void handle();
+    }
+
+    @JSBody(params = {}, script = "return new FileReader();")
+    public static native FileReader create();
 
     @JSProperty
-    String getFilename();
+    public abstract void setOnload(Listener aListener);
 
     @JSProperty
-    Blob getContent();
+    public abstract void setOnerror(Listener aListener);
 
     @JSProperty
-    String getStatus();
+    public abstract String getResult();
+
+    public abstract void readAsDataURL(Blob aBlob);
+
+    public abstract void readAsText(Blob aBlob);
 }

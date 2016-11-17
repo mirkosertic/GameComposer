@@ -30,8 +30,8 @@ import de.mirkosertic.gameengine.teavm.pixi.LoaderCallchain;
 import de.mirkosertic.gameengine.teavm.pixi.LoaderResource;
 import de.mirkosertic.gameengine.teavm.pixi.SpritesheetJSONResource;
 import de.mirkosertic.gameengine.type.ResourceName;
-import de.mirkosertic.gameengine.web.Blob;
-import de.mirkosertic.gameengine.web.File;
+import de.mirkosertic.gameengine.web.html5.Blob;
+import de.mirkosertic.gameengine.web.html5.File;
 import de.mirkosertic.gameengine.web.ResourceAccessor;
 import de.mirkosertic.gameengine.web.electron.fs.FS;
 

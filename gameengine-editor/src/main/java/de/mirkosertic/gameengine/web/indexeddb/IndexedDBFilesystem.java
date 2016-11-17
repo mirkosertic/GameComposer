@@ -23,9 +23,9 @@ import org.teavm.jso.JSObject;
 
 import de.mirkosertic.gameengine.core.Promise;
 import de.mirkosertic.gameengine.teavm.TeaVMLogger;
-import de.mirkosertic.gameengine.web.Blob;
-import de.mirkosertic.gameengine.web.File;
-import de.mirkosertic.gameengine.web.FileReader;
+import de.mirkosertic.gameengine.web.html5.Blob;
+import de.mirkosertic.gameengine.web.html5.File;
+import de.mirkosertic.gameengine.web.html5.FileReader;
 import de.mirkosertic.gameengine.web.Filesystem;
 
 public class IndexedDBFilesystem implements Filesystem {

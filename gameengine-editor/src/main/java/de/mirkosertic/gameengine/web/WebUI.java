@@ -48,60 +48,59 @@ public class WebUI {
 
         TeaVMLogger.info("Starting web editor");
 
-        EditorProject theProject = getDefaultProject();
+        Router theRouter = new Router(WINDOW);
+        theRouter.add("/index.html", aWindow -> {
+            EditorProject theProject = getDefaultProject();
+            theProject.initializeLoader().thenContinue(aResult -> {
+                Editor theEditor = new Editor(theRouter);
+                theEditor.boot(theProject, aResult);
 
-        theProject.initializeLoader().thenContinue(aResult -> {
-            initializeWithResourceLoaderFactory(aResult, theProject);
-        }).catchError((aResult, aOptionalRejectedException) -> TeaVMLogger.error("Error creating indexeddb filesystem!"));
-    }
+            }).catchError((aResult, aOptionalRejectedException) -> TeaVMLogger.error("Error creating indexeddb filesystem!"));
+        });
+        theRouter.add("/preview.html", aWindow -> {
+            EditorProject theProject = getDefaultProject();
+            theProject.initializeLoader().thenContinue(aResult -> {
 
-    private static void initializeWithResourceLoaderFactory(ResourceAccessor aResourceLoaderFactory, EditorProject aProject) {
-        if (WINDOW.getLocation().getPathName().endsWith("/index.html")) {
+                HTMLCanvasElement theCanvasElement = (HTMLCanvasElement) aWindow.getDocument().getElementById("html5canvas");
+                TeaVMGenericPlayer thePlayer = new TeaVMGenericPlayer() {
+                    @Override
+                    protected TeaVMGameSceneLoader createSceneLoader(TeaVMGameRuntimeFactory aRuntimeFactory) {
 
-            TeaVMLogger.info("Starting editor");
-
-            Editor theEditor = new Editor();
-            theEditor.boot(aProject, aResourceLoaderFactory);
-
-        } else {
-
-            TeaVMLogger.info("Starting preview");
-
-            HTMLCanvasElement theCanvasElement = (HTMLCanvasElement) WINDOW.getDocument().getElementById("html5canvas");
-            TeaVMGenericPlayer thePlayer = new TeaVMGenericPlayer() {
-                @Override
-                protected TeaVMGameSceneLoader createSceneLoader(TeaVMGameRuntimeFactory aRuntimeFactory) {
-
-                    String thePreviewData = aProject.getPreviewDataAsJSON();
-                    if (thePreviewData != null) {
-                        return new TeaVMGameSceneLoader(aRuntimeFactory) {
-                            @Override
-                            public Promise<GameScene, String> loadFromServer(Game aGame, String aSceneName, TeaVMGameResourceLoader aResourceLoader) {
-                                return new Promise<>((Promise.Executor) (aResolver, aRejector) -> {
-                                    String thePreviewData1 = WINDOW.getLocalStorage().getItem("previewscene");
-                                    aResolver.resolve(parse(aGame, thePreviewData1, aResourceLoader));
-                                });
-                            }
-                        };
+                        String thePreviewData = theProject.getPreviewDataAsJSON();
+                        if (thePreviewData != null) {
+                            return new TeaVMGameSceneLoader(aRuntimeFactory) {
+                                @Override
+                                public Promise<GameScene, String> loadFromServer(Game aGame, String aSceneName, TeaVMGameResourceLoader aResourceLoader) {
+                                    return new Promise<>((Promise.Executor) (aResolver, aRejector) -> {
+                                        String thePreviewData1 = aWindow.getLocalStorage().getItem("previewscene");
+                                        aResolver.resolve(parse(aGame, thePreviewData1, aResourceLoader));
+                                    });
+                                }
+                            };
+                        }
+                        return aResult.createSceneLoader(aRuntimeFactory);
                     }
-                    return aResourceLoaderFactory.createSceneLoader(aRuntimeFactory);
-                }
 
-                @Override
-                protected TeaVMGameLoader createGameLoader() {
-                    return aResourceLoaderFactory.createGameLoader();
-                }
+                    @Override
+                    protected TeaVMGameLoader createGameLoader() {
+                        return aResult.createGameLoader();
+                    }
 
-                @Override
-                protected TeaVMGameResourceLoader createResourceLoader(String aSceneID) {
-                    return aResourceLoaderFactory.createResourceLoaderFor(aSceneID);
-                }
+                    @Override
+                    protected TeaVMGameResourceLoader createResourceLoader(String aSceneID) {
+                        return aResult.createResourceLoaderFor(aSceneID);
+                    }
 
-                @Override
-                protected void loadOtherSceneFromWithinGame(Game aGame, String aSceneID) {
-                }
-            };
-            thePlayer.boot(theCanvasElement);
-        }
+                    @Override
+                    protected void loadOtherSceneFromWithinGame(Game aGame, String aSceneID) {
+                    }
+                };
+                thePlayer.boot(theCanvasElement);
+
+            }).catchError((aResult, aOptionalRejectedException) -> TeaVMLogger.error("Error creating indexeddb filesystem!"));
+        });
+        theRouter.widhDefaultPath("/index.html");
+
+        theRouter.handleNavigation();
     }
 }

@@ -50,12 +50,14 @@ public class GameSceneEditor {
     private GameObjectInstance dndCreateInstance;
 
     private final EditorState editorState;
+    private final Router router;
 
-    public GameSceneEditor(SceneEditorHTMLElement aSceneEditor, Window aWindow, EditorState aEditorState) {
+    public GameSceneEditor(SceneEditorHTMLElement aSceneEditor, Window aWindow, EditorState aEditorState, Router aRouter) {
 
         sceneEditorHTMLElement = aSceneEditor;
         window = aWindow;
         editorState = aEditorState;
+        router = aRouter;
 
         GameLoopFactory theGameLoopFactory = new GameLoopFactory();
 
@@ -138,7 +140,7 @@ public class GameSceneEditor {
 
             editorState.getEditorProject().setCurrentPreview(theJSON);
 
-            window.open("preview.html", "_blank");
+            router.open("preview.html", "_blabk");
         }).catchError((aResult, aOptionalRejectedException) -> Toast.error("Error writing data : " + aResult));
     }
 
