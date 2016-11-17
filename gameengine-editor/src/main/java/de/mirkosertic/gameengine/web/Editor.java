@@ -20,6 +20,7 @@ import org.teavm.jso.JSObject;
 import org.teavm.jso.browser.Window;
 import org.teavm.jso.core.JSArray;
 import org.teavm.jso.core.JSString;
+import org.teavm.jso.dom.html.HTMLDocument;
 import org.teavm.jso.dom.html.HTMLElement;
 
 import de.mirkosertic.gameengine.core.EventSheet;
@@ -45,7 +46,7 @@ import de.mirkosertic.gameengine.web.electron.fs.FS;
 public class Editor {
 
     private static final Window window = Window.current();
-    private static final HTML5Document document = (HTML5Document) window.getDocument();
+    private static final HTMLDocument document = (HTMLDocument) window.getDocument();
 
     @JSBody(params = "aValue", script = "return (typeof aValue !== 'undefined');")
     public static native boolean isDefined(JSObject aValue);
@@ -54,8 +55,10 @@ public class Editor {
     private GameObjectEditor objectEditor;
     private EditorState editorState;
     private GameTreeView treeView;
+    private final Router router;
 
-    public Editor() {
+    public Editor(Router aRouter) {
+        router = aRouter;
         if (Electron.available()) {
             Electron theElectron = Electron.require();
             Remote theRemote = theElectron.getRemote();
@@ -177,7 +180,7 @@ public class Editor {
         }
 
         SceneEditorHTMLElement theSceneEditor = SceneEditorHTMLElement.create();
-        final GameSceneEditor theGameEditor = new GameSceneEditor(theSceneEditor, window, editorState) {
+        final GameSceneEditor theGameEditor = new GameSceneEditor(theSceneEditor, window, editorState, router) {
 
             @Override
             protected void setSelectedInstance(GameObjectInstance aInstance) {

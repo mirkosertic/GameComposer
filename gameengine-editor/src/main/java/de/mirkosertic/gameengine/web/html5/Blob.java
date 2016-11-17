@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.mirkosertic.gameengine.web;
+package de.mirkosertic.gameengine.web.html5;
 
 import org.teavm.jso.JSBody;
 import org.teavm.jso.JSObject;
