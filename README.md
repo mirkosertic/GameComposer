@@ -8,7 +8,7 @@ Started as a JavaFX implementation some years ago, it now supports desktop and m
 Its core is based on Domain-driven Design and a hexagonal architecture. The main game simulation logic stayed the same for years, but
 replacing presentation logic and adapting it to new technologies is a lot easier compared to traditional layered applications.
 
-To see it in action please visit [this page](http://www.mirkosertic.de/doku.php/javastuff/javafxgameauthoring)
+To see it in action please visit [this page](http://www.mirkosertic.de/wordpress/blog-post/a-javafx-based-game-authoring-system/)
 
 Current travis-ci build status: [![Build Status](https://travis-ci.org/mirkosertic/GameComposer.svg?branch=master)](https://travis-ci.org/mirkosertic/GameComposer) [![Gitter](https://badges.gitter.im/mirkosertic/GameComposer.svg)](https://gitter.im/mirkosertic/GameComposer?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
