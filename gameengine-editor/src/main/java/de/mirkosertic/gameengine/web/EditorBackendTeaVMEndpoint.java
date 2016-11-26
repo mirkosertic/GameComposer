@@ -25,7 +25,7 @@ public class EditorBackendTeaVMEndpoint {
 
     private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(EditorBackendTeaVMEndpoint.class);
 
-    @RequestMapping(path = "/new" ,method = org.springframework.web.bind.annotation.RequestMethod.GET)
+    @RequestMapping(path = "/classes.js" ,method = org.springframework.web.bind.annotation.RequestMethod.GET)
     @ResponseBody
     public byte[] downloadByteCode() throws org.teavm.tooling.TeaVMToolException, java.io.IOException {
 
@@ -87,7 +87,7 @@ public class EditorBackendTeaVMEndpoint {
         });
         theTool.generate();
 
-        return new byte[0];
+        return org.apache.commons.io.IOUtils.toByteArray(new java.io.FileInputStream(new java.io.File(theTempDir, "classes.js")));
     }
 
 }
