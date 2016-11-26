@@ -57,6 +57,7 @@ public class WebUI {
 
             }).catchError((aResult, aOptionalRejectedException) -> TeaVMLogger.error("Error creating indexeddb filesystem!"));
         });
+
         theRouter.add("/preview.html", aWindow -> {
             EditorProject theProject = getDefaultProject();
             theProject.initializeLoader().thenContinue(aResult -> {
