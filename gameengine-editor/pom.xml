@@ -128,7 +128,6 @@
             <groupId>org.teavm</groupId>
             <artifactId>teavm-classlib</artifactId>
             <version>${teavm.version}</version>
-            <scope>provided</scope>
         </dependency>
 
         <!-- JavaScriptObjects (JSO) - a JavaScript binding for TeaVM -->
@@ -136,7 +135,6 @@
             <groupId>org.teavm</groupId>
             <artifactId>teavm-jso</artifactId>
             <version>${teavm.version}</version>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>
