@@ -16,6 +16,7 @@
 package de.mirkosertic.gameengine.web;
 
 import org.teavm.jso.browser.Window;
+import de.mirkosertic.gameengine.teavm.TeaVMLogger;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -48,8 +49,10 @@ public class Router {
 
     public void handleNavigation() {
         String theCurrentLocation = window.getLocation().getFullURL();
+        TeaVMLogger.info("Current location is " + theCurrentLocation);
         for (Map.Entry<String, Route> theEntry : routes.entrySet()) {
-            if (theCurrentLocation.contains(theEntry.getKey())) {
+            TeaVMLogger.info("Testing for route " + theEntry.getKey());
+            if (theCurrentLocation.endsWith(theEntry.getKey())) {
                 theEntry.getValue().renderContent(window);
                 return;
             }
