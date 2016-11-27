@@ -15,36 +15,49 @@
  */
 package de.mirkosertic.gameengine.web;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.teavm.tooling.RuntimeCopyOperation;
+import org.teavm.tooling.TeaVMTool;
+import org.teavm.tooling.TeaVMToolException;
+import org.teavm.tooling.TeaVMToolLog;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 @Controller
 @RequestMapping(path = "/teavm")
 public class EditorBackendTeaVMEndpoint {
 
-    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(EditorBackendTeaVMEndpoint.class);
+    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(EditorBackendTeaVMEndpoint.class);
 
-    @RequestMapping(path = "/classes.js" ,method = org.springframework.web.bind.annotation.RequestMethod.GET)
+    @RequestMapping(path = "/classes.js" ,method = RequestMethod.GET)
     @ResponseBody
-    public byte[] downloadByteCode() throws org.teavm.tooling.TeaVMToolException, java.io.IOException {
+    public byte[] downloadByteCode() throws TeaVMToolException, IOException {
 
-        java.io.File theTempFile = java.io.File.createTempFile("teavm", "teavm");
-        java.io.File theParent = theTempFile.getParentFile();
+        File theParent = FileUtils.getTempDirectory();
 
-        java.io.File theTempDir = new java.io.File(theParent, "teavmtemp");
+        File theTempDir = new File(theParent, "teavmtemp");
         theTempDir.mkdirs();
 
-        org.teavm.tooling.TeaVMTool theTool = new org.teavm.tooling.TeaVMTool();
+        LOG.info("Using temp directory {} for JavaScript code generation", theTempDir);
+
+        TeaVMTool theTool = new TeaVMTool();
         theTool.setClassLoader(getClass().getClassLoader());
         theTool.setMinifying(false);
         theTool.setMainClass(WebUI.class.getName());
-        theTool.setRuntime(org.teavm.tooling.RuntimeCopyOperation.SEPARATE);
+        theTool.setRuntime(RuntimeCopyOperation.SEPARATE);
         theTool.setSourceFilesCopied(false);
         theTool.setSourceMapsFileGenerated(false);
         theTool.setIncremental(false);
         theTool.setTargetDirectory(theTempDir);
-        theTool.setLog(new org.teavm.tooling.TeaVMToolLog() {
+        theTool.setLog(new TeaVMToolLog() {
             @Override
             public void info(String text) {
                 LOG.info(text);
@@ -87,7 +100,6 @@ public class EditorBackendTeaVMEndpoint {
         });
         theTool.generate();
 
-        return org.apache.commons.io.IOUtils.toByteArray(new java.io.FileInputStream(new java.io.File(theTempDir, "classes.js")));
+        return IOUtils.toByteArray(new FileInputStream(new File(theTempDir, "classes.js")));
     }
-
 }
