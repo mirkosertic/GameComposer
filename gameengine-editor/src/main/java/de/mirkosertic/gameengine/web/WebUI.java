@@ -24,7 +24,13 @@ import de.mirkosertic.gameengine.teavm.TeaVMGameRuntimeFactory;
 import de.mirkosertic.gameengine.teavm.TeaVMGameSceneLoader;
 import de.mirkosertic.gameengine.teavm.TeaVMGenericPlayer;
 import de.mirkosertic.gameengine.teavm.TeaVMLogger;
+import de.mirkosertic.gameengine.web.electron.Electron;
+import de.mirkosertic.gameengine.web.electron.LocalEditorProject;
+import de.mirkosertic.gameengine.web.electron.LocalProjectDefinition;
+import de.mirkosertic.gameengine.web.electron.Remote;
+import de.mirkosertic.gameengine.web.electron.fs.FS;
 import de.mirkosertic.gameengine.web.github.GithubEditorProject;
+import de.mirkosertic.gameengine.web.github.GithubProjectDefinition;
 import org.teavm.jso.browser.Window;
 import org.teavm.jso.dom.html.HTMLCanvasElement;
 
@@ -32,25 +38,19 @@ public class WebUI {
 
     private static final Window WINDOW = Window.current();
 
-    private static EditorProject getDefaultProject() {
-        /*        if (Electron.available()) {
-
-            Remote theRemote = Electron.require().getRemote();
-            FS theFilesystem = theRemote.require("fs");
-
-            return new LocalEditorProject(theFilesystem, "/home/sertic/Development/Projects/GameComposer/examples/platformer");
-        }*/
-
-        return new GithubEditorProject("mirkosertic", "GameComposer", "/examples/platformer");
-    }
-
     public static void main(String[] args) {
 
         TeaVMLogger.info("Starting web editor");
 
         Router theRouter = new Router(WINDOW);
+
         theRouter.add("/index.html", aWindow -> {
-            EditorProject theProject = getDefaultProject();
+            Welcome theWelcome = new Welcome(theRouter);
+            theWelcome.run();
+        });
+        theRouter.add("/editor.html", aWindow -> {
+            EditorProject theProject = getEditorProjectFromState(theRouter);
+
             theProject.initializeLoader().thenContinue(aResult -> {
                 Editor theEditor = new Editor(theRouter);
                 theEditor.boot(theProject, aResult);
@@ -59,7 +59,8 @@ public class WebUI {
         });
 
         theRouter.add("/preview.html", aWindow -> {
-            EditorProject theProject = getDefaultProject();
+            EditorProject theProject = getEditorProjectFromState(theRouter);
+
             theProject.initializeLoader().thenContinue(aResult -> {
 
                 HTMLCanvasElement theCanvasElement = (HTMLCanvasElement) aWindow.getDocument().getElementById("html5canvas");
@@ -103,5 +104,27 @@ public class WebUI {
         theRouter.widhDefaultPath("/index.html");
 
         theRouter.handleNavigation();
+    }
+
+    private static EditorProject getEditorProjectFromState(Router aRouter) {
+        ProjectDefinition theDefinition = aRouter.getCurrentState();
+        switch (theDefinition.getType()) {
+            case GithubProjectDefinition.TYPE:
+
+                GithubProjectDefinition theGithubDefinition = (GithubProjectDefinition) theDefinition;
+
+                TeaVMLogger.info("Loading Github Project " + theGithubDefinition.getUser() + "@" + theGithubDefinition.getRepository() + ":" + theGithubDefinition.getRelativePath());
+
+                return new GithubEditorProject(theGithubDefinition.getUser(), theGithubDefinition.getRepository(), theGithubDefinition.getRelativePath());
+            case LocalProjectDefinition.TYPE:
+                LocalProjectDefinition theLocalDefintion = (LocalProjectDefinition) theDefinition;
+
+                TeaVMLogger.info("Loading Local Electron Project " + theLocalDefintion.getPath());
+
+                Remote theRemote = Electron.require().getRemote();
+                FS theFilesystem = theRemote.require("fs");
+                return new LocalEditorProject(theFilesystem, theLocalDefintion.getPath());
+        }
+        throw new IllegalArgumentException("not supported state");
     }
 }

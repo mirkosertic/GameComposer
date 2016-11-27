@@ -37,7 +37,7 @@ public class GithubEditorProject implements EditorProject {
     }
 
     public Promise<ResourceAccessor, String> initializeLoader() {
-        return IndexedDBFilesystem.open("github_" + username + "_" + repository).thenContinue((Promise.Handler<IndexedDBFilesystem, ResourceAccessor>) aResult -> {
+        return IndexedDBFilesystem.open("github_" + username + "_" + repository+ "_" + relativePath.replace("/","_")).thenContinue((Promise.Handler<IndexedDBFilesystem, ResourceAccessor>) aResult -> {
             String theBaseURL = "https://raw.githubusercontent.com/" + username + "/" + repository + "/master" + relativePath;
             return new GithubResourceAccessor(theBaseURL, aResult);
         });

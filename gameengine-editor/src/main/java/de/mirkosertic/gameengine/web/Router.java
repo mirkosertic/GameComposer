@@ -15,13 +15,22 @@
  */
 package de.mirkosertic.gameengine.web;
 
+import org.teavm.jso.JSBody;
+import org.teavm.jso.JSObject;
 import org.teavm.jso.browser.Window;
 import de.mirkosertic.gameengine.teavm.TeaVMLogger;
+import org.teavm.jso.json.JSON;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class Router {
+
+    @JSBody(params = "aURI", script = "return encodeURI(aURI);")
+    public static native String encodeURI(String aURI);
+
+    @JSBody(params = "aURI", script = "return decodeURI(aURI);")
+    public static native String decodeURI(String aURI);
 
     public interface Route {
 
@@ -37,6 +46,16 @@ public class Router {
         routes = new HashMap<>();
     }
 
+    public <T extends JSObject> T getCurrentState() {
+        String theCurrentLocation = window.getLocation().getFullURL();
+        // Ignore hashes
+        int p = theCurrentLocation.lastIndexOf("#");
+        if (p>=0) {
+            return (T) JSON.parse(decodeURI(theCurrentLocation.substring(p + 1)));
+        }
+        return null;
+    }
+
     public Router add(String aPath, Route aRoute) {
         routes.put(aPath, aRoute);
         return this;
@@ -49,6 +68,11 @@ public class Router {
 
     public void handleNavigation() {
         String theCurrentLocation = window.getLocation().getFullURL();
+        // Ignore hashes
+        int p = theCurrentLocation.lastIndexOf("#");
+        if (p>=0) {
+            theCurrentLocation = theCurrentLocation.substring(0, p);
+        }
         TeaVMLogger.info("Current location is " + theCurrentLocation);
         for (Map.Entry<String, Route> theEntry : routes.entrySet()) {
             TeaVMLogger.info("Testing for route " + theEntry.getKey());
@@ -68,6 +92,16 @@ public class Router {
     }
 
     public void open(String aURL, String aTarget) {
-        window.open(aURL, aTarget);
+        JSObject theCurrentState = getCurrentState();
+        if (theCurrentState != null) {
+            window.open(aURL + "#" + encodeURI(JSON.stringify(theCurrentState)), aTarget);
+        } else {
+            window.open(aURL, aTarget);
+        }
+    }
+
+    public void openWithState(String aURL, JSObject aState) {
+        String theState = encodeURI(JSON.stringify(aState));
+        window.open(aURL + "#" + theState, "_self");
     }
 }
