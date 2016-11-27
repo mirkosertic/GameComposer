@@ -140,7 +140,7 @@ public class GameSceneEditor {
 
             editorState.getEditorProject().setCurrentPreview(theJSON);
 
-            router.open("preview.html", "_blabk");
+            router.open("preview.html", "_blank");
         }).catchError((aResult, aOptionalRejectedException) -> Toast.error("Error writing data : " + aResult));
     }
 
