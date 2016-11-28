@@ -17,11 +17,10 @@ package de.mirkosertic.gameengine.web;
 
 import de.mirkosertic.gameengine.core.Promise;
 import de.mirkosertic.gameengine.web.electron.LocalProjectDefinition;
+import de.mirkosertic.gameengine.web.github.GithubAuthorizer;
 import de.mirkosertic.gameengine.web.github.GithubProjectDefinition;
-import org.teavm.jso.ajax.XMLHttpRequest;
 import org.teavm.jso.browser.Window;
 import org.teavm.jso.dom.html.HTMLElement;
-import org.teavm.jso.json.JSON;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +28,6 @@ import java.util.List;
 public class Welcome {
 
     private static final Window WINDOW = Window.current();
-    private static final String OAUTHSTATE = "OAUTHSTATE";
-    private static final String AUTHORIZATIONSTATE = "AUTHORIZATIONSTATE";
 
     private final Router router;
 
@@ -40,64 +37,10 @@ public class Welcome {
 
     public void run() {
 
-        Promise<AuthorizationState, String> thePromise = new Promise<>((aResolver, aRejector) -> {
-            String theCurrentUser = WINDOW.getSessionStorage().getItem(AUTHORIZATIONSTATE);
-            if (theCurrentUser != null) {
-                AuthorizationState theDetails = (AuthorizationState) JSON.parse(theCurrentUser);
-                aResolver.resolve(theDetails);
-            } else {
-                String theQuery = WINDOW.getLocation().getFullURL();
-                int p = theQuery.lastIndexOf("?");
-                if (p>0) {
-                    String theQueryString = theQuery.substring(p+1);
-                    QueryStringParser theParser = new QueryStringParser(theQueryString);
-                    if (theParser.contains("code")) {
-                        // OAuth Callback
-                        XMLHttpRequest theRequest = XMLHttpRequest.create();
+        GithubAuthorizer theAuthorizer = new GithubAuthorizer();
+        Promise<AuthorizationState, String> thePromise = theAuthorizer.getAuthorizationState();
 
-                        String theOAuthParams = "client_id=" + determineGithubClientID() + "&code=" + theParser.getValue("code") + "&state=" + WINDOW.getSessionStorage().getItem(OAUTHSTATE);
-                        String theURL = "http://www.mirkosertic.de/githubtokenexchange.php";
-
-                        // Here we get something like "access_token=tokendata&scope=repo&token_type=bearer"
-
-                        theRequest.open("POST", theURL);
-                        theRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                        theRequest.overrideMimeType("text/plain");
-                        theRequest.onComplete(() -> {
-                            QueryStringParser theResult = new QueryStringParser(theRequest.getResponseText());
-
-                            XMLHttpRequest theUserDetailsRequest = XMLHttpRequest.create();
-                            theUserDetailsRequest.open("GET", "https://api.github.com/user");
-                            theUserDetailsRequest.setRequestHeader("Authorization", "token " + theResult.getValue("access_token"));
-                            theUserDetailsRequest.overrideMimeType("text/plain");
-                            theUserDetailsRequest.onComplete(() -> {
-
-                                WINDOW.getHistory().replaceState(null, WINDOW.getDocument().getHead().getTitle(), "index.html");
-
-                                // TODO: Get User Details from Github for Token
-                                // https://developer.github.com/v3/users/#get-the-authenticated-user
-                                Window.alert(theUserDetailsRequest.getResponseText());
-
-                                AuthorizationState theDetails = AuthorizationState.NOT_LOGGED_IN();
-                                WINDOW.getSessionStorage().setItem(AUTHORIZATIONSTATE, JSON.stringify(theDetails));
-                                aResolver.resolve(theDetails);
-
-                            });
-                            theUserDetailsRequest.send();
-                        });
-                        theRequest.send(theOAuthParams);
-                    } else {
-                        // Unknown user
-                        aResolver.resolve(AuthorizationState.NOT_LOGGED_IN());
-                    }
-                } else {
-                    // Unknown user
-                    aResolver.resolve(AuthorizationState.NOT_LOGGED_IN());
-                }
-            }
-        });
-
-        thePromise.thenContinue(aResult -> {
+        thePromise.thenContinue(aAuthorizationState -> {
             HTMLElement theParentElement = WINDOW.getDocument().getElementById("infoblockcontent");
 
             List<ProjectDefinition> theProjectDefinitions = new ArrayList<>();
@@ -119,30 +62,20 @@ public class Welcome {
                 theParentElement.appendChild(theElement);
             }
 
+            HTMLElement theWelcomeMessage = WINDOW.getDocument().getElementById("welcomemessage");
+
             HTMLElement theGithubLogin = WINDOW.getDocument().getElementById("githublogin");
-            if (aResult.isNotLoggedIn()) {
+            if (aAuthorizationState.isNotLoggedIn()) {
+                theWelcomeMessage.setInnerHTML("Welcome to Online Game Composer!");
                 theGithubLogin.addEventListener("click", evt -> {
-
                     String theState = "" + (int) (Math.random() * 1000000);
-                    WINDOW.getSessionStorage().setItem(OAUTHSTATE, theState);
-
-                    String theAutorizationURL = "https://github.com/login/oauth/authorize?state = " + theState + "&scope=repo&client_id=" + determineGithubClientID();
-                    WINDOW.open(theAutorizationURL, "_self");
+                    theAuthorizer.requestOAuthLogin(theState);
                 });
             } else {
-
-                theGithubLogin.getStyle().setProperty("diaplay", "none");
+                theWelcomeMessage.setInnerHTML("Welcome to Online Game Composer, " + aAuthorizationState.getRealName() + "!");
+                theGithubLogin.getStyle().setProperty("display", "none");
             }
         });
-    }
-
-    private String determineGithubClientID() {
-        if (WINDOW.getLocation().getFullURL().startsWith("http://localhost")) {
-            // Dev environment
-            return "8bffca80d0a9e4146b90";
-        }
-        // Prod environment
-        return "cb7f66b0ccea83f17c68";
     }
 
     private String generateStringRepresentation(ProjectDefinition aDefinition) {

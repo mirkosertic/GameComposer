@@ -115,7 +115,7 @@ public class WebUI {
 
                 TeaVMLogger.info("Loading Github Project " + theGithubDefinition.getUser() + "@" + theGithubDefinition.getRepository() + ":" + theGithubDefinition.getRelativePath());
 
-                return new GithubEditorProject(theGithubDefinition.getUser(), theGithubDefinition.getRepository(), theGithubDefinition.getRelativePath());
+                return new GithubEditorProject(theGithubDefinition);
             case LocalProjectDefinition.TYPE:
                 LocalProjectDefinition theLocalDefintion = (LocalProjectDefinition) theDefinition;
 
@@ -123,7 +123,7 @@ public class WebUI {
 
                 Remote theRemote = Electron.require().getRemote();
                 FS theFilesystem = theRemote.require("fs");
-                return new LocalEditorProject(theFilesystem, theLocalDefintion.getPath());
+                return new LocalEditorProject(theFilesystem, theLocalDefintion);
         }
         throw new IllegalArgumentException("not supported state");
     }

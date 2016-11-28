@@ -24,8 +24,20 @@ public abstract class AuthorizationState implements JSObject {
     @JSBody(params = {}, script = "return {id: 'NOT_LOGGED_IN'}")
     public static native AuthorizationState NOT_LOGGED_IN();
 
+    @JSBody(params = {"aLogin", "aRealName", "aToken"}, script = "return {id: 'GITHUB',login: aLogin, realName: aRealName, token: aToken}")
+    public static native AuthorizationState githubUser(String aLogin, String aRealName, String aToken);
+
     @JSProperty
     public abstract String getId();
+
+    @JSProperty
+    public abstract String getLogin();
+
+    @JSProperty
+    public abstract String getRealName();
+
+    @JSProperty
+    public abstract String getToken();
 
     public boolean isNotLoggedIn() {
         return "NOT_LOGGED_IN".equals(getId());

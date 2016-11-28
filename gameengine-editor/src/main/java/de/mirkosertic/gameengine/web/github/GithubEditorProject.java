@@ -18,7 +18,10 @@ package de.mirkosertic.gameengine.web.github;
 import de.mirkosertic.gameengine.core.Promise;
 import de.mirkosertic.gameengine.web.EditorProject;
 import de.mirkosertic.gameengine.web.ResourceAccessor;
+import de.mirkosertic.gameengine.web.html5.Blob;
 import de.mirkosertic.gameengine.web.indexeddb.IndexedDBFilesystem;
+import org.teavm.jso.core.JSString;
+import org.teavm.jso.json.JSON;
 
 public class GithubEditorProject implements EditorProject {
 
@@ -26,20 +29,20 @@ public class GithubEditorProject implements EditorProject {
     // https://gist.github.com/robnyman/1894032
     // https://api.github.com/repos/mirkosertic/GameComposer/git/refs/heads/master
 
-    private final String username;
-    private final String repository;
-    private final String relativePath;
+    private final GithubProjectDefinition projectDefinition;
 
-    public GithubEditorProject(String aUsername, String aRepository, String aRelativePath) {
-        username = aUsername;
-        repository = aRepository;
-        relativePath = aRelativePath;
+    public GithubEditorProject(GithubProjectDefinition aProjectDefinition) {
+        projectDefinition = aProjectDefinition;
     }
 
+    @Override
     public Promise<ResourceAccessor, String> initializeLoader() {
-        return IndexedDBFilesystem.open("github_" + username + "_" + repository+ "_" + relativePath.replace("/","_")).thenContinue((Promise.Handler<IndexedDBFilesystem, ResourceAccessor>) aResult -> {
-            String theBaseURL = "https://raw.githubusercontent.com/" + username + "/" + repository + "/master" + relativePath;
-            return new GithubResourceAccessor(theBaseURL, aResult);
+        return IndexedDBFilesystem.open("github_" + projectDefinition.getUser() + "_" + projectDefinition.getRelativePath()+ "_" + projectDefinition.getRelativePath().replace("/","_")).thenContinue((Promise.Handler<IndexedDBFilesystem, ResourceAccessor>) aResult -> {
+            String theBaseURL = "https://raw.githubusercontent.com/" + projectDefinition.getUser() + "/" + projectDefinition.getRepository() + "/master" + projectDefinition.getRelativePath();
+            GithubResourceAccessor theAccessor = new GithubResourceAccessor(theBaseURL, aResult);
+            //TODO: Wait for completion here
+            theAccessor.persistFile(DEFINITION_FILENAME, Blob.createJSONBlob(JSString.valueOf(JSON.stringify(projectDefinition))));
+            return theAccessor;
         });
     }
 }
