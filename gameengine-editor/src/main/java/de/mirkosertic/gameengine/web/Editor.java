@@ -15,14 +15,6 @@
  */
 package de.mirkosertic.gameengine.web;
 
-import org.teavm.jso.JSBody;
-import org.teavm.jso.JSObject;
-import org.teavm.jso.browser.Window;
-import org.teavm.jso.core.JSArray;
-import org.teavm.jso.core.JSString;
-import org.teavm.jso.dom.html.HTMLDocument;
-import org.teavm.jso.dom.html.HTMLElement;
-
 import de.mirkosertic.gameengine.core.EventSheet;
 import de.mirkosertic.gameengine.core.Game;
 import de.mirkosertic.gameengine.core.GameObject;
@@ -37,11 +29,19 @@ import de.mirkosertic.gameengine.web.electron.Dialog;
 import de.mirkosertic.gameengine.web.electron.DialogOptions;
 import de.mirkosertic.gameengine.web.electron.Electron;
 import de.mirkosertic.gameengine.web.electron.LocalEditorProject;
+import de.mirkosertic.gameengine.web.electron.LocalProjectDefinition;
 import de.mirkosertic.gameengine.web.electron.LocalResourceAccessor;
 import de.mirkosertic.gameengine.web.electron.Menu;
 import de.mirkosertic.gameengine.web.electron.MenuItem;
 import de.mirkosertic.gameengine.web.electron.Remote;
 import de.mirkosertic.gameengine.web.electron.fs.FS;
+import org.teavm.jso.JSBody;
+import org.teavm.jso.JSObject;
+import org.teavm.jso.browser.Window;
+import org.teavm.jso.core.JSArray;
+import org.teavm.jso.core.JSString;
+import org.teavm.jso.dom.html.HTMLDocument;
+import org.teavm.jso.dom.html.HTMLElement;
 
 public class Editor {
 
@@ -101,8 +101,8 @@ public class Editor {
         editorState = new EditorState(aProject, theRuntimeFactory, aResourceLoaderFactory);
 
         // Initialize object editor
-        HTMLElement thePropertyEditorElement = (HTMLElement) document.getElementById("objectEditor");
-        HTMLElement theTreeElement = (HTMLElement) document.getElementById("objecttree");
+        HTMLElement thePropertyEditorElement = document.getElementById("objectEditor");
+        HTMLElement theTreeElement = document.getElementById("objecttree");
 
         treeView = new GameTreeView(theTreeElement, window, editorState, new GameTreeView.EventHandler() {
             @Override
@@ -257,7 +257,7 @@ public class Editor {
             JSArray<JSString> theResults = (JSArray<JSString>) aPaths;
             if (theResults.getLength() == 1) {
                 String thePath = theResults.get(0).stringValue();
-                boot(new LocalEditorProject(aFilesystem, thePath), new LocalResourceAccessor(aFilesystem, thePath));
+                boot(new LocalEditorProject(aFilesystem, LocalProjectDefinition.create(thePath)), new LocalResourceAccessor(aFilesystem, thePath));
             }
         }
     }

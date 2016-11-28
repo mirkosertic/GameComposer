@@ -13,22 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.mirkosertic.gameengine.web;
+package de.mirkosertic.gameengine.web.github;
 
-import de.mirkosertic.gameengine.core.Promise;
-import org.teavm.jso.browser.Window;
+import org.teavm.jso.JSObject;
+import org.teavm.jso.JSProperty;
 
-public interface EditorProject {
+/**
+ * https://developer.github.com/v3/users/#get-the-authenticated-user
+ */
+public interface GithubUser extends JSObject {
 
-    String DEFINITION_FILENAME = "/definition.json";
+    @JSProperty
+    String getName();
 
-    Promise<ResourceAccessor, String> initializeLoader();
+    @JSProperty
+    String getLogin();
 
-    default public void setCurrentPreview(String aSceneDataAsJSON) {
-        Window.current().getLocalStorage().setItem("previewscene", aSceneDataAsJSON);
-    }
+    @JSProperty
+    String getAvatar_url();
 
-    default public String getPreviewDataAsJSON() {
-        return Window.current().getLocalStorage().getItem("previewscene");
-    }
+    @JSProperty
+    String getRepoStrings_url();
 }

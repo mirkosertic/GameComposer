@@ -19,19 +19,27 @@ import de.mirkosertic.gameengine.core.Promise;
 import de.mirkosertic.gameengine.web.EditorProject;
 import de.mirkosertic.gameengine.web.ResourceAccessor;
 import de.mirkosertic.gameengine.web.electron.fs.FS;
+import de.mirkosertic.gameengine.web.html5.Blob;
+import org.teavm.jso.core.JSString;
+import org.teavm.jso.json.JSON;
 
 public class LocalEditorProject implements EditorProject {
 
     private final FS fs;
-    private final String localPath;
+    private final LocalProjectDefinition projectDefinition;
 
-    public LocalEditorProject(FS aFS, String aLocalPath) {
-        localPath = aLocalPath;
+    public LocalEditorProject(FS aFS, LocalProjectDefinition aProjectDefinition) {
+        projectDefinition = aProjectDefinition;
         fs = aFS;
     }
 
     @Override
     public Promise<ResourceAccessor, String> initializeLoader() {
-        return new Promise<>((Promise.Executor) (aResolver, aRejector) -> aResolver.resolve(new LocalResourceAccessor(fs, localPath)));
+        return new Promise<>((Promise.Executor) (aResolver, aRejector) -> {
+            LocalResourceAccessor theAccessor = new LocalResourceAccessor(fs, projectDefinition.getPath());
+            theAccessor.persistFile(DEFINITION_FILENAME, Blob.createJSONBlob(JSString.valueOf(JSON.stringify(projectDefinition)))).thenContinue(aResult -> {
+                aResolver.resolve(theAccessor);
+            });
+        });
     }
 }
