@@ -20,5 +20,5 @@ import org.teavm.jso.JSObject;
 
 @JSFunctor
 public interface IndexedDBEventHandler extends JSObject {
-    void handleEvent();
+    void handleEvent(IndexedDBEvent aEvent);
 }

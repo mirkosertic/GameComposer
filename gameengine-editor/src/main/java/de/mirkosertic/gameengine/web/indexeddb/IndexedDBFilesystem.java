@@ -15,24 +15,27 @@
  */
 package de.mirkosertic.gameengine.web.indexeddb;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.teavm.jso.JSBody;
-import org.teavm.jso.JSObject;
-
 import de.mirkosertic.gameengine.core.Promise;
 import de.mirkosertic.gameengine.teavm.TeaVMLogger;
+import de.mirkosertic.gameengine.web.Filesystem;
 import de.mirkosertic.gameengine.web.html5.Blob;
 import de.mirkosertic.gameengine.web.html5.File;
 import de.mirkosertic.gameengine.web.html5.FileReader;
-import de.mirkosertic.gameengine.web.Filesystem;
+import org.teavm.jso.JSBody;
+import org.teavm.jso.JSObject;
+import org.teavm.jso.core.JSString;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class IndexedDBFilesystem implements Filesystem {
 
     @JSBody(params = {"aObject"}, script = "return typeof aObject === 'undefined';")
     static native boolean isUndefined(JSObject aObject);
 
+    private static final String ADMIN_DATASTORE = "admin";
     private static final String FILE_DATASTORE = "files";
 
     private final IndexedDB database;
@@ -43,13 +46,70 @@ public class IndexedDBFilesystem implements Filesystem {
         cachedURLs = new HashMap<>();
     }
 
+    public static Promise<IndexedDB, String> getAdminDatabase() {
+        return new Promise<>((Promise.Executor) (aResolver, aRejector) -> {
+            IndexedDBFactory theFactory = IndexedDBFactory.getFactory();
+            IndexedDBOpenRequest theGetAdminRequest = theFactory.open("GameComposerAdminData", 1);
+            theGetAdminRequest.setOnupgradeneeded((aUpgradeEvent) -> theGetAdminRequest.getResult().createObjectStore(ADMIN_DATASTORE));
+            theGetAdminRequest.setOnerror((aErrorEvent) -> aRejector.reject("Error accessing admin data", null));
+            theGetAdminRequest.setOnsuccess((aSuccessEvent) -> aResolver.resolve(theGetAdminRequest.getResult()));
+        });
+    }
+
+    public static Promise<String[], String> listDatabases() {
+        return new Promise<>((Promise.Executor) (aResolver, aRejector) -> {
+            Promise<IndexedDB, String> theAdminDB = getAdminDatabase();
+            theAdminDB.catchError((aResult, aOptionalException) -> aRejector.reject(aRejector, aOptionalException));
+            theAdminDB.thenContinue(aResult -> {
+                final Set<String> theDatabases = new HashSet<>();
+                IndexedDBObjectStore theObjectStore = aResult.transaction(ADMIN_DATASTORE, "readonly").objectStore(ADMIN_DATASTORE);
+                theObjectStore.openCursor().setOnsuccess(aEvent -> {
+                    IndexedDBCursor theCursor = aEvent.getTarget().getResult();
+                    if (theCursor == null) {
+                        // Finished with iteration)
+                        aResolver.resolve(theDatabases.toArray(new String[theDatabases.size()]));
+                    } else {
+                        JSString theKey = theCursor.getKey();
+                        theDatabases.add(theKey.stringValue());
+                        theCursor.continueWithCursor();
+                    }
+                });
+            });
+        });
+    }
+
     public static Promise<IndexedDBFilesystem, String> open(String aDatabaseName) {
         return new Promise<>((aResolver, aRejector) -> {
-            IndexedDBFactory theFactory = IndexedDBFactory.getFactory();
-            IndexedDBOpenRequest theRequest = theFactory.open(aDatabaseName, 1);
-            theRequest.setOnupgradeneeded(() -> theRequest.getResult().createObjectStore(FILE_DATASTORE));
-            theRequest.setOnerror(() -> aRejector.reject("Error opening IndexedDB", null));
-            theRequest.setOnsuccess(() -> aResolver.resolve(new IndexedDBFilesystem(theRequest.getResult())));
+
+            Promise<IndexedDB, String> theAdminRequest = getAdminDatabase();
+            theAdminRequest.catchError((aResult, aOptionalException) -> aRejector.reject(aRejector, aOptionalException));
+            theAdminRequest.thenContinue(aAdminDB -> {
+
+                IndexedDBFactory theFactory = IndexedDBFactory.getFactory();
+
+                IndexedDBTransaction theTransction = aAdminDB.transaction(ADMIN_DATASTORE, "readwrite");
+                IndexedDBObjectStore theObjectStore = theTransction.objectStore(ADMIN_DATASTORE);
+                IndexedDBGetRequest theGetAdminMarkerRequest = theObjectStore.get(JSString.valueOf(aDatabaseName));
+                theGetAdminMarkerRequest.setOnsuccess((aAdminSuccessEvent) -> {
+                    if (isUndefined(theGetAdminMarkerRequest.getResult())) {
+                        IndexedDBRequest thePutAdminMarkerRequest = theObjectStore.put(JSString.valueOf("opened"), JSString.valueOf(aDatabaseName));
+                        thePutAdminMarkerRequest.setOnsuccess((aPutAdminMarkerSuccessEvent) -> {
+                            IndexedDBOpenRequest theOpenDatabaseRequest = theFactory.open(aDatabaseName, 1);
+                            theOpenDatabaseRequest.setOnupgradeneeded((aUpgradeNeededEvent) -> theOpenDatabaseRequest.getResult().createObjectStore(FILE_DATASTORE));
+                            theOpenDatabaseRequest.setOnerror((aErrorEvent) -> aRejector.reject("Error opening IndexedDB", null));
+                            theOpenDatabaseRequest.setOnsuccess((aOpenDatabaseSuccessEvent) -> aResolver.resolve(new IndexedDBFilesystem(theOpenDatabaseRequest.getResult())));
+                        });
+                        thePutAdminMarkerRequest.setOnerror((aErrorEvent) -> aRejector.reject("Error saving admin data", null));
+                    } else {
+                        // Datenbank existiert, also weiter mit öffnen
+                        IndexedDBOpenRequest theOpenDatabaseRequest = theFactory.open(aDatabaseName, 1);
+                        theOpenDatabaseRequest.setOnupgradeneeded((aUpgradeNeededEvent) -> theOpenDatabaseRequest.getResult().createObjectStore(FILE_DATASTORE));
+                        theOpenDatabaseRequest.setOnerror((aErrorEvent) -> aRejector.reject("Error opening IndexedDB", null));
+                        theOpenDatabaseRequest.setOnsuccess((aOpenDatabaseSuccessEvent) -> aResolver.resolve(new IndexedDBFilesystem(theOpenDatabaseRequest.getResult())));
+                    }
+                });
+                theGetAdminMarkerRequest.setOnerror((aErrorEvent) -> aRejector.reject("Error saving admin data", null));
+            });
         });
     }
 
@@ -59,8 +119,8 @@ public class IndexedDBFilesystem implements Filesystem {
             IndexedDBTransaction theTransction = database.transaction(FILE_DATASTORE, "readonly");
             IndexedDBObjectStore theObjectStore = theTransction.objectStore(FILE_DATASTORE);
             IndexedDBGetRequest theRequest = theObjectStore.get(IndexedDBFile.createFileKey(aFileName));
-            theRequest.setOnerror(() -> aRejector.reject("Error storing file " + aFileName, null));
-            theRequest.setOnsuccess(() -> {
+            theRequest.setOnerror((aErrorEvent) -> aRejector.reject("Error storing file " + aFileName, null));
+            theRequest.setOnsuccess((aSuccessEvent) -> {
                 if (isUndefined(theRequest.getResult())) {
                     aRejector.reject("File " + aFileName + " does not exist", null);
                 } else {
@@ -77,8 +137,8 @@ public class IndexedDBFilesystem implements Filesystem {
             IndexedDBObjectStore theObjectStore = theTransction.objectStore(FILE_DATASTORE);
             IndexedDBFile theFile = IndexedDBFile.createCached(aFileName, aBlob);
             IndexedDBRequest theRequest = theObjectStore.put(theFile, IndexedDBFile.createFileKey(aFileName));
-            theRequest.setOnerror(() -> aRejector.reject("Error storing file " + aFileName, null));
-            theRequest.setOnsuccess(() -> aResolver.resolve(theFile));
+            theRequest.setOnerror((aErrorEvent) -> aRejector.reject("Error storing file " + aFileName, null));
+            theRequest.setOnsuccess((aSuccessEvent) -> aResolver.resolve(theFile));
         });
     }
 
@@ -89,8 +149,8 @@ public class IndexedDBFilesystem implements Filesystem {
             IndexedDBObjectStore theObjectStore = theTransction.objectStore(FILE_DATASTORE);
             IndexedDBFile theFile = IndexedDBFile.createChanged(aFileName, aBlob);
             IndexedDBRequest theRequest = theObjectStore.put(theFile, IndexedDBFile.createFileKey(aFileName));
-            theRequest.setOnerror(() -> aRejector.reject("Error storing file " + aFileName, null));
-            theRequest.setOnsuccess(() -> aResolver.resolve(theFile));
+            theRequest.setOnerror((aErrorEvent) -> aRejector.reject("Error storing file " + aFileName, null));
+            theRequest.setOnsuccess((aSuccessEvent) -> aResolver.resolve(theFile));
         });
     }
 
