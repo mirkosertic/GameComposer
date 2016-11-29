@@ -23,7 +23,8 @@ public interface File extends JSObject {
     @JSProperty
     String getFilename();
 
-    @JSProperty Blob getContent();
+    @JSProperty
+    Blob getContent();
 
     @JSProperty
     String getStatus();

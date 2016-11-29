@@ -16,12 +16,10 @@
 package de.mirkosertic.gameengine.web.indexeddb;
 
 import org.teavm.jso.JSObject;
+import org.teavm.jso.JSProperty;
 
-public interface IndexedDBObjectStore extends JSObject {
+public interface IndexedDBEvent extends JSObject {
 
-    IndexedDBGetRequest get(JSObject aKey);
-
-    IndexedDBRequest put(JSObject aData, JSObject aKey);
-
-    IndexedDBRequest openCursor();
+    @JSProperty
+    IndexedDBTarget getTarget();
 }

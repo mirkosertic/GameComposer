@@ -15,13 +15,18 @@
  */
 package de.mirkosertic.gameengine.web.indexeddb;
 
+import org.teavm.jso.JSMethod;
 import org.teavm.jso.JSObject;
+import org.teavm.jso.JSProperty;
 
-public interface IndexedDBObjectStore extends JSObject {
+public interface IndexedDBCursor extends JSObject {
 
-    IndexedDBGetRequest get(JSObject aKey);
+    @JSProperty
+    <T extends JSObject> T getKey();
 
-    IndexedDBRequest put(JSObject aData, JSObject aKey);
+    @JSProperty
+    <T extends JSObject> T getValue();
 
-    IndexedDBRequest openCursor();
+    @JSMethod(value = "continue")
+    void continueWithCursor();
 }
