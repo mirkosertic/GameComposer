@@ -30,7 +30,7 @@ public class GithubAuthorizer {
 
     public Promise<AuthorizationState, String> getAuthorizationState() {
         return new Promise<>((aResolver, aRejector) -> {
-            String theCurrentUser = WINDOW.getSessionStorage().getItem(AUTHORIZATIONSTATE);
+            String theCurrentUser = WINDOW.getLocalStorage().getItem(AUTHORIZATIONSTATE);
             if (theCurrentUser != null) {
                 AuthorizationState theDetails = (AuthorizationState) JSON.parse(theCurrentUser);
                 aResolver.resolve(theDetails);
@@ -66,7 +66,7 @@ public class GithubAuthorizer {
                                 GithubUser theGithubUser = (GithubUser) JSON.parse(theUserDetailsRequest.getResponseText());
 
                                 AuthorizationState theDetails = AuthorizationState.githubUser(theGithubUser.getLogin(), theGithubUser.getName(), theAccessToken);
-                                WINDOW.getSessionStorage().setItem(AUTHORIZATIONSTATE, JSON.stringify(theDetails));
+                                WINDOW.getLocalStorage().setItem(AUTHORIZATIONSTATE, JSON.stringify(theDetails));
                                 aResolver.resolve(theDetails);
                             });
                             theUserDetailsRequest.send();

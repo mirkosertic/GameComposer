@@ -16,11 +16,15 @@
 package de.mirkosertic.gameengine.web;
 
 import de.mirkosertic.gameengine.core.Promise;
+import de.mirkosertic.gameengine.teavm.TeaVMLogger;
 import de.mirkosertic.gameengine.web.electron.LocalProjectDefinition;
 import de.mirkosertic.gameengine.web.github.GithubAuthorizer;
 import de.mirkosertic.gameengine.web.github.GithubProjectDefinition;
+import de.mirkosertic.gameengine.web.html5.FileReader;
+import de.mirkosertic.gameengine.web.indexeddb.IndexedDBFilesystem;
 import org.teavm.jso.browser.Window;
 import org.teavm.jso.dom.html.HTMLElement;
+import org.teavm.jso.json.JSON;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +56,24 @@ public class Welcome {
             theProjectDefinitions.add(GithubProjectDefinition.create("mirkosertic", "GameComposer", "/examples/positiontest"));
             theProjectDefinitions.add(GithubProjectDefinition.create("mirkosertic", "GameComposer", "/examples/rotatingactor"));
             theProjectDefinitions.add(GithubProjectDefinition.create("mirkosertic", "GameComposer", "/examples/arcaderacer"));
+
+            Promise<String[], String> theAllDatabases = IndexedDBFilesystem.listDatabases();
+            theAllDatabases.catchError((aResult, aOptionalException) -> TeaVMLogger.info("Error getting databases : " + aResult));
+            theAllDatabases.thenContinue(aResult -> {
+                for (String theDatabaseName : aResult) {
+                    Promise<IndexedDBFilesystem, String> theFilesystem = IndexedDBFilesystem.open(theDatabaseName);
+                    theFilesystem.thenContinue(aResult1 -> {
+                        aResult1.openFile(EditorProject.DEFINITION_FILENAME).thenContinue(aResult11 -> {
+                            FileReader theReader = FileReader.create();
+                            theReader.setOnload(() -> {
+                                ProjectDefinition theDefinition = (ProjectDefinition) JSON.parse(theReader.getResult());
+                                TeaVMLogger.info("Project " + theDatabaseName + " is " + generateStringRepresentation(theDefinition));
+                            });
+                            theReader.readAsText(aResult11.getContent());
+                        });
+                    });
+                }
+            });
 
             for (ProjectDefinition theDefinition : theProjectDefinitions) {
                 HTMLElement theElement = WINDOW.getDocument().createElement("div");
