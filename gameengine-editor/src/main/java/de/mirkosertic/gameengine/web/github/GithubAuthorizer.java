@@ -20,13 +20,39 @@ import de.mirkosertic.gameengine.web.AuthorizationState;
 import de.mirkosertic.gameengine.web.QueryStringParser;
 import org.teavm.jso.ajax.XMLHttpRequest;
 import org.teavm.jso.browser.Window;
+import org.teavm.jso.core.JSArray;
 import org.teavm.jso.json.JSON;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GithubAuthorizer {
 
     private static final String AUTHORIZATIONSTATE = "AUTHORIZATIONSTATE";
     private static final String OAUTHSTATE = "OAUTHSTATE";
     private static final Window WINDOW = Window.current();
+
+    public Promise<List<GithubRepository>, String> getRepositories() {
+        return new Promise<>((aResolver, aRejector) -> {
+
+            String theCurrentState = WINDOW.getLocalStorage().getItem(AUTHORIZATIONSTATE);
+            AuthorizationState theState = (AuthorizationState) JSON.parse(theCurrentState);
+
+            XMLHttpRequest theRepositoriesRequest = XMLHttpRequest.create();
+            theRepositoriesRequest.open("GET", "https://api.github.com/users/" + theState.getLogin() + "/repos");
+            theRepositoriesRequest.setRequestHeader("Authorization", "token " + theState.getToken());
+            theRepositoriesRequest.overrideMimeType("text/plain");
+            theRepositoriesRequest.onComplete(() -> {
+                JSArray<GithubRepository> theArray = (JSArray<GithubRepository>)JSON.parse(theRepositoriesRequest.getResponseText());
+                List<GithubRepository> theRepos = new ArrayList<>();
+                for (int i=0;i<theArray.getLength();i++) {
+                    theRepos.add(theArray.get(i));
+                }
+                aResolver.resolve(theRepos);
+            });
+            theRepositoriesRequest.send();
+        });
+    }
 
     public Promise<AuthorizationState, String> getAuthorizationState() {
         return new Promise<>((aResolver, aRejector) -> {

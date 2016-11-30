@@ -1,6 +1,7 @@
 <html>
     <head>
         <title>GameComposer Web Editor</title>
+
         <link rel="stylesheet" href="css/welcome.css"/>
         <script type="text/javascript" charset="utf-8" src="teavm/runtime.js"></script>
         <script type="text/javascript" charset="utf-8" src="teavm/classes.js"></script>
@@ -20,8 +21,14 @@
                     <div class="infoblock">
                         <div class="title">or innovate your own Game</div>
                         <div class="infoblockcontent">
-                            <div class="entry">Create new Game based on default template</div>
-                            <div class="entry" id="githublogin">Collaborate on GitHub</div>
+                            <div class="entry" id="githublogin"><img src="css/GitHub_Logo.png" width="150"></div>
+                            <div class="entry githubrepositoryselection" id="githubrepositoryselection">
+                                <div>Repository:</div>
+                                <div><select id="githubrepositories"></select></div>
+                                <div>Path in Repository:</div>
+                                <div><input id="githubrepositorypath" value="/"></div>
+                                <div id="opengithubrepository" class="continue">Download and open!</div>
+                            </div>
                         </div>
                     </div>
                 </div>
