@@ -18,20 +18,14 @@ package de.mirkosertic.gameengine.web.github;
 import org.teavm.jso.JSObject;
 import org.teavm.jso.JSProperty;
 
-/**
- * https://developer.github.com/v3/users/#get-the-authenticated-user
- */
-public interface GithubUser extends JSObject {
+public interface GithubRepository extends JSObject {
+
+    @JSProperty
+    long getId();
+
+    @JSProperty
+    String getFull_name();
 
     @JSProperty
     String getName();
-
-    @JSProperty
-    String getLogin();
-
-    @JSProperty
-    String getAvatar_url();
-
-    @JSProperty
-    String getRepos_url();
 }

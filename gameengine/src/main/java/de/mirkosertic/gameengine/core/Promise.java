@@ -228,4 +228,36 @@ public class Promise<T,V> implements PromiseResolver<T>, PromiseRejector<V> {
 
         return theUnionPromise;
     }
+
+    public static Promise<Promise[], Void> all(final List<Promise> aPromise) {
+        final Promise<Promise[], Void> theUnionPromise = new Promise();
+
+        final Promise[] theData = new Promise[aPromise.size()];
+        for (int i=0;i<aPromise.size();i++) {
+            final int theFinalI = i;
+            final Promise thePromise = aPromise.get(i);
+            thePromise.thenContinue(new NoReturnHandler() {
+                @Override
+                public void process(Object aResult) {
+                    theData[theFinalI] = thePromise;
+                    boolean theComplete = true;
+                    for (int k=0;k<aPromise.size();k++) {
+                        if (theData[k] == null) {
+                            theComplete = false;
+                        }
+                    }
+                    if (theComplete) {
+                        theUnionPromise.resolve(theData);
+                    }
+                }
+            }).catchError(new ErrorHandler() {
+                @Override
+                public void process(Object aResult, Exception aOptionalException) {
+                    theUnionPromise.reject(null, aOptionalException);
+                }
+            });
+        }
+
+        return theUnionPromise;
+    }
 }

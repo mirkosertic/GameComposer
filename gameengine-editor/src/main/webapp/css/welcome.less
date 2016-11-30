@@ -1,7 +1,7 @@
 body {
   margin: 0;
   padding: 0;
-  background-color: #ecf0f1;
+  background-color: #33373c;
 }
 
 .content {
@@ -20,7 +20,8 @@ body {
     margin-right: 3em;
     margin-bottom: 2em;
     padding: 1em;
-    background-color: #2c3e50;
+    background-color: #e74c3c;
+    border: 1px solid black;
     color: white;
   }
 
@@ -50,16 +51,64 @@ body {
 
   .title {
     font-weight: bold;
-    background-color: #2c3e50;
+    background-color: #e74c3c;
     color: white;
     padding: 0.3em;
   }
 
   .infoblockcontent {
     background-color: white;
+    text-align: left;
 
     .entry {
       background-color: white;
+      padding: 0.3em;
     }
   }
+}
+
+.project {
+  padding-left: 2.5em;
+  min-height: 32px;
+  line-height: 32px;
+  vertical-align: middle;
+  border: 0.1em white;
+
+  &:hover {
+    background-color: lighten(#33373c, 50%);
+    border: 0.1em lighten(#33373c, 50%);
+  }
+}
+
+.github {
+  background-image: url("GitHub-Mark-32px.png");
+  background-repeat: no-repeat;
+  background-position: left top;
+}
+
+#githublogin {
+  text-align: center;
+}
+
+.githubrepositoryselection {
+
+  select {
+    width: 100%;
+  }
+
+  input {
+    width: 100%;
+  }
+
+  .continue {
+    margin-top: 1em;
+    background-image: url("ic_open_in_browser_black_48dp.png");
+    background-repeat: no-repeat;
+    background-position: left top;
+    background-size: 32px 32px;
+    padding-left: 2.5em;
+    min-height: 32px;
+    line-height: 32px;
+  }
+
 }
