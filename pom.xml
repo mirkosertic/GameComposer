@@ -139,6 +139,10 @@
         </dependencies>
     </dependencyManagement>
 
+    <properties>
+        <teavm.version>0.4.3</teavm.version>
+    </properties>
+
     <build>
         <pluginManagement>
             <plugins>
@@ -282,6 +286,12 @@
     </build>
 
     <profiles>
+        <profile>
+            <id>teavmdev</id>
+            <properties>
+                <teavm.version>1.0.0-SNAPSHOT</teavm.version>
+            </properties>
+        </profile>
         <profile>
             <id>automaticversion</id>
             <build>

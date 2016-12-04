@@ -15,10 +15,6 @@
         <connection>scm:git:https://github.com/mirkosertic/GameComposer.git</connection>
     </scm>
 
-    <properties>
-        <teavm.version>0.4.3</teavm.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>de.mirkosertic</groupId>
