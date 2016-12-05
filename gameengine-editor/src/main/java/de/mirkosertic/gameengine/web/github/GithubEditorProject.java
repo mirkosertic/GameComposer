@@ -26,7 +26,6 @@ import org.teavm.jso.json.JSON;
 public class GithubEditorProject implements EditorProject {
 
     // http://mdswanson.com/blog/2011/07/23/digging-around-the-github-api-take-2.html
-    // https://gist.github.com/robnyman/1894032
     // https://api.github.com/repos/mirkosertic/GameComposer/git/refs/heads/master
 
     private final GithubProjectDefinition projectDefinition;
