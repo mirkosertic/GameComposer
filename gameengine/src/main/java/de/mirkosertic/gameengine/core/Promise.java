@@ -225,6 +225,9 @@ public class Promise<T,V> implements PromiseResolver<T>, PromiseRejector<V> {
                 }
             });
         }
+        if (theData.length == 0) {
+            theUnionPromise.resolve(theData);
+        }
 
         return theUnionPromise;
     }
@@ -256,6 +259,9 @@ public class Promise<T,V> implements PromiseResolver<T>, PromiseRejector<V> {
                     theUnionPromise.reject(null, aOptionalException);
                 }
             });
+        }
+        if (theData.length == 0) {
+            theUnionPromise.resolve(theData);
         }
 
         return theUnionPromise;
