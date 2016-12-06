@@ -17,34 +17,30 @@ package de.mirkosertic.gameengine.web.github;
 
 import org.teavm.jso.JSObject;
 import org.teavm.jso.JSProperty;
-import org.teavm.jso.core.JSArrayReader;
 
-// https://api.github.com/repos/mirkosertic/GameComposer/git/trees/a8ce3c2da3f0d1fc2a6c89af76c4de341fd55d7e?recursive=1
-public abstract class Tree implements JSObject {
+// https://api.github.com/repos/mirkosertic/GameComposer/git/commits/36a1e4239ce45c9558505dd7e5de774d798fd5fd
+public abstract class GithubCommit implements JSObject {
 
-    interface TreeItem extends JSObject {
+    interface Userinfo extends JSObject {
         @JSProperty
-        String getPath();
+        String getName();
+    }
 
-        @JSProperty
-        String getMode();
-
-        @JSProperty
-        String getType();
+    interface Tree extends JSObject {
 
         @JSProperty
         String getSha();
-
-        @JSProperty
-        int getSize();
-
-        @JSProperty
-        String getUrl();
     }
 
     @JSProperty
     public abstract String getSha();
 
     @JSProperty
-    public abstract JSArrayReader<TreeItem> getTree();
+    public abstract Userinfo getAuthor();
+
+    @JSProperty
+    public abstract Userinfo getCommitter();
+
+    @JSProperty
+    public abstract Tree getTree();
 }

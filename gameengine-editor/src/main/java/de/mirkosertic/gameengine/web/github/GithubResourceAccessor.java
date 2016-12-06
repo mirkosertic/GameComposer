@@ -21,6 +21,8 @@ import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.core.LoadedSpriteSheet;
 import de.mirkosertic.gameengine.core.Promise;
+import de.mirkosertic.gameengine.core.PromiseRejector;
+import de.mirkosertic.gameengine.core.PromiseResolver;
 import de.mirkosertic.gameengine.teavm.TeaVMGameLoader;
 import de.mirkosertic.gameengine.teavm.TeaVMGameResourceLoader;
 import de.mirkosertic.gameengine.teavm.TeaVMGameSceneLoader;
@@ -31,23 +33,32 @@ import de.mirkosertic.gameengine.teavm.pixi.LoaderResource;
 import de.mirkosertic.gameengine.teavm.pixi.SpritesheetJSONResource;
 import de.mirkosertic.gameengine.teavm.pixi.LoaderCallchain;
 import de.mirkosertic.gameengine.type.ResourceName;
+import de.mirkosertic.gameengine.web.AuthorizationState;
+import de.mirkosertic.gameengine.web.ProjectDefinition;
 import de.mirkosertic.gameengine.web.html5.Blob;
 import de.mirkosertic.gameengine.web.BlobLoader;
 import de.mirkosertic.gameengine.web.html5.File;
 import de.mirkosertic.gameengine.web.Filesystem;
 import de.mirkosertic.gameengine.web.ResourceAccessor;
+import org.teavm.jso.ajax.XMLHttpRequest;
 import org.teavm.jso.browser.Window;
+import org.teavm.jso.core.JSArray;
 import org.teavm.jso.dom.html.HTMLImageElement;
 import org.teavm.jso.json.JSON;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GithubResourceAccessor implements ResourceAccessor {
 
     private final String baseURL;
     private final BlobLoader blobLoader;
     private final Filesystem fileSystem;
+    private final GithubProjectDefinition projectDefinition;
 
-    public GithubResourceAccessor(String aBaseURL, Filesystem aFileSystem) {
-        baseURL = aBaseURL;
+    public GithubResourceAccessor(GithubProjectDefinition aDefinition , Filesystem aFileSystem) {
+        projectDefinition = aDefinition;
+        baseURL = "https://raw.githubusercontent.com/" + projectDefinition.getUser() + "/" + projectDefinition.getRepository() + "/master" + projectDefinition.getRelativePath();
         fileSystem = aFileSystem;
         blobLoader = new BlobLoader();
     }
@@ -222,5 +233,54 @@ public class GithubResourceAccessor implements ResourceAccessor {
                 });
             }
         };
+    }
+
+    public Promise<GithubHead, String> getLatestHead(AuthorizationState aAuthorizationState) {
+        return new Promise<>((aResolver, aRejector) -> {
+            XMLHttpRequest theRequest = XMLHttpRequest.create();
+
+            // https://api.github.com/repos/mirkosertic/GameComposer/git/refs/heads/master
+            theRequest.open("GET", "https://api.github.com/repos/" + projectDefinition.getUser() + "/" + projectDefinition.getRepository()+"/git/refs/heads/master");
+            theRequest.setRequestHeader("Authorization", "token " + aAuthorizationState.getToken());
+            theRequest.overrideMimeType("text/plain");
+            theRequest.onComplete(() -> {
+                GithubHead theHead = (GithubHead) JSON.parse(theRequest.getResponseText());
+                aResolver.resolve(theHead);
+            });
+            theRequest.send();
+
+        });
+    }
+
+    public Promise<GithubCommit, String> getCommit(AuthorizationState aAuthorizationState, String aCommitSHA) {
+        return new Promise<>((aResolver, aRejector) -> {
+            XMLHttpRequest theRequest = XMLHttpRequest.create();
+
+            // https://api.github.com/repos/mirkosertic/GameComposer/git/commits/36a1e4239ce45c9558505dd7e5de774d798fd5fd
+            theRequest.open("GET", "https://api.github.com/repos/" + projectDefinition.getUser() + "/" + projectDefinition.getRepository()+"/git/commits/" + aCommitSHA);
+            theRequest.setRequestHeader("Authorization", "token " + aAuthorizationState.getToken());
+            theRequest.overrideMimeType("text/plain");
+            theRequest.onComplete(() -> {
+                GithubCommit theCommit = (GithubCommit) JSON.parse(theRequest.getResponseText());
+                aResolver.resolve(theCommit);
+            });
+            theRequest.send();
+        });
+    }
+
+    public Promise<GithubTree, String> getTree(AuthorizationState aAuthorizationState, String aTreeSHA) {
+        return new Promise<>((aResolver, aRejector) -> {
+            XMLHttpRequest theRequest = XMLHttpRequest.create();
+
+            // https://api.github.com/repos/mirkosertic/GameComposer/git/trees/a8ce3c2da3f0d1fc2a6c89af76c4de341fd55d7e?recursive=1
+            theRequest.open("GET", "https://api.github.com/repos/" + projectDefinition.getUser() + "/" + projectDefinition.getRepository()+"/git/trees/" + aTreeSHA + "?recursive=1");
+            theRequest.setRequestHeader("Authorization", "token " + aAuthorizationState.getToken());
+            theRequest.overrideMimeType("text/plain");
+            theRequest.onComplete(() -> {
+                GithubTree theTree = (GithubTree) JSON.parse(theRequest.getResponseText());
+                aResolver.resolve(theTree);
+            });
+            theRequest.send();
+        });
     }
 }

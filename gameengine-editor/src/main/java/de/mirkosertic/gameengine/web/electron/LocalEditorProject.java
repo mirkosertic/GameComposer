@@ -34,7 +34,7 @@ public class LocalEditorProject implements EditorProject {
     }
 
     @Override
-    public Promise<ResourceAccessor, String> initializeLoader() {
+    public Promise<ResourceAccessor, String> initializeResourceAccessor() {
         return new Promise<>((Promise.Executor) (aResolver, aRejector) -> {
             LocalResourceAccessor theAccessor = new LocalResourceAccessor(fs, projectDefinition.getPath());
             theAccessor.persistFile(DEFINITION_FILENAME, Blob.createJSONBlob(JSString.valueOf(JSON.stringify(projectDefinition)))).thenContinue(aResult -> {

@@ -29,6 +29,7 @@ import de.mirkosertic.gameengine.web.electron.LocalEditorProject;
 import de.mirkosertic.gameengine.web.electron.LocalProjectDefinition;
 import de.mirkosertic.gameengine.web.electron.Remote;
 import de.mirkosertic.gameengine.web.electron.fs.FS;
+import de.mirkosertic.gameengine.web.github.GithubAuthorizer;
 import de.mirkosertic.gameengine.web.github.GithubEditorProject;
 import de.mirkosertic.gameengine.web.github.GithubProjectDefinition;
 import org.teavm.jso.browser.Window;
@@ -40,19 +41,21 @@ public class WebUI {
 
     public static void main(String[] args) {
 
+        GithubAuthorizer theAuthorizer = new GithubAuthorizer();
+
         TeaVMLogger.info("Starting web editor");
 
         Router theRouter = new Router(WINDOW);
 
         theRouter.add("/index.html", aWindow -> {
-            Welcome theWelcome = new Welcome(theRouter);
+            Welcome theWelcome = new Welcome(theRouter, theAuthorizer);
             theWelcome.run();
         });
         theRouter.add("/editor.html", aWindow -> {
             EditorProject theProject = getEditorProjectFromState(theRouter);
 
-            theProject.initializeLoader().thenContinue(aResult -> {
-                Editor theEditor = new Editor(theRouter);
+            theProject.initializeResourceAccessor().thenContinue(aResult -> {
+                Editor theEditor = new Editor(theRouter, theAuthorizer);
                 theEditor.boot(theProject, aResult);
 
             }).catchError((aResult, aOptionalRejectedException) -> TeaVMLogger.error("Error creating indexeddb filesystem!"));
@@ -61,7 +64,7 @@ public class WebUI {
         theRouter.add("/preview.html", aWindow -> {
             EditorProject theProject = getEditorProjectFromState(theRouter);
 
-            theProject.initializeLoader().thenContinue(aResult -> {
+            theProject.initializeResourceAccessor().thenContinue(aResult -> {
 
                 HTMLCanvasElement theCanvasElement = (HTMLCanvasElement) aWindow.getDocument().getElementById("html5canvas");
                 TeaVMGenericPlayer thePlayer = new TeaVMGenericPlayer() {
