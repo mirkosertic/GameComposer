@@ -19,7 +19,7 @@ import org.teavm.jso.JSObject;
 import org.teavm.jso.JSProperty;
 
 // https://api.github.com/repos/mirkosertic/GameComposer/git/refs/heads/master
-public abstract class Head implements JSObject {
+public abstract class GithubHead implements JSObject {
 
     public interface HeadObject extends JSObject {
 

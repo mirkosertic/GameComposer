@@ -35,10 +35,9 @@ public class GithubEditorProject implements EditorProject {
     }
 
     @Override
-    public Promise<ResourceAccessor, String> initializeLoader() {
+    public Promise<ResourceAccessor, String> initializeResourceAccessor() {
         return IndexedDBFilesystem.open("github_" + projectDefinition.getUser() + "_" + projectDefinition.getRelativePath()+ "_" + projectDefinition.getRelativePath().replace("/","_")).thenContinue((Promise.Handler<IndexedDBFilesystem, ResourceAccessor>) aResult -> {
-            String theBaseURL = "https://raw.githubusercontent.com/" + projectDefinition.getUser() + "/" + projectDefinition.getRepository() + "/master" + projectDefinition.getRelativePath();
-            GithubResourceAccessor theAccessor = new GithubResourceAccessor(theBaseURL, aResult);
+            GithubResourceAccessor theAccessor = new GithubResourceAccessor(projectDefinition, aResult);
             //TODO: Wait for completion here
             theAccessor.persistFile(DEFINITION_FILENAME, Blob.createJSONBlob(JSString.valueOf(JSON.stringify(projectDefinition))));
             return theAccessor;
