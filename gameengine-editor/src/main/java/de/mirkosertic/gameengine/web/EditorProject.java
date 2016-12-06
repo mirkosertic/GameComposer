@@ -22,7 +22,7 @@ public interface EditorProject {
 
     String DEFINITION_FILENAME = "/definition.json";
 
-    Promise<ResourceAccessor, String> initializeLoader();
+    Promise<ResourceAccessor, String> initializeResourceAccessor();
 
     default public void setCurrentPreview(String aSceneDataAsJSON) {
         Window.current().getLocalStorage().setItem("previewscene", aSceneDataAsJSON);

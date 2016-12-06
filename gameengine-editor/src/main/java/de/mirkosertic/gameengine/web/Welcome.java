@@ -40,9 +40,11 @@ public class Welcome {
     private static final Window WINDOW = Window.current();
 
     private final Router router;
+    private final GithubAuthorizer authorizer;
 
-    public Welcome(Router aRouter) {
+    public Welcome(Router aRouter, GithubAuthorizer aAuthorizer) {
         router = aRouter;
+        authorizer = aAuthorizer;
     }
 
     public Promise<List<ProjectDefinition>, String> computeStoredDefinitions() {
@@ -81,13 +83,12 @@ public class Welcome {
 
     public void run() {
 
-        GithubAuthorizer theAuthorizer = new GithubAuthorizer();
-        Promise<AuthorizationState, String> thePromise = theAuthorizer.getAuthorizationState();
+        Promise<AuthorizationState, String> thePromise = authorizer.getAuthorizationState();
         thePromise.thenContinue(aAuthorizationState -> {
             HTMLElement theParentElement = WINDOW.getDocument().getElementById("infoblockcontent");
 
             if (!aAuthorizationState.isNotLoggedIn()) {
-                theAuthorizer.getRepositories().thenContinue(aResult -> {
+                authorizer.getRepositories().thenContinue(aResult -> {
                     final HTMLSelectElement theSelect = (HTMLSelectElement) WINDOW.getDocument().getElementById("githubrepositories");
                     for (GithubRepository theRepository : aResult) {
                         HTMLOptionElement theOption = (HTMLOptionElement) WINDOW.getDocument().createElement("option");
@@ -144,7 +145,7 @@ public class Welcome {
                 theWelcomeMessage.setInnerHTML("Welcome to Online Game Composer!");
                 theGithubLogin.addEventListener("click", evt -> {
                     String theState = "" + (int) (Math.random() * 1000000);
-                    theAuthorizer.requestOAuthLogin(theState);
+                    authorizer.requestOAuthLogin(theState);
                 });
             } else {
                 theWelcomeMessage.setInnerHTML("Welcome to Online Game Composer, " + aAuthorizationState.getRealName() + "!");
