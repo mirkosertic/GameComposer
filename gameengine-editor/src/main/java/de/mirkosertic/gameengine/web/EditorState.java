@@ -51,12 +51,18 @@ public class EditorState {
     private final EditorProject editorProject;
     private final AbstractGameRuntimeFactory runtimeFactory;
     private final ResourceAccessor resourceAccessor;
+    private final AuthorizationState authorizationState;
 
-    public EditorState(EditorProject aProject, AbstractGameRuntimeFactory aRuntimeFactory, ResourceAccessor aResourceAccessor) {
+    public EditorState(EditorProject aProject, AbstractGameRuntimeFactory aRuntimeFactory, ResourceAccessor aResourceAccessor, AuthorizationState aAuthorizationState) {
         loadedScenes = new HashMap<>();
         editorProject = aProject;
         runtimeFactory = aRuntimeFactory;
         resourceAccessor = aResourceAccessor;
+        authorizationState = aAuthorizationState;
+    }
+
+    public AuthorizationState getAuthorizationState() {
+        return authorizationState;
     }
 
     public EditorProject getEditorProject() {

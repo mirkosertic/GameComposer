@@ -15,12 +15,19 @@
  */
 package de.mirkosertic.gameengine.web;
 
+import org.teavm.jso.JSBody;
+import org.teavm.jso.JSObject;
+import org.teavm.jso.browser.Window;
+import org.teavm.jso.core.JSArray;
+import org.teavm.jso.core.JSString;
+import org.teavm.jso.dom.html.HTMLDocument;
+import org.teavm.jso.dom.html.HTMLElement;
+
 import de.mirkosertic.gameengine.core.EventSheet;
 import de.mirkosertic.gameengine.core.Game;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameScene;
-import de.mirkosertic.gameengine.core.Promise;
 import de.mirkosertic.gameengine.core.Spritesheet;
 import de.mirkosertic.gameengine.event.Property;
 import de.mirkosertic.gameengine.teavm.TeaVMGameRuntimeFactory;
@@ -37,15 +44,7 @@ import de.mirkosertic.gameengine.web.electron.MenuItem;
 import de.mirkosertic.gameengine.web.electron.Remote;
 import de.mirkosertic.gameengine.web.electron.fs.FS;
 import de.mirkosertic.gameengine.web.github.GithubAuthorizer;
-import de.mirkosertic.gameengine.web.github.GithubHead;
 import de.mirkosertic.gameengine.web.github.GithubResourceAccessor;
-import org.teavm.jso.JSBody;
-import org.teavm.jso.JSObject;
-import org.teavm.jso.browser.Window;
-import org.teavm.jso.core.JSArray;
-import org.teavm.jso.core.JSString;
-import org.teavm.jso.dom.html.HTMLDocument;
-import org.teavm.jso.dom.html.HTMLElement;
 
 public class Editor {
 
@@ -86,21 +85,17 @@ public class Editor {
     }
 
     public void boot(EditorProject aProject, ResourceAccessor aResourceAccessor) {
-
         if (aResourceAccessor instanceof GithubResourceAccessor) {
-            GithubResourceAccessor theAccessor = (GithubResourceAccessor) aResourceAccessor;
-            authorizer.getAuthorizationState().thenContinue(new Promise.NoReturnHandler<AuthorizationState>() {
-                @Override
-                public void process(AuthorizationState aResult) {
-                    ((GithubResourceAccessor) aResourceAccessor).getLatestHead(aResult).thenContinue(new Promise.NoReturnHandler<GithubHead>() {
-                        @Override
-                        public void process(GithubHead aResult) {
-                            Window.alert("Current HEAD is " + aResult.getObject().getSha());
-                        }
-                    });
-                }
+            authorizer.getAuthorizationState().thenContinue(aResult -> {
+                boot(aProject, aResourceAccessor, aResult);
             });
+        } else {
+            boot(aProject, aResourceAccessor, AuthorizationState.NOT_LOGGED_IN());
         }
+    }
+
+
+    public void boot(EditorProject aProject, ResourceAccessor aResourceAccessor, AuthorizationState aAuthorizationState) {
 
         TeaVMGameRuntimeFactory theRuntimeFactory = new TeaVMGameRuntimeFactory(
                 !window.getLocation().getFullURL().contains("nothreading"),
@@ -119,7 +114,7 @@ public class Editor {
 
         window.addEventListener("resize", evt -> tabbedPageManager.notifyResize(), true);
 
-        editorState = new EditorState(aProject, theRuntimeFactory, aResourceAccessor);
+        editorState = new EditorState(aProject, theRuntimeFactory, aResourceAccessor, aAuthorizationState);
 
         // Initialize object editor
         HTMLElement thePropertyEditorElement = document.getElementById("objectEditor");
