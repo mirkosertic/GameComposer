@@ -72,9 +72,19 @@
                 width: 18px;
                 height: 18px;
             }
+
+            .contextmenu {
+                vertical-align: middle;
+                float: left;
+                visibility: hidden;
+                display: none;
+                width: 24px;
+                height: 24px;
+                background-image: url("menu.png");
+            }
         </style>
 
-        <div draggable="{{draggable}}" class$="{{computeStyle(level, selected, separator)}}">{{text}}<div id="deletebutton" class="deletebutton"></div></div>
+        <div draggable="{{draggable}}" class$="{{computeStyle(level, selected, separator)}}"><div id="contextmenu" class="contextmenu"></div>{{text}}<div id="deletebutton" class="deletebutton"></div></div>
     </template>
     <script>
         Polymer({
@@ -119,6 +129,12 @@
             addDeleteListener: function(aListener) {
                 this.$.deletebutton.style.visibility = 'visible';
                 this.$.deletebutton.addEventListener("click", aListener);
+            },
+
+            addContextMenuListener: function(aListener) {
+                this.$.contextmenu.style.display = 'inline';
+                this.$.contextmenu.style.visibility = 'visible';
+                this.$.contextmenu.addEventListener("click", aListener);
             },
 
             ready: function() {
