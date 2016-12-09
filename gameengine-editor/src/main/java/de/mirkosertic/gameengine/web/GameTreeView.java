@@ -15,6 +15,13 @@
  */
 package de.mirkosertic.gameengine.web;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.teavm.jso.browser.Window;
+import org.teavm.jso.dom.events.EventListener;
+import org.teavm.jso.dom.html.HTMLElement;
+
 import de.mirkosertic.gameengine.core.EventSheet;
 import de.mirkosertic.gameengine.core.Game;
 import de.mirkosertic.gameengine.core.GameObject;
@@ -22,13 +29,6 @@ import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.core.Spritesheet;
 import de.mirkosertic.gameengine.teavm.TeaVMDragEvent;
-import de.mirkosertic.gameengine.teavm.TeaVMMouseEvent;
-import org.teavm.jso.browser.Window;
-import org.teavm.jso.dom.events.EventListener;
-import org.teavm.jso.dom.html.HTMLElement;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class GameTreeView extends ListingElement {
 
@@ -88,12 +88,28 @@ public class GameTreeView extends ListingElement {
         clear();
 
         TreeItemHTMLElement theGameElement = addTreeItem(1);
-        theGameElement.setSeparator(true);
         binder.add(theGameElement.bindTo(editorState.getLoadedGame().nameProperty()));
         theGameElement.addEventListener("click", evt -> {
             select(theGameElement);
             eventHandler.setEditingObject(editorState.getLoadedGame());
         });
+
+        if (!editorState.getAuthorizationState().isNotLoggedIn()) {
+
+            theGameElement.addContextMenuListener(aContextMenuEvent -> {
+                ContextMenuHTMLElement theElement = ContextMenuHTMLElement.create();
+                theElement.setTitle("Available Actions");
+
+                ContextMenuItemHTMLElement theItem = ContextMenuItemHTMLElement.create();
+                theItem.setText("Commit to GitHub");
+                theItem.addEventListener("click", aClickEvent -> {
+                    // Handle Commit here
+                });
+                theElement.add(theItem);
+                theElement.showAt(aContextMenuEvent);
+            });
+
+        }
 
         if (oldSelection != null) {
             select(oldSelection);
