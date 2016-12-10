@@ -16,6 +16,7 @@
 package de.mirkosertic.gameengine.web.github;
 
 import de.mirkosertic.gameengine.core.Promise;
+import de.mirkosertic.gameengine.web.AuthorizationState;
 import de.mirkosertic.gameengine.web.EditorProject;
 import de.mirkosertic.gameengine.web.ResourceAccessor;
 import de.mirkosertic.gameengine.web.html5.Blob;
@@ -36,11 +37,16 @@ public class GithubEditorProject implements EditorProject {
 
     @Override
     public Promise<ResourceAccessor, String> initializeResourceAccessor() {
-        return IndexedDBFilesystem.open("github_" + projectDefinition.getUser() + "_" + projectDefinition.getRelativePath()+ "_" + projectDefinition.getRelativePath().replace("/","_")).thenContinue((Promise.Handler<IndexedDBFilesystem, ResourceAccessor>) aResult -> {
+        return IndexedDBFilesystem.open("github_" + projectDefinition.getUser() + "_" + projectDefinition.getRelativePath()+ "_" + projectDefinition.getRelativePath().replace("/","_")).thenContinue(aResult -> {
             GithubResourceAccessor theAccessor = new GithubResourceAccessor(projectDefinition, aResult);
             //TODO: Wait for completion here
             theAccessor.persistFile(DEFINITION_FILENAME, Blob.createJSONBlob(JSString.valueOf(JSON.stringify(projectDefinition))));
             return theAccessor;
         });
+    }
+
+    @Override
+    public boolean isAuthorizedWith(AuthorizationState aAuthorizationState) {
+        return !aAuthorizationState.isNotLoggedIn() && projectDefinition.getUser().equals(aAuthorizationState.getLogin());
     }
 }
