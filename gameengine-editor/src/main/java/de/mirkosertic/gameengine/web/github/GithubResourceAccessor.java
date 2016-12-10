@@ -21,33 +21,28 @@ import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.core.LoadedSpriteSheet;
 import de.mirkosertic.gameengine.core.Promise;
-import de.mirkosertic.gameengine.core.PromiseRejector;
-import de.mirkosertic.gameengine.core.PromiseResolver;
 import de.mirkosertic.gameengine.teavm.TeaVMGameLoader;
 import de.mirkosertic.gameengine.teavm.TeaVMGameResourceLoader;
 import de.mirkosertic.gameengine.teavm.TeaVMGameSceneLoader;
 import de.mirkosertic.gameengine.teavm.TeaVMLoadedSpriteSheet;
 import de.mirkosertic.gameengine.teavm.TeaVMLogger;
 import de.mirkosertic.gameengine.teavm.pixi.Loader;
+import de.mirkosertic.gameengine.teavm.pixi.LoaderCallchain;
 import de.mirkosertic.gameengine.teavm.pixi.LoaderResource;
 import de.mirkosertic.gameengine.teavm.pixi.SpritesheetJSONResource;
-import de.mirkosertic.gameengine.teavm.pixi.LoaderCallchain;
 import de.mirkosertic.gameengine.type.ResourceName;
 import de.mirkosertic.gameengine.web.AuthorizationState;
-import de.mirkosertic.gameengine.web.ProjectDefinition;
-import de.mirkosertic.gameengine.web.html5.Blob;
 import de.mirkosertic.gameengine.web.BlobLoader;
-import de.mirkosertic.gameengine.web.html5.File;
 import de.mirkosertic.gameengine.web.Filesystem;
 import de.mirkosertic.gameengine.web.ResourceAccessor;
+import de.mirkosertic.gameengine.web.Toast;
+import de.mirkosertic.gameengine.web.html5.Blob;
+import de.mirkosertic.gameengine.web.html5.File;
+import de.mirkosertic.gameengine.web.indexeddb.IndexedDBFilesystem;
 import org.teavm.jso.ajax.XMLHttpRequest;
 import org.teavm.jso.browser.Window;
-import org.teavm.jso.core.JSArray;
 import org.teavm.jso.dom.html.HTMLImageElement;
 import org.teavm.jso.json.JSON;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class GithubResourceAccessor implements ResourceAccessor {
 
@@ -56,7 +51,7 @@ public class GithubResourceAccessor implements ResourceAccessor {
     private final Filesystem fileSystem;
     private final GithubProjectDefinition projectDefinition;
 
-    public GithubResourceAccessor(GithubProjectDefinition aDefinition , Filesystem aFileSystem) {
+    public GithubResourceAccessor(GithubProjectDefinition aDefinition , IndexedDBFilesystem aFileSystem) {
         projectDefinition = aDefinition;
         baseURL = "https://raw.githubusercontent.com/" + projectDefinition.getUser() + "/" + projectDefinition.getRepository() + "/master" + projectDefinition.getRelativePath();
         fileSystem = aFileSystem;
@@ -74,7 +69,7 @@ public class GithubResourceAccessor implements ResourceAccessor {
             @Override
             public Promise<GameScene, String> loadFromServer(Game aGame, String aSceneName, TeaVMGameResourceLoader aResourceLoader) {
 
-                return new Promise<>((Promise.Executor) (aResolver, aRejector) -> {
+                return new Promise<>((aResolver, aRejector) -> {
                     String theFileName = "/" + aSceneName + "/scene.json";
                     fileSystem.openFile(theFileName).thenContinue(aResult -> {
                         fileSystem.asDataURL(aResult).thenContinue(aDataURL -> {
@@ -105,7 +100,7 @@ public class GithubResourceAccessor implements ResourceAccessor {
         return new TeaVMGameLoader() {
             @Override
             public Promise<Game, String> loadFromServer() {
-                return new Promise<>((Promise.Executor) (aResolver, aRejector) -> {
+                return new Promise<>((aResolver, aRejector) -> {
 
                     String theFileName = "/game.json";
                     fileSystem.openFile(theFileName).thenContinue(aResult -> {
@@ -157,7 +152,7 @@ public class GithubResourceAccessor implements ResourceAccessor {
 
             @Override
             public Promise<GameResource, String> load(ResourceName aResourceName) {
-                return new Promise<>((Promise.Executor) (aResolver, aRejector) -> {
+                return new Promise<>((aResolver, aRejector) -> {
                     String theFileName = "/" + aSceneID + aResourceName.get();
 
                     fileSystem.openFile(theFileName).thenContinue(aResult -> {
@@ -219,7 +214,7 @@ public class GithubResourceAccessor implements ResourceAccessor {
                     });
                 });
 
-                return new Promise<>((Promise.Executor) (aResolver, aRejector) -> {
+                return new Promise<>((aResolver, aRejector) -> {
 
                     ResourceName theNewResourceName = new ResourceName(baseURL + theFileName);
                     final String thePath = theNewResourceName.name.replace('\\', '/');
@@ -281,6 +276,29 @@ public class GithubResourceAccessor implements ResourceAccessor {
                 aResolver.resolve(theTree);
             });
             theRequest.send();
+        });
+    }
+
+    public void publish(AuthorizationState aAuthorizationState) {
+        getLatestHead(aAuthorizationState).thenContinue(aResult -> {
+            String theHeadCommit = aResult.getObject().getSha();
+
+            Toast.info("Latest Head is " + theHeadCommit);
+
+            // We need the commit
+            getCommit(aAuthorizationState, theHeadCommit).thenContinue(aResult13 -> {
+                String theTreeSHA1 = aResult13.getTree().getSha();
+                Toast.info("Tree SHA is " + theTreeSHA1);
+
+                getTree(aAuthorizationState, theTreeSHA1).thenContinue(aResult12 -> {
+                    Toast.info("Found " + aResult12.getTree().getLength() + " files");
+
+                    // Now we need to iterate over our files
+                    fileSystem.listChangedFiles().thenContinue(aResult1 -> {
+                        Toast.info(aResult1.length + " files were changed");
+                    });
+                });
+            });
         });
     }
 }

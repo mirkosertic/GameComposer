@@ -16,6 +16,7 @@
 package de.mirkosertic.gameengine.web.electron;
 
 import de.mirkosertic.gameengine.core.Promise;
+import de.mirkosertic.gameengine.web.AuthorizationState;
 import de.mirkosertic.gameengine.web.EditorProject;
 import de.mirkosertic.gameengine.web.ResourceAccessor;
 import de.mirkosertic.gameengine.web.electron.fs.FS;
@@ -35,11 +36,16 @@ public class LocalEditorProject implements EditorProject {
 
     @Override
     public Promise<ResourceAccessor, String> initializeResourceAccessor() {
-        return new Promise<>((Promise.Executor) (aResolver, aRejector) -> {
+        return new Promise<>((aResolver, aRejector) -> {
             LocalResourceAccessor theAccessor = new LocalResourceAccessor(fs, projectDefinition.getPath());
             theAccessor.persistFile(DEFINITION_FILENAME, Blob.createJSONBlob(JSString.valueOf(JSON.stringify(projectDefinition)))).thenContinue(aResult -> {
                 aResolver.resolve(theAccessor);
             });
         });
+    }
+
+    @Override
+    public boolean isAuthorizedWith(AuthorizationState aAuthorizationState) {
+        return !aAuthorizationState.isNotLoggedIn();
     }
 }

@@ -21,12 +21,12 @@ import org.teavm.jso.JSProperty;
 // https://api.github.com/repos/mirkosertic/GameComposer/git/commits/36a1e4239ce45c9558505dd7e5de774d798fd5fd
 public abstract class GithubCommit implements JSObject {
 
-    interface Userinfo extends JSObject {
+    public interface Userinfo extends JSObject {
         @JSProperty
         String getName();
     }
 
-    interface Tree extends JSObject {
+    public interface Tree extends JSObject {
 
         @JSProperty
         String getSha();

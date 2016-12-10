@@ -24,11 +24,13 @@ public interface EditorProject {
 
     Promise<ResourceAccessor, String> initializeResourceAccessor();
 
-    default public void setCurrentPreview(String aSceneDataAsJSON) {
+    default void setCurrentPreview(String aSceneDataAsJSON) {
         Window.current().getLocalStorage().setItem("previewscene", aSceneDataAsJSON);
     }
 
-    default public String getPreviewDataAsJSON() {
+    default String getPreviewDataAsJSON() {
         return Window.current().getLocalStorage().getItem("previewscene");
     }
+
+    boolean isAuthorizedWith(AuthorizationState aAuthorizationState);
 }
