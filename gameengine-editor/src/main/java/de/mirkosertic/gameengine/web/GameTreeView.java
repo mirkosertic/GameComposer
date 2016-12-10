@@ -40,6 +40,7 @@ public class GameTreeView extends ListingElement {
         void setEditingObject(EventSheet aSheet);
         void setEditingObject(Spritesheet aSheet);
         void setEditingObject(GameObjectInstance aInstance);
+        void publishToGithub();
     }
 
     private TreeItemHTMLElement oldSelection;
@@ -88,27 +89,26 @@ public class GameTreeView extends ListingElement {
         clear();
 
         TreeItemHTMLElement theGameElement = addTreeItem(1);
+        theGameElement.setSeparator(true);
         binder.add(theGameElement.bindTo(editorState.getLoadedGame().nameProperty()));
         theGameElement.addEventListener("click", evt -> {
             select(theGameElement);
             eventHandler.setEditingObject(editorState.getLoadedGame());
         });
 
-        if (!editorState.getAuthorizationState().isNotLoggedIn()) {
-
+        if (editorState.getEditorProject().isAuthorizedWith(editorState.getAuthorizationState())) {
             theGameElement.addContextMenuListener(aContextMenuEvent -> {
                 ContextMenuHTMLElement theElement = ContextMenuHTMLElement.create();
                 theElement.setTitle("Available Actions");
 
                 ContextMenuItemHTMLElement theItem = ContextMenuItemHTMLElement.create();
-                theItem.setText("Commit to GitHub");
+                theItem.setText("Publish to GitHub");
                 theItem.addEventListener("click", aClickEvent -> {
-                    // Handle Commit here
+                    eventHandler.publishToGithub();
                 });
                 theElement.add(theItem);
                 theElement.showAt(aContextMenuEvent);
             });
-
         }
 
         if (oldSelection != null) {

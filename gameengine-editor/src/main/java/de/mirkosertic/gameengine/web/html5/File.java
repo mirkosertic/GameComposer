@@ -20,6 +20,10 @@ import org.teavm.jso.JSProperty;
 
 public interface File extends JSObject {
 
+    String STATUS_CACHED = "cached";
+
+    String STATUS_CHANGED = "changed";
+
     @JSProperty
     String getFilename();
 

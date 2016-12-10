@@ -28,4 +28,6 @@ public interface Filesystem {
     Promise<File, String> updateFile(String aFileName, Blob aBlob);
 
     Promise<String, String> asDataURL(File aFile);
+
+    Promise<File[], String> listChangedFiles();
 }

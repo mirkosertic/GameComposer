@@ -159,6 +159,12 @@ public class Editor {
             public void setEditingObject(GameObjectInstance aInstance) {
                 objectEditor.setEditingObject(aInstance);
             }
+
+            @Override
+            public void publishToGithub() {
+                GithubResourceAccessor theAccessor = (GithubResourceAccessor) aResourceAccessor;
+                theAccessor.publish(aAuthorizationState);
+            }
         });
 
         objectEditor = new GameObjectEditor(thePropertyEditorElement);
