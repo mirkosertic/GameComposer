@@ -33,16 +33,23 @@ import de.mirkosertic.gameengine.teavm.pixi.SpritesheetJSONResource;
 import de.mirkosertic.gameengine.type.ResourceName;
 import de.mirkosertic.gameengine.web.AuthorizationState;
 import de.mirkosertic.gameengine.web.BlobLoader;
+import de.mirkosertic.gameengine.web.EditorProject;
 import de.mirkosertic.gameengine.web.Filesystem;
 import de.mirkosertic.gameengine.web.ResourceAccessor;
-import de.mirkosertic.gameengine.web.Toast;
 import de.mirkosertic.gameengine.web.html5.Blob;
 import de.mirkosertic.gameengine.web.html5.File;
+import de.mirkosertic.gameengine.web.html5.FileReader;
 import de.mirkosertic.gameengine.web.indexeddb.IndexedDBFilesystem;
 import org.teavm.jso.ajax.XMLHttpRequest;
 import org.teavm.jso.browser.Window;
+import org.teavm.jso.core.JSArray;
+import org.teavm.jso.core.JSString;
 import org.teavm.jso.dom.html.HTMLImageElement;
 import org.teavm.jso.json.JSON;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GithubResourceAccessor implements ResourceAccessor {
 
@@ -243,7 +250,25 @@ public class GithubResourceAccessor implements ResourceAccessor {
                 aResolver.resolve(theHead);
             });
             theRequest.send();
+        });
+    }
 
+    public Promise<GithubHead, String> updateHead(AuthorizationState aAuthorizationState, String aCommitSHA) {
+        GithubNewHead theNewHead = GithubNewHead.create();
+        theNewHead.setSha(aCommitSHA);
+
+        return new Promise<>((aResolver, aRejector) -> {
+            XMLHttpRequest theRequest = XMLHttpRequest.create();
+
+            // https://api.github.com/repos/mirkosertic/GameComposer/git/refs/heads/master
+            theRequest.open("PATCH", "https://api.github.com/repos/" + projectDefinition.getUser() + "/" + projectDefinition.getRepository()+"/git/refs/heads/master");
+            theRequest.setRequestHeader("Authorization", "token " + aAuthorizationState.getToken());
+            theRequest.overrideMimeType("text/plain");
+            theRequest.onComplete(() -> {
+                GithubHead theHead = (GithubHead) JSON.parse(theRequest.getResponseText());
+                aResolver.resolve(theHead);
+            });
+            theRequest.send(JSON.stringify(theNewHead));
         });
     }
 
@@ -279,26 +304,145 @@ public class GithubResourceAccessor implements ResourceAccessor {
         });
     }
 
-    public void publish(AuthorizationState aAuthorizationState) {
-        getLatestHead(aAuthorizationState).thenContinue(aResult -> {
+    public Promise<GithubTree, String> createTree(AuthorizationState aAuthorizationState, GithubTree aTree) {
+        return new Promise<>((aResolver, aRejector) -> {
+            XMLHttpRequest theRequest = XMLHttpRequest.create();
+
+            theRequest.open("POST", "https://api.github.com/repos/" + projectDefinition.getUser() + "/" + projectDefinition.getRepository()+"/git/trees");
+            theRequest.setRequestHeader("Authorization", "token " + aAuthorizationState.getToken());
+            theRequest.overrideMimeType("text/plain");
+            theRequest.onComplete(() -> {
+                GithubTree theTree = (GithubTree) JSON.parse(theRequest.getResponseText());
+                aResolver.resolve(theTree);
+            });
+            theRequest.send(JSON.stringify(aTree));
+        });
+    }
+
+    private GithubTree copyTreeAndFillData(GithubTree aTree, Map<String, Promise<GithubBlob, String>> aNewBase64Data) {
+        GithubTree theCopy = GithubTree.create();
+        theCopy.setBase_tree(aTree.getSha());
+
+        JSArray<GithubTree.TreeItem> theItems = aTree.getTree();
+        for (Map.Entry<String, Promise<GithubBlob, String>> theEntry : aNewBase64Data.entrySet()) {
+
+            boolean theFound = false;
+            for (int i=0;i<theItems.getLength();i++) {
+                GithubTree.TreeItem theTreeItem = theItems.get(i);
+
+                if (("/" + theTreeItem.getPath()).equals(theEntry.getKey())) {
+                    TeaVMLogger.info("Updating file " + theTreeItem.getPath() + " in repository");
+
+                    GithubBlob theBlob = theEntry.getValue().getResolvedValue();
+
+                    theTreeItem.setSha(theBlob.getSha());
+                    theTreeItem.setSize(theEntry.getValue().getResolvedValue().getSize());
+
+                    theFound = true;
+                }
+            }
+            if (!theFound) {
+                // New file needs to be added to the repository
+                // TODO
+            }
+        }
+
+        theCopy.setTree(theItems);
+        return theCopy;
+    }
+
+    public Promise<GithubBlob, JSString> createBlob(AuthorizationState aAuthorizationState, JSString aBase64Data) {
+        return new Promise<>((aResolver, aRejector) -> {
+            XMLHttpRequest theRequest = XMLHttpRequest.create();
+
+            theRequest.open("POST", "https://api.github.com/repos/" + projectDefinition.getUser() + "/" + projectDefinition.getRepository()+"/git/blobs");
+            theRequest.setRequestHeader("Authorization", "token " + aAuthorizationState.getToken());
+            theRequest.overrideMimeType("text/plain");
+            theRequest.onComplete(() -> {
+                GithubBlob theBlob = (GithubBlob) JSON.parse(theRequest.getResponseText());
+                aResolver.resolve(theBlob);
+            });
+
+            GithubNewBlob theNewBlob = GithubNewBlob.create();
+            theNewBlob.setEncoding("base64");
+            theNewBlob.setContent(aBase64Data);
+            theRequest.send(JSON.stringify(theNewBlob));
+        });
+    }
+
+    public Promise<GithubCommit, String> commitTree(AuthorizationState aAuthorizationState, String aMessage, String aTreeSHA, String[] aParentCommits) {
+        GithubNewCommit theCommit = GithubNewCommit.create();
+        theCommit.setMessage(aMessage);
+        theCommit.setTree(aTreeSHA);
+        theCommit.setParents(aParentCommits);
+
+        return new Promise<>((aResolver, aRejector) -> {
+            XMLHttpRequest theRequest = XMLHttpRequest.create();
+
+            theRequest.open("POST", "https://api.github.com/repos/" + projectDefinition.getUser() + "/" + projectDefinition.getRepository()+"/git/commits");
+            theRequest.setRequestHeader("Authorization", "token " + aAuthorizationState.getToken());
+            theRequest.overrideMimeType("text/plain");
+            theRequest.onComplete(() -> {
+                GithubTree theTree = (GithubTree) JSON.parse(theRequest.getResponseText());
+                aResolver.resolve(theTree);
+            });
+            theRequest.send(JSON.stringify(theCommit));
+        });
+    }
+
+    public Promise<GithubCommit, String> publish(AuthorizationState aAuthorizationState, String aCommitMessage) {
+        return new Promise<>((aFinalResolver, aFinalRejector) -> getLatestHead(aAuthorizationState).thenContinue(aResult -> {
             String theHeadCommit = aResult.getObject().getSha();
 
-            Toast.info("Latest Head is " + theHeadCommit);
+            TeaVMLogger.info("Latest HEAD is " + theHeadCommit);
 
             // We need the commit
-            getCommit(aAuthorizationState, theHeadCommit).thenContinue(aResult13 -> {
-                String theTreeSHA1 = aResult13.getTree().getSha();
-                Toast.info("Tree SHA is " + theTreeSHA1);
+            getCommit(aAuthorizationState, theHeadCommit).thenContinue(aGithubHead -> {
+                String theTreeSHA1 = aGithubHead.getTree().getSha();
+                TeaVMLogger.info("Tree SHA is " + theTreeSHA1);
 
-                getTree(aAuthorizationState, theTreeSHA1).thenContinue(aResult12 -> {
-                    Toast.info("Found " + aResult12.getTree().getLength() + " files");
+                getTree(aAuthorizationState, theTreeSHA1).thenContinue(aGithubTree -> {
+                    TeaVMLogger.info("Found " + aGithubTree.getTree().getLength() + " files");
 
                     // Now we need to iterate over our files
-                    fileSystem.listChangedFiles().thenContinue(aResult1 -> {
-                        Toast.info(aResult1.length + " files were changed");
+                    fileSystem.listChangedFiles().thenContinue(aChangedFiles -> {
+                        Map<String, Promise<GithubBlob, String>> theBase64Data = new HashMap<>();
+                        for (File theFile : aChangedFiles) {
+                            if (!EditorProject.DEFINITION_FILENAME.equals(theFile.getFilename())) {
+                                theBase64Data.put(theFile.getFilename(), new Promise<>((aResolver, aRejector) -> {
+                                    FileReader theReader = FileReader.create();
+                                    theReader.setOnload(() -> {
+                                        JSString theURI = JSString.valueOf(theReader.getResult());
+                                        JSString theBase64 = theURI.substr(theURI.indexOf(JSString.valueOf(",")) + 1);
+
+                                        // Upload to GitHub as Blob and store SHA
+                                        createBlob(aAuthorizationState, theBase64).thenContinue(aLoadedBlob -> {
+                                            TeaVMLogger.info("File " + theFile.getFilename() + " uploaded as blob");
+                                            aResolver.resolve(aLoadedBlob);
+                                        });
+                                    });
+                                    theReader.readAsDataURL(theFile.getContent());
+                                }));
+                                TeaVMLogger.info(theFile.getFilename() + " was changed");
+                            }
+                        }
+                        Promise.all(new ArrayList<Promise>(theBase64Data.values())).thenContinue(aResult1 -> {
+                            TeaVMLogger.info("All files loaded as base64");
+                            GithubTree theTree = copyTreeAndFillData(aGithubTree, theBase64Data);
+                            createTree(aAuthorizationState, theTree).thenContinue(aNewTree -> {
+                                TeaVMLogger.info("New Tree created with hash  : " + aNewTree.getSha());
+                                commitTree(aAuthorizationState, aCommitMessage, aNewTree.getSha(), new String[] {aGithubHead.getSha()}).thenContinue(aNewCommit -> {
+                                    TeaVMLogger.info("New Commit created with hash  : " + aNewCommit.getSha());
+                                    updateHead(aAuthorizationState, aNewCommit.getSha()).thenContinue(aResult11 -> {
+                                        TeaVMLogger.info("HEAD updated to new commit");
+                                        aFinalResolver.resolve(aNewCommit);
+                                    });
+                                });
+                            });
+                        });
                     });
                 });
             });
-        });
+        }));
     }
 }

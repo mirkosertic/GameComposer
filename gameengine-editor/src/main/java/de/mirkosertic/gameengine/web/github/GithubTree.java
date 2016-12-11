@@ -15,36 +15,68 @@
  */
 package de.mirkosertic.gameengine.web.github;
 
+import org.teavm.jso.JSBody;
 import org.teavm.jso.JSObject;
 import org.teavm.jso.JSProperty;
-import org.teavm.jso.core.JSArrayReader;
+import org.teavm.jso.core.JSArray;
 
 // https://api.github.com/repos/mirkosertic/GameComposer/git/trees/a8ce3c2da3f0d1fc2a6c89af76c4de341fd55d7e?recursive=1
 public abstract class GithubTree implements JSObject {
 
-    interface TreeItem extends JSObject {
-        @JSProperty
-        String getPath();
+    @JSBody(params = {}, script = "return {};")
+    public static native GithubTree create();
+
+    public static abstract class TreeItem implements JSObject {
+
+        @JSBody(params = {}, script = "return {};")
+        public static native TreeItem create();
 
         @JSProperty
-        String getMode();
+        public abstract String getPath();
 
         @JSProperty
-        String getType();
+        public abstract void setPath(String aPath);
 
         @JSProperty
-        String getSha();
+        public abstract String getMode();
 
         @JSProperty
-        int getSize();
+        public abstract void setMode(String aMode);
 
         @JSProperty
-        String getUrl();
+        public abstract String getType();
+
+        @JSProperty
+        public abstract void setType(String aType);
+
+        @JSProperty
+        public abstract String getSha();
+
+        @JSProperty
+        public abstract void setSha(String aSHA);
+
+        @JSProperty
+        public abstract int getSize();
+
+        @JSProperty
+        public abstract void setSize(int aSize);
+
+        @JSProperty
+        public abstract String getUrl();
     }
 
     @JSProperty
     public abstract String getSha();
 
     @JSProperty
-    public abstract JSArrayReader<TreeItem> getTree();
+    public abstract JSArray<TreeItem> getTree();
+
+    @JSProperty
+    public abstract void setTree(JSArray<TreeItem> aTree);
+
+    @JSProperty
+    public abstract boolean isTruncated();
+
+    @JSProperty
+    public abstract void setBase_tree(String aBaseTreeHash);
 }

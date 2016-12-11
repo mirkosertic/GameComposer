@@ -15,35 +15,21 @@
  */
 package de.mirkosertic.gameengine.web.github;
 
+import org.teavm.jso.JSBody;
 import org.teavm.jso.JSObject;
 import org.teavm.jso.JSProperty;
 
-// https://api.github.com/repos/mirkosertic/GameComposer/git/commits/36a1e4239ce45c9558505dd7e5de774d798fd5fd
-public abstract class GithubCommit implements JSObject {
+public abstract class GithubNewCommit implements JSObject {
 
-    public interface Userinfo extends JSObject {
-        @JSProperty
-        String getName();
-    }
-
-    public interface Tree extends JSObject {
-
-        @JSProperty
-        String getSha();
-    }
+    @JSBody(params = {}, script = "return {};")
+    public static native GithubNewCommit create();
 
     @JSProperty
-    public abstract String getMessage();
+    public abstract void setMessage(String aMessage);
 
     @JSProperty
-    public abstract String getSha();
+    public abstract void setTree(String aTreeSHA);
 
     @JSProperty
-    public abstract Userinfo getAuthor();
-
-    @JSProperty
-    public abstract Userinfo getCommitter();
-
-    @JSProperty
-    public abstract Tree getTree();
+    public abstract void setParents(String[] aParents);
 }
