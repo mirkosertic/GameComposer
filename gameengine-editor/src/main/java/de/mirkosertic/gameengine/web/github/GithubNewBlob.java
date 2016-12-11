@@ -15,35 +15,20 @@
  */
 package de.mirkosertic.gameengine.web.github;
 
+import org.teavm.jso.JSBody;
 import org.teavm.jso.JSObject;
 import org.teavm.jso.JSProperty;
+import org.teavm.jso.core.JSString;
 
-// https://api.github.com/repos/mirkosertic/GameComposer/git/commits/36a1e4239ce45c9558505dd7e5de774d798fd5fd
-public abstract class GithubCommit implements JSObject {
+// https://developer.github.com/v3/git/blobs/
+public abstract class GithubNewBlob implements JSObject {
 
-    public interface Userinfo extends JSObject {
-        @JSProperty
-        String getName();
-    }
-
-    public interface Tree extends JSObject {
-
-        @JSProperty
-        String getSha();
-    }
+    @JSBody(params = {}, script = "return {};")
+    public static native GithubNewBlob create();
 
     @JSProperty
-    public abstract String getMessage();
+    public abstract void setEncoding(String aEncoding);
 
     @JSProperty
-    public abstract String getSha();
-
-    @JSProperty
-    public abstract Userinfo getAuthor();
-
-    @JSProperty
-    public abstract Userinfo getCommitter();
-
-    @JSProperty
-    public abstract Tree getTree();
+    public abstract void setContent(JSString aContent);
 }
