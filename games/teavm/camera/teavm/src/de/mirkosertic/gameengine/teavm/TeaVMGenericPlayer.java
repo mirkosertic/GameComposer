@@ -57,26 +57,12 @@ public class TeaVMGenericPlayer {
     public TeaVMGenericPlayer() {
     }
 
-    protected TeaVMGameSceneLoader.GameSceneLoadedListener createSceneLoaderListener() {
-        return new TeaVMGameSceneLoader.GameSceneLoadedListener() {
-            @Override
-            public void onGameSceneLoaded(GameScene aScene) {
-                playScene(aScene);
-            }
-
-            @Override
-            public void onGameSceneLoadedError(Throwable aError) {
-                TeaVMLogger.error("Failed to load scene : " + aError.getMessage());
-            }
-        };
-    }
-
     protected TeaVMGameSceneLoader createSceneLoader(TeaVMGameRuntimeFactory aRuntimeFactory) {
-        return new TeaVMGameSceneLoader(createSceneLoaderListener(), aRuntimeFactory);
+        return new TeaVMGameSceneLoader(aRuntimeFactory);
     }
 
-    protected TeaVMGameLoader createGameLoader(TeaVMGameLoader.GameLoadedListener aListener) {
-        return new TeaVMGameLoader(aListener);
+    protected TeaVMGameLoader createGameLoader() {
+        return new TeaVMGameLoader();
     }
 
     protected TeaVMGameResourceLoader createResourceLoader(String aSceneID) {
@@ -84,7 +70,10 @@ public class TeaVMGenericPlayer {
     }
 
     protected void loadOtherSceneFromWithinGame(Game aGame, String aSceneID) {
-        sceneLoader.loadFromServer(aGame, aSceneID, createResourceLoader(aSceneID));
+        sceneLoader.loadFromServer(aGame, aSceneID, createResourceLoader(aSceneID)).thenContinue(
+                aResult -> {
+                    playScene(aResult);
+                });
     }
 
     public void boot(HTMLCanvasElement aCanvas) {
@@ -122,77 +111,72 @@ public class TeaVMGenericPlayer {
 
         sceneLoader = createSceneLoader(runtimeFactory);
 
-        createGameLoader(new TeaVMGameLoader.GameLoadedListener() {
-            @Override
-            public void onGameLoaded(Game aGame) {
+        createGameLoader().loadFromServer().thenContinue(aResult -> {
+            game = aResult;
 
-                game = aGame;
-
-                if (aGame.enableNetworkingProperty().get()) {
-                    String theConnectionID = window.getLocation().getHash();
-                    if (theConnectionID == null || theConnectionID.isEmpty()) {
-                        // No connection id provided, we will start a new one
-                        theConnectionID = "game" + System.currentTimeMillis();
-                        window.getLocation().setHash(theConnectionID);
-                    } else {
-                        // Extract the hash character
-                        theConnectionID = theConnectionID.substring(1);
-                    }
-
-                    boolean theTruncateDB = "?truncate".equals(window.getLocation().getSearch());
-
-                    String theFirebaseURL = aGame.fireBaseURLProperty().get();
-
-                    TeaVMLogger.info("Enabling Firebase Networking with URL " + theFirebaseURL+", truncate = " + theTruncateDB);
-                    networkConnector = new TeaVMFirebaseNetworkConnector(theFirebaseURL, theConnectionID, theTruncateDB);
+            if (aResult.enableNetworkingProperty().get()) {
+                String theConnectionID = window.getLocation().getHash();
+                if (theConnectionID == null || theConnectionID.isEmpty()) {
+                    // No connection id provided, we will start a new one
+                    theConnectionID = "game" + System.currentTimeMillis();
+                    window.getLocation().setHash(theConnectionID);
                 } else {
-                    networkConnector = new DefaultNetworkConnector();
+                    // Extract the hash character
+                    theConnectionID = theConnectionID.substring(1);
                 }
 
-                runSceneStrategy = new PlaySceneStrategy(runtimeFactory, gameLoopFactory, networkConnector) {
+                boolean theTruncateDB = "?truncate".equals(window.getLocation().getSearch());
 
-                    private TeaVMGameView gameView;
+                String theFirebaseURL = aResult.fireBaseURLProperty().get();
 
-                    @Override
-                    protected void loadOtherScene(String aSceneId) {
-                        loadOtherSceneFromWithinGame(game, aSceneId);
-                    }
-
-                    @Override
-                    protected Size getScreenSize() {
-                        return new Size(window.getInnerWidth(), window.getInnerHeight());
-                    }
-
-                    @Override
-                    protected GameView getOrCreateCurrentGameView(GameRuntime aGameRuntime, CameraBehavior aCamera, GestureDetector aGestureDetector) {
-                        if (gameView == null) {
-                            gameView = new TeaVMGameView(aGameRuntime, aCamera, aGestureDetector, theRenderer);
-                        } else {
-                            gameView.prepareNewScene(aGameRuntime, aCamera, aGestureDetector);
-                        }
-                        gameView.setSize(getScreenSize());
-                        return gameView;
-                    }
-
-                    @Override
-                    public void handleResize() {
-                        Size theCurrentSize = getScreenSize();
-                        getRunningGameLoop().getScene().getRuntime().getEventManager().fire(new SetScreenResolution(theCurrentSize));
-                        gameView.setSize(theCurrentSize);
-                    }
-                };
-
-                String theSceneId = aGame.defaultSceneProperty().get();
-
-                TeaVMLogger.info("Loading scene " + theSceneId);
-                sceneLoader.loadFromServer(game, theSceneId, createResourceLoader(theSceneId));
+                TeaVMLogger.info("Enabling Firebase Networking with URL " + theFirebaseURL+", truncate = " + theTruncateDB);
+                networkConnector = new TeaVMFirebaseNetworkConnector(theFirebaseURL, theConnectionID, theTruncateDB);
+            } else {
+                networkConnector = new DefaultNetworkConnector();
             }
 
-            @Override
-            public void onGameLoadedError(Throwable aError) {
-                TeaVMLogger.error("Failed to load scene : " + aError);
-            }
-        }).loadFromServer();
+            runSceneStrategy = new PlaySceneStrategy(runtimeFactory, gameLoopFactory, networkConnector) {
+
+                private TeaVMGameView gameView;
+
+                @Override
+                protected void loadOtherScene(String aSceneId) {
+                    loadOtherSceneFromWithinGame(game, aSceneId);
+                }
+
+                @Override
+                protected Size getScreenSize() {
+                    return new Size(window.getInnerWidth(), window.getInnerHeight());
+                }
+
+                @Override
+                protected GameView getOrCreateCurrentGameView(GameRuntime aGameRuntime, CameraBehavior aCamera, GestureDetector aGestureDetector) {
+                    if (gameView == null) {
+                        gameView = new TeaVMGameView(aGameRuntime, aCamera, aGestureDetector, theRenderer);
+                    } else {
+                        gameView.prepareNewScene(aGameRuntime, aCamera, aGestureDetector);
+                    }
+                    gameView.setSize(getScreenSize());
+                    return gameView;
+                }
+
+                @Override
+                public void handleResize() {
+                    Size theCurrentSize = getScreenSize();
+                    getRunningGameLoop().getScene().getRuntime().getEventManager().fire(new SetScreenResolution(theCurrentSize));
+                    gameView.setSize(theCurrentSize);
+                }
+            };
+
+            String theSceneId = aResult.defaultSceneProperty().get();
+
+            TeaVMLogger.info("Loading scene " + theSceneId);
+
+            sceneLoader.loadFromServer(game, theSceneId, createResourceLoader(theSceneId)).thenContinue(
+                    aResult1 -> {
+                        playScene(aResult1);
+                    });
+        }).catchError((aResult, aOptionalException) -> TeaVMLogger.error("Failed to load scene : " + aResult));
 
         EventTarget documentEventTarget = document;
         documentEventTarget.addEventListener("keydown", aEvent -> keyPressed((TeaVMKeyEvent) aEvent), false);
@@ -305,6 +289,8 @@ public class TeaVMGenericPlayer {
     }
 
     private void playScene(GameScene aGameScene) {
-        runSceneStrategy.playScene(aGameScene, () -> runSingleStep(runSceneStrategy.getRunningGameLoop()));
+        runSceneStrategy.playScene(aGameScene).thenContinue(aResult -> {
+            runSingleStep(runSceneStrategy.getRunningGameLoop());
+        });
     }
 }

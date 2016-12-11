@@ -2,7 +2,7 @@ import {
     uid, getUrlFileExtension, decomposeDataUri, getSvgSize,
     getResolutionOfUrl, BaseTextureCache, TextureCache,
 } from '../utils';
-import { RESOLUTION, SCALE_MODES, MIPMAP_TEXTURES, WRAP_MODES } from '../const';
+import settings from '../settings';
 import EventEmitter from 'eventemitter3';
 import determineCrossOrigin from '../utils/determineCrossOrigin';
 import bitTwiddle from 'bit-twiddle';
@@ -18,7 +18,7 @@ export default class BaseTexture extends EventEmitter
 {
     /**
      * @param {HTMLImageElement|HTMLCanvasElement} [source] - the source object of the texture.
-     * @param {number} [scaleMode=PIXI.SCALE_MODES.DEFAULT] - See {@link PIXI.SCALE_MODES} for possible values
+     * @param {number} [scaleMode=PIXI.settings.SCALE_MODE] - See {@link PIXI.SCALE_MODES} for possible values
      * @param {number} [resolution=1] - The resolution / device pixel ratio of the texture
      */
     constructor(source, scaleMode, resolution)
@@ -35,7 +35,7 @@ export default class BaseTexture extends EventEmitter
          * @member {number}
          * @default 1
          */
-        this.resolution = resolution || RESOLUTION;
+        this.resolution = resolution || settings.RESOLUTION;
 
         /**
          * The width of the base texture set when the image has loaded
@@ -74,10 +74,10 @@ export default class BaseTexture extends EventEmitter
          * The scale mode to apply when scaling this texture
          *
          * @member {number}
-         * @default PIXI.SCALE_MODES.DEFAULT
+         * @default PIXI.settings.SCALE_MODE
          * @see PIXI.SCALE_MODES
          */
-        this.scaleMode = scaleMode || SCALE_MODES.DEFAULT;
+        this.scaleMode = scaleMode || settings.SCALE_MODE;
 
         /**
          * Set to true once the base texture has successfully loaded.
@@ -155,7 +155,7 @@ export default class BaseTexture extends EventEmitter
         this.imageUrl = null;
 
         /**
-         * Wether or not the texture is a power of two, try to use power of two textures as much
+         * Whether or not the texture is a power of two, try to use power of two textures as much
          * as you can
          *
          * @private
@@ -174,7 +174,7 @@ export default class BaseTexture extends EventEmitter
          * @member {boolean}
          * @see PIXI.MIPMAP_TEXTURES
          */
-        this.mipmap = MIPMAP_TEXTURES;
+        this.mipmap = settings.MIPMAP_TEXTURES;
 
         /**
          *
@@ -183,7 +183,7 @@ export default class BaseTexture extends EventEmitter
          * @member {number}
          * @see PIXI.WRAP_MODES
          */
-        this.wrapMode = WRAP_MODES.DEFAULT;
+        this.wrapMode = settings.WRAP_MODE;
 
         /**
          * A map of renderer IDs to webgl textures
@@ -192,8 +192,9 @@ export default class BaseTexture extends EventEmitter
          * @member {object<number, WebGLTexture>}
          */
         this._glTextures = {};
+
         this._enabled = 0;
-        this._id = 0;
+        this._virtalBoundId = -1;
 
         // if no source passed don't try to load
         if (source)
@@ -412,7 +413,7 @@ export default class BaseTexture extends EventEmitter
 
             if (!imageType)
             {
-                throw new Error('Invalid image type in URL.');
+                imageType = 'png';
             }
         }
 
@@ -626,7 +627,7 @@ export default class BaseTexture extends EventEmitter
      * @static
      * @param {string} imageUrl - The image url of the texture
      * @param {boolean} [crossorigin=(auto)] - Should use anonymous CORS? Defaults to true if the URL is not a data-URI.
-     * @param {number} [scaleMode=PIXI.SCALE_MODES.DEFAULT] - See {@link PIXI.SCALE_MODES} for possible values
+     * @param {number} [scaleMode=PIXI.settings.SCALE_MODE] - See {@link PIXI.SCALE_MODES} for possible values
      * @param {number} [sourceScale=(auto)] - Scale for the original image, used with Svg images.
      * @return {PIXI.BaseTexture} The new base texture.
      */

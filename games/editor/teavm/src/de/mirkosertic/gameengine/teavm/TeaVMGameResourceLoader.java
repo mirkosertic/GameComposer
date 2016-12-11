@@ -17,10 +17,15 @@ package de.mirkosertic.gameengine.teavm;
 
 import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.core.GameResourceLoader;
+import de.mirkosertic.gameengine.core.LoadedSpriteSheet;
+import de.mirkosertic.gameengine.core.Promise;
+import de.mirkosertic.gameengine.teavm.pixi.Loader;
+import de.mirkosertic.gameengine.teavm.pixi.LoaderCallchain;
+import de.mirkosertic.gameengine.teavm.pixi.LoaderResource;
+import de.mirkosertic.gameengine.teavm.pixi.SpritesheetJSONResource;
 import de.mirkosertic.gameengine.teavm.pixi.Texture;
 import de.mirkosertic.gameengine.type.ResourceName;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,15 +40,31 @@ public class TeaVMGameResourceLoader implements GameResourceLoader {
     }
 
     @Override
-    public void load(ResourceName aResourceName, Listener aListener) throws IOException {
+    public Promise<GameResource, String> load(ResourceName aResourceName) {
         ResourceName theNewResourceName = new ResourceName(sceneId + aResourceName.name.replace('\\', '/'));
-        aListener.handle(convert(theNewResourceName, theNewResourceName));
+        return new Promise<>((Promise.Executor) (aResolver, aRejector) -> aResolver.resolve(convert(theNewResourceName, theNewResourceName)));
     }
 
     @Override
-    public void loadSpriteSheet(ResourceName aResourceName, SpritesheetListener aListener) {
-        ResourceName theNewResourceName = new ResourceName(sceneId + aResourceName.name.replace('\\', '/'));
-        new TeaVMLoadedSpriteSheet(theNewResourceName, aSpriteSheet -> aListener.handle(aSpriteSheet));
+    public Promise<LoadedSpriteSheet, String> loadSpriteSheet(ResourceName aResourceName) {
+        return new Promise<>((Promise.Executor) (aResolver, aRejector) -> {
+
+            ResourceName theNewResourceName = new ResourceName(sceneId + aResourceName.name.replace('\\', '/'));
+
+            Loader theLoader = Loader.create();
+            final String thePath = theNewResourceName.name.replace('\\', '/');
+            theLoader.add(thePath);
+            theLoader.pre((aResource, aChain) -> {
+                // This does nothing
+                LoaderCallchain.next(aChain);
+            });
+            theLoader.load((aLoader, aResources) -> {
+                LoaderResource theLoadedJSON = aResources.get(thePath);
+                if (theLoadedJSON != null) {
+                    aResolver.resolve(new TeaVMLoadedSpriteSheet((SpritesheetJSONResource) theLoadedJSON.getData()));
+                }
+            });
+        });
     }
 
     protected GameResource convert(ResourceName aOriginalResourceName, ResourceName aResourceName) {

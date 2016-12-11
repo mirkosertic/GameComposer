@@ -15,20 +15,37 @@
  */
 package de.mirkosertic.gameengine.web.electron;
 
+import de.mirkosertic.gameengine.core.Promise;
+import de.mirkosertic.gameengine.web.AuthorizationState;
 import de.mirkosertic.gameengine.web.EditorProject;
+import de.mirkosertic.gameengine.web.ResourceAccessor;
 import de.mirkosertic.gameengine.web.electron.fs.FS;
+import de.mirkosertic.gameengine.web.html5.Blob;
+import org.teavm.jso.core.JSString;
+import org.teavm.jso.json.JSON;
 
 public class LocalEditorProject implements EditorProject {
 
     private final FS fs;
-    private final String localPath;
+    private final LocalProjectDefinition projectDefinition;
 
-    public LocalEditorProject(FS aFS, String aLocalPath) {
-        localPath = aLocalPath;
+    public LocalEditorProject(FS aFS, LocalProjectDefinition aProjectDefinition) {
+        projectDefinition = aProjectDefinition;
         fs = aFS;
     }
 
-    public void initializeLoader(Callback aCallback) {
-        aCallback.onSuccess(this, new LocalResourceLoaderFactory(fs, localPath));
+    @Override
+    public Promise<ResourceAccessor, String> initializeResourceAccessor() {
+        return new Promise<>((aResolver, aRejector) -> {
+            LocalResourceAccessor theAccessor = new LocalResourceAccessor(fs, projectDefinition.getPath());
+            theAccessor.persistFile(DEFINITION_FILENAME, Blob.createJSONBlob(JSString.valueOf(JSON.stringify(projectDefinition)))).thenContinue(aResult -> {
+                aResolver.resolve(theAccessor);
+            });
+        });
+    }
+
+    @Override
+    public boolean isAuthorizedWith(AuthorizationState aAuthorizationState) {
+        return !aAuthorizationState.isNotLoggedIn();
     }
 }

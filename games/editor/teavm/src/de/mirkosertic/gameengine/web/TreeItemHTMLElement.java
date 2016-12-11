@@ -63,6 +63,8 @@ public abstract class TreeItemHTMLElement implements HTMLElement {
 
     public abstract void addDeleteListener(EventListener<TeaVMMouseEvent> aListener);
 
+    public abstract void addContextMenuListener(EventListener<TeaVMMouseEvent> aListener);
+
     public HTMLInputBinder bindTo(Property<String> aProperty) {
         setText(aProperty.get());
         GameEventListener<PropertyChanged> theListener = aEvent -> setText(aProperty.get());

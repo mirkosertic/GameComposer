@@ -18,6 +18,7 @@ package de.mirkosertic.gameengine.teavm;
 import de.mirkosertic.gameengine.AbstractGameRuntimeFactory;
 import de.mirkosertic.gameengine.core.Game;
 import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.Promise;
 import org.teavm.jso.ajax.XMLHttpRequest;
 import org.teavm.jso.json.JSON;
 
@@ -25,25 +26,20 @@ import java.util.Map;
 
 public class TeaVMGameSceneLoader {
 
-    public interface GameSceneLoadedListener {
-        void onGameSceneLoaded(GameScene aScene);
-        void onGameSceneLoadedError(Throwable aThrowable);
-    }
-
-    protected final GameSceneLoadedListener listener;
     private final AbstractGameRuntimeFactory runtimeFactory;
 
-    public TeaVMGameSceneLoader(GameSceneLoadedListener aListener, AbstractGameRuntimeFactory aRuntimeFactory) {
-        listener = aListener;
+    public TeaVMGameSceneLoader(AbstractGameRuntimeFactory aRuntimeFactory) {
         runtimeFactory = aRuntimeFactory;
     }
 
-    public void loadFromServer(final Game aGame, String aSceneName, final TeaVMGameResourceLoader aResourceLoader) {
-        final XMLHttpRequest theRequest = XMLHttpRequest.create();
-        theRequest.overrideMimeType("text/plain");
-        theRequest.open("GET", aSceneName+"/scene.json");
-        theRequest.onComplete(() -> listener.onGameSceneLoaded(parse(aGame, theRequest.getResponseText(), aResourceLoader)));
-        theRequest.send();
+    public Promise<GameScene, String> loadFromServer(final Game aGame, String aSceneName, final TeaVMGameResourceLoader aResourceLoader) {
+        return new Promise<>((Promise.Executor) (aResolver, aRejector) -> {
+            final XMLHttpRequest theRequest = XMLHttpRequest.create();
+            theRequest.overrideMimeType("text/plain");
+            theRequest.open("GET", aSceneName+"/scene.json");
+            theRequest.onComplete(() -> aResolver.resolve(parse(aGame, theRequest.getResponseText(), aResourceLoader)));
+            theRequest.send();
+        });
     }
 
     protected GameScene parse(Game aGame, String aResponse, TeaVMGameResourceLoader aResourceLoader) {

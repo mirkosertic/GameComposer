@@ -15,15 +15,15 @@
  */
 package de.mirkosertic.gameengine.core;
 
-import de.mirkosertic.gameengine.annotations.ReflectiveField;
-import de.mirkosertic.gameengine.event.Property;
-import de.mirkosertic.gameengine.type.CustomProperties;
-import de.mirkosertic.gameengine.type.Reflectable;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import de.mirkosertic.gameengine.annotations.ReflectiveField;
+import de.mirkosertic.gameengine.event.Property;
+import de.mirkosertic.gameengine.type.CustomProperties;
+import de.mirkosertic.gameengine.type.Reflectable;
 
 public class Game implements Reflectable {
 
@@ -121,7 +121,7 @@ public class Game implements Reflectable {
         theResult.put("enableDebug", Boolean.toString(enableDebug.get()));
         theResult.put("enableNetworking", Boolean.toString(enableNetworking.get()));
         theResult.put("firebaseURL", fireBaseURL.get());
-        theResult.put("scenes", scenes.toArray(new String[scenes.size()]));
+        theResult.put("scenes", new ArrayList<>(scenes));
         return theResult;
     }
 

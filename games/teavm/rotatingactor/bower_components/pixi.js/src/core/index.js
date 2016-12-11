@@ -6,13 +6,15 @@ export * from './math';
 
 import * as utils from './utils';
 import * as ticker from './ticker';
+import settings from './settings';
 import CanvasRenderer from './renderers/canvas/CanvasRenderer';
 import WebGLRenderer from './renderers/webgl/WebGLRenderer';
 
-export { utils, ticker, CanvasRenderer, WebGLRenderer };
+export { settings, utils, ticker, CanvasRenderer, WebGLRenderer };
 
 export { default as glCore } from 'pixi-gl-core';
 
+export { default as Bounds } from './display/Bounds';
 export { default as DisplayObject } from './display/DisplayObject';
 export { default as Container } from './display/Container';
 export { default as Transform } from './display/Transform';
@@ -49,6 +51,7 @@ export { default as Filter } from './renderers/webgl/filters/Filter';
  * the browser then this function will return a canvas renderer
  *
  * @memberof PIXI
+ * @function autoDetectRenderer
  * @param {number} [width=800] - the width of the renderers view
  * @param {number} [height=600] - the height of the renderers view
  * @param {object} [options] - The optional renderer parameters

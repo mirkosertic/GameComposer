@@ -3,7 +3,8 @@ import Sprite from '../sprites/Sprite';
 import Texture from '../textures/Texture';
 import { Rectangle } from '../math';
 import { sign } from '../utils';
-import { TEXT_GRADIENT, RESOLUTION } from '../const';
+import { TEXT_GRADIENT } from '../const';
+import settings from '../settings';
 import TextStyle from './TextStyle';
 
 const defaultDestroyOptions = {
@@ -64,7 +65,7 @@ export default class Text extends Sprite
          * @member {number}
          * @default 1
          */
-        this.resolution = RESOLUTION;
+        this.resolution = settings.RESOLUTION;
 
         /**
          * Private tracker for the current text.
@@ -125,10 +126,7 @@ export default class Text extends Sprite
             return;
         }
 
-        // build canvas api font setting from invididual components. Convert a numeric style.fontSize to px
-        const fontSizeString = (typeof style.fontSize === 'number') ? `${style.fontSize}px` : style.fontSize;
-
-        this._font = `${style.fontStyle} ${style.fontVariant} ${style.fontWeight} ${fontSizeString} ${style.fontFamily}`;
+        this._font = Text.getFontStyle(style);
 
         this.context.font = this._font;
 
@@ -142,7 +140,7 @@ export default class Text extends Sprite
         // calculate text width
         const lineWidths = new Array(lines.length);
         let maxLineWidth = 0;
-        const fontProperties = this.determineFontProperties(this._font);
+        const fontProperties = Text.calculateFontProperties(this._font);
 
         for (let i = 0; i < lines.length; i++)
         {
@@ -394,109 +392,6 @@ export default class Text extends Sprite
     }
 
     /**
-     * Calculates the ascent, descent and fontSize of a given fontStyle
-     *
-     * @private
-     * @param {string} fontStyle - String representing the style of the font
-     * @return {Object} Font properties object
-     */
-    determineFontProperties(fontStyle)
-    {
-        let properties = Text.fontPropertiesCache[fontStyle];
-
-        if (!properties)
-        {
-            properties = {};
-
-            const canvas = Text.fontPropertiesCanvas;
-            const context = Text.fontPropertiesContext;
-
-            context.font = fontStyle;
-
-            const width = Math.ceil(context.measureText('|MÉq').width);
-            let baseline = Math.ceil(context.measureText('M').width);
-            const height = 2 * baseline;
-
-            baseline = baseline * 1.4 | 0;
-
-            canvas.width = width;
-            canvas.height = height;
-
-            context.fillStyle = '#f00';
-            context.fillRect(0, 0, width, height);
-
-            context.font = fontStyle;
-
-            context.textBaseline = 'alphabetic';
-            context.fillStyle = '#000';
-            context.fillText('|MÉq', 0, baseline);
-
-            const imagedata = context.getImageData(0, 0, width, height).data;
-            const pixels = imagedata.length;
-            const line = width * 4;
-
-            let i = 0;
-            let idx = 0;
-            let stop = false;
-
-            // ascent. scan from top to bottom until we find a non red pixel
-            for (i = 0; i < baseline; ++i)
-            {
-                for (let j = 0; j < line; j += 4)
-                {
-                    if (imagedata[idx + j] !== 255)
-                    {
-                        stop = true;
-                        break;
-                    }
-                }
-                if (!stop)
-                {
-                    idx += line;
-                }
-                else
-                {
-                    break;
-                }
-            }
-
-            properties.ascent = baseline - i;
-
-            idx = pixels - line;
-            stop = false;
-
-            // descent. scan from bottom to top until we find a non red pixel
-            for (i = height; i > baseline; --i)
-            {
-                for (let j = 0; j < line; j += 4)
-                {
-                    if (imagedata[idx + j] !== 255)
-                    {
-                        stop = true;
-                        break;
-                    }
-                }
-
-                if (!stop)
-                {
-                    idx -= line;
-                }
-                else
-                {
-                    break;
-                }
-            }
-
-            properties.descent = i - baseline;
-            properties.fontSize = properties.ascent + properties.descent;
-
-            Text.fontPropertiesCache[fontStyle] = properties;
-        }
-
-        return properties;
-    }
-
-    /**
      * Applies newlines to a string to have it optimally fit into the horizontal
      * bounds set by the Text object's wordWrapWidth property.
      *
@@ -604,7 +499,7 @@ export default class Text extends Sprite
      *
      * @private
      * @param {object} style - The style.
-     * @param {string} lines - The lines of text.
+     * @param {string[]} lines - The lines of text.
      * @return {string|number|CanvasGradient} The fill style
      */
     _generateFillStyle(style, lines)
@@ -635,7 +530,7 @@ export default class Text extends Sprite
             // start the gradient at the top center of the canvas, and end at the bottom middle of the canvas
             gradient = this.context.createLinearGradient(width / 2, 0, width / 2, height);
 
-            // we need to repeat the gradient so that each invididual line of text has the same vertical gradient effect
+            // we need to repeat the gradient so that each individual line of text has the same vertical gradient effect
             // ['#FF0000', '#00FF00', '#0000FF'] over 2 lines would create stops at 0.125, 0.25, 0.375, 0.625, 0.75, 0.875
             totalIterations = (style.fill.length + 1) * lines.length;
             currentIteration = 0;
@@ -818,6 +713,133 @@ export default class Text extends Sprite
         }
         this._text = text;
         this.dirty = true;
+    }
+
+    /**
+     * Generates a font style string to use for Text.calculateFontProperties(). Takes the same parameter
+     * as Text.style.
+     *
+     * @static
+     * @param {object|TextStyle} style - String representing the style of the font
+     * @return {string} Font style string, for passing to Text.calculateFontProperties()
+     */
+    static getFontStyle(style)
+    {
+        style = style || {};
+
+        if (!(style instanceof TextStyle))
+        {
+            style = new TextStyle(style);
+        }
+
+        // build canvas api font setting from individual components. Convert a numeric style.fontSize to px
+        const fontSizeString = (typeof style.fontSize === 'number') ? `${style.fontSize}px` : style.fontSize;
+
+        return `${style.fontStyle} ${style.fontVariant} ${style.fontWeight} ${fontSizeString} "${style.fontFamily}"`;
+    }
+
+    /**
+     * Calculates the ascent, descent and fontSize of a given fontStyle
+     *
+     * @static
+     * @param {string} fontStyle - String representing the style of the font
+     * @return {Object} Font properties object
+     */
+    static calculateFontProperties(fontStyle)
+    {
+        // as this method is used for preparing assets, don't recalculate things if we don't need to
+        if (Text.fontPropertiesCache[fontStyle])
+        {
+            return Text.fontPropertiesCache[fontStyle];
+        }
+
+        const properties = {};
+
+        const canvas = Text.fontPropertiesCanvas;
+        const context = Text.fontPropertiesContext;
+
+        context.font = fontStyle;
+
+        const width = Math.ceil(context.measureText('|MÉq').width);
+        let baseline = Math.ceil(context.measureText('M').width);
+        const height = 2 * baseline;
+
+        baseline = baseline * 1.4 | 0;
+
+        canvas.width = width;
+        canvas.height = height;
+
+        context.fillStyle = '#f00';
+        context.fillRect(0, 0, width, height);
+
+        context.font = fontStyle;
+
+        context.textBaseline = 'alphabetic';
+        context.fillStyle = '#000';
+        context.fillText('|MÉq', 0, baseline);
+
+        const imagedata = context.getImageData(0, 0, width, height).data;
+        const pixels = imagedata.length;
+        const line = width * 4;
+
+        let i = 0;
+        let idx = 0;
+        let stop = false;
+
+        // ascent. scan from top to bottom until we find a non red pixel
+        for (i = 0; i < baseline; ++i)
+        {
+            for (let j = 0; j < line; j += 4)
+            {
+                if (imagedata[idx + j] !== 255)
+                {
+                    stop = true;
+                    break;
+                }
+            }
+            if (!stop)
+            {
+                idx += line;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        properties.ascent = baseline - i;
+
+        idx = pixels - line;
+        stop = false;
+
+        // descent. scan from bottom to top until we find a non red pixel
+        for (i = height; i > baseline; --i)
+        {
+            for (let j = 0; j < line; j += 4)
+            {
+                if (imagedata[idx + j] !== 255)
+                {
+                    stop = true;
+                    break;
+                }
+            }
+
+            if (!stop)
+            {
+                idx -= line;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        properties.descent = i - baseline;
+        properties.fontSize = properties.ascent + properties.descent;
+
+        Text.fontPropertiesCache[fontStyle] = properties;
+
+        return properties;
     }
 }
 

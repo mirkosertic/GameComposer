@@ -16,13 +16,22 @@
 package de.mirkosertic.gameengine.web;
 
 import de.mirkosertic.gameengine.core.Game;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.Promise;
 import de.mirkosertic.gameengine.teavm.TeaVMGameLoader;
 import de.mirkosertic.gameengine.teavm.TeaVMGameResourceLoader;
 import de.mirkosertic.gameengine.teavm.TeaVMGameRuntimeFactory;
 import de.mirkosertic.gameengine.teavm.TeaVMGameSceneLoader;
 import de.mirkosertic.gameengine.teavm.TeaVMGenericPlayer;
 import de.mirkosertic.gameengine.teavm.TeaVMLogger;
+import de.mirkosertic.gameengine.web.electron.Electron;
+import de.mirkosertic.gameengine.web.electron.LocalEditorProject;
+import de.mirkosertic.gameengine.web.electron.LocalProjectDefinition;
+import de.mirkosertic.gameengine.web.electron.Remote;
+import de.mirkosertic.gameengine.web.electron.fs.FS;
+import de.mirkosertic.gameengine.web.github.GithubAuthorizer;
 import de.mirkosertic.gameengine.web.github.GithubEditorProject;
+import de.mirkosertic.gameengine.web.github.GithubProjectDefinition;
 import org.teavm.jso.browser.Window;
 import org.teavm.jso.dom.html.HTMLCanvasElement;
 
@@ -30,83 +39,95 @@ public class WebUI {
 
     private static final Window WINDOW = Window.current();
 
-    private static EditorProject getDefaultProject() {
-        /*        if (Electron.available()) {
-
-            Remote theRemote = Electron.require().getRemote();
-            FS theFilesystem = theRemote.require("fs");
-
-            return new LocalEditorProject(theFilesystem, "/home/sertic/Development/Projects/GameComposer/examples/platformer");
-        }*/
-
-        return new GithubEditorProject("mirkosertic", "GameComposer", "/examples/platformer");
-    }
-
     public static void main(String[] args) {
+
+        GithubAuthorizer theAuthorizer = new GithubAuthorizer();
 
         TeaVMLogger.info("Starting web editor");
 
-        EditorProject theProject = getDefaultProject();
+        Router theRouter = new Router(WINDOW);
 
-        theProject.initializeLoader(new EditorProject.Callback() {
-            @Override
-            public void onError(EditorProject aProject) {
-                TeaVMLogger.error("Error creating indexeddb filesystem!");
-            }
-
-            @Override
-            public void onSuccess(EditorProject aProject, ResourceLoaderFactory aResourceLoaderFactory) {
-                TeaVMLogger.info("ResourceLoader created");
-                initializeWithResourceLoaderFactory(aResourceLoaderFactory, aProject);
-            }
+        theRouter.add("/index.html", aWindow -> {
+            Welcome theWelcome = new Welcome(theRouter, theAuthorizer);
+            theWelcome.run();
         });
+        theRouter.add("/editor.html", aWindow -> {
+            EditorProject theProject = getEditorProjectFromState(theRouter);
+
+            theProject.initializeResourceAccessor().thenContinue(aResult -> {
+                Editor theEditor = new Editor(theRouter, theAuthorizer);
+                theEditor.boot(theProject, aResult);
+
+            }).catchError((aResult, aOptionalRejectedException) -> TeaVMLogger.error("Error creating indexeddb filesystem!"));
+        });
+
+        theRouter.add("/preview.html", aWindow -> {
+            EditorProject theProject = getEditorProjectFromState(theRouter);
+
+            theProject.initializeResourceAccessor().thenContinue(aResult -> {
+
+                HTMLCanvasElement theCanvasElement = (HTMLCanvasElement) aWindow.getDocument().getElementById("html5canvas");
+                TeaVMGenericPlayer thePlayer = new TeaVMGenericPlayer() {
+                    @Override
+                    protected TeaVMGameSceneLoader createSceneLoader(TeaVMGameRuntimeFactory aRuntimeFactory) {
+
+                        String thePreviewData = theProject.getPreviewDataAsJSON();
+                        if (thePreviewData != null) {
+                            return new TeaVMGameSceneLoader(aRuntimeFactory) {
+                                @Override
+                                public Promise<GameScene, String> loadFromServer(Game aGame, String aSceneName, TeaVMGameResourceLoader aResourceLoader) {
+                                    return new Promise<>((Promise.Executor) (aResolver, aRejector) -> {
+                                        String thePreviewData1 = aWindow.getLocalStorage().getItem("previewscene");
+                                        aResolver.resolve(parse(aGame, thePreviewData1, aResourceLoader));
+                                    });
+                                }
+                            };
+                        }
+                        return aResult.createSceneLoader(aRuntimeFactory);
+                    }
+
+                    @Override
+                    protected TeaVMGameLoader createGameLoader() {
+                        return aResult.createGameLoader();
+                    }
+
+                    @Override
+                    protected TeaVMGameResourceLoader createResourceLoader(String aSceneID) {
+                        return aResult.createResourceLoaderFor(aSceneID);
+                    }
+
+                    @Override
+                    protected void loadOtherSceneFromWithinGame(Game aGame, String aSceneID) {
+                    }
+                };
+                thePlayer.boot(theCanvasElement);
+
+            }).catchError((aResult, aOptionalRejectedException) -> TeaVMLogger.error("Error creating indexeddb filesystem!"));
+        });
+        theRouter.widhDefaultPath("/index.html");
+
+        theRouter.handleNavigation();
     }
 
-    private static void initializeWithResourceLoaderFactory(ResourceLoaderFactory aResourceLoaderFactory, EditorProject aProject) {
-        if (WINDOW.getLocation().getPathName().endsWith("/index.html")) {
+    private static EditorProject getEditorProjectFromState(Router aRouter) {
+        ProjectDefinition theDefinition = aRouter.getCurrentState();
+        switch (theDefinition.getType()) {
+            case GithubProjectDefinition.TYPE:
 
-            TeaVMLogger.info("Starting editor");
+                GithubProjectDefinition theGithubDefinition = (GithubProjectDefinition) theDefinition;
 
-            Editor theEditor = new Editor();
-            theEditor.boot(aProject, aResourceLoaderFactory);
+                TeaVMLogger.info("Loading Github Project " + theGithubDefinition.getUser() + "@" + theGithubDefinition.getRepository() + ":" + theGithubDefinition.getRelativePath());
 
-        } else {
+                return new GithubEditorProject(theGithubDefinition);
+            case LocalProjectDefinition.TYPE:
+                LocalProjectDefinition theLocalDefintion = (LocalProjectDefinition) theDefinition;
 
-            TeaVMLogger.info("Starting preview");
+                TeaVMLogger.info("Loading Local Electron Project " + theLocalDefintion.getPath());
 
-            HTMLCanvasElement theCanvasElement = (HTMLCanvasElement) WINDOW.getDocument().getElementById("html5canvas");
-            TeaVMGenericPlayer thePlayer = new TeaVMGenericPlayer() {
-                @Override
-                protected TeaVMGameSceneLoader createSceneLoader(TeaVMGameRuntimeFactory aRuntimeFactory) {
-
-                    String thePreviewData = aProject.getPreviewDataAsJSON();
-                    if (thePreviewData != null) {
-                        return new TeaVMGameSceneLoader(createSceneLoaderListener(), aRuntimeFactory) {
-                            @Override
-                            public void loadFromServer(Game aGame, String aSceneName, TeaVMGameResourceLoader aResourceLoader) {
-                                String thePreviewData = WINDOW.getLocalStorage().getItem("previewscene");
-                                listener.onGameSceneLoaded(parse(aGame, thePreviewData, aResourceLoader));
-                            }
-                        };
-                    }
-                    return aResourceLoaderFactory.createSceneLoader(createSceneLoaderListener(), aRuntimeFactory);
-                }
-
-                @Override
-                protected TeaVMGameLoader createGameLoader(TeaVMGameLoader.GameLoadedListener aListener) {
-                    return aResourceLoaderFactory.createGameLoader(aListener);
-                }
-
-                @Override
-                protected TeaVMGameResourceLoader createResourceLoader(String aSceneID) {
-                    return aResourceLoaderFactory.createResourceLoaderFor(aSceneID);
-                }
-
-                @Override
-                protected void loadOtherSceneFromWithinGame(Game aGame, String aSceneID) {
-                }
-            };
-            thePlayer.boot(theCanvasElement);
+                Remote theRemote = Electron.require().getRemote();
+                FS theFilesystem = theRemote.require("fs");
+                return new LocalEditorProject(theFilesystem, theLocalDefintion);
         }
+        throw new IllegalArgumentException("not supported state");
     }
 }

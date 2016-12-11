@@ -35,12 +35,12 @@
     "tests",
     "examples"
   ],
-  "version": "2.0.1",
-  "_release": "2.0.1",
+  "version": "2.0.2",
+  "_release": "2.0.2",
   "_resolution": {
     "type": "version",
-    "tag": "v2.0.1",
-    "commit": "cdcb68faff2f4187239ebc203efa7cb6c94087f5"
+    "tag": "v2.0.2",
+    "commit": "8c80aeae07ce2ce38617c5d44ceee590880fe61f"
   },
   "_source": "https://github.com/goldfire/howler.js.git",
   "_target": "^2.0.1",

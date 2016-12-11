@@ -15,36 +15,38 @@
  */
 package de.mirkosertic.gameengine.web.github;
 
+import de.mirkosertic.gameengine.core.Promise;
+import de.mirkosertic.gameengine.teavm.TeaVMMap;
+import de.mirkosertic.gameengine.web.AuthorizationState;
 import de.mirkosertic.gameengine.web.EditorProject;
+import de.mirkosertic.gameengine.web.ResourceAccessor;
+import de.mirkosertic.gameengine.web.html5.Blob;
 import de.mirkosertic.gameengine.web.indexeddb.IndexedDBFilesystem;
+import org.teavm.jso.core.JSString;
 
 public class GithubEditorProject implements EditorProject {
 
     // http://mdswanson.com/blog/2011/07/23/digging-around-the-github-api-take-2.html
-    // https://gist.github.com/robnyman/1894032
+    // https://api.github.com/repos/mirkosertic/GameComposer/git/refs/heads/master
 
-    private final String username;
-    private final String repository;
-    private final String relativePath;
+    private final GithubProjectDefinition projectDefinition;
 
-    public GithubEditorProject(String aUsername, String aRepository, String aRelativePath) {
-        username = aUsername;
-        repository = aRepository;
-        relativePath = aRelativePath;
+    public GithubEditorProject(GithubProjectDefinition aProjectDefinition) {
+        projectDefinition = aProjectDefinition;
     }
 
-    public void initializeLoader(Callback aCallback) {
-        IndexedDBFilesystem.open("github_" + username + "_" + repository, new IndexedDBFilesystem.Callback() {
-            @Override
-            public void onError() {
-                aCallback.onError(GithubEditorProject.this);
-            }
-
-            @Override
-            public void onSuccess(IndexedDBFilesystem aFilesystem) {
-                String theBaseURL = "https://raw.githubusercontent.com/" + username + "/" + repository + "/master" + relativePath;
-                aCallback.onSuccess(GithubEditorProject.this, new GithubResourceLoaderFactory(theBaseURL, aFilesystem));
-            }
+    @Override
+    public Promise<ResourceAccessor, String> initializeResourceAccessor() {
+        return IndexedDBFilesystem.open("github_" + projectDefinition.getUser() + "_" + projectDefinition.getRelativePath()+ "_" + projectDefinition.getRelativePath().replace("/","_")).thenContinue(aResult -> {
+            GithubResourceAccessor theAccessor = new GithubResourceAccessor(projectDefinition, aResult);
+            //TODO: Wait for completion here
+            theAccessor.persistFile(DEFINITION_FILENAME, Blob.createJSONBlob(JSString.valueOf(TeaVMMap.stringifyPretty(projectDefinition))));
+            return theAccessor;
         });
+    }
+
+    @Override
+    public boolean isAuthorizedWith(AuthorizationState aAuthorizationState) {
+        return !aAuthorizationState.isNotLoggedIn() && projectDefinition.getUser().equals(aAuthorizationState.getLogin());
     }
 }

@@ -15,24 +15,22 @@
  */
 package de.mirkosertic.gameengine.web;
 
+import de.mirkosertic.gameengine.core.Promise;
 import org.teavm.jso.browser.Window;
 
 public interface EditorProject {
 
-    interface Callback {
+    String DEFINITION_FILENAME = "/definition.json";
 
-        void onError(EditorProject aProject);
+    Promise<ResourceAccessor, String> initializeResourceAccessor();
 
-        void onSuccess(EditorProject aProject, ResourceLoaderFactory aResourceLoaderFactory);
-    }
-
-    void initializeLoader(Callback aCallback);
-
-    default public void setCurrentPreview(String aSceneDataAsJSON) {
+    default void setCurrentPreview(String aSceneDataAsJSON) {
         Window.current().getLocalStorage().setItem("previewscene", aSceneDataAsJSON);
     }
 
-    default public String getPreviewDataAsJSON() {
+    default String getPreviewDataAsJSON() {
         return Window.current().getLocalStorage().getItem("previewscene");
     }
+
+    boolean isAuthorizedWith(AuthorizationState aAuthorizationState);
 }

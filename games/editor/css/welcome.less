@@ -1,0 +1,115 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #33373c;
+}
+
+.content {
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  flex-direction: column;
+
+  .welcomemessage {
+    text-align: center;
+    font-weight: bold;
+    width: 80%;
+    margin-left: 3em;
+    margin-right: 3em;
+    margin-bottom: 2em;
+    padding: 1em;
+    background-color: #e74c3c;
+    color: white;
+    border: 1px solid white;
+  }
+
+  .contentblocks {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    width: 80%;
+    height: 50%;
+
+    .contentblock {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      text-align: center;
+      height: 100%;
+      padding: 1em;
+    }
+  }
+}
+
+.infoblock {
+
+  flex-grow: 1;
+  border: 1px solid white;
+  background-color: white;
+
+  .title {
+    font-weight: bold;
+    background-color: #e74c3c;
+    color: white;
+    padding: 0.3em;
+  }
+
+  .infoblockcontent {
+    background-color: white;
+    text-align: left;
+    margin: 0.1em;
+
+    .entry {
+      background-color: white;
+      padding: 0.3em;
+    }
+  }
+}
+
+.project {
+  padding-left: 2.5em;
+  min-height: 32px;
+  line-height: 32px;
+  vertical-align: middle;
+  border: 0.1em white;
+
+  &:hover {
+    background-color: lighten(#33373c, 50%);
+    border: 0.1em lighten(#33373c, 50%);
+  }
+}
+
+.github {
+  background-image: url("GitHub-Mark-32px.png");
+  background-repeat: no-repeat;
+  background-position: left top;
+}
+
+#githublogin {
+  text-align: center;
+}
+
+.githubrepositoryselection {
+
+  select {
+    width: 100%;
+  }
+
+  input {
+    width: 100%;
+  }
+
+  .continue {
+    margin-top: 1em;
+    background-image: url("ic_open_in_browser_black_48dp.png");
+    background-repeat: no-repeat;
+    background-position: left top;
+    background-size: 32px 32px;
+    padding-left: 2.5em;
+    min-height: 32px;
+    line-height: 32px;
+  }
+
+}

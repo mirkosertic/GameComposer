@@ -15,6 +15,14 @@
  */
 package de.mirkosertic.gameengine.web;
 
+import org.teavm.jso.JSBody;
+import org.teavm.jso.JSObject;
+import org.teavm.jso.browser.Window;
+import org.teavm.jso.core.JSArray;
+import org.teavm.jso.core.JSString;
+import org.teavm.jso.dom.html.HTMLDocument;
+import org.teavm.jso.dom.html.HTMLElement;
+
 import de.mirkosertic.gameengine.core.EventSheet;
 import de.mirkosertic.gameengine.core.Game;
 import de.mirkosertic.gameengine.core.GameObject;
@@ -29,22 +37,19 @@ import de.mirkosertic.gameengine.web.electron.Dialog;
 import de.mirkosertic.gameengine.web.electron.DialogOptions;
 import de.mirkosertic.gameengine.web.electron.Electron;
 import de.mirkosertic.gameengine.web.electron.LocalEditorProject;
-import de.mirkosertic.gameengine.web.electron.LocalResourceLoaderFactory;
+import de.mirkosertic.gameengine.web.electron.LocalProjectDefinition;
+import de.mirkosertic.gameengine.web.electron.LocalResourceAccessor;
 import de.mirkosertic.gameengine.web.electron.Menu;
 import de.mirkosertic.gameengine.web.electron.MenuItem;
 import de.mirkosertic.gameengine.web.electron.Remote;
 import de.mirkosertic.gameengine.web.electron.fs.FS;
-import org.teavm.jso.JSBody;
-import org.teavm.jso.JSObject;
-import org.teavm.jso.browser.Window;
-import org.teavm.jso.core.JSArray;
-import org.teavm.jso.core.JSString;
-import org.teavm.jso.dom.html.HTMLElement;
+import de.mirkosertic.gameengine.web.github.GithubAuthorizer;
+import de.mirkosertic.gameengine.web.github.GithubResourceAccessor;
 
 public class Editor {
 
     private static final Window window = Window.current();
-    private static final HTML5Document document = (HTML5Document) window.getDocument();
+    private static final HTMLDocument document = (HTMLDocument) window.getDocument();
 
     @JSBody(params = "aValue", script = "return (typeof aValue !== 'undefined');")
     public static native boolean isDefined(JSObject aValue);
@@ -53,12 +58,16 @@ public class Editor {
     private GameObjectEditor objectEditor;
     private EditorState editorState;
     private GameTreeView treeView;
+    private final Router router;
+    private final GithubAuthorizer authorizer;
 
-    public Editor() {
+    public Editor(Router aRouter, GithubAuthorizer aAuthorizer) {
+        router = aRouter;
+        authorizer = aAuthorizer;
         if (Electron.available()) {
             Electron theElectron = Electron.require();
             Remote theRemote = theElectron.getRemote();
-            FS theFilesystem = theRemote.require("fs");
+            FS theFilesystem = Remote.require("fs");
 
             Menu theApplicationMenu = Menu.createMenu(theRemote);
 
@@ -75,7 +84,18 @@ public class Editor {
         }
     }
 
-    public void boot(EditorProject aProject, ResourceLoaderFactory aResourceLoaderFactory) {
+    public void boot(EditorProject aProject, ResourceAccessor aResourceAccessor) {
+        if (aResourceAccessor instanceof GithubResourceAccessor) {
+            authorizer.getAuthorizationState().thenContinue(aResult -> {
+                boot(aProject, aResourceAccessor, aResult);
+            });
+        } else {
+            boot(aProject, aResourceAccessor, AuthorizationState.NOT_LOGGED_IN());
+        }
+    }
+
+
+    public void boot(EditorProject aProject, ResourceAccessor aResourceAccessor, AuthorizationState aAuthorizationState) {
 
         TeaVMGameRuntimeFactory theRuntimeFactory = new TeaVMGameRuntimeFactory(
                 !window.getLocation().getFullURL().contains("nothreading"),
@@ -94,11 +114,11 @@ public class Editor {
 
         window.addEventListener("resize", evt -> tabbedPageManager.notifyResize(), true);
 
-        editorState = new EditorState(aProject, theRuntimeFactory, aResourceLoaderFactory);
+        editorState = new EditorState(aProject, theRuntimeFactory, aResourceAccessor, aAuthorizationState);
 
         // Initialize object editor
-        HTMLElement thePropertyEditorElement = (HTMLElement) document.getElementById("objectEditor");
-        HTMLElement theTreeElement = (HTMLElement) document.getElementById("objecttree");
+        HTMLElement thePropertyEditorElement = document.getElementById("objectEditor");
+        HTMLElement theTreeElement = document.getElementById("objecttree");
 
         treeView = new GameTreeView(theTreeElement, window, editorState, new GameTreeView.EventHandler() {
             @Override
@@ -139,6 +159,17 @@ public class Editor {
             public void setEditingObject(GameObjectInstance aInstance) {
                 objectEditor.setEditingObject(aInstance);
             }
+
+            @Override
+            public void publishToGithub() {
+                Toast.info("Pushing to Github, this may take while...");
+                editorState.saveAll().thenContinue(aNothing -> {
+                    GithubResourceAccessor theAccessor = (GithubResourceAccessor) aResourceAccessor;
+                    theAccessor.publish(aAuthorizationState, "Updated by Web Editor").thenContinue(aResult -> {
+                        Toast.info("New Commit " + aResult.getSha() + " created.");
+                    });
+                });
+            }
         });
 
         objectEditor = new GameObjectEditor(thePropertyEditorElement);
@@ -176,7 +207,7 @@ public class Editor {
         }
 
         SceneEditorHTMLElement theSceneEditor = SceneEditorHTMLElement.create();
-        final GameSceneEditor theGameEditor = new GameSceneEditor(theSceneEditor, window, editorState) {
+        final GameSceneEditor theGameEditor = new GameSceneEditor(theSceneEditor, window, editorState, router) {
 
             @Override
             protected void setSelectedInstance(GameObjectInstance aInstance) {
@@ -253,7 +284,7 @@ public class Editor {
             JSArray<JSString> theResults = (JSArray<JSString>) aPaths;
             if (theResults.getLength() == 1) {
                 String thePath = theResults.get(0).stringValue();
-                boot(new LocalEditorProject(aFilesystem, thePath), new LocalResourceLoaderFactory(aFilesystem, thePath));
+                boot(new LocalEditorProject(aFilesystem, LocalProjectDefinition.create(thePath)), new LocalResourceAccessor(aFilesystem, thePath));
             }
         }
     }

@@ -16,16 +16,24 @@
 package de.mirkosertic.gameengine.web;
 
 import de.mirkosertic.gameengine.camera.CameraBehavior;
-import de.mirkosertic.gameengine.core.*;
+import de.mirkosertic.gameengine.core.GameLoop;
+import de.mirkosertic.gameengine.core.GameLoopFactory;
+import de.mirkosertic.gameengine.core.GameObject;
+import de.mirkosertic.gameengine.core.GameObjectInstance;
+import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.physic.DisableDynamicPhysics;
 import de.mirkosertic.gameengine.physic.EnableDynamicPhysics;
-import de.mirkosertic.gameengine.teavm.*;
+import de.mirkosertic.gameengine.teavm.TeaVMDragEvent;
+import de.mirkosertic.gameengine.teavm.TeaVMGameView;
+import de.mirkosertic.gameengine.teavm.TeaVMLogger;
+import de.mirkosertic.gameengine.teavm.TeaVMMap;
+import de.mirkosertic.gameengine.teavm.TeaVMMouseEvent;
+import de.mirkosertic.gameengine.teavm.TeaVMWindow;
 import de.mirkosertic.gameengine.teavm.pixi.Renderer;
 import de.mirkosertic.gameengine.type.Position;
 import org.teavm.jso.JSObject;
 import org.teavm.jso.browser.Window;
 import org.teavm.jso.dom.events.EventListener;
-import org.teavm.jso.json.JSON;
 
 public class GameSceneEditor {
 
@@ -40,12 +48,14 @@ public class GameSceneEditor {
     private GameObjectInstance dndCreateInstance;
 
     private final EditorState editorState;
+    private final Router router;
 
-    public GameSceneEditor(SceneEditorHTMLElement aSceneEditor, Window aWindow, EditorState aEditorState) {
+    public GameSceneEditor(SceneEditorHTMLElement aSceneEditor, Window aWindow, EditorState aEditorState, Router aRouter) {
 
         sceneEditorHTMLElement = aSceneEditor;
         window = aWindow;
         editorState = aEditorState;
+        router = aRouter;
 
         GameLoopFactory theGameLoopFactory = new GameLoopFactory();
 
@@ -115,17 +125,22 @@ public class GameSceneEditor {
     }
 
     public void playScene(GameScene aGameScene) {
-        runSceneStrategy.playScene(aGameScene, () -> runSingleStep(runSceneStrategy.getRunningGameLoop()));
+        runSceneStrategy.playScene(aGameScene).thenContinue(aResult -> {
+            runSingleStep(runSceneStrategy.getRunningGameLoop());
+        });
     }
 
     private void onPreview() {
+        GameScene theScene = runSceneStrategy.getRunningGameLoop().getScene();
+        editorState.saveAll().thenContinue(aResult -> {
+            JSObject theJSForm = TeaVMMap.toJS(theScene.serialize());
+            String theJSON = TeaVMMap.stringifyPretty(theJSForm);
 
-        JSObject theJSForm = TeaVMMap.toJS(runSceneStrategy.getRunningGameLoop().getScene().serialize());
-        String theJSON = JSON.stringify(theJSForm);
+            editorState.getEditorProject().setCurrentPreview(theJSON);
 
-        editorState.getEditorProject().setCurrentPreview(theJSON);
+            router.open("preview.html", "_blank");
 
-        window.open("preview.html", "_blank");
+        });
     }
 
     private void onMouseClick(TeaVMMouseEvent aEvent) {

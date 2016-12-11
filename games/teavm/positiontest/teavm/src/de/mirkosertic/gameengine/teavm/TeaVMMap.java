@@ -15,6 +15,12 @@
  */
 package de.mirkosertic.gameengine.teavm;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.teavm.jso.JSBody;
 import org.teavm.jso.JSIndexer;
 import org.teavm.jso.JSObject;
@@ -22,8 +28,6 @@ import org.teavm.jso.core.JSArray;
 import org.teavm.jso.core.JSBoolean;
 import org.teavm.jso.core.JSNumber;
 import org.teavm.jso.core.JSString;
-
-import java.util.*;
 
 public class TeaVMMap implements Map<String, Object> {
 
@@ -58,6 +62,9 @@ public class TeaVMMap implements Map<String, Object> {
         JSDelegate theResult = JSDelegate.create();
         return fill(aMap, theResult);
     }
+
+    @JSBody(params = { "object" }, script = "return JSON.stringify(object, null, 2);")
+    public static native String stringifyPretty(JSObject object);
 
     private static JSObject convert(Object aObject) {
         if (aObject instanceof String) {

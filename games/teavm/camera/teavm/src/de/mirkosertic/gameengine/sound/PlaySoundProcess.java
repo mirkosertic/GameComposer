@@ -15,6 +15,7 @@
  */
 package de.mirkosertic.gameengine.sound;
 
+import de.mirkosertic.gameengine.core.Promise;
 import de.mirkosertic.gameengine.process.AbstractGameProcess;
 import de.mirkosertic.gameengine.type.ResourceName;
 
@@ -36,10 +37,10 @@ public class PlaySoundProcess extends AbstractGameProcess {
     }
 
     private void playSound() {
-        gameSoundSystem.play(resourceName, new GameSoundSystem.Listener() {
+        gameSoundSystem.play(resourceName).thenContinue(new Promise.NoReturnHandler() {
             @Override
-            public void handle(Object aValue) {
-                soundObject = aValue;
+            public void process(Object aResult) {
+                soundObject = aResult;
             }
         });
     }

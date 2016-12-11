@@ -76,135 +76,131 @@ public abstract class PlaySceneStrategy {
     protected void handleSystemException(SystemException e) {
     }
 
-    public void playScene(final GameScene aGameScene, final SuccessCallback aCallback) {
-        if (runningGameLoop != null) {
-            runningGameLoop.shutdown();
-        }
-
-        final GameRuntime theRuntime = aGameScene.getRuntime();
-        final GameEventManager theEventManager = theRuntime.getEventManager();
-
-        theEventManager.register(null, SystemException.class, new GameEventListener<SystemException>() {
+    public Promise<GameScene, String> playScene(final GameScene aGameScene) {
+        return new Promise<>(new Promise.Executor() {
             @Override
-            public void handleGameEvent(SystemException aEvent) {
-                theRuntime.getLogger().error("Fatal system exception : " + aEvent.exception.getMessage());
-                handleSystemException(aEvent);
-            }
-        } );
-
-        final Runnable theFinishedRunnable = new Runnable() {
-            @Override
-            public void run() {
-
-                theRuntime.getLogger().info("Continuing with loading after ressources are cached");
-
-                loadingFinished(aGameScene);
-
-                theRuntime.getLogger().info("Starting with camera and player init");
-
-                GameObject theCameraObject = aGameScene.cameraObjectProperty().get();
-                GameObjectInstance theCameraObjectInstance = aGameScene.createFrom(theCameraObject);
-                CameraBehavior theCameraBehavior = theCameraObjectInstance.getBehavior(CameraBehavior.class);
-
-                GameObjectInstance thePlayerInstance = null;
-                for (GameObjectInstance theInstance : aGameScene.getInstances()) {
-                    if (theInstance.getOwnerGameObject() == aGameScene.defaultPlayerProperty().get()) {
-                        thePlayerInstance = theInstance;
-                    }
+            public void process(final PromiseResolver aResolver, PromiseRejector aRejector) {
+                if (runningGameLoop != null) {
+                    runningGameLoop.shutdown();
                 }
 
-                // If there is a networked game
-                // we need unique player instance ids
-                // After loading they are the same on every instance
-                if (thePlayerInstance != null) {
-                    thePlayerInstance.uuidProperty().set(UUID.randomUID());
-                }
+                final GameRuntime theRuntime = aGameScene.getRuntime();
+                final GameEventManager theEventManager = theRuntime.getEventManager();
 
-                // This is our hook to load new scenes
-                theEventManager.register(null, RunScene.class, new GameEventListener<RunScene>() {
+                theEventManager.register(null, SystemException.class, new GameEventListener<SystemException>() {
                     @Override
-                    public void handleGameEvent(RunScene aEvent) {
-                        loadOtherScene(aEvent.sceneId);
+                    public void handleGameEvent(SystemException aEvent) {
+                        theRuntime.getLogger().error("Fatal system exception : " + aEvent.exception.getMessage());
+                        handleSystemException(aEvent);
                     }
-                });
+                } );
 
-                GestureDetector theGestureDetector = createGestureDetectorFor(theRuntime.getEventManager(), theCameraBehavior);
-                GameView theGameView = getOrCreateCurrentGameView(theRuntime, theCameraBehavior, theGestureDetector);
+                final Runnable theFinishedRunnable = new Runnable() {
+                    @Override
+                    public void run() {
 
-                theRuntime.getLogger().info("Creating new event loop");
-                GameLoop theLoop = gameLoopFactory.create(aGameScene, theGameView, theRuntime);
+                        theRuntime.getLogger().info("Continuing with loading after ressources are cached");
 
-                Size theScreenResolution = getScreenSize();
-                theEventManager.fire(new SetScreenResolution(theScreenResolution));
+                        loadingFinished(aGameScene);
 
-                runningGameLoop = theLoop;
+                        theRuntime.getLogger().info("Starting with camera and player init");
 
-                theRuntime.getLogger().info("Initializing camera for new player and scene");
-                theCameraBehavior.initializeFor(aGameScene, thePlayerInstance);
+                        GameObject theCameraObject = aGameScene.cameraObjectProperty().get();
+                        GameObjectInstance theCameraObjectInstance = aGameScene.createFrom(theCameraObject);
+                        CameraBehavior theCameraBehavior = theCameraObjectInstance.getBehavior(CameraBehavior.class);
 
-                // Now initialize the networking
-                EventInterpreter theInterpreter = createEventInterpreter();
+                        GameObjectInstance thePlayerInstance = null;
+                        for (GameObjectInstance theInstance : aGameScene.getInstances()) {
+                            if (theInstance.getOwnerGameObject() == aGameScene.defaultPlayerProperty().get()) {
+                                thePlayerInstance = theInstance;
+                            }
+                        }
 
-                final NetworkGameViewFactory theNetworkFactory = new NetworkGameViewFactory(networkConnector, theInterpreter);
-                final NetworkGameView theNetworkGameView = theNetworkFactory.createNetworkViewFor(theEventManager);
+                        // If there is a networked game
+                        // we need unique player instance ids
+                        // After loading they are the same on every instance
+                        if (thePlayerInstance != null) {
+                            thePlayerInstance.uuidProperty().set(UUID.randomUID());
+                        }
 
-                runningGameLoop.addGameView(theNetworkGameView);
+                        // This is our hook to load new scenes
+                        theEventManager.register(null, RunScene.class, new GameEventListener<RunScene>() {
+                            @Override
+                            public void handleGameEvent(RunScene aEvent) {
+                                loadOtherScene(aEvent.sceneId);
+                            }
+                        });
 
-                // Finally notify the other game instances that there is a new player on the field
-                // This event will we sent to the other game instances
-                // And will trigger there a creation of the new remote player
-                theNetworkGameView.handleGameEvent(new NewGameInstance(thePlayerInstance));
+                        GestureDetector theGestureDetector = createGestureDetectorFor(theRuntime.getEventManager(), theCameraBehavior);
+                        GameView theGameView = getOrCreateCurrentGameView(theRuntime, theCameraBehavior, theGestureDetector);
 
-                if (thePlayerInstance != null) {
+                        theRuntime.getLogger().info("Creating new event loop");
+                        GameLoop theLoop = gameLoopFactory.create(aGameScene, theGameView, theRuntime);
 
-                    final GameObjectInstance theFinalPlayer = thePlayerInstance;
+                        Size theScreenResolution = getScreenSize();
+                        theEventManager.fire(new SetScreenResolution(theScreenResolution));
 
-                    theEventManager.register(null, NewGameInstance.class, new GameEventListener<NewGameInstance>() {
+                        runningGameLoop = theLoop;
+
+                        theRuntime.getLogger().info("Initializing camera for new player and scene");
+                        theCameraBehavior.initializeFor(aGameScene, thePlayerInstance);
+
+                        // Now initialize the networking
+                        EventInterpreter theInterpreter = createEventInterpreter();
+
+                        final NetworkGameViewFactory theNetworkFactory = new NetworkGameViewFactory(networkConnector, theInterpreter);
+                        final NetworkGameView theNetworkGameView = theNetworkFactory.createNetworkViewFor(theEventManager);
+
+                        runningGameLoop.addGameView(theNetworkGameView);
+
+                        // Finally notify the other game instances that there is a new player on the field
+                        // This event will we sent to the other game instances
+                        // And will trigger there a creation of the new remote player
+                        theNetworkGameView.handleGameEvent(new NewGameInstance(thePlayerInstance));
+
+                        if (thePlayerInstance != null) {
+
+                            final GameObjectInstance theFinalPlayer = thePlayerInstance;
+
+                            theEventManager.register(null, NewGameInstance.class, new GameEventListener<NewGameInstance>() {
+                                @Override
+                                public void handleGameEvent(NewGameInstance aEvent) {
+                                    // Inform the other instances about the current player
+                                    theNetworkGameView.handleGameEvent(new GameObjectInstanceAddedToScene(theFinalPlayer));
+                                }
+                            });
+                        }
+
+                        theRuntime.getLogger().info("Finished with scene init");
+
+                        aResolver.resolve(aGameScene);
+                    }
+                };
+
+                final Spritesheet[] theSheets = aGameScene.getSpriteSheets();
+                if (theSheets.length > 0) {
+
+                    Promise<Spritesheet, String>[] thePromises = new Promise[theSheets.length];
+                    for (int i=0;i<theSheets.length;i++) {
+                        thePromises[i] = theRuntime.getResourceCache().loadIntoCache(theSheets[i]);
+                    }
+
+                    Promise.all(thePromises).thenContinue(new Promise.NoReturnHandler<Promise[]>() {
                         @Override
-                        public void handleGameEvent(NewGameInstance aEvent) {
-                            // Inform the other instances about the current player
-                            theNetworkGameView.handleGameEvent(new GameObjectInstanceAddedToScene(theFinalPlayer));
+                        public void process(Promise[] aResult) {
+                            theRuntime.getLogger().info("spritesheet loading finished");
+
+                            theFinishedRunnable.run();
                         }
                     });
+
+                } else {
+
+                    theRuntime.getLogger().info("Continuing loading without spritesheets");
+
+                    theFinishedRunnable.run();
                 }
-
-                theRuntime.getLogger().info("Finished with scene init");
-
-                aCallback.success();
             }
-        };
-
-        final Spritesheet[] theSheets = aGameScene.getSpriteSheets();
-        if (theSheets.length > 0) {
-
-            SuccessCallback theCallback = new SuccessCallback() {
-
-                int counter = 0;
-
-                @Override
-                public void success() {
-                    counter++;
-
-                    theRuntime.getLogger().info(counter + " spritesheets loaded out of " + theSheets.length);
-
-                    if (counter == theSheets.length) {
-
-                        theRuntime.getLogger().info("spritesheet loading finished");
-
-                        theFinishedRunnable.run();
-                    }
-                }
-            };
-
-            for (Spritesheet theSheet : theSheets) {
-                theRuntime.getResourceCache().loadIntoCache(theSheet, theCallback);
-            }
-
-        } else {
-
-            theRuntime.getLogger().info("Continuing loading without spritesheets");
-
-            theFinishedRunnable.run();
-        }
+        });
     }
 }
