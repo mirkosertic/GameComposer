@@ -331,17 +331,19 @@ public class GithubResourceAccessor implements ResourceAccessor {
                 GithubTree.TreeItem theTreeItem = theItems.get(i);
 
                 if (("/" + theTreeItem.getPath()).equals(theEntry.getKey())) {
-                    TeaVMLogger.info("Updating file " + theTreeItem.getPath() + " in repository");
-
                     GithubBlob theBlob = theEntry.getValue().getResolvedValue();
 
+                    TeaVMLogger.info("Updating file " + theTreeItem.getPath() + " in repository. old hash " + theTreeItem.getSha() + ", new hash " + theBlob.getSha());
+
                     theTreeItem.setSha(theBlob.getSha());
-                    theTreeItem.setSize(theEntry.getValue().getResolvedValue().getSize());
+                    theTreeItem.unsetSize();
+                    theTreeItem.unsetUrl();
 
                     theFound = true;
                 }
             }
             if (!theFound) {
+                TeaVMLogger.info("File " + theEntry.getKey() +" not found in remote tree!");
                 // New file needs to be added to the repository
                 // TODO
             }

@@ -61,8 +61,14 @@ public abstract class GithubTree implements JSObject {
         @JSProperty
         public abstract void setSize(int aSize);
 
+        @JSBody(params = {}, script = "delete this.size;")
+        public abstract void unsetSize();
+
         @JSProperty
         public abstract String getUrl();
+
+        @JSBody(params = {}, script = "delete this.url;")
+        public abstract void unsetUrl();
     }
 
     @JSProperty
