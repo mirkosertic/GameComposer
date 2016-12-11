@@ -67,7 +67,7 @@ public class Editor {
         if (Electron.available()) {
             Electron theElectron = Electron.require();
             Remote theRemote = theElectron.getRemote();
-            FS theFilesystem = theRemote.require("fs");
+            FS theFilesystem = Remote.require("fs");
 
             Menu theApplicationMenu = Menu.createMenu(theRemote);
 
@@ -162,9 +162,11 @@ public class Editor {
 
             @Override
             public void publishToGithub() {
-                GithubResourceAccessor theAccessor = (GithubResourceAccessor) aResourceAccessor;
-                theAccessor.publish(aAuthorizationState, "Updated by Web Editor").thenContinue(aResult -> {
-                    Toast.info("Neuer Commit " + aResult.getSha() + " erstellt");
+                editorState.saveAll().thenContinue(aNothing -> {
+                    GithubResourceAccessor theAccessor = (GithubResourceAccessor) aResourceAccessor;
+                    theAccessor.publish(aAuthorizationState, "Updated by Web Editor").thenContinue(aResult -> {
+                        Toast.info("Neuer Commit " + aResult.getSha() + " erstellt");
+                    });
                 });
             }
         });
