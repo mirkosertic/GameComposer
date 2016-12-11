@@ -15,11 +15,6 @@
  */
 package de.mirkosertic.gameengine.web;
 
-import org.teavm.jso.JSObject;
-import org.teavm.jso.browser.Window;
-import org.teavm.jso.dom.events.EventListener;
-import org.teavm.jso.json.JSON;
-
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.core.GameLoop;
 import de.mirkosertic.gameengine.core.GameLoopFactory;
@@ -36,6 +31,10 @@ import de.mirkosertic.gameengine.teavm.TeaVMMouseEvent;
 import de.mirkosertic.gameengine.teavm.TeaVMWindow;
 import de.mirkosertic.gameengine.teavm.pixi.Renderer;
 import de.mirkosertic.gameengine.type.Position;
+import org.teavm.jso.JSObject;
+import org.teavm.jso.browser.Window;
+import org.teavm.jso.dom.events.EventListener;
+import org.teavm.jso.json.JSON;
 
 public class GameSceneEditor {
 
@@ -134,14 +133,15 @@ public class GameSceneEditor {
 
     private void onPreview() {
         GameScene theScene = runSceneStrategy.getRunningGameLoop().getScene();
-        editorState.saveScene(theScene).thenContinue(aResult -> {
+        editorState.saveAll().thenContinue(aResult -> {
             JSObject theJSForm = TeaVMMap.toJS(theScene.serialize());
             String theJSON = JSON.stringify(theJSForm);
 
             editorState.getEditorProject().setCurrentPreview(theJSON);
 
             router.open("preview.html", "_blank");
-        }).catchError((aResult, aOptionalRejectedException) -> Toast.error("Error writing data : " + aResult));
+
+        });
     }
 
     private void onMouseClick(TeaVMMouseEvent aEvent) {

@@ -89,34 +89,20 @@ public class EditorState {
         return resourceAccessor.persistFile("/game.json", theBlob);
     }
 
-    private String getIDForScene(GameScene aGameScene) {
-        for (Map.Entry<String, GameScene> theEntry : loadedScenes.entrySet()) {
-            if (theEntry.getValue() == aGameScene) {
-                return theEntry.getKey();
-            }
-        }
-        throw new IllegalStateException("Unknown game scene");
-    }
+    public Promise saveAll() {
+        List<Promise> thePromises = new ArrayList<>();
+        thePromises.add(saveGame());
 
-    public Promise<GameScene, String> saveScene(GameScene aScene) {
-        Promise<File, String> theScenePromise = new Promise<>((Promise.Executor) (aResolver, aRejector) -> {
-            JSObject theJSForm = TeaVMMap.toJS(aScene.serialize());
+        for (Map.Entry<String, GameScene> theEntry : loadedScenes.entrySet()) {
+
+            JSObject theJSForm = TeaVMMap.toJS(theEntry.getValue().serialize());
             String theJSON = JSON.stringify(theJSForm);
             Blob theBlob = Blob.createJSONBlob(JSString.valueOf(theJSON));
 
-            resourceAccessor.persistFile("/" + getIDForScene(aScene) + "/scene.json", theBlob).thenContinue(aResolver::resolve).catchError(
-                    (aResult, aOptionalRejectedException) -> aRejector.reject(aResult, aOptionalRejectedException));
-        });
+            thePromises.add(resourceAccessor.persistFile("/" + theEntry.getKey() + "/scene.json", theBlob));
+        }
 
-        Promise<GameScene, String> theResult = new Promise<>();
-
-        Promise<File, String> theGamePromise = saveGame();
-        Promise<Promise[], Void> theAll = Promise.all(theScenePromise, theGamePromise);
-        theAll.thenContinue(aResult -> {
-            theResult.resolve(aScene);
-        }).catchError((aResult, aOptionalRejectedException) -> theResult.reject("Error while saving data", aOptionalRejectedException));
-
-        return theResult;
+        return Promise.all(thePromises);
     }
 
     public void load(LoadingListener aListener) {
