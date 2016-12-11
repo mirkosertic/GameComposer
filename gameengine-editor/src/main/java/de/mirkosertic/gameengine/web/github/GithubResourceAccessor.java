@@ -96,7 +96,6 @@ public class GithubResourceAccessor implements ResourceAccessor {
                             });
                         }).catchError((aErrorMessage, aOptionalRejectedException1) -> TeaVMLogger.error("Error writing file : " + aErrorMessage));
                     });
-
                 });
             }
         };
@@ -323,30 +322,21 @@ public class GithubResourceAccessor implements ResourceAccessor {
         GithubTree theCopy = GithubTree.create();
         theCopy.setBase_tree(aTree.getSha());
 
-        JSArray<GithubTree.TreeItem> theItems = aTree.getTree();
+        // Currently only adding and updating files is supported
+        JSArray<GithubTree.TreeItem> theItems = JSArray.create();
         for (Map.Entry<String, Promise<GithubBlob, String>> theEntry : aNewBase64Data.entrySet()) {
 
-            boolean theFound = false;
-            for (int i=0;i<theItems.getLength();i++) {
-                GithubTree.TreeItem theTreeItem = theItems.get(i);
+            GithubBlob theBlob = theEntry.getValue().getResolvedValue();
 
-                if (("/" + theTreeItem.getPath()).equals(theEntry.getKey())) {
-                    GithubBlob theBlob = theEntry.getValue().getResolvedValue();
+            String thePathInRepository = (projectDefinition.getRelativePath() + theEntry.getKey().substring(1)).substring(1);
+            TeaVMLogger.info("Updating file " + thePathInRepository + " with SHA " + theBlob.getSha());
 
-                    TeaVMLogger.info("Updating file " + theTreeItem.getPath() + " in repository. old hash " + theTreeItem.getSha() + ", new hash " + theBlob.getSha());
-
-                    theTreeItem.setSha(theBlob.getSha());
-                    theTreeItem.unsetSize();
-                    theTreeItem.unsetUrl();
-
-                    theFound = true;
-                }
-            }
-            if (!theFound) {
-                TeaVMLogger.info("File " + theEntry.getKey() +" not found in remote tree!");
-                // New file needs to be added to the repository
-                // TODO
-            }
+            GithubTree.TreeItem theItem = GithubTree.TreeItem.create();
+            theItem.setPath(thePathInRepository);
+            theItem.setMode("100644");
+            theItem.setType("blob");
+            theItem.setSha(theBlob.getSha());
+            theItems.push(theItem);
         }
 
         theCopy.setTree(theItems);

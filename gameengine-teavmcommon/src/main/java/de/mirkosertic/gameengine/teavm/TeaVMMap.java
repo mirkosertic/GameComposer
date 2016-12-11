@@ -63,6 +63,9 @@ public class TeaVMMap implements Map<String, Object> {
         return fill(aMap, theResult);
     }
 
+    @JSBody(params = { "object" }, script = "return JSON.stringify(object, null, 2);")
+    public static native String stringifyPretty(JSObject object);
+
     private static JSObject convert(Object aObject) {
         if (aObject instanceof String) {
             return JSString.valueOf((String) aObject);

@@ -162,10 +162,11 @@ public class Editor {
 
             @Override
             public void publishToGithub() {
+                Toast.info("Pushing to Github, this may take while...");
                 editorState.saveAll().thenContinue(aNothing -> {
                     GithubResourceAccessor theAccessor = (GithubResourceAccessor) aResourceAccessor;
                     theAccessor.publish(aAuthorizationState, "Updated by Web Editor").thenContinue(aResult -> {
-                        Toast.info("Neuer Commit " + aResult.getSha() + " erstellt");
+                        Toast.info("New Commit " + aResult.getSha() + " created.");
                     });
                 });
             }
