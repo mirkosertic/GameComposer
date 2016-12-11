@@ -16,13 +16,13 @@
 package de.mirkosertic.gameengine.web.github;
 
 import de.mirkosertic.gameengine.core.Promise;
+import de.mirkosertic.gameengine.teavm.TeaVMMap;
 import de.mirkosertic.gameengine.web.AuthorizationState;
 import de.mirkosertic.gameengine.web.EditorProject;
 import de.mirkosertic.gameengine.web.ResourceAccessor;
 import de.mirkosertic.gameengine.web.html5.Blob;
 import de.mirkosertic.gameengine.web.indexeddb.IndexedDBFilesystem;
 import org.teavm.jso.core.JSString;
-import org.teavm.jso.json.JSON;
 
 public class GithubEditorProject implements EditorProject {
 
@@ -40,7 +40,7 @@ public class GithubEditorProject implements EditorProject {
         return IndexedDBFilesystem.open("github_" + projectDefinition.getUser() + "_" + projectDefinition.getRelativePath()+ "_" + projectDefinition.getRelativePath().replace("/","_")).thenContinue(aResult -> {
             GithubResourceAccessor theAccessor = new GithubResourceAccessor(projectDefinition, aResult);
             //TODO: Wait for completion here
-            theAccessor.persistFile(DEFINITION_FILENAME, Blob.createJSONBlob(JSString.valueOf(JSON.stringify(projectDefinition))));
+            theAccessor.persistFile(DEFINITION_FILENAME, Blob.createJSONBlob(JSString.valueOf(TeaVMMap.stringifyPretty(projectDefinition))));
             return theAccessor;
         });
     }

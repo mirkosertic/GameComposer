@@ -8,7 +8,7 @@ Started as a JavaFX implementation some years ago, it now supports desktop and m
 Its core is based on Domain-driven Design and a hexagonal architecture. The main game simulation logic stayed the same for years, but
 replacing presentation logic and adapting it to new technologies is a lot easier compared to traditional layered applications.
 
-To see it in action please visit [this page](http://www.mirkosertic.de/wordpress/blog-post/a-javafx-based-game-authoring-system/)
+To see it in action please visit [this page](https://www.mirkosertic.de/wordpress/blog-post/a-javafx-based-game-authoring-system/)
 
 Current travis-ci build status: [![Build Status](https://travis-ci.org/mirkosertic/GameComposer.svg?branch=master)](https://travis-ci.org/mirkosertic/GameComposer) [![Gitter](https://badges.gitter.im/mirkosertic/GameComposer.svg)](https://gitter.im/mirkosertic/GameComposer?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
@@ -19,7 +19,7 @@ This is the shiny new Web-enabled editor for the GameEngine. It is based on HTML
 
 ![Webeditor in Action](https://raw.githubusercontent.com/mirkosertic/GameComposer/master/docs/images/webeditor.png)
 
-[Edit Dukes Adventure Example Game](http://mirkosertic.github.io/GameComposer/games/editor/index.html)
+[Edit Dukes Adventure Example Game](https://mirkosertic.github.io/GameComposer/games/editor/index.html)
 
 The Electron Releases are available for download at the GitHub Releases section.
 
@@ -56,7 +56,7 @@ GameEngine-Networking
 Networking support is implemented as a RemoteGameView. Local events are sent between game instances to sync the distributed game models.
 
 Networking is implemented in a very early beta state only by the TeaVM Renderer. Events are sent to a Firebase instance, which
-then syncs the events back to other browsers bound to the same Firebase instance. Take a look at the [Networking](http://mirkosertic.github.io/GameComposer/games/teavm/networking/index.html) example
+then syncs the events back to other browsers bound to the same Firebase instance. Take a look at the [Networking](https://mirkosertic.github.io/GameComposer/games/teavm/networking/index.html) example
 to see it in action. In this case, Firebase acts as a non-authorative game server. The game models and simulation is still run in the local browser.
 Only the game state is synchronized using events.
 
@@ -79,55 +79,55 @@ Example Games
 
 TeaVM Renderer:
 
-[Bouncing block](http://mirkosertic.github.io/GameComposer/games/teavm/bounce/index.html)
+[Bouncing block](https://mirkosertic.github.io/GameComposer/games/teavm/bounce/index.html)
 
-[Camera with Clock](http://mirkosertic.github.io/GameComposer/games/teavm/camera/index.html)
+[Camera with Clock](https://mirkosertic.github.io/GameComposer/games/teavm/camera/index.html)
 
-[Gravity and Mouse](http://mirkosertic.github.io/GameComposer/games/teavm/gravity/index.html)
+[Gravity and Mouse](https://mirkosertic.github.io/GameComposer/games/teavm/gravity/index.html)
 
-[Duke on the Platform](http://mirkosertic.github.io/GameComposer/games/teavm/platformer/index.html)
+[Duke on the Platform](https://mirkosertic.github.io/GameComposer/games/teavm/platformer/index.html)
 
-[Position test](http://mirkosertic.github.io/GameComposer/games/teavm/positiontest/index.html)
+[Position test](https://mirkosertic.github.io/GameComposer/games/teavm/positiontest/index.html)
 
-[Rotating actor](http://mirkosertic.github.io/GameComposer/games/teavm/rotatingactor/index.html)
+[Rotating actor](https://mirkosertic.github.io/GameComposer/games/teavm/rotatingactor/index.html)
 
-[Networking](http://mirkosertic.github.io/GameComposer/games/teavm/networking/index.html)
+[Networking](https://mirkosertic.github.io/GameComposer/games/teavm/networking/index.html)
 
-[Arcade Racer](http://mirkosertic.github.io/GameComposer/games/teavm/arcaderacer/index.html)
+[Arcade Racer](https://mirkosertic.github.io/GameComposer/games/teavm/arcaderacer/index.html)
 
 
 GWT Renderer:
 
-[Bouncing block](http://mirkosertic.github.io/GameComposer/games/gwt/bounce/index.html)
+[Bouncing block](https://mirkosertic.github.io/GameComposer/games/gwt/bounce/index.html)
 
-[Camera with Clock](http://mirkosertic.github.io/GameComposer/games/gwt/camera/index.html)
+[Camera with Clock](https://mirkosertic.github.io/GameComposer/games/gwt/camera/index.html)
 
-[Gravity and Mouse](http://mirkosertic.github.io/GameComposer/games/gwt/gravity/index.html)
+[Gravity and Mouse](https://mirkosertic.github.io/GameComposer/games/gwt/gravity/index.html)
 
-[Duke on the Platform](http://mirkosertic.github.io/GameComposer/games/gwt/platformer/index.html)
+[Duke on the Platform](https://mirkosertic.github.io/GameComposer/games/gwt/platformer/index.html)
 
-[Position test](http://mirkosertic.github.io/GameComposer/games/gwt/positiontest/index.html)
+[Position test](https://mirkosertic.github.io/GameComposer/games/gwt/positiontest/index.html)
 
-[Rotating actor](http://mirkosertic.github.io/GameComposer/games/gwt/rotatingactor/index.html)
+[Rotating actor](https://mirkosertic.github.io/GameComposer/games/gwt/rotatingactor/index.html)
 
-[Arcade Racer](http://mirkosertic.github.io/GameComposer/games/gwt/arcaderacer/index.html)
+[Arcade Racer](https://mirkosertic.github.io/GameComposer/games/gwt/arcaderacer/index.html)
 
 
 Dragome Renderer:
 
-[Bouncing block](http://mirkosertic.github.io/GameComposer/games/dragome/bounce/index.html)
+[Bouncing block](https://mirkosertic.github.io/GameComposer/games/dragome/bounce/index.html)
 
-[Camera with Clock](http://mirkosertic.github.io/GameComposer/games/dragome/camera/index.html)
+[Camera with Clock](https://mirkosertic.github.io/GameComposer/games/dragome/camera/index.html)
 
-[Gravity and Mouse](http://mirkosertic.github.io/GameComposer/games/dragome/gravity/index.html)
+[Gravity and Mouse](https://mirkosertic.github.io/GameComposer/games/dragome/gravity/index.html)
 
-[Duke on the Platform](http://mirkosertic.github.io/GameComposer/games/dragome/platformer/index.html)
+[Duke on the Platform](https://mirkosertic.github.io/GameComposer/games/dragome/platformer/index.html)
 
-[Position test](http://mirkosertic.github.io/GameComposer/games/dragome/positiontest/index.html)
+[Position test](https://mirkosertic.github.io/GameComposer/games/dragome/positiontest/index.html)
 
-[Rotating actor](http://mirkosertic.github.io/GameComposer/games/dragome/rotatingactor/index.html)
+[Rotating actor](https://mirkosertic.github.io/GameComposer/games/dragome/rotatingactor/index.html)
 
-[Arcade Racer](http://mirkosertic.github.io/GameComposer/games/dragome/arcaderacer/index.html) 
+[Arcade Racer](https://mirkosertic.github.io/GameComposer/games/dragome/arcaderacer/index.html) 
 
 
 

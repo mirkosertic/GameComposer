@@ -26,7 +26,6 @@ import de.mirkosertic.gameengine.web.html5.Blob;
 import de.mirkosertic.gameengine.web.html5.File;
 import org.teavm.jso.JSObject;
 import org.teavm.jso.core.JSString;
-import org.teavm.jso.json.JSON;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -83,7 +82,7 @@ public class EditorState {
 
     public Promise<File, String> saveGame() {
         JSObject theJSForm = TeaVMMap.toJS(loadedGame.serialize());
-        String theJSON = JSON.stringify(theJSForm);
+        String theJSON = TeaVMMap.stringifyPretty(theJSForm);
 
         Blob theBlob = Blob.createJSONBlob(JSString.valueOf(theJSON));
         return resourceAccessor.persistFile("/game.json", theBlob);
@@ -96,7 +95,7 @@ public class EditorState {
         for (Map.Entry<String, GameScene> theEntry : loadedScenes.entrySet()) {
 
             JSObject theJSForm = TeaVMMap.toJS(theEntry.getValue().serialize());
-            String theJSON = JSON.stringify(theJSForm);
+            String theJSON = TeaVMMap.stringifyPretty(theJSForm);
             Blob theBlob = Blob.createJSONBlob(JSString.valueOf(theJSON));
 
             thePromises.add(resourceAccessor.persistFile("/" + theEntry.getKey() + "/scene.json", theBlob));

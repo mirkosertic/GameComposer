@@ -34,7 +34,6 @@ import de.mirkosertic.gameengine.type.Position;
 import org.teavm.jso.JSObject;
 import org.teavm.jso.browser.Window;
 import org.teavm.jso.dom.events.EventListener;
-import org.teavm.jso.json.JSON;
 
 public class GameSceneEditor {
 
@@ -135,7 +134,7 @@ public class GameSceneEditor {
         GameScene theScene = runSceneStrategy.getRunningGameLoop().getScene();
         editorState.saveAll().thenContinue(aResult -> {
             JSObject theJSForm = TeaVMMap.toJS(theScene.serialize());
-            String theJSON = JSON.stringify(theJSForm);
+            String theJSON = TeaVMMap.stringifyPretty(theJSForm);
 
             editorState.getEditorProject().setCurrentPreview(theJSON);
 
