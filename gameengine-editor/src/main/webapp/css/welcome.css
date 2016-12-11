@@ -19,8 +19,8 @@ body {
   margin-bottom: 2em;
   padding: 1em;
   background-color: #e74c3c;
-  border: 1px solid black;
   color: white;
+  border: 1px solid white;
 }
 .content .contentblocks {
   display: inline-flex;
@@ -39,7 +39,7 @@ body {
 }
 .infoblock {
   flex-grow: 1;
-  border: 1px solid black;
+  border: 1px solid white;
   background-color: white;
 }
 .infoblock .title {
@@ -51,6 +51,7 @@ body {
 .infoblock .infoblockcontent {
   background-color: white;
   text-align: left;
+  margin: 0.1em;
 }
 .infoblock .infoblockcontent .entry {
   background-color: white;
