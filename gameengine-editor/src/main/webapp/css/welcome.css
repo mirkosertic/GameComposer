@@ -1,7 +1,7 @@
 body {
   margin: 0;
   padding: 0;
-  background-color: #33373c;
+  background-color: #141414;
 }
 .content {
   display: flex;
@@ -18,9 +18,9 @@ body {
   margin-right: 3em;
   margin-bottom: 2em;
   padding: 1em;
-  background-color: #e74c3c;
-  color: white;
-  border: 1px solid white;
+  background-color: #292929;
+  color: #b1b2b2;
+  border: 1px solid #505050;
 }
 .content .contentblocks {
   display: inline-flex;
@@ -39,13 +39,13 @@ body {
 }
 .infoblock {
   flex-grow: 1;
-  border: 1px solid white;
+  border: 1px solid #505050;
   background-color: white;
 }
 .infoblock .title {
   font-weight: bold;
-  background-color: #e74c3c;
-  color: white;
+  background-color: #292929;
+  color: #b1b2b2;
   padding: 0.3em;
 }
 .infoblock .infoblockcontent {

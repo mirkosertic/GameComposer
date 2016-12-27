@@ -1,10 +1,10 @@
 @numbergridcolumns: 12;
 @screenwidth: 800px;
-@bordercolor: white;
-@backgroundcolor: #33373c;
-@hovercolor: lighten(#3498db,10%);
-@textcolor: white;
-@objectbrowsertitle: #e74c3c;
+
+@pagebackground: #141414;
+@sectionbackground: #292929;
+@textcolor: #b1b2b2;
+@darkborder: #505050;
 // Colors taken from https://flatuicolors.com/
 
 @import url(https://fonts.googleapis.com/css?family=Roboto);
@@ -13,7 +13,7 @@
 body {
   margin: 0 0 0 0;
   padding: 0 0 0 0;
-  background-color: @backgroundcolor;
+  background-color: @pagebackground;
   font-family: 'Roboto', sans-serif;
 }
 
@@ -75,7 +75,7 @@ body {
   .border((@counter - 1));
 
   .border-@{counter} {
-    border: 1px solid @bordercolor;
+    border: 1px solid @darkborder;
   }
 }
 .border(10);
@@ -107,4 +107,8 @@ body {
   display: inline;
   width: 18px;
   height: 18px;
+}
+
+#editortabbedpane {
+  border: 0px;
 }
