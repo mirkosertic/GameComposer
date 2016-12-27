@@ -1,7 +1,12 @@
+@pagebackground: #141414;
+@sectionbackground: #292929;
+@textcolor: #b1b2b2;
+@darkborder: #505050;
+
 body {
   margin: 0;
   padding: 0;
-  background-color: #33373c;
+  background-color: @pagebackground;
 }
 
 .content {
@@ -20,9 +25,9 @@ body {
     margin-right: 3em;
     margin-bottom: 2em;
     padding: 1em;
-    background-color: #e74c3c;
-    color: white;
-    border: 1px solid white;
+    background-color: @sectionbackground;
+    color: @textcolor;
+    border: 1px solid @darkborder;
   }
 
   .contentblocks {
@@ -46,13 +51,13 @@ body {
 .infoblock {
 
   flex-grow: 1;
-  border: 1px solid white;
+  border: 1px solid @darkborder;
   background-color: white;
 
   .title {
     font-weight: bold;
-    background-color: #e74c3c;
-    color: white;
+    background-color: @sectionbackground;
+    color: @textcolor;
     padding: 0.3em;
   }
 
