@@ -1,10 +1,15 @@
 {
-  "enableDebug" : "true",
-  "customProperties" : {
-    "data" : [ ]
+  "enableDebug": "true",
+  "customProperties": {
+    "data": []
   },
-  "enablewebgl" : "true",
-  "name" : "Dukes Adventure",
-  "defaultscene" : "scene1",
-  "scenes": ["scene1", "scene2"]
+  "enablewebgl": "true",
+  "scenes": [
+    "scene1",
+    "scene2"
+  ],
+  "enableNetworking": "false",
+  "firebaseURL": "https://glowing-heat-2189.firebaseio.com",
+  "defaultscene": "scene1",
+  "name": "Dukes Adventure"
 }

@@ -26,16 +26,9 @@ import org.teavm.platform.PlatformClass;
 import org.teavm.platform.metadata.ClassResource;
 import org.teavm.platform.metadata.ClassScopedMetadataProvider;
 
-/**
- *
- * @author Alexey Andreev
- * @param <T> class type.
- */
 public class TClass<T> extends TObject implements TAnnotatedElement {
     TString name;
     TString simpleName;
-    private TClass<?> componentType;
-    private boolean componentTypeDirty = true;
     private PlatformClass platformClass;
     private TAnnotation[] annotationsCache;
     private Map<TClass<?>, TAnnotation> annotationsByType;
@@ -70,7 +63,7 @@ public class TClass<T> extends TObject implements TAnnotatedElement {
 
     public TString getName() {
         if (name == null) {
-            name = TString.wrap(platformClass.getMetadata().getName());
+            name = TString.wrap(Platform.getName(platformClass));
         }
         return name;
     }
@@ -81,7 +74,7 @@ public class TClass<T> extends TObject implements TAnnotatedElement {
                 simpleName = getComponentType().getSimpleName().concat(TString.wrap("[]"));
                 return simpleName;
             }
-            String name = platformClass.getMetadata().getName();
+            String name = Platform.getName(platformClass);
             int lastDollar = name.lastIndexOf('$');
             if (lastDollar != -1) {
                 name = name.substring(lastDollar + 1);
@@ -100,11 +93,11 @@ public class TClass<T> extends TObject implements TAnnotatedElement {
     }
 
     public boolean isPrimitive() {
-        return platformClass.getMetadata().isPrimitive();
+        return Platform.isPrimitive(platformClass);
     }
 
     public boolean isArray() {
-        return platformClass.getMetadata().getArrayItem() != null;
+        return Platform.getArrayItem(platformClass) != null;
     }
 
     public boolean isEnum() {
@@ -112,57 +105,7 @@ public class TClass<T> extends TObject implements TAnnotatedElement {
     }
 
     public TClass<?> getComponentType() {
-        if (componentTypeDirty) {
-            PlatformClass arrayItem = platformClass.getMetadata().getArrayItem();
-            componentType = arrayItem != null ? getClass(arrayItem) : null;
-            componentTypeDirty = false;
-        }
-        return componentType;
-    }
-
-    @SuppressWarnings("unchecked")
-    static TClass<TVoid> voidClass() {
-        return (TClass<TVoid>) getClass(Platform.getPrimitives().getVoidClass());
-    }
-
-    @SuppressWarnings("unchecked")
-    static TClass<TBoolean> booleanClass() {
-        return (TClass<TBoolean>) getClass(Platform.getPrimitives().getBooleanClass());
-    }
-
-    @SuppressWarnings("unchecked")
-    static TClass<TCharacter> charClass() {
-        return (TClass<TCharacter>) getClass(Platform.getPrimitives().getCharClass());
-    }
-
-    @SuppressWarnings("unchecked")
-    static TClass<TByte> byteClass() {
-        return (TClass<TByte>) getClass(Platform.getPrimitives().getByteClass());
-    }
-
-    @SuppressWarnings("unchecked")
-    static TClass<TShort> shortClass() {
-        return (TClass<TShort>) getClass(Platform.getPrimitives().getShortClass());
-    }
-
-    @SuppressWarnings("unchecked")
-    static TClass<TInteger> intClass() {
-        return (TClass<TInteger>) getClass(Platform.getPrimitives().getIntClass());
-    }
-
-    @SuppressWarnings("unchecked")
-    static TClass<TLong> longClass() {
-        return (TClass<TLong>) getClass(Platform.getPrimitives().getLongClass());
-    }
-
-    @SuppressWarnings("unchecked")
-    static TClass<TFloat> floatClass() {
-        return (TClass<TFloat>) getClass(Platform.getPrimitives().getFloatClass());
-    }
-
-    @SuppressWarnings("unchecked")
-    static TClass<TDouble> doubleClass() {
-        return (TClass<TDouble>) getClass(Platform.getPrimitives().getDoubleClass());
+        return getClass(Platform.getArrayItem(platformClass));
     }
 
     public boolean desiredAssertionStatus() {

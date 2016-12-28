@@ -328,7 +328,19 @@ public class GithubResourceAccessor implements ResourceAccessor {
 
             GithubBlob theBlob = theEntry.getValue().getResolvedValue();
 
-            String thePathInRepository = (projectDefinition.getRelativePath() + theEntry.getKey().substring(1)).substring(1);
+            String theDirectoryInRepository = projectDefinition.getRelativePath();
+            if (!theDirectoryInRepository.endsWith("/")) {
+                theDirectoryInRepository = theDirectoryInRepository + "/";
+            }
+            // Github does not accept a leading slash
+            if (theDirectoryInRepository.startsWith("/")) {
+                theDirectoryInRepository = theDirectoryInRepository.substring(1);
+            }
+
+            // Filenames always have a slash at the beginning
+            String theFileNameWithoutPrefix = theEntry.getKey().substring(1);
+
+            String thePathInRepository = theDirectoryInRepository + theFileNameWithoutPrefix;
             TeaVMLogger.info("Updating file " + thePathInRepository + " with SHA " + theBlob.getSha());
 
             GithubTree.TreeItem theItem = GithubTree.TreeItem.create();

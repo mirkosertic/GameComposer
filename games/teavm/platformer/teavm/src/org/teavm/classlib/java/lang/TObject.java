@@ -15,15 +15,24 @@
  */
 package org.teavm.classlib.java.lang;
 
-import org.teavm.javascript.spi.Async;
-import org.teavm.javascript.spi.Rename;
-import org.teavm.javascript.spi.Superclass;
-import org.teavm.javascript.spi.Sync;
+import org.teavm.interop.Address;
+import org.teavm.interop.Async;
+import org.teavm.interop.DelegateTo;
+import org.teavm.interop.Rename;
+import org.teavm.interop.Structure;
+import org.teavm.interop.Superclass;
+import org.teavm.interop.Sync;
 import org.teavm.jso.browser.TimerHandler;
 import org.teavm.platform.Platform;
+import org.teavm.platform.PlatformObject;
 import org.teavm.platform.PlatformQueue;
 import org.teavm.platform.PlatformRunnable;
 import org.teavm.platform.async.AsyncCallback;
+import org.teavm.runtime.Allocator;
+import org.teavm.runtime.RuntimeArray;
+import org.teavm.runtime.RuntimeClass;
+import org.teavm.runtime.RuntimeJavaObject;
+import org.teavm.runtime.RuntimeObject;
 
 /**
  *
@@ -108,13 +117,11 @@ public class TObject {
             callback.complete(null);
             return;
         }
-        o.monitor.enteringThreads.add(new PlatformRunnable() {
-            @Override public void run() {
-                TThread.setCurrentThread(thread);
-                o.monitor.owner = thread;
-                o.monitor.count += count;
-                callback.complete(null);
-            }
+        o.monitor.enteringThreads.add(() -> {
+            TThread.setCurrentThread(thread);
+            o.monitor.owner = thread;
+            o.monitor.count += count;
+            callback.complete(null);
         });
     }
 
@@ -135,14 +142,12 @@ public class TObject {
 
         o.monitor.owner = null;
         if (!o.monitor.enteringThreads.isEmpty()) {
-            Platform.postpone(new PlatformRunnable() {
-                @Override public void run() {
-                    if (o.isEmptyMonitor() || o.monitor.owner != null) {
-                        return;
-                    }
-                    if (!o.monitor.enteringThreads.isEmpty()) {
-                        o.monitor.enteringThreads.remove().run();
-                    }
+            Platform.postpone(() -> {
+                if (o.isEmptyMonitor() || o.monitor.owner != null) {
+                    return;
+                }
+                if (!o.monitor.enteringThreads.isEmpty()) {
+                    o.monitor.enteringThreads.remove().run();
                 }
             });
         } else {
@@ -172,7 +177,6 @@ public class TObject {
 
     @Rename("<init>")
     private void init() {
-        Platform.getPlatformObject(this).setId(Platform.nextObjectId());
     }
 
     @Rename("getClass")
@@ -195,11 +199,33 @@ public class TObject {
         return getClass().getName() + "@" + TInteger.toHexString(identity());
     }
 
+    @DelegateTo("identityLowLevel")
     int identity() {
+        PlatformObject platformThis = Platform.getPlatformObject(this);
+        if (platformThis.getId() == 0) {
+            platformThis.setId(Platform.nextObjectId());
+        }
         return Platform.getPlatformObject(this).getId();
     }
 
+    @SuppressWarnings("unused")
+    private static int identityLowLevel(RuntimeJavaObject object) {
+        if ((object.classReference & RuntimeObject.MONITOR_EXISTS) != 0) {
+            object = (RuntimeJavaObject) object.monitor;
+        }
+        int result = object.monitor.toAddress().toInt();
+        if (result == 0) {
+            result = RuntimeJavaObject.nextId++;
+            if (result == 0) {
+                result = RuntimeJavaObject.nextId++;
+            }
+            object.monitor = Address.fromInt(result).toStructure();
+        }
+        return result;
+    }
+
     @Override
+    @DelegateTo("cloneLowLevel")
     protected Object clone() throws TCloneNotSupportedException {
         if (!(this instanceof TCloneable) && Platform.getPlatformObject(this)
                 .getPlatformClass().getMetadata().getArrayItem() == null) {
@@ -208,6 +234,28 @@ public class TObject {
         Object result = Platform.clone(this);
         Platform.getPlatformObject(result).setId(Platform.nextObjectId());
         return result;
+    }
+
+    @SuppressWarnings("unused")
+    private static RuntimeJavaObject cloneLowLevel(RuntimeJavaObject self) {
+        RuntimeClass cls = RuntimeClass.getClass(self);
+        int skip = Structure.sizeOf(RuntimeJavaObject.class);
+        int size;
+        RuntimeJavaObject copy;
+        if (cls.itemType == null) {
+            copy = Allocator.allocate(cls).toStructure();
+            size = cls.size;
+        } else {
+            RuntimeArray array = (RuntimeArray) self;
+            copy = Allocator.allocateArray(cls, array.size).toStructure();
+            int itemSize = (cls.itemType.flags & RuntimeClass.PRIMITIVE) == 0 ? 4 : cls.itemType.size;
+            Address headerSize = Address.align(Address.fromInt(Structure.sizeOf(RuntimeArray.class)), itemSize);
+            size = itemSize * array.size + headerSize.toInt();
+        }
+        if (size > skip) {
+            Allocator.moveMemoryBlock(self.toAddress().add(skip), copy.toAddress().add(skip), size - skip);
+        }
+        return copy;
     }
 
     @Sync
@@ -325,11 +373,7 @@ public class TObject {
                 Platform.killSchedule(timerId);
                 timerId = -1;
             }
-            Platform.postpone(new PlatformRunnable() {
-                @Override public void run() {
-                    callback.error(new TInterruptedException());
-                }
-            });
+            Platform.postpone(() -> callback.error(new TInterruptedException()));
         }
     }
 

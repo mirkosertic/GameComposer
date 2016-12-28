@@ -15,19 +15,37 @@
  */
 package org.teavm.classlib.java.lang.reflect;
 
-import org.teavm.classlib.java.lang.*;
+import org.teavm.backend.javascript.spi.GeneratedBy;
+import org.teavm.classlib.java.lang.TArrayIndexOutOfBoundsException;
+import org.teavm.classlib.java.lang.TClass;
+import org.teavm.classlib.java.lang.TIllegalArgumentException;
+import org.teavm.classlib.java.lang.TNegativeArraySizeException;
+import org.teavm.classlib.java.lang.TNullPointerException;
+import org.teavm.classlib.java.lang.TObject;
 import org.teavm.dependency.PluggableDependency;
-import org.teavm.javascript.spi.GeneratedBy;
+import org.teavm.interop.DelegateTo;
+import org.teavm.interop.Unmanaged;
 import org.teavm.platform.PlatformClass;
+import org.teavm.runtime.Allocator;
+import org.teavm.runtime.RuntimeArray;
+import org.teavm.runtime.RuntimeClass;
+import org.teavm.runtime.RuntimeObject;
 
-/**
- *
- * @author Alexey Andreev
- */
 public final class TArray extends TObject {
     @GeneratedBy(ArrayNativeGenerator.class)
     @PluggableDependency(ArrayNativeGenerator.class)
+    @DelegateTo("getLengthLowLevel")
     public static native int getLength(TObject array) throws TIllegalArgumentException;
+
+    @SuppressWarnings("unused")
+    private static int getLengthLowLevel(RuntimeObject obj) {
+        RuntimeClass cls = RuntimeClass.getClass(obj);
+        if (cls.itemType == null) {
+            throw new TIllegalArgumentException();
+        }
+        RuntimeArray array = (RuntimeArray) obj;
+        return array.size;
+    }
 
     public static TObject newInstance(TClass<?> componentType, int length) throws TNegativeArraySizeException {
         if (componentType == null) {
@@ -44,7 +62,14 @@ public final class TArray extends TObject {
 
     @GeneratedBy(ArrayNativeGenerator.class)
     @PluggableDependency(ArrayNativeGenerator.class)
+    @DelegateTo("newInstanceLowLevel")
     private static native TObject newInstanceImpl(PlatformClass componentType, int length);
+
+    @SuppressWarnings("unused")
+    @Unmanaged
+    private static RuntimeObject newInstanceLowLevel(RuntimeClass cls, int length) {
+        return Allocator.allocateArray(cls.arrayType, length).toStructure();
+    }
 
     public static TObject get(TObject array, int index) throws TIllegalArgumentException,
             TArrayIndexOutOfBoundsException {

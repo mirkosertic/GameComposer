@@ -14,12 +14,12 @@
   "dependencies": {},
   "devDependencies": {},
   "homepage": "https://github.com/GoodBoyDigital/pixi.js",
-  "version": "4.2.3",
-  "_release": "4.2.3",
+  "version": "4.3.0",
+  "_release": "4.3.0",
   "_resolution": {
     "type": "version",
-    "tag": "v4.2.3",
-    "commit": "3f87dd2e552c71f66a923205befb6dbc0bc2742a"
+    "tag": "v4.3.0",
+    "commit": "20faa77a34d0b687e52746ac53595d6d43e2cd33"
   },
   "_source": "https://github.com/GoodBoyDigital/pixi.js.git",
   "_target": "^4.1.0",

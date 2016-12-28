@@ -2,7 +2,7 @@
 body {
   margin: 0 0 0 0;
   padding: 0 0 0 0;
-  background-color: #33373c;
+  background-color: #141414;
   font-family: 'Roboto', sans-serif;
 }
 .flexVertical {
@@ -206,34 +206,34 @@ body {
   flex-grow: 1;
 }
 .border-1 {
-  border: 1px solid #ffffff;
+  border: 1px solid #505050;
 }
 .border-2 {
-  border: 1px solid #ffffff;
+  border: 1px solid #505050;
 }
 .border-3 {
-  border: 1px solid #ffffff;
+  border: 1px solid #505050;
 }
 .border-4 {
-  border: 1px solid #ffffff;
+  border: 1px solid #505050;
 }
 .border-5 {
-  border: 1px solid #ffffff;
+  border: 1px solid #505050;
 }
 .border-6 {
-  border: 1px solid #ffffff;
+  border: 1px solid #505050;
 }
 .border-7 {
-  border: 1px solid #ffffff;
+  border: 1px solid #505050;
 }
 .border-8 {
-  border: 1px solid #ffffff;
+  border: 1px solid #505050;
 }
 .border-9 {
-  border: 1px solid #ffffff;
+  border: 1px solid #505050;
 }
 .border-10 {
-  border: 1px solid #ffffff;
+  border: 1px solid #505050;
 }
 .commonFont {
   color: white;
@@ -253,8 +253,11 @@ body {
 }
 .genericdeletebutton {
   vertical-align: middle;
-  background-image: url("../webcomponents/gameeditor-treeitem/close.png");
+  background-image: url("../webcomponents/gameeditor-treeitem/delete.png");
   display: inline;
   width: 18px;
   height: 18px;
+}
+#editortabbedpane {
+  border: 0px;
 }

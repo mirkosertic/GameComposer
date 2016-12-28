@@ -16,20 +16,18 @@
 package org.teavm.classlib.java.lang;
 
 import org.teavm.classlib.impl.unicode.UnicodeHelper;
+import org.teavm.interop.DelegateTo;
+import org.teavm.interop.Import;
 import org.teavm.platform.Platform;
 import org.teavm.platform.metadata.MetadataProvider;
 import org.teavm.platform.metadata.StringResource;
 
-/**
- *
- * @author Alexey Andreev
- */
 public class TCharacter extends TObject implements TComparable<TCharacter> {
     public static final int MIN_RADIX = 2;
     public static final int MAX_RADIX = 36;
     public static final char MIN_VALUE = '\0';
     public static final char MAX_VALUE = '\uFFFF';
-    public static final TClass<TCharacter> TYPE = TClass.charClass();
+    public static final Class<Character> TYPE = char.class;
     public static final byte UNASSIGNED = 0;
     public static final byte UPPERCASE_LETTER = 1;
     public static final byte LOWERCASE_LETTER = 2;
@@ -235,17 +233,33 @@ public class TCharacter extends TObject implements TComparable<TCharacter> {
         return (char) toLowerCase((int) ch);
     }
 
+    @DelegateTo("toLowerCaseLowLevel")
     public static int toLowerCase(int ch) {
         return Platform.stringFromCharCode(ch).toLowerCase().charCodeAt(0);
     }
+
+    private static int toLowerCaseLowLevel(int codePoint) {
+        return toLowerCaseSystem(codePoint);
+    }
+
+    @Import(module = "runtime", name = "towlower")
+    private static native int toLowerCaseSystem(int codePoint);
 
     public static char toUpperCase(char ch) {
         return (char) toUpperCase((int) ch);
     }
 
+    @DelegateTo("toUpperCaseLowLevel")
     public static int toUpperCase(int codePoint) {
         return Platform.stringFromCharCode(codePoint).toUpperCase().charCodeAt(0);
     }
+
+    private static int toUpperCaseLowLevel(int codePoint) {
+        return toUpperCaseSystem(codePoint);
+    }
+
+    @Import(module = "runtime", name = "towupper")
+    private static native int toUpperCaseSystem(int codePoint);
 
     public static int digit(char ch, int radix) {
         return digit((int) ch, radix);

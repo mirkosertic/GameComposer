@@ -16,7 +16,7 @@
 package org.teavm.classlib.java.util;
 
 import org.teavm.classlib.java.lang.*;
-import org.teavm.javascript.spi.Rename;
+import org.teavm.interop.Rename;
 
 /**
  *
@@ -144,7 +144,7 @@ public abstract class TAbstractList<E> extends TAbstractCollection<E> implements
         if (fromIndex > toIndex) {
             throw new TIllegalArgumentException();
         }
-        if (fromIndex < 0 || toIndex >= size()) {
+        if (fromIndex < 0 || toIndex > size()) {
             throw new TIndexOutOfBoundsException();
         }
         if (this instanceof TRandomAccess) {

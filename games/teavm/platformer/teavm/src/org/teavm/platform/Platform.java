@@ -16,20 +16,19 @@
 package org.teavm.platform;
 
 import java.lang.annotation.Annotation;
+import org.teavm.backend.javascript.spi.GeneratedBy;
+import org.teavm.backend.javascript.spi.InjectedBy;
 import org.teavm.dependency.PluggableDependency;
-import org.teavm.javascript.spi.GeneratedBy;
-import org.teavm.javascript.spi.InjectedBy;
+import org.teavm.interop.DelegateTo;
 import org.teavm.jso.JSBody;
 import org.teavm.jso.JSObject;
 import org.teavm.jso.browser.Window;
 import org.teavm.platform.metadata.ClassResource;
 import org.teavm.platform.metadata.StaticFieldResource;
 import org.teavm.platform.plugin.PlatformGenerator;
+import org.teavm.runtime.RuntimeClass;
+import org.teavm.runtime.RuntimeObject;
 
-/**
- *
- * @author Alexey Andreev
- */
 public final class Platform {
     private Platform() {
     }
@@ -41,14 +40,21 @@ public final class Platform {
     @PluggableDependency(PlatformGenerator.class)
     public static native Object clone(Object obj);
 
+    @DelegateTo("isInstanceLowLevel")
     public static boolean isInstance(PlatformObject obj, PlatformClass cls) {
         return obj != null && !isUndefined(obj.getPlatformClass().getMetadata())
                 && isAssignable(obj.getPlatformClass(), cls);
     }
 
+    @SuppressWarnings("unused")
+    private static boolean isInstanceLowLevel(RuntimeClass self, RuntimeObject object) {
+        return isAssignableLowLevel(RuntimeClass.getClass(object), self);
+    }
+
     @JSBody(params = "object", script = "return typeof object === 'undefined';")
     private static native boolean isUndefined(JSObject object);
 
+    @DelegateTo("isAssignableLowLevel")
     public static boolean isAssignable(PlatformClass from, PlatformClass to) {
         if (from == to) {
             return true;
@@ -62,21 +68,21 @@ public final class Platform {
         return false;
     }
 
+    @SuppressWarnings("unused")
+    private static boolean isAssignableLowLevel(RuntimeClass from, RuntimeClass to) {
+        return to.isSupertypeOf.apply(from);
+    }
+
     @InjectedBy(PlatformGenerator.class)
     @PluggableDependency(PlatformGenerator.class)
     public static native Class<?> asJavaClass(PlatformObject obj);
-
-    public static PlatformPrimitives getPrimitives() {
-        return (PlatformPrimitives) Window.current();
-    }
 
     public static PlatformConsole getConsole() {
         return (PlatformConsole) Window.current();
     }
 
-    public static int nextObjectId() {
-        return ((PlatformHelper) Window.current()).nextId();
-    }
+    @JSBody(params = {}, script = "return $rt_nextId();")
+    public static native int nextObjectId();
 
     public static <T> T newInstance(PlatformClass cls) {
         prepareNewInstance();
@@ -139,5 +145,30 @@ public final class Platform {
 
     public static PlatformString stringFromCharCode(int charCode) {
         return ((PlatformHelper) Window.current()).getStringClass().fromCharCode(charCode);
+    }
+
+    @DelegateTo("isPrimitiveLowLevel")
+    public static boolean isPrimitive(PlatformClass cls) {
+        return cls.getMetadata().isPrimitive();
+    }
+
+    @SuppressWarnings("unused")
+    private static boolean isPrimitiveLowLevel(RuntimeClass cls) {
+        return (cls.flags & RuntimeClass.PRIMITIVE) != 0;
+    }
+
+    @DelegateTo("getArrayItemLowLevel")
+    public static PlatformClass getArrayItem(PlatformClass cls) {
+        return cls.getMetadata().getArrayItem();
+    }
+
+    @SuppressWarnings("unused")
+    private static RuntimeClass getArrayItemLowLevel(RuntimeClass cls) {
+        return cls.itemType;
+    }
+
+    @DelegateTo("getNameLowLevel")
+    public static String getName(PlatformClass cls) {
+        return cls.getMetadata().getName();
     }
 }

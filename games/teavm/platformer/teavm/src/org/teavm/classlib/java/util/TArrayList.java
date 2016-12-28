@@ -18,7 +18,7 @@ package org.teavm.classlib.java.util;
 import java.util.Arrays;
 import org.teavm.classlib.java.io.TSerializable;
 import org.teavm.classlib.java.lang.*;
-import org.teavm.javascript.spi.Rename;
+import org.teavm.interop.Rename;
 
 /**
  *
@@ -53,7 +53,7 @@ public class TArrayList<E> extends TAbstractList<E> implements TCloneable, TSeri
 
     public void ensureCapacity(int minCapacity) {
         if (array.length < minCapacity) {
-            array = TArrays.copyOf(array, array.length + TMath.min(5, array.length / 2));
+            array = TArrays.copyOf(array, array.length + TMath.max(5, array.length / 2));
         }
     }
 
