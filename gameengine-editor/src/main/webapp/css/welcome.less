@@ -52,7 +52,7 @@ body {
 
   flex-grow: 1;
   border: 1px solid @darkborder;
-  background-color: white;
+  background-color: @pagebackground;
 
   .title {
     font-weight: bold;
@@ -62,13 +62,12 @@ body {
   }
 
   .infoblockcontent {
-    background-color: white;
+    background-color: @pagebackground;
     text-align: left;
     margin: 0.1em;
 
     .entry {
-      background-color: white;
-      padding: 0.3em;
+      color: @textcolor;
     }
   }
 }
@@ -78,16 +77,16 @@ body {
   min-height: 32px;
   line-height: 32px;
   vertical-align: middle;
-  border: 0.1em white;
+  border-bottom: 1px solid @sectionbackground;
+  color: @textcolor;
 
   &:hover {
-    background-color: lighten(#33373c, 50%);
-    border: 0.1em lighten(#33373c, 50%);
+    background-color: @sectionbackground;
   }
 }
 
 .github {
-  background-image: url("GitHub-Mark-32px.png");
+  background-image: url("octocat.png");
   background-repeat: no-repeat;
   background-position: left top;
 }
@@ -108,13 +107,13 @@ body {
 
   .continue {
     margin-top: 1em;
-    background-image: url("ic_open_in_browser_black_48dp.png");
+    background-image: url("openinbrowser.png");
     background-repeat: no-repeat;
     background-position: left top;
-    background-size: 32px 32px;
+    background-size: 36px 36px;
     padding-left: 2.5em;
-    min-height: 32px;
-    line-height: 32px;
+    min-height: 36px;
+    line-height: 36px;
   }
 
 }
