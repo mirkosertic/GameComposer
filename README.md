@@ -21,12 +21,13 @@ This is the shiny new Web-enabled editor for the GameEngine. It is based on HTML
 
 [Edit Dukes Adventure Example Game](https://mirkosertic.github.io/GameComposer/games/editor/index.html)
 
+![Webeditor editing an Event Sheet](https://raw.githubusercontent.com/mirkosertic/GameComposer/master/docs/images/webeventsheet.png)
+
+![Webeditor editing a LUA script](https://raw.githubusercontent.com/mirkosertic/GameComposer/master/docs/images/luawebeditor.png)
+
 The Electron Releases are available for download at the GitHub Releases section.
 
 ![Webeditor in Electron](https://raw.githubusercontent.com/mirkosertic/GameComposer/master/docs/images/electron.png)
-
-
-![Webeditor editing a LUA script](https://raw.githubusercontent.com/mirkosertic/GameComposer/master/docs/images/luawebeditor.png)
 
 GameEngine
 ----------
