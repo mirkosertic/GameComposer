@@ -9,8 +9,11 @@ const CANVAS_START_SIZE = 16;
  * textures to an offline canvas.
  * This draw call will force the texture to be moved onto the GPU.
  *
+ * An instance of this class is automatically created by default, and can be found at renderer.plugins.prepare
+ *
  * @class
- * @memberof PIXI
+ * @extends PIXI.prepare.BasePrepare
+ * @memberof PIXI.prepare
  */
 export default class CanvasPrepare extends BasePrepare
 {

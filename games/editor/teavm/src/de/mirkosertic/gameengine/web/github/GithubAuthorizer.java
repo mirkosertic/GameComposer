@@ -71,7 +71,7 @@ public class GithubAuthorizer {
                         XMLHttpRequest theRequest = XMLHttpRequest.create();
 
                         String theOAuthParams = "client_id=" + determineGithubClientID() + "&code=" + theParser.getValue("code") + "&state=" + WINDOW.getSessionStorage().getItem(OAUTHSTATE);
-                        String theURL = "https://www.mirkosertic.de/githubtokenexchange.php";
+                        String theURL = "https://tools.mirkosertic.de/githubtokenexchange.php";
 
                         theRequest.open("POST", theURL);
                         theRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");

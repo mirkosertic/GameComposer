@@ -85,11 +85,12 @@ var Ticker = function () {
          * is based, this value is neither capped nor scaled.
          * If the platform supports DOMHighResTimeStamp,
          * this value will have a precision of 1 µs.
+         * Defaults to target frame time
          *
          * @member {number}
-         * @default 1 / TARGET_FPMS
+         * @default 16.66
          */
-        this.elapsedMS = 1 / _settings2.default.TARGET_FPMS; // default to target frame time
+        this.elapsedMS = 1 / _settings2.default.TARGET_FPMS;
 
         /**
          * The last time {@link PIXI.ticker.Ticker#update} was invoked.
@@ -351,7 +352,7 @@ var Ticker = function () {
      * {@link PIXI.ticker.Ticker#speed}, which is specific
      * to scaling {@link PIXI.ticker.Ticker#deltaTime}.
      *
-     * @memberof PIXI.ticker.Ticker#
+     * @member {number}
      * @readonly
      */
 
@@ -370,7 +371,7 @@ var Ticker = function () {
          * When setting this property it is clamped to a value between
          * `0` and `PIXI.settings.TARGET_FPMS * 1000`.
          *
-         * @memberof PIXI.ticker.Ticker#
+         * @member {number}
          * @default 10
          */
 
@@ -378,15 +379,9 @@ var Ticker = function () {
         key: 'minFPS',
         get: function get() {
             return 1000 / this._maxElapsedMS;
-        }
-
-        /**
-         * Sets the min fps.
-         *
-         * @param {number} fps - value to set.
-         */
-        ,
-        set: function set(fps) {
+        },
+        set: function set(fps) // eslint-disable-line require-jsdoc
+        {
             // Clamp: 0 to TARGET_FPMS
             var minFPMS = Math.min(Math.max(0, fps) / 1000, _settings2.default.TARGET_FPMS);
 

@@ -53,7 +53,7 @@ var DisplacementFilter = function (_core$Filter) {
         _this.maskMatrix = maskMatrix;
 
         _this.uniforms.mapSampler = sprite.texture;
-        _this.uniforms.filterMatrix = maskMatrix.toArray(true);
+        _this.uniforms.filterMatrix = maskMatrix;
         _this.uniforms.scale = { x: 1, y: 1 };
 
         if (scale === null || scale === undefined) {
@@ -88,7 +88,6 @@ var DisplacementFilter = function (_core$Filter) {
      * The texture used for the displacement map. Must be power of 2 sized texture.
      *
      * @member {PIXI.Texture}
-     * @memberof PIXI.filters.DisplacementFilter#
      */
 
 
@@ -96,15 +95,9 @@ var DisplacementFilter = function (_core$Filter) {
         key: 'map',
         get: function get() {
             return this.uniforms.mapSampler;
-        }
-
-        /**
-         * Sets the texture to use for the displacement.
-         *
-         * @param {PIXI.Texture} value - The texture to set to.
-         */
-        ,
-        set: function set(value) {
+        },
+        set: function set(value) // eslint-disable-line require-jsdoc
+        {
             this.uniforms.mapSampler = value;
         }
     }]);

@@ -387,7 +387,8 @@ var Texture = function (_EventEmitter) {
      * The source can be - frame id, image url, video url, canvas element, video element, base texture
      *
      * @static
-     * @param {number|string|PIXI.BaseTexture|HTMLCanvasElement|HTMLVideoElement} source - Source to create texture from
+     * @param {number|string|HTMLImageElement|HTMLCanvasElement|HTMLVideoElement|PIXI.BaseTexture}
+     *        source - Source to create texture from
      * @return {PIXI.Texture} The newly created texture
      */
 
@@ -411,7 +412,7 @@ var Texture = function (_EventEmitter) {
 
             return texture;
         } else if (source instanceof HTMLImageElement) {
-            return new Texture(new _BaseTexture2.default(source));
+            return new Texture(_BaseTexture2.default.from(source));
         } else if (source instanceof HTMLCanvasElement) {
             return Texture.fromCanvas(source);
         } else if (source instanceof HTMLVideoElement) {
@@ -422,6 +423,42 @@ var Texture = function (_EventEmitter) {
 
         // lets assume its a texture!
         return source;
+    };
+
+    /**
+     * Create a texture from a source and add to the cache.
+     *
+     * @static
+     * @param {HTMLImageElement|HTMLCanvasElement} source - The input source.
+     * @param {String} imageUrl - File name of texture, for cache and resolving resolution.
+     * @param {String} [name] - Human readible name for the texture cache. If no name is
+     *        specified, only `imageUrl` will be used as the cache ID.
+     * @return {PIXI.Texture} Output texture
+     */
+
+
+    Texture.fromLoader = function fromLoader(source, imageUrl, name) {
+        var baseTexture = new _BaseTexture2.default(source, undefined, (0, _utils.getResolutionOfUrl)(imageUrl));
+        var texture = new Texture(baseTexture);
+
+        baseTexture.imageUrl = imageUrl;
+
+        // No name, use imageUrl instead
+        if (!name) {
+            name = imageUrl;
+        }
+
+        // lets also add the frame to pixi's global cache for fromFrame and fromImage fucntions
+        _utils.BaseTextureCache[name] = baseTexture;
+        _utils.TextureCache[name] = texture;
+
+        // also add references by url if they are different.
+        if (name !== imageUrl) {
+            _utils.BaseTextureCache[imageUrl] = baseTexture;
+            _utils.TextureCache[imageUrl] = texture;
+        }
+
+        return texture;
     };
 
     /**
@@ -459,7 +496,6 @@ var Texture = function (_EventEmitter) {
      * The frame specifies the region of the base texture that this texture uses.
      *
      * @member {PIXI.Rectangle}
-     * @memberof PIXI.Texture#
      */
 
 
@@ -467,21 +503,15 @@ var Texture = function (_EventEmitter) {
         key: 'frame',
         get: function get() {
             return this._frame;
-        }
-
-        /**
-         * Set the frame.
-         *
-         * @param {Rectangle} frame - The new frame to set.
-         */
-        ,
-        set: function set(frame) {
+        },
+        set: function set(frame) // eslint-disable-line require-jsdoc
+        {
             this._frame = frame;
 
             this.noFrame = false;
 
             if (frame.x + frame.width > this.baseTexture.width || frame.y + frame.height > this.baseTexture.height) {
-                throw new Error('Texture Error: frame does not fit inside the base Texture dimensions ' + this);
+                throw new Error('Texture Error: frame does not fit inside the base Texture dimensions: ' + ('X: ' + frame.x + ' + ' + frame.width + ' > ' + this.baseTexture.width + ' ') + ('Y: ' + frame.y + ' + ' + frame.height + ' > ' + this.baseTexture.height));
             }
 
             // this.valid = frame && frame.width && frame.height && this.baseTexture.source && this.baseTexture.hasLoaded;
@@ -510,15 +540,9 @@ var Texture = function (_EventEmitter) {
         key: 'rotate',
         get: function get() {
             return this._rotate;
-        }
-
-        /**
-         * Set the rotation
-         *
-         * @param {number} rotate - The new rotation to set.
-         */
-        ,
-        set: function set(rotate) {
+        },
+        set: function set(rotate) // eslint-disable-line require-jsdoc
+        {
             this._rotate = rotate;
             if (this.valid) {
                 this._updateUvs();
@@ -534,7 +558,7 @@ var Texture = function (_EventEmitter) {
     }, {
         key: 'width',
         get: function get() {
-            return this.orig ? this.orig.width : 0;
+            return this.orig.width;
         }
 
         /**
@@ -546,12 +570,36 @@ var Texture = function (_EventEmitter) {
     }, {
         key: 'height',
         get: function get() {
-            return this.orig ? this.orig.height : 0;
+            return this.orig.height;
         }
     }]);
 
     return Texture;
 }(_eventemitter2.default);
+
+exports.default = Texture;
+
+
+function createWhiteTexture() {
+    var canvas = document.createElement('canvas');
+
+    canvas.width = 10;
+    canvas.height = 10;
+
+    var context = canvas.getContext('2d');
+
+    context.fillStyle = 'white';
+    context.fillRect(0, 0, 10, 10);
+
+    return new Texture(new _BaseTexture2.default(canvas));
+}
+
+function removeAllHandlers(tex) {
+    tex.destroy = function _emptyDestroy() {/* empty */};
+    tex.on = function _emptyOn() {/* empty */};
+    tex.once = function _emptyOnce() {/* empty */};
+    tex.emit = function _emptyEmit() {/* empty */};
+}
 
 /**
  * An empty texture, used often to not have to create multiple empty textures.
@@ -560,12 +608,16 @@ var Texture = function (_EventEmitter) {
  * @static
  * @constant
  */
-
-
-exports.default = Texture;
 Texture.EMPTY = new Texture(new _BaseTexture2.default());
-Texture.EMPTY.destroy = function _emptyDestroy() {/* empty */};
-Texture.EMPTY.on = function _emptyOn() {/* empty */};
-Texture.EMPTY.once = function _emptyOnce() {/* empty */};
-Texture.EMPTY.emit = function _emptyEmit() {/* empty */};
+removeAllHandlers(Texture.EMPTY);
+
+/**
+ * A white texture of 10x10 size, used for graphics and other things
+ * Can not be destroyed.
+ *
+ * @static
+ * @constant
+ */
+Texture.WHITE = createWhiteTexture();
+removeAllHandlers(Texture.WHITE);
 //# sourceMappingURL=Texture.js.map

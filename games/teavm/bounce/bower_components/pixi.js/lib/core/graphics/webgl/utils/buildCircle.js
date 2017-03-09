@@ -40,6 +40,10 @@ function buildCircle(graphicsData, webGLData) {
         height = circleData.height;
     }
 
+    if (width === 0 || height === 0) {
+        return;
+    }
+
     var totalSegs = Math.floor(30 * Math.sqrt(circleData.radius)) || Math.floor(15 * Math.sqrt(circleData.width + circleData.height));
 
     var seg = Math.PI * 2 / totalSegs;

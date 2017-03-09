@@ -4,6 +4,8 @@ import * as particles from './particles';
 import * as extras from './extras';
 import * as filters from './filters';
 import * as prepare from './prepare';
+import * as loaders from './loaders';
+import * as interaction from './interaction';
 
 // provide method to give a stack track for warnings
 // useful for tracking-down where deprecated methods/properties/classes
@@ -533,7 +535,7 @@ const defaults = [
     { parent: 'GC_MODES', target: 'GC_MODE' },
     { parent: 'WRAP_MODES', target: 'WRAP_MODE' },
     { parent: 'SCALE_MODES', target: 'SCALE_MODE' },
-    { parent: 'PRECISION', target: 'PRECISION' },
+    { parent: 'PRECISION', target: 'PRECISION_FRAGMENT' },
 ];
 
 for (let i = 0; i < defaults.length; i++)
@@ -556,6 +558,32 @@ for (let i = 0; i < defaults.length; i++)
         },
     });
 }
+
+Object.defineProperties(core.settings, {
+
+    /**
+     * @static
+     * @name PRECISION
+     * @memberof PIXI.settings
+     * @see PIXI.PRECISION
+     * @deprecated since version 4.4.0
+     */
+    PRECISION: {
+        enumerable: true,
+        get()
+        {
+            warn('PIXI.settings.PRECISION has been deprecated, please use PIXI.settings.PRECISION_FRAGMENT');
+
+            return core.settings.PRECISION_FRAGMENT;
+        },
+        set(value)
+        {
+            warn('PIXI.settings.PRECISION has been deprecated, please use PIXI.settings.PRECISION_FRAGMENT');
+
+            core.settings.PRECISION_FRAGMENT = value;
+        },
+    },
+});
 
 Object.defineProperties(extras, {
 
@@ -693,7 +721,7 @@ core.Text.prototype.determineFontProperties = function determineFontProperties(f
     warn('determineFontProperties is now deprecated, please use the static calculateFontProperties method, '
         + 'e.g : Text.calculateFontProperties(fontStyle);');
 
-    return Text.calculateFontProperties(fontStyle);
+    return core.Text.calculateFontProperties(fontStyle);
 };
 
 Object.defineProperties(core.TextStyle.prototype, {
@@ -938,5 +966,133 @@ Object.defineProperty(prepare.webgl, 'UPLOADS_PER_FRAME', {
             + 'renderer.plugins.prepare.limiter');
 
         return NaN;
+    },
+});
+
+Object.defineProperties(loaders.Resource.prototype, {
+    isJson: {
+        get()
+        {
+            warn('The isJson property is deprecated, please use `resource.type === Resource.TYPE.JSON`.');
+
+            return this.type === loaders.Loader.Resource.TYPE.JSON;
+        },
+    },
+    isXml: {
+        get()
+        {
+            warn('The isXml property is deprecated, please use `resource.type === Resource.TYPE.XML`.');
+
+            return this.type === loaders.Loader.Resource.TYPE.XML;
+        },
+    },
+    isImage: {
+        get()
+        {
+            warn('The isImage property is deprecated, please use `resource.type === Resource.TYPE.IMAGE`.');
+
+            return this.type === loaders.Loader.Resource.TYPE.IMAGE;
+        },
+    },
+    isAudio: {
+        get()
+        {
+            warn('The isAudio property is deprecated, please use `resource.type === Resource.TYPE.AUDIO`.');
+
+            return this.type === loaders.Loader.Resource.TYPE.AUDIO;
+        },
+    },
+    isVideo: {
+        get()
+        {
+            warn('The isVideo property is deprecated, please use `resource.type === Resource.TYPE.VIDEO`.');
+
+            return this.type === loaders.Loader.Resource.TYPE.VIDEO;
+        },
+    },
+});
+
+Object.defineProperties(loaders.Loader.prototype, {
+    before: {
+        get()
+        {
+            warn('The before() method is deprecated, please use pre().');
+
+            return this.pre;
+        },
+    },
+    after: {
+        get()
+        {
+            warn('The after() method is deprecated, please use use().');
+
+            return this.use;
+        },
+    },
+});
+
+/**
+ * @name PIXI.interaction.interactiveTarget#defaultCursor
+ * @static
+ * @type {number}
+ * @see PIXI.interaction.interactiveTarget#cursor
+ * @deprecated since 4.3.0
+ */
+Object.defineProperty(interaction.interactiveTarget, 'defaultCursor', {
+    set(value)
+    {
+        warn('Property defaultCursor has been replaced with \'cursor\'. ');
+        this.cursor = value;
+    },
+    get()
+    {
+        warn('Property defaultCursor has been replaced with \'cursor\'. ');
+
+        return this.cursor;
+    },
+    enumerable: true,
+});
+
+/**
+ * @name PIXI.interaction.InteractionManager#defaultCursorStyle
+ * @static
+ * @type {string}
+ * @see PIXI.interaction.InteractionManager#cursorStyles
+ * @deprecated since 4.3.0
+ */
+Object.defineProperty(interaction.InteractionManager, 'defaultCursorStyle', {
+    set(value)
+    {
+        warn('Property defaultCursorStyle has been replaced with \'cursorStyles.default\'. ');
+        this.cursorStyles.default = value;
+    },
+    get()
+    {
+        warn('Property defaultCursorStyle has been replaced with \'cursorStyles.default\'. ');
+
+        return this.cursorStyles.default;
+    },
+});
+
+/**
+ * @name PIXI.interaction.InteractionManager#currentCursorStyle
+ * @static
+ * @type {string}
+ * @see PIXI.interaction.InteractionManager#cursorStyles
+ * @deprecated since 4.3.0
+ */
+Object.defineProperty(interaction.InteractionManager, 'currentCursorStyle', {
+    set(value)
+    {
+        warn('Property currentCursorStyle has been removed.'
+        + 'See the currentCursorMode property, which works differently.');
+        this.currentCursorMode = value;
+    },
+    get()
+    {
+        warn('Property currentCursorStyle has been removed.'
+        + 'See the currentCursorMode property, which works differently.');
+
+        return this.currentCursorMode;
     },
 });

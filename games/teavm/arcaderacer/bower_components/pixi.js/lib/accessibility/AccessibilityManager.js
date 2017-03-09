@@ -21,7 +21,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 // add some extra variables to the container..
-Object.assign(core.DisplayObject.prototype, _accessibleTarget2.default);
+core.utils.mixins.delayMixin(core.DisplayObject.prototype, _accessibleTarget2.default);
 
 var KEY_CODE_TAB = 9;
 
@@ -43,8 +43,10 @@ var DIV_HOOK_ZINDEX = 2;
  * Much like interaction any DisplayObject can be made accessible. This manager will map the
  * events as if the mouse was being used, minimizing the efferot required to implement.
  *
+ * An instance of this class is automatically created by default, and can be found at renderer.plugins.accessibility
+ *
  * @class
- * @memberof PIXI
+ * @memberof PIXI.accessibility
  */
 
 var AccessibilityManager = function () {

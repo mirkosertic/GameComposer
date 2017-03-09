@@ -12,6 +12,10 @@ var _utils = require('../../../utils');
 
 var _const = require('../../../const');
 
+var _settings = require('../../../settings');
+
+var _settings2 = _interopRequireDefault(_settings);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -50,8 +54,6 @@ var Filter = function () {
 
     this.blendMode = _const.BLEND_MODES.NORMAL;
 
-    // pull out the vertex and shader uniforms if they are not specified..
-    // currently this does not extract structs only default types
     this.uniformData = uniforms || (0, _extractUniformsFromSrc2.default)(this.vertexSrc, this.fragmentSrc, 'projectionMatrix|uSampler');
 
     /**
@@ -93,7 +95,7 @@ var Filter = function () {
      *
      * @member {number}
      */
-    this.resolution = 1;
+    this.resolution = _settings2.default.RESOLUTION;
 
     /**
      * If enabled is true the filter is applied, if false it will not.
@@ -110,10 +112,14 @@ var Filter = function () {
    * @param {PIXI.RenderTarget} input - The input render target.
    * @param {PIXI.RenderTarget} output - The target to output to.
    * @param {boolean} clear - Should the output be cleared before rendering to it
+   * @param {object} [currentState] - It's current state of filter.
+   *        There are some useful properties in the currentState :
+   *        target, filters, sourceFrame, destinationFrame, renderTarget, resolution
    */
 
 
-  Filter.prototype.apply = function apply(filterManager, input, output, clear) {
+  Filter.prototype.apply = function apply(filterManager, input, output, clear, currentState) // eslint-disable-line no-unused-vars
+  {
     // --- //
     //  this.uniforms.filterMatrix = filterManager.calculateSpriteMatrix(tempMatrix, window.panda );
 

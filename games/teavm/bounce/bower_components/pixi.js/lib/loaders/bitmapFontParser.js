@@ -6,7 +6,7 @@ exports.parse = parse;
 exports.default = function () {
     return function bitmapFontParser(resource, next) {
         // skip if no data or not xml data
-        if (!resource.data || !resource.isXml) {
+        if (!resource.data || resource.type !== _resourceLoader.Resource.TYPE.XML) {
             next();
 
             return;
@@ -52,7 +52,8 @@ exports.default = function () {
             var loadOptions = {
                 crossOrigin: resource.crossOrigin,
                 loadType: _resourceLoader.Resource.LOAD_TYPE.IMAGE,
-                metadata: resource.metadata.imageMetadata
+                metadata: resource.metadata.imageMetadata,
+                parentResource: resource
             };
 
             // load the texture for the font
@@ -76,51 +77,15 @@ var _extras = require('../extras');
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
+/**
+ * Register a BitmapText font from loader resource.
+ *
+ * @function parseBitmapFontData
+ * @memberof PIXI.loaders
+ * @param {PIXI.loaders.Resource} resource - Loader resource.
+ * @param {PIXI.Texture} texture - Reference to texture.
+ */
 function parse(resource, texture) {
-    var data = {};
-    var info = resource.data.getElementsByTagName('info')[0];
-    var common = resource.data.getElementsByTagName('common')[0];
-
-    data.font = info.getAttribute('face');
-    data.size = parseInt(info.getAttribute('size'), 10);
-    data.lineHeight = parseInt(common.getAttribute('lineHeight'), 10);
-    data.chars = {};
-
-    // parse letters
-    var letters = resource.data.getElementsByTagName('char');
-
-    for (var i = 0; i < letters.length; i++) {
-        var charCode = parseInt(letters[i].getAttribute('id'), 10);
-
-        var textureRect = new _core.Rectangle(parseInt(letters[i].getAttribute('x'), 10) + texture.frame.x, parseInt(letters[i].getAttribute('y'), 10) + texture.frame.y, parseInt(letters[i].getAttribute('width'), 10), parseInt(letters[i].getAttribute('height'), 10));
-
-        data.chars[charCode] = {
-            xOffset: parseInt(letters[i].getAttribute('xoffset'), 10),
-            yOffset: parseInt(letters[i].getAttribute('yoffset'), 10),
-            xAdvance: parseInt(letters[i].getAttribute('xadvance'), 10),
-            kerning: {},
-            texture: new _core.Texture(texture.baseTexture, textureRect)
-
-        };
-    }
-
-    // parse kernings
-    var kernings = resource.data.getElementsByTagName('kerning');
-
-    for (var _i = 0; _i < kernings.length; _i++) {
-        var first = parseInt(kernings[_i].getAttribute('first'), 10);
-        var second = parseInt(kernings[_i].getAttribute('second'), 10);
-        var amount = parseInt(kernings[_i].getAttribute('amount'), 10);
-
-        if (data.chars[second]) {
-            data.chars[second].kerning[first] = amount;
-        }
-    }
-
-    resource.bitmapFont = data;
-
-    // I'm leaving this as a temporary fix so we can test the bitmap fonts in v3
-    // but it's very likely to change
-    _extras.BitmapText.fonts[data.font] = data;
+    resource.bitmapFont = _extras.BitmapText.registerFont(resource.data, texture);
 }
 //# sourceMappingURL=bitmapFontParser.js.map

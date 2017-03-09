@@ -26,6 +26,10 @@ var _TextStyle = require('./TextStyle');
 
 var _TextStyle2 = _interopRequireDefault(_TextStyle);
 
+var _trimCanvas = require('../utils/trimCanvas');
+
+var _trimCanvas2 = _interopRequireDefault(_trimCanvas);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -62,11 +66,12 @@ var Text = function (_Sprite) {
     /**
      * @param {string} text - The string that you would like the text to display
      * @param {object|PIXI.TextStyle} [style] - The style parameters
+     * @param {HTMLCanvasElement} [canvas] - The canvas element for drawing text
      */
-    function Text(text, style) {
+    function Text(text, style, canvas) {
         _classCallCheck(this, Text);
 
-        var canvas = document.createElement('canvas');
+        canvas = canvas || document.createElement('canvas');
 
         canvas.width = 3;
         canvas.height = 3;
@@ -87,7 +92,7 @@ var Text = function (_Sprite) {
 
         /**
          * The canvas 2d context that everything is drawn with
-         * @member {HTMLCanvasElement}
+         * @member {CanvasRenderingContext2D}
          */
         _this.context = _this.canvas.getContext('2d');
 
@@ -186,12 +191,10 @@ var Text = function (_Sprite) {
             width += style.dropShadowDistance;
         }
 
-        width += style.padding * 2;
-
-        this.canvas.width = Math.ceil((width + this.context.lineWidth) * this.resolution);
+        this.canvas.width = Math.ceil((width + style.padding * 2) * this.resolution);
 
         // calculate text height
-        var lineHeight = this.style.lineHeight || fontProperties.fontSize + style.strokeThickness;
+        var lineHeight = style.lineHeight || fontProperties.fontSize + style.strokeThickness;
 
         var height = Math.max(lineHeight, fontProperties.fontSize + style.strokeThickness) + (lines.length - 1) * lineHeight;
 
@@ -199,7 +202,7 @@ var Text = function (_Sprite) {
             height += style.dropShadowDistance;
         }
 
-        this.canvas.height = Math.ceil((height + this._style.padding * 2) * this.resolution);
+        this.canvas.height = Math.ceil((height + style.padding * 2) * this.resolution);
 
         this.context.scale(this.resolution, this.resolution);
 
@@ -216,9 +219,11 @@ var Text = function (_Sprite) {
         var linePositionY = void 0;
 
         if (style.dropShadow) {
+            this.context.shadowBlur = style.dropShadowBlur;
+            this.context.globalAlpha = style.dropShadowAlpha;
+
             if (style.dropShadowBlur > 0) {
                 this.context.shadowColor = style.dropShadowColor;
-                this.context.shadowBlur = style.dropShadowBlur;
             } else {
                 this.context.fillStyle = style.dropShadowColor;
             }
@@ -247,6 +252,10 @@ var Text = function (_Sprite) {
                 }
             }
         }
+
+        // reset the shadow blur and alpha that was set by the drop shadow, for the regular text
+        this.context.shadowBlur = 0;
+        this.context.globalAlpha = 1;
 
         // set canvas text styles
         this.context.fillStyle = this._generateFillStyle(style, lines);
@@ -327,6 +336,14 @@ var Text = function (_Sprite) {
 
 
     Text.prototype.updateTexture = function updateTexture() {
+        if (this._style.trim) {
+            var trimmed = (0, _trimCanvas2.default)(this.canvas);
+
+            this.canvas.width = trimmed.width;
+            this.canvas.height = trimmed.height;
+            this.context.putImageData(trimmed.data, 0, 0);
+        }
+
         var texture = this._texture;
         var style = this._style;
 
@@ -405,8 +422,9 @@ var Text = function (_Sprite) {
         // Greedy wrapping algorithm that will wrap words as the line grows longer
         // than its horizontal bounds.
         var result = '';
+        var style = this._style;
         var lines = text.split('\n');
-        var wordWrapWidth = this._style.wordWrapWidth;
+        var wordWrapWidth = style.wordWrapWidth;
 
         for (var i = 0; i < lines.length; i++) {
             var spaceLeft = wordWrapWidth;
@@ -415,7 +433,7 @@ var Text = function (_Sprite) {
             for (var j = 0; j < words.length; j++) {
                 var wordWidth = this.context.measureText(words[j]).width;
 
-                if (this._style.breakWords && wordWidth > wordWrapWidth) {
+                if (style.breakWords && wordWidth > wordWrapWidth) {
                     // Word should be split in the middle
                     var characters = words[j].split('');
 
@@ -458,6 +476,20 @@ var Text = function (_Sprite) {
         }
 
         return result;
+    };
+
+    /**
+     * Gets the local bounds of the text object.
+     *
+     * @param {Rectangle} rect - The output rectangle.
+     * @return {Rectangle} The bounds.
+     */
+
+
+    Text.prototype.getLocalBounds = function getLocalBounds(rect) {
+        this.updateText(true);
+
+        return _Sprite.prototype.getLocalBounds.call(this, rect);
     };
 
     /**
@@ -512,19 +544,44 @@ var Text = function (_Sprite) {
         var width = this.canvas.width / this.resolution;
         var height = this.canvas.height / this.resolution;
 
+        // make a copy of the style settings, so we can manipulate them later
+        var fill = style.fill.slice();
+        var fillGradientStops = style.fillGradientStops.slice();
+
+        // wanting to evenly distribute the fills. So an array of 4 colours should give fills of 0.25, 0.5 and 0.75
+        if (!fillGradientStops.length) {
+            var lengthPlus1 = fill.length + 1;
+
+            for (var i = 1; i < lengthPlus1; ++i) {
+                fillGradientStops.push(i / lengthPlus1);
+            }
+        }
+
+        // stop the bleeding of the last gradient on the line above to the top gradient of the this line
+        // by hard defining the first gradient colour at point 0, and last gradient colour at point 1
+        fill.unshift(style.fill[0]);
+        fillGradientStops.unshift(0);
+
+        fill.push(style.fill[style.fill.length - 1]);
+        fillGradientStops.push(1);
+
         if (style.fillGradientType === _const.TEXT_GRADIENT.LINEAR_VERTICAL) {
             // start the gradient at the top center of the canvas, and end at the bottom middle of the canvas
             gradient = this.context.createLinearGradient(width / 2, 0, width / 2, height);
 
             // we need to repeat the gradient so that each individual line of text has the same vertical gradient effect
             // ['#FF0000', '#00FF00', '#0000FF'] over 2 lines would create stops at 0.125, 0.25, 0.375, 0.625, 0.75, 0.875
-            totalIterations = (style.fill.length + 1) * lines.length;
+            totalIterations = (fill.length + 1) * lines.length;
             currentIteration = 0;
-            for (var i = 0; i < lines.length; i++) {
+            for (var _i3 = 0; _i3 < lines.length; _i3++) {
                 currentIteration += 1;
-                for (var j = 0; j < style.fill.length; j++) {
-                    stop = currentIteration / totalIterations;
-                    gradient.addColorStop(stop, style.fill[j]);
+                for (var j = 0; j < fill.length; j++) {
+                    if (fillGradientStops[j]) {
+                        stop = fillGradientStops[j] / lines.length + _i3 / lines.length;
+                    } else {
+                        stop = currentIteration / totalIterations;
+                    }
+                    gradient.addColorStop(stop, fill[j]);
                     currentIteration++;
                 }
             }
@@ -534,12 +591,16 @@ var Text = function (_Sprite) {
 
             // can just evenly space out the gradients in this case, as multiple lines makes no difference
             // to an even left to right gradient
-            totalIterations = style.fill.length + 1;
+            totalIterations = fill.length + 1;
             currentIteration = 1;
 
-            for (var _i3 = 0; _i3 < style.fill.length; _i3++) {
-                stop = currentIteration / totalIterations;
-                gradient.addColorStop(stop, style.fill[_i3]);
+            for (var _i4 = 0; _i4 < fill.length; _i4++) {
+                if (fillGradientStops[_i4]) {
+                    stop = fillGradientStops[_i4];
+                } else {
+                    stop = currentIteration / totalIterations;
+                }
+                gradient.addColorStop(stop, fill[_i4]);
                 currentIteration++;
             }
         }
@@ -550,7 +611,7 @@ var Text = function (_Sprite) {
     /**
      * Destroys this text object.
      * Note* Unlike a Sprite, a Text object will automatically destroy its baseTexture and texture as
-     * the majorety of the time the texture will not be shared with any other Sprites.
+     * the majority of the time the texture will not be shared with any other Sprites.
      *
      * @param {object|boolean} [options] - Options parameter. A boolean will act as if all options
      *  have been set to that value
@@ -581,7 +642,6 @@ var Text = function (_Sprite) {
      * The width of the Text, setting this will actually modify the scale to achieve the value set
      *
      * @member {number}
-     * @memberof PIXI.Text#
      */
 
 
@@ -603,7 +663,26 @@ var Text = function (_Sprite) {
         // build canvas api font setting from individual components. Convert a numeric style.fontSize to px
         var fontSizeString = typeof style.fontSize === 'number' ? style.fontSize + 'px' : style.fontSize;
 
-        return style.fontStyle + ' ' + style.fontVariant + ' ' + style.fontWeight + ' ' + fontSizeString + ' "' + style.fontFamily + '"';
+        // Clean-up fontFamily property by quoting each font name
+        // this will support font names with spaces
+        var fontFamilies = style.fontFamily;
+
+        if (!Array.isArray(style.fontFamily)) {
+            fontFamilies = style.fontFamily.split(',');
+        }
+
+        for (var i = fontFamilies.length - 1; i >= 0; i--) {
+            // Trim any extra white-space
+            var fontFamily = fontFamilies[i].trim();
+
+            // Check if font already contains strings
+            if (!/([\"\'])[^\'\"]+\1/.test(fontFamily)) {
+                fontFamily = '"' + fontFamily + '"';
+            }
+            fontFamilies[i] = fontFamily;
+        }
+
+        return style.fontStyle + ' ' + style.fontVariant + ' ' + style.fontWeight + ' ' + fontSizeString + ' ' + fontFamilies.join(',');
     };
 
     /**
@@ -703,21 +782,15 @@ var Text = function (_Sprite) {
         get: function get() {
             this.updateText(true);
 
-            return Math.abs(this.scale.x) * this.texture.orig.width;
-        }
-
-        /**
-         * Sets the width of the text.
-         *
-         * @param {number} value - The value to set to.
-         */
-        ,
-        set: function set(value) {
+            return Math.abs(this.scale.x) * this._texture.orig.width;
+        },
+        set: function set(value) // eslint-disable-line require-jsdoc
+        {
             this.updateText(true);
 
             var s = (0, _utils.sign)(this.scale.x) || 1;
 
-            this.scale.x = s * value / this.texture.orig.width;
+            this.scale.x = s * value / this._texture.orig.width;
             this._width = value;
         }
 
@@ -725,7 +798,6 @@ var Text = function (_Sprite) {
          * The height of the Text, setting this will actually modify the scale to achieve the value set
          *
          * @member {number}
-         * @memberof PIXI.Text#
          */
 
     }, {
@@ -734,20 +806,14 @@ var Text = function (_Sprite) {
             this.updateText(true);
 
             return Math.abs(this.scale.y) * this._texture.orig.height;
-        }
-
-        /**
-         * Sets the height of the text.
-         *
-         * @param {number} value - The value to set to.
-         */
-        ,
-        set: function set(value) {
+        },
+        set: function set(value) // eslint-disable-line require-jsdoc
+        {
             this.updateText(true);
 
             var s = (0, _utils.sign)(this.scale.y) || 1;
 
-            this.scale.y = s * value / this.texture.orig.height;
+            this.scale.y = s * value / this._texture.orig.height;
             this._height = value;
         }
 
@@ -756,22 +822,15 @@ var Text = function (_Sprite) {
          * object and mark the text as dirty.
          *
          * @member {object|PIXI.TextStyle}
-         * @memberof PIXI.Text#
          */
 
     }, {
         key: 'style',
         get: function get() {
             return this._style;
-        }
-
-        /**
-         * Sets the style of the text.
-         *
-         * @param {object} style - The value to set to.
-         */
-        ,
-        set: function set(style) {
+        },
+        set: function set(style) // eslint-disable-line require-jsdoc
+        {
             style = style || {};
 
             if (style instanceof _TextStyle2.default) {
@@ -788,24 +847,16 @@ var Text = function (_Sprite) {
          * Set the copy for the text object. To split a line you can use '\n'.
          *
          * @member {string}
-         * @memberof PIXI.Text#
          */
 
     }, {
         key: 'text',
         get: function get() {
             return this._text;
-        }
-
-        /**
-         * Sets the text.
-         *
-         * @param {string} text - The value to set to.
-         */
-        ,
-        set: function set(text) {
-            text = text || ' ';
-            text = text.toString();
+        },
+        set: function set(text) // eslint-disable-line require-jsdoc
+        {
+            text = String(text === '' || text === null || text === undefined ? ' ' : text);
 
             if (this._text === text) {
                 return;

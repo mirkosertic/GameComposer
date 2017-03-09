@@ -141,7 +141,12 @@ var GraphicsRenderer = function (_ObjectRenderer) {
             shaderTemp.uniforms.alpha = graphics.worldAlpha;
 
             renderer.bindVao(webGLData.vao);
-            webGLData.vao.draw(gl.TRIANGLE_STRIP, webGLData.indices.length);
+
+            if (graphics.nativeLines) {
+                gl.drawArrays(gl.LINES, 0, webGLData.points.length / 6);
+            } else {
+                webGLData.vao.draw(gl.TRIANGLE_STRIP, webGLData.indices.length);
+            }
         }
     };
 

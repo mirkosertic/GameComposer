@@ -13,7 +13,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /**
  * Utility methods for Sprite/Texture tinting.
  *
- * @namespace PIXI.CanvasTinter
+ * @class
+ * @memberof PIXI
  */
 var CanvasTinter = {
     /**
@@ -77,8 +78,8 @@ var CanvasTinter = {
         crop.width *= resolution;
         crop.height *= resolution;
 
-        canvas.width = crop.width;
-        canvas.height = crop.height;
+        canvas.width = Math.ceil(crop.width);
+        canvas.height = Math.ceil(crop.height);
 
         context.fillStyle = '#' + ('00000' + (color | 0).toString(16)).substr(-6);
 
@@ -111,8 +112,8 @@ var CanvasTinter = {
         crop.width *= resolution;
         crop.height *= resolution;
 
-        canvas.width = crop.width;
-        canvas.height = crop.height;
+        canvas.width = Math.ceil(crop.width);
+        canvas.height = Math.ceil(crop.height);
 
         context.globalCompositeOperation = 'copy';
         context.fillStyle = '#' + ('00000' + (color | 0).toString(16)).substr(-6);
@@ -143,8 +144,8 @@ var CanvasTinter = {
         crop.width *= resolution;
         crop.height *= resolution;
 
-        canvas.width = crop.width;
-        canvas.height = crop.height;
+        canvas.width = Math.ceil(crop.width);
+        canvas.height = Math.ceil(crop.height);
 
         context.globalCompositeOperation = 'copy';
         context.drawImage(texture.baseTexture.source, crop.x, crop.y, crop.width, crop.height, 0, 0, crop.width, crop.height);

@@ -76,7 +76,7 @@ var TextureManager = function () {
      * Updates and/or Creates a WebGL texture for the renderer's context.
      *
      * @param {PIXI.BaseTexture|PIXI.Texture} texture - the texture to update
-     * @param {Number} location - the location the texture will be bound to.
+     * @param {number} location - the location the texture will be bound to.
      * @return {GLTexture} The gl texture.
      */
     ;
@@ -84,7 +84,6 @@ var TextureManager = function () {
     TextureManager.prototype.updateTexture = function updateTexture(texture, location) {
         // assume it good!
         // texture = texture.baseTexture || texture;
-        location = location || 0;
 
         var gl = this.gl;
 
@@ -93,6 +92,26 @@ var TextureManager = function () {
         if (!texture.hasLoaded) {
             return null;
         }
+
+        var boundTextures = this.renderer.boundTextures;
+
+        // if the location is undefined then this may have been called by n event.
+        // this being the case the texture may already be bound to a slot. As a texture can only be bound once
+        // we need to find its current location if it exists.
+        if (location === undefined) {
+            location = 0;
+
+            // TODO maybe we can use texture bound ids later on...
+            // check if texture is already bound..
+            for (var i = 0; i < boundTextures.length; ++i) {
+                if (boundTextures[i] === texture) {
+                    location = i;
+                    break;
+                }
+            }
+        }
+
+        boundTextures[location] = texture;
 
         gl.activeTexture(gl.TEXTURE0 + location);
 
@@ -147,8 +166,6 @@ var TextureManager = function () {
             } else {
                 glTexture.upload(texture.source);
             }
-
-        this.renderer.boundTextures[location] = texture;
 
         return glTexture;
     };

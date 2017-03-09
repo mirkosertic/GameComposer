@@ -6,6 +6,12 @@ var _resourceLoader = require('resource-loader');
 
 var _resourceLoader2 = _interopRequireDefault(_resourceLoader);
 
+var _blob = require('resource-loader/lib/middlewares/parsing/blob');
+
+var _eventemitter = require('eventemitter3');
+
+var _eventemitter2 = _interopRequireDefault(_eventemitter);
+
 var _textureParser = require('./textureParser');
 
 var _textureParser2 = _interopRequireDefault(_textureParser);
@@ -28,20 +34,47 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 /**
  *
- * The new loader, extends Resource Loader by Chad Engler : https://github.com/englercj/resource-loader
+ * The new loader, extends Resource Loader by Chad Engler: https://github.com/englercj/resource-loader
  *
  * ```js
- * let loader = PIXI.loader; // pixi exposes a premade instance for you to use.
+ * const loader = PIXI.loader; // pixi exposes a premade instance for you to use.
  * //or
- * let loader = new PIXI.loaders.Loader(); // you can also create your own if you want
+ * const loader = new PIXI.loaders.Loader(); // you can also create your own if you want
  *
- * loader.add('bunny', 'data/bunny.png');
- * loader.add('spaceship', 'assets/spritesheet.json');
+ * const sprites = {};
+ *
+ * // Chainable `add` to enqueue a resource
+ * loader.add('bunny', 'data/bunny.png')
+ *       .add('spaceship', 'assets/spritesheet.json');
  * loader.add('scoreFont', 'assets/score.fnt');
  *
- * loader.once('complete',onAssetsLoaded);
+ * // Chainable `pre` to add a middleware that runs for each resource, *before* loading that resource.
+ * // This is useful to implement custom caching modules (using filesystem, indexeddb, memory, etc).
+ * loader.pre(cachingMiddleware);
  *
- * loader.load();
+ * // Chainable `use` to add a middleware that runs for each resource, *after* loading that resource.
+ * // This is useful to implement custom parsing modules (like spritesheet parsers, spine parser, etc).
+ * loader.use(parsingMiddleware);
+ *
+ * // The `load` method loads the queue of resources, and calls the passed in callback called once all
+ * // resources have loaded.
+ * loader.load((loader, resources) => {
+ *     // resources is an object where the key is the name of the resource loaded and the value is the resource object.
+ *     // They have a couple default properties:
+ *     // - `url`: The URL that the resource was loaded from
+ *     // - `error`: The error that happened when trying to load (if any)
+ *     // - `data`: The raw data that was loaded
+ *     // also may contain other properties based on the middleware that runs.
+ *     sprites.bunny = new PIXI.TilingSprite(resources.bunny.texture);
+ *     sprites.spaceship = new PIXI.TilingSprite(resources.spaceship.texture);
+ *     sprites.scoreFont = new PIXI.TilingSprite(resources.scoreFont.texture);
+ * });
+ *
+ * // throughout the process multiple signals can be dispatched.
+ * loader.onProgress.add(() => {}); // called once per loaded/errored file
+ * loader.onError.add(() => {}); // called once per errored file
+ * loader.onLoad.add(() => {}); // called once per loaded file
+ * loader.onComplete.add(() => {}); // called once when the queued resources all load.
  * ```
  *
  * @see https://github.com/englercj/resource-loader
@@ -62,9 +95,28 @@ var Loader = function (_ResourceLoader) {
 
         var _this = _possibleConstructorReturn(this, _ResourceLoader.call(this, baseUrl, concurrency));
 
+        _eventemitter2.default.call(_this);
+
         for (var i = 0; i < Loader._pixiMiddleware.length; ++i) {
             _this.use(Loader._pixiMiddleware[i]());
         }
+
+        // Compat layer, translate the new v2 signals into old v1 events.
+        _this.onStart.add(function (l) {
+            return _this.emit('start', l);
+        });
+        _this.onProgress.add(function (l, r) {
+            return _this.emit('progress', l, r);
+        });
+        _this.onError.add(function (e, l, r) {
+            return _this.emit('error', e, l, r);
+        });
+        _this.onLoad.add(function (l, r) {
+            return _this.emit('load', l, r);
+        });
+        _this.onComplete.add(function (l, r) {
+            return _this.emit('complete', l, r);
+        });
         return _this;
     }
 
@@ -83,12 +135,17 @@ var Loader = function (_ResourceLoader) {
     return Loader;
 }(_resourceLoader2.default);
 
-exports.default = Loader;
+// Copy EE3 prototype (mixin)
 
+
+exports.default = Loader;
+for (var k in _eventemitter2.default.prototype) {
+    Loader.prototype[k] = _eventemitter2.default.prototype[k];
+}
 
 Loader._pixiMiddleware = [
 // parse any blob into more usable objects (e.g. Image)
-_resourceLoader2.default.middleware.parsing.blob,
+_blob.blobMiddlewareFactory,
 // parse any Image objects into textures
 _textureParser2.default,
 // parse any spritesheet data into multiple textures

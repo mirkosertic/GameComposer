@@ -60,24 +60,22 @@ var BitmapText = function (_core$Container) {
         _classCallCheck(this, BitmapText);
 
         /**
-         * The width of the overall text, different from fontSize,
-         * which is defined in the style object
+         * Private tracker for the width of the overall text
          *
          * @member {number}
-         * @readonly
+         * @private
          */
         var _this = _possibleConstructorReturn(this, _core$Container.call(this));
 
-        _this.textWidth = 0;
+        _this._textWidth = 0;
 
         /**
-         * The height of the overall text, different from fontSize,
-         * which is defined in the style object
+         * Private tracker for the height of the overall text
          *
          * @member {number}
-         * @readonly
+         * @private
          */
-        _this.textHeight = 0;
+        _this._textHeight = 0;
 
         /**
          * Private tracker for the letter sprite pool.
@@ -277,14 +275,14 @@ var BitmapText = function (_core$Container) {
             this.removeChild(this._glyphs[_i3]);
         }
 
-        this.textWidth = maxLineWidth * scale;
-        this.textHeight = (pos.y + data.lineHeight) * scale;
+        this._textWidth = maxLineWidth * scale;
+        this._textHeight = (pos.y + data.lineHeight) * scale;
 
         // apply anchor
         if (this.anchor.x !== 0 || this.anchor.y !== 0) {
             for (var _i4 = 0; _i4 < lenChars; _i4++) {
-                this._glyphs[_i4].x -= this.textWidth * this.anchor.x;
-                this._glyphs[_i4].y -= this.textHeight * this.anchor.y;
+                this._glyphs[_i4].x -= this._textWidth * this.anchor.x;
+                this._glyphs[_i4].y -= this._textHeight * this.anchor.y;
             }
         }
         this.maxLineHeight = maxLineHeight * scale;
@@ -333,23 +331,74 @@ var BitmapText = function (_core$Container) {
      * The tint of the BitmapText object
      *
      * @member {number}
-     * @memberof PIXI.extras.BitmapText#
      */
 
+
+    /**
+     * Register a bitmap font with data and a texture.
+     *
+     * @static
+     * @param {XMLDocument} xml - The XML document data.
+     * @param {PIXI.Texture} texture - Texture with all symbols.
+     * @return {Object} Result font object with font, size, lineHeight and char fields.
+     */
+    BitmapText.registerFont = function registerFont(xml, texture) {
+        var data = {};
+        var info = xml.getElementsByTagName('info')[0];
+        var common = xml.getElementsByTagName('common')[0];
+
+        data.font = info.getAttribute('face');
+        data.size = parseInt(info.getAttribute('size'), 10);
+        data.lineHeight = parseInt(common.getAttribute('lineHeight'), 10);
+        data.chars = {};
+
+        // parse letters
+        var letters = xml.getElementsByTagName('char');
+
+        for (var i = 0; i < letters.length; i++) {
+            var letter = letters[i];
+            var charCode = parseInt(letter.getAttribute('id'), 10);
+
+            var textureRect = new core.Rectangle(parseInt(letter.getAttribute('x'), 10) + texture.frame.x, parseInt(letter.getAttribute('y'), 10) + texture.frame.y, parseInt(letter.getAttribute('width'), 10), parseInt(letter.getAttribute('height'), 10));
+
+            data.chars[charCode] = {
+                xOffset: parseInt(letter.getAttribute('xoffset'), 10),
+                yOffset: parseInt(letter.getAttribute('yoffset'), 10),
+                xAdvance: parseInt(letter.getAttribute('xadvance'), 10),
+                kerning: {},
+                texture: new core.Texture(texture.baseTexture, textureRect)
+
+            };
+        }
+
+        // parse kernings
+        var kernings = xml.getElementsByTagName('kerning');
+
+        for (var _i5 = 0; _i5 < kernings.length; _i5++) {
+            var kerning = kernings[_i5];
+            var first = parseInt(kerning.getAttribute('first'), 10);
+            var second = parseInt(kerning.getAttribute('second'), 10);
+            var amount = parseInt(kerning.getAttribute('amount'), 10);
+
+            if (data.chars[second]) {
+                data.chars[second].kerning[first] = amount;
+            }
+        }
+
+        // I'm leaving this as a temporary fix so we can test the bitmap fonts in v3
+        // but it's very likely to change
+        BitmapText.fonts[data.font] = data;
+
+        return data;
+    };
 
     _createClass(BitmapText, [{
         key: 'tint',
         get: function get() {
             return this._font.tint;
-        }
-
-        /**
-         * Sets the tint.
-         *
-         * @param {number} value - The value to set to.
-         */
-        ,
-        set: function set(value) {
+        },
+        set: function set(value) // eslint-disable-line require-jsdoc
+        {
             this._font.tint = typeof value === 'number' && value >= 0 ? value : 0xFFFFFF;
 
             this.dirty = true;
@@ -360,22 +409,15 @@ var BitmapText = function (_core$Container) {
          *
          * @member {string}
          * @default 'left'
-         * @memberof PIXI.extras.BitmapText#
          */
 
     }, {
         key: 'align',
         get: function get() {
             return this._font.align;
-        }
-
-        /**
-         * Sets the alignment
-         *
-         * @param {string} value - The value to set to.
-         */
-        ,
-        set: function set(value) {
+        },
+        set: function set(value) // eslint-disable-line require-jsdoc
+        {
             this._font.align = value || 'left';
 
             this.dirty = true;
@@ -388,22 +430,15 @@ var BitmapText = function (_core$Container) {
          * Setting the anchor to 1,1 would mean the text's origin point will be the bottom right corner
          *
          * @member {PIXI.Point | number}
-         * @memberof PIXI.extras.BitmapText#
          */
 
     }, {
         key: 'anchor',
         get: function get() {
             return this._anchor;
-        }
-
-        /**
-         * Sets the anchor.
-         *
-         * @param {PIXI.Point|number} value - The value to set to.
-         */
-        ,
-        set: function set(value) {
+        },
+        set: function set(value) // eslint-disable-line require-jsdoc
+        {
             if (typeof value === 'number') {
                 this._anchor.set(value);
             } else {
@@ -415,22 +450,15 @@ var BitmapText = function (_core$Container) {
          * The font descriptor of the BitmapText object
          *
          * @member {string|object}
-         * @memberof PIXI.extras.BitmapText#
          */
 
     }, {
         key: 'font',
         get: function get() {
             return this._font;
-        }
-
-        /**
-         * Sets the font.
-         *
-         * @param {string|object} value - The value to set to.
-         */
-        ,
-        set: function set(value) {
+        },
+        set: function set(value) // eslint-disable-line require-jsdoc
+        {
             if (!value) {
                 return;
             }
@@ -452,28 +480,53 @@ var BitmapText = function (_core$Container) {
          * The text of the BitmapText object
          *
          * @member {string}
-         * @memberof PIXI.extras.BitmapText#
          */
 
     }, {
         key: 'text',
         get: function get() {
             return this._text;
-        }
-
-        /**
-         * Sets the text.
-         *
-         * @param {string} value - The value to set to.
-         */
-        ,
-        set: function set(value) {
+        },
+        set: function set(value) // eslint-disable-line require-jsdoc
+        {
             value = value.toString() || ' ';
             if (this._text === value) {
                 return;
             }
             this._text = value;
             this.dirty = true;
+        }
+
+        /**
+         * The width of the overall text, different from fontSize,
+         * which is defined in the style object
+         *
+         * @member {number}
+         * @readonly
+         */
+
+    }, {
+        key: 'textWidth',
+        get: function get() {
+            this.validate();
+
+            return this._textWidth;
+        }
+
+        /**
+         * The height of the overall text, different from fontSize,
+         * which is defined in the style object
+         *
+         * @member {number}
+         * @readonly
+         */
+
+    }, {
+        key: 'textHeight',
+        get: function get() {
+            this.validate();
+
+            return this._textHeight;
         }
     }]);
 
