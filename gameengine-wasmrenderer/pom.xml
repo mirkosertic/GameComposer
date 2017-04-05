@@ -18,6 +18,11 @@
     <dependencies>
 
         <dependency>
+            <groupId>de.mirkosertic</groupId>
+            <artifactId>gameengine</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.teavm</groupId>
             <artifactId>teavm-classlib</artifactId>
             <version>${teavm.version}</version>
@@ -27,7 +32,7 @@
         <!-- JavaScriptObjects (JSO) - a JavaScript binding for TeaVM -->
         <dependency>
             <groupId>org.teavm</groupId>
-            <artifactId>teavm-jso</artifactId>
+            <artifactId>teavm-interop</artifactId>
             <version>${teavm.version}</version>
             <scope>provided</scope>
         </dependency>

@@ -22,6 +22,14 @@ var TeaVM = function() {
             }
 
             var importObj = {
+                runtime: {
+                    currentTimeMillis: function() {
+                        return new Date().getTime();
+                    },
+                    towlower: function(c) {
+                        return c;
+                    }
+                },
                 logic: {
                     invokeMe : function() {
                         console.log(teavm.instance.exports.passThru(13));
