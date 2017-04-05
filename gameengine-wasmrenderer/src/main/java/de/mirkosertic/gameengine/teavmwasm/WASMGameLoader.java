@@ -15,6 +15,7 @@
  */
 package de.mirkosertic.gameengine.teavmwasm;
 
+import de.mirkosertic.gameengine.core.Game;
 import org.teavm.interop.Export;
 
 import java.util.Map;
@@ -24,5 +25,6 @@ public class WASMGameLoader {
     @Export(name = "loadGameFromStringPool")
     public static void loadGameFromStringPool(int aPoolID) {
         Map<String, Object> theResult = new JSONParser().fromJSON(WASMStringPool.getStringPool(aPoolID));
+        Game theGame = Game.deserialize(theResult);
     }
 }
