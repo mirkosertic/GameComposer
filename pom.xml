@@ -25,6 +25,7 @@
         <module>gameengine-androidrenderer</module>
         <module>gameengine-teavmcommon</module>
         <module>gameengine-teavmrenderer</module>
+        <module>gameengine-wasmrenderer</module>
         <module>gameengine-dragomerenderer</module>
         <module>gameengine-cordovarenderer</module>
         <module>gameengine-tools</module>
@@ -34,6 +35,10 @@
     </modules>
 
     <repositories>
+        <repository>
+            <id>teavm-dev</id>
+            <url>https://dl.bintray.com/konsoletyper/teavm</url>
+        </repository>
         <repository>
             <id>gamecreator</id>
             <name>gamecreator</name>
@@ -50,6 +55,10 @@
     </repositories>
 
     <pluginRepositories>
+        <pluginRepository>
+            <id>teavm-dev</id>
+            <url>https://dl.bintray.com/konsoletyper/teavm</url>
+        </pluginRepository>
         <pluginRepository>
             <id>gamecreator-plugins</id>
             <name>gamecreator-plugins</name>
@@ -140,7 +149,7 @@
     </dependencyManagement>
 
     <properties>
-        <teavm.version>0.4.3</teavm.version>
+        <teavm.version>0.5.0-dev-244</teavm.version>
     </properties>
 
     <build>
@@ -286,12 +295,6 @@
     </build>
 
     <profiles>
-        <profile>
-            <id>teavmdev</id>
-            <properties>
-                <teavm.version>1.0.0-SNAPSHOT</teavm.version>
-            </properties>
-        </profile>
         <profile>
             <id>automaticversion</id>
             <build>

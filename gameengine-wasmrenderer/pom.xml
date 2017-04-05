@@ -6,8 +6,8 @@
         <artifactId>gamecreator</artifactId>
         <version>0.0.0-SNAPSHOT</version>
     </parent>
-    <artifactId>gameengine-teavmrenderer</artifactId>
-    <name>GameComposer TeaVM Renderer</name>
+    <artifactId>gameengine-wasmrenderer</artifactId>
+    <name>GameComposer WASM Renderer</name>
     <packaging>war</packaging>
 
     <scm>
@@ -16,10 +16,6 @@
     </scm>
 
     <dependencies>
-        <dependency>
-            <groupId>de.mirkosertic</groupId>
-            <artifactId>gameengine-teavmcommon</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>org.teavm</groupId>
@@ -109,8 +105,8 @@
                             <goal>compile</goal>
                         </goals>
                         <configuration>
-                            <targetDirectory>${project.build.directory}/generated/js/teavm</targetDirectory>
-                            <mainClass>de.mirkosertic.gameengine.teavm.TeaVMRenderer</mainClass>
+                            <targetDirectory>${project.build.directory}/generated/js/teavm-wasm</targetDirectory>
+                            <mainClass>de.mirkosertic.gameengine.teavmwasm.WASMRenderer</mainClass>
                             <!-- How to attach runtime.js. Possible values are: SEPARATE, MERGED and NONE -->
                             <runtime>SEPARATE</runtime>
                             <!-- Whether TeaVM should produce minified JavaScript. Can reduce JavaScript file size more than
@@ -123,6 +119,7 @@
                             <!-- Whether TeaVM should also put source files into output directory,
                                  for compatibility with source maps -->
                             <sourceFilesCopied>true</sourceFilesCopied>
+                            <targetType>WEBASSEMBLY</targetType>
                         </configuration>
                     </execution>
                 </executions>
