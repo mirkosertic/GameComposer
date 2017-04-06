@@ -15,19 +15,10 @@
  */
 package de.mirkosertic.gameengine.teavmwasm;
 
-import java.util.Map;
+import org.teavm.interop.Import;
 
-import org.teavm.interop.Export;
+public class WASMLogger {
 
-import de.mirkosertic.gameengine.core.Game;
-
-public class WASMGameLoader {
-
-    @Export(name = "loadGameFromStringPool")
-    public static void loadGameFromStringPool(int aPoolID) {
-        String theJSON = WASMStringPool.getStringPool(aPoolID);
-        Map<String, Object> theResult = new JSONParser().fromJSON(WASMStringPool.getStringPool(aPoolID));
-        Game theGame = Game.deserialize(theResult);
-        WASMLogger.log("JSON = " + theJSON + " " +  theGame.nameProperty().get());
-    }
+    @Import(module = "log", name = "log_string")
+    public static native void log(String aValue);
 }
