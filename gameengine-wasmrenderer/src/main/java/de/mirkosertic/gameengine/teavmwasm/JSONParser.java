@@ -15,29 +15,74 @@
  */
 package de.mirkosertic.gameengine.teavmwasm;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class JSONParser {
 
-    private class TokenHandler {
+    private interface TokenHandler<T> {
+
+        TokenHandler handle(char aChar);
+
+        TokenHandler resolveChild(TokenHandler aChild);
+
+        T toData();
+    }
+
+    private class ListProducingTokenHandler implements TokenHandler<List<Map<String, Object>>> {
+
+        private final MapProducingTokenHandler parent;
+        private final List<Map<String, Object>> data;
+
+        public ListProducingTokenHandler(MapProducingTokenHandler aParent) {
+            data = new ArrayList<>();
+            parent = aParent;
+        }
+
+        @Override
+        public TokenHandler handle(char aChar) {
+            switch (aChar) {
+                case '{':
+                    return new MapProducingTokenHandler(this);
+                case ']':
+                    return parent.resolveChild(this);
+            }
+            return this;
+        }
+
+        @Override
+        public TokenHandler resolveChild(TokenHandler aChild) {
+            data.add((Map<String, Object>) aChild.toData());
+            return this;
+        }
+
+        @Override
+        public List<Map<String, Object>> toData() {
+            return data;
+        }
+    }
+
+    private class MapProducingTokenHandler implements TokenHandler<Map<String, Object>> {
 
         private Map<String, Object> data;
         private StringBuilder currentToken;
         private String lastToken;
         private boolean inString;
         private boolean inValue;
+        private boolean escapeNext;
         private final TokenHandler parent;
 
-        public TokenHandler() {
+        public MapProducingTokenHandler() {
             this(null, null);
         }
 
-        private TokenHandler(TokenHandler aParent) {
+        private MapProducingTokenHandler(TokenHandler aParent) {
             this(aParent, new HashMap<>());
         }
 
-        private TokenHandler(TokenHandler aParent, Map<String, Object> aData) {
+        private MapProducingTokenHandler(TokenHandler aParent, Map<String, Object> aData) {
             data = aData;
             currentToken = new StringBuilder();
             inString = false;
@@ -45,9 +90,18 @@ public class JSONParser {
             parent = aParent;
         }
 
-        public TokenHandler handle(char aChar) {
+        @Override
+        public TokenHandler<? extends Object> handle(char aChar) {
             if (inString) {
+                if (escapeNext) {
+                    escapeNext = false;
+                    currentToken.append(aChar);
+                    return this;
+                }
                 switch (aChar) {
+                    case '\\':
+                        escapeNext = true;
+                        break;
                     case '\"':
                         inString = false;
                         if (inValue) {
@@ -71,7 +125,7 @@ public class JSONParser {
                     if (data == null) {
                         data = new HashMap<>();
                     } else {
-                        return new TokenHandler(this);
+                        return new MapProducingTokenHandler(this);
                     }
                     break;
                 case ':':
@@ -94,27 +148,32 @@ public class JSONParser {
                         return parent.resolveChild(this);
                     }
                     break;
+                case '[':
+                    return new ListProducingTokenHandler(this);
+
                 default:
                     currentToken.append(aChar);
             }
             return this;
         }
 
-        public Map<String, Object> toMap() {
+        @Override
+        public Map<String, Object> toData() {
             return data;
         }
 
-        private TokenHandler resolveChild(TokenHandler aChild) {
-            data.put(currentToken.toString(), aChild.toMap());
+        @Override
+        public TokenHandler resolveChild(TokenHandler aChild) {
+            data.put(currentToken.toString(), aChild.toData());
             return this;
         }
     }
 
-    public Map<String, Object> fromJSON(String aValue) {
-        TokenHandler theHandler = new TokenHandler();
+    public <T> T fromJSON(String aValue) {
+        TokenHandler theHandler = new MapProducingTokenHandler();
         for (int i=0;i<aValue.length();i++) {
             theHandler = theHandler.handle(aValue.charAt(i));
         }
-        return theHandler.toMap();
+        return (T) theHandler.toData();
     }
 }
