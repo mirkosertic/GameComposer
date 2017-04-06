@@ -44,10 +44,7 @@
                     console.log(xhr.responseText)
 
                     var gameJson = xhr.responseText
-                    var stringPoolId = vm.instance.exports.newStringPoolID()
-                    for (var i=0, len = gameJson.length;i < len;i++) {
-                        vm.instance.exports.addCharToStringPool(stringPoolId, gameJson[i])
-                    }
+                    var stringPoolId = vm.loadIntoStringPool(gameJson)
 
                     console.log("Transfered")
 
