@@ -15,11 +15,62 @@
  */
 package de.mirkosertic.gameengine.teavmwasm;
 
+import de.mirkosertic.gameengine.Version;
+import de.mirkosertic.gameengine.core.Game;
+import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.GameSceneClassInformation;
+import org.teavm.interop.Export;
+import org.teavm.interop.Import;
+
+import java.util.Map;
+
 public class WASMRenderer {
 
+    private static Game loadedGame;
+
+    @Import(module = "engine", name = "bootstrap")
+    public static native void bootstrap();
+
+    @Import(module = "engine", name = "loadGameScene")
+    public static native void loadGameScene(String aGameSceneId);
+
+    @Export(name = "loadGameFromStringPool")
+    public static void loadGameFromStringPool(int aPoolID) {
+        Map<String, Object> theResult = new JSONParser().fromJSON(WASMStringPool.getStringPool(aPoolID));
+
+        loadedGame = Game.deserialize(theResult);
+        WASMLogger.log("Game loaded : " + loadedGame.nameProperty().get());
+
+        String theStartingScene = loadedGame.defaultSceneProperty().get();
+        WASMLogger.log("Loading default scene " + theStartingScene);
+
+        loadGameScene(theStartingScene);
+    }
+
+    @Export(name = "loadGameSceneFromStringPool")
+    public static void loadGameSceneFromStringPool(int aPoolID) {
+        Map<String, Object> theResult = new JSONParser().fromJSON(WASMStringPool.getStringPool(aPoolID));
+
+        WASMLogger.log("Loading scene");
+
+        WASMGameRuntimeFactory runtimeFactory = new WASMGameRuntimeFactory();
+        GameRuntime theRuntime = runtimeFactory.create(new WASMGameResourceLoader(), new WASMGameSoundSystemFactory());
+        WASMLogger.log("Runtime created");
+
+        GameScene theScene = GameScene.deserialize(loadedGame, theRuntime, theResult);
+
+        WASMLogger.log("Ok");;
+        //WASMLogger.log("Scene loaded : " + theScene.nameProperty().get());
+
+    }
+
     public static void main(String[] args) {
+        WASMLogger.log("Gameengine starting with version " + Version.VERSION);
+
         WASMStringPool theStringPool = new WASMStringPool();
-        WASMGameLoader theLoader = new WASMGameLoader();
+
+        bootstrap();
         // We are done here, waiting fpor the loadGameFromStringPool callback invoked
         // by JavaScript side
     }

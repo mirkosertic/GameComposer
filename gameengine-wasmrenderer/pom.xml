@@ -23,24 +23,20 @@
         </dependency>
 
         <dependency>
+            <groupId>de.mirkosertic</groupId>
+            <artifactId>gameengine-jbox2d</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>de.mirkosertic</groupId>
+            <artifactId>gameengine-lua</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.teavm</groupId>
             <artifactId>teavm-classlib</artifactId>
             <version>${teavm.version}</version>
             <scope>provided</scope>
-        </dependency>
-
-        <!-- JavaScriptObjects (JSO) - a JavaScript binding for TeaVM -->
-        <dependency>
-            <groupId>org.teavm</groupId>
-            <artifactId>teavm-interop</artifactId>
-            <version>${teavm.version}</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.teavm</groupId>
-            <artifactId>teavm-jso-apis</artifactId>
-            <version>${teavm.version}</version>
         </dependency>
 
         <dependency>
@@ -104,7 +100,7 @@
                 <version>${teavm.version}</version>
                 <executions>
                     <execution>
-                        <id>web-client</id>
+                        <id>wasm-client</id>
                         <phase>prepare-package</phase>
                         <goals>
                             <goal>compile</goal>
@@ -114,9 +110,6 @@
                             <mainClass>de.mirkosertic.gameengine.teavmwasm.WASMRenderer</mainClass>
                             <!-- How to attach runtime.js. Possible values are: SEPARATE, MERGED and NONE -->
                             <runtime>SEPARATE</runtime>
-                            <!-- Whether TeaVM should produce minified JavaScript. Can reduce JavaScript file size more than
-                                 two times -->
-                            <minifying>true</minifying>
                             <!-- Whether TeaVM should produce debug information for its built-in debugger -->
                             <debugInformationGenerated>true</debugInformationGenerated>
                             <!-- Whether TeaVM should produce source maps file -->
@@ -125,6 +118,7 @@
                                  for compatibility with source maps -->
                             <sourceFilesCopied>true</sourceFilesCopied>
                             <targetType>WEBASSEMBLY</targetType>
+                            <wasmVersion>V_0x1</wasmVersion>
                         </configuration>
                     </execution>
                 </executions>
