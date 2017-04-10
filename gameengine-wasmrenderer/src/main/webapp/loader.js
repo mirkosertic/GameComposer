@@ -57,6 +57,45 @@ var TeaVM = function() {
                     },
                     towlower: function(c) {
                         return c
+                    },
+                    getNaN: function() {
+                        return NaN;
+                    },
+                    random: function() {
+                        return Math.random()
+                    },
+                    isInfinite: function(v) {
+                        return !isFinite(v)
+                    },
+                },
+                engine: {
+                    bootstrap: function() {
+                        var xhr = new XMLHttpRequest()
+                        xhr.responseType = "text"
+                        xhr.open("GET", "game.json")
+                        xhr.onload = function () {
+
+                            var gameJson = xhr.responseText
+                            var stringPoolId = teavm.loadIntoStringPool(gameJson)
+
+                            teavm.instance.exports.loadGameFromStringPool(stringPoolId)
+                        }
+                        xhr.send()
+                    },
+                    loadGameScene: function(str) {
+                        var sceneId = teavm.pointerToString(str)
+
+                        var xhr = new XMLHttpRequest()
+                        xhr.responseType = "text"
+                        xhr.open("GET", sceneId + "/scene.json")
+                        xhr.onload = function () {
+
+                            var sceneJson = xhr.responseText
+                            var stringPoolId = teavm.loadIntoStringPool(sceneJson)
+
+                            teavm.instance.exports.loadGameSceneFromStringPool(stringPoolId)
+                        }
+                        xhr.send()
                     }
                 },
                 log: {

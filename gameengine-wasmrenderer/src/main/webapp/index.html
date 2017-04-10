@@ -35,24 +35,6 @@
             var vm = new TeaVM()
             vm.run(function() {
                 vm.instance.exports.main()
-
-                var xhr = new XMLHttpRequest()
-                xhr.responseType = "text"
-                xhr.open("GET", "game.json")
-                xhr.onload = function () {
-
-                    console.log(xhr.responseText)
-
-                    var gameJson = xhr.responseText
-                    var stringPoolId = vm.loadIntoStringPool(gameJson)
-
-                    console.log("Transfered")
-
-                    vm.instance.exports.loadGameFromStringPool(stringPoolId)
-                    console.log("Loaded from string pool " + stringPoolId)
-                }
-                xhr.send()
-
             });
         }
     </script>
