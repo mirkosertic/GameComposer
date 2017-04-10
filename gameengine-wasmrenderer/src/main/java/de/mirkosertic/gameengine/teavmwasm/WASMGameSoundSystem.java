@@ -15,19 +15,18 @@
  */
 package de.mirkosertic.gameengine.teavmwasm;
 
-import java.util.Map;
+import de.mirkosertic.gameengine.core.Promise;
+import de.mirkosertic.gameengine.sound.GameSoundSystem;
+import de.mirkosertic.gameengine.type.ResourceName;
 
-import org.teavm.interop.Export;
+public class WASMGameSoundSystem implements GameSoundSystem {
 
-import de.mirkosertic.gameengine.core.Game;
+    @Override
+    public Promise play(ResourceName aResourceName) {
+        return null;
+    }
 
-public class WASMGameLoader {
-
-    @Export(name = "loadGameFromStringPool")
-    public static void loadGameFromStringPool(int aPoolID) {
-        String theJSON = WASMStringPool.getStringPool(aPoolID);
-        Map<String, Object> theResult = new JSONParser().fromJSON(WASMStringPool.getStringPool(aPoolID));
-        Game theGame = Game.deserialize(theResult);
-        WASMLogger.log("JSON = " + theJSON + " " +  theGame.nameProperty().get());
+    @Override
+    public void stop(Object aSoundObject) {
     }
 }
