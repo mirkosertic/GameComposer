@@ -21,20 +21,28 @@ var TeaVM = function() {
 
     TeaVM.prototype.pointerToString = function(str) {
 
-        var len1 = this.memoryArray[str + 24]
-        var len2 = this.memoryArray[str + 25]
-        var len3 = this.memoryArray[str + 26]
-        var len4 = this.memoryArray[str + 27]
+        // Pointer to character array
+        var len1 = this.memoryArray[str + 8];
+        var len2 = this.memoryArray[str + 9];
+        var len3 = this.memoryArray[str + 10];
+        var len4 = this.memoryArray[str + 11];
 
-        var totalLength = len1 + len2 * 256 + len3 * 65536 + len4 * 16777216
+        var offset = len1 + len2 * 256 + len3 * 65536 + len4 * 16777216;
 
-        var dataOffset = str + 28
-        var data = ''
+        var len1 = this.memoryArray[offset + 8];
+        var len2 = this.memoryArray[offset + 9];
+        var len3 = this.memoryArray[offset + 10];
+        var len4 = this.memoryArray[offset + 11];
+
+        var totalLength = len1 + len2 * 256 + len3 * 65536 + len4 * 16777216;
+
+        var dataOffset = offset + 12;
+        var data = '';
         for (i=0;i<totalLength;i++) {
-            var firstCode = this.memoryArray[dataOffset++]
-            var secondCode = this.memoryArray[dataOffset++]
-            var theChar = String.fromCharCode(secondCode * 256 + firstCode)
-            data+=theChar
+            var firstCode = this.memoryArray[dataOffset++];
+            var secondCode = this.memoryArray[dataOffset++];
+            var theChar = String.fromCharCode(secondCode * 256 + firstCode);
+            data+=theChar;
         }
 
         return data
