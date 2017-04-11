@@ -23,6 +23,6 @@ public class WASMGameSoundSystemFactory implements GameSoundSystemFactory {
 
     @Override
     public GameSoundSystem create(GameRuntime aGameRuntime) {
-        return new WASMGameSoundSystem();
+        return new WASMGameSoundSystem(aGameRuntime);
     }
 }

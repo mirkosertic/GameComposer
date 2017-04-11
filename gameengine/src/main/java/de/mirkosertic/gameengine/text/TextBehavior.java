@@ -41,7 +41,7 @@ public class TextBehavior implements Behavior, Text, Reflectable<TextClassInform
     private final Property<Boolean> isScript;
 
     TextBehavior(GameObjectInstance aObjectInstance) {
-        this(aObjectInstance, aObjectInstance.getOwnerGameObject().getBehaviorTemplate(TextBehaviorTemplate.class));
+        this(aObjectInstance, (TextBehaviorTemplate) aObjectInstance.getOwnerGameObject().getBehaviorTemplate(TextBehaviorTemplate.ID));
     }
 
     TextBehavior(GameObjectInstance aObjectInstance, TextBehaviorTemplate aTemplate) {
@@ -98,7 +98,7 @@ public class TextBehavior implements Behavior, Text, Reflectable<TextClassInform
 
     @Override
     public TextBehaviorTemplate getTemplate() {
-        return objectInstance.getOwnerGameObject().getBehaviorTemplate(TextBehaviorTemplate.class);
+        return objectInstance.getOwnerGameObject().getBehaviorTemplate(TextBehaviorTemplate.ID);
     }
 
     @Override

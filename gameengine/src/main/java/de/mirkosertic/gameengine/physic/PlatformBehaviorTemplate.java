@@ -16,6 +16,7 @@
 package de.mirkosertic.gameengine.physic;
 
 import de.mirkosertic.gameengine.core.BehaviorTemplate;
+import de.mirkosertic.gameengine.core.BehaviorTemplateID;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
@@ -28,6 +29,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PlatformBehaviorTemplate implements BehaviorTemplate<PlatformBehavior>, Platform, Reflectable<PlatformClassInformation> {
+
+    public static final BehaviorTemplateID ID = new BehaviorTemplateID("PlatformBehaviorTemplate");
 
     private static final PlatformClassInformation CIINSTANCE = new PlatformClassInformation();
 
@@ -46,6 +49,11 @@ public class PlatformBehaviorTemplate implements BehaviorTemplate<PlatformBehavi
         jumpKey = new Property<>(GameKeyCode.class, this, JUMP_KEY_PROPERTY, GameKeyCode.UP, aEventManager);
         leftRightImpulse = new Property<>(Float.class, this, LEFT_RIGHT_IMPULSE_PROPERTY, 4f, aEventManager);
         jumpImpulse = new Property<>(Float.class, this, JUMP_IMPULSE_PROPERTY, 2f, aEventManager);
+    }
+
+    @Override
+    public BehaviorTemplateID getId() {
+        return ID;
     }
 
     @Override

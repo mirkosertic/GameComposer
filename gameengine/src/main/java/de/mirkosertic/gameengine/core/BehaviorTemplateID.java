@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Mirko Sertic
+ * Copyright 2017 Mirko Sertic
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,15 +15,31 @@
  */
 package de.mirkosertic.gameengine.core;
 
-import java.util.Map;
+public class BehaviorTemplateID {
 
-public interface BehaviorTemplate<T extends Behavior> {
+    private final String value;
 
-    BehaviorTemplateID getId();
+    public BehaviorTemplateID(String aValue) {
+        value = aValue;
+    }
 
-    T create(GameObjectInstance aInstance, GameRuntime aGameRuntime);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
 
-    Map<String,Object> serialize();
+        BehaviorTemplateID that = (BehaviorTemplateID) o;
 
-    GameObject getOwner();
+        if (!value.equals(that.value))
+            return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return value.hashCode();
+    }
 }

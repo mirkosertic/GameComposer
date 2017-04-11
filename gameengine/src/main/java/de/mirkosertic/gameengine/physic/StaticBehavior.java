@@ -53,7 +53,7 @@ public class StaticBehavior implements Behavior, Static, Reflectable<StaticClass
 
     @Override
     public StaticBehaviorTemplate getTemplate() {
-        return objectInstance.getOwnerGameObject().getBehaviorTemplate(StaticBehaviorTemplate.class);
+        return objectInstance.getOwnerGameObject().getBehaviorTemplate(StaticBehaviorTemplate.ID);
     }
 
     @Override
