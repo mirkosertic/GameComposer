@@ -16,6 +16,7 @@
 package de.mirkosertic.gameengine.sprite;
 
 import de.mirkosertic.gameengine.core.BehaviorTemplate;
+import de.mirkosertic.gameengine.core.BehaviorTemplateID;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectConfigurationChanged;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
@@ -34,6 +35,8 @@ import java.util.Map;
 
 public class SpriteBehaviorTemplate implements BehaviorTemplate<SpriteBehavior>, Sprite, Reflectable<SpriteClassInformation> {
 
+    public static final BehaviorTemplateID ID = new BehaviorTemplateID("SpriteBehaviorTemplate");;
+
     private static final SpriteClassInformation CIINSTANCE = new SpriteClassInformation();
 
     private final Property<Animation> currentAnimation;
@@ -48,6 +51,11 @@ public class SpriteBehaviorTemplate implements BehaviorTemplate<SpriteBehavior>,
         speed = new Property<>(Integer.class, this, SPEED_PROPERTY, 5, aEventManager);
         animations = new ArrayList<>();
         owner = aOwner;
+    }
+
+    @Override
+    public BehaviorTemplateID getId() {
+        return ID;
     }
 
     @Override

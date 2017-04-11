@@ -15,16 +15,31 @@
  */
 package de.mirkosertic.gameengine.teavmwasm;
 
+import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.core.Promise;
+import de.mirkosertic.gameengine.core.PromiseRejector;
+import de.mirkosertic.gameengine.core.PromiseResolver;
 import de.mirkosertic.gameengine.sound.GameSoundSystem;
 import de.mirkosertic.gameengine.type.ResourceName;
 
 public class WASMGameSoundSystem implements GameSoundSystem {
 
+    private final GameRuntime gameRuntime;
+
+    public WASMGameSoundSystem(GameRuntime aGameRuntime) {
+        gameRuntime = aGameRuntime;
+    }
+
     @Override
     public Promise play(ResourceName aResourceName) {
-        return null;
+        WASMLogger.log("Playing sound " + aResourceName.get());
+        return new Promise(new Promise.Executor() {
+            @Override
+            public void process(PromiseResolver aResolver, PromiseRejector aRejector) {
+            }
+        });
     }
+
 
     @Override
     public void stop(Object aSoundObject) {

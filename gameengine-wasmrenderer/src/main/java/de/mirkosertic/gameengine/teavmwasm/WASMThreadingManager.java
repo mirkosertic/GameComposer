@@ -26,11 +26,8 @@ public class WASMThreadingManager implements ThreadingManager {
 
         aJob.run();
 
-        return new FutureResult() {
-            @Override
-            public void waitForCompletion() throws Exception {
-                return;
-            }
+        return () -> {
+            return;
         };
     }
 }

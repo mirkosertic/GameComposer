@@ -43,7 +43,7 @@ public class ConstantMovementBehavior implements Behavior, ConstantMovement, Ref
     private boolean remoteObject;
 
     ConstantMovementBehavior(GameObjectInstance aObjectInstance) {
-        this(aObjectInstance, aObjectInstance.getOwnerGameObject().getBehaviorTemplate(ConstantMovementBehaviorTemplate.class));
+        this(aObjectInstance, (ConstantMovementBehaviorTemplate) aObjectInstance.getOwnerGameObject().getBehaviorTemplate(ConstantMovementBehaviorTemplate.ID));
     }
 
     ConstantMovementBehavior(GameObjectInstance aObjectInstance, ConstantMovementBehaviorTemplate aTemplate) {
@@ -95,7 +95,7 @@ public class ConstantMovementBehavior implements Behavior, ConstantMovement, Ref
 
     @Override
     public ConstantMovementBehaviorTemplate getTemplate() {
-        return objectInstance.getOwnerGameObject().getBehaviorTemplate(ConstantMovementBehaviorTemplate.class);
+        return objectInstance.getOwnerGameObject().getBehaviorTemplate(ConstantMovementBehaviorTemplate.ID);
     }
 
     @Override

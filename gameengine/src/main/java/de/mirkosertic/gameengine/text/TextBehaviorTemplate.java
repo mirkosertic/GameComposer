@@ -16,6 +16,7 @@
 package de.mirkosertic.gameengine.text;
 
 import de.mirkosertic.gameengine.core.BehaviorTemplate;
+import de.mirkosertic.gameengine.core.BehaviorTemplateID;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
@@ -30,6 +31,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TextBehaviorTemplate implements BehaviorTemplate<TextBehavior>, Text, Reflectable<TextClassInformation> {
+
+    public static final BehaviorTemplateID ID = new BehaviorTemplateID("TextBehaviorTemplate");
 
     private static final TextClassInformation CIINSTANCE = new TextClassInformation();
 
@@ -46,6 +49,11 @@ public class TextBehaviorTemplate implements BehaviorTemplate<TextBehavior>, Tex
         color = new Property<>(Color.class, this, COLOR_PROPERTY, Color.WHITE, aEventManager);
         isscript = new Property<>(Boolean.class, this, ISSCRIPT_PROPERTY, false, aEventManager);
         owner = aOwner;
+    }
+
+    @Override
+    public BehaviorTemplateID getId() {
+        return ID;
     }
 
     @Override

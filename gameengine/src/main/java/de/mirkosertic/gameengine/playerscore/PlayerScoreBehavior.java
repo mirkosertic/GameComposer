@@ -35,7 +35,7 @@ public class PlayerScoreBehavior implements Behavior, PlayerScore, Reflectable<P
     private final Property<ScoreValue> scoreValue;
 
     private PlayerScoreBehavior(GameObjectInstance aObjectInstance) {
-        this(aObjectInstance, aObjectInstance.getOwnerGameObject().getBehaviorTemplate(PlayerScoreBehaviorTemplate.class));
+        this(aObjectInstance, (PlayerScoreBehaviorTemplate) aObjectInstance.getOwnerGameObject().getBehaviorTemplate(PlayerScoreBehaviorTemplate.ID));
     }
 
     PlayerScoreBehavior(GameObjectInstance aObjectInstance, PlayerScoreBehaviorTemplate aTemplate) {
@@ -58,7 +58,7 @@ public class PlayerScoreBehavior implements Behavior, PlayerScore, Reflectable<P
 
     @Override
     public PlayerScoreBehaviorTemplate getTemplate() {
-        return objectInstance.getOwnerGameObject().getBehaviorTemplate(PlayerScoreBehaviorTemplate.class);
+        return objectInstance.getOwnerGameObject().getBehaviorTemplate(PlayerScoreBehaviorTemplate.ID);
     }
 
     @Override

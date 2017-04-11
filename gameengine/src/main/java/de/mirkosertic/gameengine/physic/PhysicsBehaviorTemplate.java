@@ -16,6 +16,7 @@
 package de.mirkosertic.gameengine.physic;
 
 import de.mirkosertic.gameengine.core.BehaviorTemplate;
+import de.mirkosertic.gameengine.core.BehaviorTemplateID;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
@@ -27,6 +28,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PhysicsBehaviorTemplate implements BehaviorTemplate<PhysicsBehavior>, Physics, Reflectable<PhysicsClassInformation> {
+
+    public static final BehaviorTemplateID ID = new BehaviorTemplateID("ID");
 
     private static final PhysicsClassInformation CIINSTANCE = new PhysicsClassInformation();
 
@@ -48,6 +51,11 @@ public class PhysicsBehaviorTemplate implements BehaviorTemplate<PhysicsBehavior
         friction = new Property<>(Float.class, this, FRICTION_PROPERTY, 1.8f, aEventManager);
         restitution = new Property<>(Float.class, this, RESTITUTION_PROPERTY, 0f, aEventManager);
         gravityScale = new Property<>(Float.class, this, GRAVITY_SCALE_PROPERTY, 1f, aEventManager);
+    }
+
+    @Override
+    public BehaviorTemplateID getId() {
+        return ID;
     }
 
     @Override

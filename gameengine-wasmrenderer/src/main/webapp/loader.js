@@ -61,13 +61,17 @@ var TeaVM = function() {
                     getNaN: function() {
                         return NaN;
                     },
-                    random: function() {
-                        return Math.random()
-                    },
                     isInfinite: function(v) {
                         return !isFinite(v)
                     },
+                    isFinite: function(v) {
+                        return isFinite(v)
+                    },
+                    isNaN: function(v) {
+                        return !isNaN(v)
+                    },
                 },
+                math: Math,
                 engine: {
                     bootstrap: function() {
                         var xhr = new XMLHttpRequest()

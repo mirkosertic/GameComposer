@@ -16,6 +16,7 @@
 package de.mirkosertic.gameengine.teavmwasm;
 
 import de.mirkosertic.gameengine.AbstractGameRuntimeFactory;
+import de.mirkosertic.gameengine.core.Logger;
 import de.mirkosertic.gameengine.core.ThreadingManager;
 import de.mirkosertic.gameengine.physic.GamePhysicsManagerFactory;
 import de.mirkosertic.gameengine.physics.jbox2d.JBox2DGamePhysicsManagerFactory;
@@ -23,6 +24,29 @@ import de.mirkosertic.gameengine.scriptengine.LUAScriptEngineFactory;
 import de.mirkosertic.gameengine.scriptengine.luaj.LuaJScriptEngineFactory;
 
 public class WASMGameRuntimeFactory extends AbstractGameRuntimeFactory {
+
+    @Override
+    protected Logger createLogger() {
+        return new Logger() {
+            @Override
+            public void info(String aMessage) {
+                WASMLogger.log("INFO: " + aMessage);
+            }
+
+            @Override
+            public void error(String aMessage) {
+                WASMLogger.log("ERROR: " + aMessage);
+            }
+
+            @Override
+            public void time(String aLabel) {
+            }
+
+            @Override
+            public void timeEnd(String aLabel) {
+            }
+        };
+    }
 
     @Override
     protected ThreadingManager createThreadingManager() {

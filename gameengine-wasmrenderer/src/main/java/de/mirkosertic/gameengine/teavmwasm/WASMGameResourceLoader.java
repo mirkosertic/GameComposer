@@ -19,18 +19,31 @@ import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.core.GameResourceLoader;
 import de.mirkosertic.gameengine.core.LoadedSpriteSheet;
 import de.mirkosertic.gameengine.core.Promise;
+import de.mirkosertic.gameengine.core.PromiseRejector;
+import de.mirkosertic.gameengine.core.PromiseResolver;
 import de.mirkosertic.gameengine.type.ResourceName;
 
 public class WASMGameResourceLoader implements GameResourceLoader {
 
     @Override
     public Promise<GameResource, String> load(ResourceName aResourceName) {
-        return null;
+        WASMLogger.log("Loading Game Resource " +  aResourceName);
+        return new Promise<>(new Promise.Executor() {
+            @Override
+            public void process(PromiseResolver aResolver, PromiseRejector aRejector) {
+
+            }
+        });
     }
 
     @Override
     public Promise<LoadedSpriteSheet, String> loadSpriteSheet(ResourceName aResourceName) {
-        return null;
+        WASMLogger.log("Loading Style sheet " +  aResourceName);
+        return new Promise<>(new Promise.Executor() {
+            @Override
+            public void process(PromiseResolver aResolver, PromiseRejector aRejector) {
+            }
+        });
     }
 
     @Override
