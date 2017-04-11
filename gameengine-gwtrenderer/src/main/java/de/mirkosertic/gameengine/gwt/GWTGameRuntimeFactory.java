@@ -33,7 +33,7 @@ class GWTGameRuntimeFactory extends AbstractGameRuntimeFactory {
     @Override
     public GameRuntime create(GameResourceLoader aResourceLoader, GameSoundSystemFactory aSoundSystemFactory) {
         GameRuntime theRuntime = super.create(aResourceLoader, aSoundSystemFactory);
-        theRuntime.getEventManager().register(null, SystemException.class, new GameEventListener<SystemException>() {
+        theRuntime.getEventManager().register(null, SystemException.TYPE, new GameEventListener<SystemException>() {
             @Override
             public void handleGameEvent(SystemException aEvent) {
                 GWT.log("System exception : " + aEvent.exception.getMessage(), aEvent.exception);

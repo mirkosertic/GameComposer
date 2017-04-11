@@ -15,15 +15,15 @@
  */
 package de.mirkosertic.gameengine.teavmwasm;
 
+import java.util.Map;
+
+import org.teavm.interop.Export;
+import org.teavm.interop.Import;
+
 import de.mirkosertic.gameengine.Version;
 import de.mirkosertic.gameengine.core.Game;
 import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.core.GameScene;
-import de.mirkosertic.gameengine.core.GameSceneClassInformation;
-import org.teavm.interop.Export;
-import org.teavm.interop.Import;
-
-import java.util.Map;
 
 public class WASMRenderer {
 
@@ -50,18 +50,23 @@ public class WASMRenderer {
 
     @Export(name = "loadGameSceneFromStringPool")
     public static void loadGameSceneFromStringPool(int aPoolID) {
-        Map<String, Object> theResult = new JSONParser().fromJSON(WASMStringPool.getStringPool(aPoolID));
+        try {
 
-        WASMLogger.log("Loading scene");
+            Map<String, Object> theResult = new JSONParser().fromJSON(WASMStringPool.getStringPool(aPoolID));
 
-        WASMGameRuntimeFactory runtimeFactory = new WASMGameRuntimeFactory();
-        GameRuntime theRuntime = runtimeFactory.create(new WASMGameResourceLoader(), new WASMGameSoundSystemFactory());
-        WASMLogger.log("Runtime created");
+            WASMLogger.log("Loading scene");
 
-        GameScene theScene = GameScene.deserialize(loadedGame, theRuntime, theResult);
+            WASMGameRuntimeFactory runtimeFactory = new WASMGameRuntimeFactory();
+            GameRuntime theRuntime = runtimeFactory.create(new WASMGameResourceLoader(), new WASMGameSoundSystemFactory());
+            WASMLogger.log("Runtime created");
 
-        WASMLogger.log("Ok");;
-        //WASMLogger.log("Scene loaded : " + theScene.nameProperty().get());
+            GameScene theScene = GameScene.deserialize(loadedGame, theRuntime, theResult);
+
+            WASMLogger.log("Ok");
+            //WASMLogger.log("Scene loaded : " + theScene.nameProperty().get());
+        } catch (Exception e) {
+            WASMLogger.log("Error : " + e.getMessage());
+        }
 
     }
 

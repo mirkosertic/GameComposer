@@ -22,7 +22,7 @@ public class GameSoundManagerFactory {
 
     public static GameSoundManager create(GameEventManager aEventManager, GameSoundSystem aSoundSystem) {
         final GameSoundManager theManager = new GameSoundManager(aSoundSystem, aEventManager);
-        aEventManager.register(null, PlaySound.class, new GameEventListener<PlaySound>() {
+        aEventManager.register(null, PlaySound.TYPE, new GameEventListener<PlaySound>() {
             @Override
             public void handleGameEvent(PlaySound aEvent) {
                 theManager.onPlaySoundEvent(aEvent.resourceName);

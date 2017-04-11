@@ -18,9 +18,12 @@ package de.mirkosertic.gameengine.core;
 import de.mirkosertic.gameengine.annotations.InheritedClassInformation;
 import de.mirkosertic.gameengine.annotations.ReflectiveField;
 import de.mirkosertic.gameengine.event.GameEvent;
+import de.mirkosertic.gameengine.event.GameEventType;
 
 @InheritedClassInformation
 public class RunScene extends GameEvent {
+
+    public static final GameEventType TYPE = new GameEventType("RunScene");
 
     private static final RunSceneClassInformation CIINSTANCE = new RunSceneClassInformation();
 
@@ -28,7 +31,7 @@ public class RunScene extends GameEvent {
     public final String sceneId;
 
     public RunScene(String aSceneId) {
-        super("RunScene");
+        super(TYPE);
         sceneId = aSceneId;
     }
 

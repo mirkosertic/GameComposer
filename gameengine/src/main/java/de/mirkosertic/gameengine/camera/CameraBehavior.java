@@ -59,7 +59,7 @@ public class CameraBehavior implements Behavior, Camera, Reflectable<CameraClass
     }
 
     void registerEvents(GameRuntime aGameRuntime) {
-        aGameRuntime.getEventManager().register(objectInstance, SetScreenResolution.class,
+        aGameRuntime.getEventManager().register(objectInstance, SetScreenResolution.TYPE,
                 new GameEventListener<SetScreenResolution>() {
                     @Override
                     public void handleGameEvent(SetScreenResolution aEvent) {

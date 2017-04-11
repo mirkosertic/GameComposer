@@ -15,8 +15,8 @@
  */
 package de.mirkosertic.gameengine.network;
 
-import de.mirkosertic.gameengine.event.GameEvent;
 import de.mirkosertic.gameengine.event.GameEventManager;
+import de.mirkosertic.gameengine.event.GameEventType;
 
 public class NetworkGameViewFactory {
 
@@ -30,7 +30,7 @@ public class NetworkGameViewFactory {
 
     public NetworkGameView createNetworkViewFor(GameEventManager aEventManager) {
         NetworkGameView theView = new NetworkGameView(networkConnector, eventInterpreter);
-        aEventManager.register(null, GameEvent.class, theView);
+        aEventManager.register(null, GameEventType.CATCH_ALL, theView);
         return theView;
     }
 }
