@@ -19,6 +19,7 @@ import de.mirkosertic.gameengine.annotations.InheritedClassInformation;
 import de.mirkosertic.gameengine.annotations.ReflectiveField;
 import de.mirkosertic.gameengine.event.DistributableEvent;
 import de.mirkosertic.gameengine.event.GameEvent;
+import de.mirkosertic.gameengine.event.GameEventType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +27,7 @@ import java.util.Map;
 @InheritedClassInformation
 public class GameObjectInstanceRemovedFromScene extends GameEvent implements DistributableEvent {
 
-    public static final String EVENT_ID = "GameObjectInstanceRemovedFromScene";
+    public static final GameEventType TYPE = new GameEventType("GameObjectInstanceRemovedFromScene");
 
     private static final GameObjectInstanceRemovedFromSceneClassInformation CIINSTANCE = new GameObjectInstanceRemovedFromSceneClassInformation();
 
@@ -37,7 +38,7 @@ public class GameObjectInstanceRemovedFromScene extends GameEvent implements Dis
     public final GameObjectInstance instance;
 
     public GameObjectInstanceRemovedFromScene(GameScene aScene, GameObjectInstance aInstance) {
-        super(EVENT_ID);
+        super(TYPE);
         scene = aScene;
         instance = aInstance;
     }
@@ -50,7 +51,7 @@ public class GameObjectInstanceRemovedFromScene extends GameEvent implements Dis
     @Override
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<>();
-        theResult.put(EVENT_ID_ATTRIBUTE, type);
+        theResult.put(EVENT_ID_ATTRIBUTE, type.getType());
         theResult.put("instanceID", instance.uuidProperty().get());
         return theResult;
     }

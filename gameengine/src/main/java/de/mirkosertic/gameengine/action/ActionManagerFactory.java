@@ -19,12 +19,13 @@ import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.event.GameEvent;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.GameEventManager;
+import de.mirkosertic.gameengine.event.GameEventType;
 
 public class ActionManagerFactory {
 
     public ActionManager create(GameScene aScene, GameEventManager aEventManager) {
         final ActionManager theManager = new ActionManager(aScene);
-        aEventManager.register(null, GameEvent.class, new GameEventListener<GameEvent>() {
+        aEventManager.register(null, GameEventType.CATCH_ALL, new GameEventListener<GameEvent>() {
             @Override
             public void handleGameEvent(GameEvent aEvent) {
                 theManager.onEvent(aEvent);

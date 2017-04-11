@@ -21,6 +21,7 @@ import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.event.GameEvent;
 import de.mirkosertic.gameengine.event.GameEventListener;
+import de.mirkosertic.gameengine.event.GameEventType;
 import de.mirkosertic.gameengine.javafx.JavaSoundAPISoundSystemFactory;
 import de.mirkosertic.gameengine.type.ResourceName;
 
@@ -117,7 +118,7 @@ public class PersistenceManager {
             game.defaultSceneProperty().set(theSceneID);
         }
 
-        theRuntime.getEventManager().register(null, GameEvent.class, new EventCDIForwarder());
+        theRuntime.getEventManager().register(null, GameEventType.CATCH_ALL, new EventCDIForwarder());
 
         statusEvent.fire(new StatusEvent("New scene created at " + theSceneDirectory, StatusEvent.Severity.INFO));
 
@@ -177,7 +178,7 @@ public class PersistenceManager {
         currentGameDirectory = theGameDirectory;
 
         for (Map.Entry<String, GameScene> theEntry : gameScenes.entrySet()) {
-            theEntry.getValue().getRuntime().getEventManager().register(null, GameEvent.class, new EventCDIForwarder());
+            theEntry.getValue().getRuntime().getEventManager().register(null, GameEventType.CATCH_ALL, new EventCDIForwarder());
         }
 
         statusEvent.fire(new StatusEvent("Game loaded", StatusEvent.Severity.INFO));

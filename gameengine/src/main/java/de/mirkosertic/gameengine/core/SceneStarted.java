@@ -16,10 +16,13 @@
 package de.mirkosertic.gameengine.core;
 
 import de.mirkosertic.gameengine.event.GameEvent;
+import de.mirkosertic.gameengine.event.GameEventType;
 
 public class SceneStarted extends GameEvent {
 
+    public static final GameEventType TYPE = new GameEventType("SceneStarted");
+
     public SceneStarted() {
-        super("SceneStartup");
+        super(TYPE);
     }
 }

@@ -23,7 +23,7 @@ import java.util.Map;
 
 public class GameEventManager implements GameEventListener {
 
-    private final Map<Class<GameEvent>, GameEventListener[]> registeredListeners;
+    private final Map<GameEventType, GameEventListener[]> registeredListeners;
 
     private GameEventListener catchAllEventListener[];
 
@@ -32,13 +32,13 @@ public class GameEventManager implements GameEventListener {
         catchAllEventListener = new GameEventListener[0];
     }
 
-    public void register(Object aOwningInstance, Class aEvent, GameEventListener aEventListener) {
+    public void register(Object aOwningInstance, GameEventType aEvent, GameEventListener aEventListener) {
         GameEventListener[] theListener = registeredListeners.get(aEvent);
         if (theListener == null) {
             theListener = new GameEventListener[] { aEventListener };
             registeredListeners.put(aEvent, theListener);
 
-            if (aEvent == GameEvent.class) {
+            if (GameEventType.CATCH_ALL.equals(aEvent)) {
                 catchAllEventListener = new GameEventListener[] { aEventListener };
             }
 
@@ -50,7 +50,7 @@ public class GameEventManager implements GameEventListener {
         GameEventListener[] theEventListener = theListenerList.toArray(new GameEventListener[theListenerList.size()]);
         registeredListeners.put(aEvent, theEventListener);
 
-        if (aEvent == GameEvent.class) {
+        if (GameEventType.CATCH_ALL.equals(aEvent)) {
             catchAllEventListener = theEventListener;
         }
     }
@@ -61,7 +61,7 @@ public class GameEventManager implements GameEventListener {
                 theListener.handleGameEvent(aEvent);
             }
 
-            GameEventListener[] theRegisteredListener = registeredListeners.get(aEvent.getClass());
+            GameEventListener[] theRegisteredListener = registeredListeners.get(aEvent.getType());
             if (theRegisteredListener != null) {
                 for (GameEventListener theListener : theRegisteredListener) {
                     theListener.handleGameEvent(aEvent);

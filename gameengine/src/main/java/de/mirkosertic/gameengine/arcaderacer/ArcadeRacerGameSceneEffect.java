@@ -79,7 +79,7 @@ public class ArcadeRacerGameSceneEffect implements GameSceneEffect {
         cameraHeight = new Property<>(Double.class, this, CAMERAHEIGHT_PROPERTY, 2d, aEventManager);
         distanceCamera = new Property<>(Integer.class, this, DISTANCECAMERA_PROPERTY, -3, aEventManager);
 
-        aEventManager.register(this, SetScreenResolution.class, new GameEventListener<SetScreenResolution>() {
+        aEventManager.register(this, SetScreenResolution.TYPE, new GameEventListener<SetScreenResolution>() {
             @Override
             public void handleGameEvent(SetScreenResolution aEvent) {
                 screenSize = aEvent.screenSize;

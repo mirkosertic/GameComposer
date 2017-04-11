@@ -178,6 +178,7 @@ public class GameObjectInstance implements Reflectable<GameObjectInstanceClassIn
         }
 
         GameObjectInstance theResult = new GameObjectInstance(aGameRuntime.getEventManager(), theGameObject);
+
         theResult.position.setQuietly(Position.deserialize((Map<String, Object>) theInstance.get(POSITION_PROPERTY)));
         theResult.name.setQuietly((String) theInstance.get(NAME_PROPERTY));
 
@@ -185,10 +186,12 @@ public class GameObjectInstance implements Reflectable<GameObjectInstanceClassIn
         if (theInstanceUUID != null) {
             theResult.uuid.setQuietly(theInstanceUUID);
         }
+
         String theVisible = (String) theInstance.get(VISIBLE_PROPERTY);
         if (theVisible != null) {
             theResult.visible.setQuietly(Boolean.parseBoolean(theVisible));
         }
+
         String theAbsolutePositon = (String) theInstance.get("absolutePosition");
         if (theAbsolutePositon != null) {
             if (!Boolean.parseBoolean(theAbsolutePositon)) {
@@ -209,10 +212,12 @@ public class GameObjectInstance implements Reflectable<GameObjectInstanceClassIn
                 theResult.positionAnchor.setQuietly(PositionAnchor.SCENE);
             }
         }
+
         Map<String, Object> theRotationAngle = (Map<String, Object>) theInstance.get("rotationangle");
         if (theRotationAngle != null) {
             theResult.rotationAngle.setQuietly(Angle.deserialize(theRotationAngle));
         }
+
         List<Map<String, Object>> theComponents = (List<Map<String, Object>>) theInstance.get("components");
         for (Map<String, Object> theStructure : theComponents) {
             String theType = (String) theStructure.get(Behavior.TYPE_ATTRIBUTE);
@@ -220,7 +225,6 @@ public class GameObjectInstance implements Reflectable<GameObjectInstanceClassIn
             BehaviorUnmarshaller theUnmarshaller = aGameRuntime.getIORegistry().getBehaviorUnmarshallerFor(theType);
             theResult.addBehavior(theUnmarshaller.deserialize(aGameRuntime, theResult, theStructure));
         }
-
         return theResult;
     }
 }

@@ -18,9 +18,12 @@ package de.mirkosertic.gameengine.core;
 import de.mirkosertic.gameengine.annotations.InheritedClassInformation;
 import de.mirkosertic.gameengine.annotations.ReflectiveField;
 import de.mirkosertic.gameengine.event.GameEvent;
+import de.mirkosertic.gameengine.event.GameEventType;
 
 @InheritedClassInformation
 public class SpriteSheetAddedToScene extends GameEvent {
+
+    public static final GameEventType TYPE = new GameEventType("SpriteSheetAddedToScene");
 
     private static final EventSheetAddedToSceneClassInformation CIINSTANCE = new EventSheetAddedToSceneClassInformation();
 
@@ -28,7 +31,7 @@ public class SpriteSheetAddedToScene extends GameEvent {
     public final Spritesheet spriteSheet;
 
     public SpriteSheetAddedToScene(Spritesheet aSpriteSheet) {
-        super("SpriteSheetAddedToScene");
+        super(TYPE);
         spriteSheet = aSpriteSheet;
     }
 
