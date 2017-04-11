@@ -1,30 +1,28 @@
 package de.mirkosertic.gameengine.core;
 
-import de.mirkosertic.gameengine.event.GameEventManager;
-import de.mirkosertic.gameengine.event.PropertyChanged;
-import de.mirkosertic.gameengine.type.Size;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyMap;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.anyMap;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import de.mirkosertic.gameengine.event.GameEventManager;
+import de.mirkosertic.gameengine.event.PropertyChanged;
+import de.mirkosertic.gameengine.type.Size;
 
 public class GameObjectTest {
 
@@ -137,42 +135,6 @@ public class GameObjectTest {
         GameObject theObject = new GameObject(theScene, "Test");
         theObject.uuidProperty().set("lala");
         assertEquals(3314090, theObject.hashCode());
-    }
-
-    @Test
-    public void testAdd() throws Exception {
-        GameEventManager theEventManager = mock(GameEventManager.class);
-        doThrow(new RuntimeException()).when(theEventManager).fire(null);
-        GameRuntime theRuntime = mock(GameRuntime.class);
-        when(theRuntime.getEventManager()).thenReturn(theEventManager);
-        GameScene theScene = mock(GameScene.class);
-        when(theScene.getRuntime()).thenReturn(theRuntime);
-
-        BehaviorTemplate theBehavior = mock(BehaviorTemplate.class);
-
-        GameObject theObject = new GameObject(theScene, "Test");
-        assertNull(theObject.getBehaviorTemplate(theBehavior.getClass()));
-        theObject.add(theBehavior);
-        assertSame(theBehavior, theObject.getBehaviorTemplate(theBehavior.getClass()));
-        verify(theEventManager).fire(any(GameObjectConfigurationChanged.class));
-    }
-
-    @Test
-    public void testRemove() throws Exception {
-        GameEventManager theEventManager = mock(GameEventManager.class);
-        GameRuntime theRuntime = mock(GameRuntime.class);
-        when(theRuntime.getEventManager()).thenReturn(theEventManager);
-        GameScene theScene = mock(GameScene.class);
-        when(theScene.getRuntime()).thenReturn(theRuntime);
-
-        BehaviorTemplate theBehavior = mock(BehaviorTemplate.class);
-
-        GameObject theObject = new GameObject(theScene, "Test");
-        assertNull(theObject.getBehaviorTemplate(theBehavior.getClass()));
-        theObject.add(theBehavior);
-        theObject.remove(theBehavior);
-        assertNull(theObject.getBehaviorTemplate(theBehavior.getClass()));
-        verify(theEventManager, times(2)).fire(any(GameObjectConfigurationChanged.class));
     }
 
     @Test

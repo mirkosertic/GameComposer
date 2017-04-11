@@ -19,9 +19,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
 public class JSONParserTest {
@@ -99,5 +102,12 @@ public class JSONParserTest {
         Map<String, Object> theElementTwo = theList.get(1);
         assertEquals(1, theElementTwo.size());
         assertEquals("othervalue", theElementTwo.get("otherkey"));
+    }
+
+    @Test
+    public void testParseRealScene() throws IOException {
+        String theJSON = IOUtils.toString(new InputStreamReader(getClass().getResourceAsStream("/examplescene.json")));
+        Map<String, Object> theResult = new JSONParser().fromJSON(theJSON);
+        assertEquals(11, theResult.size());
     }
 }

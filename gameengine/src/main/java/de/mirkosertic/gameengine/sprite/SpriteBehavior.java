@@ -38,7 +38,7 @@ public class SpriteBehavior implements Behavior, Sprite, Reflectable<SpriteClass
     private final Property<Integer> speed;
 
     private SpriteBehavior(GameObjectInstance aObjectInstance) {
-        this(aObjectInstance, aObjectInstance.getOwnerGameObject().getBehaviorTemplate(SpriteBehaviorTemplate.class));
+        this(aObjectInstance, (SpriteBehaviorTemplate) aObjectInstance.getOwnerGameObject().getBehaviorTemplate(SpriteBehaviorTemplate.ID));
     }
 
     SpriteBehavior(GameObjectInstance aObjectInstance, SpriteBehaviorTemplate aTemplate) {
@@ -79,7 +79,7 @@ public class SpriteBehavior implements Behavior, Sprite, Reflectable<SpriteClass
 
     @Override
     public SpriteBehaviorTemplate getTemplate() {
-        return objectInstance.getOwnerGameObject().getBehaviorTemplate(SpriteBehaviorTemplate.class);
+        return objectInstance.getOwnerGameObject().getBehaviorTemplate(SpriteBehaviorTemplate.ID);
     }
 
     @Override

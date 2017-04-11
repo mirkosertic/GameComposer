@@ -44,7 +44,7 @@ public class GameObject implements Reflectable<GameObjectClassInformation> {
     private final Property<Size> size;
     private final Property<Boolean> visible;
 
-    private final Map<String, BehaviorTemplate> componentTemplates;
+    private final Map<BehaviorTemplateID, BehaviorTemplate> behaviors;
 
     public GameObject(GameScene aScene, String aName) {
         this(aScene, aName, de.mirkosertic.gameengine.type.UUID.randomUID());
@@ -59,7 +59,7 @@ public class GameObject implements Reflectable<GameObjectClassInformation> {
         name = new Property<>(String.class, this, NAME_PROPERTY, aName, theManager);
         size = new Property<>(Size.class, this, SIZE_PROPERTY, new Size(64, 64), theManager);
         visible = new Property<>(Boolean.class, this, VISIBLE_PROPERTY, Boolean.TRUE, theManager);
-        componentTemplates = new HashMap<>();
+        behaviors = new HashMap<>();
     }
 
     public GameScene getGameScene() {
@@ -102,17 +102,17 @@ public class GameObject implements Reflectable<GameObjectClassInformation> {
     }
 
     public void add(BehaviorTemplate aBehaviorTemplate) {
-        componentTemplates.put(aBehaviorTemplate.getClass().getSimpleName(), aBehaviorTemplate);
+        behaviors.put(aBehaviorTemplate.getId(), aBehaviorTemplate);
         gameScene.getRuntime().getEventManager().fire(new GameObjectConfigurationChanged(this));
     }
 
     public void remove(BehaviorTemplate aBehaviorTemplate) {
-        componentTemplates.remove(aBehaviorTemplate.getClass().getSimpleName());
+        behaviors.remove(aBehaviorTemplate.getId());
         gameScene.getRuntime().getEventManager().fire(new GameObjectConfigurationChanged(this));
     }
 
-    public <T extends BehaviorTemplate> T getBehaviorTemplate(Class<T> aBehaviorClass) {
-        return (T) componentTemplates.get(aBehaviorClass.getSimpleName());
+    public <T extends BehaviorTemplate> T getBehaviorTemplate(BehaviorTemplateID aID) {
+        return (T) behaviors.get(aID);
     }
 
     @Override
@@ -122,7 +122,7 @@ public class GameObject implements Reflectable<GameObjectClassInformation> {
 
     public Set<BehaviorTemplate> getBehaviorTemplates() {
         HashSet<BehaviorTemplate> theResult = new HashSet<>();
-        theResult.addAll(componentTemplates.values());
+        theResult.addAll(behaviors.values());
         return theResult;
     }
 
@@ -133,7 +133,7 @@ public class GameObject implements Reflectable<GameObjectClassInformation> {
         theResult.put(VISIBLE_PROPERTY, Boolean.toString(visible.get()));
         theResult.put(SIZE_PROPERTY, size.get().serialize());
         List<Map<String, Object>> theTemplates = new ArrayList<>();
-        for (BehaviorTemplate theTemplate : componentTemplates.values()) {
+        for (BehaviorTemplate theTemplate : behaviors.values()) {
            theTemplates.add(theTemplate.serialize());
         }
         theResult.put("templates", theTemplates);

@@ -27,6 +27,7 @@ import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.CameraBehaviorTemplate;
 import de.mirkosertic.gameengine.core.Behavior;
 import de.mirkosertic.gameengine.core.BehaviorTemplate;
+import de.mirkosertic.gameengine.core.BehaviorTemplateID;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectConfigurationChanged;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
@@ -85,7 +86,7 @@ public class ObjectInspectorController implements Controller {
     private PropertySheet propertySheet;
     private ObservableList<PropertySheet.Item> items;
 
-    private Map<Class<? extends BehaviorTemplate>, Class> behaviorTemplateToIdentifier;
+    private Map<BehaviorTemplateID, Class> behaviorTemplateToIdentifier;
     private Map<Class<? extends Behavior>, Class> behaviorToIdentifier;
 
     ObjectInspectorController initialize(Node aView) {
@@ -100,14 +101,14 @@ public class ObjectInspectorController implements Controller {
         behaviorToIdentifier.put(PlayerScoreBehavior.class, PlayerScore.class);
         behaviorToIdentifier.put(ConstantMovementBehavior.class, ConstantMovement.class);
         behaviorTemplateToIdentifier = new HashMap<>();
-        behaviorTemplateToIdentifier.put(StaticBehaviorTemplate.class, Static.class);
-        behaviorTemplateToIdentifier.put(CameraBehaviorTemplate.class, Camera.class);
-        behaviorTemplateToIdentifier.put(PlatformBehaviorTemplate.class, Platform.class);
-        behaviorTemplateToIdentifier.put(PhysicsBehaviorTemplate.class, Physics.class);
-        behaviorTemplateToIdentifier.put(SpriteBehaviorTemplate.class, Sprite.class);
-        behaviorTemplateToIdentifier.put(TextBehaviorTemplate.class, Text.class);
-        behaviorTemplateToIdentifier.put(PlayerScoreBehaviorTemplate.class, PlayerScore.class);
-        behaviorTemplateToIdentifier.put(ConstantMovementBehaviorTemplate.class, ConstantMovement.class);
+        behaviorTemplateToIdentifier.put(StaticBehaviorTemplate.ID, Static.class);
+        behaviorTemplateToIdentifier.put(CameraBehaviorTemplate.ID, Camera.class);
+        behaviorTemplateToIdentifier.put(PlatformBehaviorTemplate.ID, Platform.class);
+        behaviorTemplateToIdentifier.put(PhysicsBehaviorTemplate.ID, Physics.class);
+        behaviorTemplateToIdentifier.put(SpriteBehaviorTemplate.ID, Sprite.class);
+        behaviorTemplateToIdentifier.put(TextBehaviorTemplate.ID, Text.class);
+        behaviorTemplateToIdentifier.put(PlayerScoreBehaviorTemplate.ID, PlayerScore.class);
+        behaviorTemplateToIdentifier.put(ConstantMovementBehaviorTemplate.ID, ConstantMovement.class);
 
 
         items = new ObservableListWrapper<>(new ArrayList<>());
@@ -202,7 +203,7 @@ public class ObjectInspectorController implements Controller {
 
                     GameObject theGameObject = (GameObject) aObject;
 
-                    for (Map.Entry<Class<? extends BehaviorTemplate>, Class> theEntry : behaviorTemplateToIdentifier.entrySet()) {
+                    for (Map.Entry<BehaviorTemplateID,Class> theEntry : behaviorTemplateToIdentifier.entrySet()) {
                         BehaviorTemplate theTemplate = theGameObject.getBehaviorTemplate(theEntry.getKey());
                         if (theTemplate != null) {
                             Instance<?> theTemplateConfiguratorInstance = singleObjectFactory.select(createQualifier(theEntry.getValue()));
