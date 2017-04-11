@@ -18,9 +18,12 @@ package de.mirkosertic.gameengine.core;
 import de.mirkosertic.gameengine.annotations.InheritedClassInformation;
 import de.mirkosertic.gameengine.annotations.ReflectiveField;
 import de.mirkosertic.gameengine.event.GameEvent;
+import de.mirkosertic.gameengine.event.GameEventType;
 
 @InheritedClassInformation
 public class EventSheetRemovedFromScene extends GameEvent {
+
+    public static final GameEventType TYPE = new GameEventType("EventSheetRemovedFromScene");
 
     private static final EventSheetRemovedFromSceneClassInformation CIINSTANCE = new EventSheetRemovedFromSceneClassInformation();
 
@@ -28,7 +31,7 @@ public class EventSheetRemovedFromScene extends GameEvent {
     public final EventSheet eventSheet;
 
     public EventSheetRemovedFromScene(EventSheet aEventSheet) {
-        super("EventSheetRemovedFromScene");
+        super(TYPE);
         eventSheet = aEventSheet;
     }
 

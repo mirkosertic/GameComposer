@@ -87,7 +87,7 @@ public abstract class PlaySceneStrategy {
                 final GameRuntime theRuntime = aGameScene.getRuntime();
                 final GameEventManager theEventManager = theRuntime.getEventManager();
 
-                theEventManager.register(null, SystemException.class, new GameEventListener<SystemException>() {
+                theEventManager.register(null, SystemException.TYPE, new GameEventListener<SystemException>() {
                     @Override
                     public void handleGameEvent(SystemException aEvent) {
                         theRuntime.getLogger().error("Fatal system exception : " + aEvent.exception.getMessage());
@@ -124,7 +124,7 @@ public abstract class PlaySceneStrategy {
                         }
 
                         // This is our hook to load new scenes
-                        theEventManager.register(null, RunScene.class, new GameEventListener<RunScene>() {
+                        theEventManager.register(null, RunScene.TYPE, new GameEventListener<RunScene>() {
                             @Override
                             public void handleGameEvent(RunScene aEvent) {
                                 loadOtherScene(aEvent.sceneId);
@@ -162,7 +162,7 @@ public abstract class PlaySceneStrategy {
 
                             final GameObjectInstance theFinalPlayer = thePlayerInstance;
 
-                            theEventManager.register(null, NewGameInstance.class, new GameEventListener<NewGameInstance>() {
+                            theEventManager.register(null, NewGameInstance.TYPE, new GameEventListener<NewGameInstance>() {
                                 @Override
                                 public void handleGameEvent(NewGameInstance aEvent) {
                                     // Inform the other instances about the current player

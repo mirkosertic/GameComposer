@@ -30,7 +30,7 @@ import java.util.Map;
 @InheritedClassInformation
 public class PropertyChanged extends GameEvent implements DistributableEvent {
 
-    public static final String EVENT_ID = "PropertyChanged";
+    public static final GameEventType TYPE = new GameEventType("PropertyChanged");
 
     private static final PropertyChangedClassInformation CIINSTANCE = new PropertyChangedClassInformation();
 
@@ -41,7 +41,7 @@ public class PropertyChanged extends GameEvent implements DistributableEvent {
     public final Object oldValue;
 
     public PropertyChanged(Property aProperty, Object aOldValue) {
-        super(EVENT_ID);
+        super(TYPE);
         property = aProperty;
         oldValue = aOldValue;
     }
@@ -64,7 +64,7 @@ public class PropertyChanged extends GameEvent implements DistributableEvent {
     @Override
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<>();
-        theResult.put(EVENT_ID_ATTRIBUTE, type);
+        theResult.put(EVENT_ID_ATTRIBUTE, type.getType());
         theResult.put("eventts", "" + System.currentTimeMillis());
         theResult.put("propertyName", property.getName());
         theResult.put("newValue", DistributableUtils.convert(property.get()));

@@ -15,19 +15,37 @@
  */
 package de.mirkosertic.gameengine.event;
 
-public class SystemException extends GameEvent {
+public class GameEventType {
 
-    public static final GameEventType TYPE = new GameEventType("SystemException");
+    public static final GameEventType CATCH_ALL = new GameEventType("*");
 
-    public final Exception exception;
+    private final String type;
 
-    public SystemException(Exception aException) {
-        super(TYPE);
-        exception = aException;
+    public GameEventType(String aType) {
+        type = aType;
     }
 
     @Override
-    public String toString() {
-        return exception.getMessage();
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+
+        GameEventType that = (GameEventType) o;
+
+        if (!type.equals(that.type))
+            return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return type.hashCode();
+    }
+
+    public String getType() {
+        return type;
     }
 }

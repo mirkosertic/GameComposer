@@ -80,7 +80,7 @@ public class PlatformBehavior implements Behavior, Platform, Reflectable<Platfor
     }
 
     public void registerEvents(GameRuntime aGameRuntime) {
-        aGameRuntime.getEventManager().register(objectInstance, KeyPressed.class, new GameEventListener<KeyPressed>() {
+        aGameRuntime.getEventManager().register(objectInstance, KeyPressed.TYPE, new GameEventListener<KeyPressed>() {
             @Override
             public void handleGameEvent(KeyPressed aEvent) {
                 if (!remoteObject) {
@@ -88,7 +88,7 @@ public class PlatformBehavior implements Behavior, Platform, Reflectable<Platfor
                 }
             }
         });
-        aGameRuntime.getEventManager().register(objectInstance, KeyReleased.class, new GameEventListener<KeyReleased>() {
+        aGameRuntime.getEventManager().register(objectInstance, KeyReleased.TYPE, new GameEventListener<KeyReleased>() {
             @Override
             public void handleGameEvent(KeyReleased aEvent) {
                 if (!remoteObject) {
@@ -96,7 +96,7 @@ public class PlatformBehavior implements Behavior, Platform, Reflectable<Platfor
                 }
             }
         });
-        aGameRuntime.getEventManager().register(objectInstance, GameObjectCollision.class, new GameEventListener<GameObjectCollision>() {
+        aGameRuntime.getEventManager().register(objectInstance, GameObjectCollision.TYPE, new GameEventListener<GameObjectCollision>() {
             @Override
             public void handleGameEvent(GameObjectCollision aEvent) {
                 if (!remoteObject) {
@@ -104,7 +104,7 @@ public class PlatformBehavior implements Behavior, Platform, Reflectable<Platfor
                 }
             }
         });
-        aGameRuntime.getEventManager().register(objectInstance, SystemTick.class, new GameEventListener<SystemTick>() {
+        aGameRuntime.getEventManager().register(objectInstance, SystemTick.TYPE, new GameEventListener<SystemTick>() {
             @Override
             public void handleGameEvent(SystemTick aEvent) {
                 if (!remoteObject) {

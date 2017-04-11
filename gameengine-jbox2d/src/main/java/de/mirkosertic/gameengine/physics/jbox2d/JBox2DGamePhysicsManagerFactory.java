@@ -32,43 +32,43 @@ public class JBox2DGamePhysicsManagerFactory implements GamePhysicsManagerFactor
     @Override
     public JBox2DGamePhysicsManager create(GameEventManager aEventManager, ThreadingManager aThreadingManager) {
         final JBox2DGamePhysicsManager thePhysicsManager = new JBox2DGamePhysicsManager(aEventManager, aThreadingManager);
-        aEventManager.register(null, GameObjectInstanceAddedToScene.class, new GameEventListener<GameObjectInstanceAddedToScene>() {
+        aEventManager.register(null, GameObjectInstanceAddedToScene.TYPE, new GameEventListener<GameObjectInstanceAddedToScene>() {
             @Override
             public void handleGameEvent(GameObjectInstanceAddedToScene aEvent) {
                 thePhysicsManager.gameObjectInstanceAddedToScene(aEvent.instance);
             }
         });
-        aEventManager.register(null, GameObjectInstanceRemovedFromScene.class, new GameEventListener<GameObjectInstanceRemovedFromScene>() {
+        aEventManager.register(null, GameObjectInstanceRemovedFromScene.TYPE, new GameEventListener<GameObjectInstanceRemovedFromScene>() {
             @Override
             public void handleGameEvent(GameObjectInstanceRemovedFromScene aEvent) {
                 thePhysicsManager.gameObjectInstanceRemovedFromScene(aEvent.instance);
             }
         });
-        aEventManager.register(null, ApplyImpulseToGameObjectInstance.class, new GameEventListener<ApplyImpulseToGameObjectInstance>() {
+        aEventManager.register(null, ApplyImpulseToGameObjectInstance.TYPE, new GameEventListener<ApplyImpulseToGameObjectInstance>() {
             @Override
             public void handleGameEvent(ApplyImpulseToGameObjectInstance aEvent) {
                 thePhysicsManager.applyImpulse(aEvent.instance, aEvent.force);
             }
         });
-        aEventManager.register(null, ApplyForceToGameObjectInstance.class, new GameEventListener<ApplyForceToGameObjectInstance>() {
+        aEventManager.register(null, ApplyForceToGameObjectInstance.TYPE, new GameEventListener<ApplyForceToGameObjectInstance>() {
             @Override
             public void handleGameEvent(ApplyForceToGameObjectInstance aEvent) {
                 thePhysicsManager.applyForce(aEvent.instance, aEvent.force);
             }
         });
-        aEventManager.register(null, DisableDynamicPhysics.class, new GameEventListener<DisableDynamicPhysics>() {
+        aEventManager.register(null, DisableDynamicPhysics.TYPE, new GameEventListener<DisableDynamicPhysics>() {
             @Override
             public void handleGameEvent(DisableDynamicPhysics aEvent) {
                 thePhysicsManager.disableDynamicPhysicsOn(aEvent.object);
             }
         });
-        aEventManager.register(null, EnableDynamicPhysics.class, new GameEventListener<EnableDynamicPhysics>() {
+        aEventManager.register(null, EnableDynamicPhysics.TYPE, new GameEventListener<EnableDynamicPhysics>() {
             @Override
             public void handleGameEvent(EnableDynamicPhysics aEvent) {
                 thePhysicsManager.enableDynamicPhysicsOn(aEvent.object);
             }
         });
-        aEventManager.register(null, GameObjectConfigurationChanged.class, new GameEventListener<GameObjectConfigurationChanged>() {
+        aEventManager.register(null, GameObjectConfigurationChanged.TYPE, new GameEventListener<GameObjectConfigurationChanged>() {
             @Override
             public void handleGameEvent(GameObjectConfigurationChanged aEvent) {
                 thePhysicsManager.updateGameObjectConfiguration(aEvent.object);
