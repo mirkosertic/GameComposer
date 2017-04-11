@@ -21,6 +21,6 @@ public class UUID {
     }
 
     public static String randomUID() {
-        return Long.toString((long)Math.random() * 1000000);
+        return Long.toString((long)(Math.random() * 1000000));
     }
 }
