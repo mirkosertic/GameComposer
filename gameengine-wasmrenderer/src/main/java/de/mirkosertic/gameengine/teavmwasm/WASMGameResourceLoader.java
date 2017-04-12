@@ -27,7 +27,7 @@ public class WASMGameResourceLoader implements GameResourceLoader {
 
     @Override
     public Promise<GameResource, String> load(ResourceName aResourceName) {
-        WASMLogger.log("Loading Game Resource " +  aResourceName);
+        WASMLogger.INSTANCE.info("Loading Game Resource " +  aResourceName);
         return new Promise<>(new Promise.Executor() {
             @Override
             public void process(PromiseResolver aResolver, PromiseRejector aRejector) {
@@ -38,7 +38,7 @@ public class WASMGameResourceLoader implements GameResourceLoader {
 
     @Override
     public Promise<LoadedSpriteSheet, String> loadSpriteSheet(ResourceName aResourceName) {
-        WASMLogger.log("Loading Style sheet " +  aResourceName);
+        WASMLogger.INSTANCE.info("Loading Style sheet " +  aResourceName);
         return new Promise<>(new Promise.Executor() {
             @Override
             public void process(PromiseResolver aResolver, PromiseRejector aRejector) {

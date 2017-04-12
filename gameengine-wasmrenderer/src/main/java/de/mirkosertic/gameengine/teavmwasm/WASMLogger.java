@@ -15,10 +15,31 @@
  */
 package de.mirkosertic.gameengine.teavmwasm;
 
+import de.mirkosertic.gameengine.core.Logger;
 import org.teavm.interop.Import;
 
-public class WASMLogger {
+public class WASMLogger implements Logger {
+
+    public static final WASMLogger INSTANCE = new WASMLogger();
 
     @Import(module = "log", name = "log_string")
     public static native void log(String aValue);
+
+    @Override
+    public void info(String aMessage) {
+        log("INFO : " + aMessage);
+    }
+
+    @Override
+    public void error(String aMessage) {
+        log("ERROR : " + aMessage);
+    }
+
+    @Override
+    public void time(String aLabel) {
+    }
+
+    @Override
+    public void timeEnd(String aLabel) {
+    }
 }

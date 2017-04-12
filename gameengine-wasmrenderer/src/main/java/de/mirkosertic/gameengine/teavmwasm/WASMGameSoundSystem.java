@@ -32,7 +32,7 @@ public class WASMGameSoundSystem implements GameSoundSystem {
 
     @Override
     public Promise play(ResourceName aResourceName) {
-        WASMLogger.log("Playing sound " + aResourceName.get());
+        WASMLogger.INSTANCE.info("Playing sound " + aResourceName.get());
         return new Promise(new Promise.Executor() {
             @Override
             public void process(PromiseResolver aResolver, PromiseRejector aRejector) {

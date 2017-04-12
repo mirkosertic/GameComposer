@@ -27,25 +27,7 @@ public class WASMGameRuntimeFactory extends AbstractGameRuntimeFactory {
 
     @Override
     protected Logger createLogger() {
-        return new Logger() {
-            @Override
-            public void info(String aMessage) {
-                WASMLogger.log("INFO: " + aMessage);
-            }
-
-            @Override
-            public void error(String aMessage) {
-                WASMLogger.log("ERROR: " + aMessage);
-            }
-
-            @Override
-            public void time(String aLabel) {
-            }
-
-            @Override
-            public void timeEnd(String aLabel) {
-            }
-        };
+        return WASMLogger.INSTANCE;
     }
 
     @Override
