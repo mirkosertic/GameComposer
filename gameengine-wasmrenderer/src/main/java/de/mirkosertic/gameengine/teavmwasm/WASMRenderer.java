@@ -17,6 +17,7 @@ package de.mirkosertic.gameengine.teavmwasm;
 
 import java.util.Map;
 
+import de.mirkosertic.gameengine.type.PositionAnchor;
 import org.teavm.interop.Export;
 import org.teavm.interop.Import;
 
@@ -40,10 +41,10 @@ public class WASMRenderer {
         Map<String, Object> theResult = new JSONParser().fromJSON(WASMStringPool.getStringPool(aPoolID));
 
         loadedGame = Game.deserialize(theResult);
-        WASMLogger.log("Game loaded : " + loadedGame.nameProperty().get());
+        WASMLogger.INSTANCE.info("Game loaded : " + loadedGame.nameProperty().get());
 
         String theStartingScene = loadedGame.defaultSceneProperty().get();
-        WASMLogger.log("Loading default scene " + theStartingScene);
+        WASMLogger.INSTANCE.info("Loading default scene " + theStartingScene);
 
         loadGameScene(theStartingScene);
     }
@@ -54,26 +55,33 @@ public class WASMRenderer {
 
             Map<String, Object> theResult = new JSONParser().fromJSON(WASMStringPool.getStringPool(aPoolID));
 
-            WASMLogger.log("Loading scene");
+            WASMLogger.INSTANCE.info("Loading scene");
 
             WASMGameRuntimeFactory runtimeFactory = new WASMGameRuntimeFactory();
             GameRuntime theRuntime = runtimeFactory.create(new WASMGameResourceLoader(), new WASMGameSoundSystemFactory());
-            WASMLogger.log("Runtime created");
+            WASMLogger.INSTANCE.info("Runtime created");
 
             GameScene theScene = GameScene.deserialize(loadedGame, theRuntime, theResult);
 
-            WASMLogger.log("Ok");
+            WASMLogger.INSTANCE.info("Ok");
             //WASMLogger.log("Scene loaded : " + theScene.nameProperty().get());
         } catch (Exception e) {
-            WASMLogger.log("Error : " + e.getMessage());
+            WASMLogger.INSTANCE.error(e.getMessage());
         }
 
     }
 
     public static void main(String[] args) {
-        WASMLogger.log("Gameengine starting with version " + Version.VERSION);
+        WASMLogger.INSTANCE.info("Gameengine starting with version " + Version.VERSION);
 
         WASMStringPool theStringPool = new WASMStringPool();
+
+        try {
+            PositionAnchor a = PositionAnchor.valueOf("SCENE");
+            WASMLogger.INSTANCE.info("Found : " + a.name());
+        } catch (Exception e) {
+            WASMLogger.INSTANCE.error("Error while searching");
+        }
 
         bootstrap();
         // We are done here, waiting fpor the loadGameFromStringPool callback invoked
