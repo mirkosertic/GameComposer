@@ -22,7 +22,7 @@ before_install:
   - "npm install vulcanize -g"
   - "git clone https://github.com/mirkosertic/teavm.git ./teavm"
   - "cd teavm"
-  - "mvn clean install -DskipTests"
+  - "mvn clean install -DskipTests >/dev/null 2>&1"
   - "cd .."
   - "env"
   - "echo 'MAVEN_OPTS = $MAVEN_OPTS'"
