@@ -5,6 +5,7 @@ import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.Logger;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.type.Color;
 import de.mirkosertic.gameengine.type.Position;
@@ -67,7 +68,7 @@ public class LuaScriptEngineTest {
     @Test
     public void testProceedGameWithPropertyRead() throws IOException {
 
-        GameEventManager theEventManager = new GameEventManager();
+        GameEventManager theEventManager = new GameEventManager(mock(Logger.class));
         GameRuntime theRuntime = mock(GameRuntime.class);
         when(theRuntime.getEventManager()).thenReturn(theEventManager);
         Game theGame = mock(Game.class);
@@ -85,7 +86,7 @@ public class LuaScriptEngineTest {
     @Test
     public void testProceedGameWithPropertyWrite() throws IOException {
 
-        GameEventManager theEventManager = new GameEventManager();
+        GameEventManager theEventManager = new GameEventManager(mock(Logger.class));
         GameRuntime theRuntime = mock(GameRuntime.class);
         when(theRuntime.getEventManager()).thenReturn(theEventManager);
 
@@ -105,7 +106,7 @@ public class LuaScriptEngineTest {
     @Test
     public void testEvaluateSimpleExpression() throws IOException {
 
-        GameEventManager theEventManager = new GameEventManager();
+        GameEventManager theEventManager = new GameEventManager(mock(Logger.class));
         GameRuntime theRuntime = mock(GameRuntime.class);
         when(theRuntime.getEventManager()).thenReturn(theEventManager);
         Game theGame = new Game();

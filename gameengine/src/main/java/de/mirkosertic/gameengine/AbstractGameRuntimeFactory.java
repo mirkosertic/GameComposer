@@ -60,17 +60,17 @@ public abstract class AbstractGameRuntimeFactory {
 
     public GameRuntime create(GameResourceLoader aResourceLoader, GameSoundSystemFactory aSoundSystemFactory) {
 
-        GameEventManager theEventManager = new GameEventManager();
+        Logger theLogger = createLogger();
+
+        GameEventManager theEventManager = new GameEventManager(theLogger);
         GameProcessManagerFactory theProcessManagerFactory = new GameProcessManagerFactory();
         GameProcessManager theProcessManager = theProcessManagerFactory.create(theEventManager);
 
         ThreadingManager theThreadingManager = createThreadingManager();
 
-        Logger theLogger = createLogger();
-
         // Physics system
         GamePhysicsManagerFactory thePhysicsManagerFactory = createPhysicsManagerFactory();
-        GamePhysicsManager thePhysicsManager = thePhysicsManagerFactory.create(theEventManager, theThreadingManager);
+        GamePhysicsManager thePhysicsManager = thePhysicsManagerFactory.create(theLogger, theEventManager, theThreadingManager);
 
         // By default we use Lua as a script engine
         LUAScriptEngineFactory theScriptEngineFactory = createScriptEngine();

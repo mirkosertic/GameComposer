@@ -15,7 +15,7 @@ public class GameLoopFactoryTest {
     @Test
     public void testCreate() throws Exception {
 
-        GameEventManager theEventManager = new GameEventManager();
+        GameEventManager theEventManager = new GameEventManager(mock(Logger.class));
 
         GameScene theScene = mock(GameScene.class);
         GameView theView = mock(GameView.class);

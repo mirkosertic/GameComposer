@@ -16,6 +16,7 @@
 package de.mirkosertic.gameengine.event;
 
 import de.mirkosertic.gameengine.ArrayUtils;
+import de.mirkosertic.gameengine.core.Logger;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,10 +25,12 @@ import java.util.Map;
 public class GameEventManager implements GameEventListener {
 
     private final Map<GameEventType, GameEventListener[]> registeredListeners;
+    private final Logger logger;
 
     private GameEventListener catchAllEventListener[];
 
-    public GameEventManager() {
+    public GameEventManager(Logger aLogger) {
+        logger = aLogger;
         registeredListeners = new HashMap<>();
         catchAllEventListener = new GameEventListener[0];
     }
@@ -57,17 +60,20 @@ public class GameEventManager implements GameEventListener {
 
     public void fire(GameEvent aEvent) {
         try {
+            logger.info("Calling catch all for " + aEvent.getType().getType());
             for (GameEventListener theListener : catchAllEventListener) {
                 theListener.handleGameEvent(aEvent);
             }
 
             GameEventListener[] theRegisteredListener = registeredListeners.get(aEvent.getType());
             if (theRegisteredListener != null) {
+                logger.info("Calling handler for " + aEvent.getType().getType());
                 for (GameEventListener theListener : theRegisteredListener) {
                     theListener.handleGameEvent(aEvent);
                 }
             }
         } catch (Exception e) {
+            logger.info("Error while dispatching event " + e.getMessage());
             if (aEvent instanceof SystemException) {
                 throw new RuntimeException("Error dispatching system exception", e);
             } else {
