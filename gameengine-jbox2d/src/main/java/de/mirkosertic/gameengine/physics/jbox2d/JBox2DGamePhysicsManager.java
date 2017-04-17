@@ -255,7 +255,6 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
 
     Body gameObjectInstanceAddedToScene(GameObjectInstance aInstance) {
         //synchronized (physicsWorld) {
-        logger.info("A");
             aInstance.positionProperty().addChangeListener(positionChangeListener);
             aInstance.rotationAngleProperty().addChangeListener(positionChangeListener);
             aInstance.visibleProperty().addChangeListener(visibleListener);
@@ -267,7 +266,6 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
                 }
             }
 
-        logger.info("B");
             Size theInstanceSize = aInstance.getOwnerGameObject().sizeProperty().get();
 
             // Check if is a static component
@@ -288,7 +286,6 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
                 return theBody;
             }
 
-        logger.info("C");
             // Now the player, hence the platform component
             PlatformBehavior thePlatformComponent = aInstance.getBehavior(PlatformBehavior.TYPE);
             if (thePlatformComponent != null) {
@@ -306,7 +303,6 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
                 return theBody;
             }
 
-        logger.info("D");
             // Additional physics
             PhysicsBehavior thePhysicscomponent = aInstance.getBehavior(PhysicsBehavior.TYPE);
             if (thePhysicscomponent != null) {
@@ -326,7 +322,6 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
                 return theBody;
             }
         //}
-        logger.info("E");
         return null;
     }
 
