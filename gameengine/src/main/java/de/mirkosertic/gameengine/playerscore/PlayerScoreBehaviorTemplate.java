@@ -16,7 +16,7 @@
 package de.mirkosertic.gameengine.playerscore;
 
 import de.mirkosertic.gameengine.core.BehaviorTemplate;
-import de.mirkosertic.gameengine.core.BehaviorTemplateID;
+import de.mirkosertic.gameengine.core.BehaviorType;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
@@ -30,7 +30,7 @@ import java.util.Map;
 
 public class PlayerScoreBehaviorTemplate implements BehaviorTemplate<PlayerScoreBehavior>, PlayerScore, Reflectable<PlayerScoreClassInformation> {
 
-    public static final BehaviorTemplateID ID = new BehaviorTemplateID("PlayerScoreBehaviorTemplate");
+    public static final BehaviorType TYPE = new BehaviorType("PlayerScoreBehaviorTemplate");
 
     private static final PlayerScoreClassInformation CIINSTANCE = new PlayerScoreClassInformation();
 
@@ -43,8 +43,8 @@ public class PlayerScoreBehaviorTemplate implements BehaviorTemplate<PlayerScore
     }
 
     @Override
-    public BehaviorTemplateID getId() {
-        return ID;
+    public BehaviorType getType() {
+        return TYPE;
     }
 
     @Override

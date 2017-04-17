@@ -16,7 +16,7 @@
 package de.mirkosertic.gameengine.sprite;
 
 import de.mirkosertic.gameengine.core.BehaviorTemplate;
-import de.mirkosertic.gameengine.core.BehaviorTemplateID;
+import de.mirkosertic.gameengine.core.BehaviorType;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectConfigurationChanged;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
@@ -35,7 +35,7 @@ import java.util.Map;
 
 public class SpriteBehaviorTemplate implements BehaviorTemplate<SpriteBehavior>, Sprite, Reflectable<SpriteClassInformation> {
 
-    public static final BehaviorTemplateID ID = new BehaviorTemplateID("SpriteBehaviorTemplate");;
+    public static final BehaviorType TYPE = new BehaviorType("SpriteBehaviorTemplate");;
 
     private static final SpriteClassInformation CIINSTANCE = new SpriteClassInformation();
 
@@ -54,8 +54,8 @@ public class SpriteBehaviorTemplate implements BehaviorTemplate<SpriteBehavior>,
     }
 
     @Override
-    public BehaviorTemplateID getId() {
-        return ID;
+    public BehaviorType getType() {
+        return TYPE;
     }
 
     @Override

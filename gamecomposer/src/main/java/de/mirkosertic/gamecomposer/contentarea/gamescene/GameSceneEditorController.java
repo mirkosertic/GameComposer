@@ -332,7 +332,7 @@ public class GameSceneEditorController implements ContentController<GameScene> {
 
         // Detect and create a camera
         GameObjectInstance theCameraInstance = thePreviewScene.createFrom(theDefaultCamera);
-        final CameraBehavior theCameraInstanceBehavior = theCameraInstance.getBehavior(CameraBehavior.class);
+        final CameraBehavior theCameraInstanceBehavior = theCameraInstance.getBehavior(CameraBehavior.TYPE);
         if (theCameraInstanceBehavior == null) {
             throw new IllegalArgumentException("No camera component in camera object");
         }

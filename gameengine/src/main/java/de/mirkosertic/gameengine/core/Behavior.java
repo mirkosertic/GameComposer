@@ -21,7 +21,7 @@ public interface Behavior {
 
     String TYPE_ATTRIBUTE = "type";
 
-    String getType();
+    BehaviorType getType();
 
     GameObjectInstance getInstance();
 

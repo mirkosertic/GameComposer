@@ -19,7 +19,7 @@ import java.util.Map;
 
 public interface BehaviorTemplate<T extends Behavior> {
 
-    BehaviorTemplateID getId();
+    BehaviorType getType();
 
     T create(GameObjectInstance aInstance, GameRuntime aGameRuntime);
 

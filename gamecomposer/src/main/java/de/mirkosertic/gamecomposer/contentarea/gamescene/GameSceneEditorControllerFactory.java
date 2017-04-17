@@ -63,7 +63,7 @@ public class GameSceneEditorControllerFactory implements ContentAreaFactory<Game
 
         // Detect and create a camera
         GameObjectInstance theCameraInstance = aScene.createFrom(theDefaultCamera);
-        CameraBehavior theCameraBehavior = theCameraInstance.getBehavior(CameraBehavior.class);
+        CameraBehavior theCameraBehavior = theCameraInstance.getBehavior(CameraBehavior.TYPE);
         if (theCameraBehavior == null) {
             throw new IllegalArgumentException("No camera component in camera object");
         }

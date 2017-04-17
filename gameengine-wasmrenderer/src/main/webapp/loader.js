@@ -35,6 +35,15 @@ var TeaVM = function() {
         return len2 * 256 + len1
     },
 
+    TeaVM.prototype.putchar = function(charCode) {
+        if (charCode == 10) {
+            console.log(this.line);
+            this.line = "";
+        } else {
+            this.line += String.fromCharCode(charCode);
+        }
+    },
+
     TeaVM.prototype.pointerToString = function(str) {
 
         // Pointer to character array
@@ -83,6 +92,9 @@ var TeaVM = function() {
                     isNaN: function(v) {
                         return !isNaN(v)
                     },
+                    putchar: function(c) {
+                        teavm.putChar(c)
+                    }
                 },
                 math: Math,
                 engine: {

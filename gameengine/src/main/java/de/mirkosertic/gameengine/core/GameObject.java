@@ -44,7 +44,7 @@ public class GameObject implements Reflectable<GameObjectClassInformation> {
     private final Property<Size> size;
     private final Property<Boolean> visible;
 
-    private final Map<BehaviorTemplateID, BehaviorTemplate> behaviors;
+    private final Map<BehaviorType, BehaviorTemplate> behaviors;
 
     public GameObject(GameScene aScene, String aName) {
         this(aScene, aName, de.mirkosertic.gameengine.type.UUID.randomUID());
@@ -102,17 +102,17 @@ public class GameObject implements Reflectable<GameObjectClassInformation> {
     }
 
     public void add(BehaviorTemplate aBehaviorTemplate) {
-        behaviors.put(aBehaviorTemplate.getId(), aBehaviorTemplate);
+        behaviors.put(aBehaviorTemplate.getType(), aBehaviorTemplate);
         gameScene.getRuntime().getEventManager().fire(new GameObjectConfigurationChanged(this));
     }
 
     public void remove(BehaviorTemplate aBehaviorTemplate) {
-        behaviors.remove(aBehaviorTemplate.getId());
+        behaviors.remove(aBehaviorTemplate.getType());
         gameScene.getRuntime().getEventManager().fire(new GameObjectConfigurationChanged(this));
     }
 
-    public <T extends BehaviorTemplate> T getBehaviorTemplate(BehaviorTemplateID aID) {
-        return (T) behaviors.get(aID);
+    public <T extends BehaviorTemplate> T getBehaviorTemplate(BehaviorType aType) {
+        return (T) behaviors.get(aType);
     }
 
     @Override
@@ -157,7 +157,7 @@ public class GameObject implements Reflectable<GameObjectClassInformation> {
 
         List<Map<String, Object>> theTemplates = (List<Map<String, Object>>) theSerializedData.get("templates");
         for (Map<String, Object> theTemplate : theTemplates) {
-            String theTypeKey = (String) theTemplate.get(Behavior.TYPE_ATTRIBUTE);
+            BehaviorType theTypeKey = new BehaviorType((String) theTemplate.get(Behavior.TYPE_ATTRIBUTE));
             theObject.add(aGameRuntime.getIORegistry().getBehaviorTemplateUnmarshallerFor(theTypeKey).deserialize(aGameRuntime.getEventManager(), theObject, theTemplate));
         }
 

@@ -226,7 +226,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
         theBodyDef.position = computePosition(aInstance);
         theBodyDef.gravityScale = 1;
 
-        PhysicsBehaviorTemplate theTemplate = aInstance.getOwnerGameObject().getBehaviorTemplate(PhysicsBehaviorTemplate.ID);
+        PhysicsBehaviorTemplate theTemplate = aInstance.getOwnerGameObject().getBehaviorTemplate(PhysicsBehaviorTemplate.TYPE);
         if (theTemplate != null) {
             theBodyDef.active = theTemplate.activeProperty().get();
             theBodyDef.fixedRotation = theTemplate.fixedRotationProperty().get();
@@ -243,7 +243,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
         theFixture.friction = 1.8f;
         theFixture.restitution = 0;
 
-        PhysicsBehaviorTemplate theTemplate = aInstance.getOwnerGameObject().getBehaviorTemplate(PhysicsBehaviorTemplate.ID);
+        PhysicsBehaviorTemplate theTemplate = aInstance.getOwnerGameObject().getBehaviorTemplate(PhysicsBehaviorTemplate.TYPE);
         if (theTemplate != null) {
             theFixture.density = theTemplate.densityProperty().get();
             theFixture.friction = theTemplate.frictionProperty().get();
@@ -261,7 +261,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
             aInstance.visibleProperty().addChangeListener(visibleListener);
             if (alreadyRegisteredSizeListener.add(aInstance.getOwnerGameObject())) {
                 aInstance.getOwnerGameObject().sizeProperty().addChangeListener(sizeChangeListener);
-                PhysicsBehaviorTemplate theTemplate = aInstance.getOwnerGameObject().getBehaviorTemplate(PhysicsBehaviorTemplate.ID);
+                PhysicsBehaviorTemplate theTemplate = aInstance.getOwnerGameObject().getBehaviorTemplate(PhysicsBehaviorTemplate.TYPE);
                 if (theTemplate != null) {
                     theTemplate.fixedRotationProperty().addChangeListener(fixedAngleListener);
                 }
@@ -271,7 +271,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
             Size theInstanceSize = aInstance.getOwnerGameObject().sizeProperty().get();
 
             // Check if is a static component
-            StaticBehavior theStaticComponent = aInstance.getBehavior(StaticBehavior.class);
+            StaticBehavior theStaticComponent = aInstance.getBehavior(StaticBehavior.TYPE);
             if (theStaticComponent != null) {
                 // The component is static hence not moveable, we add it as a ground to the physics simulation
                 PolygonShape theStaticShape = new PolygonShape();
@@ -290,7 +290,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
 
         logger.info("C");
             // Now the player, hence the platform component
-            PlatformBehavior thePlatformComponent = aInstance.getBehavior(PlatformBehavior.class);
+            PlatformBehavior thePlatformComponent = aInstance.getBehavior(PlatformBehavior.TYPE);
             if (thePlatformComponent != null) {
                 PolygonShape thePlatformShape = new PolygonShape();
                 thePlatformShape.setAsBox(SIZE_FACTOR * theInstanceSize.width / 2, SIZE_FACTOR * theInstanceSize.height
@@ -308,7 +308,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
 
         logger.info("D");
             // Additional physics
-            PhysicsBehavior thePhysicscomponent = aInstance.getBehavior(PhysicsBehavior.class);
+            PhysicsBehavior thePhysicscomponent = aInstance.getBehavior(PhysicsBehavior.TYPE);
             if (thePhysicscomponent != null) {
 
                 PolygonShape thePhysicsShape = new PolygonShape();
