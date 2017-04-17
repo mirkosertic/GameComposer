@@ -21,7 +21,7 @@ import java.util.Map;
 
 public interface BehaviorTemplateUnmarshaller<T extends BehaviorTemplate> {
 
-    String getTypeKey();
+    BehaviorType getTypeKey();
 
     T deserialize(GameEventManager aEventmanager, GameObject aOwner, Map<String, Object> aSerializedData);
 }

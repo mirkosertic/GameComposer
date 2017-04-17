@@ -16,6 +16,7 @@
 package de.mirkosertic.gameengine.physic;
 
 import de.mirkosertic.gameengine.core.Behavior;
+import de.mirkosertic.gameengine.core.BehaviorType;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.type.Reflectable;
 
@@ -26,7 +27,7 @@ public class StaticBehavior implements Behavior, Static, Reflectable<StaticClass
 
     private static final StaticClassInformation CIINSTANCE = new StaticClassInformation();
     
-    static final String TYPE = "Static";
+    public static final BehaviorType TYPE = new BehaviorType("Static");
 
     private final GameObjectInstance objectInstance;
 
@@ -35,7 +36,7 @@ public class StaticBehavior implements Behavior, Static, Reflectable<StaticClass
     }
 
     @Override
-    public String getType() {
+    public BehaviorType getType() {
         return TYPE;
     }
 
@@ -53,7 +54,7 @@ public class StaticBehavior implements Behavior, Static, Reflectable<StaticClass
 
     @Override
     public StaticBehaviorTemplate getTemplate() {
-        return objectInstance.getOwnerGameObject().getBehaviorTemplate(StaticBehaviorTemplate.ID);
+        return objectInstance.getOwnerGameObject().getBehaviorTemplate(StaticBehaviorTemplate.TYPE);
     }
 
     @Override

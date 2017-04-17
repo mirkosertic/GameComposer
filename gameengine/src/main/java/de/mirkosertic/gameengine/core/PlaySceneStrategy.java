@@ -107,7 +107,7 @@ public abstract class PlaySceneStrategy {
 
                         GameObject theCameraObject = aGameScene.cameraObjectProperty().get();
                         GameObjectInstance theCameraObjectInstance = aGameScene.createFrom(theCameraObject);
-                        CameraBehavior theCameraBehavior = theCameraObjectInstance.getBehavior(CameraBehavior.class);
+                        CameraBehavior theCameraBehavior = theCameraObjectInstance.getBehavior(CameraBehavior.TYPE);
 
                         GameObjectInstance thePlayerInstance = null;
                         for (GameObjectInstance theInstance : aGameScene.getInstances()) {

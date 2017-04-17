@@ -17,6 +17,7 @@ package de.mirkosertic.gameengine.physic;
 
 import de.mirkosertic.gameengine.action.SystemTick;
 import de.mirkosertic.gameengine.core.Behavior;
+import de.mirkosertic.gameengine.core.BehaviorType;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.event.GameEventListener;
@@ -37,7 +38,7 @@ public class PlatformBehavior implements Behavior, Platform, Reflectable<Platfor
 
     private static final PlatformClassInformation CIINSTANCE = new PlatformClassInformation();
 
-    static final String TYPE = "Platform";
+    public static final BehaviorType TYPE = new BehaviorType("Platform");
 
     private final GameRuntime gameRuntime;
     private final GameObjectInstance objectInstance;
@@ -59,7 +60,7 @@ public class PlatformBehavior implements Behavior, Platform, Reflectable<Platfor
         gameRuntime = aGameRuntime;
         objectInstance = aObjectInstance;
 
-        PlatformBehaviorTemplate theTemplate = aObjectInstance.getOwnerGameObject().getBehaviorTemplate(PlatformBehaviorTemplate.ID);
+        PlatformBehaviorTemplate theTemplate = aObjectInstance.getOwnerGameObject().getBehaviorTemplate(PlatformBehaviorTemplate.TYPE);
         GameEventManager theEventManager = aObjectInstance.getOwnerGameObject().getGameScene().getRuntime().getEventManager();
 
         moveLeftKey = new Property<>(GameKeyCode.class, this, MOVE_LEFT_KEY_PROPERTY, theTemplate.moveLeftKeyProperty().get(), theEventManager);
@@ -75,7 +76,7 @@ public class PlatformBehavior implements Behavior, Platform, Reflectable<Platfor
     }
 
     @Override
-    public String getType() {
+    public BehaviorType getType() {
         return TYPE;
     }
 
@@ -214,7 +215,7 @@ public class PlatformBehavior implements Behavior, Platform, Reflectable<Platfor
 
     @Override
     public PlatformBehaviorTemplate getTemplate() {
-        return objectInstance.getOwnerGameObject().getBehaviorTemplate(PlatformBehaviorTemplate.ID);
+        return objectInstance.getOwnerGameObject().getBehaviorTemplate(PlatformBehaviorTemplate.TYPE);
     }
 
     @Override

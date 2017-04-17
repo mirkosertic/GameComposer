@@ -143,12 +143,12 @@ public class GameObjectEditor extends ListingElement {
         availableTemplates.put("Camera", new ObjectEditorHelper<GameObject>() {
             @Override
             public boolean contains(GameObject aObject) {
-                return aObject.getBehaviorTemplate(CameraBehaviorTemplate.ID) != null;
+                return aObject.getBehaviorTemplate(CameraBehaviorTemplate.TYPE) != null;
             }
 
             @Override
             public void addOptionEditor(GameObject aObject) {
-                addSubComponent((CameraBehaviorTemplate) aObject.getBehaviorTemplate(CameraBehaviorTemplate.ID), true);
+                addSubComponent((CameraBehaviorTemplate) aObject.getBehaviorTemplate(CameraBehaviorTemplate.TYPE), true);
             }
 
             @Override
@@ -161,12 +161,12 @@ public class GameObjectEditor extends ListingElement {
         availableTemplates.put("Player", new ObjectEditorHelper<GameObject>() {
             @Override
             public boolean contains(GameObject aObject) {
-                return aObject.getBehaviorTemplate(PlayerScoreBehaviorTemplate.ID) != null;
+                return aObject.getBehaviorTemplate(PlayerScoreBehaviorTemplate.TYPE) != null;
             }
 
             @Override
             public void addOptionEditor(GameObject aObject) {
-                addSubComponent((PlayerScoreBehaviorTemplate) aObject.getBehaviorTemplate(PlayerScoreBehaviorTemplate.ID), true);
+                addSubComponent((PlayerScoreBehaviorTemplate) aObject.getBehaviorTemplate(PlayerScoreBehaviorTemplate.TYPE), true);
             }
 
             @Override
@@ -179,12 +179,12 @@ public class GameObjectEditor extends ListingElement {
         availableTemplates.put("Static", new ObjectEditorHelper<GameObject>() {
             @Override
             public boolean contains(GameObject aObject) {
-                return aObject.getBehaviorTemplate(StaticBehaviorTemplate.ID) != null;
+                return aObject.getBehaviorTemplate(StaticBehaviorTemplate.TYPE) != null;
             }
 
             @Override
             public void addOptionEditor(GameObject aObject) {
-                addSubComponent((StaticBehaviorTemplate) aObject.getBehaviorTemplate(StaticBehaviorTemplate.ID), true);
+                addSubComponent((StaticBehaviorTemplate) aObject.getBehaviorTemplate(StaticBehaviorTemplate.TYPE), true);
             }
 
             @Override
@@ -197,12 +197,12 @@ public class GameObjectEditor extends ListingElement {
         availableTemplates.put("Text", new ObjectEditorHelper<GameObject>() {
             @Override
             public boolean contains(GameObject aObject) {
-                return aObject.getBehaviorTemplate(TextBehaviorTemplate.ID) != null;
+                return aObject.getBehaviorTemplate(TextBehaviorTemplate.TYPE) != null;
             }
 
             @Override
             public void addOptionEditor(GameObject aObject) {
-                addSubComponent((TextBehaviorTemplate) aObject.getBehaviorTemplate(TextBehaviorTemplate.ID), true);
+                addSubComponent((TextBehaviorTemplate) aObject.getBehaviorTemplate(TextBehaviorTemplate.TYPE), true);
             }
 
             @Override
@@ -215,12 +215,12 @@ public class GameObjectEditor extends ListingElement {
         availableTemplates.put("Platformer", new ObjectEditorHelper<GameObject>() {
             @Override
             public boolean contains(GameObject aObject) {
-                return aObject.getBehaviorTemplate(PlatformBehaviorTemplate.ID) != null;
+                return aObject.getBehaviorTemplate(PlatformBehaviorTemplate.TYPE) != null;
             }
 
             @Override
             public void addOptionEditor(GameObject aObject) {
-                addSubComponent((PlatformBehaviorTemplate) aObject.getBehaviorTemplate(PlatformBehaviorTemplate.ID), true);
+                addSubComponent((PlatformBehaviorTemplate) aObject.getBehaviorTemplate(PlatformBehaviorTemplate.TYPE), true);
             }
 
             @Override
@@ -233,12 +233,12 @@ public class GameObjectEditor extends ListingElement {
         availableTemplates.put("Constant movement", new ObjectEditorHelper<GameObject>() {
             @Override
             public boolean contains(GameObject aObject) {
-                return aObject.getBehaviorTemplate(ConstantMovementBehaviorTemplate.ID) != null;
+                return aObject.getBehaviorTemplate(ConstantMovementBehaviorTemplate.TYPE) != null;
             }
 
             @Override
             public void addOptionEditor(GameObject aObject) {
-                addSubComponent((ConstantMovementBehaviorTemplate) aObject.getBehaviorTemplate(ConstantMovementBehaviorTemplate.ID), true);
+                addSubComponent((ConstantMovementBehaviorTemplate) aObject.getBehaviorTemplate(ConstantMovementBehaviorTemplate.TYPE), true);
             }
 
             @Override
@@ -251,12 +251,12 @@ public class GameObjectEditor extends ListingElement {
         availableTemplates.put("Physics", new ObjectEditorHelper<GameObject>() {
             @Override
             public boolean contains(GameObject aObject) {
-                return aObject.getBehaviorTemplate(PhysicsBehaviorTemplate.ID) != null;
+                return aObject.getBehaviorTemplate(PhysicsBehaviorTemplate.TYPE) != null;
             }
 
             @Override
             public void addOptionEditor(GameObject aObject) {
-                addSubComponent((PhysicsBehaviorTemplate) aObject.getBehaviorTemplate(PhysicsBehaviorTemplate.ID), true);
+                addSubComponent((PhysicsBehaviorTemplate) aObject.getBehaviorTemplate(PhysicsBehaviorTemplate.TYPE), true);
             }
 
             @Override
@@ -269,12 +269,12 @@ public class GameObjectEditor extends ListingElement {
         availableTemplates.put("Sprite", new ObjectEditorHelper<GameObject>() {
             @Override
             public boolean contains(GameObject aObject) {
-                return aObject.getBehaviorTemplate(SpriteBehaviorTemplate.ID) != null;
+                return aObject.getBehaviorTemplate(SpriteBehaviorTemplate.TYPE) != null;
             }
 
             @Override
             public void addOptionEditor(GameObject aObject) {
-                addSubComponent((SpriteBehaviorTemplate) aObject.getBehaviorTemplate(SpriteBehaviorTemplate.ID),
+                addSubComponent((SpriteBehaviorTemplate) aObject.getBehaviorTemplate(SpriteBehaviorTemplate.TYPE),
                         aObject.getGameScene(), true);
             }
 
@@ -424,14 +424,14 @@ public class GameObjectEditor extends ListingElement {
         });
         addSelectionEditor("Anchor", aObject.positionAnchorProperty(), PositionAnchor.values());
 
-        addSubComponent(aObject.getBehavior(CameraBehavior.class), false);
-        addSubComponent(aObject.getBehavior(PlayerScoreBehavior.class), false);
-        addSubComponent(aObject.getBehavior(StaticBehavior.class), false);
-        addSubComponent(aObject.getBehavior(TextBehavior.class), false);
-        addSubComponent(aObject.getBehavior(PlatformBehavior.class), false);
-        addSubComponent(aObject.getBehavior(ConstantMovementBehavior.class), false);
-        addSubComponent(aObject.getBehavior(PhysicsBehavior.class), false);
-        addSubComponent(aObject.getBehavior(SpriteBehavior.class), aObject.getOwnerGameObject().getGameScene(), false);
+        addSubComponent((CameraBehavior) aObject.getBehavior(CameraBehavior.TYPE), false);
+        addSubComponent((PlayerScoreBehavior) aObject.getBehavior(PlayerScoreBehavior.TYPE), false);
+        addSubComponent((StaticBehavior) aObject.getBehavior(StaticBehavior.TYPE), false);
+        addSubComponent((TextBehavior) aObject.getBehavior(TextBehavior.TYPE), false);
+        addSubComponent((PlatformBehavior) aObject.getBehavior(PlatformBehavior.TYPE), false);
+        addSubComponent((ConstantMovementBehavior) aObject.getBehavior(ConstantMovementBehavior.TYPE), false);
+        addSubComponent((PhysicsBehavior) aObject.getBehavior(PhysicsBehavior.TYPE), false);
+        addSubComponent(aObject.getBehavior(SpriteBehavior.TYPE), aObject.getOwnerGameObject().getGameScene(), false);
     }
 
     public <T> void initializeAndBuildContextMenu(GlobalSeparatorHTMLElement aEditor, T aObject, Map<String, ObjectEditorHelper<T>> aOptions) {

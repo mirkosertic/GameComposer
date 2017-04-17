@@ -60,14 +60,12 @@ public class GameEventManager implements GameEventListener {
 
     public void fire(GameEvent aEvent) {
         try {
-            logger.info("Calling catch all for " + aEvent.getType().getType());
             for (GameEventListener theListener : catchAllEventListener) {
                 theListener.handleGameEvent(aEvent);
             }
 
             GameEventListener[] theRegisteredListener = registeredListeners.get(aEvent.getType());
             if (theRegisteredListener != null) {
-                logger.info("Calling handler for " + aEvent.getType().getType());
                 for (GameEventListener theListener : theRegisteredListener) {
                     theListener.handleGameEvent(aEvent);
                 }

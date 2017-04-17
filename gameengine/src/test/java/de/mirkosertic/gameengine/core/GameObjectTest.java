@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyMap;
 import static org.mockito.Mockito.mock;
@@ -204,7 +205,7 @@ public class GameObjectTest {
         when(theUnmarshaller.deserialize(any(GameEventManager.class), any(GameObject.class), anyMap())).thenReturn(theBehavior);
 
         IORegistry theRegistry = mock(IORegistry.class);
-        when(theRegistry.getBehaviorTemplateUnmarshallerFor("behav")).thenReturn(theUnmarshaller);
+        when(theRegistry.getBehaviorTemplateUnmarshallerFor(eq(new BehaviorType("behav")))).thenReturn(theUnmarshaller);
 
         GameEventManager theEventManager = mock(GameEventManager.class);
         GameRuntime theRuntime = mock(GameRuntime.class);
