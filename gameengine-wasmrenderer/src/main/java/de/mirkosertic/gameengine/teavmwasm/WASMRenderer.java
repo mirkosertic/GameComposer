@@ -63,8 +63,7 @@ public class WASMRenderer {
 
             GameScene theScene = GameScene.deserialize(loadedGame, theRuntime, theResult);
 
-            WASMLogger.INSTANCE.info("Ok");
-            //WASMLogger.log("Scene loaded : " + theScene.nameProperty().get());
+            WASMLogger.INSTANCE.info("Scene loaded : " + theScene.nameProperty().get());
         } catch (Throwable e) {
             try {
                 ByteArrayOutputStream theOS = new ByteArrayOutputStream();
@@ -80,6 +79,9 @@ public class WASMRenderer {
     }
 
     public static void main(String[] args) {
+        Integer.parseInt("10");
+        Long.parseLong("10");
+        Double.parseDouble("10");
         WASMLogger.INSTANCE.info("Gameengine starting with version " + Version.VERSION);
 
         WASMStringPool theStringPool = new WASMStringPool();

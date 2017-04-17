@@ -90,7 +90,7 @@ var TeaVM = function() {
                         return isFinite(v)
                     },
                     isNaN: function(v) {
-                        return !isNaN(v)
+                        return isNaN(v)
                     },
                     putchar: function(c) {
                         teavm.putChar(c)
