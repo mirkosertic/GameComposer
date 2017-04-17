@@ -15,16 +15,16 @@
  */
 package de.mirkosertic.gameengine.teavmwasm;
 
-import java.util.Map;
-
-import de.mirkosertic.gameengine.type.PositionAnchor;
-import org.teavm.interop.Export;
-import org.teavm.interop.Import;
-
 import de.mirkosertic.gameengine.Version;
 import de.mirkosertic.gameengine.core.Game;
 import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.core.GameScene;
+import org.teavm.interop.Export;
+import org.teavm.interop.Import;
+
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.util.Map;
 
 public class WASMRenderer {
 
@@ -65,8 +65,16 @@ public class WASMRenderer {
 
             WASMLogger.INSTANCE.info("Ok");
             //WASMLogger.log("Scene loaded : " + theScene.nameProperty().get());
-        } catch (Exception e) {
-            WASMLogger.INSTANCE.error(e.getMessage());
+        } catch (Throwable e) {
+            try {
+                ByteArrayOutputStream theOS = new ByteArrayOutputStream();
+                try (PrintStream theStream =  new PrintStream(theOS)) {
+                    e.printStackTrace(theStream);
+                }
+                WASMLogger.INSTANCE.error(e.getClass().getName() + " : " + new String(theOS.toByteArray()));
+            } catch (Exception ex) {
+                WASMLogger.INSTANCE.error("General error : " +e.getMessage());
+            }
         }
 
     }
@@ -76,15 +84,8 @@ public class WASMRenderer {
 
         WASMStringPool theStringPool = new WASMStringPool();
 
-        try {
-            PositionAnchor a = PositionAnchor.valueOf("SCENE");
-            WASMLogger.INSTANCE.info("Found : " + a.name());
-        } catch (Exception e) {
-            WASMLogger.INSTANCE.error("Error while searching");
-        }
-
         bootstrap();
-        // We are done here, waiting fpor the loadGameFromStringPool callback invoked
+        // We are done here, waiting for the loadGameFromStringPool callback invoked
         // by JavaScript side
     }
 }

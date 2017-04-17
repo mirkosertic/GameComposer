@@ -17,7 +17,7 @@
   ],
   "dependencies": {
     "howler.js": "howler#^2.0.1",
-    "pixi.js": "pixi#^4.1.0",
+    "pixi.js": "4.3.0",
     "firebase": "2.2.2"
   }
 }

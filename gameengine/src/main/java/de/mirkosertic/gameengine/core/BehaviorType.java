@@ -15,11 +15,11 @@
  */
 package de.mirkosertic.gameengine.core;
 
-public class BehaviorTemplateID {
+public class BehaviorType {
 
     private final String value;
 
-    public BehaviorTemplateID(String aValue) {
+    public BehaviorType(String aValue) {
         value = aValue;
     }
 
@@ -30,7 +30,7 @@ public class BehaviorTemplateID {
         if (o == null || getClass() != o.getClass())
             return false;
 
-        BehaviorTemplateID that = (BehaviorTemplateID) o;
+        BehaviorType that = (BehaviorType) o;
 
         if (!value.equals(that.value))
             return false;
@@ -41,5 +41,9 @@ public class BehaviorTemplateID {
     @Override
     public int hashCode() {
         return value.hashCode();
+    }
+
+    public String getValue() {
+        return value;
     }
 }

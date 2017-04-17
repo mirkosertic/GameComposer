@@ -16,7 +16,7 @@
 package de.mirkosertic.gameengine.physic;
 
 import de.mirkosertic.gameengine.core.BehaviorTemplate;
-import de.mirkosertic.gameengine.core.BehaviorTemplateID;
+import de.mirkosertic.gameengine.core.BehaviorType;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
@@ -29,7 +29,7 @@ import java.util.Map;
 
 public class PhysicsBehaviorTemplate implements BehaviorTemplate<PhysicsBehavior>, Physics, Reflectable<PhysicsClassInformation> {
 
-    public static final BehaviorTemplateID ID = new BehaviorTemplateID("ID");
+    public static final BehaviorType TYPE = new BehaviorType("ID");
 
     private static final PhysicsClassInformation CIINSTANCE = new PhysicsClassInformation();
 
@@ -54,8 +54,8 @@ public class PhysicsBehaviorTemplate implements BehaviorTemplate<PhysicsBehavior
     }
 
     @Override
-    public BehaviorTemplateID getId() {
-        return ID;
+    public BehaviorType getType() {
+        return TYPE;
     }
 
     @Override
