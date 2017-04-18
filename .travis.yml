@@ -23,7 +23,7 @@ before_install:
   - "git clone https://github.com/mirkosertic/teavm.git ./teavm"
   - "cd teavm"
   - "git checkout devmse"
-  - "mvn clean install -DskipTests >/dev/null 2>&1"
+  - "mvn clean install -DskipTests -Dteavm.build.all=false"
   - "cd .."
   - "env"
   - "echo 'MAVEN_OPTS = $MAVEN_OPTS'"
