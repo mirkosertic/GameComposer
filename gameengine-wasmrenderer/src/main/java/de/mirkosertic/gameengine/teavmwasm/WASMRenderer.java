@@ -73,7 +73,6 @@ public class WASMRenderer {
 
             WASMLogger.INSTANCE.info("Loading scene");
 
-            runtimeFactory = new WASMGameRuntimeFactory();
             GameRuntime theRuntime = runtimeFactory.create(new WASMGameResourceLoader(), new WASMGameSoundSystemFactory());
             WASMLogger.INSTANCE.info("Runtime created");
 
@@ -90,43 +89,9 @@ public class WASMRenderer {
 
     private static void playScene(GameScene aScene) {
         try {
-            runSceneStrategy = new PlaySceneStrategy(runtimeFactory, gameLoopFactory, new DefaultNetworkConnector()) {
-
-                private WASMGameView gameView;
-
-                @Override
-                protected void loadOtherScene(String aSceneId) {
-                }
-
-                @Override
-                protected Size getScreenSize() {
-                    return size;
-                }
-
-                @Override
-                protected GameView getOrCreateCurrentGameView(GameRuntime aGameRuntime, CameraBehavior aCamera, GestureDetector aGestureDetector) {
-                    if (gameView == null) {
-                        gameView = new WASMGameView(aGameRuntime, aCamera, aGestureDetector);
-                    } else {
-                        gameView.prepareNewScene(aGameRuntime, aCamera, aGestureDetector);
-                    }
-                    gameView.setCurrentScreenSize(getScreenSize());
-                    return gameView;
-                }
-
-                @Override
-                public void handleResize() {
-                    Size theCurrentSize = getScreenSize();
-                    getRunningGameLoop().getScene().getRuntime().getEventManager().fire(new SetScreenResolution(theCurrentSize));
-                    gameView.setCurrentScreenSize(theCurrentSize);
-                }
-            };
-
             runSceneStrategy.playScene(aScene).thenContinue(aResult -> {
                 requestAnimationFrame();
             });
-            runSceneStrategy.getRunningGameLoop().singleRun();
-
         } catch (Throwable e) {
             logException(e);
         }
@@ -147,6 +112,41 @@ public class WASMRenderer {
         WASMLogger.INSTANCE.info("Gameengine starting with version " + Version.VERSION);
 
         WASMStringPool theStringPool = new WASMStringPool();
+
+        gameLoopFactory = new GameLoopFactory();
+        runtimeFactory = new WASMGameRuntimeFactory();
+        runSceneStrategy = new PlaySceneStrategy(runtimeFactory, gameLoopFactory, new DefaultNetworkConnector()) {
+
+            private WASMGameView gameView;
+
+            @Override
+            protected void loadOtherScene(String aSceneId) {
+            }
+
+            @Override
+            protected Size getScreenSize() {
+                return size;
+            }
+
+            @Override
+            protected GameView getOrCreateCurrentGameView(GameRuntime aGameRuntime, CameraBehavior aCamera, GestureDetector aGestureDetector) {
+                if (gameView == null) {
+                    gameView = new WASMGameView(aGameRuntime, aCamera, aGestureDetector);
+                } else {
+                    gameView.prepareNewScene(aGameRuntime, aCamera, aGestureDetector);
+                }
+                gameView.setCurrentScreenSize(getScreenSize());
+                return gameView;
+            }
+
+            @Override
+            public void handleResize() {
+                Size theCurrentSize = getScreenSize();
+                getRunningGameLoop().getScene().getRuntime().getEventManager().fire(new SetScreenResolution(theCurrentSize));
+                gameView.setCurrentScreenSize(theCurrentSize);
+            }
+        };
+
 
         bootstrap();
         // We are done here, waiting for the loadGameFromStringPool callback invoked
