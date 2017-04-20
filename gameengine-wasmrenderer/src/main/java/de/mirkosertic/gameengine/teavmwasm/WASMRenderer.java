@@ -15,20 +15,36 @@
  */
 package de.mirkosertic.gameengine.teavmwasm;
 
-import de.mirkosertic.gameengine.Version;
-import de.mirkosertic.gameengine.core.Game;
-import de.mirkosertic.gameengine.core.GameRuntime;
-import de.mirkosertic.gameengine.core.GameScene;
-import org.teavm.interop.Export;
-import org.teavm.interop.Import;
-
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.Map;
 
+import org.teavm.interop.Export;
+import org.teavm.interop.Import;
+
+import de.mirkosertic.gameengine.Version;
+import de.mirkosertic.gameengine.camera.CameraBehavior;
+import de.mirkosertic.gameengine.camera.SetScreenResolution;
+import de.mirkosertic.gameengine.core.Game;
+import de.mirkosertic.gameengine.core.GameLoopFactory;
+import de.mirkosertic.gameengine.core.GameRuntime;
+import de.mirkosertic.gameengine.core.GameScene;
+import de.mirkosertic.gameengine.core.GameView;
+import de.mirkosertic.gameengine.core.GestureDetector;
+import de.mirkosertic.gameengine.core.PlaySceneStrategy;
+import de.mirkosertic.gameengine.network.DefaultNetworkConnector;
+import de.mirkosertic.gameengine.type.Size;
+
 public class WASMRenderer {
 
+    private static GameLoopFactory gameLoopFactory;
+    private static WASMGameRuntimeFactory runtimeFactory;
     private static Game loadedGame;
+    private static PlaySceneStrategy runSceneStrategy;
+    private static Size size = new Size(10, 10);
+
+    @Import(module = "engine", name = "requestAnimationFrame")
+    public static native void requestAnimationFrame();
 
     @Import(module = "engine", name = "bootstrap")
     public static native void bootstrap();
@@ -57,25 +73,71 @@ public class WASMRenderer {
 
             WASMLogger.INSTANCE.info("Loading scene");
 
-            WASMGameRuntimeFactory runtimeFactory = new WASMGameRuntimeFactory();
+            runtimeFactory = new WASMGameRuntimeFactory();
             GameRuntime theRuntime = runtimeFactory.create(new WASMGameResourceLoader(), new WASMGameSoundSystemFactory());
             WASMLogger.INSTANCE.info("Runtime created");
 
             GameScene theScene = GameScene.deserialize(loadedGame, theRuntime, theResult);
 
             WASMLogger.INSTANCE.info("Scene loaded : " + theScene.nameProperty().get());
-        } catch (Throwable e) {
-            try {
-                ByteArrayOutputStream theOS = new ByteArrayOutputStream();
-                try (PrintStream theStream =  new PrintStream(theOS)) {
-                    e.printStackTrace(theStream);
-                }
-                WASMLogger.INSTANCE.error(e.getClass().getName() + " : " + new String(theOS.toByteArray()));
-            } catch (Exception ex) {
-                WASMLogger.INSTANCE.error("General error : " +e.getMessage());
-            }
-        }
 
+            playScene(theScene);
+
+        } catch (Throwable e) {
+            logException(e);
+        }
+    }
+
+    private static void playScene(GameScene aScene) {
+        try {
+            runSceneStrategy = new PlaySceneStrategy(runtimeFactory, gameLoopFactory, new DefaultNetworkConnector()) {
+
+                private WASMGameView gameView;
+
+                @Override
+                protected void loadOtherScene(String aSceneId) {
+                }
+
+                @Override
+                protected Size getScreenSize() {
+                    return size;
+                }
+
+                @Override
+                protected GameView getOrCreateCurrentGameView(GameRuntime aGameRuntime, CameraBehavior aCamera, GestureDetector aGestureDetector) {
+                    if (gameView == null) {
+                        gameView = new WASMGameView(aGameRuntime, aCamera, aGestureDetector);
+                    } else {
+                        gameView.prepareNewScene(aGameRuntime, aCamera, aGestureDetector);
+                    }
+                    gameView.setCurrentScreenSize(getScreenSize());
+                    return gameView;
+                }
+
+                @Override
+                public void handleResize() {
+                    Size theCurrentSize = getScreenSize();
+                    getRunningGameLoop().getScene().getRuntime().getEventManager().fire(new SetScreenResolution(theCurrentSize));
+                    gameView.setCurrentScreenSize(theCurrentSize);
+                }
+            };
+
+            runSceneStrategy.playScene(aScene).thenContinue(aResult -> {
+                requestAnimationFrame();
+            });
+            runSceneStrategy.getRunningGameLoop().singleRun();
+
+        } catch (Throwable e) {
+            logException(e);
+        }
+    }
+
+    @Export(name = "runSingleStep")
+    public static void runSingleStep() {
+        if (runSceneStrategy != null && runSceneStrategy.hasGameLoop() && !runSceneStrategy.getRunningGameLoop().isShutdown()) {
+            runSceneStrategy.getRunningGameLoop().singleRun();
+            requestAnimationFrame();
+        }
     }
 
     public static void main(String[] args) {
@@ -89,5 +151,17 @@ public class WASMRenderer {
         bootstrap();
         // We are done here, waiting for the loadGameFromStringPool callback invoked
         // by JavaScript side
+    }
+
+    private static void logException(Throwable e) {
+        try {
+            ByteArrayOutputStream theOS = new ByteArrayOutputStream();
+            try (PrintStream theStream =  new PrintStream(theOS)) {
+                e.printStackTrace(theStream);
+            }
+            WASMLogger.INSTANCE.error(e.getClass().getName() + " : " + new String(theOS.toByteArray()));
+        } catch (Exception ex) {
+            WASMLogger.INSTANCE.error("General error : " +e.getMessage());
+        }
     }
 }
