@@ -100,7 +100,9 @@ public class WASMRenderer {
     @Export(name = "runSingleStep")
     public static void runSingleStep() {
         if (runSceneStrategy != null && runSceneStrategy.hasGameLoop() && !runSceneStrategy.getRunningGameLoop().isShutdown()) {
+            WASMLogger.INSTANCE.info("Trying to run a single step");
             runSceneStrategy.getRunningGameLoop().singleRun();
+            WASMLogger.INSTANCE.info("Single step run");
             requestAnimationFrame();
         }
     }

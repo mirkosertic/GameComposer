@@ -27,18 +27,17 @@ public class WASMGameResourceLoader implements GameResourceLoader {
 
     @Override
     public Promise<GameResource, String> load(ResourceName aResourceName) {
-        WASMLogger.INSTANCE.info("Loading Game Resource " +  aResourceName);
+        WASMLogger.INSTANCE.info("Loading Game Resource " +  aResourceName.get());
         return new Promise<>(new Promise.Executor() {
             @Override
             public void process(PromiseResolver aResolver, PromiseRejector aRejector) {
-
             }
         });
     }
 
     @Override
     public Promise<LoadedSpriteSheet, String> loadSpriteSheet(ResourceName aResourceName) {
-        WASMLogger.INSTANCE.info("Loading Style sheet " +  aResourceName);
+        WASMLogger.INSTANCE.info("Loading Style sheet " +  aResourceName.get());
         return new Promise<>(new Promise.Executor() {
             @Override
             public void process(PromiseResolver aResolver, PromiseRejector aRejector) {
