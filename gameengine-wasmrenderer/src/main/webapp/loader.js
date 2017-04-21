@@ -125,6 +125,11 @@ var TeaVM = function() {
                             teavm.instance.exports.loadGameSceneFromStringPool(stringPoolId)
                         }
                         xhr.send()
+                    },
+                    requestAnimationFrame: function() {
+                        window.requestAnimationFrame(function(timestamp) {
+                            teavm.instance.exports.runSingleStep();
+                        })
                     }
                 },
                 log: {
