@@ -80,12 +80,16 @@ public abstract class PlaySceneStrategy {
         return new Promise<>(new Promise.Executor() {
             @Override
             public void process(final PromiseResolver aResolver, PromiseRejector aRejector) {
-                if (runningGameLoop != null) {
-                    runningGameLoop.shutdown();
-                }
 
                 final GameRuntime theRuntime = aGameScene.getRuntime();
                 final GameEventManager theEventManager = theRuntime.getEventManager();
+
+                if (runningGameLoop != null) {
+                    theRuntime.getLogger().info("Shutting down previous game loop");
+                    runningGameLoop.shutdown();
+                }
+
+                theRuntime.getLogger().info("Registering global exception handler");
 
                 theEventManager.register(null, SystemException.TYPE, new GameEventListener<SystemException>() {
                     @Override
@@ -182,6 +186,9 @@ public abstract class PlaySceneStrategy {
 
                     Promise<Spritesheet, String>[] thePromises = new Promise[theSheets.length];
                     for (int i=0;i<theSheets.length;i++) {
+
+                        theRuntime.getLogger().info("Loading sprite sheet " + i);
+
                         thePromises[i] = theRuntime.getResourceCache().loadIntoCache(theSheets[i]);
                     }
 
