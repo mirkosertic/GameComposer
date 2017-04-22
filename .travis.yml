@@ -1,3 +1,4 @@
+sudo: false
 language: android
 jdk:
   - oraclejdk8
@@ -11,9 +12,10 @@ android:
     - android-23
 env:
   global:
-    - "MAVEN_OPTS=-Xmx3072m -XX:MaxPermSize=1024m -XX:+CMSClassUnloadingEnabled -XX:-UseGCOverheadLimit"
+    - "MAVEN_OPTS=-Xmx3072m -XX:MaxPermSize=512m -XX:+CMSClassUnloadingEnabled -XX:-UseGCOverheadLimit"
     - "TRAVIS_NODE_VERSION=6"
 before_install:
+  - "echo \""MAVEN_OPTS='-Xmx3072m -XX:MaxPermSize=512m'\"" > ~/.mavenrc"
   - "rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && (cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`) && source ~/.nvm/nvm.sh && nvm install $TRAVIS_NODE_VERSION"
   - "npm install"
   - "npm install electron-packager -g"
@@ -26,4 +28,3 @@ before_install:
   - "mvn clean install -DskipTests -Dteavm.build.all=false"
   - "cd .."
   - "env"
-  - "echo 'MAVEN_OPTS = $MAVEN_OPTS'"
