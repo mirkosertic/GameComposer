@@ -11,7 +11,7 @@ android:
     - android-23
 env:
   global:
-    - "MAVEN_OPTS=-Xmx2536m -XX:MaxPermSize=1024m -XX:+CMSClassUnloadingEnabled -XX:-UseGCOverheadLimit"
+    - "MAVEN_OPTS=-Xmx3072m -XX:MaxPermSize=1024m -XX:+CMSClassUnloadingEnabled -XX:-UseGCOverheadLimit"
     - "TRAVIS_NODE_VERSION=6"
 before_install:
   - "rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && (cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`) && source ~/.nvm/nvm.sh && nvm install $TRAVIS_NODE_VERSION"
