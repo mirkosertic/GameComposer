@@ -5,10 +5,16 @@ var TeaVM = function() {
         this.module = null;
         this.memory = null;
         this.memoryArray = null;
+        this.cachedObjects = [];
     }
 
     TeaVM.prototype.run = function(callback) {
         load(this, callback)
+    },
+
+    TeaVM.prototype.putIntoCache = function(obj) {
+        this.cachedObjects.push(obj)
+        return this.cachedObjects.length - 1;
     },
 
     TeaVM.prototype.loadIntoStringPool = function(str) {
@@ -122,9 +128,34 @@ var TeaVM = function() {
                             var sceneJson = xhr.responseText
                             var stringPoolId = teavm.loadIntoStringPool(sceneJson)
 
-                            teavm.instance.exports.loadGameSceneFromStringPool(stringPoolId)
+                            teavm.instance.exports.loadGameSceneFromStringPool(stringPoolId, str)
                         }
                         xhr.send()
+                    },
+                    loadSpriteSheet: function(promiseId, resourceName) {
+                        var loader = new PIXI.loaders.Loader()
+                        var realResourceName = teavm.pointerToString(resourceName)
+
+                        loader.add(realResourceName)
+                        loader.pre(function(resource, chain) {
+                            chain()
+                        })
+                        loader.load(function(loader, resources) {
+                            var loadedJson = resources[realResourceName]
+
+                            var frames = loadedJson.data.frames
+                            Object.keys(frames).forEach(function(frame, index) {
+                                var texture = new PIXI.Texture.fromFrame(frame)
+
+                                var cacheId = teavm.putIntoCache(texture)
+
+                                var stringPoolId = teavm.loadIntoStringPool(frame)
+                                teavm.instance.exports.registerResourceToSpriteSheet(resourceName, stringPoolId, cacheId)
+                            })
+
+                            // We are done here
+                            teavm.instance.exports.resolvePromiseWithID(promiseId, 42)
+                        })
                     },
                     requestAnimationFrame: function() {
                         window.requestAnimationFrame(function(timestamp) {
