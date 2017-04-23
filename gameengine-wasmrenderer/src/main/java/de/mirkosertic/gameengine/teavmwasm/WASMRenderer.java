@@ -15,13 +15,6 @@
  */
 package de.mirkosertic.gameengine.teavmwasm;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-import java.util.Map;
-
-import org.teavm.interop.Export;
-import org.teavm.interop.Import;
-
 import de.mirkosertic.gameengine.Version;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.camera.SetScreenResolution;
@@ -34,6 +27,12 @@ import de.mirkosertic.gameengine.core.GestureDetector;
 import de.mirkosertic.gameengine.core.PlaySceneStrategy;
 import de.mirkosertic.gameengine.network.DefaultNetworkConnector;
 import de.mirkosertic.gameengine.type.Size;
+import org.teavm.interop.Export;
+import org.teavm.interop.Import;
+
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.util.Map;
 
 public class WASMRenderer {
 
@@ -41,7 +40,7 @@ public class WASMRenderer {
     private static WASMGameRuntimeFactory runtimeFactory;
     private static Game loadedGame;
     private static PlaySceneStrategy runSceneStrategy;
-    private static Size size = new Size(10, 10);
+    private static Size size = new Size(800, 600);
 
     @Import(module = "engine", name = "requestAnimationFrame")
     public static native void requestAnimationFrame();
@@ -66,14 +65,14 @@ public class WASMRenderer {
     }
 
     @Export(name = "loadGameSceneFromStringPool")
-    public static void loadGameSceneFromStringPool(int aPoolID) {
+    public static void loadGameSceneFromStringPool(int aPoolID, String aSceneID) {
         try {
 
             Map<String, Object> theResult = new JSONParser().fromJSON(WASMStringPool.getStringPool(aPoolID));
 
             WASMLogger.INSTANCE.info("Loading scene");
 
-            GameRuntime theRuntime = runtimeFactory.create(new WASMGameResourceLoader(), new WASMGameSoundSystemFactory());
+            GameRuntime theRuntime = runtimeFactory.create(new WASMGameResourceLoader(aSceneID), new WASMGameSoundSystemFactory());
             WASMLogger.INSTANCE.info("Runtime created");
 
             GameScene theScene = GameScene.deserialize(loadedGame, theRuntime, theResult);
@@ -99,11 +98,15 @@ public class WASMRenderer {
 
     @Export(name = "runSingleStep")
     public static void runSingleStep() {
-        if (runSceneStrategy != null && runSceneStrategy.hasGameLoop() && !runSceneStrategy.getRunningGameLoop().isShutdown()) {
-            WASMLogger.INSTANCE.info("Trying to run a single step");
-            runSceneStrategy.getRunningGameLoop().singleRun();
-            WASMLogger.INSTANCE.info("Single step run");
-            requestAnimationFrame();
+        try {
+            if (runSceneStrategy != null && runSceneStrategy.hasGameLoop() && !runSceneStrategy.getRunningGameLoop().isShutdown()) {
+                WASMLogger.INSTANCE.info("Trying to run a single step");
+                runSceneStrategy.getRunningGameLoop().singleRun();
+                WASMLogger.INSTANCE.info("Single step run");
+                requestAnimationFrame();
+            }
+        } catch (Throwable e) {
+            logException(e);
         }
     }
 
