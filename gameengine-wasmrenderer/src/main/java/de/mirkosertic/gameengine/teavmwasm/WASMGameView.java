@@ -21,6 +21,8 @@ import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.core.GestureDetector;
+import de.mirkosertic.gameengine.generic.CSSCache;
+import de.mirkosertic.gameengine.generic.CSSUtils;
 import de.mirkosertic.gameengine.generic.GenericAbstractGameView;
 import de.mirkosertic.gameengine.type.Angle;
 import de.mirkosertic.gameengine.type.Color;
@@ -28,18 +30,37 @@ import de.mirkosertic.gameengine.type.EffectCanvas;
 import de.mirkosertic.gameengine.type.Font;
 import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Size;
+import org.teavm.interop.Import;
 
 public class WASMGameView extends GenericAbstractGameView {
+
+    @Import(module = "engine", name = "beginFrame")
+    public static native void externalBeginFrame();
+
+    @Import(module = "engine", name = "drawText")
+    public static native void externalDrawText(String aObjectID, String aText, String aFontFamily, String aFontSize,
+                                               String aCSSFill,
+                                               String aCSSStroke,
+                                               float aX,
+                                               float aY,
+                                               float aRotation);
+
+    @Import(module = "engine", name = "frameFinished")
+    public static native void externalFrameFinished();
+
+    private final CSSCache cssCache;
 
     public WASMGameView(GameRuntime aGameRuntime,
             CameraBehavior aCameraBehavior,
             GestureDetector aGestureDetector) {
         super(aGameRuntime, aCameraBehavior, aGestureDetector);
+        cssCache = new CSSCache();
     }
 
     @Override
     protected boolean beginFrame(GameScene aScene) {
-        return false;
+        externalBeginFrame();
+        return true;
     }
 
     @Override
@@ -53,8 +74,20 @@ public class WASMGameView extends GenericAbstractGameView {
     }
 
     @Override
-    protected void drawText(String aID, Position aPositionOnScreen, Angle aAngle, Position aCenterOffset, Font aFont,
+    protected void drawText(String aID, Position aPosition, Angle aAngle, Position aCenterOffset, Font aFont,
             Color aColor, String aText, Size aSize, boolean aVisible) {
+
+        String theFontFamily = CSSUtils.toFontFamily(aFont);
+        String theFontSize = aFont.size+"px";
+        String theFill = cssCache.toColor(aColor);
+        String theStroke = cssCache.toColor(aColor);
+        float theX = aPosition.x + aCenterOffset.x;
+        float theY = aPosition.y + aCenterOffset.y;
+        float theRotation = aAngle.toRadians();
+
+        externalDrawText(aID, aText, theFontFamily, theFontSize, theFill, theStroke, theX
+        , theY, theRotation);
+
     }
 
     @Override
@@ -64,6 +97,12 @@ public class WASMGameView extends GenericAbstractGameView {
 
     @Override
     protected void afterInstance(GameObjectInstance aInstance, Position aPositionOnScreen) {
+    }
+
+    @Override
+    protected void framefinished() {
+        super.framefinished();
+        externalFrameFinished();
     }
 
     @Override
