@@ -168,6 +168,26 @@ var TeaVM = function() {
                     },
                     screenHeight: function() {
                         return window.innerHeight
+                    },
+                    beginFrame: function() {
+                        console.log("beginFrame")
+                    },
+                    drawText: function(objectIdPtr,textPtr,fontFamilyPtr,fontSizePtr,
+                    cssFillPtr,
+                    cssStoktePtr,
+                    x,
+                    y,
+                    rotationRad) {
+                        var objectId = teavm.pointerToString(objectIdPtr)
+                        var text = teavm.pointerToString(textPtr)
+                        var fontFamily = teavm.pointerToString(fontFamilyPtr)
+                        var fontSize = teavm.pointerToString(fontSizePtr)
+                        var cssFill = teavm.pointerToString(cssFillPtr)
+                        var stroke = teavm.pointerToString(cssStoktePtr)
+                        console.log("Draw text")
+                    },
+                    frameFinished: function() {
+                        console.log("frame finished")
                     }
                 },
                 log: {
