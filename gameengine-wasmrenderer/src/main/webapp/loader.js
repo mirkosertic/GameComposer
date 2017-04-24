@@ -1,11 +1,12 @@
 var TeaVM = function() {
 
-    function TeaVM() {
+    function TeaVM(renderer) {
         this.instance = null;
         this.module = null;
         this.memory = null;
         this.memoryArray = null;
         this.cachedObjects = [];
+        this.pixiRenderer = renderer
     }
 
     TeaVM.prototype.run = function(callback) {
@@ -159,8 +160,14 @@ var TeaVM = function() {
                     },
                     requestAnimationFrame: function() {
                         window.requestAnimationFrame(function(timestamp) {
-                            teavm.instance.exports.runSingleStep();
+                            teavm.instance.exports.runSingleStep()
                         })
+                    },
+                    screenWidth: function() {
+                        return window.innerWidth
+                    },
+                    screenHeight: function() {
+                        return window.innerHeight
                     }
                 },
                 log: {
