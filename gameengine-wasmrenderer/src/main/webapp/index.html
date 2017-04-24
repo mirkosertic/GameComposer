@@ -32,9 +32,21 @@
     <canvas id="html5canvas" class="mainCanvas"/>
     <script language="JavaScript">
         document.body.onload = function() {
-            var vm = new TeaVM()
+
+            // Init PIXIJS
+            var canvas = document.getElementById("html5canvas")
+            var pixiRenderer = PIXI.autoDetectRenderer(320, 200, {
+                view: canvas
+            })
+
+            var vm = new TeaVM(pixiRenderer)
+
             vm.run(function() {
                 vm.instance.exports.main()
+
+                window.addEventListener("resize", function(evt) {
+                    vm.instance.exports.handleResize()
+                }, true)
             });
         }
     </script>

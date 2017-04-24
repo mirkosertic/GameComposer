@@ -40,7 +40,12 @@ public class WASMRenderer {
     private static WASMGameRuntimeFactory runtimeFactory;
     private static Game loadedGame;
     private static PlaySceneStrategy runSceneStrategy;
-    private static Size size = new Size(800, 600);
+
+    @Import(module = "engine", name = "screenWidth")
+    public static native int screenWidth();
+
+    @Import(module = "engine", name = "screenHeight")
+    public static native int screenHeight();
 
     @Import(module = "engine", name = "requestAnimationFrame")
     public static native void requestAnimationFrame();
@@ -110,6 +115,13 @@ public class WASMRenderer {
         }
     }
 
+    @Export(name = "handleResize")
+    public static void handleResize() {
+        if (runSceneStrategy != null && runSceneStrategy.hasGameLoop()) {
+            runSceneStrategy.handleResize();
+        }
+    }
+
     public static void main(String[] args) {
         Integer.parseInt("10");
         Long.parseLong("10");
@@ -130,7 +142,7 @@ public class WASMRenderer {
 
             @Override
             protected Size getScreenSize() {
-                return size;
+                return new Size(screenWidth(), screenHeight());
             }
 
             @Override
