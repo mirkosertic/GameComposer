@@ -201,7 +201,7 @@ var TeaVM = function() {
                             theInstance = new PIXI.Text(text);
                             theInstance.scale.set(1,1)
                             theInstance.pivot.set(centerX, centerY)
-
+                            teavm.sceneGraphInstances[objectId] = theInstance
                             teavm.stage.addChild(theInstance)
                         } else {
                             theInstance.text = text;
