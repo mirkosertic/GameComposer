@@ -35,7 +35,7 @@
 
             // Init PIXIJS
             var canvas = document.getElementById("html5canvas")
-            var pixiRenderer = PIXI.autoDetectRenderer(320, 200, {
+            var pixiRenderer = PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight, {
                 view: canvas
             })
 
@@ -45,7 +45,7 @@
                 vm.instance.exports.main()
 
                 window.addEventListener("resize", function(evt) {
-                    vm.instance.exports.handleResize()
+                    vm.handleResize()
                 }, true)
             });
         }
