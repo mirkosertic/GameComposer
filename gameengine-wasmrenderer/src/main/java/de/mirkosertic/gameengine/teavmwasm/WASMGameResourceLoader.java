@@ -72,7 +72,7 @@ public class WASMGameResourceLoader implements GameResourceLoader {
 
     @Override
     public Promise<LoadedSpriteSheet, String> loadSpriteSheet(ResourceName aResourceName) {
-        WASMLogger.INSTANCE.info("Loading Style sheet " +  aResourceName.get());
+        WASMLogger.INSTANCE.info("Loading sprite sheet " +  aResourceName.get());
 
         ResourceName theNewResourceName = new ResourceName(sceneId + aResourceName.name.replace('\\', '/'));
         final String thePath = theNewResourceName.name.replace('\\', '/');
