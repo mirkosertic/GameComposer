@@ -118,6 +118,7 @@ public class WASMRenderer {
     @Export(name = "handleResize")
     public static void handleResize() {
         if (runSceneStrategy != null && runSceneStrategy.hasGameLoop()) {
+            WASMLogger.INSTANCE.info("Handling resize event");
             runSceneStrategy.handleResize();
         }
     }

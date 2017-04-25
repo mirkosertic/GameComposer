@@ -43,6 +43,8 @@ public class WASMGameView extends GenericAbstractGameView {
                                                String aCSSStroke,
                                                float aX,
                                                float aY,
+                                               float aCenterX,
+                                               float aCentery,
                                                float aRotation);
 
     @Import(module = "engine", name = "frameFinished")
@@ -86,7 +88,7 @@ public class WASMGameView extends GenericAbstractGameView {
         float theRotation = aAngle.toRadians();
 
         externalDrawText(aID, aText, theFontFamily, theFontSize, theFill, theStroke, theX
-        , theY, theRotation);
+        , theY, aCenterOffset.x, aCenterOffset.y, theRotation);
 
     }
 

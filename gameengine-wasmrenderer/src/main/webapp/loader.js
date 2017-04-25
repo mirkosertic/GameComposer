@@ -7,6 +7,9 @@ var TeaVM = function() {
         this.memoryArray = null;
         this.cachedObjects = [];
         this.pixiRenderer = renderer
+        this.stage = new PIXI.Container();
+        this.sceneGraphInstances = [];
+        this.touchedInLastFrame = []
     }
 
     TeaVM.prototype.run = function(callback) {
@@ -49,6 +52,11 @@ var TeaVM = function() {
         } else {
             this.line += String.fromCharCode(charCode);
         }
+    },
+
+    TeaVM.prototype.handleResize = function() {
+        this.pixiRenderer.resize(window.innerWidth, window.innerHeight)
+        this.instance.exports.handleResize()
     },
 
     TeaVM.prototype.pointerToString = function(str) {
@@ -171,23 +179,62 @@ var TeaVM = function() {
                     },
                     beginFrame: function() {
                         console.log("beginFrame")
+                        teavm.touchedInLastFrame = []
                     },
                     drawText: function(objectIdPtr,textPtr,fontFamilyPtr,fontSizePtr,
-                    cssFillPtr,
-                    cssStoktePtr,
-                    x,
-                    y,
-                    rotationRad) {
+                        cssFillPtr,
+                        cssStoktePtr,
+                        x,
+                        y,
+                        centerX,
+                        centerY,
+                        rotationRad) {
                         var objectId = teavm.pointerToString(objectIdPtr)
                         var text = teavm.pointerToString(textPtr)
                         var fontFamily = teavm.pointerToString(fontFamilyPtr)
                         var fontSize = teavm.pointerToString(fontSizePtr)
                         var cssFill = teavm.pointerToString(cssFillPtr)
                         var stroke = teavm.pointerToString(cssStoktePtr)
-                        console.log("Draw text")
+
+                        var theInstance = teavm.sceneGraphInstances[objectId]
+                        if (theInstance == null) {
+                            theInstance = new PIXI.Text(text);
+                            theInstance.scale.set(1,1)
+                            theInstance.pivot.set(centerX, centerY)
+
+                            teavm.stage.addChild(theInstance)
+                        } else {
+                            theInstance.text = text;
+                        }
+
+                        var theInstanceStyle = theInstance.style
+                        theInstanceStyle.fontFamily = fontFamily
+                        theInstanceStyle.fontSize = fontSize
+                        theInstanceStyle.fill = cssFill
+                        theInstanceStyle.stroke = stroke
+
+                        theInstance.position.set(x, y)
+                        theInstance.rotation = rotationRad
+
+                        teavm.touchedInLastFrame[objectId] = theInstance
+
                     },
                     frameFinished: function() {
                         console.log("frame finished")
+
+                        // Remove no longer needed instances
+                        var theNewInstances = []
+                        for (var key in teavm.sceneGraphInstances) {
+                            var instance = teavm.sceneGraphInstances[key]
+                            if (teavm.touchedInLastFrame[key] != null) {
+                                theNewInstances[key] = instance
+                            } else {
+                                teavm.stage.removeChild(instance)
+                            }
+                        }
+                        teavm,sceneGraphInstances = theNewInstances
+
+                        teavm.pixiRenderer.render(teavm.stage)
                     }
                 },
                 log: {
