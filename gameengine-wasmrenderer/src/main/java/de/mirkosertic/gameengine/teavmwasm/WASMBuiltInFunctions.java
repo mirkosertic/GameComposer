@@ -15,13 +15,14 @@
  */
 package de.mirkosertic.gameengine.teavmwasm;
 
+import de.mirkosertic.gameengine.annotations.ReflectiveMethod;
 import de.mirkosertic.gameengine.type.BuiltInFunctions;
 import de.mirkosertic.gameengine.type.BuiltInFunctionsClassInformation;
 import de.mirkosertic.gameengine.type.ClassInformation;
 
 public class WASMBuiltInFunctions extends BuiltInFunctions {
 
-    private static BuiltInFunctionsClassInformation CIINSTANCE = new BuiltInFunctionsClassInformation();
+    private static final WASMBuiltInFunctionsClassInformation CIINSTANCE = new WASMBuiltInFunctionsClassInformation();
 
     @Override
     public ClassInformation getClassInformation() {
@@ -29,6 +30,7 @@ public class WASMBuiltInFunctions extends BuiltInFunctions {
     }
 
     @Override
+    @ReflectiveMethod
     public String formatTime(Number aTimeInMilis, String aPattern) {
         return "";
     }

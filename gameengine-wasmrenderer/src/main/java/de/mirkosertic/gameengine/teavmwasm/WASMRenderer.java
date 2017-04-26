@@ -26,12 +26,19 @@ import de.mirkosertic.gameengine.core.GameView;
 import de.mirkosertic.gameengine.core.GestureDetector;
 import de.mirkosertic.gameengine.core.PlaySceneStrategy;
 import de.mirkosertic.gameengine.network.DefaultNetworkConnector;
+import de.mirkosertic.gameengine.scriptengine.LUAScriptEngine;
+import de.mirkosertic.gameengine.scriptengine.luaj.LuaJScriptEngineFactory;
+import de.mirkosertic.gameengine.type.KeyValueObjectCache;
 import de.mirkosertic.gameengine.type.Size;
+import de.mirkosertic.gameengine.type.TextExpression;
 import org.teavm.interop.Export;
 import org.teavm.interop.Import;
+import org.teavm.runtime.GC;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.io.StringReader;
+import java.util.HashMap;
 import java.util.Map;
 
 public class WASMRenderer {
@@ -105,10 +112,15 @@ public class WASMRenderer {
     public static void runSingleStep() {
         try {
             if (runSceneStrategy != null && runSceneStrategy.hasGameLoop() && !runSceneStrategy.getRunningGameLoop().isShutdown()) {
+
+                long theFreeMemory = GC.getFreeMemory();
+                long theMaxMemory = GC.availableBytes();
+
+                WASMLogger.INSTANCE.info("Free mem : " + theFreeMemory + " of " + theMaxMemory);
+
                 WASMLogger.INSTANCE.info("Trying to run a single step");
                 runSceneStrategy.getRunningGameLoop().singleRun();
                 WASMLogger.INSTANCE.info("Single step run");
-                requestAnimationFrame();
             }
         } catch (Throwable e) {
             logException(e);
@@ -127,6 +139,28 @@ public class WASMRenderer {
         Integer.parseInt("10");
         Long.parseLong("10");
         Double.parseDouble("10");
+
+/*        try {
+            LUAScriptEngine theEngine = new LuaJScriptEngineFactory(new WASMBuiltInFunctions()).createNewEngine(
+                    new KeyValueObjectCache() {
+
+                        private final Map<Object, Object> data = new HashMap<>();
+
+                        @Override
+                        public <T> T getObjectForKey(Object aKey) {
+                            return (T) data.get(aKey);
+                        }
+
+                        @Override
+                        public <T> void setObjectForKey(Object aKey, T aValue) {
+                            data.put(aKey, aValue);
+                        }
+                    }, new TextExpression("lala")
+            );
+        } catch (Exception e) {
+            logException(e);
+        }*/
+
         WASMLogger.INSTANCE.info("Gameengine starting with version " + Version.VERSION);
 
         WASMStringPool theStringPool = new WASMStringPool();
