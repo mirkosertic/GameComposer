@@ -59,6 +59,14 @@ var TeaVM = function() {
         this.instance.exports.handleResize()
     },
 
+    TeaVM.prototype.requestAnimationFrame = function() {
+        var thisRef = this
+        window.requestAnimationFrame(function(timestamp) {
+            thisRef.instance.exports.runSingleStep()
+            thisRef.requestAnimationFrame()
+        })
+    },
+
     TeaVM.prototype.pointerToString = function(str) {
 
         // Pointer to character array
@@ -167,9 +175,7 @@ var TeaVM = function() {
                         })
                     },
                     requestAnimationFrame: function() {
-                        window.requestAnimationFrame(function(timestamp) {
-                            teavm.instance.exports.runSingleStep()
-                        })
+                        teavm.requestAnimationFrame()
                     },
                     screenWidth: function() {
                         return window.innerWidth
@@ -178,7 +184,6 @@ var TeaVM = function() {
                         return window.innerHeight
                     },
                     beginFrame: function() {
-                        console.log("beginFrame")
                         teavm.touchedInLastFrame = []
                     },
                     drawRect: function(objectIdPtr, width, height, color, x, y,
@@ -269,8 +274,6 @@ var TeaVM = function() {
 
                     },
                     frameFinished: function() {
-                        console.log("frame finished")
-
                         // Remove no longer needed instances
                         var theNewInstances = []
                         for (var key in teavm.sceneGraphInstances) {
@@ -298,7 +301,7 @@ var TeaVM = function() {
                 teavm.instance = resultObject.instance
                 teavm.memory = teavm.instance.exports.memory;
                 teavm.memoryArray = new Uint8Array(teavm.memory.buffer)
-                console.log("Initialized")
+                console.log("WASM Initialized")
                 callback()
             }).catch(function(error) {
                 console.log("Error : " + error)
