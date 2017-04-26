@@ -16,13 +16,14 @@
 package de.mirkosertic.gameengine.process;
 
 import de.mirkosertic.gameengine.core.GameObjectInstanceRemovedFromScene;
+import de.mirkosertic.gameengine.core.Logger;
 import de.mirkosertic.gameengine.event.GameEventListener;
 import de.mirkosertic.gameengine.event.GameEventManager;
 
 public class GameProcessManagerFactory {
 
-    public GameProcessManager create(GameEventManager aEventManager) {
-        final GameProcessManager theManager = new GameProcessManager();
+    public GameProcessManager create(Logger aLogger, GameEventManager aEventManager) {
+        final GameProcessManager theManager = new GameProcessManager(aLogger);
         aEventManager.register(null, StartProcess.TYPE, new GameEventListener<StartProcess>() {
             @Override
             public void handleGameEvent(StartProcess aEvent) {
