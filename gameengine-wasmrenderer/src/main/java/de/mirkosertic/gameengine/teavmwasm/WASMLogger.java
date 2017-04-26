@@ -37,11 +37,9 @@ public class WASMLogger implements Logger {
 
     @Override
     public void time(String aLabel) {
-        info("Time start : " + aLabel);
     }
 
     @Override
     public void timeEnd(String aLabel) {
-        info("Time end : " + aLabel);
     }
 }

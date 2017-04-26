@@ -16,9 +16,13 @@
 package de.mirkosertic.gameengine.teavmwasm;
 
 import de.mirkosertic.gameengine.AbstractGameRuntimeFactory;
+import de.mirkosertic.gameengine.core.GameSystemWork;
 import de.mirkosertic.gameengine.core.Logger;
 import de.mirkosertic.gameengine.core.ThreadingManager;
+import de.mirkosertic.gameengine.event.GameEventManager;
+import de.mirkosertic.gameengine.physic.GamePhysicsManager;
 import de.mirkosertic.gameengine.physic.GamePhysicsManagerFactory;
+import de.mirkosertic.gameengine.physic.PhysicsDebugCanvas;
 import de.mirkosertic.gameengine.physics.jbox2d.JBox2DGamePhysicsManagerFactory;
 import de.mirkosertic.gameengine.scriptengine.LUAScriptEngineFactory;
 import de.mirkosertic.gameengine.scriptengine.luaj.LuaJScriptEngineFactory;
@@ -42,6 +46,28 @@ public class WASMGameRuntimeFactory extends AbstractGameRuntimeFactory {
 
     @Override
     protected GamePhysicsManagerFactory createPhysicsManagerFactory() {
-        return new JBox2DGamePhysicsManagerFactory();
+        return new GamePhysicsManagerFactory() {
+            @Override
+            public GamePhysicsManager create(Logger aLogger, GameEventManager aEventManager, ThreadingManager aThreadingManager) {
+                return new GamePhysicsManager() {
+                    @Override
+                    public void drawDebug(PhysicsDebugCanvas aCanvas) {
+                    }
+
+                    @Override
+                    public GameSystemWork proceedGame(long aTotalTicks, long aGameTime, long aElapsedTime) {
+                        return new GameSystemWork() {
+                            @Override
+                            public void runInFrame() {
+                            }
+
+                            @Override
+                            public void runAfterFrame() {
+                            }
+                        };
+                    }
+                };
+            }
+        };
     }
 }
