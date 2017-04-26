@@ -47,6 +47,18 @@ public class WASMGameView extends GenericAbstractGameView {
                                                float aCentery,
                                                float aRotation);
 
+    @Import(module = "engine", name = "drawImage")
+    public static native void externalDrawImage(String aObjectID, int aTextureID,
+            float aX,
+            float aY,
+            float aCenterX,
+            float aCentery,
+            float aRotation);
+
+    @Import(module = "engine", name = "drawRect")
+    public static native void externalDrawRect(String aObjectID, int aWidth, int aHeight, int aColor, float aX, float aY,
+            float aCenterX, float aCenterY, float aRotation);
+
     @Import(module = "engine", name = "frameFinished")
     public static native void externalFrameFinished();
 
@@ -73,6 +85,15 @@ public class WASMGameView extends GenericAbstractGameView {
     @Override
     protected void drawImage(GameObjectInstance aInstance, Position aPositionOnScreen, Position aCenterOffset,
             GameResource aResource) {
+
+        String theInstanceID = aInstance.uuidProperty().get();
+        float theX = aPositionOnScreen.x + aCenterOffset.x;
+        float theY = aPositionOnScreen.y + aCenterOffset.y;
+        float theRotationRad = aInstance.rotationAngleProperty().get().toRadians();
+        WASMTextureResource thetextureResource = (WASMTextureResource) aResource;
+
+        externalDrawImage(theInstanceID, thetextureResource.getExternalID(),
+                theX, theY, aCenterOffset.x, aCenterOffset.y, theRotationRad);
     }
 
     @Override
@@ -95,6 +116,17 @@ public class WASMGameView extends GenericAbstractGameView {
     @Override
     protected void drawRect(GameObjectInstance aInstance, Position aPositionOnScreen, Position aCenterOffset,
             Color aColor, Size aSize) {
+
+        String theInstanceID = aInstance.uuidProperty().get();
+        int theColor = CSSUtils.toInt(aColor);
+        float theX = aPositionOnScreen.x + aCenterOffset.x;
+        float theY = aPositionOnScreen.y + aCenterOffset.y;
+        float theRotationRad = aInstance.rotationAngleProperty().get().toRadians();
+        int theWidth = aSize.width;
+        int theHeight = aSize.height;
+
+        externalDrawRect(theInstanceID, theWidth, theHeight, theColor, theX, theY,
+                aCenterOffset.x, aCenterOffset.y, theRotationRad);
     }
 
     @Override

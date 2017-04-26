@@ -181,6 +181,55 @@ var TeaVM = function() {
                         console.log("beginFrame")
                         teavm.touchedInLastFrame = []
                     },
+                    drawRect: function(objectIdPtr, width, height, color, x, y,
+                        centerX, centerY, rotationRad) {
+
+                        var objectId = teavm.pointerToString(objectIdPtr)
+
+                        var theInstance = teavm.sceneGraphInstances[objectId]
+                        if (theInstance == null) {
+                            theInstance = new PIXI.Graphics()
+                            theInstance.scale.set(1,1)
+                            theInstance.pivot.set(centerX, centerY)
+                            theInstance.width = width
+                            theInstance.height = height
+                            theInstance.lineStyle(1, color, 1)
+                            theInstance.drawRect(0,0, width, height)
+
+                            teavm.sceneGraphInstances[objectId] = theInstance
+                            teavm.stage.addChild(theInstance)
+                        }
+
+                        theInstance.position.set(x, y)
+                        theInstance.rotation = rotationRad
+
+                        teavm.touchedInLastFrame[objectId] = theInstance
+                    },
+                    drawImage: function(objectIdPtr,textureId,
+                        x,
+                        y,
+                        centerX,
+                        centerY,
+                        rotationRad) {
+
+                        var objectId = teavm.pointerToString(objectIdPtr)
+
+                        var theInstance = teavm.sceneGraphInstances[objectId]
+                        if (theInstance == null) {
+                            var texture = teavm.cachedObjects[textureId]
+                            theInstance = new PIXI.Sprite(texture)
+                            theInstance.scale.set(1,1)
+                            theInstance.pivot.set(centerX, centerY)
+
+                            teavm.sceneGraphInstances[objectId] = theInstance
+                            teavm.stage.addChild(theInstance)
+                        }
+
+                        theInstance.position.set(x, y)
+                        theInstance.rotation = rotationRad
+
+                        teavm.touchedInLastFrame[objectId] = theInstance
+                    },
                     drawText: function(objectIdPtr,textPtr,fontFamilyPtr,fontSizePtr,
                         cssFillPtr,
                         cssStoktePtr,
