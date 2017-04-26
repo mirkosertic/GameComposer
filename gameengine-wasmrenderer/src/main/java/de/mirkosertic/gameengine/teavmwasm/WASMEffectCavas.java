@@ -16,6 +16,7 @@
 package de.mirkosertic.gameengine.teavmwasm;
 
 import de.mirkosertic.gameengine.core.GameResource;
+import de.mirkosertic.gameengine.generic.CSSUtils;
 import de.mirkosertic.gameengine.type.Color;
 import de.mirkosertic.gameengine.type.EffectCanvas;
 import de.mirkosertic.gameengine.type.Position;
@@ -24,6 +25,7 @@ public class WASMEffectCavas implements EffectCanvas {
 
     @Override
     public void drawSingleDot(String aObjectIdentifier, Position aPosition, Color aColor, int aZIndex) {
+        WASMGameView.externalDrawRect(aObjectIdentifier, 1, 1, CSSUtils.toInt(aColor), aPosition.x, aPosition.y, 0.5f, 0.5f, 0.0f);
     }
 
     @Override
