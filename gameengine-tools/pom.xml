@@ -99,6 +99,12 @@
         </dependency>
         <dependency>
             <groupId>de.mirkosertic</groupId>
+            <artifactId>gameengine-wasmrenderer</artifactId>
+            <type>war</type>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.mirkosertic</groupId>
             <artifactId>gameengine-dragomerenderer</artifactId>
             <type>war</type>
             <scope>provided</scope>
