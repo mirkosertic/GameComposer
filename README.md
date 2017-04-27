@@ -29,58 +29,6 @@ The Electron Releases are available for download at the GitHub Releases section.
 
 ![Webeditor in Electron](https://raw.githubusercontent.com/mirkosertic/GameComposer/master/docs/images/electron.png)
 
-GameEngine
-----------
-
-GameEngine is the cross-platform game engine.
-
-Core concepts and components of the game engine are:
-
-| Concept /  component   | Description
-|------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------
-| Game                   | A Game is the top level container. Each Game is split into several GameScenes.
-| GameScene              | A Scene is like a level of a game. A Scene has a collection of GameObjects, Assets and Events.
-| GameSystem             | A GameSystem defines a subsystem of the game engine. There are GameSystems for physics, sounds and other stuff
-| GameView               | A GameView is the presentation of a GameScene to some kind of consumer. This can be a screen renderer or even a remote consumer.
-| GameObject             | A GameObject is a template for visible objects. The behavior of a GameObject is defined by GameComponentTemplates
-| BehaviorTemplate       | A BehaviorTemplate defines some kind of behavior, e.g. if it is static, a sprite or driven by physics.
-| GameObjectInstance     | A GameObjectInstance is an instance of a GameObject. It inherits the defined BehaviorTemplates by copying them into a Behavior
-| Behavior               | A Behavior is the behavior status for a BehaviorTemplate and a GameObjectInstance.
-| Event                  | An Event can be triggered by a consumer by sending it via the GameView to the engine. An Event can also be triggered or consumed by a GameComponent or GameSystem.
-| EventSheet             | An EventSheet is the rule engine. Each rule has a condition and some actions.
-| GameLoop               | The GameLoop drives the engine by calling the GameSystems, rendering the GameView and dispatching events.
-| GameProcess            | A GameProcess is something that takes multiple GameLoop cycles to complete, for instance playing background music or playing an animation.
-
-GameEngine-Networking
---------------
-
-Networking support is implemented as a RemoteGameView. Local events are sent between game instances to sync the distributed game models.
-
-Networking is implemented in a very early beta state only by the TeaVM Renderer. Events are sent to a Firebase instance, which
-then syncs the events back to other browsers bound to the same Firebase instance. Take a look at the [Networking](https://mirkosertic.github.io/GameComposer/games/teavm/networking/index.html) example
-to see it in action. In this case, Firebase acts as a non-authorative game server. The game models and simulation is still run in the local browser.
-Only the game state is synchronized using events.
-
-GameEngine-TeaVMRenderer (preferred)
---------------
-
-This is the game presentation logic using the TeaVM Java-to-JavaScript Transpiler Framework. It will render the game view
-using [pixi.js](http://www.pixijs.com), which uses WebGL or the HTML5 Canvas API as a fallback. Sound is done using [howler.js](https://github.com/goldfire/howler.js/) 
-
-GameEngine-WebAssemblyRenderer (experimental)
---------------
-
-This is a first implementation of a [WebAssembly](http://webassembly.org/) based GameRenderer. Under the hood it uses the TeaVM WebAssembly compile target.
-
-Please note that this is experimental stage!
-
-GameEngine-CordovaRenderer (experimental)
---------------
-
-This is basically the TeaVMRenderer packaged as a Cordova Application backed by Crosswalk(Chromium).
-
-![A game running in Android Emulator](https://raw.githubusercontent.com/mirkosertic/GameComposer/master/docs/images/android.png)
-
 Example Games
 -------------
 
@@ -136,6 +84,65 @@ Dragome Renderer:
 
 [Arcade Racer](https://mirkosertic.github.io/GameComposer/games/dragome/arcaderacer/index.html) 
 
+
+GameEngine
+----------
+
+GameEngine is the cross-platform game engine.
+
+Core concepts and components of the game engine are:
+
+| Concept /  component   | Description
+|------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Game                   | A Game is the top level container. Each Game is split into several GameScenes.
+| GameScene              | A Scene is like a level of a game. A Scene has a collection of GameObjects, Assets and Events.
+| GameSystem             | A GameSystem defines a subsystem of the game engine. There are GameSystems for physics, sounds and other stuff
+| GameView               | A GameView is the presentation of a GameScene to some kind of consumer. This can be a screen renderer or even a remote consumer.
+| GameObject             | A GameObject is a template for visible objects. The behavior of a GameObject is defined by GameComponentTemplates
+| BehaviorTemplate       | A BehaviorTemplate defines some kind of behavior, e.g. if it is static, a sprite or driven by physics.
+| GameObjectInstance     | A GameObjectInstance is an instance of a GameObject. It inherits the defined BehaviorTemplates by copying them into a Behavior
+| Behavior               | A Behavior is the behavior status for a BehaviorTemplate and a GameObjectInstance.
+| Event                  | An Event can be triggered by a consumer by sending it via the GameView to the engine. An Event can also be triggered or consumed by a GameComponent or GameSystem.
+| EventSheet             | An EventSheet is the rule engine. Each rule has a condition and some actions.
+| GameLoop               | The GameLoop drives the engine by calling the GameSystems, rendering the GameView and dispatching events.
+| GameProcess            | A GameProcess is something that takes multiple GameLoop cycles to complete, for instance playing background music or playing an animation.
+
+GameEngine-Networking
+--------------
+
+Networking support is implemented as a RemoteGameView. Local events are sent between game instances to sync the distributed game models.
+
+Networking is implemented in a very early beta state only by the TeaVM Renderer. Events are sent to a Firebase instance, which
+then syncs the events back to other browsers bound to the same Firebase instance. Take a look at the [Networking](https://mirkosertic.github.io/GameComposer/games/teavm/networking/index.html) example
+to see it in action. In this case, Firebase acts as a non-authorative game server. The game models and simulation is still run in the local browser.
+Only the game state is synchronized using events.
+
+GameEngine-TeaVMRenderer (preferred)
+--------------
+
+This is the game presentation logic using the TeaVM Java-to-JavaScript Transpiler Framework. It will render the game view
+using [pixi.js](http://www.pixijs.com), which uses WebGL or the HTML5 Canvas API as a fallback. Sound is done using [howler.js](https://github.com/goldfire/howler.js/) 
+
+GameEngine-WebAssemblyRenderer (experimental)
+--------------
+
+This is a first implementation of a [WebAssembly](http://webassembly.org/) based GameRenderer. Under the hood it uses the TeaVM WebAssembly compile target.
+
+Please note that this is experimental stage!
+
+Example games(probably not working):
+
+[Gravity and Mouse](https://mirkosertic.github.io/GameComposer/games/wasm/gravity/index.html)
+
+[Duke on the Platform](https://mirkosertic.github.io/GameComposer/games/wasm/platformer/index.html)
+
+
+GameEngine-CordovaRenderer (experimental)
+--------------
+
+This is basically the TeaVMRenderer packaged as a Cordova Application backed by Crosswalk(Chromium).
+
+![A game running in Android Emulator](https://raw.githubusercontent.com/mirkosertic/GameComposer/master/docs/images/android.png)
 
 
 GameEngine-FXRenderer (outdated)
