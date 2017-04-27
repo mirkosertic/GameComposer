@@ -119,7 +119,7 @@
                             <sourceFilesCopied>true</sourceFilesCopied>
                             <targetType>WEBASSEMBLY</targetType>
                             <wasmVersion>V_0x1</wasmVersion>
-                            <optimizationLevel>ADVANCED</optimizationLevel>
+                            <optimizationLevel>SIMPLE</optimizationLevel>
                         </configuration>
                     </execution>
                 </executions>
