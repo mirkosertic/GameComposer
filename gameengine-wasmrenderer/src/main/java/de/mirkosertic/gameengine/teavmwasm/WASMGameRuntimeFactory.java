@@ -16,6 +16,7 @@
 package de.mirkosertic.gameengine.teavmwasm;
 
 import de.mirkosertic.gameengine.AbstractGameRuntimeFactory;
+import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameSystemWork;
 import de.mirkosertic.gameengine.core.Logger;
 import de.mirkosertic.gameengine.core.ThreadingManager;
@@ -23,11 +24,48 @@ import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.physic.GamePhysicsManager;
 import de.mirkosertic.gameengine.physic.GamePhysicsManagerFactory;
 import de.mirkosertic.gameengine.physic.PhysicsDebugCanvas;
-import de.mirkosertic.gameengine.physics.jbox2d.JBox2DGamePhysicsManagerFactory;
+import de.mirkosertic.gameengine.process.GameProcess;
+import de.mirkosertic.gameengine.scriptengine.LUAScriptEngine;
 import de.mirkosertic.gameengine.scriptengine.LUAScriptEngineFactory;
-import de.mirkosertic.gameengine.scriptengine.luaj.LuaJScriptEngineFactory;
+import de.mirkosertic.gameengine.type.KeyValueObjectCache;
+import de.mirkosertic.gameengine.type.Reflectable;
+import de.mirkosertic.gameengine.type.Script;
+import de.mirkosertic.gameengine.type.TextExpression;
+
+import java.io.IOException;
 
 public class WASMGameRuntimeFactory extends AbstractGameRuntimeFactory {
+
+    public static class DoNothingScriptEngine implements LUAScriptEngine {
+
+        private final String script;
+
+        public DoNothingScriptEngine(String aScript) {
+            script = aScript;
+        }
+
+        @Override
+        public void shutdown() {
+        }
+
+        @Override
+        public void registerObject(String aObjectName, Reflectable aObject) {
+        }
+
+        @Override
+        public Object proceedGame(long aGameTime, long aElapsedTimeSinceLastLoop) {
+            return GameProcess.ProceedResult.STOPPED;
+        }
+
+        @Override
+        public void registerPrimitive(String aObjectName, long aValue) {
+        }
+
+        @Override
+        public String evaluateSimpleExpressionFor(GameObjectInstance aObjectInstance) {
+            return script;
+        }
+    }
 
     @Override
     protected Logger createLogger() {
@@ -41,7 +79,19 @@ public class WASMGameRuntimeFactory extends AbstractGameRuntimeFactory {
 
     @Override
     protected LUAScriptEngineFactory createScriptEngine() {
-        return new LuaJScriptEngineFactory(new WASMBuiltInFunctions());
+        return new LUAScriptEngineFactory() {
+            @Override
+            public LUAScriptEngine createNewEngine(KeyValueObjectCache aObjectCache, Script aScript)
+                    throws IOException {
+                return new DoNothingScriptEngine(aScript.script);
+            }
+
+            @Override
+            public LUAScriptEngine createNewEngine(KeyValueObjectCache aObjectCache, TextExpression aExpression)
+                    throws IOException {
+                return new DoNothingScriptEngine(aExpression.expression);
+            }
+        };
     }
 
     @Override

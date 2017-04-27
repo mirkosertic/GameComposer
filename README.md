@@ -8,7 +8,7 @@ Started as a JavaFX implementation some years ago, it now supports desktop and m
 Its core is based on Domain-driven Design and a hexagonal architecture. The main game simulation logic stayed the same for years, but
 replacing presentation logic and adapting it to new technologies is a lot easier compared to traditional layered applications.
 
-To see it in action please visit [this page](https://www.mirkosertic.de/wordpress/blog-post/a-javafx-based-game-authoring-system/)
+To see it in action please visit [this page](https://www.mirkosertic.de/blog/2013/11/a-javafx-based-game-authoring-system/)
 
 Current travis-ci build status: [![Build Status](https://travis-ci.org/mirkosertic/GameComposer.svg?branch=master)](https://travis-ci.org/mirkosertic/GameComposer) [![Gitter](https://badges.gitter.im/mirkosertic/GameComposer.svg)](https://gitter.im/mirkosertic/GameComposer?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
@@ -67,8 +67,14 @@ GameEngine-TeaVMRenderer (preferred)
 This is the game presentation logic using the TeaVM Java-to-JavaScript Transpiler Framework. It will render the game view
 using [pixi.js](http://www.pixijs.com), which uses WebGL or the HTML5 Canvas API as a fallback. Sound is done using [howler.js](https://github.com/goldfire/howler.js/) 
 
+GameEngine-WebAssemblyRenderer (experimental)
+--------------
 
-GameEngine-Cordovarenderer (experimental)
+This is a first implementation of a [WebAssembly](http://webassembly.org/) based GameRenderer. Under the hood it uses the TeaVM WebAssembly compile target.
+
+Please note that this is experimental stage!
+
+GameEngine-CordovaRenderer (experimental)
 --------------
 
 This is basically the TeaVMRenderer packaged as a Cordova Application backed by Crosswalk(Chromium).

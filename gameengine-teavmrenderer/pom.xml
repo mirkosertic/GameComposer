@@ -123,6 +123,7 @@
                             <!-- Whether TeaVM should also put source files into output directory,
                                  for compatibility with source maps -->
                             <sourceFilesCopied>true</sourceFilesCopied>
+                            <optimizationLevel>ADVANCED</optimizationLevel>
                         </configuration>
                     </execution>
                 </executions>
