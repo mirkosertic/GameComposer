@@ -55,6 +55,21 @@
                         </configuration>
                     </execution>
                     <execution>
+                        <id>bounce_wasm</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>de.mirkosertic.gamecomposer.tools.Main</mainClass>
+                            <arguments>
+                                <argument>WASM</argument>
+                                <argument>${project.basedir}/bounce</argument>
+                                <argument>${project.build.directory}/games/wasm/bounce</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
                         <id>bounce_gwt</id>
                         <phase>compile</phase>
                         <goals>
@@ -98,6 +113,21 @@
                                 <argument>TEAVM</argument>
                                 <argument>${project.basedir}/camera</argument>
                                 <argument>${project.build.directory}/games/teavm/camera</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>camera_wasm</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>de.mirkosertic.gamecomposer.tools.Main</mainClass>
+                            <arguments>
+                                <argument>WASM</argument>
+                                <argument>${project.basedir}/camera</argument>
+                                <argument>${project.build.directory}/games/wasm/camera</argument>
                             </arguments>
                         </configuration>
                     </execution>
@@ -149,6 +179,21 @@
                         </configuration>
                     </execution>
                     <execution>
+                        <id>gravity_wasm</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>de.mirkosertic.gamecomposer.tools.Main</mainClass>
+                            <arguments>
+                                <argument>WASM</argument>
+                                <argument>${project.basedir}/gravity</argument>
+                                <argument>${project.build.directory}/games/wasm/gravity</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
                         <id>gravity_gwt</id>
                         <phase>compile</phase>
                         <goals>
@@ -192,6 +237,21 @@
                                 <argument>TEAVM</argument>
                                 <argument>${project.basedir}/networking</argument>
                                 <argument>${project.build.directory}/games/teavm/networking</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>networking_wasm</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>de.mirkosertic.gamecomposer.tools.Main</mainClass>
+                            <arguments>
+                                <argument>WASM</argument>
+                                <argument>${project.basedir}/networking</argument>
+                                <argument>${project.build.directory}/games/wasm/networking</argument>
                             </arguments>
                         </configuration>
                     </execution>
@@ -243,6 +303,21 @@
                         </configuration>
                     </execution>
                     <execution>
+                        <id>platformer_wasm</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>de.mirkosertic.gamecomposer.tools.Main</mainClass>
+                            <arguments>
+                                <argument>WASM</argument>
+                                <argument>${project.basedir}/platformer</argument>
+                                <argument>${project.build.directory}/games/wasm/platformer</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
                         <id>platformer_gwt</id>
                         <phase>compile</phase>
                         <goals>
@@ -286,6 +361,21 @@
                                 <argument>TEAVM</argument>
                                 <argument>${project.basedir}/positiontest</argument>
                                 <argument>${project.build.directory}/games/teavm/positiontest</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>positiontest_wasm</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>de.mirkosertic.gamecomposer.tools.Main</mainClass>
+                            <arguments>
+                                <argument>WASM</argument>
+                                <argument>${project.basedir}/positiontest</argument>
+                                <argument>${project.build.directory}/games/wasm/positiontest</argument>
                             </arguments>
                         </configuration>
                     </execution>
@@ -337,6 +427,21 @@
                         </configuration>
                     </execution>
                     <execution>
+                        <id>rotatingactor_wasm</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>de.mirkosertic.gamecomposer.tools.Main</mainClass>
+                            <arguments>
+                                <argument>WASM</argument>
+                                <argument>${project.basedir}/rotatingactor</argument>
+                                <argument>${project.build.directory}/games/wasm/rotatingactor</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
                         <id>rotatingactor_gwt</id>
                         <phase>compile</phase>
                         <goals>
@@ -380,6 +485,21 @@
                                 <argument>TEAVM</argument>
                                 <argument>${project.basedir}/arcaderacer</argument>
                                 <argument>${project.build.directory}/games/teavm/arcaderacer</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>arcaderacer_wasm</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>de.mirkosertic.gamecomposer.tools.Main</mainClass>
+                            <arguments>
+                                <argument>WASM</argument>
+                                <argument>${project.basedir}/arcaderacer</argument>
+                                <argument>${project.build.directory}/games/wasm/arcaderacer</argument>
                             </arguments>
                         </configuration>
                     </execution>
