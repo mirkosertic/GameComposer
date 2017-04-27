@@ -42,7 +42,22 @@
             var vm = new TeaVM(pixiRenderer)
 
             vm.run(function() {
+
                 vm.instance.exports.main()
+
+                document.addEventListener("keydown", function(event) {
+                    vm.instance.exports.keyPressed(event.keyCode)
+                }, false)
+                document.addEventListener("keyup", function(event) {
+                    vm.instance.exports.keyReleased(event.keyCode)
+                }, false)
+
+                canvas.addEventListener("mousedown", function(event) {
+                    vm.instance.exports.mouseDown(event.clientX, event.clientY)
+                }, false)
+                canvas.addEventListener("mouseup", function(event) {
+                    vm.instance.exports.mouseUp(event.clientX, event.clientY)
+                }, false)
 
                 window.addEventListener("resize", function(evt) {
                     vm.handleResize()
