@@ -13,50 +13,45 @@ import Point from './Point';
 export default class Matrix
 {
     /**
-     * @param {number} [a=1] - x scale
-     * @param {number} [b=0] - y skew
-     * @param {number} [c=0] - x skew
-     * @param {number} [d=1] - y scale
-     * @param {number} [tx=0] - x translation
-     * @param {number} [ty=0] - y translation
+     *
      */
-    constructor(a = 1, b = 0, c = 0, d = 1, tx = 0, ty = 0)
+    constructor()
     {
         /**
          * @member {number}
          * @default 1
          */
-        this.a = a;
+        this.a = 1;
 
         /**
          * @member {number}
          * @default 0
          */
-        this.b = b;
+        this.b = 0;
 
         /**
          * @member {number}
          * @default 0
          */
-        this.c = c;
+        this.c = 0;
 
         /**
          * @member {number}
          * @default 1
          */
-        this.d = d;
+        this.d = 1;
 
         /**
          * @member {number}
          * @default 0
          */
-        this.tx = tx;
+        this.tx = 0;
 
         /**
          * @member {number}
          * @default 0
          */
-        this.ty = ty;
+        this.ty = 0;
 
         this.array = null;
     }

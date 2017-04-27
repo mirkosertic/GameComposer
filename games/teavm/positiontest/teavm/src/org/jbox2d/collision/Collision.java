@@ -96,7 +96,7 @@ public class Collision {
    * @param manifold1
    * @param manifold2
    */
-  public static void getPointStates(final PointState[] state1, final PointState[] state2,
+  public static final void getPointStates(final PointState[] state1, final PointState[] state2,
       final Manifold manifold1, final Manifold manifold2) {
 
     for (int i = 0; i < Settings.maxManifoldPoints; i++) {
@@ -142,7 +142,7 @@ public class Collision {
    * @param offset
    * @return
    */
-  public static int clipSegmentToLine(final ClipVertex[] vOut, final ClipVertex[] vIn,
+  public static final int clipSegmentToLine(final ClipVertex[] vOut, final ClipVertex[] vIn,
       final Vec2 normal, float offset, int vertexIndexA) {
 
     // Start with no output points

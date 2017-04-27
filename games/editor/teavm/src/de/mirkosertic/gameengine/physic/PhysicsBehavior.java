@@ -16,6 +16,7 @@
 package de.mirkosertic.gameengine.physic;
 
 import de.mirkosertic.gameengine.core.Behavior;
+import de.mirkosertic.gameengine.core.BehaviorType;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
@@ -28,7 +29,7 @@ public class PhysicsBehavior implements Behavior, Physics, Reflectable<PhysicsCl
 
     private static final PhysicsClassInformation CIINSTANCE = new PhysicsClassInformation();
 
-    static final String TYPE = "Physics";
+    public static final BehaviorType TYPE = new BehaviorType("Physics");
 
     private final GameObjectInstance objectInstance;
 
@@ -40,7 +41,7 @@ public class PhysicsBehavior implements Behavior, Physics, Reflectable<PhysicsCl
     private final Property<Float> gravityScale;
 
     PhysicsBehavior(GameObjectInstance aObjectInstance) {
-        this(aObjectInstance, aObjectInstance.getOwnerGameObject().getBehaviorTemplate(PhysicsBehaviorTemplate.class));
+        this(aObjectInstance, (PhysicsBehaviorTemplate) aObjectInstance.getOwnerGameObject().getBehaviorTemplate(PhysicsBehaviorTemplate.TYPE));
     }
 
     PhysicsBehavior(GameObjectInstance aObjectInstance, PhysicsBehaviorTemplate aTemplate) {
@@ -57,7 +58,7 @@ public class PhysicsBehavior implements Behavior, Physics, Reflectable<PhysicsCl
     }
 
     @Override
-    public String getType() {
+    public BehaviorType getType() {
         return TYPE;
     }
 
@@ -106,7 +107,7 @@ public class PhysicsBehavior implements Behavior, Physics, Reflectable<PhysicsCl
 
     @Override
     public PhysicsBehaviorTemplate getTemplate() {
-        return objectInstance.getOwnerGameObject().getBehaviorTemplate(PhysicsBehaviorTemplate.class);
+        return objectInstance.getOwnerGameObject().getBehaviorTemplate(PhysicsBehaviorTemplate.TYPE);
     }
 
     @Override

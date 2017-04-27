@@ -16,6 +16,7 @@
 package de.mirkosertic.gameengine.camera;
 
 import de.mirkosertic.gameengine.core.Behavior;
+import de.mirkosertic.gameengine.core.BehaviorType;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.core.GameScene;
@@ -37,7 +38,7 @@ public class CameraBehavior implements Behavior, Camera, Reflectable<CameraClass
 
     private static final CameraClassInformation CIINSTANCE = new CameraClassInformation();
 
-    static final String TYPE = "Camera";
+    public static final BehaviorType TYPE = new BehaviorType("Camera");
 
     private final GameObjectInstance objectInstance;
     private final Property<CameraType> type;
@@ -46,7 +47,7 @@ public class CameraBehavior implements Behavior, Camera, Reflectable<CameraClass
     private Size screenSize;
 
     CameraBehavior(GameObjectInstance aObjectInstance) {
-        this(aObjectInstance, aObjectInstance.getOwnerGameObject().getBehaviorTemplate(CameraBehaviorTemplate.class));
+        this(aObjectInstance, (CameraBehaviorTemplate) aObjectInstance.getOwnerGameObject().getBehaviorTemplate(CameraBehaviorTemplate.TYPE));
     }
 
     CameraBehavior(GameObjectInstance aObjectInstance, CameraBehaviorTemplate aTemplate) {
@@ -59,7 +60,7 @@ public class CameraBehavior implements Behavior, Camera, Reflectable<CameraClass
     }
 
     void registerEvents(GameRuntime aGameRuntime) {
-        aGameRuntime.getEventManager().register(objectInstance, SetScreenResolution.class,
+        aGameRuntime.getEventManager().register(objectInstance, SetScreenResolution.TYPE,
                 new GameEventListener<SetScreenResolution>() {
                     @Override
                     public void handleGameEvent(SetScreenResolution aEvent) {
@@ -69,7 +70,7 @@ public class CameraBehavior implements Behavior, Camera, Reflectable<CameraClass
     }
 
     @Override
-    public String getType() {
+    public BehaviorType getType() {
         return TYPE;
     }
 
@@ -149,7 +150,7 @@ public class CameraBehavior implements Behavior, Camera, Reflectable<CameraClass
 
     @Override
     public CameraBehaviorTemplate getTemplate() {
-        return objectInstance.getOwnerGameObject().getBehaviorTemplate(CameraBehaviorTemplate.class);
+        return objectInstance.getOwnerGameObject().getBehaviorTemplate(CameraBehaviorTemplate.TYPE);
     }
 
     @Override

@@ -19,9 +19,12 @@ import de.mirkosertic.gameengine.annotations.InheritedClassInformation;
 import de.mirkosertic.gameengine.annotations.ReflectiveField;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.event.GameEvent;
+import de.mirkosertic.gameengine.event.GameEventType;
 
 @InheritedClassInformation
 class KillProcessesForInstance extends GameEvent {
+
+    public static final GameEventType TYPE = new GameEventType("KillProcessesForInstance");
 
     private static final KillProcessesForInstanceClassInformation CIINSTANCE = new KillProcessesForInstanceClassInformation();
 
@@ -29,7 +32,7 @@ class KillProcessesForInstance extends GameEvent {
     public final GameObjectInstance instance;
 
     KillProcessesForInstance(GameObjectInstance aInstance) {
-        super("KillProcessesForInstance");
+        super(TYPE);
         instance = aInstance;
     }
 

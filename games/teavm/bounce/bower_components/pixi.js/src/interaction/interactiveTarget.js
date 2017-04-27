@@ -9,7 +9,7 @@
  *      function MyObject() {}
  *
  *      Object.assign(
- *          core.DisplayObject.prototype,
+ *          MyObject.prototype,
  *          PIXI.interaction.interactiveTarget
  *      );
  */
@@ -38,56 +38,68 @@ export default {
     hitArea: null,
 
     /**
-     * If enabled, the mouse cursor use the pointer behavior when hovered over the displayObject if it is interactive
-     * Setting this changes the 'cursor' property to `'pointer'`.
+     * If enabled, the mouse cursor will change when hovered over the displayObject if it is interactive
      *
-     * @member {boolean}
-     * @memberof PIXI.interaction.interactiveTarget#
+     * @inner {boolean}
      */
-    get buttonMode()
-    {
-        return this.cursor === 'pointer';
-    },
-    set buttonMode(value)
-    {
-        if (value)
-        {
-            this.cursor = 'pointer';
-        }
-        else if (this.cursor === 'pointer')
-        {
-            this.cursor = null;
-        }
-    },
+    buttonMode: false,
 
     /**
-     * This defines what cursor mode is used when the mouse cursor
-     * is hovered over the displayObject.
+     * If buttonMode is enabled, this defines what CSS cursor property is used when the mouse cursor
+     * is hovered over the displayObject
      *
      * @see https://developer.mozilla.org/en/docs/Web/CSS/cursor
      *
      * @inner {string}
      */
-    cursor: null,
+    defaultCursor: 'pointer',
 
+    // some internal checks..
     /**
-     * Internal set of all active pointers, by identifier
+     * Internal check to detect if the mouse cursor is hovered over the displayObject
      *
-     * @member {Map<number, InteractionTrackingData>}
-     * @memberof PIXI.interaction.interactiveTarget#
+     * @inner {boolean}
      * @private
      */
-    get trackedPointers()
-    {
-        if (this._trackedPointers === undefined) this._trackedPointers = {};
-
-        return this._trackedPointers;
-    },
+    _over: false,
 
     /**
-     * Map of all tracked pointers, by identifier. Use trackedPointers to access.
+     * Internal check to detect if the left mouse button is pressed on the displayObject
      *
-     * @private {Map<number, InteractionTrackingData>}
+     * @inner {boolean}
+     * @private
      */
-    _trackedPointers: undefined,
+    _isLeftDown: false,
+
+    /**
+     * Internal check to detect if the right mouse button is pressed on the displayObject
+     *
+     * @inner {boolean}
+     * @private
+     */
+    _isRightDown: false,
+
+    /**
+     * Internal check to detect if the pointer cursor is hovered over the displayObject
+     *
+     * @inner {boolean}
+     * @private
+     */
+    _pointerOver: false,
+
+    /**
+     * Internal check to detect if the pointer is down on the displayObject
+     *
+     * @inner {boolean}
+     * @private
+     */
+    _pointerDown: false,
+
+    /**
+     * Internal check to detect if a user has touched the displayObject
+     *
+     * @inner {boolean}
+     * @private
+     */
+    _touchDown: false,
 };

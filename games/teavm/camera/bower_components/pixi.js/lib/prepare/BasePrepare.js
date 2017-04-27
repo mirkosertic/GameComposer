@@ -36,7 +36,7 @@ core.settings.UPLOADS_PER_FRAME = 4;
  *
  * @abstract
  * @class
- * @memberof PIXI.prepare
+ * @memberof PIXI
  */
 
 var BasePrepare = function () {
@@ -124,9 +124,9 @@ var BasePrepare = function () {
     /**
      * Upload all the textures and graphics to the GPU.
      *
-     * @param {Function|PIXI.DisplayObject|PIXI.Container|PIXI.BaseTexture|PIXI.Texture|PIXI.Graphics|PIXI.Text} item -
-     *        Either the container or display object to search for items to upload, the items to upload themselves,
-     *        or the callback function, if items have been added using `prepare.add`.
+     * @param {Function|PIXI.DisplayObject|PIXI.Container} item - Either
+     *        the container or display object to search for items to upload or
+     *        the callback function, if items have been added using `prepare.add`.
      * @param {Function} [done] - Optional callback when all queued uploads have completed
      */
 
@@ -240,8 +240,7 @@ var BasePrepare = function () {
     /**
      * Manually add an item to the uploading queue.
      *
-     * @param {PIXI.DisplayObject|PIXI.Container|PIXI.BaseTexture|PIXI.Texture|PIXI.Graphics|PIXI.Text|*} item - Object to
-     *        add to the queue
+     * @param {PIXI.DisplayObject|PIXI.Container|*} item - Object to add to the queue
      * @return {PIXI.CanvasPrepare} Instance of plugin for chaining.
      */
 

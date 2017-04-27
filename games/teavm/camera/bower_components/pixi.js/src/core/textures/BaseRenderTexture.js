@@ -1,6 +1,8 @@
 import BaseTexture from './BaseTexture';
 import settings from '../settings';
 
+const { RESOLUTION, SCALE_MODE } = settings;
+
 /**
  * A BaseRenderTexture is a special texture that allows any Pixi display object to be rendered to it.
  *
@@ -23,17 +25,18 @@ import settings from '../settings';
  * baseRenderTexture.render(sprite);
  * ```
  *
- * The Sprite in this case will be rendered using its local transform. To render this sprite at 0,0
- * you can clear the transform
+ * The Sprite in this case will be rendered to a position of 0,0. To render this sprite at its actual
+ * position a Container should be used:
  *
  * ```js
+ * let doc = new PIXI.Container();
  *
- * sprite.setTransform()
+ * doc.addChild(sprite);
  *
  * let baseRenderTexture = new PIXI.BaseRenderTexture(100, 100);
  * let renderTexture = new PIXI.RenderTexture(baseRenderTexture);
  *
- * renderer.render(sprite, renderTexture);  // Renders to center of RenderTexture
+ * renderer.render(doc, renderTexture);  // Renders to center of RenderTexture
  * ```
  *
  * @class
@@ -52,7 +55,7 @@ export default class BaseRenderTexture extends BaseTexture
     {
         super(null, scaleMode);
 
-        this.resolution = resolution || settings.RESOLUTION;
+        this.resolution = resolution || RESOLUTION;
 
         this.width = width;
         this.height = height;
@@ -60,7 +63,7 @@ export default class BaseRenderTexture extends BaseTexture
         this.realWidth = this.width * this.resolution;
         this.realHeight = this.height * this.resolution;
 
-        this.scaleMode = scaleMode !== undefined ? scaleMode : settings.SCALE_MODE;
+        this.scaleMode = scaleMode || SCALE_MODE;
         this.hasLoaded = true;
 
         /**

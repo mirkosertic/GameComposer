@@ -16,6 +16,7 @@
 package de.mirkosertic.gameengine.playerscore;
 
 import de.mirkosertic.gameengine.core.Behavior;
+import de.mirkosertic.gameengine.core.BehaviorType;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
@@ -29,13 +30,13 @@ public class PlayerScoreBehavior implements Behavior, PlayerScore, Reflectable<P
 
     private static final PlayerScoreClassInformation CIINSTANCE = new PlayerScoreClassInformation();
 
-    static final String TYPE = "PlayerScore";
+    public static final BehaviorType TYPE = new BehaviorType("PlayerScore");
 
     private final GameObjectInstance objectInstance;
     private final Property<ScoreValue> scoreValue;
 
     private PlayerScoreBehavior(GameObjectInstance aObjectInstance) {
-        this(aObjectInstance, aObjectInstance.getOwnerGameObject().getBehaviorTemplate(PlayerScoreBehaviorTemplate.class));
+        this(aObjectInstance, (PlayerScoreBehaviorTemplate) aObjectInstance.getOwnerGameObject().getBehaviorTemplate(PlayerScoreBehaviorTemplate.TYPE));
     }
 
     PlayerScoreBehavior(GameObjectInstance aObjectInstance, PlayerScoreBehaviorTemplate aTemplate) {
@@ -47,7 +48,7 @@ public class PlayerScoreBehavior implements Behavior, PlayerScore, Reflectable<P
     }
 
     @Override
-    public String getType() {
+    public BehaviorType getType() {
         return TYPE;
     }
 
@@ -58,7 +59,7 @@ public class PlayerScoreBehavior implements Behavior, PlayerScore, Reflectable<P
 
     @Override
     public PlayerScoreBehaviorTemplate getTemplate() {
-        return objectInstance.getOwnerGameObject().getBehaviorTemplate(PlayerScoreBehaviorTemplate.class);
+        return objectInstance.getOwnerGameObject().getBehaviorTemplate(PlayerScoreBehaviorTemplate.TYPE);
     }
 
     @Override

@@ -84,8 +84,8 @@ var WebGLRenderer = function (_SystemRenderer) {
 
     /**
      *
-     * @param {number} [screenWidth=800] - the width of the screen
-     * @param {number} [screenHeight=600] - the height of the screen
+     * @param {number} [width=0] - the width of the canvas view
+     * @param {number} [height=0] - the height of the canvas view
      * @param {object} [options] - The optional renderer parameters
      * @param {HTMLCanvasElement} [options.view] - the canvas to use as a view, optional
      * @param {boolean} [options.transparent=false] - If the render view is transparent, default false
@@ -103,21 +103,11 @@ var WebGLRenderer = function (_SystemRenderer) {
      *  enable this if you need to call toDataUrl on the webgl context.
      * @param {boolean} [options.roundPixels=false] - If true Pixi will Math.floor() x/y values when
      *  rendering, stopping pixel interpolation.
-     * @param {boolean} [options.legacy=false] - If true Pixi will aim to ensure compatibility
-     * with older / less advanced devices. If you experiance unexplained flickering try setting this to true.
      */
-    function WebGLRenderer(screenWidth, screenHeight) {
+    function WebGLRenderer(width, height) {
         var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
         _classCallCheck(this, WebGLRenderer);
-
-        var _this = _possibleConstructorReturn(this, _SystemRenderer.call(this, 'WebGL', screenWidth, screenHeight, options));
-
-        _this.legacy = !!options.legacy;
-
-        if (_this.legacy) {
-            _pixiGlCore2.default.VertexArrayObject.FORCE_NATIVE = true;
-        }
 
         /**
          * The type of this renderer as a standardised const
@@ -125,6 +115,8 @@ var WebGLRenderer = function (_SystemRenderer) {
          * @member {number}
          * @see PIXI.RENDERER_TYPE
          */
+        var _this = _possibleConstructorReturn(this, _SystemRenderer.call(this, 'WebGL', width, height, options));
+
         _this.type = _const.RENDERER_TYPE.WEBGL;
 
         _this.handleContextLost = _this.handleContextLost.bind(_this);
@@ -209,6 +201,16 @@ var WebGLRenderer = function (_SystemRenderer) {
          */
         _this.boundTextures = null;
 
+        _this._initContext();
+        /**
+         * Manages the filters.
+         *
+         * @member {PIXI.FilterManager}
+         */
+        _this.filterManager = new _FilterManager2.default(_this);
+        // map some webGL blend and drawmodes..
+        _this.drawModes = (0, _mapWebGLDrawModesToPixi2.default)(_this.gl);
+
         /**
          * Holds the current shader
          *
@@ -224,17 +226,6 @@ var WebGLRenderer = function (_SystemRenderer) {
          * @member {PIXI.RenderTarget}
          */
         _this._activeRenderTarget = null;
-
-        _this._initContext();
-
-        /**
-         * Manages the filters.
-         *
-         * @member {PIXI.FilterManager}
-         */
-        _this.filterManager = new _FilterManager2.default(_this);
-        // map some webGL blend and drawmodes..
-        _this.drawModes = (0, _mapWebGLDrawModesToPixi2.default)(_this.gl);
 
         _this._nextTextureLocation = 0;
 
@@ -293,7 +284,7 @@ var WebGLRenderer = function (_SystemRenderer) {
         this.emit('context', gl);
 
         // setup the width/height properties and gl viewport
-        this.resize(this.screen.width, this.screen.height);
+        this.resize(this.width, this.height);
     };
 
     /**
@@ -385,17 +376,17 @@ var WebGLRenderer = function (_SystemRenderer) {
     /**
      * Resizes the webGL view to the specified width and height.
      *
-     * @param {number} screenWidth - the new width of the screen
-     * @param {number} screenHeight - the new height of the screen
+     * @param {number} width - the new width of the webGL view
+     * @param {number} height - the new height of the webGL view
      */
 
 
-    WebGLRenderer.prototype.resize = function resize(screenWidth, screenHeight) {
+    WebGLRenderer.prototype.resize = function resize(width, height) {
         //  if(width * this.resolution === this.width && height * this.resolution === this.height)return;
 
-        _SystemRenderer3.default.prototype.resize.call(this, screenWidth, screenHeight);
+        _SystemRenderer3.default.prototype.resize.call(this, width, height);
 
-        this.rootRenderTarget.resize(screenWidth, screenHeight);
+        this.rootRenderTarget.resize(width, height);
 
         if (this._activeRenderTarget === this.rootRenderTarget) {
             this.rootRenderTarget.activate();
@@ -437,26 +428,6 @@ var WebGLRenderer = function (_SystemRenderer) {
 
     WebGLRenderer.prototype.setTransform = function setTransform(matrix) {
         this._activeRenderTarget.transform = matrix;
-    };
-
-    /**
-     * Erases the render texture and fills the drawing area with a colour
-     *
-     * @param {PIXI.RenderTexture} renderTexture - The render texture to clear
-     * @param {number} [clearColor] - The colour
-     * @return {PIXI.WebGLRenderer} Returns itself.
-     */
-
-
-    WebGLRenderer.prototype.clearRenderTexture = function clearRenderTexture(renderTexture, clearColor) {
-        var baseTexture = renderTexture.baseTexture;
-        var renderTarget = baseTexture._glRenderTargets[this.CONTEXT_UID];
-
-        if (renderTarget) {
-            renderTarget.clear(clearColor);
-        }
-
-        return this;
     };
 
     /**
@@ -520,24 +491,18 @@ var WebGLRenderer = function (_SystemRenderer) {
      * Changes the current shader to the one given in parameter
      *
      * @param {PIXI.Shader} shader - the new shader
-     * @param {boolean} [autoProject=true] - Whether automatically set the projection matrix
      * @return {PIXI.WebGLRenderer} Returns itself.
      */
 
 
-    WebGLRenderer.prototype.bindShader = function bindShader(shader, autoProject) {
+    WebGLRenderer.prototype.bindShader = function bindShader(shader) {
         // TODO cache
         if (this._activeShader !== shader) {
             this._activeShader = shader;
             shader.bind();
 
-            // `autoProject` normally would be a default parameter set to true
-            // but because of how Babel transpiles default parameters
-            // it hinders the performance of this method.
-            if (autoProject !== false) {
-                // automatically set the projection matrix
-                shader.uniforms.projectionMatrix = this._activeRenderTarget.projectionMatrix.toArray(true);
-            }
+            // automatically set the projection matrix
+            shader.uniforms.projectionMatrix = this._activeRenderTarget.projectionMatrix.toArray(true);
         }
 
         return this;

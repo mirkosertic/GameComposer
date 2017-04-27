@@ -16,6 +16,7 @@
 package de.mirkosertic.gameengine.arcade;
 
 import de.mirkosertic.gameengine.core.BehaviorTemplate;
+import de.mirkosertic.gameengine.core.BehaviorType;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
@@ -29,6 +30,8 @@ import java.util.Map;
 
 public class ConstantMovementBehaviorTemplate implements BehaviorTemplate<ConstantMovementBehavior>, ConstantMovement, Reflectable<ConstantMovementClassInformation> {
 
+    public static final BehaviorType TYPE = new BehaviorType("ID");
+
     private static final ConstantMovementClassInformation CIINSTANCE = new ConstantMovementClassInformation();
 
     private final Property<Speed> speed;
@@ -39,6 +42,11 @@ public class ConstantMovementBehaviorTemplate implements BehaviorTemplate<Consta
         speed = new Property<>(Speed.class, this, SPEED_PROPERTY, new Speed(0), aEventManager);
         rotationSpeed = new Property<>(Speed.class, this, ROTATIONSPEED_PROPERTY, new Speed(0), aEventManager);
         owner = aOwner;
+    }
+
+    @Override
+    public BehaviorType getType() {
+        return TYPE;
     }
 
     @Override

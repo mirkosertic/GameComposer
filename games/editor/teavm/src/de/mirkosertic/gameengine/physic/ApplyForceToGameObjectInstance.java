@@ -19,10 +19,13 @@ import de.mirkosertic.gameengine.annotations.InheritedClassInformation;
 import de.mirkosertic.gameengine.annotations.ReflectiveField;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.event.GameEvent;
+import de.mirkosertic.gameengine.event.GameEventType;
 import de.mirkosertic.gameengine.type.Force;
 
 @InheritedClassInformation
 public class ApplyForceToGameObjectInstance extends GameEvent {
+
+    public static final GameEventType TYPE = new GameEventType("ApplyForceToGameObjectInstance");
 
     private static final ApplyForceToGameObjectInstanceClassInformation CIINSTANCE = new ApplyForceToGameObjectInstanceClassInformation();
 
@@ -33,7 +36,7 @@ public class ApplyForceToGameObjectInstance extends GameEvent {
     public final Force force;
 
     public ApplyForceToGameObjectInstance(GameObjectInstance aInstance, Force aForce) {
-        super("ApplyForceToGameObjectInstance");
+        super(TYPE);
         instance = aInstance;
         force = aForce;
     }

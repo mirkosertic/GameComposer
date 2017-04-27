@@ -16,6 +16,7 @@
 package de.mirkosertic.gameengine.camera;
 
 import de.mirkosertic.gameengine.core.BehaviorTemplate;
+import de.mirkosertic.gameengine.core.BehaviorType;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
@@ -28,6 +29,8 @@ import java.util.Map;
 
 public class CameraBehaviorTemplate implements BehaviorTemplate<CameraBehavior>, Camera, Reflectable<CameraClassInformation> {
 
+    public static final BehaviorType TYPE = new BehaviorType("CameraBehaviorTemplate");
+
     private static final CameraClassInformation CIINSTANCE = new CameraClassInformation();
 
     private final Property<CameraType> type;
@@ -36,6 +39,11 @@ public class CameraBehaviorTemplate implements BehaviorTemplate<CameraBehavior>,
     public CameraBehaviorTemplate(GameEventManager aEventManager, GameObject aOwner) {
         type = new Property<>(CameraType.class, this, TYPE_PROPERTY, CameraType.FOLLOWPLAYER, aEventManager);
         owner = aOwner;
+    }
+
+    @Override
+    public BehaviorType getType() {
+        return TYPE;
     }
 
     @Override

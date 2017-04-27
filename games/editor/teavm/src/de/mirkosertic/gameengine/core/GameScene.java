@@ -384,11 +384,13 @@ public class GameScene implements Reflectable<GameSceneClassInformation>, KeyVal
         GameScene theScene = new GameScene(aGame, aGameRuntime);
         theScene.name.setQuietly((String) aSerializedData.get(NAME_PROPERTY));
 
+        aGameRuntime.getLogger().info("Loading objects");
         List<Map<String, Object>> theObjects = (List<Map<String, Object>>) aSerializedData.get("objects");
         for (Map<String, Object> theObject : theObjects) {
             theScene.addGameObject(GameObject.deserialize(aGameRuntime, theScene, theObject));
         }
 
+        aGameRuntime.getLogger().info("Loading instances");
         List<Map<String, Object>> theInstances = (List<Map<String, Object>>) aSerializedData.get("instances");
         if (theInstances != null) {
             for (Map<String, Object> theInstance : theInstances) {
@@ -396,6 +398,7 @@ public class GameScene implements Reflectable<GameSceneClassInformation>, KeyVal
             }
         }
 
+        aGameRuntime.getLogger().info("Loading event sheets");
         List<EventSheet> theEventSheetList = new ArrayList<>();
         List<Map<String, Object>> theEventSheets = (List<Map<String, Object>>) aSerializedData.get("eventsheets");
         if (theEventSheets != null) {
@@ -405,6 +408,7 @@ public class GameScene implements Reflectable<GameSceneClassInformation>, KeyVal
         }
         theScene.eventSheets = theEventSheetList.toArray(new EventSheet[theEventSheetList.size()]);
 
+        aGameRuntime.getLogger().info("Loading sprite sheets");
         List<Spritesheet> theSpriteSheetList = new ArrayList<>();
         List<Map<String, Object>> theSpriteSheets = (List<Map<String, Object>>) aSerializedData.get("spritesheets");
         if (theSpriteSheets != null) {
@@ -412,9 +416,9 @@ public class GameScene implements Reflectable<GameSceneClassInformation>, KeyVal
                 theSpriteSheetList.add(Spritesheet.unmarshall(theScene, theSheet));
             }
         }
-
         theScene.spriteSheets = theSpriteSheetList.toArray(new Spritesheet[theSpriteSheetList.size()]);
 
+        aGameRuntime.getLogger().info("Loading core properties");
         String theCameraObject = (String) aSerializedData.get("cameraobjectid");
         if (theCameraObject != null) {
             theScene.cameraObject.setQuietly(theScene.findObjectByID(theCameraObject));
@@ -432,6 +436,7 @@ public class GameScene implements Reflectable<GameSceneClassInformation>, KeyVal
             theScene.layoutBounds.setQuietly(Rectangle.deserialize(theLayoutBounds));
         }
 
+        aGameRuntime.getLogger().info("Loading effects");
         List<Map<String, Object>> theEffects = (List<Map<String, Object>>) aSerializedData.get("effects");
         if (theEffects != null) {
             for (Map<String, Object> theData : theEffects) {
@@ -440,6 +445,7 @@ public class GameScene implements Reflectable<GameSceneClassInformation>, KeyVal
             }
         }
 
+        aGameRuntime.getLogger().info("Loading custom properties");
         Map<String, Object> theCustomProperties = (Map<String, Object>) aSerializedData.get("customProperties");
         if (theCustomProperties != null) {
             theScene.customProperties.setQuietly(CustomProperties.deserialize(theCustomProperties));

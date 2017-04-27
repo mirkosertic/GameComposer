@@ -18,9 +18,12 @@ package de.mirkosertic.gameengine.core;
 import de.mirkosertic.gameengine.annotations.InheritedClassInformation;
 import de.mirkosertic.gameengine.annotations.ReflectiveField;
 import de.mirkosertic.gameengine.event.GameEvent;
+import de.mirkosertic.gameengine.event.GameEventType;
 
 @InheritedClassInformation
 public class GameObjectAddedToScene extends GameEvent {
+
+    public static final GameEventType TYPE = new GameEventType("GameObjectAddedToScene");
 
     private static final GameObjectAddedToSceneClassInformation CIINSTANCE = new GameObjectAddedToSceneClassInformation();
 
@@ -31,7 +34,7 @@ public class GameObjectAddedToScene extends GameEvent {
     public final GameObject object;
 
     public GameObjectAddedToScene(GameScene aScene, GameObject aObject) {
-        super("GameObjectAddedToScene");
+        super(TYPE);
         scene = aScene;
         object = aObject;
     }

@@ -19,6 +19,7 @@ import de.mirkosertic.gameengine.ArrayUtils;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameSystem;
 import de.mirkosertic.gameengine.core.GameSystemWork;
+import de.mirkosertic.gameengine.core.Logger;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -27,17 +28,22 @@ import java.util.Set;
 
 public class GameProcessManager implements GameSystem {
 
+    private final Logger logger;
+
     private GameProcess[] runningProcesses;
     private final Set<GameProcess> killedProcesses;
     private long processesAmountOfTime;
 
-    GameProcessManager() {
+    GameProcessManager(Logger aLogger) {
+        logger = aLogger;
         runningProcesses = new GameProcess[0];
         killedProcesses = new HashSet<>();
         processesAmountOfTime = 0;
     }
 
     void start(GameProcess aProcess) {
+        logger.info("Starting process of type " + aProcess.getClass().getName());
+
         List<GameProcess> theProcesses = ArrayUtils.asList(runningProcesses);
         theProcesses.add(aProcess);
         runningProcesses = theProcesses.toArray(new GameProcess[theProcesses.size()]);
@@ -45,6 +51,8 @@ public class GameProcessManager implements GameSystem {
     }
 
     void kill(GameProcess aProcess) {
+        logger.info("Killing process of type " + aProcess.getClass().getName());
+
         killedProcesses.add(aProcess);
         aProcess.killed();
     }
@@ -74,6 +82,9 @@ public class GameProcessManager implements GameSystem {
                     List<GameProcess> theNewChildProcesses = new ArrayList<>();
 
                     for (GameProcess theProcess : runningProcesses) {
+
+                        logger.info("Running process of type " + theProcess.getClass().getName());
+
                         GameProcess.ProceedResult theResult = theProcess.proceedGame(aGameTime, processesAmountOfTime);
                         switch (theResult) {
                         case CONTINUE_RUNNING:

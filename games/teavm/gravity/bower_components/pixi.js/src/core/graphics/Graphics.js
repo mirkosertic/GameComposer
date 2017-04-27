@@ -28,9 +28,8 @@ export default class Graphics extends Container
 {
     /**
      *
-     * @param {boolean} [nativeLines=false] - If true the lines will be draw using LINES instead of TRIANGLE_STRIP
      */
-    constructor(nativeLines = false)
+    constructor()
     {
         super();
 
@@ -49,13 +48,6 @@ export default class Graphics extends Container
          * @default 0
          */
         this.lineWidth = 0;
-
-        /**
-         * If true the lines will be draw using LINES instead of TRIANGLE_STRIP
-         *
-         * @member {boolean}
-         */
-        this.nativeLines = nativeLines;
 
         /**
          * The color of any lines drawn.
@@ -707,9 +699,6 @@ export default class Graphics extends Container
             this.graphicsData.length = 0;
         }
 
-        this.currentPath = null;
-        this._spriteRect = null;
-
         return this;
     }
 
@@ -765,14 +754,28 @@ export default class Graphics extends Container
 
         if (!this._spriteRect)
         {
-            this._spriteRect = new Sprite(new Texture(Texture.WHITE));
+            if (!Graphics._SPRITE_TEXTURE)
+            {
+                Graphics._SPRITE_TEXTURE = RenderTexture.create(10, 10);
+
+                const canvas = document.createElement('canvas');
+
+                canvas.width = 10;
+                canvas.height = 10;
+
+                const context = canvas.getContext('2d');
+
+                context.fillStyle = 'white';
+                context.fillRect(0, 0, 10, 10);
+
+                Graphics._SPRITE_TEXTURE = Texture.fromCanvas(canvas);
+            }
+
+            this._spriteRect = new Sprite(Graphics._SPRITE_TEXTURE);
         }
-
-        const sprite = this._spriteRect;
-
         if (this.tint === 0xffffff)
         {
-            sprite.tint = this.graphicsData[0].fillColor;
+            this._spriteRect.tint = this.graphicsData[0].fillColor;
         }
         else
         {
@@ -786,21 +789,20 @@ export default class Graphics extends Container
             t1[1] *= t2[1];
             t1[2] *= t2[2];
 
-            sprite.tint = rgb2hex(t1);
+            this._spriteRect.tint = rgb2hex(t1);
         }
-        sprite.alpha = this.graphicsData[0].fillAlpha;
-        sprite.worldAlpha = this.worldAlpha * sprite.alpha;
-        sprite.blendMode = this.blendMode;
+        this._spriteRect.alpha = this.graphicsData[0].fillAlpha;
+        this._spriteRect.worldAlpha = this.worldAlpha * this._spriteRect.alpha;
 
-        sprite.texture._frame.width = rect.width;
-        sprite.texture._frame.height = rect.height;
+        Graphics._SPRITE_TEXTURE._frame.width = rect.width;
+        Graphics._SPRITE_TEXTURE._frame.height = rect.height;
 
-        sprite.transform.worldTransform = this.transform.worldTransform;
+        this._spriteRect.transform.worldTransform = this.transform.worldTransform;
 
-        sprite.anchor.set(-rect.x / rect.width, -rect.y / rect.height);
-        sprite._onAnchorUpdate();
+        this._spriteRect.anchor.set(-rect.x / rect.width, -rect.y / rect.height);
+        this._spriteRect._onAnchorUpdate();
 
-        sprite._renderWebGL(renderer);
+        this._spriteRect._renderWebGL(renderer);
     }
 
     /**
@@ -831,6 +833,7 @@ export default class Graphics extends Container
             this.boundsDirty = this.dirty;
             this.updateLocalBounds();
 
+            this.dirty++;
             this.cachedSpriteDirty = true;
         }
 
@@ -1026,7 +1029,6 @@ export default class Graphics extends Container
             this.fillColor,
             this.fillAlpha,
             this.filling,
-            this.nativeLines,
             shape
         );
 
@@ -1061,15 +1063,10 @@ export default class Graphics extends Container
             canvasRenderer = new CanvasRenderer();
         }
 
-        this.transform.updateLocalTransform();
-        this.transform.localTransform.copy(tempMatrix);
+        tempMatrix.tx = -bounds.x;
+        tempMatrix.ty = -bounds.y;
 
-        tempMatrix.invert();
-
-        tempMatrix.tx -= bounds.x;
-        tempMatrix.ty -= bounds.y;
-
-        canvasRenderer.render(this, canvasBuffer, true, tempMatrix);
+        canvasRenderer.render(this, canvasBuffer, false, tempMatrix);
 
         const texture = Texture.fromCanvas(canvasBuffer.baseTexture._canvasRenderTarget.canvas, scaleMode);
 
@@ -1122,10 +1119,6 @@ export default class Graphics extends Container
      *  options have been set to that value
      * @param {boolean} [options.children=false] - if set to true, all the children will have
      *  their destroy method called as well. 'options' will be passed on to those calls.
-     * @param {boolean} [options.texture=false] - Only used for child Sprites if options.children is set to true
-     *  Should it destroy the texture of the child sprite
-     * @param {boolean} [options.baseTexture=false] - Only used for child Sprites if options.children is set to true
-     *  Should it destroy the base texture of the child sprite
      */
     destroy(options)
     {

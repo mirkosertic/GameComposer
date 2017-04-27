@@ -102,8 +102,7 @@ var TextureGarbageCollector = function () {
     TextureGarbageCollector.prototype.unload = function unload(displayObject) {
         var tm = this.renderer.textureManager;
 
-        // only destroy non generated textures
-        if (displayObject._texture && displayObject._texture._glRenderTargets) {
+        if (displayObject._texture) {
             tm.destroyTexture(displayObject._texture, true);
         }
 

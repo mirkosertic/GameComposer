@@ -18,10 +18,13 @@ package de.mirkosertic.gameengine.sound;
 import de.mirkosertic.gameengine.annotations.InheritedClassInformation;
 import de.mirkosertic.gameengine.annotations.ReflectiveField;
 import de.mirkosertic.gameengine.event.GameEvent;
+import de.mirkosertic.gameengine.event.GameEventType;
 import de.mirkosertic.gameengine.type.ResourceName;
 
 @InheritedClassInformation
 class PlaySound extends GameEvent {
+
+    public static final GameEventType TYPE = new GameEventType("PlaySound");
 
     private static final PlaySoundClassInformation CIINSTANCE = new PlaySoundClassInformation();
 
@@ -29,7 +32,7 @@ class PlaySound extends GameEvent {
     public final ResourceName resourceName;
 
     public PlaySound(ResourceName aResourceName) {
-        super("PlaySound");
+        super(TYPE);
         resourceName = aResourceName;
     }
 

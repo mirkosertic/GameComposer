@@ -19,10 +19,11 @@ import java.lang.annotation.Annotation;
 import org.teavm.backend.javascript.spi.GeneratedBy;
 import org.teavm.backend.javascript.spi.InjectedBy;
 import org.teavm.dependency.PluggableDependency;
+import org.teavm.interop.Address;
 import org.teavm.interop.DelegateTo;
+import org.teavm.interop.Unmanaged;
 import org.teavm.jso.JSBody;
 import org.teavm.jso.JSObject;
-import org.teavm.jso.browser.Window;
 import org.teavm.platform.metadata.ClassResource;
 import org.teavm.platform.metadata.StaticFieldResource;
 import org.teavm.platform.plugin.PlatformGenerator;
@@ -32,6 +33,8 @@ import org.teavm.runtime.RuntimeObject;
 public final class Platform {
     private Platform() {
     }
+
+    private static boolean newInstancePrepared;
 
     @InjectedBy(PlatformGenerator.class)
     public static native PlatformObject getPlatformObject(Object obj);
@@ -47,6 +50,7 @@ public final class Platform {
     }
 
     @SuppressWarnings("unused")
+    @Unmanaged
     private static boolean isInstanceLowLevel(RuntimeClass self, RuntimeObject object) {
         return isAssignableLowLevel(RuntimeClass.getClass(object), self);
     }
@@ -69,6 +73,7 @@ public final class Platform {
     }
 
     @SuppressWarnings("unused")
+    @Unmanaged
     private static boolean isAssignableLowLevel(RuntimeClass from, RuntimeClass to) {
         return to.isSupertypeOf.apply(from);
     }
@@ -78,14 +83,17 @@ public final class Platform {
     public static native Class<?> asJavaClass(PlatformObject obj);
 
     public static PlatformConsole getConsole() {
-        return (PlatformConsole) Window.current();
+        return (PlatformConsole) getGlobal();
     }
 
-    @JSBody(params = {}, script = "return $rt_nextId();")
+    @JSBody(script = "return $rt_nextId();")
     public static native int nextObjectId();
 
     public static <T> T newInstance(PlatformClass cls) {
-        prepareNewInstance();
+        if (!newInstancePrepared) {
+            prepareNewInstance();
+            newInstancePrepared = true;
+        }
         return newInstanceImpl(cls);
     }
 
@@ -100,8 +108,8 @@ public final class Platform {
     @PluggableDependency(PlatformGenerator.class)
     public static native PlatformClass lookupClass(String name);
 
-    @GeneratedBy(PlatformGenerator.class)
     @PluggableDependency(PlatformGenerator.class)
+    @InjectedBy(PlatformGenerator.class)
     public static native void initClass(PlatformClass cls);
 
     @InjectedBy(PlatformGenerator.class)
@@ -114,7 +122,43 @@ public final class Platform {
 
     @GeneratedBy(PlatformGenerator.class)
     @PluggableDependency(PlatformGenerator.class)
+    @DelegateTo("getEnumConstantsLowLevel")
     public static native Enum<?>[] getEnumConstants(PlatformClass cls);
+
+    private static Enum<?>[] getEnumConstantsLowLevel(PlatformClass cls) {
+        int size = getEnumConstantsSize(cls);
+        if (size < 0) {
+            return null;
+        }
+
+        Enum<?>[] constants = new Enum<?>[size];
+        fillEnumConstants(cls, constants);
+        return constants;
+    }
+
+    @DelegateTo("getEnumConstantsSizeImpl")
+    private static native int getEnumConstantsSize(PlatformClass cls);
+
+    @Unmanaged
+    private static int getEnumConstantsSizeImpl(RuntimeClass cls) {
+        Address enumValues = cls.enumValues;
+        if (enumValues == null) {
+            return -1;
+        }
+        return enumValues.getAddress().toInt();
+    }
+
+    @DelegateTo("fillEnumConstantsImpl")
+    private static native void fillEnumConstants(PlatformClass cls, Enum<?>[] array);
+
+    @Unmanaged
+    private static void fillEnumConstantsImpl(RuntimeClass cls, Address[] array) {
+        Address enumValues = cls.enumValues;
+        for (int i = 0; i < array.length; i++) {
+            enumValues = enumValues.add(Address.sizeOf());
+            array[i] = enumValues.getAddress().getAddress();
+        }
+    }
 
     @GeneratedBy(PlatformGenerator.class)
     @PluggableDependency(PlatformGenerator.class)
@@ -137,14 +181,14 @@ public final class Platform {
     public static native int schedule(PlatformRunnable runnable, int timeout);
 
     public static void killSchedule(int id) {
-        ((PlatformHelper) Window.current()).killSchedule(id);
+        ((PlatformHelper) getGlobal()).killSchedule(id);
     }
 
-    @JSBody(params = {}, script = "return [];")
+    @JSBody(script = "return [];")
     public static native <T> PlatformQueue<T> createQueue();
 
     public static PlatformString stringFromCharCode(int charCode) {
-        return ((PlatformHelper) Window.current()).getStringClass().fromCharCode(charCode);
+        return ((PlatformHelper) getGlobal()).getStringClass().fromCharCode(charCode);
     }
 
     @DelegateTo("isPrimitiveLowLevel")
@@ -153,8 +197,19 @@ public final class Platform {
     }
 
     @SuppressWarnings("unused")
+    @Unmanaged
     private static boolean isPrimitiveLowLevel(RuntimeClass cls) {
         return (cls.flags & RuntimeClass.PRIMITIVE) != 0;
+    }
+
+    @DelegateTo("isEnumLowLevel")
+    public static boolean isEnum(PlatformClass cls) {
+        return cls.getMetadata().isEnum();
+    }
+
+    @Unmanaged
+    private static boolean isEnumLowLevel(RuntimeClass cls) {
+        return (cls.flags & RuntimeClass.ENUM) != 0;
     }
 
     @DelegateTo("getArrayItemLowLevel")
@@ -163,12 +218,15 @@ public final class Platform {
     }
 
     @SuppressWarnings("unused")
+    @Unmanaged
     private static RuntimeClass getArrayItemLowLevel(RuntimeClass cls) {
         return cls.itemType;
     }
 
-    @DelegateTo("getNameLowLevel")
     public static String getName(PlatformClass cls) {
         return cls.getMetadata().getName();
     }
+
+    @JSBody(script = "return $rt_global;")
+    private static native JSObject getGlobal();
 }

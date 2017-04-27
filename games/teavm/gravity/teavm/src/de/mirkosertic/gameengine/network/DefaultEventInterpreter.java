@@ -28,19 +28,19 @@ public class DefaultEventInterpreter implements EventInterpreter {
     @Override
     public void process(Map<String, Object> aEventData, GameScene aGameScene) {
         Object theEventID = aEventData.get(DistributableEvent.EVENT_ID_ATTRIBUTE);
-        if (PropertyChanged.EVENT_ID.equals(theEventID)) {
+        if (PropertyChanged.TYPE.getType().equals(theEventID)) {
             PropertyChanged.runEventInScene(aEventData, aGameScene);
             return;
         }
-        if (GameObjectInstanceAddedToScene.EVENT_ID.equals(theEventID)) {
+        if (GameObjectInstanceAddedToScene.TYPE.getType().equals(theEventID)) {
             GameObjectInstanceAddedToScene.runEventInScene(aEventData, aGameScene);
             return;
         }
-        if (GameObjectInstanceRemovedFromScene.EVENT_ID.equals(theEventID)) {
+        if (GameObjectInstanceRemovedFromScene.TYPE.getType().equals(theEventID)) {
             GameObjectInstanceRemovedFromScene.runEventInScene(aEventData, aGameScene);
             return;
         }
-        if (NewGameInstance.EVENT_ID.equals(theEventID)) {
+        if (NewGameInstance.TYPE.getType().equals(theEventID)) {
             NewGameInstance.runEventInScene(aEventData, aGameScene);
             return;
         }

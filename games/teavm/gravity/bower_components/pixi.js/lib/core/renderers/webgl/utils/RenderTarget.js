@@ -137,7 +137,7 @@ var RenderTarget = function () {
      * @default PIXI.settings.SCALE_MODE
      * @see PIXI.SCALE_MODES
      */
-    this.scaleMode = scaleMode !== undefined ? scaleMode : _settings2.default.SCALE_MODE;
+    this.scaleMode = scaleMode || _settings2.default.SCALE_MODE;
 
     /**
      * Whether this object is the root element or not

@@ -2,7 +2,6 @@ import { DATA_URI, URL_FILE_EXTENSION, SVG_SIZE, VERSION } from '../const';
 import settings from '../settings';
 import EventEmitter from 'eventemitter3';
 import pluginTarget from './pluginTarget';
-import * as mixins from './mixin';
 import * as isMobile from 'ismobilejs';
 
 let nextUid = 0;
@@ -34,7 +33,6 @@ export {
      * @type {mixin}
      */
     pluginTarget,
-    mixins,
 };
 
 /**
@@ -95,7 +93,7 @@ export function hex2string(hex)
  */
 export function rgb2hex(rgb)
 {
-    return (((rgb[0] * 255) << 16) + ((rgb[1] * 255) << 8) + (rgb[2] * 255 | 0));
+    return (((rgb[0] * 255) << 16) + ((rgb[1] * 255) << 8) + (rgb[2] * 255));
 }
 
 /**
@@ -362,43 +360,3 @@ export const TextureCache = {};
  * @private
  */
 export const BaseTextureCache = {};
-
-/**
- * Destroys all texture in the cache
- *
- * @memberof PIXI.utils
- * @function destroyTextureCache
- */
-export function destroyTextureCache()
-{
-    let key;
-
-    for (key in TextureCache)
-    {
-        TextureCache[key].destroy();
-    }
-    for (key in BaseTextureCache)
-    {
-        BaseTextureCache[key].destroy();
-    }
-}
-
-/**
- * Removes all textures from cache, but does not destroy them
- *
- * @memberof PIXI.utils
- * @function clearTextureCache
- */
-export function clearTextureCache()
-{
-    let key;
-
-    for (key in TextureCache)
-    {
-        delete TextureCache[key];
-    }
-    for (key in BaseTextureCache)
-    {
-        delete BaseTextureCache[key];
-    }
-}

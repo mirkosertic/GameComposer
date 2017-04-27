@@ -24,14 +24,6 @@ var _prepare = require('./prepare');
 
 var prepare = _interopRequireWildcard(_prepare);
 
-var _loaders = require('./loaders');
-
-var loaders = _interopRequireWildcard(_loaders);
-
-var _interaction = require('./interaction');
-
-var interaction = _interopRequireWildcard(_interaction);
-
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 // provide method to give a stack track for warnings
@@ -508,7 +500,7 @@ Object.defineProperties(core, {
 });
 
 // Move the default properties to settings
-var defaults = [{ parent: 'TRANSFORM_MODE', target: 'TRANSFORM_MODE' }, { parent: 'GC_MODES', target: 'GC_MODE' }, { parent: 'WRAP_MODES', target: 'WRAP_MODE' }, { parent: 'SCALE_MODES', target: 'SCALE_MODE' }, { parent: 'PRECISION', target: 'PRECISION_FRAGMENT' }];
+var defaults = [{ parent: 'TRANSFORM_MODE', target: 'TRANSFORM_MODE' }, { parent: 'GC_MODES', target: 'GC_MODE' }, { parent: 'WRAP_MODES', target: 'WRAP_MODE' }, { parent: 'SCALE_MODES', target: 'SCALE_MODE' }, { parent: 'PRECISION', target: 'PRECISION' }];
 
 var _loop = function _loop(i) {
     var deprecation = defaults[i];
@@ -531,30 +523,6 @@ var _loop = function _loop(i) {
 for (var i = 0; i < defaults.length; i++) {
     _loop(i);
 }
-
-Object.defineProperties(core.settings, {
-
-    /**
-     * @static
-     * @name PRECISION
-     * @memberof PIXI.settings
-     * @see PIXI.PRECISION
-     * @deprecated since version 4.4.0
-     */
-    PRECISION: {
-        enumerable: true,
-        get: function get() {
-            warn('PIXI.settings.PRECISION has been deprecated, please use PIXI.settings.PRECISION_FRAGMENT');
-
-            return core.settings.PRECISION_FRAGMENT;
-        },
-        set: function set(value) {
-            warn('PIXI.settings.PRECISION has been deprecated, please use PIXI.settings.PRECISION_FRAGMENT');
-
-            core.settings.PRECISION_FRAGMENT = value;
-        }
-    }
-});
 
 Object.defineProperties(extras, {
 
@@ -677,7 +645,7 @@ core.Text.prototype.setStyle = function setStyle(style) {
 core.Text.prototype.determineFontProperties = function determineFontProperties(fontStyle) {
     warn('determineFontProperties is now deprecated, please use the static calculateFontProperties method, ' + 'e.g : Text.calculateFontProperties(fontStyle);');
 
-    return core.Text.calculateFontProperties(fontStyle);
+    return Text.calculateFontProperties(fontStyle);
 };
 
 Object.defineProperties(core.TextStyle.prototype, {
@@ -719,19 +687,19 @@ Object.defineProperties(core.TextStyle.prototype, {
             var fontSizeIndex = -1;
 
             this._fontSize = 26;
-            for (var i = 0; i < splits.length; ++i) {
-                if (splits[i].match(/(px|pt|em|%)/)) {
-                    fontSizeIndex = i;
-                    this._fontSize = splits[i];
+            for (var _i = 0; _i < splits.length; ++_i) {
+                if (splits[_i].match(/(px|pt|em|%)/)) {
+                    fontSizeIndex = _i;
+                    this._fontSize = splits[_i];
                     break;
                 }
             }
 
             // we can now search for fontWeight as we know it must occur before the fontSize
             this._fontWeight = 'normal';
-            for (var _i = 0; _i < fontSizeIndex; ++_i) {
-                if (splits[_i].match(/(bold|bolder|lighter|100|200|300|400|500|600|700|800|900)/)) {
-                    this._fontWeight = splits[_i];
+            for (var _i2 = 0; _i2 < fontSizeIndex; ++_i2) {
+                if (splits[_i2].match(/(bold|bolder|lighter|100|200|300|400|500|600|700|800|900)/)) {
+                    this._fontWeight = splits[_i2];
                     break;
                 }
             }
@@ -739,8 +707,8 @@ Object.defineProperties(core.TextStyle.prototype, {
             // and finally join everything together after the fontSize in case the font family has multiple words
             if (fontSizeIndex > -1 && fontSizeIndex < splits.length - 1) {
                 this._fontFamily = '';
-                for (var _i2 = fontSizeIndex + 1; _i2 < splits.length; ++_i2) {
-                    this._fontFamily += splits[_i2] + ' ';
+                for (var _i3 = fontSizeIndex + 1; _i3 < splits.length; ++_i3) {
+                    this._fontFamily += splits[_i3] + ' ';
                 }
 
                 this._fontFamily = this._fontFamily.slice(0, -1);
@@ -886,120 +854,6 @@ Object.defineProperty(prepare.webgl, 'UPLOADS_PER_FRAME', {
         warn('PIXI.WebGLPrepare.UPLOADS_PER_FRAME has been removed. Please use ' + 'renderer.plugins.prepare.limiter');
 
         return NaN;
-    }
-});
-
-Object.defineProperties(loaders.Resource.prototype, {
-    isJson: {
-        get: function get() {
-            warn('The isJson property is deprecated, please use `resource.type === Resource.TYPE.JSON`.');
-
-            return this.type === loaders.Loader.Resource.TYPE.JSON;
-        }
-    },
-    isXml: {
-        get: function get() {
-            warn('The isXml property is deprecated, please use `resource.type === Resource.TYPE.XML`.');
-
-            return this.type === loaders.Loader.Resource.TYPE.XML;
-        }
-    },
-    isImage: {
-        get: function get() {
-            warn('The isImage property is deprecated, please use `resource.type === Resource.TYPE.IMAGE`.');
-
-            return this.type === loaders.Loader.Resource.TYPE.IMAGE;
-        }
-    },
-    isAudio: {
-        get: function get() {
-            warn('The isAudio property is deprecated, please use `resource.type === Resource.TYPE.AUDIO`.');
-
-            return this.type === loaders.Loader.Resource.TYPE.AUDIO;
-        }
-    },
-    isVideo: {
-        get: function get() {
-            warn('The isVideo property is deprecated, please use `resource.type === Resource.TYPE.VIDEO`.');
-
-            return this.type === loaders.Loader.Resource.TYPE.VIDEO;
-        }
-    }
-});
-
-Object.defineProperties(loaders.Loader.prototype, {
-    before: {
-        get: function get() {
-            warn('The before() method is deprecated, please use pre().');
-
-            return this.pre;
-        }
-    },
-    after: {
-        get: function get() {
-            warn('The after() method is deprecated, please use use().');
-
-            return this.use;
-        }
-    }
-});
-
-/**
- * @name PIXI.interaction.interactiveTarget#defaultCursor
- * @static
- * @type {number}
- * @see PIXI.interaction.interactiveTarget#cursor
- * @deprecated since 4.3.0
- */
-Object.defineProperty(interaction.interactiveTarget, 'defaultCursor', {
-    set: function set(value) {
-        warn('Property defaultCursor has been replaced with \'cursor\'. ');
-        this.cursor = value;
-    },
-    get: function get() {
-        warn('Property defaultCursor has been replaced with \'cursor\'. ');
-
-        return this.cursor;
-    },
-
-    enumerable: true
-});
-
-/**
- * @name PIXI.interaction.InteractionManager#defaultCursorStyle
- * @static
- * @type {string}
- * @see PIXI.interaction.InteractionManager#cursorStyles
- * @deprecated since 4.3.0
- */
-Object.defineProperty(interaction.InteractionManager, 'defaultCursorStyle', {
-    set: function set(value) {
-        warn('Property defaultCursorStyle has been replaced with \'cursorStyles.default\'. ');
-        this.cursorStyles.default = value;
-    },
-    get: function get() {
-        warn('Property defaultCursorStyle has been replaced with \'cursorStyles.default\'. ');
-
-        return this.cursorStyles.default;
-    }
-});
-
-/**
- * @name PIXI.interaction.InteractionManager#currentCursorStyle
- * @static
- * @type {string}
- * @see PIXI.interaction.InteractionManager#cursorStyles
- * @deprecated since 4.3.0
- */
-Object.defineProperty(interaction.InteractionManager, 'currentCursorStyle', {
-    set: function set(value) {
-        warn('Property currentCursorStyle has been removed.' + 'See the currentCursorMode property, which works differently.');
-        this.currentCursorMode = value;
-    },
-    get: function get() {
-        warn('Property currentCursorStyle has been removed.' + 'See the currentCursorMode property, which works differently.');
-
-        return this.currentCursorMode;
     }
 });
 //# sourceMappingURL=deprecation.js.map

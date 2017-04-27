@@ -195,7 +195,7 @@ public class Settings {
    * @param friction2
    * @return
    */
-  public static float mixFriction(float friction1, float friction2) {
+  public static final float mixFriction(float friction1, float friction2) {
     return MathUtils.sqrt(friction1 * friction2);
   }
 
@@ -206,7 +206,7 @@ public class Settings {
    * @param restitution2
    * @return
    */
-  public static float mixRestitution(float restitution1, float restitution2) {
+  public static final float mixRestitution(float restitution1, float restitution2) {
     return restitution1 > restitution2 ? restitution1 : restitution2;
   }
 }

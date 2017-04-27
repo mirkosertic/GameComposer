@@ -1,0 +1,206 @@
+{
+  "cameraobjectid" : "3034500734775421290",
+  "eventsheets" : [ {
+    "name" : "Events",
+    "rules" : [ {
+      "condition" : {
+        "primaryObjectUuid" : "2955937955858173841",
+        "secondaryObjectUuid" : "-6627045695388007662",
+        "position" : "EVERYWHERE",
+        "type" : "ObjectCollisionCondition"
+      },
+      "name": "Object collision",
+      "actions" : [ {
+        "type" : "RunScriptAction",
+        "script" : {
+          "script" : "--\n-- This is the default method of every action. It is called once for every game loop cycle.\n--\n-- instance is an optional injected object which is a reference to the GameObjectInstance for \n-- which this script is executed.\n-- scene is an injected object which is a reference to the GameScene for \n-- which this script is executed.\n--\nfunction proceedGame(aGameTime, aElapsedTimeSinceLastLoop) \n    \n    local currentAngle = instance.rotationAngleProperty()\n    instance.rotationAngleProperty(currentAngle.invert())\n    \n\n\t-- The method must return either STOPPED or CONTINUE_RUNNING\n\t-- STOPPED will kill the script, it is not invoked the next time\n\t-- CONTINUE_RUNNING will invoke the skript the next game loop cycle.\n\treturn 'STOPPED'\nend"
+        }
+      } ]
+    } ]
+  } ],
+  "effects" : [ ],
+  "customProperties" : {
+    "data" : [ ]
+  },
+  "layoutBounds" : {
+    "size" : {
+      "width" : "2147483647",
+      "height" : "2147483647"
+    },
+    "position" : {
+      "x" : "0.0",
+      "y" : "0.0"
+    }
+  },
+  "instances" : [ {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
+    "components" : [ {
+      "type" : "Static"
+    } ],
+    "visible" : "true",
+    "name" : "Obstacle_1390417922538",
+    "gameobjectuuid" : "-6627045695388007662",
+    "position" : {
+      "x" : "277.0",
+      "y" : "346.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-5943417486001446125"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
+    "components" : [ {
+      "type" : "Static"
+    } ],
+    "visible" : "true",
+    "name" : "Obstacle_1390417925965",
+    "gameobjectuuid" : "-6627045695388007662",
+    "position" : {
+      "x" : "1016.0",
+      "y" : "341.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "3733596439218141203"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "90"
+    },
+    "components" : [ {
+      "rotationSpeed" : {
+        "speed" : "0"
+      },
+      "type" : "ConstantMovement",
+      "speed" : {
+        "speed" : "120"
+      }
+    }, {
+      "active" : "true",
+      "type" : "Physics"
+    } ],
+    "visible" : "true",
+    "name" : "Player_1390419545178",
+    "gameobjectuuid" : "2955937955858173841",
+    "position" : {
+      "x" : "650.0",
+      "y" : "348.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "1745998218418867801"
+  }, {
+    "absolutePosition" : "true",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
+    "components" : [ {
+      "textExpression" : {
+        "expression" : "Let it bounce !"
+      },
+      "color" : {
+        "r" : "255",
+        "b" : "255",
+        "g" : "255"
+      },
+      "isScript" : "false",
+      "type" : "Text",
+      "font" : {
+        "size" : "20",
+        "name" : "ARIAL"
+      }
+    } ],
+    "visible" : "true",
+    "name" : "Text_1421745295804",
+    "gameobjectuuid" : "-7072559674462426246",
+    "position" : {
+      "x" : "4.0",
+      "y" : "0.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-1986782422657668912"
+  } ],
+  "defaultplayerobjectid" : "2955937955858173841",
+  "objects" : [ {
+    "visible" : "true",
+    "size" : {
+      "width" : "64",
+      "height" : "64"
+    },
+    "templates" : [ {
+      "type" : "Camera",
+      "cameratype" : "FOLLOWPLAYER"
+    } ],
+    "name" : "Camera",
+    "uuid" : "3034500734775421290"
+  }, {
+    "visible" : "true",
+    "size" : {
+      "width" : "64",
+      "height" : "64"
+    },
+    "templates" : [ {
+      "type" : "Static"
+    } ],
+    "name" : "Obstacle",
+    "uuid" : "-6627045695388007662"
+  }, {
+    "visible" : "true",
+    "size" : {
+      "width" : "64",
+      "height" : "64"
+    },
+    "templates" : [ {
+      "rotationSpeed" : {
+        "speed" : "0"
+      },
+      "type" : "ConstantMovement",
+      "speed" : {
+        "speed" : "10"
+      }
+    }, {
+      "fixedrotation" : "false",
+      "density" : "1.0",
+      "restitution" : "0.0",
+      "gravityScale" : "0.0",
+      "active" : "true",
+      "type" : "Physics",
+      "friction" : "1.8"
+    } ],
+    "name" : "Player",
+    "uuid" : "2955937955858173841"
+  }, {
+    "visible" : "true",
+    "size" : {
+      "width" : "150",
+      "height" : "25"
+    },
+    "templates" : [ {
+      "textExpression" : {
+        "expression" : "Let it bounce !"
+      },
+      "color" : {
+        "r" : "255",
+        "b" : "255",
+        "g" : "255"
+      },
+      "isScript" : "false",
+      "type" : "Text",
+      "font" : {
+        "size" : "20",
+        "name" : "ARIAL"
+      }
+    } ],
+    "name" : "Text",
+    "uuid" : "-7072559674462426246"
+  } ],
+  "name" : "Simple scene",
+  "backgroundcolor" : {
+    "r" : "0",
+    "b" : "0",
+    "g" : "0"
+  }
+}

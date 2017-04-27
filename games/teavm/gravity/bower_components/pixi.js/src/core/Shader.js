@@ -1,7 +1,9 @@
 import { GLShader } from 'pixi-gl-core';
 import settings from './settings';
 
-function checkPrecision(src, def)
+const { PRECISION } = settings;
+
+function checkPrecision(src)
 {
     if (src instanceof Array)
     {
@@ -9,14 +11,14 @@ function checkPrecision(src, def)
         {
             const copy = src.slice(0);
 
-            copy.unshift(`precision ${def} float;`);
+            copy.unshift(`precision ${PRECISION} float;`);
 
             return copy;
         }
     }
     else if (src.substring(0, 9) !== 'precision')
     {
-        return `precision ${def} float;\n${src}`;
+        return `precision ${PRECISION} float;\n${src}`;
     }
 
     return src;
@@ -40,7 +42,6 @@ export default class Shader extends GLShader
      */
     constructor(gl, vertexSrc, fragmentSrc)
     {
-        super(gl, checkPrecision(vertexSrc, settings.PRECISION_VERTEX),
-            checkPrecision(fragmentSrc, settings.PRECISION_FRAGMENT));
+        super(gl, checkPrecision(vertexSrc), checkPrecision(fragmentSrc));
     }
 }

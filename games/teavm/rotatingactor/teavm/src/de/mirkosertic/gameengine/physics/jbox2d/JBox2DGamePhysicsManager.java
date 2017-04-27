@@ -20,6 +20,7 @@ import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameSystemWork;
 import de.mirkosertic.gameengine.core.Job;
+import de.mirkosertic.gameengine.core.Logger;
 import de.mirkosertic.gameengine.core.ThreadingManager;
 import de.mirkosertic.gameengine.event.GameEvent;
 import de.mirkosertic.gameengine.event.GameEventListener;
@@ -94,7 +95,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
         @Override
         public void handleGameEvent(PropertyChanged aEvent) {
             if (!insimulation) {
-                synchronized (physicsWorld) {
+                //synchronized (physicsWorld) {
                     GameObjectInstance theInstance = (GameObjectInstance) aEvent.getOwner();
                     Body theBody = staticObjects.get(theInstance);
                     if (theBody == null) {
@@ -104,7 +105,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
                         theBody.setTransform(computePosition(theInstance),
                                 theInstance.rotationAngleProperty().get().invert().toRadians());
                     }
-                }
+                //}
             }
         }
     }
@@ -153,8 +154,10 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
     private boolean insimulation;
     private final List<GameEvent> queuedEventsOfLastLoop;
     private final ThreadingManager threadingManager;
+    private final Logger logger;
 
-    JBox2DGamePhysicsManager(GameEventManager aEventManager, ThreadingManager aThreadingManager) {
+    JBox2DGamePhysicsManager(Logger aLogger, GameEventManager aEventManager, ThreadingManager aThreadingManager) {
+        logger = aLogger;
         threadingManager = aThreadingManager;
         queuedEventsOfLastLoop = new ArrayList<>();
         eventManager = aEventManager;
@@ -223,7 +226,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
         theBodyDef.position = computePosition(aInstance);
         theBodyDef.gravityScale = 1;
 
-        PhysicsBehaviorTemplate theTemplate = aInstance.getOwnerGameObject().getBehaviorTemplate(PhysicsBehaviorTemplate.class);
+        PhysicsBehaviorTemplate theTemplate = aInstance.getOwnerGameObject().getBehaviorTemplate(PhysicsBehaviorTemplate.TYPE);
         if (theTemplate != null) {
             theBodyDef.active = theTemplate.activeProperty().get();
             theBodyDef.fixedRotation = theTemplate.fixedRotationProperty().get();
@@ -240,7 +243,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
         theFixture.friction = 1.8f;
         theFixture.restitution = 0;
 
-        PhysicsBehaviorTemplate theTemplate = aInstance.getOwnerGameObject().getBehaviorTemplate(PhysicsBehaviorTemplate.class);
+        PhysicsBehaviorTemplate theTemplate = aInstance.getOwnerGameObject().getBehaviorTemplate(PhysicsBehaviorTemplate.TYPE);
         if (theTemplate != null) {
             theFixture.density = theTemplate.densityProperty().get();
             theFixture.friction = theTemplate.frictionProperty().get();
@@ -251,13 +254,13 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
     }
 
     Body gameObjectInstanceAddedToScene(GameObjectInstance aInstance) {
-        synchronized (physicsWorld) {
+        //synchronized (physicsWorld) {
             aInstance.positionProperty().addChangeListener(positionChangeListener);
             aInstance.rotationAngleProperty().addChangeListener(positionChangeListener);
             aInstance.visibleProperty().addChangeListener(visibleListener);
             if (alreadyRegisteredSizeListener.add(aInstance.getOwnerGameObject())) {
                 aInstance.getOwnerGameObject().sizeProperty().addChangeListener(sizeChangeListener);
-                PhysicsBehaviorTemplate theTemplate = aInstance.getOwnerGameObject().getBehaviorTemplate(PhysicsBehaviorTemplate.class);
+                PhysicsBehaviorTemplate theTemplate = aInstance.getOwnerGameObject().getBehaviorTemplate(PhysicsBehaviorTemplate.TYPE);
                 if (theTemplate != null) {
                     theTemplate.fixedRotationProperty().addChangeListener(fixedAngleListener);
                 }
@@ -266,7 +269,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
             Size theInstanceSize = aInstance.getOwnerGameObject().sizeProperty().get();
 
             // Check if is a static component
-            StaticBehavior theStaticComponent = aInstance.getBehavior(StaticBehavior.class);
+            StaticBehavior theStaticComponent = aInstance.getBehavior(StaticBehavior.TYPE);
             if (theStaticComponent != null) {
                 // The component is static hence not moveable, we add it as a ground to the physics simulation
                 PolygonShape theStaticShape = new PolygonShape();
@@ -284,7 +287,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
             }
 
             // Now the player, hence the platform component
-            PlatformBehavior thePlatformComponent = aInstance.getBehavior(PlatformBehavior.class);
+            PlatformBehavior thePlatformComponent = aInstance.getBehavior(PlatformBehavior.TYPE);
             if (thePlatformComponent != null) {
                 PolygonShape thePlatformShape = new PolygonShape();
                 thePlatformShape.setAsBox(SIZE_FACTOR * theInstanceSize.width / 2, SIZE_FACTOR * theInstanceSize.height
@@ -301,7 +304,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
             }
 
             // Additional physics
-            PhysicsBehavior thePhysicscomponent = aInstance.getBehavior(PhysicsBehavior.class);
+            PhysicsBehavior thePhysicscomponent = aInstance.getBehavior(PhysicsBehavior.TYPE);
             if (thePhysicscomponent != null) {
 
                 PolygonShape thePhysicsShape = new PolygonShape();
@@ -318,7 +321,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
 
                 return theBody;
             }
-        }
+        //}
         return null;
     }
 
@@ -461,7 +464,7 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
 
     @Override
     public void drawDebug(PhysicsDebugCanvas aCanvas) {
-        synchronized (physicsWorld) {
+        //synchronized (physicsWorld) {
             Body theBody = physicsWorld.getBodyList();
             while (theBody != null) {
 
@@ -492,6 +495,6 @@ public class JBox2DGamePhysicsManager implements GamePhysicsManager {
 
                 theBody = theBody.getNext();
             }
-        }
+        //}
     }
 }

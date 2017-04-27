@@ -95,8 +95,7 @@ export default class TextureGarbageCollector
     {
         const tm = this.renderer.textureManager;
 
-        // only destroy non generated textures
-        if (displayObject._texture && displayObject._texture._glRenderTargets)
+        if (displayObject._texture)
         {
             tm.destroyTexture(displayObject._texture, true);
         }

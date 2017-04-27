@@ -163,10 +163,11 @@ var FilterManager = function (_WebGLManager) {
         // bind the render target to draw the shape in the top corner..
 
         renderTarget.setFrame(destinationFrame, sourceFrame);
-
         // bind the render target
         renderer.bindRenderTarget(renderTarget);
-        renderTarget.clear();
+
+        // clear the renderTarget
+        renderer.clear(); // [0.5,0.5,0.5, 1.0]);
     };
 
     /**
@@ -186,7 +187,7 @@ var FilterManager = function (_WebGLManager) {
         var filters = currentState.filters;
 
         if (filters.length === 1) {
-            filters[0].apply(this, currentState.renderTarget, lastState.renderTarget, false, currentState);
+            filters[0].apply(this, currentState.renderTarget, lastState.renderTarget, false);
             this.freePotRenderTarget(currentState.renderTarget);
         } else {
             var flip = currentState.renderTarget;
@@ -194,13 +195,10 @@ var FilterManager = function (_WebGLManager) {
 
             flop.setFrame(currentState.destinationFrame, currentState.sourceFrame);
 
-            // finally lets clear the render target before drawing to it..
-            flop.clear();
-
             var i = 0;
 
             for (i = 0; i < filters.length - 1; ++i) {
-                filters[i].apply(this, flip, flop, true, currentState);
+                filters[i].apply(this, flip, flop, true);
 
                 var t = flip;
 
@@ -208,7 +206,7 @@ var FilterManager = function (_WebGLManager) {
                 flop = t;
             }
 
-            filters[i].apply(this, flip, lastState.renderTarget, false, currentState);
+            filters[i].apply(this, flip, lastState.renderTarget, false);
 
             this.freePotRenderTarget(flip);
             this.freePotRenderTarget(flop);
@@ -274,22 +272,20 @@ var FilterManager = function (_WebGLManager) {
 
         renderer.bindShader(shader);
 
-        // free unit 0 for us, doesn't matter what was there
-        // don't try to restore it, because syncUniforms can upload it to another slot
-        // and it'll be a problem
-        var tex = this.renderer.emptyTextures[0];
-
-        this.renderer.boundTextures[0] = tex;
         // this syncs the pixi filters  uniforms with glsl uniforms
         this.syncUniforms(shader, filter);
 
         renderer.state.setBlendMode(filter.blendMode);
+
+        // temporary bypass cache..
+        var tex = this.renderer.boundTextures[0];
 
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, input.texture.texture);
 
         this.quad.vao.draw(this.renderer.gl.TRIANGLES, 6, 0);
 
+        // restore cache.
         gl.bindTexture(gl.TEXTURE_2D, tex._glTextures[this.renderer.CONTEXT_UID].texture);
     };
 
@@ -309,12 +305,8 @@ var FilterManager = function (_WebGLManager) {
         var textureCount = 1;
         var currentState = void 0;
 
-        // filterArea and filterClamp that are handled by FilterManager directly
-        // they must not appear in uniformData
-
-        if (shader.uniforms.filterArea) {
+        if (shader.uniforms.data.filterArea) {
             currentState = this.filterData.stack[this.filterData.index];
-
             var filterArea = shader.uniforms.filterArea;
 
             filterArea[0] = currentState.renderTarget.size.width;
@@ -327,8 +319,8 @@ var FilterManager = function (_WebGLManager) {
 
         // use this to clamp displaced texture coords so they belong to filterArea
         // see displacementFilter fragment shader for an example
-        if (shader.uniforms.filterClamp) {
-            currentState = currentState || this.filterData.stack[this.filterData.index];
+        if (shader.uniforms.data.filterClamp) {
+            currentState = this.filterData.stack[this.filterData.index];
 
             var filterClamp = shader.uniforms.filterClamp;
 
@@ -355,9 +347,7 @@ var FilterManager = function (_WebGLManager) {
                     // rather than a renderTarget
                     var gl = this.renderer.gl;
 
-                    this.renderer.boundTextures[textureCount] = this.renderer.emptyTextures[textureCount];
                     gl.activeTexture(gl.TEXTURE0 + textureCount);
-
                     uniforms[i].texture.bind();
                 }
 
@@ -472,7 +462,7 @@ var FilterManager = function (_WebGLManager) {
 
 
     FilterManager.prototype.destroy = function destroy() {
-        this.shaderCache = {};
+        this.shaderCache = [];
         this.emptyPool();
     };
 

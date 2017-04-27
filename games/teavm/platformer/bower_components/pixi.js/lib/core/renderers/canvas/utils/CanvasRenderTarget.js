@@ -12,12 +12,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var RESOLUTION = _settings2.default.RESOLUTION;
+
 /**
  * Creates a Canvas element of the given size.
  *
  * @class
  * @memberof PIXI
  */
+
 var CanvasRenderTarget = function () {
   /**
    * @param {number} width - the width for the newly created canvas
@@ -41,7 +44,7 @@ var CanvasRenderTarget = function () {
      */
     this.context = this.canvas.getContext('2d');
 
-    this.resolution = resolution || _settings2.default.RESOLUTION;
+    this.resolution = resolution || RESOLUTION;
 
     this.resize(width, height);
   }
@@ -86,6 +89,7 @@ var CanvasRenderTarget = function () {
    * The width of the canvas buffer in pixels.
    *
    * @member {number}
+   * @memberof PIXI.CanvasRenderTarget#
    */
 
 
@@ -93,9 +97,15 @@ var CanvasRenderTarget = function () {
     key: 'width',
     get: function get() {
       return this.canvas.width;
-    },
-    set: function set(val) // eslint-disable-line require-jsdoc
-    {
+    }
+
+    /**
+     * Sets the width.
+     *
+     * @param {number} val - The value to set.
+     */
+    ,
+    set: function set(val) {
       this.canvas.width = val;
     }
 
@@ -103,15 +113,22 @@ var CanvasRenderTarget = function () {
      * The height of the canvas buffer in pixels.
      *
      * @member {number}
+     * @memberof PIXI.CanvasRenderTarget#
      */
 
   }, {
     key: 'height',
     get: function get() {
       return this.canvas.height;
-    },
-    set: function set(val) // eslint-disable-line require-jsdoc
-    {
+    }
+
+    /**
+     * Sets the height.
+     *
+     * @param {number} val - The value to set.
+     */
+    ,
+    set: function set(val) {
       this.canvas.height = val;
     }
   }]);

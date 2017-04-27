@@ -37,20 +37,22 @@ export default class BitmapText extends core.Container
         super();
 
         /**
-         * Private tracker for the width of the overall text
+         * The width of the overall text, different from fontSize,
+         * which is defined in the style object
          *
          * @member {number}
-         * @private
+         * @readonly
          */
-        this._textWidth = 0;
+        this.textWidth = 0;
 
         /**
-         * Private tracker for the height of the overall text
+         * The height of the overall text, different from fontSize,
+         * which is defined in the style object
          *
          * @member {number}
-         * @private
+         * @readonly
          */
-        this._textHeight = 0;
+        this.textHeight = 0;
 
         /**
          * Private tracker for the letter sprite pool.
@@ -262,16 +264,16 @@ export default class BitmapText extends core.Container
             this.removeChild(this._glyphs[i]);
         }
 
-        this._textWidth = maxLineWidth * scale;
-        this._textHeight = (pos.y + data.lineHeight) * scale;
+        this.textWidth = maxLineWidth * scale;
+        this.textHeight = (pos.y + data.lineHeight) * scale;
 
         // apply anchor
         if (this.anchor.x !== 0 || this.anchor.y !== 0)
         {
             for (let i = 0; i < lenChars; i++)
             {
-                this._glyphs[i].x -= this._textWidth * this.anchor.x;
-                this._glyphs[i].y -= this._textHeight * this.anchor.y;
+                this._glyphs[i].x -= this.textWidth * this.anchor.x;
+                this._glyphs[i].y -= this.textHeight * this.anchor.y;
             }
         }
         this.maxLineHeight = maxLineHeight * scale;
@@ -318,13 +320,19 @@ export default class BitmapText extends core.Container
      * The tint of the BitmapText object
      *
      * @member {number}
+     * @memberof PIXI.extras.BitmapText#
      */
     get tint()
     {
         return this._font.tint;
     }
 
-    set tint(value) // eslint-disable-line require-jsdoc
+    /**
+     * Sets the tint.
+     *
+     * @param {number} value - The value to set to.
+     */
+    set tint(value)
     {
         this._font.tint = (typeof value === 'number' && value >= 0) ? value : 0xFFFFFF;
 
@@ -336,13 +344,19 @@ export default class BitmapText extends core.Container
      *
      * @member {string}
      * @default 'left'
+     * @memberof PIXI.extras.BitmapText#
      */
     get align()
     {
         return this._font.align;
     }
 
-    set align(value) // eslint-disable-line require-jsdoc
+    /**
+     * Sets the alignment
+     *
+     * @param {string} value - The value to set to.
+     */
+    set align(value)
     {
         this._font.align = value || 'left';
 
@@ -356,13 +370,19 @@ export default class BitmapText extends core.Container
      * Setting the anchor to 1,1 would mean the text's origin point will be the bottom right corner
      *
      * @member {PIXI.Point | number}
+     * @memberof PIXI.extras.BitmapText#
      */
     get anchor()
     {
         return this._anchor;
     }
 
-    set anchor(value) // eslint-disable-line require-jsdoc
+    /**
+     * Sets the anchor.
+     *
+     * @param {PIXI.Point|number} value - The value to set to.
+     */
+    set anchor(value)
     {
         if (typeof value === 'number')
         {
@@ -378,13 +398,19 @@ export default class BitmapText extends core.Container
      * The font descriptor of the BitmapText object
      *
      * @member {string|object}
+     * @memberof PIXI.extras.BitmapText#
      */
     get font()
     {
         return this._font;
     }
 
-    set font(value) // eslint-disable-line require-jsdoc
+    /**
+     * Sets the font.
+     *
+     * @param {string|object} value - The value to set to.
+     */
+    set font(value)
     {
         if (!value)
         {
@@ -411,13 +437,19 @@ export default class BitmapText extends core.Container
      * The text of the BitmapText object
      *
      * @member {string}
+     * @memberof PIXI.extras.BitmapText#
      */
     get text()
     {
         return this._text;
     }
 
-    set text(value) // eslint-disable-line require-jsdoc
+    /**
+     * Sets the text.
+     *
+     * @param {string} value - The value to set to.
+     */
+    set text(value)
     {
         value = value.toString() || ' ';
         if (this._text === value)
@@ -426,101 +458,6 @@ export default class BitmapText extends core.Container
         }
         this._text = value;
         this.dirty = true;
-    }
-
-    /**
-     * The width of the overall text, different from fontSize,
-     * which is defined in the style object
-     *
-     * @member {number}
-     * @readonly
-     */
-    get textWidth()
-    {
-        this.validate();
-
-        return this._textWidth;
-    }
-
-    /**
-     * The height of the overall text, different from fontSize,
-     * which is defined in the style object
-     *
-     * @member {number}
-     * @readonly
-     */
-    get textHeight()
-    {
-        this.validate();
-
-        return this._textHeight;
-    }
-
-    /**
-     * Register a bitmap font with data and a texture.
-     *
-     * @static
-     * @param {XMLDocument} xml - The XML document data.
-     * @param {PIXI.Texture} texture - Texture with all symbols.
-     * @return {Object} Result font object with font, size, lineHeight and char fields.
-     */
-    static registerFont(xml, texture)
-    {
-        const data = {};
-        const info = xml.getElementsByTagName('info')[0];
-        const common = xml.getElementsByTagName('common')[0];
-
-        data.font = info.getAttribute('face');
-        data.size = parseInt(info.getAttribute('size'), 10);
-        data.lineHeight = parseInt(common.getAttribute('lineHeight'), 10);
-        data.chars = {};
-
-        // parse letters
-        const letters = xml.getElementsByTagName('char');
-
-        for (let i = 0; i < letters.length; i++)
-        {
-            const letter = letters[i];
-            const charCode = parseInt(letter.getAttribute('id'), 10);
-
-            const textureRect = new core.Rectangle(
-                parseInt(letter.getAttribute('x'), 10) + texture.frame.x,
-                parseInt(letter.getAttribute('y'), 10) + texture.frame.y,
-                parseInt(letter.getAttribute('width'), 10),
-                parseInt(letter.getAttribute('height'), 10)
-            );
-
-            data.chars[charCode] = {
-                xOffset: parseInt(letter.getAttribute('xoffset'), 10),
-                yOffset: parseInt(letter.getAttribute('yoffset'), 10),
-                xAdvance: parseInt(letter.getAttribute('xadvance'), 10),
-                kerning: {},
-                texture: new core.Texture(texture.baseTexture, textureRect),
-
-            };
-        }
-
-        // parse kernings
-        const kernings = xml.getElementsByTagName('kerning');
-
-        for (let i = 0; i < kernings.length; i++)
-        {
-            const kerning = kernings[i];
-            const first = parseInt(kerning.getAttribute('first'), 10);
-            const second = parseInt(kerning.getAttribute('second'), 10);
-            const amount = parseInt(kerning.getAttribute('amount'), 10);
-
-            if (data.chars[second])
-            {
-                data.chars[second].kerning[first] = amount;
-            }
-        }
-
-        // I'm leaving this as a temporary fix so we can test the bitmap fonts in v3
-        // but it's very likely to change
-        BitmapText.fonts[data.font] = data;
-
-        return data;
     }
 }
 

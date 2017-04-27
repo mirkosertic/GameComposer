@@ -57,28 +57,28 @@ public class Mat33 implements Serializable {
   }
 
   // / Multiply a matrix times a vector.
-  public static Vec3 mul(Mat33 A, Vec3 v) {
+  public static final Vec3 mul(Mat33 A, Vec3 v) {
     return new Vec3(v.x * A.ex.x + v.y * A.ey.x + v.z + A.ez.x, v.x * A.ex.y + v.y * A.ey.y + v.z
         * A.ez.y, v.x * A.ex.z + v.y * A.ey.z + v.z * A.ez.z);
   }
 
-  public static Vec2 mul22(Mat33 A, Vec2 v) {
+  public static final Vec2 mul22(Mat33 A, Vec2 v) {
     return new Vec2(A.ex.x * v.x + A.ey.x * v.y, A.ex.y * v.x + A.ey.y * v.y);
   }
 
-  public static void mul22ToOut(Mat33 A, Vec2 v, Vec2 out) {
+  public static final void mul22ToOut(Mat33 A, Vec2 v, Vec2 out) {
     final float tempx = A.ex.x * v.x + A.ey.x * v.y;
     out.y = A.ex.y * v.x + A.ey.y * v.y;
     out.x = tempx;
   }
 
-  public static void mul22ToOutUnsafe(Mat33 A, Vec2 v, Vec2 out) {
+  public static final void mul22ToOutUnsafe(Mat33 A, Vec2 v, Vec2 out) {
     assert (v != out);
     out.y = A.ex.y * v.x + A.ey.y * v.y;
     out.x = A.ex.x * v.x + A.ey.x * v.y;
   }
 
-  public static void mulToOut(Mat33 A, Vec3 v, Vec3 out) {
+  public static final void mulToOut(Mat33 A, Vec3 v, Vec3 out) {
     final float tempy = v.x * A.ex.y + v.y * A.ey.y + v.z * A.ez.y;
     final float tempz = v.x * A.ex.z + v.y * A.ey.z + v.z * A.ez.z;
     out.x = v.x * A.ex.x + v.y * A.ey.x + v.z * A.ez.x;
@@ -86,7 +86,7 @@ public class Mat33 implements Serializable {
     out.z = tempz;
   }
 
-  public static void mulToOutUnsafe(Mat33 A, Vec3 v, Vec3 out) {
+  public static final void mulToOutUnsafe(Mat33 A, Vec3 v, Vec3 out) {
     assert (out != v);
     out.x = v.x * A.ex.x + v.y * A.ey.x + v.z * A.ez.x;
     out.y = v.x * A.ex.y + v.y * A.ey.y + v.z * A.ez.y;

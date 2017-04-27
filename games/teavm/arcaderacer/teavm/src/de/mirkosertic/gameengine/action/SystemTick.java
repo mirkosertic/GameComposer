@@ -18,9 +18,12 @@ package de.mirkosertic.gameengine.action;
 import de.mirkosertic.gameengine.annotations.InheritedClassInformation;
 import de.mirkosertic.gameengine.annotations.ReflectiveField;
 import de.mirkosertic.gameengine.event.GameEvent;
+import de.mirkosertic.gameengine.event.GameEventType;
 
 @InheritedClassInformation
 public class SystemTick extends GameEvent {
+
+    public static final GameEventType TYPE = new GameEventType("SystemTick");
 
     private static final SystemTickClassInformation CIINSTANCE = new SystemTickClassInformation();
 
@@ -34,7 +37,7 @@ public class SystemTick extends GameEvent {
     public final long elapsedTimeSinceLastLoop;
 
     SystemTick(long aTotalTicks, long aGameTime, long aElapsedTimeSinceLastLoop) {
-        super("SystemTick");
+        super(TYPE);
         totalTicks = aTotalTicks;
         gameTime = aGameTime;
         elapsedTimeSinceLastLoop = aElapsedTimeSinceLastLoop;

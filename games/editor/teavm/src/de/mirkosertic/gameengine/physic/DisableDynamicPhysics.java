@@ -19,9 +19,12 @@ import de.mirkosertic.gameengine.annotations.InheritedClassInformation;
 import de.mirkosertic.gameengine.annotations.ReflectiveField;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.event.GameEvent;
+import de.mirkosertic.gameengine.event.GameEventType;
 
 @InheritedClassInformation
 public class DisableDynamicPhysics extends GameEvent {
+
+    public static final GameEventType TYPE = new GameEventType("DisableDynamicPhysics");
 
     private static final DisableDynamicPhysicsClassInformation CIINSTANCE = new DisableDynamicPhysicsClassInformation();
 
@@ -29,7 +32,7 @@ public class DisableDynamicPhysics extends GameEvent {
     public final GameObjectInstance object;
 
     public DisableDynamicPhysics(GameObjectInstance aObject) {
-        super("DisableDynamicPhysics");
+        super(TYPE);
         object = aObject;
     }
 

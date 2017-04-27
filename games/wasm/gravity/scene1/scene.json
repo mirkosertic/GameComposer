@@ -1,0 +1,209 @@
+{
+  "cameraobjectid" : "-6326992950365466679",
+  "eventsheets" : [ {
+    "name" : "Events",
+    "rules" : [ {
+      "condition" : {
+        "eventType" : "PRESSED",
+        "type" : "MouseEventCondition",
+        "filterType" : "IGNORE_INSTANCES",
+        "objectType" : "8826966312026124668"
+      },
+      "name" : "User clicked with mouse",
+      "actions" : [ {
+        "type" : "RunScriptAction",
+        "script" : {
+          "script" : "--\n-- This is the default method of every action. It is called once for every game loop cycle.\n--\n-- instance is an optional injected object which is a reference to the GameObjectInstance for \n-- which this script is executed.\n-- scene is an injected object which is a reference to the GameScene for \n-- which this script is executed.\n--\nfunction proceedGame(aGameTime, aElapsedTimeSinceLastLoop) \n\n    -- Find the ball object\n    local theBall = scene.findObjectByName('ball')\n    -- And create a new instance\n    local theNewInstance = scene.createFrom(theBall)\n    \n    -- We place the new instance at the current mouse position\n    -- Here we calculate in scene coordinates\n    theNewInstance.positionProperty(event.position())\n    \n    -- Finally add the new instance to the scene\n    scene.addInstance(theNewInstance)\n\n\t-- The method must return either STOPPED or CONTINUE_RUNNING\n\t-- STOPPED will kill the script, it is not invoked the next time\n\t-- CONTINUE_RUNNING will invoke the skript the next game loop cycle.\n\treturn 'STOPPED'\nend"
+        }
+      } ]
+    } ]
+  } ],
+  "effects" : [ ],
+  "customProperties" : {
+    "data" : [ ]
+  },
+  "layoutBounds" : {
+    "size" : {
+      "width" : "2147483647",
+      "height" : "2147483647"
+    },
+    "position" : {
+      "x" : "0.0",
+      "y" : "0.0"
+    }
+  },
+  "instances" : [ {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
+    "components" : [ {
+      "type" : "Static"
+    } ],
+    "visible" : "true",
+    "name" : "block_1422365131008",
+    "gameobjectuuid" : "5611073180460021715",
+    "position" : {
+      "x" : "186.0",
+      "y" : "233.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "7838272984224540475"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
+    "components" : [ {
+      "type" : "Static"
+    } ],
+    "visible" : "true",
+    "name" : "block_1422365155819",
+    "gameobjectuuid" : "5611073180460021715",
+    "position" : {
+      "x" : "764.0",
+      "y" : "230.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-7001871701014798188"
+  }, {
+    "absolutePosition" : "false",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
+    "components" : [ {
+      "type" : "Static"
+    } ],
+    "visible" : "true",
+    "name" : "ground_1422365100351",
+    "gameobjectuuid" : "7784579767270349505",
+    "position" : {
+      "x" : "185.0",
+      "y" : "632.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "-1565253295346853560"
+  }, {
+    "absolutePosition" : "true",
+    "rotationangle" : {
+      "angleindegrees" : "0"
+    },
+    "components" : [ {
+      "textExpression" : {
+        "expression" : "Click or touch to create objects"
+      },
+      "color" : {
+        "r" : "255",
+        "b" : "255",
+        "g" : "255"
+      },
+      "isScript" : "false",
+      "type" : "Text",
+      "font" : {
+        "size" : "20",
+        "name" : "ARIAL"
+      }
+    } ],
+    "visible" : "true",
+    "name" : "scenetext_1422365046055",
+    "gameobjectuuid" : "-5025892867619532201",
+    "position" : {
+      "x" : "5.0",
+      "y" : "5.0"
+    },
+    "absolutePositionAnchor" : "TOP_LEFT",
+    "uuid" : "1379417544522968964"
+  } ],
+  "defaultplayerobjectid" : "-3534492951433334256",
+  "objects" : [ {
+    "visible" : "true",
+    "size" : {
+      "width" : "20",
+      "height" : "20"
+    },
+    "templates" : [ {
+      "fixedrotation" : "false",
+      "density" : "1.0",
+      "restitution" : "0.0",
+      "gravityScale" : "1.0",
+      "active" : "true",
+      "type" : "Physics",
+      "friction" : "1.8"
+    } ],
+    "name" : "ball",
+    "uuid" : "8826966312026124668"
+  }, {
+    "visible" : "true",
+    "size" : {
+      "width" : "20",
+      "height" : "400"
+    },
+    "templates" : [ {
+      "type" : "Static"
+    } ],
+    "name" : "block",
+    "uuid" : "5611073180460021715"
+  }, {
+    "visible" : "true",
+    "size" : {
+      "width" : "64",
+      "height" : "64"
+    },
+    "templates" : [ {
+      "type" : "Camera",
+      "cameratype" : "CENTERONSCENE"
+    } ],
+    "name" : "camera",
+    "uuid" : "-6326992950365466679"
+  }, {
+    "visible" : "true",
+    "size" : {
+      "width" : "600",
+      "height" : "20"
+    },
+    "templates" : [ {
+      "type" : "Static"
+    } ],
+    "name" : "ground",
+    "uuid" : "7784579767270349505"
+  }, {
+    "visible" : "true",
+    "size" : {
+      "width" : "64",
+      "height" : "64"
+    },
+    "templates" : [ ],
+    "name" : "player",
+    "uuid" : "-3534492951433334256"
+  }, {
+    "visible" : "true",
+    "size" : {
+      "width" : "350",
+      "height" : "32"
+    },
+    "templates" : [ {
+      "textExpression" : {
+        "expression" : "Click to create objects"
+      },
+      "color" : {
+        "r" : "255",
+        "b" : "255",
+        "g" : "255"
+      },
+      "isScript" : "false",
+      "type" : "Text",
+      "font" : {
+        "size" : "20",
+        "name" : "ARIAL"
+      }
+    } ],
+    "name" : "scenetext",
+    "uuid" : "-5025892867619532201"
+  } ],
+  "name" : "First stage",
+  "backgroundcolor" : {
+    "r" : "0",
+    "b" : "0",
+    "g" : "0"
+  }
+}

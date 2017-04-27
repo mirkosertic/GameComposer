@@ -17,6 +17,7 @@ package de.mirkosertic.gameengine.physic;
 
 import de.mirkosertic.gameengine.action.SystemTick;
 import de.mirkosertic.gameengine.core.Behavior;
+import de.mirkosertic.gameengine.core.BehaviorType;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.event.GameEventListener;
@@ -37,7 +38,7 @@ public class PlatformBehavior implements Behavior, Platform, Reflectable<Platfor
 
     private static final PlatformClassInformation CIINSTANCE = new PlatformClassInformation();
 
-    static final String TYPE = "Platform";
+    public static final BehaviorType TYPE = new BehaviorType("Platform");
 
     private final GameRuntime gameRuntime;
     private final GameObjectInstance objectInstance;
@@ -59,7 +60,7 @@ public class PlatformBehavior implements Behavior, Platform, Reflectable<Platfor
         gameRuntime = aGameRuntime;
         objectInstance = aObjectInstance;
 
-        PlatformBehaviorTemplate theTemplate = aObjectInstance.getOwnerGameObject().getBehaviorTemplate(PlatformBehaviorTemplate.class);
+        PlatformBehaviorTemplate theTemplate = aObjectInstance.getOwnerGameObject().getBehaviorTemplate(PlatformBehaviorTemplate.TYPE);
         GameEventManager theEventManager = aObjectInstance.getOwnerGameObject().getGameScene().getRuntime().getEventManager();
 
         moveLeftKey = new Property<>(GameKeyCode.class, this, MOVE_LEFT_KEY_PROPERTY, theTemplate.moveLeftKeyProperty().get(), theEventManager);
@@ -75,12 +76,12 @@ public class PlatformBehavior implements Behavior, Platform, Reflectable<Platfor
     }
 
     @Override
-    public String getType() {
+    public BehaviorType getType() {
         return TYPE;
     }
 
     public void registerEvents(GameRuntime aGameRuntime) {
-        aGameRuntime.getEventManager().register(objectInstance, KeyPressed.class, new GameEventListener<KeyPressed>() {
+        aGameRuntime.getEventManager().register(objectInstance, KeyPressed.TYPE, new GameEventListener<KeyPressed>() {
             @Override
             public void handleGameEvent(KeyPressed aEvent) {
                 if (!remoteObject) {
@@ -88,7 +89,7 @@ public class PlatformBehavior implements Behavior, Platform, Reflectable<Platfor
                 }
             }
         });
-        aGameRuntime.getEventManager().register(objectInstance, KeyReleased.class, new GameEventListener<KeyReleased>() {
+        aGameRuntime.getEventManager().register(objectInstance, KeyReleased.TYPE, new GameEventListener<KeyReleased>() {
             @Override
             public void handleGameEvent(KeyReleased aEvent) {
                 if (!remoteObject) {
@@ -96,7 +97,7 @@ public class PlatformBehavior implements Behavior, Platform, Reflectable<Platfor
                 }
             }
         });
-        aGameRuntime.getEventManager().register(objectInstance, GameObjectCollision.class, new GameEventListener<GameObjectCollision>() {
+        aGameRuntime.getEventManager().register(objectInstance, GameObjectCollision.TYPE, new GameEventListener<GameObjectCollision>() {
             @Override
             public void handleGameEvent(GameObjectCollision aEvent) {
                 if (!remoteObject) {
@@ -104,7 +105,7 @@ public class PlatformBehavior implements Behavior, Platform, Reflectable<Platfor
                 }
             }
         });
-        aGameRuntime.getEventManager().register(objectInstance, SystemTick.class, new GameEventListener<SystemTick>() {
+        aGameRuntime.getEventManager().register(objectInstance, SystemTick.TYPE, new GameEventListener<SystemTick>() {
             @Override
             public void handleGameEvent(SystemTick aEvent) {
                 if (!remoteObject) {
@@ -214,7 +215,7 @@ public class PlatformBehavior implements Behavior, Platform, Reflectable<Platfor
 
     @Override
     public PlatformBehaviorTemplate getTemplate() {
-        return objectInstance.getOwnerGameObject().getBehaviorTemplate(PlatformBehaviorTemplate.class);
+        return objectInstance.getOwnerGameObject().getBehaviorTemplate(PlatformBehaviorTemplate.TYPE);
     }
 
     @Override

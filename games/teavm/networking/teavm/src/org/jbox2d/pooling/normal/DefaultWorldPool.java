@@ -27,6 +27,7 @@
 package org.jbox2d.pooling.normal;
 
 import java.util.HashMap;
+
 import org.jbox2d.collision.AABB;
 import org.jbox2d.collision.Collision;
 import org.jbox2d.collision.Distance;

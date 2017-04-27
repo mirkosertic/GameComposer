@@ -21,10 +21,15 @@ import java.util.Map;
 import org.teavm.classlib.impl.DeclaringClassMetadataGenerator;
 import org.teavm.classlib.java.lang.annotation.TAnnotation;
 import org.teavm.classlib.java.lang.reflect.TAnnotatedElement;
+import org.teavm.dependency.PluggableDependency;
+import org.teavm.interop.Address;
+import org.teavm.interop.DelegateTo;
 import org.teavm.platform.Platform;
 import org.teavm.platform.PlatformClass;
 import org.teavm.platform.metadata.ClassResource;
 import org.teavm.platform.metadata.ClassScopedMetadataProvider;
+import org.teavm.runtime.RuntimeClass;
+import org.teavm.runtime.RuntimeJavaObject;
 
 public class TClass<T> extends TObject implements TAnnotatedElement {
     TString name;
@@ -61,11 +66,17 @@ public class TClass<T> extends TObject implements TAnnotatedElement {
         return Platform.isAssignable(obj.getPlatformClass(), platformClass);
     }
 
+    @DelegateTo("getNameLowLevel")
     public TString getName() {
         if (name == null) {
             name = TString.wrap(Platform.getName(platformClass));
         }
         return name;
+    }
+
+    private RuntimeJavaObject getNameLowLevel() {
+        RuntimeClass runtimeClass = Address.ofObject(this).toStructure();
+        return runtimeClass.name;
     }
 
     public TString getSimpleName() {
@@ -101,7 +112,7 @@ public class TClass<T> extends TObject implements TAnnotatedElement {
     }
 
     public boolean isEnum() {
-        return platformClass.getMetadata().isEnum();
+        return Platform.isEnum(platformClass);
     }
 
     public TClass<?> getComponentType() {
@@ -147,6 +158,11 @@ public class TClass<T> extends TObject implements TAnnotatedElement {
     public static TClass<?> forName(TString name, boolean initialize, TClassLoader loader)
             throws TClassNotFoundException {
         return forName(name);
+    }
+
+    @PluggableDependency(ClassDependencyListener.class)
+    void initialize() {
+        Platform.initClass(platformClass);
     }
 
     @SuppressWarnings({ "unchecked", "unused" })

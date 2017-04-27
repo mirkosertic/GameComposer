@@ -17,14 +17,12 @@ package org.teavm.classlib.java.lang;
 
 import org.teavm.classlib.java.io.TPrintStream;
 import org.teavm.classlib.java.util.TArrays;
+import org.teavm.interop.DelegateTo;
 import org.teavm.interop.Remove;
 import org.teavm.interop.Rename;
 import org.teavm.interop.Superclass;
+import org.teavm.runtime.ExceptionHandling;
 
-/**
- *
- * @author Alexey Andreev
- */
 @Superclass("java.lang.Object")
 public class TThrowable extends RuntimeException {
     private static final long serialVersionUID = 2026791432677149320L;
@@ -33,6 +31,7 @@ public class TThrowable extends RuntimeException {
     private boolean suppressionEnabled;
     private boolean writableStackTrace;
     private TThrowable[] suppressed = new TThrowable[0];
+    private TStackTraceElement[] stackTrace;
 
     @SuppressWarnings("unused")
     @Rename("fakeInit")
@@ -101,7 +100,15 @@ public class TThrowable extends RuntimeException {
     }
 
     @Override
+    @DelegateTo("fillInStackTraceLowLevel")
     public Throwable fillInStackTrace() {
+        return this;
+    }
+
+    private TThrowable fillInStackTraceLowLevel() {
+        int stackSize = ExceptionHandling.callStackSize() - 1;
+        stackTrace = new TStackTraceElement[stackSize];
+        ExceptionHandling.fillStackTrace((StackTraceElement[]) (Object) stackTrace, 2);
         return this;
     }
 
@@ -115,8 +122,11 @@ public class TThrowable extends RuntimeException {
         return TString.wrap(getMessage());
     }
 
-    @Override
-    public TThrowable getCause() {
+    @Remove
+    public native TThrowable getCause();
+
+    @Rename("getCause")
+    public TThrowable getCause0() {
         return cause != this ? cause : null;
     }
 
@@ -144,15 +154,25 @@ public class TThrowable extends RuntimeException {
 
     public void printStackTrace(TPrintStream stream) {
         stream.println(TString.wrap(getClass().getName() + ": " + getMessage()));
+        if (stackTrace != null) {
+            for (TStackTraceElement element : stackTrace) {
+                stream.print(TString.wrap("  at "));
+                stream.println(element);
+            }
+        }
+        if (cause != null && cause != this) {
+            stream.print(TString.wrap("Caused by: "));
+            cause.printStackTrace(stream);
+        }
     }
 
     @Rename("getStackTrace")
     public TStackTraceElement[] getStackTrace0() {
-        return new TStackTraceElement[0];
+        return stackTrace != null ? stackTrace.clone() : new TStackTraceElement[0];
     }
 
     public void setStackTrace(@SuppressWarnings("unused") TStackTraceElement[] stackTrace) {
-        // do nothing
+        this.stackTrace = stackTrace.clone();
     }
 
     @Rename("getSuppressed")

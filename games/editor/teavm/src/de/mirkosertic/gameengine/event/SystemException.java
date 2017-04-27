@@ -17,10 +17,12 @@ package de.mirkosertic.gameengine.event;
 
 public class SystemException extends GameEvent {
 
+    public static final GameEventType TYPE = new GameEventType("SystemException");
+
     public final Exception exception;
 
     public SystemException(Exception aException) {
-        super("SystemException");
+        super(TYPE);
         exception = aException;
     }
 

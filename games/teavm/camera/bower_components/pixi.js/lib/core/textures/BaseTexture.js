@@ -2,6 +2,8 @@
 
 exports.__esModule = true;
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 var _utils = require('../utils');
 
 var _settings = require('../settings');
@@ -100,7 +102,7 @@ var BaseTexture = function (_EventEmitter) {
          * @default PIXI.settings.SCALE_MODE
          * @see PIXI.SCALE_MODES
          */
-        _this.scaleMode = scaleMode !== undefined ? scaleMode : _settings2.default.SCALE_MODE;
+        _this.scaleMode = scaleMode || _settings2.default.SCALE_MODE;
 
         /**
          * Set to true once the base texture has successfully loaded.
@@ -255,22 +257,13 @@ var BaseTexture = function (_EventEmitter) {
             this.realWidth = this.source.naturalWidth || this.source.videoWidth || this.source.width;
             this.realHeight = this.source.naturalHeight || this.source.videoHeight || this.source.height;
 
-            this._updateDimensions();
+            this.width = this.realWidth / this.resolution;
+            this.height = this.realHeight / this.resolution;
+
+            this.isPowerOfTwo = _bitTwiddle2.default.isPow2(this.realWidth) && _bitTwiddle2.default.isPow2(this.realHeight);
         }
 
         this.emit('update', this);
-    };
-
-    /**
-     * Update dimensions from real values
-     */
-
-
-    BaseTexture.prototype._updateDimensions = function _updateDimensions() {
-        this.width = this.realWidth / this.resolution;
-        this.height = this.realHeight / this.resolution;
-
-        this.isPowerOfTwo = _bitTwiddle2.default.isPow2(this.realWidth) && _bitTwiddle2.default.isPow2(this.realHeight);
     };
 
     /**
@@ -297,6 +290,8 @@ var BaseTexture = function (_EventEmitter) {
 
 
     BaseTexture.prototype.loadSource = function loadSource(source) {
+        var _this2 = this;
+
         var wasLoading = this.isLoading;
 
         this.hasLoaded = false;
@@ -326,74 +321,80 @@ var BaseTexture = function (_EventEmitter) {
                 this.emit('loaded', this);
             }
         } else if (!source.getContext) {
-            // Image fail / not ready
-            this.isLoading = true;
+            var _ret = function () {
+                // Image fail / not ready
+                _this2.isLoading = true;
 
-            var scope = this;
+                var scope = _this2;
 
-            source.onload = function () {
-                scope._updateImageType();
-                source.onload = null;
-                source.onerror = null;
+                source.onload = function () {
+                    scope._updateImageType();
+                    source.onload = null;
+                    source.onerror = null;
 
-                if (!scope.isLoading) {
-                    return;
-                }
+                    if (!scope.isLoading) {
+                        return;
+                    }
 
-                scope.isLoading = false;
-                scope._sourceLoaded();
+                    scope.isLoading = false;
+                    scope._sourceLoaded();
 
-                if (scope.imageType === 'svg') {
-                    scope._loadSvgSource();
+                    if (scope.imageType === 'svg') {
+                        scope._loadSvgSource();
 
-                    return;
-                }
+                        return;
+                    }
 
-                scope.emit('loaded', scope);
-            };
+                    scope.emit('loaded', scope);
+                };
 
-            source.onerror = function () {
-                source.onload = null;
-                source.onerror = null;
+                source.onerror = function () {
+                    source.onload = null;
+                    source.onerror = null;
 
-                if (!scope.isLoading) {
-                    return;
-                }
+                    if (!scope.isLoading) {
+                        return;
+                    }
 
-                scope.isLoading = false;
-                scope.emit('error', scope);
-            };
+                    scope.isLoading = false;
+                    scope.emit('error', scope);
+                };
 
-            // Per http://www.w3.org/TR/html5/embedded-content-0.html#the-img-element
-            //   "The value of `complete` can thus change while a script is executing."
-            // So complete needs to be re-checked after the callbacks have been added..
-            // NOTE: complete will be true if the image has no src so best to check if the src is set.
-            if (source.complete && source.src) {
-                // ..and if we're complete now, no need for callbacks
-                source.onload = null;
-                source.onerror = null;
+                // Per http://www.w3.org/TR/html5/embedded-content-0.html#the-img-element
+                //   "The value of `complete` can thus change while a script is executing."
+                // So complete needs to be re-checked after the callbacks have been added..
+                // NOTE: complete will be true if the image has no src so best to check if the src is set.
+                if (source.complete && source.src) {
+                    // ..and if we're complete now, no need for callbacks
+                    source.onload = null;
+                    source.onerror = null;
 
-                if (scope.imageType === 'svg') {
-                    scope._loadSvgSource();
+                    if (scope.imageType === 'svg') {
+                        scope._loadSvgSource();
 
-                    return;
-                }
+                        return {
+                            v: void 0
+                        };
+                    }
 
-                this.isLoading = false;
+                    _this2.isLoading = false;
 
-                if (source.width && source.height) {
-                    this._sourceLoaded();
+                    if (source.width && source.height) {
+                        _this2._sourceLoaded();
 
+                        // If any previous subscribers possible
+                        if (wasLoading) {
+                            _this2.emit('loaded', _this2);
+                        }
+                    }
                     // If any previous subscribers possible
-                    if (wasLoading) {
-                        this.emit('loaded', this);
-                    }
+                    else if (wasLoading) {
+                            _this2.emit('error', _this2);
+                        }
                 }
-                // If any previous subscribers possible
-                else if (wasLoading) {
-                        this.emit('error', this);
-                    }
-            }
+            }();
+
+            if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
         }
     };
 
@@ -480,7 +481,7 @@ var BaseTexture = function (_EventEmitter) {
 
 
     BaseTexture.prototype._loadSvgSourceUsingXhr = function _loadSvgSourceUsingXhr() {
-        var _this2 = this;
+        var _this3 = this;
 
         var svgXhr = new XMLHttpRequest();
 
@@ -496,11 +497,11 @@ var BaseTexture = function (_EventEmitter) {
                 throw new Error('Failed to load SVG using XHR.');
             }
 
-            _this2._loadSvgSourceUsingString(svgXhr.response);
+            _this3._loadSvgSourceUsingString(svgXhr.response);
         };
 
         svgXhr.onerror = function () {
-            return _this2.emit('error', _this2);
+            return _this3.emit('error', _this3);
         };
 
         svgXhr.open('GET', this.imageUrl, true);
@@ -532,7 +533,11 @@ var BaseTexture = function (_EventEmitter) {
         this.realWidth = Math.round(svgWidth * this.sourceScale);
         this.realHeight = Math.round(svgHeight * this.sourceScale);
 
-        this._updateDimensions();
+        this.width = this.realWidth / this.resolution;
+        this.height = this.realHeight / this.resolution;
+
+        // Check pow2 after scale
+        this.isPowerOfTwo = _bitTwiddle2.default.isPow2(this.realWidth) && _bitTwiddle2.default.isPow2(this.realHeight);
 
         // Create a canvas element
         var canvas = document.createElement('canvas');
@@ -688,48 +693,6 @@ var BaseTexture = function (_EventEmitter) {
         }
 
         return baseTexture;
-    };
-
-    /**
-     * Helper function that creates a base texture based on the source you provide.
-     * The source can be - image url, image element, canvas element.
-     *
-     * @static
-     * @param {string|HTMLImageElement|HTMLCanvasElement} source - The source to create base texture from.
-     * @param {number} [scaleMode=PIXI.settings.SCALE_MODE] - See {@link PIXI.SCALE_MODES} for possible values
-     * @param {number} [sourceScale=(auto)] - Scale for the original image, used with Svg images.
-     * @return {PIXI.BaseTexture} The new base texture.
-     */
-
-
-    BaseTexture.from = function from(source, scaleMode, sourceScale) {
-        if (typeof source === 'string') {
-            return BaseTexture.fromImage(source, undefined, scaleMode, sourceScale);
-        } else if (source instanceof HTMLImageElement) {
-            var imageUrl = source.src;
-            var baseTexture = _utils.BaseTextureCache[imageUrl];
-
-            if (!baseTexture) {
-                baseTexture = new BaseTexture(source, scaleMode);
-                baseTexture.imageUrl = imageUrl;
-
-                if (sourceScale) {
-                    baseTexture.sourceScale = sourceScale;
-                }
-
-                // if there is an @2x at the end of the url we are going to assume its a highres image
-                baseTexture.resolution = (0, _utils.getResolutionOfUrl)(imageUrl);
-
-                _utils.BaseTextureCache[imageUrl] = baseTexture;
-            }
-
-            return baseTexture;
-        } else if (source instanceof HTMLCanvasElement) {
-            return BaseTexture.fromCanvas(source, scaleMode);
-        }
-
-        // lets assume its a base texture!
-        return source;
     };
 
     return BaseTexture;

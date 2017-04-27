@@ -15,6 +15,7 @@
  */
 package de.mirkosertic.gameengine.physic;
 
+import de.mirkosertic.gameengine.core.BehaviorType;
 import de.mirkosertic.gameengine.core.BehaviorUnmarshaller;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
@@ -24,7 +25,7 @@ import java.util.Map;
 public class PlatformBehaviorUnmarshaller implements BehaviorUnmarshaller<PlatformBehavior> {
 
     @Override
-    public String getTypeKey() {
+    public BehaviorType getTypeKey() {
         return PlatformBehavior.TYPE;
     }
 

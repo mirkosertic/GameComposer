@@ -23,11 +23,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /**
  * The prepare manager provides functionality to upload content to the GPU.
  *
- * An instance of this class is automatically created by default, and can be found at renderer.plugins.prepare
- *
  * @class
- * @extends PIXI.prepare.BasePrepare
- * @memberof PIXI.prepare
+ * @memberof PIXI
  */
 var WebGLPrepare = function (_BasePrepare) {
     _inherits(WebGLPrepare, _BasePrepare);

@@ -51,8 +51,8 @@ var SystemRenderer = function (_EventEmitter) {
 
   /**
    * @param {string} system - The name of the system this renderer is for.
-   * @param {number} [screenWidth=800] - the width of the screen
-   * @param {number} [screenHeight=600] - the height of the screen
+   * @param {number} [width=800] - the width of the canvas view
+   * @param {number} [height=600] - the height of the canvas view
    * @param {object} [options] - The optional renderer parameters
    * @param {HTMLCanvasElement} [options.view] - the canvas to use as a view, optional
    * @param {boolean} [options.transparent=false] - If the render view is transparent, default false
@@ -67,7 +67,7 @@ var SystemRenderer = function (_EventEmitter) {
    * @param {boolean} [options.roundPixels=false] - If true Pixi will Math.floor() x/y values when rendering,
    *  stopping pixel interpolation.
    */
-  function SystemRenderer(system, screenWidth, screenHeight, options) {
+  function SystemRenderer(system, width, height, options) {
     _classCallCheck(this, SystemRenderer);
 
     var _this = _possibleConstructorReturn(this, _EventEmitter.call(this));
@@ -95,13 +95,20 @@ var SystemRenderer = function (_EventEmitter) {
     _this.type = _const.RENDERER_TYPE.UNKNOWN;
 
     /**
-     * Measurements of the screen. (0, 0, screenWidth, screenHeight)
+     * The width of the canvas view
      *
-     * Its safe to use as filterArea or hitArea for whole stage
-     *
-     * @member {PIXI.Rectangle}
+     * @member {number}
+     * @default 800
      */
-    _this.screen = new _math.Rectangle(0, 0, screenWidth || 800, screenHeight || 600);
+    _this.width = width || 800;
+
+    /**
+     * The height of the canvas view
+     *
+     * @member {number}
+     * @default 600
+     */
+    _this.height = height || 600;
 
     /**
      * The canvas element that everything is drawn to
@@ -126,7 +133,7 @@ var SystemRenderer = function (_EventEmitter) {
     _this.transparent = options.transparent;
 
     /**
-     * Whether css dimensions of canvas view should be resized to screen dimensions automatically
+     * Whether the render view should be resized automatically
      *
      * @member {boolean}
      */
@@ -212,31 +219,23 @@ var SystemRenderer = function (_EventEmitter) {
   }
 
   /**
-   * Same as view.width, actual number of pixels in the canvas by horizontal
+   * Resizes the canvas view to the specified width and height
    *
-   * @member {number}
-   * @readonly
-   * @default 800
+   * @param {number} width - the new width of the canvas view
+   * @param {number} height - the new height of the canvas view
    */
 
 
-  /**
-   * Resizes the screen and canvas to the specified width and height
-   * Canvas dimensions are multiplied by resolution
-   *
-   * @param {number} screenWidth - the new width of the screen
-   * @param {number} screenHeight - the new height of the screen
-   */
-  SystemRenderer.prototype.resize = function resize(screenWidth, screenHeight) {
-    this.screen.width = screenWidth;
-    this.screen.height = screenHeight;
+  SystemRenderer.prototype.resize = function resize(width, height) {
+    this.width = width * this.resolution;
+    this.height = height * this.resolution;
 
-    this.view.width = screenWidth * this.resolution;
-    this.view.height = screenHeight * this.resolution;
+    this.view.width = this.width;
+    this.view.height = this.height;
 
     if (this.autoResize) {
-      this.view.style.width = screenWidth + 'px';
-      this.view.style.height = screenHeight + 'px';
+      this.view.style.width = this.width / this.resolution + 'px';
+      this.view.style.height = this.height / this.resolution + 'px';
     }
   };
 
@@ -278,9 +277,10 @@ var SystemRenderer = function (_EventEmitter) {
 
     this.type = _const.RENDERER_TYPE.UNKNOWN;
 
-    this.view = null;
+    this.width = 0;
+    this.height = 0;
 
-    this.screen = null;
+    this.view = null;
 
     this.resolution = 0;
 
@@ -308,35 +308,23 @@ var SystemRenderer = function (_EventEmitter) {
    * The background color to fill if not transparent
    *
    * @member {number}
+   * @memberof PIXI.SystemRenderer#
    */
 
 
   _createClass(SystemRenderer, [{
-    key: 'width',
-    get: function get() {
-      return this.view.width;
-    }
-
-    /**
-     * Same as view.height, actual number of pixels in the canvas by vertical
-     *
-     * @member {number}
-     * @readonly
-     * @default 600
-     */
-
-  }, {
-    key: 'height',
-    get: function get() {
-      return this.view.height;
-    }
-  }, {
     key: 'backgroundColor',
     get: function get() {
       return this._backgroundColor;
-    },
-    set: function set(value) // eslint-disable-line require-jsdoc
-    {
+    }
+
+    /**
+     * Sets the background color.
+     *
+     * @param {number} value - The value to set to.
+     */
+    ,
+    set: function set(value) {
       this._backgroundColor = value;
       this._backgroundColorString = (0, _utils.hex2string)(value);
       (0, _utils.hex2rgb)(value, this._backgroundColorRgba);

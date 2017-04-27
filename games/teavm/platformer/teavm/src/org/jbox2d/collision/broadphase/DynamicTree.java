@@ -299,7 +299,7 @@ public class DynamicTree implements BroadPhaseStrategy {
     return computeHeight(m_root);
   }
 
-  private int computeHeight(DynamicTreeNode node) {
+  private final int computeHeight(DynamicTreeNode node) {
     assert (0 <= node.id && node.id < m_nodeCapacity);
 
     if (node.isLeaf()) {
@@ -450,7 +450,7 @@ public class DynamicTree implements BroadPhaseStrategy {
     validate();
   }
 
-  private DynamicTreeNode allocateNode() {
+  private final DynamicTreeNode allocateNode() {
     if (m_freeList == NULL_NODE) {
       assert (m_nodeCount == m_nodeCapacity);
 
@@ -483,7 +483,7 @@ public class DynamicTree implements BroadPhaseStrategy {
   /**
    * returns a node to the pool
    */
-  private void freeNode(DynamicTreeNode node) {
+  private final void freeNode(DynamicTreeNode node) {
     assert (node != null);
     assert (0 < m_nodeCount);
     node.parent = m_freeList != NULL_NODE ? m_nodes[m_freeList] : null;
@@ -499,7 +499,7 @@ public class DynamicTree implements BroadPhaseStrategy {
 
   private final AABB combinedAABB = new AABB();
 
-  private void insertLeaf(int leaf_index) {
+  private final void insertLeaf(int leaf_index) {
     m_insertionCount++;
 
     DynamicTreeNode leaf = m_nodes[leaf_index];
@@ -614,7 +614,7 @@ public class DynamicTree implements BroadPhaseStrategy {
     // validate();
   }
 
-  private void removeLeaf(DynamicTreeNode leaf) {
+  private final void removeLeaf(DynamicTreeNode leaf) {
     if (leaf == m_root) {
       m_root = null;
       return;

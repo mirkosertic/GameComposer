@@ -68,11 +68,8 @@ var Graphics = function (_Container) {
 
     /**
      *
-     * @param {boolean} [nativeLines=false] - If true the lines will be draw using LINES instead of TRIANGLE_STRIP
      */
     function Graphics() {
-        var nativeLines = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
-
         _classCallCheck(this, Graphics);
 
         /**
@@ -92,13 +89,6 @@ var Graphics = function (_Container) {
          * @default 0
          */
         _this.lineWidth = 0;
-
-        /**
-         * If true the lines will be draw using LINES instead of TRIANGLE_STRIP
-         *
-         * @member {boolean}
-         */
-        _this.nativeLines = nativeLines;
 
         /**
          * The color of any lines drawn.
@@ -733,9 +723,6 @@ var Graphics = function (_Container) {
             this.graphicsData.length = 0;
         }
 
-        this.currentPath = null;
-        this._spriteRect = null;
-
         return this;
     };
 
@@ -787,13 +774,26 @@ var Graphics = function (_Container) {
         var rect = this.graphicsData[0].shape;
 
         if (!this._spriteRect) {
-            this._spriteRect = new _Sprite2.default(new _Texture2.default(_Texture2.default.WHITE));
+            if (!Graphics._SPRITE_TEXTURE) {
+                Graphics._SPRITE_TEXTURE = _RenderTexture2.default.create(10, 10);
+
+                var canvas = document.createElement('canvas');
+
+                canvas.width = 10;
+                canvas.height = 10;
+
+                var context = canvas.getContext('2d');
+
+                context.fillStyle = 'white';
+                context.fillRect(0, 0, 10, 10);
+
+                Graphics._SPRITE_TEXTURE = _Texture2.default.fromCanvas(canvas);
+            }
+
+            this._spriteRect = new _Sprite2.default(Graphics._SPRITE_TEXTURE);
         }
-
-        var sprite = this._spriteRect;
-
         if (this.tint === 0xffffff) {
-            sprite.tint = this.graphicsData[0].fillColor;
+            this._spriteRect.tint = this.graphicsData[0].fillColor;
         } else {
             var t1 = tempColor1;
             var t2 = tempColor2;
@@ -805,21 +805,20 @@ var Graphics = function (_Container) {
             t1[1] *= t2[1];
             t1[2] *= t2[2];
 
-            sprite.tint = (0, _utils.rgb2hex)(t1);
+            this._spriteRect.tint = (0, _utils.rgb2hex)(t1);
         }
-        sprite.alpha = this.graphicsData[0].fillAlpha;
-        sprite.worldAlpha = this.worldAlpha * sprite.alpha;
-        sprite.blendMode = this.blendMode;
+        this._spriteRect.alpha = this.graphicsData[0].fillAlpha;
+        this._spriteRect.worldAlpha = this.worldAlpha * this._spriteRect.alpha;
 
-        sprite.texture._frame.width = rect.width;
-        sprite.texture._frame.height = rect.height;
+        Graphics._SPRITE_TEXTURE._frame.width = rect.width;
+        Graphics._SPRITE_TEXTURE._frame.height = rect.height;
 
-        sprite.transform.worldTransform = this.transform.worldTransform;
+        this._spriteRect.transform.worldTransform = this.transform.worldTransform;
 
-        sprite.anchor.set(-rect.x / rect.width, -rect.y / rect.height);
-        sprite._onAnchorUpdate();
+        this._spriteRect.anchor.set(-rect.x / rect.width, -rect.y / rect.height);
+        this._spriteRect._onAnchorUpdate();
 
-        sprite._renderWebGL(renderer);
+        this._spriteRect._renderWebGL(renderer);
     };
 
     /**
@@ -850,6 +849,7 @@ var Graphics = function (_Container) {
             this.boundsDirty = this.dirty;
             this.updateLocalBounds();
 
+            this.dirty++;
             this.cachedSpriteDirty = true;
         }
 
@@ -1022,7 +1022,7 @@ var Graphics = function (_Container) {
 
         this.currentPath = null;
 
-        var data = new _GraphicsData2.default(this.lineWidth, this.lineColor, this.lineAlpha, this.fillColor, this.fillAlpha, this.filling, this.nativeLines, shape);
+        var data = new _GraphicsData2.default(this.lineWidth, this.lineColor, this.lineAlpha, this.fillColor, this.fillAlpha, this.filling, shape);
 
         this.graphicsData.push(data);
 
@@ -1056,15 +1056,10 @@ var Graphics = function (_Container) {
             canvasRenderer = new _CanvasRenderer2.default();
         }
 
-        this.transform.updateLocalTransform();
-        this.transform.localTransform.copy(tempMatrix);
+        tempMatrix.tx = -bounds.x;
+        tempMatrix.ty = -bounds.y;
 
-        tempMatrix.invert();
-
-        tempMatrix.tx -= bounds.x;
-        tempMatrix.ty -= bounds.y;
-
-        canvasRenderer.render(this, canvasBuffer, true, tempMatrix);
+        canvasRenderer.render(this, canvasBuffer, false, tempMatrix);
 
         var texture = _Texture2.default.fromCanvas(canvasBuffer.baseTexture._canvasRenderTarget.canvas, scaleMode);
 
@@ -1118,10 +1113,6 @@ var Graphics = function (_Container) {
      *  options have been set to that value
      * @param {boolean} [options.children=false] - if set to true, all the children will have
      *  their destroy method called as well. 'options' will be passed on to those calls.
-     * @param {boolean} [options.texture=false] - Only used for child Sprites if options.children is set to true
-     *  Should it destroy the texture of the child sprite
-     * @param {boolean} [options.baseTexture=false] - Only used for child Sprites if options.children is set to true
-     *  Should it destroy the base texture of the child sprite
      */
 
 

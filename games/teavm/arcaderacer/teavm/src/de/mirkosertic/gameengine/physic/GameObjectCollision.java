@@ -19,9 +19,12 @@ import de.mirkosertic.gameengine.annotations.InheritedClassInformation;
 import de.mirkosertic.gameengine.annotations.ReflectiveField;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.event.GameEvent;
+import de.mirkosertic.gameengine.event.GameEventType;
 
 @InheritedClassInformation
 public class GameObjectCollision extends GameEvent {
+
+    public static final GameEventType TYPE = new GameEventType("GameObjectCollision");
 
     private static final GameObjectCollisionClassInformation CIINSTANCE = new GameObjectCollisionClassInformation();
 
@@ -32,7 +35,7 @@ public class GameObjectCollision extends GameEvent {
     public final GameObjectInstance instance2;
 
     public GameObjectCollision(GameObjectInstance aInstance1, GameObjectInstance aInstance2) {
-        super("GameObjectCollision");
+        super(TYPE);
         instance1 = aInstance1;
         instance2 = aInstance2;
     }

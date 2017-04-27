@@ -18,8 +18,8 @@ import settings from '../../settings';
 export default class CanvasRenderer extends SystemRenderer
 {
     /**
-     * @param {number} [screenWidth=800] - the width of the screen
-     * @param {number} [screenHeight=600] - the height of the screen
+     * @param {number} [width=800] - the width of the canvas view
+     * @param {number} [height=600] - the height of the canvas view
      * @param {object} [options] - The optional renderer parameters
      * @param {HTMLCanvasElement} [options.view] - the canvas to use as a view, optional
      * @param {boolean} [options.transparent=false] - If the render view is transparent, default false
@@ -34,9 +34,9 @@ export default class CanvasRenderer extends SystemRenderer
      * @param {boolean} [options.roundPixels=false] - If true Pixi will Math.floor() x/y values when rendering,
      *  stopping pixel interpolation.
      */
-    constructor(screenWidth, screenHeight, options = {})
+    constructor(width, height, options = {})
     {
-        super('Canvas', screenWidth, screenHeight, options);
+        super('Canvas', width, height, options);
 
         this.type = RENDERER_TYPE.CANVAS;
 
@@ -96,7 +96,7 @@ export default class CanvasRenderer extends SystemRenderer
         this.context = null;
         this.renderingToScreen = false;
 
-        this.resize(screenWidth, screenHeight);
+        this.resize(width, height);
     }
 
     /**
@@ -120,8 +120,6 @@ export default class CanvasRenderer extends SystemRenderer
         this.renderingToScreen = !renderTexture;
 
         this.emit('prerender');
-
-        const rootResolution = this.resolution;
 
         if (renderTexture)
         {
@@ -162,9 +160,6 @@ export default class CanvasRenderer extends SystemRenderer
             if (transform)
             {
                 transform.copy(tempWt);
-
-                // lets not forget to flag the parent transform as dirty...
-                this._tempDisplayObjectParent.transform._worldID = -1;
             }
             else
             {
@@ -172,7 +167,6 @@ export default class CanvasRenderer extends SystemRenderer
             }
 
             displayObject.parent = this._tempDisplayObjectParent;
-
             displayObject.updateTransform();
             displayObject.parent = cacheParent;
             // displayObject.hitArea = //TODO add a temp hit area
@@ -213,31 +207,7 @@ export default class CanvasRenderer extends SystemRenderer
         displayObject.renderCanvas(this);
         this.context = tempContext;
 
-        this.resolution = rootResolution;
-
         this.emit('postrender');
-    }
-
-    /**
-     * Clear the canvas of renderer.
-     *
-     * @param {string} [clearColor] - Clear the canvas with this color, except the canvas is transparent.
-     */
-    clear(clearColor)
-    {
-        const context = this.context;
-
-        clearColor = clearColor || this._backgroundColorString;
-
-        if (!this.transparent && clearColor)
-        {
-            context.fillStyle = clearColor;
-            context.fillRect(0, 0, this.width, this.height);
-        }
-        else
-        {
-            context.clearRect(0, 0, this.width, this.height);
-        }
     }
 
     /**
@@ -283,12 +253,12 @@ export default class CanvasRenderer extends SystemRenderer
      *
      * @extends PIXI.SystemRenderer#resize
      *
-     * @param {number} screenWidth - the new width of the screen
-     * @param {number} screenHeight - the new height of the screen
+     * @param {number} width - The new width of the canvas view
+     * @param {number} height - The new height of the canvas view
      */
-    resize(screenWidth, screenHeight)
+    resize(width, height)
     {
-        super.resize(screenWidth, screenHeight);
+        super.resize(width, height);
 
         // reset the scale mode.. oddly this seems to be reset when the canvas is resized.
         // surely a browser bug?? Let pixi fix that for you..

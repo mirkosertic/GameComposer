@@ -18,6 +18,9 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var RESOLUTION = _settings2.default.RESOLUTION,
+    SCALE_MODE = _settings2.default.SCALE_MODE;
+
 /**
  * A BaseRenderTexture is a special texture that allows any Pixi display object to be rendered to it.
  *
@@ -40,23 +43,25 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  * baseRenderTexture.render(sprite);
  * ```
  *
- * The Sprite in this case will be rendered using its local transform. To render this sprite at 0,0
- * you can clear the transform
+ * The Sprite in this case will be rendered to a position of 0,0. To render this sprite at its actual
+ * position a Container should be used:
  *
  * ```js
+ * let doc = new PIXI.Container();
  *
- * sprite.setTransform()
+ * doc.addChild(sprite);
  *
  * let baseRenderTexture = new PIXI.BaseRenderTexture(100, 100);
  * let renderTexture = new PIXI.RenderTexture(baseRenderTexture);
  *
- * renderer.render(sprite, renderTexture);  // Renders to center of RenderTexture
+ * renderer.render(doc, renderTexture);  // Renders to center of RenderTexture
  * ```
  *
  * @class
  * @extends PIXI.BaseTexture
  * @memberof PIXI
  */
+
 var BaseRenderTexture = function (_BaseTexture) {
   _inherits(BaseRenderTexture, _BaseTexture);
 
@@ -76,7 +81,7 @@ var BaseRenderTexture = function (_BaseTexture) {
 
     var _this = _possibleConstructorReturn(this, _BaseTexture.call(this, null, scaleMode));
 
-    _this.resolution = resolution || _settings2.default.RESOLUTION;
+    _this.resolution = resolution || RESOLUTION;
 
     _this.width = width;
     _this.height = height;
@@ -84,7 +89,7 @@ var BaseRenderTexture = function (_BaseTexture) {
     _this.realWidth = _this.width * _this.resolution;
     _this.realHeight = _this.height * _this.resolution;
 
-    _this.scaleMode = scaleMode !== undefined ? scaleMode : _settings2.default.SCALE_MODE;
+    _this.scaleMode = scaleMode || SCALE_MODE;
     _this.hasLoaded = true;
 
     /**

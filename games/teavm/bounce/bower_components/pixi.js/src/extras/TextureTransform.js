@@ -4,12 +4,8 @@ const tempMat = new Matrix();
 
 /**
  * class controls uv transform and frame clamp for texture
- *
- * @class
- * @memberof PIXI.extras
  */
-export default class TextureTransform
-{
+export default class TextureTransform {
     /**
      *
      * @param {PIXI.Texture} texture observed texture
@@ -31,7 +27,7 @@ export default class TextureTransform
         /**
          * Changes frame clamping
          * Works with TilingSprite and Mesh
-         * Change to 1.5 if you texture has repeated right and bottom lines, that leads to smoother borders
+         * Change to 1.5 if you tex ture has repeated right and bottom lines, that leads to smoother borders
          *
          * @default 0
          * @member {number}
@@ -52,13 +48,18 @@ export default class TextureTransform
     /**
      * texture property
      * @member {PIXI.Texture}
+     * @memberof PIXI.TextureTransform
      */
     get texture()
     {
         return this._texture;
     }
 
-    set texture(value) // eslint-disable-line require-jsdoc
+    /**
+     * sets texture value
+     * @param {PIXI.Texture} value texture to be set
+     */
+    set texture(value)
     {
         this._texture = value;
         this._lastTextureID = -1;
@@ -70,7 +71,7 @@ export default class TextureTransform
      */
     update(forceUpdate)
     {
-        const tex = this._texture;
+        const tex = this.texture;
 
         if (!tex || !tex.valid)
         {
@@ -78,14 +79,14 @@ export default class TextureTransform
         }
 
         if (!forceUpdate
-            && this._lastTextureID === tex._updateID)
+            && this._lastTextureID === this.texture._updateID)
         {
             return;
         }
 
-        this._lastTextureID = tex._updateID;
+        this._lastTextureID = this.texture._updateID;
 
-        const uvs = tex._uvs;
+        const uvs = this.texture._uvs;
 
         this.mapCoord.set(uvs.x1 - uvs.x0, uvs.y1 - uvs.y0, uvs.x3 - uvs.x0, uvs.y3 - uvs.y0, uvs.x0, uvs.y0);
 

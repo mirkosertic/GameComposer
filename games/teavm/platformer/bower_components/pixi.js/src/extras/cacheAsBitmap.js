@@ -41,9 +41,6 @@ Object.defineProperties(DisplayObject.prototype, {
      * provide a performance benefit for complex static displayObjects.
      * To remove simply set this property to 'false'
      *
-     * IMPORTANT GOTCHA - make sure that all your textures are preloaded BEFORE setting this property to true
-     * as it will take a snapshot of what is currently there. If the textures have not loaded then they will not appear.
-     *
      * @member {boolean}
      * @memberof PIXI.DisplayObject#
      */
@@ -283,7 +280,7 @@ DisplayObject.prototype._initCachedDisplayObjectCanvas = function _initCachedDis
     // need to set //
     const m = _tempMatrix;
 
-    this.transform.localTransform.copy(m);
+    this.transform.worldTransform.copy(m);
     m.invert();
 
     m.tx -= bounds.x;

@@ -23,10 +23,14 @@ public abstract class GameEvent implements Reflectable<GameEventClassInformation
     private static final GameEventClassInformation CIINSTANCE = new GameEventClassInformation();
 
     @ReflectiveField
-    public final String type;
+    public final GameEventType type;
 
-    protected GameEvent(String aType) {
+    protected GameEvent(GameEventType aType) {
         type = aType;
+    }
+
+    public GameEventType getType() {
+        return type;
     }
 
     @Override

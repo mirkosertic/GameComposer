@@ -65,7 +65,7 @@ var InteractionEvent = function () {
   };
 
   /**
-   * Resets the event.
+   * Prevents event from reaching any objects other than the current object.
    *
    * @private
    */

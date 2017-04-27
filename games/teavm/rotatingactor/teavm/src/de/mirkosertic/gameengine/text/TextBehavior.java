@@ -16,6 +16,7 @@
 package de.mirkosertic.gameengine.text;
 
 import de.mirkosertic.gameengine.core.Behavior;
+import de.mirkosertic.gameengine.core.BehaviorType;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.event.GameEventManager;
 import de.mirkosertic.gameengine.event.Property;
@@ -31,7 +32,7 @@ public class TextBehavior implements Behavior, Text, Reflectable<TextClassInform
 
     private static final TextClassInformation CIINSTANCE = new TextClassInformation();
 
-    static final String TYPE = "Text";
+    public static final BehaviorType TYPE = new BehaviorType("Text");
 
     private final GameObjectInstance objectInstance;
 
@@ -41,7 +42,7 @@ public class TextBehavior implements Behavior, Text, Reflectable<TextClassInform
     private final Property<Boolean> isScript;
 
     TextBehavior(GameObjectInstance aObjectInstance) {
-        this(aObjectInstance, aObjectInstance.getOwnerGameObject().getBehaviorTemplate(TextBehaviorTemplate.class));
+        this(aObjectInstance, (TextBehaviorTemplate) aObjectInstance.getOwnerGameObject().getBehaviorTemplate(TextBehaviorTemplate.TYPE));
     }
 
     TextBehavior(GameObjectInstance aObjectInstance, TextBehaviorTemplate aTemplate) {
@@ -56,7 +57,7 @@ public class TextBehavior implements Behavior, Text, Reflectable<TextClassInform
     }
 
     @Override
-    public String getType() {
+    public BehaviorType getType() {
         return TYPE;
     }
 
@@ -98,7 +99,7 @@ public class TextBehavior implements Behavior, Text, Reflectable<TextClassInform
 
     @Override
     public TextBehaviorTemplate getTemplate() {
-        return objectInstance.getOwnerGameObject().getBehaviorTemplate(TextBehaviorTemplate.class);
+        return objectInstance.getOwnerGameObject().getBehaviorTemplate(TextBehaviorTemplate.TYPE);
     }
 
     @Override

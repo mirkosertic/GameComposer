@@ -16,6 +16,7 @@
 package de.mirkosertic.gameengine.physic;
 
 import de.mirkosertic.gameengine.core.BehaviorTemplate;
+import de.mirkosertic.gameengine.core.BehaviorType;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
@@ -28,6 +29,8 @@ import java.util.Map;
 
 public class StaticBehaviorTemplate implements BehaviorTemplate<StaticBehavior>, Static, Reflectable<StaticClassInformation> {
 
+    public static final BehaviorType TYPE = new BehaviorType("StaticBehaviorTemplate");
+
     private static final StaticClassInformation CIINSTANCE = new StaticClassInformation();
 
     private final GameObject owner;
@@ -35,6 +38,11 @@ public class StaticBehaviorTemplate implements BehaviorTemplate<StaticBehavior>,
     @UsedByReflection
     public StaticBehaviorTemplate(GameEventManager aEventManager, GameObject aOwner) {
         owner = aOwner;
+    }
+
+    @Override
+    public BehaviorType getType() {
+        return TYPE;
     }
 
     @Override

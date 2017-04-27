@@ -33,7 +33,7 @@ public class FollowCameraProcess extends AbstractGameProcess {
     @Override
     public ProceedResult proceedGame(long aGameTime, long aElapsedTimeSinceLastLoop) {
 
-        CameraBehavior theCameraBehavior = cameraObject.getBehavior(CameraBehavior.class);
+        CameraBehavior theCameraBehavior = cameraObject.getBehavior(CameraBehavior.TYPE);
         Position theCameraPosition = cameraObject.positionProperty().get();
         Size theCameraSize = theCameraBehavior.getScreenSize();
 

@@ -20,8 +20,8 @@ import java.util.Map;
 
 public class IORegistry {
 
-    private final Map<String, BehaviorTemplateUnmarshaller> registeredBehaviorTemplateUnmarshaller;
-    private final Map<String, BehaviorUnmarshaller> registeredBehaviorUnmarshaller;
+    private final Map<BehaviorType, BehaviorTemplateUnmarshaller> registeredBehaviorTemplateUnmarshaller;
+    private final Map<BehaviorType, BehaviorUnmarshaller> registeredBehaviorUnmarshaller;
     private final Map<String, ConditionUnmarshaller> registeredConditionUnmarshaller;
     private final Map<String, ActionUnmarshaller> registeredActionUnmarshaller;
     private final Map<String, GameSceneEffectUnmarshaller> sceneEffectUnmarsheller;
@@ -54,11 +54,11 @@ public class IORegistry {
         sceneEffectUnmarsheller.put(aUnmarshaller.getTypeKey(), aUnmarshaller);
     }
 
-    public BehaviorTemplateUnmarshaller getBehaviorTemplateUnmarshallerFor(String aTypeKey) {
+    public BehaviorTemplateUnmarshaller getBehaviorTemplateUnmarshallerFor(BehaviorType aTypeKey) {
         return registeredBehaviorTemplateUnmarshaller.get(aTypeKey);
     }
 
-    public BehaviorUnmarshaller getBehaviorUnmarshallerFor(String aTypeKey) {
+    public BehaviorUnmarshaller getBehaviorUnmarshallerFor(BehaviorType aTypeKey) {
         return registeredBehaviorUnmarshaller.get(aTypeKey);
     }
 

@@ -3,7 +3,7 @@ import Device from 'ismobilejs';
 import accessibleTarget from './accessibleTarget';
 
 // add some extra variables to the container..
-core.utils.mixins.delayMixin(
+Object.assign(
     core.DisplayObject.prototype,
     accessibleTarget
 );
@@ -28,10 +28,8 @@ const DIV_HOOK_ZINDEX = 2;
  * Much like interaction any DisplayObject can be made accessible. This manager will map the
  * events as if the mouse was being used, minimizing the efferot required to implement.
  *
- * An instance of this class is automatically created by default, and can be found at renderer.plugins.accessibility
- *
  * @class
- * @memberof PIXI.accessibility
+ * @memberof PIXI
  */
 export default class AccessibilityManager
 {

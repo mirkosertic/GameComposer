@@ -16,6 +16,7 @@
 package de.mirkosertic.gameengine.sprite;
 
 import de.mirkosertic.gameengine.core.BehaviorTemplateUnmarshaller;
+import de.mirkosertic.gameengine.core.BehaviorType;
 import de.mirkosertic.gameengine.core.GameObject;
 import de.mirkosertic.gameengine.event.GameEventManager;
 
@@ -24,7 +25,7 @@ import java.util.Map;
 public class SpriteBehaviorTemplateUnmarshaller implements BehaviorTemplateUnmarshaller<SpriteBehaviorTemplate> {
 
     @Override
-    public String getTypeKey() {
+    public BehaviorType getTypeKey() {
         return SpriteBehavior.TYPE;
     }
 

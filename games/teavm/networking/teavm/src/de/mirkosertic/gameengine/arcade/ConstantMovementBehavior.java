@@ -17,6 +17,7 @@ package de.mirkosertic.gameengine.arcade;
 
 import de.mirkosertic.gameengine.action.SystemTick;
 import de.mirkosertic.gameengine.core.Behavior;
+import de.mirkosertic.gameengine.core.BehaviorType;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameRuntime;
 import de.mirkosertic.gameengine.event.GameEventListener;
@@ -33,7 +34,7 @@ public class ConstantMovementBehavior implements Behavior, ConstantMovement, Ref
 
     private static final ConstantMovementClassInformation CIINSTANCE = new ConstantMovementClassInformation();
 
-    static final String TYPE = "ConstantMovement";
+    public static final BehaviorType TYPE = new BehaviorType("ConstantMovement");
 
     private final GameObjectInstance objectInstance;
 
@@ -43,7 +44,7 @@ public class ConstantMovementBehavior implements Behavior, ConstantMovement, Ref
     private boolean remoteObject;
 
     ConstantMovementBehavior(GameObjectInstance aObjectInstance) {
-        this(aObjectInstance, aObjectInstance.getOwnerGameObject().getBehaviorTemplate(ConstantMovementBehaviorTemplate.class));
+        this(aObjectInstance, (ConstantMovementBehaviorTemplate) aObjectInstance.getOwnerGameObject().getBehaviorTemplate(ConstantMovementBehaviorTemplate.TYPE));
     }
 
     ConstantMovementBehavior(GameObjectInstance aObjectInstance, ConstantMovementBehaviorTemplate aTemplate) {
@@ -56,12 +57,12 @@ public class ConstantMovementBehavior implements Behavior, ConstantMovement, Ref
     }
 
     @Override
-    public String getType() {
+    public BehaviorType getType() {
         return TYPE;
     }
 
     public void registerEvents(GameRuntime aGameRuntime) {
-        aGameRuntime.getEventManager().register(objectInstance, SystemTick.class, new GameEventListener<SystemTick>() {
+        aGameRuntime.getEventManager().register(objectInstance, SystemTick.TYPE, new GameEventListener<SystemTick>() {
             @Override
             public void handleGameEvent(SystemTick aEvent) {
                 if (!remoteObject) {
@@ -95,7 +96,7 @@ public class ConstantMovementBehavior implements Behavior, ConstantMovement, Ref
 
     @Override
     public ConstantMovementBehaviorTemplate getTemplate() {
-        return objectInstance.getOwnerGameObject().getBehaviorTemplate(ConstantMovementBehaviorTemplate.class);
+        return objectInstance.getOwnerGameObject().getBehaviorTemplate(ConstantMovementBehaviorTemplate.TYPE);
     }
 
     @Override

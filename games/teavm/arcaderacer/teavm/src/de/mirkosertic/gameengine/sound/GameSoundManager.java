@@ -33,7 +33,15 @@ public class GameSoundManager implements GameSystem {
 
     @Override
     public GameSystemWork proceedGame(long aTotalTicks, long aGameTime, long aElapsedTime) {
-        return GameSystemWork.NOTHING;
+        return new GameSystemWork() {
+            @Override
+            public void runInFrame() {
+            }
+
+            @Override
+            public void runAfterFrame() {
+            }
+        };
     }
 
     void onPlaySoundEvent(ResourceName aResourceName) {

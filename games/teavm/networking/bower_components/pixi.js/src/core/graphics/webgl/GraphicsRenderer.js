@@ -102,15 +102,7 @@ export default class GraphicsRenderer extends ObjectRenderer
             shaderTemp.uniforms.alpha = graphics.worldAlpha;
 
             renderer.bindVao(webGLData.vao);
-
-            if (graphics.nativeLines)
-            {
-                gl.drawArrays(gl.LINES, 0, webGLData.points.length / 6);
-            }
-            else
-            {
-                webGLData.vao.draw(gl.TRIANGLE_STRIP, webGLData.indices.length);
-            }
+            webGLData.vao.draw(gl.TRIANGLE_STRIP, webGLData.indices.length);
         }
     }
 

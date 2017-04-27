@@ -16,9 +16,6 @@ var tempMat = new _Matrix2.default();
 
 /**
  * class controls uv transform and frame clamp for texture
- *
- * @class
- * @memberof PIXI.extras
  */
 
 var TextureTransform = function () {
@@ -44,7 +41,7 @@ var TextureTransform = function () {
         /**
          * Changes frame clamping
          * Works with TilingSprite and Mesh
-         * Change to 1.5 if you texture has repeated right and bottom lines, that leads to smoother borders
+         * Change to 1.5 if you tex ture has repeated right and bottom lines, that leads to smoother borders
          *
          * @default 0
          * @member {number}
@@ -65,6 +62,7 @@ var TextureTransform = function () {
     /**
      * texture property
      * @member {PIXI.Texture}
+     * @memberof PIXI.TextureTransform
      */
 
 
@@ -73,19 +71,19 @@ var TextureTransform = function () {
      * @param {boolean} forceUpdate if true, matrices will be updated any case
      */
     TextureTransform.prototype.update = function update(forceUpdate) {
-        var tex = this._texture;
+        var tex = this.texture;
 
         if (!tex || !tex.valid) {
             return;
         }
 
-        if (!forceUpdate && this._lastTextureID === tex._updateID) {
+        if (!forceUpdate && this._lastTextureID === this.texture._updateID) {
             return;
         }
 
-        this._lastTextureID = tex._updateID;
+        this._lastTextureID = this.texture._updateID;
 
-        var uvs = tex._uvs;
+        var uvs = this.texture._uvs;
 
         this.mapCoord.set(uvs.x1 - uvs.x0, uvs.y1 - uvs.y0, uvs.x3 - uvs.x0, uvs.y3 - uvs.y0, uvs.x0, uvs.y0);
 
@@ -114,9 +112,14 @@ var TextureTransform = function () {
         key: 'texture',
         get: function get() {
             return this._texture;
-        },
-        set: function set(value) // eslint-disable-line require-jsdoc
-        {
+        }
+
+        /**
+         * sets texture value
+         * @param {PIXI.Texture} value texture to be set
+         */
+        ,
+        set: function set(value) {
             this._texture = value;
             this._lastTextureID = -1;
         }

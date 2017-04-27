@@ -18,10 +18,13 @@ package de.mirkosertic.gameengine.input;
 import de.mirkosertic.gameengine.annotations.InheritedClassInformation;
 import de.mirkosertic.gameengine.annotations.ReflectiveField;
 import de.mirkosertic.gameengine.event.GameEvent;
+import de.mirkosertic.gameengine.event.GameEventType;
 import de.mirkosertic.gameengine.type.GameKeyCode;
 
 @InheritedClassInformation
 public class KeyReleased extends GameEvent {
+
+    public static final GameEventType TYPE = new GameEventType("KeyReleased");
 
     private static final KeyReleasedClassInformation CIINSTANCE = new KeyReleasedClassInformation();
 
@@ -29,7 +32,7 @@ public class KeyReleased extends GameEvent {
     public final GameKeyCode keyCode;
 
     KeyReleased(GameKeyCode aKeyCode) {
-        super("KeyReleased");
+        super(TYPE);
         keyCode = aKeyCode;
     }
 

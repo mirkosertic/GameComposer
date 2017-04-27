@@ -16,6 +16,7 @@
 package de.mirkosertic.gameengine.sprite;
 
 import de.mirkosertic.gameengine.core.Behavior;
+import de.mirkosertic.gameengine.core.BehaviorType;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.event.GameEventManager;
@@ -31,14 +32,14 @@ public class SpriteBehavior implements Behavior, Sprite, Reflectable<SpriteClass
 
     private static final SpriteClassInformation CIINSTANCE = new SpriteClassInformation();
 
-    static final String TYPE = "Sprite";
+    public static final BehaviorType TYPE = new BehaviorType("Sprite");
 
     private final GameObjectInstance objectInstance;
     private final Property<Animation> currentAnimation;
     private final Property<Integer> speed;
 
     private SpriteBehavior(GameObjectInstance aObjectInstance) {
-        this(aObjectInstance, aObjectInstance.getOwnerGameObject().getBehaviorTemplate(SpriteBehaviorTemplate.class));
+        this(aObjectInstance, (SpriteBehaviorTemplate) aObjectInstance.getOwnerGameObject().getBehaviorTemplate(SpriteBehaviorTemplate.TYPE));
     }
 
     SpriteBehavior(GameObjectInstance aObjectInstance, SpriteBehaviorTemplate aTemplate) {
@@ -51,7 +52,7 @@ public class SpriteBehavior implements Behavior, Sprite, Reflectable<SpriteClass
     }
 
     @Override
-    public String getType() {
+    public BehaviorType getType() {
         return TYPE;
     }
 
@@ -79,7 +80,7 @@ public class SpriteBehavior implements Behavior, Sprite, Reflectable<SpriteClass
 
     @Override
     public SpriteBehaviorTemplate getTemplate() {
-        return objectInstance.getOwnerGameObject().getBehaviorTemplate(SpriteBehaviorTemplate.class);
+        return objectInstance.getOwnerGameObject().getBehaviorTemplate(SpriteBehaviorTemplate.TYPE);
     }
 
     @Override

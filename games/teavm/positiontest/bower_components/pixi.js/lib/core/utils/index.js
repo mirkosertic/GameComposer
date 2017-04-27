@@ -1,7 +1,7 @@
 'use strict';
 
 exports.__esModule = true;
-exports.BaseTextureCache = exports.TextureCache = exports.mixins = exports.pluginTarget = exports.EventEmitter = exports.isMobile = undefined;
+exports.BaseTextureCache = exports.TextureCache = exports.pluginTarget = exports.EventEmitter = exports.isMobile = undefined;
 exports.uid = uid;
 exports.hex2rgb = hex2rgb;
 exports.hex2string = hex2string;
@@ -15,8 +15,6 @@ exports.sayHello = sayHello;
 exports.isWebGLSupported = isWebGLSupported;
 exports.sign = sign;
 exports.removeItems = removeItems;
-exports.destroyTextureCache = destroyTextureCache;
-exports.clearTextureCache = clearTextureCache;
 
 var _const = require('../const');
 
@@ -31,10 +29,6 @@ var _eventemitter2 = _interopRequireDefault(_eventemitter);
 var _pluginTarget = require('./pluginTarget');
 
 var _pluginTarget2 = _interopRequireDefault(_pluginTarget);
-
-var _mixin = require('./mixin');
-
-var mixins = _interopRequireWildcard(_mixin);
 
 var _ismobilejs = require('ismobilejs');
 
@@ -53,7 +47,6 @@ var saidHello = false;
 exports.isMobile = isMobile;
 exports.EventEmitter = _eventemitter2.default;
 exports.pluginTarget = _pluginTarget2.default;
-exports.mixins = mixins;
 
 /**
  * Gets the next unique identifier
@@ -110,7 +103,7 @@ function hex2string(hex) {
  * @return {number} The color number
  */
 function rgb2hex(rgb) {
-    return (rgb[0] * 255 << 16) + (rgb[1] * 255 << 8) + (rgb[2] * 255 | 0);
+    return (rgb[0] * 255 << 16) + (rgb[1] * 255 << 8) + rgb[2] * 255;
 }
 
 /**
@@ -341,38 +334,4 @@ var TextureCache = exports.TextureCache = {};
  * @private
  */
 var BaseTextureCache = exports.BaseTextureCache = {};
-
-/**
- * Destroys all texture in the cache
- *
- * @memberof PIXI.utils
- * @function destroyTextureCache
- */
-function destroyTextureCache() {
-    var key = void 0;
-
-    for (key in TextureCache) {
-        TextureCache[key].destroy();
-    }
-    for (key in BaseTextureCache) {
-        BaseTextureCache[key].destroy();
-    }
-}
-
-/**
- * Removes all textures from cache, but does not destroy them
- *
- * @memberof PIXI.utils
- * @function clearTextureCache
- */
-function clearTextureCache() {
-    var key = void 0;
-
-    for (key in TextureCache) {
-        delete TextureCache[key];
-    }
-    for (key in BaseTextureCache) {
-        delete BaseTextureCache[key];
-    }
-}
 //# sourceMappingURL=index.js.map

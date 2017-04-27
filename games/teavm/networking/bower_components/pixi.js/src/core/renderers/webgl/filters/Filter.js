@@ -1,7 +1,6 @@
 import extractUniformsFromSrc from './extractUniformsFromSrc';
 import { uid } from '../../../utils';
 import { BLEND_MODES } from '../../../const';
-import settings from '../../../settings';
 
 const SOURCE_KEY_MAP = {};
 
@@ -11,7 +10,7 @@ const SOURCE_KEY_MAP = {};
  * @memberof PIXI
  * @extends PIXI.Shader
  */
-export default class Filter
+class Filter
 {
     /**
      * @param {string} [vertexSrc] - The source of the vertex shader.
@@ -36,6 +35,8 @@ export default class Filter
 
         this.blendMode = BLEND_MODES.NORMAL;
 
+        // pull out the vertex and shader uniforms if they are not specified..
+        // currently this does not extract structs only default types
         this.uniformData = uniforms || extractUniformsFromSrc(this.vertexSrc, this.fragmentSrc, 'projectionMatrix|uSampler');
 
         /**
@@ -79,7 +80,7 @@ export default class Filter
          *
          * @member {number}
          */
-        this.resolution = settings.RESOLUTION;
+        this.resolution = 1;
 
         /**
          * If enabled is true the filter is applied, if false it will not.
@@ -96,11 +97,8 @@ export default class Filter
      * @param {PIXI.RenderTarget} input - The input render target.
      * @param {PIXI.RenderTarget} output - The target to output to.
      * @param {boolean} clear - Should the output be cleared before rendering to it
-     * @param {object} [currentState] - It's current state of filter.
-     *        There are some useful properties in the currentState :
-     *        target, filters, sourceFrame, destinationFrame, renderTarget, resolution
      */
-    apply(filterManager, input, output, clear, currentState) // eslint-disable-line no-unused-vars
+    apply(filterManager, input, output, clear)
     {
         // --- //
         //  this.uniforms.filterMatrix = filterManager.calculateSpriteMatrix(tempMatrix, window.panda );
@@ -172,3 +170,5 @@ export default class Filter
         ].join('\n');
     }
 }
+
+export default Filter;

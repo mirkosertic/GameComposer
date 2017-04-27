@@ -10,7 +10,7 @@ exports.__esModule = true;
  * @name VERSION
  * @type {string}
  */
-var VERSION = exports.VERSION = '4.4.1';
+var VERSION = exports.VERSION = '4.3.0';
 
 /**
  * Two Pi.
@@ -184,7 +184,7 @@ var WRAP_MODES = exports.WRAP_MODES = {
  * The gc modes that are supported by pixi.
  *
  * The {@link PIXI.settings.GC_MODE} Garbage Collection mode for pixi textures is AUTO
- * If set to GC_MODE, the renderer will occasionally check textures usage. If they are not
+ * If set to GC_MODE, the renderer will occasianally check textures usage. If they are not
  * used for a specified period of time they will be removed from the GPU. They will of course
  * be uploaded again when they are required. This is a silent behind the scenes process that
  * should ensure that the GPU does not  get filled up.

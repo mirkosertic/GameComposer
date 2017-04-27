@@ -18,9 +18,12 @@ package de.mirkosertic.gameengine.process;
 import de.mirkosertic.gameengine.annotations.InheritedClassInformation;
 import de.mirkosertic.gameengine.annotations.ReflectiveField;
 import de.mirkosertic.gameengine.event.GameEvent;
+import de.mirkosertic.gameengine.event.GameEventType;
 
 @InheritedClassInformation
 public class StartProcess extends GameEvent {
+
+    public static final GameEventType TYPE = new GameEventType("StartProcess");
 
     private static final StartProcessClassInformation CIINSTANCE = new StartProcessClassInformation();
 
@@ -28,7 +31,7 @@ public class StartProcess extends GameEvent {
     public final GameProcess process;
 
     public StartProcess(GameProcess aProcess) {
-        super("StartProcess");
+        super(TYPE);
         process = aProcess;
     }
 

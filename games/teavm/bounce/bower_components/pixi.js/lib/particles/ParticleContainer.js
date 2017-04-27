@@ -256,7 +256,7 @@ var ParticleContainer = function (_core$Container) {
                 continue;
             }
 
-            var frame = child._texture.frame;
+            var frame = child.texture.frame;
 
             context.globalAlpha = this.worldAlpha * child.alpha;
 
@@ -295,9 +295,9 @@ var ParticleContainer = function (_core$Container) {
                 finalHeight = frame.height;
             }
 
-            var resolution = child._texture.baseTexture.resolution;
+            var resolution = child.texture.baseTexture.resolution;
 
-            context.drawImage(child._texture.baseTexture.source, frame.x * resolution, frame.y * resolution, frame.width * resolution, frame.height * resolution, positionX * resolution, positionY * resolution, finalWidth * resolution, finalHeight * resolution);
+            context.drawImage(child.texture.baseTexture.source, frame.x * resolution, frame.y * resolution, frame.width * resolution, frame.height * resolution, positionX * resolution, positionY * resolution, finalWidth * resolution, finalHeight * resolution);
         }
     };
 
@@ -308,10 +308,6 @@ var ParticleContainer = function (_core$Container) {
      *  have been set to that value
      * @param {boolean} [options.children=false] - if set to true, all the children will have their
      *  destroy method called as well. 'options' will be passed on to those calls.
-     * @param {boolean} [options.texture=false] - Only used for child Sprites if options.children is set to true
-     *  Should it destroy the texture of the child sprite
-     * @param {boolean} [options.baseTexture=false] - Only used for child Sprites if options.children is set to true
-     *  Should it destroy the base texture of the child sprite
      */
 
 

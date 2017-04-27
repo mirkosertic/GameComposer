@@ -80,7 +80,7 @@ public class StarfieldGameSceneEffect implements GameSceneEffect {
         starSpeed = new Property<>(Float.class, this, STAR_SPEED_PROPERTY, 7f, aEventManager);
         color = new Property<>(Color.class, this, COLOR_PROPERTY, Color.WHITE, aEventManager);
 
-        aEventManager.register(this, SetScreenResolution.class, new GameEventListener<SetScreenResolution>() {
+        aEventManager.register(this, SetScreenResolution.TYPE, new GameEventListener<SetScreenResolution>() {
             @Override
             public void handleGameEvent(SetScreenResolution aEvent) {
                 setScreenSize(aEvent.screenSize);

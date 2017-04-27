@@ -1,0 +1,21 @@
+{
+  "name": "gameenginewasmrenderer",
+  "homepage": "https://github.com/mirkosertic/GameComposer",
+  "authors": [
+    "Mirko Sertic <mirko.sertic@web.de>"
+  ],
+  "description": "",
+  "main": "index.html",
+  "license": "APLv2",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "pixi.js": "4.3.0"
+  }
+}

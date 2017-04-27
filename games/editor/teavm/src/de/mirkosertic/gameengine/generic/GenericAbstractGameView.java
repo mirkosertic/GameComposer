@@ -165,7 +165,7 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
 
                 boolean theSomethingRendered = false;
 
-                SpriteBehavior theSpriteBehavior = aValue.getBehavior(SpriteBehavior.class);
+                SpriteBehavior theSpriteBehavior = aValue.getBehavior(SpriteBehavior.TYPE);
                 if (theSpriteBehavior != null) {
 
                     final ResourceName theSpriteResource = theSpriteBehavior.computeCurrentFrame(aGameTime);
@@ -186,7 +186,7 @@ public abstract class GenericAbstractGameView<S extends GameResource> implements
                         theSomethingRendered = true;
                     }
                 }
-                TextBehavior theTextBehavior = aValue.getBehavior(TextBehavior.class);
+                TextBehavior theTextBehavior = aValue.getBehavior(TextBehavior.TYPE);
                 if (theTextBehavior != null) {
                     TextExpression theExpression = theTextBehavior.textExpressionProperty().get();
 

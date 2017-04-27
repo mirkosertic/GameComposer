@@ -20,18 +20,19 @@ import de.mirkosertic.gameengine.core.GameObjectInstanceAddedToScene;
 import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.event.DistributableEvent;
 import de.mirkosertic.gameengine.event.GameEvent;
+import de.mirkosertic.gameengine.event.GameEventType;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class NewGameInstance extends GameEvent implements DistributableEvent {
 
-    public static final String EVENT_ID = "NewGameInstance";
+    public static final GameEventType TYPE = new GameEventType("NewGameInstance");
 
     private final GameObjectInstance player;
 
     public NewGameInstance(GameObjectInstance aPlayer) {
-        super(EVENT_ID);
+        super(TYPE);
         player = aPlayer;
     }
 
@@ -43,7 +44,7 @@ public class NewGameInstance extends GameEvent implements DistributableEvent {
     @Override
     public Map<String, Object> serialize() {
         Map<String, Object> theResult = new HashMap<>();
-        theResult.put(EVENT_ID_ATTRIBUTE, EVENT_ID);
+        theResult.put(EVENT_ID_ATTRIBUTE, TYPE.getType());
         if (player != null) {
             GameObjectInstanceAddedToScene theEvent = new GameObjectInstanceAddedToScene(player);
             theResult.put("playerAddEvent", theEvent.serialize());
