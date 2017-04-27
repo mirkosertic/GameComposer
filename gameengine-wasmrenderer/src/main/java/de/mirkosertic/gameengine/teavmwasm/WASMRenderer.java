@@ -205,6 +205,12 @@ public class WASMRenderer {
         // by JavaScript side
     }
 
+    @Export(name = "gc")
+    public static void gc() {
+        GC.collectGarbage(10);
+        WASMLogger.INSTANCE.info("Garbage collected");
+    }
+
     private static void logException(Throwable e) {
         try {
             ByteArrayOutputStream theOS = new ByteArrayOutputStream();
