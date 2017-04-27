@@ -26,19 +26,15 @@ import de.mirkosertic.gameengine.core.GameView;
 import de.mirkosertic.gameengine.core.GestureDetector;
 import de.mirkosertic.gameengine.core.PlaySceneStrategy;
 import de.mirkosertic.gameengine.network.DefaultNetworkConnector;
-import de.mirkosertic.gameengine.scriptengine.LUAScriptEngine;
-import de.mirkosertic.gameengine.scriptengine.luaj.LuaJScriptEngineFactory;
-import de.mirkosertic.gameengine.type.KeyValueObjectCache;
+import de.mirkosertic.gameengine.type.GameKeyCode;
+import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Size;
-import de.mirkosertic.gameengine.type.TextExpression;
 import org.teavm.interop.Export;
 import org.teavm.interop.Import;
 import org.teavm.runtime.GC;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.io.StringReader;
-import java.util.HashMap;
 import java.util.Map;
 
 public class WASMRenderer {
@@ -140,27 +136,6 @@ public class WASMRenderer {
         Long.parseLong("10");
         Double.parseDouble("10");
 
-/*        try {
-            LUAScriptEngine theEngine = new LuaJScriptEngineFactory(new WASMBuiltInFunctions()).createNewEngine(
-                    new KeyValueObjectCache() {
-
-                        private final Map<Object, Object> data = new HashMap<>();
-
-                        @Override
-                        public <T> T getObjectForKey(Object aKey) {
-                            return (T) data.get(aKey);
-                        }
-
-                        @Override
-                        public <T> void setObjectForKey(Object aKey, T aValue) {
-                            data.put(aKey, aValue);
-                        }
-                    }, new TextExpression("lala")
-            );
-        } catch (Exception e) {
-            logException(e);
-        }*/
-
         WASMLogger.INSTANCE.info("Gameengine starting with version " + Version.VERSION);
 
         WASMStringPool theStringPool = new WASMStringPool();
@@ -209,6 +184,50 @@ public class WASMRenderer {
     public static void gc() {
         GC.collectGarbage(10);
         WASMLogger.INSTANCE.info("Garbage collected");
+    }
+
+    private static void requestFullScreen() {
+        // DO NOTHING YET
+    }
+
+    @Export(name = "mouseDown")
+    private void mouseDown(float aClientX, float aClientY) {
+        if (runSceneStrategy.hasGameLoop()) {
+            requestFullScreen();
+            runSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector().mousePressed(
+                    new Position(aClientX, aClientY)
+            );
+        }
+    }
+
+    @Export(name = "mouseUp")
+    private void mouseUp(float aClientX, float aClientY) {
+        if (runSceneStrategy.hasGameLoop()) {
+            requestFullScreen();
+            runSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector().mouseReleased(
+                    new Position(aClientX, aClientY)
+            );
+        }
+    }
+
+    @Export(name = "keyPressed")
+    private void keyPressed(int aKeyCode) {
+        if (runSceneStrategy.hasGameLoop()) {
+            requestFullScreen();
+            GameKeyCode theKeyCode = WASMKeyCodeTranslator.translate(aKeyCode);
+            runSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector().keyPressed(theKeyCode);
+            runSceneStrategy.getRunningGameLoop().getScene().getRuntime().getLogger().info("KeyEvent keyPressed " + aKeyCode);
+        }
+    }
+
+    @Export(name = "keyReleased")
+    private void keyReleased(int aKeyCode) {
+        if (runSceneStrategy.hasGameLoop()) {
+            requestFullScreen();
+            GameKeyCode theKeyCode = WASMKeyCodeTranslator.translate(aKeyCode);
+            runSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector().keyReleased(theKeyCode);
+            runSceneStrategy.getRunningGameLoop().getScene().getRuntime().getLogger().info("KeyEvent keyReleased " + aKeyCode);
+        }
     }
 
     private static void logException(Throwable e) {
