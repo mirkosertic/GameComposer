@@ -191,7 +191,7 @@ public class WASMRenderer {
     }
 
     @Export(name = "mouseDown")
-    private void mouseDown(float aClientX, float aClientY) {
+    public static void mouseDown(float aClientX, float aClientY) {
         if (runSceneStrategy.hasGameLoop()) {
             requestFullScreen();
             runSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector().mousePressed(
@@ -201,7 +201,7 @@ public class WASMRenderer {
     }
 
     @Export(name = "mouseUp")
-    private void mouseUp(float aClientX, float aClientY) {
+    public static void mouseUp(float aClientX, float aClientY) {
         if (runSceneStrategy.hasGameLoop()) {
             requestFullScreen();
             runSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector().mouseReleased(
@@ -211,17 +211,17 @@ public class WASMRenderer {
     }
 
     @Export(name = "keyPressed")
-    private void keyPressed(int aKeyCode) {
+    public static void keyPressed(int aKeyCode) {
         if (runSceneStrategy.hasGameLoop()) {
             requestFullScreen();
-            GameKeyCode theKeyCode = WASMKeyCodeTranslator.translate(aKeyCode);
+            GameKeyCode theKeyCode = WASMKeyCodeTranslator.translate((int) aKeyCode);
             runSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector().keyPressed(theKeyCode);
             runSceneStrategy.getRunningGameLoop().getScene().getRuntime().getLogger().info("KeyEvent keyPressed " + aKeyCode);
         }
     }
 
     @Export(name = "keyReleased")
-    private void keyReleased(int aKeyCode) {
+    public static void keyReleased(int aKeyCode) {
         if (runSceneStrategy.hasGameLoop()) {
             requestFullScreen();
             GameKeyCode theKeyCode = WASMKeyCodeTranslator.translate(aKeyCode);
