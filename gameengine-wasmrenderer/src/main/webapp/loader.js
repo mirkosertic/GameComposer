@@ -103,6 +103,9 @@ var TeaVM = function() {
                     towlower: function(c) {
                         return c
                     },
+                    tolower: function(c) {
+                        return c
+                    },
                     getNaN: function() {
                         return NaN;
                     },
