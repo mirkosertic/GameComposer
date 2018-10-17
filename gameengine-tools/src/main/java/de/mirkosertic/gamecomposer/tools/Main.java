@@ -45,7 +45,7 @@ public class Main {
         theExporter.export(theGameDirectory, theTargetDirectory, new Exporter.Callback() {
             @Override
             public void updateStatus(String aStatusMessage) {
-                LOG.info(aStatusMessage);
+                LOG.log(Level.FINE, aStatusMessage);
             }
         });
     }
