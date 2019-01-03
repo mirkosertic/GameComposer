@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <meta http-equiv="cache-control" content="max-age=0" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="expires" content="0" />
+    <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+    <meta http-equiv="pragma" content="no-cache" />
+
+    <script type="text/javascript" charset="utf-8" src="bower_components/pixi.js/dist/pixi.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: black;
+        }
+
+        .mainCanvas {
+            border: 0;
+            padding: 0;
+            z-index: 99;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+        }
+    </style>
+    <script src="bytecoder_wasmbindings.js" type="text/javascript"></script>
+</head>
+<body>
+    <canvas id="html5canvas" class="mainCanvas"/>
+    <script language="JavaScript">
+
+        bytecoder.imports.renderer.autodetectRendererINTINTHTMLCanvasElement = function(UNUSED, aWidth, aHeight, aCanvasElement) {
+            return bytecoder.toBytecoderReference(PIXI.autoDetectRenderer(aWidth, aHeight, {
+                view: bytecoder.referenceTable[aCanvasElement]
+            }));
+        };
+        bytecoder.imports.container.createContainer = function(UNUSED) {
+            return bytecoder.toBytecoderReference(new PIXI.Container());
+        };
+        bytecoder.imports.graphics.createGraphics = function(UNUSED) {
+            return bytecoder.toBytecoderReference(new PIXI.Graphics());
+        };
+
+        var instantiated = function(result) {
+            bytecoder.init(result.instance);
+
+            bytecoder.exports.initMemory(0);
+            console.log("Memory initialized");
+            bytecoder.exports.bootstrap(0);
+            console.log("Bootstrapped");
+            bytecoder.exports.main(0);
+            console.log("Ready for action!");
+        };
+
+        // Try to load the WASM file
+        WebAssembly.instantiateStreaming(fetch('bytecoder.wasm'), bytecoder.imports)
+            .then(instantiated)
+            .catch(function(error) {
+                console.log("Using fallback method to load WebAssembly! Check if mime types for WebAssembly are configured correctly!")
+                var request = new XMLHttpRequest();
+                request.open('GET', 'bytecoder.wasm');
+                request.responseType = 'arraybuffer';
+                request.send();
+
+                request.onload = function() {
+                    var bytes = request.response;
+                    WebAssembly.instantiate(bytes, bytecoder.imports).then(instantiated);
+                };
+            });
+    </script>
+</body>
+</html>

@@ -28,6 +28,7 @@
         <module>gameengine-wasmrenderer</module>
         <module>gameengine-dragomerenderer</module>
         <module>gameengine-cordovarenderer</module>
+        <module>gameengine-bytecoderrenderer</module>
         <module>gameengine-tools</module>
         <module>gameengine-editor</module>
         <module>gamecomposer</module>
@@ -137,6 +138,12 @@
             </dependency>
             <dependency>
                 <groupId>de.mirkosertic</groupId>
+                <artifactId>gameengine-bytecoderrenderer</artifactId>
+                <version>${project.version}</version>
+                <type>war</type>
+            </dependency>
+            <dependency>
+                <groupId>de.mirkosertic</groupId>
                 <artifactId>gameengine-dragomerenderer</artifactId>
                 <version>${project.version}</version>
                 <type>war</type>
@@ -155,7 +162,8 @@
     </dependencyManagement>
 
     <properties>
-        <teavm.version>0.5.0-SNAPSHOT</teavm.version>
+        <teavm.version>0.5.1</teavm.version>
+        <bytecoder.version>0-SNAPSHOT</bytecoder.version>
     </properties>
 
     <build>
