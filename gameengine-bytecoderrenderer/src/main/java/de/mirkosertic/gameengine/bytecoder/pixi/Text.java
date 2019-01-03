@@ -16,36 +16,14 @@
 package de.mirkosertic.gameengine.bytecoder.pixi;
 
 import de.mirkosertic.bytecoder.api.OpaqueProperty;
-import de.mirkosertic.bytecoder.api.OpaqueReferenceType;
 
-public interface DisplayObject extends OpaqueReferenceType {
+public abstract class Text implements DisplayObject {
 
-    public abstract void destroy();
-
-    @OpaqueProperty
-    public abstract Point position();
+    public static native Text createText(String aText);
 
     @OpaqueProperty
-    public abstract Point scale();
+    public abstract Style style();
 
     @OpaqueProperty
-    public abstract void rotation(float aRotationInRadians);
-
-    @OpaqueProperty
-    public abstract Point pivot();
-
-    @OpaqueProperty
-    public abstract void width(int aWidth);
-
-    @OpaqueProperty
-    public abstract void height(int aHeight);
-
-    @OpaqueProperty
-    public abstract void zOrder(int aIndex);
-
-    @OpaqueProperty
-    public abstract int zOrder();
-
-    @OpaqueProperty
-    public abstract void alpha(float alpha);
+    public abstract void text(String aText);
 }

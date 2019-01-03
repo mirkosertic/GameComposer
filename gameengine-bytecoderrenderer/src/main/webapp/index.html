@@ -43,6 +43,9 @@
         bytecoder.imports.graphics.createGraphics = function(UNUSED) {
             return bytecoder.toBytecoderReference(new PIXI.Graphics());
         };
+        bytecoder.imports.text.createTextString = function(UNUSED, aText) {
+            return bytecoder.toBytecoderReference(new PIXI.Text(bytecoder.toJSString(aText)));
+        };
 
         var instantiated = function(result) {
             bytecoder.init(result.instance);
