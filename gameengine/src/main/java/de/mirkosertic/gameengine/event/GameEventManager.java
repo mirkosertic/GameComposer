@@ -60,7 +60,7 @@ public class GameEventManager implements GameEventListener {
 
     public void fire(GameEvent aEvent) {
         try {
-            logger.info("Firing event of type " + aEvent.getClass().getName());
+            logger.info("Firing event of type " + aEvent.getType().getType());
 
             for (GameEventListener theListener : catchAllEventListener) {
                 theListener.handleGameEvent(aEvent);
