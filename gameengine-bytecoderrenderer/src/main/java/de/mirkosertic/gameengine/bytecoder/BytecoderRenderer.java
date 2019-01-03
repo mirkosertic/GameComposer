@@ -16,6 +16,7 @@
 package de.mirkosertic.gameengine.bytecoder;
 
 import de.mirkosertic.bytecoder.api.Export;
+import de.mirkosertic.bytecoder.api.web.ClickEvent;
 import de.mirkosertic.bytecoder.api.web.EventTarget;
 import de.mirkosertic.bytecoder.api.web.HTMLCanvasElement;
 import de.mirkosertic.bytecoder.api.web.HTMLDocument;
@@ -35,6 +36,7 @@ import de.mirkosertic.gameengine.core.PlaySceneStrategy;
 import de.mirkosertic.gameengine.network.DefaultNetworkConnector;
 import de.mirkosertic.gameengine.network.NetworkConnector;
 import de.mirkosertic.gameengine.sound.GameSoundSystemFactory;
+import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Size;
 
 public class BytecoderRenderer {
@@ -135,7 +137,26 @@ public class BytecoderRenderer {
                 runSceneStrategy.handleResize();
             }
         });
+        aCanvas.addEventListener("mousedown", aEvent -> mouseDown((ClickEvent) aEvent));
+        aCanvas.addEventListener("mouseup", aEvent -> mouseUp((ClickEvent) aEvent));
     }
+
+    private static void mouseDown(ClickEvent aEvent) {
+        if (runSceneStrategy.hasGameLoop()) {
+            runSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector().mousePressed(
+                    new Position(aEvent.clientX(), aEvent.clientY())
+            );
+        }
+    }
+
+    private static void mouseUp(ClickEvent aEvent) {
+        if (runSceneStrategy.hasGameLoop()) {
+            runSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector().mouseReleased(
+                    new Position(aEvent.clientX(), aEvent.clientY())
+            );
+        }
+    }
+
 
     private static void loadOtherSceneFromWithinGame(Game aGame, String aSceneID) {
         sceneLoader.loadFromServer(aGame, aSceneID, new BytecoderGameResourceLoader(aSceneID)).thenContinue(
