@@ -21,7 +21,7 @@ import de.mirkosertic.gameengine.type.ResourceName;
 
 public class Track {
 
-    private static final Animation COLUMN = new Animation("Lala").addToAnimationSequence(new ResourceName("/assets/sprites/column.png"));
+    private static final Animation COLUMN = new Animation("Lala");
     private static final Sprite[] SPRITES = new Sprite[] {
         new Sprite(COLUMN, -3, -1, 2, 2, 4)
     };
