@@ -49,6 +49,11 @@
                 return bytecoder.toBytecoderReference(new PIXI.Graphics());
             }
         };
+        bytecoder.imports.text = {
+            createTextString : function(aText) {
+                return bytecoder.toBytecoderReference(new PIXI.Text(bytecoder.toJSString(aText)));
+            }
+        };
 
         bytecoder.bootstrap();
         console.log("Bootstrapped");

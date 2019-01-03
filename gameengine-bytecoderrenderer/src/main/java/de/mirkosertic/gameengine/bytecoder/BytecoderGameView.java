@@ -22,6 +22,8 @@ import de.mirkosertic.gameengine.bytecoder.pixi.Container;
 import de.mirkosertic.gameengine.bytecoder.pixi.DisplayObject;
 import de.mirkosertic.gameengine.bytecoder.pixi.Graphics;
 import de.mirkosertic.gameengine.bytecoder.pixi.Renderer;
+import de.mirkosertic.gameengine.bytecoder.pixi.Style;
+import de.mirkosertic.gameengine.bytecoder.pixi.Text;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
 import de.mirkosertic.gameengine.core.GameObjectInstance;
 import de.mirkosertic.gameengine.core.GameResource;
@@ -96,6 +98,29 @@ public class BytecoderGameView extends GenericAbstractGameView {
     @Override
     protected void drawText(String aID, Position aPositionOnScreen, Angle aAngle, Position aCenterOffset, Font aFont,
             Color aColor, String aText, Size aSize, boolean aVisible) {
+        Text theCurrentObject = instanceCache.getOrCreate(aID, () -> {
+            Text theText = Text.createText(aText);
+            theText.scale().set(1, 1);
+            theText.pivot().set(aCenterOffset.x, aCenterOffset.y);
+            return theText;
+        }, 0);
+
+        if (aVisible) {
+            theCurrentObject.alpha(1f);
+        } else {
+            theCurrentObject.alpha(0.3f);
+        }
+
+        Style theStyle = theCurrentObject.style();
+        theStyle.fontFamily(CSSUtils.toFontFamily(aFont));
+        theStyle.fontSize(aFont.size+"px");
+        theStyle.fill(cssCache.toColor(aColor));
+        theStyle.stroke(cssCache.toColor(aColor));
+        theCurrentObject.text(aText);
+
+        // Update the position and all the other stuff
+        theCurrentObject.position().set(aPositionOnScreen.x + aCenterOffset.x, aPositionOnScreen.y + aCenterOffset.y);
+        theCurrentObject.rotation(aAngle.toRadians());
     }
 
     @Override
@@ -104,7 +129,7 @@ public class BytecoderGameView extends GenericAbstractGameView {
         String theInstanceID = aInstance.uuidProperty().get();
         Graphics theCurrentObject = instanceCache.getOrCreate(theInstanceID, () -> {
             Graphics theCurrentObject1 = Graphics.createGraphics();
-            theCurrentObject1.getScale().set(1, 1);
+            theCurrentObject1.scale().set(1, 1);
             theCurrentObject1.pivot().set(aCenterOffset.x, aCenterOffset.y);
             theCurrentObject1.width(aSize.width);
             theCurrentObject1.height(aSize.height);
