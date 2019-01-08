@@ -36,9 +36,11 @@ public class BytecoderLogger implements Logger {
 
     @Override
     public void time(String aLabel) {
+        console.profileTime(aLabel);
     }
 
     @Override
     public void timeEnd(String aLabel) {
+        console.profileTimeEnd(aLabel);
     }
 }
