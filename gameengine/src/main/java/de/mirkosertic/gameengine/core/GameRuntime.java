@@ -36,7 +36,7 @@ public class GameRuntime {
         logger = aLogger;
         eventManager = aEventManager;
         systems = new GameSystem[0];
-        gameResourceCache = new GameResourceCache(aResourceLoader);
+        gameResourceCache = new GameResourceCache(aResourceLoader, aLogger);
         scriptEngineFactory = aScriptEngineFactory;
     }
 

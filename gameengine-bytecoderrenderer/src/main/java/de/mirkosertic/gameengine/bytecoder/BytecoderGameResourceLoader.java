@@ -15,6 +15,10 @@
  */
 package de.mirkosertic.gameengine.bytecoder;
 
+import de.mirkosertic.gameengine.bytecoder.pixi.Loader;
+import de.mirkosertic.gameengine.bytecoder.pixi.LoaderResource;
+import de.mirkosertic.gameengine.bytecoder.pixi.SpritesheetJSONResource;
+import de.mirkosertic.gameengine.bytecoder.pixi.Texture;
 import de.mirkosertic.gameengine.core.GameResource;
 import de.mirkosertic.gameengine.core.GameResourceLoader;
 import de.mirkosertic.gameengine.core.GameResourceType;
@@ -24,26 +28,28 @@ import de.mirkosertic.gameengine.core.PromiseRejector;
 import de.mirkosertic.gameengine.core.PromiseResolver;
 import de.mirkosertic.gameengine.type.ResourceName;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class BytecoderGameResourceLoader implements GameResourceLoader {
 
     private final String sceneId;
+    private final Map<ResourceName, BytecoderTextureResource> textureResources;
+
 
     public BytecoderGameResourceLoader(String sceneId) {
         this.sceneId = sceneId;
+        this.textureResources = new HashMap<>();
     }
 
     @Override
     public Promise<GameResource, String> load(ResourceName aResourceName) {
-        BytecoderLogger.INSTANCE.info("Finishing Game resource loading");
+        BytecoderLogger.INSTANCE.info("Trying to load game resouce " + aResourceName.name);
+        ResourceName theNewResourceName = new ResourceName(sceneId + aResourceName.name.replace('\\', '/'));
         return new Promise<>(new Promise.Executor() {
             @Override
             public void process(PromiseResolver aResolver, PromiseRejector aRejector) {
-                aResolver.resolve(new GameResource() {
-                    @Override
-                    public GameResourceType getType() {
-                        return GameResourceType.BITMAP;
-                    }
-                });
+                aResolver.resolve(convert(theNewResourceName, theNewResourceName));
             }
         });
     }
@@ -54,23 +60,44 @@ public class BytecoderGameResourceLoader implements GameResourceLoader {
         return new Promise<>(new Promise.Executor() {
             @Override
             public void process(PromiseResolver aResolver, PromiseRejector aRejector) {
-                BytecoderLogger.INSTANCE.info("Finishing Sprite Sheet loading");
-                aResolver.resolve(new LoadedSpriteSheet() {
-                    @Override
-                    public GameResource getResourceFor(ResourceName aResourceName) {
-                        return new GameResource() {
-                            @Override
-                            public GameResourceType getType() {
-                                return GameResourceType.BITMAP;
-                            }
-                        };
+                ResourceName theNewResourceName = new ResourceName(sceneId + aResourceName.name.replace('\\', '/'));
+
+                Loader theLoader = Loader.create();
+                final String thePath = theNewResourceName.name.replace('\\', '/');
+
+                BytecoderLogger.INSTANCE.info("Trying to load sprite sheet " + thePath);
+
+                theLoader.add(thePath);
+                theLoader.load((aLoader, aResources) -> {
+                    BytecoderLogger.INSTANCE.info("Got result from loader");
+                    LoaderResource theLoadedJSON = Loader.resourceByName(aResources, thePath);
+                    if (theLoadedJSON != null) {
+                        BytecoderLogger.INSTANCE.info("Done loading");
+                        aResolver.resolve(new BytecoderLoadedSpriteSheet((SpritesheetJSONResource) theLoadedJSON.getData()));
+                    } else {
+                        BytecoderLogger.INSTANCE.error("Failed to load!");
                     }
                 });
             }
         });
     }
 
+    protected GameResource convert(ResourceName aOriginalResourceName, ResourceName aResourceName) {
+        BytecoderTextureResource theResource = textureResources.get(aResourceName);
+        if (theResource == null) {
+            Texture theTexture = Texture.createTextureFromImage(aResourceName.name);
+            theResource = new BytecoderTextureResource(theTexture, aResourceName.name);
+            textureResources.put(aResourceName, theResource);
+        }
+
+        return theResource;
+    }
+
     @Override
     public void flush() {
+        for (Map.Entry<ResourceName, BytecoderTextureResource> aEntry : textureResources.entrySet()) {
+            aEntry.getValue().getTexture().destroy();
+        }
+        textureResources.clear();
     }
 }

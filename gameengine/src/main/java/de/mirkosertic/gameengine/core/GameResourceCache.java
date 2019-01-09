@@ -26,21 +26,26 @@ public class GameResourceCache {
 
     private final Map<String, GameResource> cachedResources;
     private final GameResourceLoader resourceLoader;
+    private final Logger logger;
     private LoadedSpriteSheet[] loadedSpriteSheets;
 
-    public GameResourceCache(GameResourceLoader aResourceLoader) {
+    public GameResourceCache(GameResourceLoader aResourceLoader, final Logger aLogger) {
         cachedResources = new HashMap<>();
         resourceLoader = aResourceLoader;
         loadedSpriteSheets = new LoadedSpriteSheet[0];
+        logger = aLogger;
     }
 
     public Promise<Spritesheet, String> loadIntoCache(final Spritesheet aSheet) {
+        logger.info("Loading sprite sheet into cache");
         return new Promise<>(new Promise.Executor() {
             @Override
             public void process(final PromiseResolver aResolver, PromiseRejector aRejector) {
+                logger.info("Delegating to resource loader");
                 resourceLoader.loadSpriteSheet(aSheet.jsonFileProperty().get()).thenContinue(new Promise.NoReturnHandler<LoadedSpriteSheet>() {
                     @Override
                     public void process(LoadedSpriteSheet aResult) {
+                        logger.info("Got sprite sheet for cache");
                         List<LoadedSpriteSheet> theSheets = ArrayUtils.asList(loadedSpriteSheets);
                         theSheets.add(aResult);
                         loadedSpriteSheets = theSheets.toArray(new LoadedSpriteSheet[theSheets.size()]);

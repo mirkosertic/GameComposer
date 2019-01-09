@@ -15,13 +15,11 @@
  */
 package de.mirkosertic.gameengine.bytecoder;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import de.mirkosertic.gameengine.bytecoder.pixi.Container;
 import de.mirkosertic.gameengine.bytecoder.pixi.DisplayObject;
 import de.mirkosertic.gameengine.bytecoder.pixi.Graphics;
 import de.mirkosertic.gameengine.bytecoder.pixi.Renderer;
+import de.mirkosertic.gameengine.bytecoder.pixi.Sprite;
 import de.mirkosertic.gameengine.bytecoder.pixi.Style;
 import de.mirkosertic.gameengine.bytecoder.pixi.Text;
 import de.mirkosertic.gameengine.camera.CameraBehavior;
@@ -39,6 +37,9 @@ import de.mirkosertic.gameengine.type.EffectCanvas;
 import de.mirkosertic.gameengine.type.Font;
 import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Size;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class BytecoderGameView extends GenericAbstractGameView {
 
@@ -93,6 +94,24 @@ public class BytecoderGameView extends GenericAbstractGameView {
     @Override
     protected void drawImage(GameObjectInstance aInstance, Position aPositionOnScreen, Position aCenterOffset,
             GameResource aResource) {
+        String theInstanceID = aInstance.uuidProperty().get();
+        Sprite theCurrentObject = instanceCache.getOrCreate(theInstanceID, () -> {
+            BytecoderTextureResource theTexture = (BytecoderTextureResource) aResource;
+            Sprite theSprite =  Sprite.createSprite(theTexture.getTexture());
+            theSprite.scale().set(1, 1);
+            theSprite.pivot().set(aCenterOffset.x, aCenterOffset.y);
+            return theSprite;
+        }, 0);
+
+        if (aInstance.visibleProperty().get()) {
+            theCurrentObject.alpha(1f);
+        } else {
+            theCurrentObject.alpha(0.3f);
+        }
+
+        // Update the position and all the other stuff
+        theCurrentObject.position().set(aPositionOnScreen.x + aCenterOffset.x, aPositionOnScreen.y + aCenterOffset.y);
+        theCurrentObject.rotation(aInstance.rotationAngleProperty().get().toRadians());
     }
 
     @Override
