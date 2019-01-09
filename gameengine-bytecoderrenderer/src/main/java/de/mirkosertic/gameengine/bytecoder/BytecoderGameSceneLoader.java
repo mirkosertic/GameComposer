@@ -15,8 +15,6 @@
  */
 package de.mirkosertic.gameengine.bytecoder;
 
-import java.util.Map;
-
 import de.mirkosertic.bytecoder.api.web.Response;
 import de.mirkosertic.bytecoder.api.web.StringPromise;
 import de.mirkosertic.bytecoder.api.web.WindowOrWorkerGlobalScope;
@@ -28,6 +26,8 @@ import de.mirkosertic.gameengine.core.Promise;
 import de.mirkosertic.gameengine.core.PromiseRejector;
 import de.mirkosertic.gameengine.core.PromiseResolver;
 import de.mirkosertic.gameengine.sound.GameSoundSystemFactory;
+
+import java.util.Map;
 
 public class BytecoderGameSceneLoader {
 
@@ -57,7 +57,7 @@ public class BytecoderGameSceneLoader {
                             public void handleString(String aValue) {
                                 Map<String, Object> theData = jsonParser.fromJSON(aValue);
 
-                                GameRuntime runtime = runtimeFactory.create(new BytecoderResourceLoader(aSceneName),
+                                GameRuntime runtime = runtimeFactory.create(new BytecoderGameResourceLoader(aSceneName),
                                         soundSystemFactory);
 
                                 aResolver.resolve(GameScene.deserialize(aGame, runtime, theData));

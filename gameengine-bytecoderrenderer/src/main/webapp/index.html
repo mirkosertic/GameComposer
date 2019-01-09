@@ -46,6 +46,41 @@
         bytecoder.imports.text.createTextString = function(UNUSED, aText) {
             return bytecoder.toBytecoderReference(new PIXI.Text(bytecoder.toJSString(aText)));
         };
+        bytecoder.imports.loader.create = function(UNUSED) {
+            var loader = new PIXI.loaders.Loader();
+            loader.pre(function(resource, chain) {
+               chain();
+            });
+            return bytecoder.toBytecoderReference(loader);
+        };
+        bytecoder.imports.sprite = {
+            createSpriteTexture : function(UNUSED, texture) {
+                return bytecoder.toBytecoderReference(new PIXI.Sprite(bytecoder.toJSReference(texture)));
+            }
+        };
+        bytecoder.imports.loader.resourceByNameLoader$ResourcesString = function(UNUSED, resources, name) {
+            var res = bytecoder.toJSReference(resources);
+            var n = bytecoder.toJSString(name);
+            return bytecoder.toBytecoderReference(res[n]);
+        };
+        bytecoder.imports.texture = {
+            createTextureFromImageString : function(UNUSED, aResourceName) {
+                return bytecoder.toBytecoderReference(PIXI.Texture.fromImage(bytecoder.toJSString(aResourceName)));
+            },
+            createFromFrameString : function(UNUSED, aResourceName) {
+                return bytecoder.toBytecoderReference(PIXI.Texture.fromFrame(bytecoder.toJSString(aResourceName)));
+            }
+        };
+        bytecoder.imports.bytecoderloadedspritesheet = {
+            keysOfOpaqueReferenceType: function(aUNUSED, aObject) {
+                var theObject = bytecoder.toJSReference(aObject);
+                return bytecoder.toBytecoderReference(Object.keys(theObject));
+            },
+            toFrameIDOpaqueReferenceType: function(aUNUSED, aObject) {
+                var theObject = bytecoder.toJSReference(aObject);
+                return bytecoder.toBytecoderString(theObject);
+            }
+        };
 
         var instantiated = function(result) {
             bytecoder.init(result.instance);

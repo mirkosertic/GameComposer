@@ -187,7 +187,7 @@ public abstract class PlaySceneStrategy {
                     Promise<Spritesheet, String>[] thePromises = new Promise[theSheets.length];
                     for (int i=0;i<theSheets.length;i++) {
 
-                        theRuntime.getLogger().info("Loading sprite sheet " + i);
+                        theRuntime.getLogger().info("Loading sprite sheet " + i + " " + theSheets[i].jsonFileProperty().get().get());
 
                         thePromises[i] = theRuntime.getResourceCache().loadIntoCache(theSheets[i]);
                     }
