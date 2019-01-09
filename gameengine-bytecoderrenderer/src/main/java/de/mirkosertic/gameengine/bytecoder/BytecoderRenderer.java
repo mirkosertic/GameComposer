@@ -20,6 +20,7 @@ import de.mirkosertic.bytecoder.api.web.ClickEvent;
 import de.mirkosertic.bytecoder.api.web.EventTarget;
 import de.mirkosertic.bytecoder.api.web.HTMLCanvasElement;
 import de.mirkosertic.bytecoder.api.web.HTMLDocument;
+import de.mirkosertic.bytecoder.api.web.KeyEvent;
 import de.mirkosertic.bytecoder.api.web.Window;
 import de.mirkosertic.gameengine.Version;
 import de.mirkosertic.gameengine.bytecoder.pixi.Renderer;
@@ -36,6 +37,7 @@ import de.mirkosertic.gameengine.core.PlaySceneStrategy;
 import de.mirkosertic.gameengine.network.DefaultNetworkConnector;
 import de.mirkosertic.gameengine.network.NetworkConnector;
 import de.mirkosertic.gameengine.sound.GameSoundSystemFactory;
+import de.mirkosertic.gameengine.type.GameKeyCode;
 import de.mirkosertic.gameengine.type.Position;
 import de.mirkosertic.gameengine.type.Size;
 
@@ -99,7 +101,7 @@ public class BytecoderRenderer {
 
                 @Override
                 protected Size getScreenSize() {
-                    return new Size(window.innerWidth(), window.innerHeight());
+                    return new Size((int) window.innerWidth(), (int) window.innerHeight());
                 }
 
                 @Override
@@ -139,6 +141,26 @@ public class BytecoderRenderer {
         });
         aCanvas.addEventListener("mousedown", aEvent -> mouseDown((ClickEvent) aEvent));
         aCanvas.addEventListener("mouseup", aEvent -> mouseUp((ClickEvent) aEvent));
+        document.addEventListener("keydown", aEvent -> keyPressed((KeyEvent) aEvent));
+        document.addEventListener("keyup", aEvent -> keyReleased((KeyEvent) aEvent));
+    }
+
+    private static void keyPressed(KeyEvent aEvent) {
+        if (runSceneStrategy.hasGameLoop()) {
+            int theCode = (int) aEvent.keyCode();
+            GameKeyCode theKeyCode = BytecoderKeyCodeTranslator.translate(theCode);
+            runSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector().keyPressed(theKeyCode);
+            BytecoderLogger.INSTANCE.info("KeyEvent keyPressed " + theCode);
+        }
+    }
+
+    private static void keyReleased(KeyEvent aEvent) {
+        if (runSceneStrategy.hasGameLoop()) {
+            int theCode = (int) aEvent.keyCode();
+            GameKeyCode theKeyCode = BytecoderKeyCodeTranslator.translate(theCode);
+            runSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector().keyReleased(theKeyCode);
+            BytecoderLogger.INSTANCE.info("KeyEvent keyReleased " + theCode);
+        }
     }
 
     private static void mouseDown(ClickEvent aEvent) {
@@ -174,7 +196,7 @@ public class BytecoderRenderer {
     }
 
     private static void playScene(GameScene aGameScene) {
-        BytecoderLogger.INSTANCE.info("Playing scene");
+        BytecoderLogger.INSTANCE.info("Playing scene " + aGameScene.nameProperty().get());
         runSceneStrategy.playScene(aGameScene).thenContinue(aResult -> {
             runSingleStep(runSceneStrategy.getRunningGameLoop());
         });
