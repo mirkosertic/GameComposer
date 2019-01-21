@@ -32,26 +32,50 @@
     <canvas id="html5canvas" class="mainCanvas"/>
     <script language="JavaScript">
 
-        bytecoder.imports.renderer = {
-            autodetectRendererINTINTHTMLCanvasElement : function(aWidth, aHeight, aCanvasElement) {
-                return PIXI.autoDetectRenderer(aWidth, aHeight, {
-                    view: aCanvasElement
-                });
+        bytecoder.imports.renderer.autodetectRendererINTINTHTMLCanvasElement = function(aWidth, aHeight, aCanvasElement) {
+            return PIXI.autoDetectRenderer(aWidth, aHeight, {
+                view: aCanvasElement
+            });
+        };
+        bytecoder.imports.container.createContainer = function() {
+            return new PIXI.Container();
+        };
+        bytecoder.imports.graphics.createGraphics = function() {
+            return new PIXI.Graphics();
+        };
+        bytecoder.imports.text.createTextString = function(aText) {
+            return new PIXI.Text(bytecoder.toJSString(aText));
+        };
+        bytecoder.imports.loader.create = function() {
+            var loader = new PIXI.loaders.Loader();
+            loader.pre(function(resource, chain) {
+                chain();
+            });
+            return loader;
+        };
+        bytecoder.imports.sprite = {
+            createSpriteTexture : function(texture) {
+                return new PIXI.Sprite(bytecoder.toJSReference(texture));
             }
         };
-        bytecoder.imports.container = {
-            createContainer : function() {
-                return new PIXI.Container();
+        bytecoder.imports.loader.resourceByNameLoader$ResourcesString = function(resources, name) {
+            var n = bytecoder.toJSString(name);
+            return resources[n];
+        };
+        bytecoder.imports.texture = {
+            createTextureFromImageString : function(aResourceName) {
+                return PIXI.Texture.fromImage(bytecoder.toJSString(aResourceName));
+            },
+            createFromFrameString : function(aResourceName) {
+                return PIXI.Texture.fromFrame(bytecoder.toJSString(aResourceName));
             }
         };
-        bytecoder.imports.graphics = {
-            createGraphics : function() {
-                return bytecoder.toBytecoderReference(new PIXI.Graphics());
-            }
-        };
-        bytecoder.imports.text = {
-            createTextString : function(aText) {
-                return bytecoder.toBytecoderReference(new PIXI.Text(bytecoder.toJSString(aText)));
+        bytecoder.imports.bytecoderloadedspritesheet = {
+            keysOfOpaqueReferenceType: function(aObject) {
+                return Object.keys(aObject);
+            },
+            toFrameIDOpaqueReferenceType: function(aObject) {
+                return bytecoder.toBytecoderString(aObject);
             }
         };
 
