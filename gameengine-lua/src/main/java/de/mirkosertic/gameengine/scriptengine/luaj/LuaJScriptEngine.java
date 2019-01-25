@@ -27,6 +27,7 @@ import de.mirkosertic.gameengine.type.Reflectable;
 import de.mirkosertic.gameengine.type.TypeConverters;
 
 import org.luaj.vm2.Globals;
+import org.luaj.vm2.LuaClosure;
 import org.luaj.vm2.LuaDouble;
 import org.luaj.vm2.LuaInteger;
 import org.luaj.vm2.LuaString;
@@ -62,17 +63,17 @@ public class LuaJScriptEngine implements LUAScriptEngine {
 
         // Objects are converted to plain tables
         LuaTable theTable = new LuaTable();
-        theTable.set("javaobject", LuaValue.userdataOf(aValue));
+        theTable.set(LuaString.valueOf("javaobject"), LuaValue.userdataOf(aValue));
         return theTable;
     }
 
     static void registerTo(LuaTable aTable, Reflectable aObject, KeyValueObjectCache aCache) {
         ClassInformation theClassInformation = aObject.getClassInformation();
         for (Field theField : theClassInformation.getFields()) {
-            aTable.set(theField.getName(), new FieldAccessFunction(aCache, aObject, theField));
+            aTable.set(LuaString.valueOf(theField.getName()), new FieldAccessFunction(aCache, aObject, theField));
         }
         for (Method theMethod : theClassInformation.getMethods()) {
-            aTable.set(theMethod.getName(), new MethodInvocationFunction(aCache, aObject, theMethod));
+            aTable.set(LuaString.valueOf(theMethod.getName()), new MethodInvocationFunction(aCache, aObject, theMethod));
         }
     }
 
@@ -80,7 +81,7 @@ public class LuaJScriptEngine implements LUAScriptEngine {
         LuaTable theTable = aCache.getObjectForKey(aObject);
         if (theTable == null) {
             theTable = new LuaTable();
-            theTable.set("javaobject", LuaValue.userdataOf(aObject));
+            theTable.set(LuaString.valueOf("javaobject"), LuaValue.userdataOf(aObject));
             registerTo(theTable, aObject, aCache);
 
             aCache.setObjectForKey(aObject, theTable);
@@ -94,7 +95,7 @@ public class LuaJScriptEngine implements LUAScriptEngine {
         }
         if (aValue.istable()) {
             LuaTable theTable = (LuaTable) aValue;
-            LuaValue theObject = theTable.get("javaobject");
+            LuaValue theObject = theTable.get(LuaString.valueOf("javaobject"));
             if (theObject.isuserdata()) {
                 return theObject.checkuserdata();
             }
@@ -124,7 +125,7 @@ public class LuaJScriptEngine implements LUAScriptEngine {
         if (aTargetClass == Double.class) {
             return aValue.todouble();
         }
-        if (aTargetClass == Object.class || aTargetClass == Number.class) {
+        if (aTargetClass == Object.class) {
             if (aValue.isint()) {
                 return aValue.toint();
             }
@@ -141,7 +142,7 @@ public class LuaJScriptEngine implements LUAScriptEngine {
         }
         if (aValue.istable()) {
             LuaTable theTable = (LuaTable) aValue;
-            LuaValue theObject = theTable.get("javaobject");
+            LuaValue theObject = theTable.get(LuaString.valueOf("javaobject"));
             if (theObject.isuserdata()) {
                 return theObject.checkuserdata();
             }
@@ -223,18 +224,13 @@ public class LuaJScriptEngine implements LUAScriptEngine {
     }
 
     private final Globals globals;
-    private final LuaValue methodToCall;
     private final KeyValueObjectCache cache;
+    private final String methodName;
 
     public LuaJScriptEngine(KeyValueObjectCache aCache, Globals aGlobals, String aMethodName) {
         globals = aGlobals;
         cache = aCache;
-
-        // Retrieve function from globals
-        methodToCall = globals.get(aMethodName);
-        if (methodToCall == null) {
-            throw new IllegalStateException("No "+aMethodName+" function defined");
-        }
+        methodName = aMethodName;
 
         // Register generic Type converters
         registerTo(globals, new TypeConverters(), cache);
@@ -247,13 +243,13 @@ public class LuaJScriptEngine implements LUAScriptEngine {
     @Override
     public void registerObject(String aObjectName, Reflectable aObject) {
         if (aObject != null) {
-            globals.set(aObjectName, toLuaValue(aObject, cache));
+            globals.set(LuaString.valueOf(aObjectName), toLuaValue(aObject, cache));
         }
     }
 
     @Override
     public void registerPrimitive(String aObjectName, long aValue) {
-        globals.set(aObjectName, LuaInteger.valueOf(aValue));
+        globals.set(LuaString.valueOf(aObjectName), LuaInteger.valueOf(aValue));
     }
 
     @Override
@@ -264,7 +260,9 @@ public class LuaJScriptEngine implements LUAScriptEngine {
             LuaInteger.valueOf(aElapsedTimeSinceLastLoop)
         });
 
-        Varargs theResult = methodToCall.invoke(theArguments);
+        LuaClosure theMethodToCall = (LuaClosure) globals.get(LuaString.valueOf(methodName));
+
+        Varargs theResult = theMethodToCall.invoke(theArguments);
         if (theResult.narg() == 1) {
             return toJavaValue(theResult.arg(1));
         }
@@ -278,7 +276,10 @@ public class LuaJScriptEngine implements LUAScriptEngine {
                     toLuaValue(aObjectInstance.getOwnerGameObject().getGameScene(), cache),
                     toLuaValue(aObjectInstance.getOwnerGameObject().getGameScene().getGame(), cache),
             });
-        Varargs theResult = methodToCall.invoke(theArguments);
+
+        LuaClosure theMethodToCall = (LuaClosure) globals.get(LuaString.valueOf(methodName));
+
+        Varargs theResult = theMethodToCall.invoke(theArguments);
         if (theResult.narg() == 1) {
             return toJavaValue(theResult.arg(1), String.class).toString();
         }
