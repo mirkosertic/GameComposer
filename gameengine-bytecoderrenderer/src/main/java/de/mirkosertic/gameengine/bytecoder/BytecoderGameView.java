@@ -47,12 +47,12 @@ public class BytecoderGameView extends GenericAbstractGameView {
     private final Map<String, DisplayObject> instances;
     private Container stage;
     private BytecoderInstanceCache instanceCache;
-    private CSSCache cssCache;
+    private final CSSCache cssCache;
 
-    public BytecoderGameView(GameRuntime aGameRuntime,
-            CameraBehavior aCameraBehavior,
-            GestureDetector aGestureDetector,
-            Renderer renderer) {
+    public BytecoderGameView(final GameRuntime aGameRuntime,
+                             final CameraBehavior aCameraBehavior,
+                             final GestureDetector aGestureDetector,
+                             final Renderer renderer) {
         super(aGameRuntime, aCameraBehavior, aGestureDetector);
         this.renderer = renderer;
         cssCache = new CSSCache();
@@ -62,42 +62,42 @@ public class BytecoderGameView extends GenericAbstractGameView {
     }
 
     @Override
-    public void prepareNewScene(GameRuntime aGameRuntime, CameraBehavior aCameraBehavior, GestureDetector aGestureDetector) {
+    public void prepareNewScene(final GameRuntime aGameRuntime, final CameraBehavior aCameraBehavior, final GestureDetector aGestureDetector) {
         super.prepareNewScene(aGameRuntime, aCameraBehavior, aGestureDetector);
 
-        for (Map.Entry<String, DisplayObject> theEntry : instances.entrySet()) {
-            theEntry.getValue().destroy();
+        for (final Map.Entry<String, DisplayObject> theEntry : instances.entrySet()) {
+            theEntry.getValue().destroyDisplayObject();
         }
         instances.clear();
-        stage.destroy();
+        stage.destroyDisplayObject();
         stage = Container.createContainer();
         instanceCache = new BytecoderInstanceCache(stage);
     }
 
     @Override
-    protected boolean beginFrame(GameScene aScene) {
+    protected boolean beginFrame(final GameScene aScene) {
         renderer.backgroundColor(CSSUtils.toInt(aScene.backgroundColorProperty().get()));
         instanceCache.clearTouchedInstances();
         return true;
     }
 
     @Override
-    protected void touched(GameObjectInstance aInstance) {
+    protected void touched(final GameObjectInstance aInstance) {
         instanceCache.touch(aInstance.uuidProperty().get());
     }
 
     @Override
-    protected void beforeInstance(GameObjectInstance aInstance, Position aPositionOnScreen, Position aCenterOffset,
-            Angle aRotation) {
+    protected void beforeInstance(final GameObjectInstance aInstance, final Position aPositionOnScreen, final Position aCenterOffset,
+                                  final Angle aRotation) {
     }
 
     @Override
-    protected void drawImage(GameObjectInstance aInstance, Position aPositionOnScreen, Position aCenterOffset,
-            GameResource aResource) {
-        String theInstanceID = aInstance.uuidProperty().get();
-        Sprite theCurrentObject = instanceCache.getOrCreate(theInstanceID, () -> {
-            BytecoderTextureResource theTexture = (BytecoderTextureResource) aResource;
-            Sprite theSprite =  Sprite.createSprite(theTexture.getTexture());
+    protected void drawImage(final GameObjectInstance aInstance, final Position aPositionOnScreen, final Position aCenterOffset,
+                             final GameResource aResource) {
+        final String theInstanceID = aInstance.uuidProperty().get();
+        final Sprite theCurrentObject = instanceCache.getOrCreate(theInstanceID, () -> {
+            final BytecoderTextureResource theTexture = (BytecoderTextureResource) aResource;
+            final Sprite theSprite =  Sprite.createSprite(theTexture.getTexture());
             theSprite.scale().set(1, 1);
             theSprite.pivot().set(aCenterOffset.x, aCenterOffset.y);
             return theSprite;
@@ -115,10 +115,10 @@ public class BytecoderGameView extends GenericAbstractGameView {
     }
 
     @Override
-    protected void drawText(String aID, Position aPositionOnScreen, Angle aAngle, Position aCenterOffset, Font aFont,
-            Color aColor, String aText, Size aSize, boolean aVisible) {
-        Text theCurrentObject = instanceCache.getOrCreate(aID, () -> {
-            Text theText = Text.createText(aText);
+    protected void drawText(final String aID, final Position aPositionOnScreen, final Angle aAngle, final Position aCenterOffset, final Font aFont,
+                            final Color aColor, final String aText, final Size aSize, final boolean aVisible) {
+        final Text theCurrentObject = instanceCache.getOrCreate(aID, () -> {
+            final Text theText = Text.createText(aText);
             theText.scale().set(1, 1);
             theText.pivot().set(aCenterOffset.x, aCenterOffset.y);
             return theText;
@@ -130,7 +130,7 @@ public class BytecoderGameView extends GenericAbstractGameView {
             theCurrentObject.alpha(0.3f);
         }
 
-        Style theStyle = theCurrentObject.style();
+        final Style theStyle = theCurrentObject.style();
         theStyle.fontFamily(CSSUtils.toFontFamily(aFont));
         theStyle.fontSize(aFont.size+"px");
         theStyle.fill(cssCache.toColor(aColor));
@@ -143,11 +143,11 @@ public class BytecoderGameView extends GenericAbstractGameView {
     }
 
     @Override
-    protected void drawRect(GameObjectInstance aInstance, Position aPositionOnScreen, Position aCenterOffset,
-            Color aColor, Size aSize) {
-        String theInstanceID = aInstance.uuidProperty().get();
-        Graphics theCurrentObject = instanceCache.getOrCreate(theInstanceID, () -> {
-            Graphics theCurrentObject1 = Graphics.createGraphics();
+    protected void drawRect(final GameObjectInstance aInstance, final Position aPositionOnScreen, final Position aCenterOffset,
+                            final Color aColor, final Size aSize) {
+        final String theInstanceID = aInstance.uuidProperty().get();
+        final Graphics theCurrentObject = instanceCache.getOrCreate(theInstanceID, () -> {
+            final Graphics theCurrentObject1 = Graphics.createGraphics();
             theCurrentObject1.scale().set(1, 1);
             theCurrentObject1.pivot().set(aCenterOffset.x, aCenterOffset.y);
             theCurrentObject1.width(aSize.width);
@@ -169,7 +169,7 @@ public class BytecoderGameView extends GenericAbstractGameView {
     }
 
     @Override
-    protected void afterInstance(GameObjectInstance aInstance, Position aPositionOnScreen) {
+    protected void afterInstance(final GameObjectInstance aInstance, final Position aPositionOnScreen) {
     }
 
     @Override
@@ -190,23 +190,23 @@ public class BytecoderGameView extends GenericAbstractGameView {
     protected EffectCanvas createEffectCanvas() {
         return new EffectCanvas() {
             @Override
-            public void drawSingleDot(String aObjectIdentifier, Position aPosition, Color aColor, int aZIndex) {
+            public void drawSingleDot(final String aObjectIdentifier, final Position aPosition, final Color aColor, final int aZIndex) {
             }
 
             @Override
-            public void fillRectangle(String aObjectIdentifier, int aX0, int aY0, int aX1, int aY1, int aX2, int aY2,
-                    int aX3, int aY3, Color aColor, int aZIndex) {
+            public void fillRectangle(final String aObjectIdentifier, final int aX0, final int aY0, final int aX1, final int aY1, final int aX2, final int aY2,
+                                      final int aX3, final int aY3, final Color aColor, final int aZIndex) {
             }
 
             @Override
-            public void fillRectangle(String aObjectIdentifier, GameResource aTexture, int aX0, int aY0, int aX1,
-                    int aY1, int aX2, int aY2, int aX3, int aY3, double aU0, double aV0, double aU1, double aV1, double aU2,
-                    double aV2, double aU3, double aV3, int aZIndex) {
+            public void fillRectangle(final String aObjectIdentifier, final GameResource aTexture, final int aX0, final int aY0, final int aX1,
+                                      final int aY1, final int aX2, final int aY2, final int aX3, final int aY3, final double aU0, final double aV0, final double aU1, final double aV1, final double aU2,
+                                      final double aV2, final double aU3, final double aV3, final int aZIndex) {
             }
         };
     }
 
-    public void setSize(Size screenSize) {
+    public void setSize(final Size screenSize) {
         super.setCurrentScreenSize(screenSize);
         renderer.resize(screenSize.width, screenSize.height);
     }
