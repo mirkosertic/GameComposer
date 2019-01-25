@@ -33,7 +33,7 @@ public abstract class Renderer implements OpaqueReferenceType {
     public abstract void backgroundColor(int aColor);
 
     @OpaqueProperty
-    public abstract int type();
+    public abstract int rendererType();
 
     public abstract void resize(int aWidth, int aHeight);
 }

@@ -17,7 +17,6 @@ package de.mirkosertic.gameengine.bytecoder;
 
 import de.mirkosertic.bytecoder.api.Export;
 import de.mirkosertic.bytecoder.api.web.ClickEvent;
-import de.mirkosertic.bytecoder.api.web.EventTarget;
 import de.mirkosertic.bytecoder.api.web.HTMLCanvasElement;
 import de.mirkosertic.bytecoder.api.web.HTMLDocument;
 import de.mirkosertic.bytecoder.api.web.KeyEvent;
@@ -34,6 +33,7 @@ import de.mirkosertic.gameengine.core.GameScene;
 import de.mirkosertic.gameengine.core.GameView;
 import de.mirkosertic.gameengine.core.GestureDetector;
 import de.mirkosertic.gameengine.core.PlaySceneStrategy;
+import de.mirkosertic.gameengine.core.Promise;
 import de.mirkosertic.gameengine.network.DefaultNetworkConnector;
 import de.mirkosertic.gameengine.network.NetworkConnector;
 import de.mirkosertic.gameengine.sound.GameSoundSystemFactory;
@@ -53,10 +53,10 @@ public class BytecoderRenderer {
     private static GameSoundSystemFactory soundSystemFactory;
 
     @Export("main")
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         window = Window.window();
-        HTMLDocument document = window.document();
-        HTMLCanvasElement aCanvas = (HTMLCanvasElement) document.getElementById("html5canvas");
+        final HTMLDocument document = window.document();
+        final HTMLCanvasElement aCanvas = (HTMLCanvasElement) document.getElementById("html5canvas");
 
         BytecoderLogger.INSTANCE.info("Starting GameEngine " + Version.VERSION);
 
@@ -69,7 +69,7 @@ public class BytecoderRenderer {
         // Initialize PIXI
         final Renderer theRenderer = Renderer.autodetectRenderer(320, 200, aCanvas);
 
-        switch (theRenderer.type()) {
+        switch (theRenderer.rendererType()) {
         case Renderer.TYPE_WEBGL:
             BytecoderLogger.INSTANCE.info("Using: WebGL Renderer");
             break;
@@ -95,7 +95,7 @@ public class BytecoderRenderer {
                 private BytecoderGameView gameView;
 
                 @Override
-                protected void loadOtherScene(String aSceneId) {
+                protected void loadOtherScene(final String aSceneId) {
                     loadOtherSceneFromWithinGame(game, aSceneId);
                 }
 
@@ -106,7 +106,7 @@ public class BytecoderRenderer {
 
                 @Override
                 protected GameView getOrCreateCurrentGameView(
-                        GameRuntime aGameRuntime, CameraBehavior aCamera, GestureDetector aGestureDetector) {
+                        final GameRuntime aGameRuntime, final CameraBehavior aCamera, final GestureDetector aGestureDetector) {
                     if (gameView == null) {
                         gameView = new BytecoderGameView(aGameRuntime, aCamera, aGestureDetector, theRenderer);
                     } else {
@@ -118,7 +118,7 @@ public class BytecoderRenderer {
 
                 @Override
                 public void handleResize() {
-                    Size theCurrentSize = getScreenSize();
+                    final Size theCurrentSize = getScreenSize();
                     getRunningGameLoop().getScene().getRuntime().getEventManager().fire(new SetScreenResolution(theCurrentSize));
                     gameView.setSize(theCurrentSize);
                 }
@@ -127,12 +127,13 @@ public class BytecoderRenderer {
             String theSceneId = aResult.defaultSceneProperty().get();
 
             sceneLoader.loadFromServer(game, theSceneId, new BytecoderGameResourceLoader(theSceneId)).thenContinue(
-                    aResult1 -> {
-                        playScene(aResult1);
+                    new Promise.NoReturnHandler<GameScene>() {
+                        @Override
+                        public void process(final GameScene aResult) {
+                            playScene(aResult);
+                        }
                     });
         }).catchError((aResult, aOptionalException) -> BytecoderLogger.INSTANCE.error("Failed to load scene : " + aResult));
-
-        EventTarget documentEventTarget = document;
 
         window.addEventListener("resize", evt -> {
             if (runSceneStrategy.hasGameLoop()) {
@@ -145,25 +146,25 @@ public class BytecoderRenderer {
         document.addEventListener("keyup", aEvent -> keyReleased((KeyEvent) aEvent));
     }
 
-    private static void keyPressed(KeyEvent aEvent) {
+    private static void keyPressed(final KeyEvent aEvent) {
         if (runSceneStrategy.hasGameLoop()) {
-            int theCode = (int) aEvent.keyCode();
-            GameKeyCode theKeyCode = BytecoderKeyCodeTranslator.translate(theCode);
+            final int theCode = (int) aEvent.keyCode();
+            final GameKeyCode theKeyCode = BytecoderKeyCodeTranslator.translate(theCode);
             runSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector().keyPressed(theKeyCode);
             BytecoderLogger.INSTANCE.info("KeyEvent keyPressed " + theCode);
         }
     }
 
-    private static void keyReleased(KeyEvent aEvent) {
+    private static void keyReleased(final KeyEvent aEvent) {
         if (runSceneStrategy.hasGameLoop()) {
-            int theCode = (int) aEvent.keyCode();
-            GameKeyCode theKeyCode = BytecoderKeyCodeTranslator.translate(theCode);
+            final int theCode = (int) aEvent.keyCode();
+            final GameKeyCode theKeyCode = BytecoderKeyCodeTranslator.translate(theCode);
             runSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector().keyReleased(theKeyCode);
             BytecoderLogger.INSTANCE.info("KeyEvent keyReleased " + theCode);
         }
     }
 
-    private static void mouseDown(ClickEvent aEvent) {
+    private static void mouseDown(final ClickEvent aEvent) {
         if (runSceneStrategy.hasGameLoop()) {
             runSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector().mousePressed(
                     new Position(aEvent.clientX(), aEvent.clientY())
@@ -171,7 +172,7 @@ public class BytecoderRenderer {
         }
     }
 
-    private static void mouseUp(ClickEvent aEvent) {
+    private static void mouseUp(final ClickEvent aEvent) {
         if (runSceneStrategy.hasGameLoop()) {
             runSceneStrategy.getRunningGameLoop().getHumanGameView().getGestureDetector().mouseReleased(
                     new Position(aEvent.clientX(), aEvent.clientY())
@@ -180,7 +181,7 @@ public class BytecoderRenderer {
     }
 
 
-    private static void loadOtherSceneFromWithinGame(Game aGame, String aSceneID) {
+    private static void loadOtherSceneFromWithinGame(final Game aGame, final String aSceneID) {
         sceneLoader.loadFromServer(aGame, aSceneID, new BytecoderGameResourceLoader(aSceneID)).thenContinue(
                 aResult -> {
                     playScene(aResult);
@@ -195,7 +196,7 @@ public class BytecoderRenderer {
         }
     }
 
-    private static void playScene(GameScene aGameScene) {
+    private static void playScene(final GameScene aGameScene) {
         BytecoderLogger.INSTANCE.info("Playing scene " + aGameScene.nameProperty().get());
         runSceneStrategy.playScene(aGameScene).thenContinue(aResult -> {
             runSingleStep(runSceneStrategy.getRunningGameLoop());
