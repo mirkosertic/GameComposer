@@ -15,37 +15,39 @@
  */
 package de.mirkosertic.gameengine.bytecoder.pixi;
 
+import de.mirkosertic.bytecoder.api.OpaqueMethod;
 import de.mirkosertic.bytecoder.api.OpaqueProperty;
 import de.mirkosertic.bytecoder.api.OpaqueReferenceType;
 
 public interface DisplayObject extends OpaqueReferenceType {
 
-    public abstract void destroy();
+    @OpaqueMethod("destroy")
+    void destroyDisplayObject();
 
     @OpaqueProperty
-    public abstract Point position();
+    Point position();
 
     @OpaqueProperty
-    public abstract Point scale();
+    Point scale();
 
     @OpaqueProperty
-    public abstract void rotation(float aRotationInRadians);
+    void rotation(float aRotationInRadians);
 
     @OpaqueProperty
-    public abstract Point pivot();
+    Point pivot();
 
     @OpaqueProperty
-    public abstract void width(int aWidth);
+    void width(int aWidth);
 
     @OpaqueProperty
-    public abstract void height(int aHeight);
+    void height(int aHeight);
 
     @OpaqueProperty
-    public abstract void zOrder(int aIndex);
+    void zOrder(int aIndex);
 
     @OpaqueProperty
-    public abstract int zOrder();
+    int zOrder();
 
     @OpaqueProperty
-    public abstract void alpha(float alpha);
+    void alpha(float alpha);
 }

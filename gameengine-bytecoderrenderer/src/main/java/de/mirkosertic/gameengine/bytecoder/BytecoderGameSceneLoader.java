@@ -36,29 +36,33 @@ public class BytecoderGameSceneLoader {
     private final GameSoundSystemFactory soundSystemFactory;
     private final JSONParser jsonParser;
 
-    public BytecoderGameSceneLoader(WindowOrWorkerGlobalScope windowOrWorkerGlobalScope, AbstractGameRuntimeFactory runtimeFactory,
-            GameSoundSystemFactory soundSystemFactory) {
+    public BytecoderGameSceneLoader(final WindowOrWorkerGlobalScope windowOrWorkerGlobalScope, final AbstractGameRuntimeFactory runtimeFactory,
+                                    final GameSoundSystemFactory soundSystemFactory) {
         this.runtimeFactory = runtimeFactory;
         this.windowOrWorkerGlobalScope = windowOrWorkerGlobalScope;
         this.soundSystemFactory = soundSystemFactory;
         this.jsonParser = new JSONParser();
     }
 
-    public Promise<GameScene, String> loadFromServer(final Game aGame, String aSceneName, final BytecoderGameResourceLoader aResourceLoader) {
+    public Promise<GameScene, String> loadFromServer(final Game aGame, final String aSceneName, final BytecoderGameResourceLoader aResourceLoader) {
         BytecoderLogger.INSTANCE.info("Loading game scene " + aSceneName);
         return new Promise<>(new Promise.Executor() {
             @Override
-            public void process(PromiseResolver aResolver, PromiseRejector aRejector) {
+            public void process(final PromiseResolver aResolver, final PromiseRejector aRejector) {
                 windowOrWorkerGlobalScope.fetch(aSceneName + "/scene.json").then(new de.mirkosertic.bytecoder.api.web.Promise.Handler<Response>() {
                     @Override
-                    public void handleObject(Response aValue) {
+                    public void handleObject(final Response aValue) {
                         aValue.text().then(new StringPromise.Handler() {
                             @Override
-                            public void handleString(String aValue) {
-                                Map<String, Object> theData = jsonParser.fromJSON(aValue);
+                            public void handleString(final String aValue) {
+                                final Map<String, Object> theData = jsonParser.fromJSON(aValue);
 
-                                GameRuntime runtime = runtimeFactory.create(new BytecoderGameResourceLoader(aSceneName),
+                                BytecoderLogger.INSTANCE.info("Got text for game scene");
+
+                                final GameRuntime runtime = runtimeFactory.create(new BytecoderGameResourceLoader(aSceneName),
                                         soundSystemFactory);
+
+                                BytecoderLogger.INSTANCE.info("New game runtime created");
 
                                 aResolver.resolve(GameScene.deserialize(aGame, runtime, theData));
 

@@ -65,7 +65,7 @@
         };
         bytecoder.imports.sprite = {
             createSpriteTexture : function(texture) {
-                return new PIXI.Sprite(bytecoder.toJSReference(texture));
+                return new PIXI.Sprite(texture);
             }
         };
         bytecoder.imports.loader.resourceByNameLoader$ResourcesString = function(resources, name) {
