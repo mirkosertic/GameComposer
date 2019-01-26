@@ -95,7 +95,25 @@ public class JSONParser {
             if (inString) {
                 if (escapeNext) {
                     escapeNext = false;
-                    currentToken.append(aChar);
+                    switch (aChar) {
+                        case 't':
+                            currentToken.append('\t');
+                            break;
+                        case 'n':
+                            currentToken.append('\n');
+                            break;
+                        case 'r':
+                            currentToken.append('\r');
+                            break;
+                        case '\'':
+                            currentToken.append('\'');
+                            break;
+                        case '\"':
+                            currentToken.append('\"');
+                            break;
+                        default:
+                            throw new IllegalStateException("Illegal escape character : " + aChar);
+                    }
                     return this;
                 }
                 switch (aChar) {
