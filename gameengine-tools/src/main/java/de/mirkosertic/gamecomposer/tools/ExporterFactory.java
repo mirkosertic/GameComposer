@@ -17,21 +17,21 @@ package de.mirkosertic.gamecomposer.tools;
 
 public class ExporterFactory {
 
-    public static enum ExportFormat {
+    public enum ExportFormat {
         GWT, TEAVM, WASM, APK, DRAGOME
     }
 
     public ExporterFactory() {
     }
 
-    public Exporter create(ExportFormat aFormat) {
+    public Exporter create(final ExportFormat aFormat) {
         switch (aFormat) {
             case GWT:
                 return new HTML5Exporter("/gameengine-gwtrenderer.war");
             case TEAVM:
                 return new HTML5Exporter("/gameengine-teavmrenderer.war");
             case WASM:
-                return new HTML5Exporter("/gameengine-wasmrenderer.war");
+                return new HTML5Exporter("/gameengine-bytecoderrenderer.war");
             case DRAGOME:
                 return new HTML5Exporter("/gameengine-dragomerenderer.war");
             case APK:

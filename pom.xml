@@ -25,7 +25,6 @@
         <module>gameengine-androidrenderer</module>
         <module>gameengine-teavmcommon</module>
         <module>gameengine-teavmrenderer</module>
-        <module>gameengine-wasmrenderer</module>
         <module>gameengine-dragomerenderer</module>
         <module>gameengine-cordovarenderer</module>
         <module>gameengine-bytecoderrenderer</module>
@@ -132,12 +131,6 @@
             </dependency>
             <dependency>
                 <groupId>de.mirkosertic</groupId>
-                <artifactId>gameengine-wasmrenderer</artifactId>
-                <version>${project.version}</version>
-                <type>war</type>
-            </dependency>
-            <dependency>
-                <groupId>de.mirkosertic</groupId>
                 <artifactId>gameengine-bytecoderrenderer</artifactId>
                 <version>${project.version}</version>
                 <type>war</type>
@@ -163,7 +156,7 @@
 
     <properties>
         <teavm.version>0.5.1</teavm.version>
-        <bytecoder.version>0-SNAPSHOT</bytecoder.version>
+        <bytecoder.version>2019-01-26</bytecoder.version>
     </properties>
 
     <build>
