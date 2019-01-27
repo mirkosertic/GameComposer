@@ -123,19 +123,19 @@ GameEngine-TeaVMRenderer (preferred)
 This is the game presentation logic using the TeaVM Java-to-JavaScript Transpiler Framework. It will render the game view
 using [pixi.js](http://www.pixijs.com), which uses WebGL or the HTML5 Canvas API as a fallback. Sound is done using [howler.js](https://github.com/goldfire/howler.js/) 
 
-GameEngine-WebAssemblyRenderer (experimental)
+GameEngine-BytecoderRenderer (experimental)
 --------------
 
-This is a first implementation of a [WebAssembly](http://webassembly.org/) based GameRenderer. Under the hood it uses the TeaVM WebAssembly compile target.
+This is a first implementation of a [WebAssembly](http://webassembly.org/) based GameRenderer. Under the hood it uses 
+[Bytecoder](https://github.com/mirkosertic/Bytecoder) to compile the Game Runtime to WebAssembly and plain old JavaScript as a fallback.
+It will render the game view using [pixi.js](http://www.pixijs.com), which uses WebGL or the HTML5 Canvas API as a fallback.
 
 Please note that this is experimental stage!
 
-Example games(probably not working):
+Example games:
 
-[Gravity and Mouse](https://mirkosertic.github.io/GameComposer/games/wasm/gravity/index.html)
-
-[Duke on the Platform](https://mirkosertic.github.io/GameComposer/games/wasm/platformer/index.html)
-
+* [Physics Game Example compiled to WebAssembly](https://www.mirkosertic.de/examples/gameengine/index.html)
+* [Physics Game Example compiled to JavaScript](https://www.mirkosertic.de/examples/gameengine/indexjs.html)
 
 GameEngine-CordovaRenderer (experimental)
 --------------
