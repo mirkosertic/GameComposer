@@ -99,7 +99,7 @@
         </dependency>
         <dependency>
             <groupId>de.mirkosertic</groupId>
-            <artifactId>gameengine-wasmrenderer</artifactId>
+            <artifactId>gameengine-bytecoderrenderer</artifactId>
             <type>war</type>
             <scope>provided</scope>
         </dependency>
