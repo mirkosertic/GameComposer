@@ -109,7 +109,7 @@ public class LuaJScriptEngineFactory implements LUAScriptEngineFactory {
 
             // Initialize the globals and the code
             LuaClosure theClosure = new LuaClosure(thePrototype, theGlobals);
-            theGlobals.set(LuaString.valueOf(aMethodName), theClosure);
+            theClosure.call();
 
             theCacheEntry = new CacheEntry(thePrototype, theGlobals);
             prototypes.put(aScriptCode, theCacheEntry);
