@@ -31,7 +31,7 @@ import java.util.Map;
 
 public class RunScriptAction implements Action {
 
-    private static final String DEFAULT_SCRIPT = "--\n"
+    public static final String DEFAULT_SCRIPT = "--\n"
             + "-- This is the default method of every action. It is called once for every game loop cycle.\n"
             + "--\n"
             + "-- event is an object which represents the GameEvent causing this action\n"

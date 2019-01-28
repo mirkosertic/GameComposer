@@ -58,6 +58,13 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>de.mirkosertic.bytecoder</groupId>
+            <artifactId>bytecoder-core</artifactId>
+            <version>${bytecoder.version}</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -116,6 +123,7 @@
                             <backend>wasm</backend>
                             <enableExceptionHandling>false</enableExceptionHandling>
                             <debugOutput>true</debugOutput>
+                            <wasmMaximumPages>4096</wasmMaximumPages>
                         </configuration>
                     </execution>
                     <execution>
