@@ -32,13 +32,11 @@ public class GameProcessManager implements GameSystem {
 
     private GameProcess[] runningProcesses;
     private final Set<GameProcess> killedProcesses;
-    private long processesAmountOfTime;
 
     GameProcessManager(Logger aLogger) {
         logger = aLogger;
         runningProcesses = new GameProcess[0];
         killedProcesses = new HashSet<>();
-        processesAmountOfTime = 0;
     }
 
     void start(GameProcess aProcess) {
@@ -75,52 +73,46 @@ public class GameProcessManager implements GameSystem {
         return new GameSystemWork() {
             @Override
             public void runInFrame() {
-                processesAmountOfTime += aElapsedTime;
-                // We limit the physics system to 60 frames / second, or we are getting strange results
-                if (processesAmountOfTime > 8) {
 
-                    List<GameProcess> theNewChildProcesses = new ArrayList<>();
+                List<GameProcess> theNewChildProcesses = new ArrayList<>();
 
-                    for (GameProcess theProcess : runningProcesses) {
+                for (GameProcess theProcess : runningProcesses) {
 
-                        logger.info("Running process of type " + theProcess.getClass().getName());
+                    logger.info("Running process of type " + theProcess.getClass().getName() + " with time " + aElapsedTime);
 
-                        GameProcess.ProceedResult theResult = theProcess.proceedGame(aGameTime, processesAmountOfTime);
-                        switch (theResult) {
-                        case CONTINUE_RUNNING:
-                            // The process wants to continue, so we do it
-                            break;
-                        case STOPPED:
-                            // The process wants to be stopped, so we will help him
-                            killedProcesses.add(theProcess);
-                            GameProcess theChildProcess = theProcess.getChildProcess();
-                            if (theChildProcess != null) {
-                                // There is a child process attached, so start with this one
-                                theNewChildProcesses.add(theChildProcess);
-                            }
-                            break;
+                    GameProcess.ProceedResult theResult = theProcess.proceedGame(aGameTime, aElapsedTime);
+                    switch (theResult) {
+                    case CONTINUE_RUNNING:
+                        // The process wants to continue, so we do it
+                        break;
+                    case STOPPED:
+                        // The process wants to be stopped, so we will help him
+                        killedProcesses.add(theProcess);
+                        GameProcess theChildProcess = theProcess.getChildProcess();
+                        if (theChildProcess != null) {
+                            // There is a child process attached, so start with this one
+                            theNewChildProcesses.add(theChildProcess);
                         }
+                        break;
                     }
+                }
 
-                    if (!theNewChildProcesses.isEmpty()) {
-                        for (GameProcess theChildProcess : theNewChildProcesses) {
-                            start(theChildProcess);
-                        }
+                if (!theNewChildProcesses.isEmpty()) {
+                    for (GameProcess theChildProcess : theNewChildProcesses) {
+                        start(theChildProcess);
                     }
+                }
 
-                    if (killedProcesses.size() > 0) {
-                        List<GameProcess> theRunningProcesses = ArrayUtils.asList(runningProcesses);
-                        theRunningProcesses.removeAll(killedProcesses);
-                        runningProcesses = theRunningProcesses.toArray(new GameProcess[theRunningProcesses.size()]);
-                        killedProcesses.clear();
-                    }
-                    processesAmountOfTime = 0;
+                if (killedProcesses.size() > 0) {
+                    List<GameProcess> theRunningProcesses = ArrayUtils.asList(runningProcesses);
+                    theRunningProcesses.removeAll(killedProcesses);
+                    runningProcesses = theRunningProcesses.toArray(new GameProcess[theRunningProcesses.size()]);
+                    killedProcesses.clear();
                 }
             }
 
             @Override
             public void runAfterFrame() {
-
             }
         };
    }
