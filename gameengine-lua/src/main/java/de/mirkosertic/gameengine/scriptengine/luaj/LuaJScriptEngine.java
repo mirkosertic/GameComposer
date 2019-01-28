@@ -266,7 +266,7 @@ public class LuaJScriptEngine implements LUAScriptEngine {
         if (theResult.narg() == 1) {
             return toJavaValue(theResult.arg(1));
         }
-        throw new IllegalStateException("Not supported return type : " + theResult);
+        throw new IllegalStateException("Not supported return type : " + theResult + " for function " + methodName);
     }
 
     @Override
