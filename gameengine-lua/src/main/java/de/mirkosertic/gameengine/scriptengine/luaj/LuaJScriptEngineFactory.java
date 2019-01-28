@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LuaClosure;
+import org.luaj.vm2.LuaString;
 import org.luaj.vm2.Prototype;
 import org.luaj.vm2.compiler.LuaC;
 
@@ -107,7 +108,8 @@ public class LuaJScriptEngineFactory implements LUAScriptEngineFactory {
             Prototype thePrototype = theGlobals.compilePrototype(new StringReader(aScriptCode), "script");
 
             // Initialize the globals and the code
-            new LuaClosure(thePrototype, theGlobals).call();
+            LuaClosure theClosure = new LuaClosure(thePrototype, theGlobals);
+            theGlobals.set(LuaString.valueOf(aMethodName), theClosure);
 
             theCacheEntry = new CacheEntry(thePrototype, theGlobals);
             prototypes.put(aScriptCode, theCacheEntry);

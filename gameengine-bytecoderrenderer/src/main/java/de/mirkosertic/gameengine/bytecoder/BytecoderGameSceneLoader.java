@@ -15,6 +15,8 @@
  */
 package de.mirkosertic.gameengine.bytecoder;
 
+import java.util.Map;
+
 import de.mirkosertic.bytecoder.api.web.Response;
 import de.mirkosertic.bytecoder.api.web.StringPromise;
 import de.mirkosertic.bytecoder.api.web.WindowOrWorkerGlobalScope;
@@ -27,8 +29,6 @@ import de.mirkosertic.gameengine.core.PromiseRejector;
 import de.mirkosertic.gameengine.core.PromiseResolver;
 import de.mirkosertic.gameengine.sound.GameSoundSystemFactory;
 
-import java.util.Map;
-
 public class BytecoderGameSceneLoader {
 
     private final WindowOrWorkerGlobalScope windowOrWorkerGlobalScope;
@@ -36,39 +36,43 @@ public class BytecoderGameSceneLoader {
     private final GameSoundSystemFactory soundSystemFactory;
     private final JSONParser jsonParser;
 
-    public BytecoderGameSceneLoader(final WindowOrWorkerGlobalScope windowOrWorkerGlobalScope, final AbstractGameRuntimeFactory runtimeFactory,
-                                    final GameSoundSystemFactory soundSystemFactory) {
+    public BytecoderGameSceneLoader(WindowOrWorkerGlobalScope windowOrWorkerGlobalScope, AbstractGameRuntimeFactory runtimeFactory,
+            GameSoundSystemFactory soundSystemFactory) {
         this.runtimeFactory = runtimeFactory;
         this.windowOrWorkerGlobalScope = windowOrWorkerGlobalScope;
         this.soundSystemFactory = soundSystemFactory;
         this.jsonParser = new JSONParser();
     }
 
-    public Promise<GameScene, String> loadFromServer(final Game aGame, final String aSceneName, final BytecoderGameResourceLoader aResourceLoader) {
+    private void loadGameAsText(Response asText, String aSceneName, PromiseResolver aResolver, Game aGame) {
+        asText.text().then(new StringPromise.Handler() {
+            @Override
+            public void handleString(String aValue) {
+
+                BytecoderLogger.INSTANCE.info("Got text for game scene : " + aValue);
+
+                Map<String, Object> theData = jsonParser.fromJSON(aValue);
+                GameRuntime runtime = runtimeFactory.create(new BytecoderGameResourceLoader(aSceneName),
+                        soundSystemFactory);
+
+                BytecoderLogger.INSTANCE.info("New game runtime created");
+
+                aResolver.resolve(GameScene.deserialize(aGame, runtime, theData));
+
+                BytecoderLogger.INSTANCE.info("Done loading game scene!");
+            }
+        });
+    }
+
+    public Promise<GameScene, String> loadFromServer(final Game aGame, String aSceneName, final BytecoderGameResourceLoader aResourceLoader) {
         BytecoderLogger.INSTANCE.info("Loading game scene " + aSceneName);
         return new Promise<>(new Promise.Executor() {
             @Override
-            public void process(final PromiseResolver aResolver, final PromiseRejector aRejector) {
+            public void process(PromiseResolver aResolver, PromiseRejector aRejector) {
                 windowOrWorkerGlobalScope.fetch(aSceneName + "/scene.json").then(new de.mirkosertic.bytecoder.api.web.Promise.Handler<Response>() {
                     @Override
-                    public void handleObject(final Response aValue) {
-                        aValue.text().then(new StringPromise.Handler() {
-                            @Override
-                            public void handleString(final String aValue) {
-                                final Map<String, Object> theData = jsonParser.fromJSON(aValue);
-
-                                BytecoderLogger.INSTANCE.info("Got text for game scene");
-
-                                final GameRuntime runtime = runtimeFactory.create(new BytecoderGameResourceLoader(aSceneName),
-                                        soundSystemFactory);
-
-                                BytecoderLogger.INSTANCE.info("New game runtime created");
-
-                                aResolver.resolve(GameScene.deserialize(aGame, runtime, theData));
-
-                                BytecoderLogger.INSTANCE.info("Done loading game scene!");
-                            }
-                        });
+                    public void handleObject(Response aValue) {
+                        loadGameAsText(aValue, aSceneName, aResolver, aGame);
                     }
                 });
             }
