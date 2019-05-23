@@ -24,7 +24,6 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
-                    <verbose>true</verbose>
                 </configuration>
             </plugin>
         </plugins>
