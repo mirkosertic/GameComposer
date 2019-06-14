@@ -155,7 +155,7 @@
     </dependencyManagement>
 
     <properties>
-        <teavm.version>0.5.1</teavm.version>
+        <teavm.version>0.6.0-dev-771</teavm.version>
         <bytecoder.version>2019-06-13</bytecoder.version>
     </properties>
 
