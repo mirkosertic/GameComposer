@@ -1,6 +1,7 @@
 language: android
 jdk:
   - oraclejdk8
+
 android:
   components:
     - tools # to get the new `repository-11.xml`
@@ -9,10 +10,16 @@ android:
     - build-tools-24.0.2
     - android-24
     - android-23
+
+cache:
+  directories:
+    - $HOME/.m2
+
 env:
   global:
     - "MAVEN_OPTS=-Xmx3072m -XX:MaxPermSize=512m -XX:+CMSClassUnloadingEnabled -XX:-UseGCOverheadLimit"
     - "TRAVIS_NODE_VERSION=6"
+
 before_install:
   - echo "MAVEN_OPTS='-Xmx3072m -XX:MaxPermSize=512m'" > ~/.mavenrc
   - "rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && (cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`) && source ~/.nvm/nvm.sh && nvm install $TRAVIS_NODE_VERSION"
@@ -23,6 +30,6 @@ before_install:
   - "npm install vulcanize -g"
   - "git clone https://github.com/mirkosertic/Bytecoder.git ./bytecoder"
   - "cd bytecoder"
-  - "mvn clean install -P notest"
+  - "mvn -pl '!:bytecoder-integrationtest' clean install -P notest"
   - "cd .."
   - "env"
