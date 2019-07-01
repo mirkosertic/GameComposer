@@ -156,7 +156,7 @@
 
     <properties>
         <teavm.version>0.5.1</teavm.version>
-        <bytecoder.version>2019-06-13</bytecoder.version>
+        <bytecoder.version>2019-06-29</bytecoder.version>
     </properties>
 
     <build>
