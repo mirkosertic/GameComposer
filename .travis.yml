@@ -1,6 +1,6 @@
 language: android
 jdk:
-  - openjdk8
+  - openjdk12
 
 android:
   components:
