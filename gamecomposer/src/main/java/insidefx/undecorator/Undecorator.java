@@ -28,10 +28,8 @@
 package insidefx.undecorator;
 
 import javafx.animation.FadeTransition;
-import javafx.animation.FadeTransitionBuilder;
 import javafx.animation.ParallelTransition;
 import javafx.animation.TranslateTransition;
-import javafx.animation.TranslateTransitionBuilder;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.ObservableList;
@@ -266,12 +264,12 @@ public class Undecorator extends StackPane {
                         fullscreenButtonTransition.stop();
                     }
                     // Animate the fullscreen button
-                    fullscreenButtonTransition = TranslateTransitionBuilder.create()
-                            .duration(Duration.millis(3000))
-                            .toX(66)
-                            .node(fullscreen)
-                            .onFinished(t1 -> fullscreenButtonTransition = null)
-                            .build();
+                    fullscreenButtonTransition = new TranslateTransition();
+
+                    fullscreenButtonTransition.setDuration(Duration.millis(3000));
+                    fullscreenButtonTransition.setToX(66);
+                    fullscreenButtonTransition.setNode(fullscreen);
+                    fullscreenButtonTransition.setOnFinished(t1 -> fullscreenButtonTransition = null);
                     fullscreenButtonTransition.play();
                     fullscreen.setOpacity(0.2);
                 } else {
@@ -285,12 +283,11 @@ public class Undecorator extends StackPane {
                         fullscreenButtonTransition.stop();
                     }
                     // Animate the change
-                    fullscreenButtonTransition = TranslateTransitionBuilder.create()
-                            .duration(Duration.millis(1000))
-                            .toX(0)
-                            .node(fullscreen)
-                            .onFinished(t1 -> fullscreenButtonTransition = null)
-                            .build();
+                    fullscreenButtonTransition = new TranslateTransition();
+                    fullscreenButtonTransition.setDuration(Duration.millis(1000));
+                    fullscreenButtonTransition.setToX(0);
+                    fullscreenButtonTransition.setNode(fullscreen);
+                    fullscreenButtonTransition.setOnFinished(t1 -> fullscreenButtonTransition = null);
 
                     fullscreenButtonTransition.play();
                 }
