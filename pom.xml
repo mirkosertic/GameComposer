@@ -22,7 +22,7 @@
         <module>gameengine</module>
         <module>gameengine-fxrenderer</module>
         <module>gameengine-gwtrenderer</module>
-        <module>gameengine-androidrenderer</module>
+        <!--<module>gameengine-androidrenderer</module>-->
         <module>gameengine-teavmcommon</module>
         <module>gameengine-teavmrenderer</module>
         <module>gameengine-dragomerenderer</module>
