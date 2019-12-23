@@ -15,7 +15,6 @@
  */
 package de.mirkosertic.gameengine.web;
 
-import com.sun.webkit.ContextMenuItem;
 import de.mirkosertic.gameengine.arcade.ConstantMovement;
 import de.mirkosertic.gameengine.arcade.ConstantMovementBehavior;
 import de.mirkosertic.gameengine.arcade.ConstantMovementBehaviorTemplate;
