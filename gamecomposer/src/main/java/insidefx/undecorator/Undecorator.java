@@ -697,18 +697,17 @@ public class Undecorator extends StackPane {
         dockFeedback.setOpacity(1);
         dockFeedbackPopup.show();
 
-        dockFadeTransition = FadeTransitionBuilder.create()
-                .duration(Duration.millis(200))
-                .node(dockFeedback)
-                .fromValue(0)
-                .toValue(1)
-                .autoReverse(true)
-                .cycleCount(3)
-                .onFinished(t -> {
+        dockFadeTransition = new FadeTransition();
+        dockFadeTransition.setDuration(Duration.millis(200));
+        dockFadeTransition.setNode(dockFeedback);
+        dockFadeTransition.setFromValue(0);
+        dockFadeTransition.setToValue(1);
+        dockFadeTransition.setAutoReverse(true);
+        dockFadeTransition.setCycleCount(3);
+        dockFadeTransition.setOnFinished(t -> {
                     //dockFeedback.setVisible(false);
                     //dockFeedbackPopup.hide();
-                })
-                .build();
+                });
         /*
          ScaleTransition scaleTransition = ScaleTransitionBuilder.create()
          .duration(Duration.millis(1000))
