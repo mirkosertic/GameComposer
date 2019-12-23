@@ -15,17 +15,9 @@
  */
 package de.mirkosertic.gameengine.bytecoder.pixi;
 
-import de.mirkosertic.bytecoder.api.OpaqueProperty;
-
 public abstract class Graphics extends Container {
 
     public static native Graphics createGraphics();
-
-    @OpaqueProperty
-    public abstract void width(int aWidth);
-
-    @OpaqueProperty
-    public abstract void height(int aHeight);
 
     public abstract void moveTo(int aX, int aY);
 
