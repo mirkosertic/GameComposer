@@ -93,8 +93,6 @@
                         <configuration>
                             <targetDirectory>${project.build.directory}/generated/js/teavm</targetDirectory>
                             <mainClass>de.mirkosertic.gameengine.web.WebUI</mainClass>
-                            <!-- How to attach runtime.js. Possible values are: SEPARATE, MERGED and NONE -->
-                            <runtime>SEPARATE</runtime>
                             <!-- Whether TeaVM should produce minified JavaScript. Can reduce JavaScript file size more than
                                  two times -->
                             <minifying>false</minifying>
@@ -141,6 +139,12 @@
             <groupId>org.teavm</groupId>
             <artifactId>teavm-tooling</artifactId>
             <version>${teavm.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.6</version>
         </dependency>
 
         <dependency>

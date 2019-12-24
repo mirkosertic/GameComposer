@@ -22,7 +22,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.teavm.tooling.RuntimeCopyOperation;
 import org.teavm.tooling.TeaVMTool;
 import org.teavm.tooling.TeaVMToolException;
 import org.teavm.tooling.TeaVMToolLog;
@@ -52,7 +51,6 @@ public class EditorBackendTeaVMEndpoint {
         theTool.setClassLoader(getClass().getClassLoader());
         theTool.setMinifying(false);
         theTool.setMainClass(WebUI.class.getName());
-        theTool.setRuntime(RuntimeCopyOperation.SEPARATE);
         theTool.setSourceFilesCopied(false);
         theTool.setSourceMapsFileGenerated(false);
         theTool.setIncremental(false);

@@ -108,12 +108,12 @@
             <type>war</type>
             <scope>provided</scope>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>de.mirkosertic</groupId>
             <artifactId>gameengine-androidrenderer</artifactId>
             <type>apk</type>
             <scope>provided</scope>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
