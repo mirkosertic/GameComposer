@@ -155,7 +155,7 @@
     </dependencyManagement>
 
     <properties>
-        <teavm.version>0.6.1</teavm.version>
+        <teavm.version>0.7.0-dev-1066</teavm.version>
         <bytecoder.version>2019-12-08</bytecoder.version>
         <javafx.version>12.0.2</javafx.version>
     </properties>
