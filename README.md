@@ -10,7 +10,7 @@ replacing presentation logic and adapting it to new technologies is a lot easier
 
 To see it in action please visit [this page](https://www.mirkosertic.de/blog/2013/11/a-javafx-based-game-authoring-system/)
 
-Current build status: ![Build](https://github.com/mirkosertic/GameComposer/workflows/Build/badge.svg) [![Build Status](https://travis-ci.org/mirkosertic/GameComposer.svg?branch=master)](https://travis-ci.org/mirkosertic/GameComposer) [![Gitter](https://badges.gitter.im/mirkosertic/GameComposer.svg)](https://gitter.im/mirkosertic/GameComposer?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+Current build status: ![Build](https://github.com/mirkosertic/GameComposer/workflows/Build/badge.svg) [![Build Status](https://travis-ci.org/mirkosertic/GameComposer.svg?branch=master)](https://travis-ci.org/mirkosertic/GameComposer) 
 
 GameEngine-Editor
 -----------------
