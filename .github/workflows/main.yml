@@ -1,0 +1,26 @@
+name: Build 
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+    steps:
+     - uses: actions/checkout@v1
+     - uses: joschi/setup-jdk@v1
+       with:
+           java-version: '12'
+     - uses: actions/setup-node@v1
+       with:
+          node-version: '6'
+     - run: npm install
+     - run: npm install electron-packager -g
+     - run: npm install cordova -g
+     - run: npm install bower -g
+     - run: npm install vulcanize -g
+     - run: mvn verify
