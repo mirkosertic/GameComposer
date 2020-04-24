@@ -1,6 +1,6 @@
 name: Build 
 on:
-  push:
+  pull_request:
     branches: [ master ]
 jobs:
   build:
@@ -22,7 +22,3 @@ jobs:
      - run: npm install bower -g
      - run: npm install vulcanize -g
      - run: mvn verify
-     - uses: actions/upload-artifact@v1
-       with:
-         name: Games
-         path: 'examples/target/games'
