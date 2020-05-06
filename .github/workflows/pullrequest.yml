@@ -21,4 +21,8 @@ jobs:
      - run: npm install cordova -g
      - run: npm install bower -g
      - run: npm install vulcanize -g
+     - run: wget https://apt.llvm.org/llvm.sh
+     - run: chmod +x llvm.sh
+     - run: sudo ./llvm.sh 10
+     - run: sudo apt-get install -y ocl-icd-opencl-dev clang-10 lldb-10 lld-10 clangd-10
      - run: mvn verify

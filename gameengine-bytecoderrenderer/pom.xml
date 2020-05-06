@@ -120,7 +120,7 @@
                         </goals>
                         <configuration>
                             <mainClass>de.mirkosertic.gameengine.bytecoder.BytecoderRenderer</mainClass>
-                            <backend>wasm</backend>
+                            <backend>wasm_llvm</backend>
                             <enableExceptionHandling>false</enableExceptionHandling>
                             <debugOutput>true</debugOutput>
                             <wasmMaximumPages>4096</wasmMaximumPages>
