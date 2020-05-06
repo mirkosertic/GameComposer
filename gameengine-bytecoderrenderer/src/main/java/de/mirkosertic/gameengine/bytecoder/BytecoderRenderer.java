@@ -15,7 +15,6 @@
  */
 package de.mirkosertic.gameengine.bytecoder;
 
-import de.mirkosertic.bytecoder.api.Export;
 import de.mirkosertic.bytecoder.api.web.ClickEvent;
 import de.mirkosertic.bytecoder.api.web.HTMLCanvasElement;
 import de.mirkosertic.bytecoder.api.web.HTMLDocument;
@@ -52,7 +51,6 @@ public class BytecoderRenderer {
     private static NetworkConnector networkConnector;
     private static GameSoundSystemFactory soundSystemFactory;
 
-    @Export("main")
     public static void main(final String[] args) {
         window = Window.window();
         final HTMLDocument document = window.document();
