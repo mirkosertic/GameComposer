@@ -1,3 +1,4 @@
+dist: bionic
 language: android
 jdk:
   - openjdk12
