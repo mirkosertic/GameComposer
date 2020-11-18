@@ -40,7 +40,7 @@
             <url>https://dl.bintray.com/konsoletyper/teavm</url>
         </repository>
         <repository>
-            <id>mogwai-repository</id>
+            <id>local-repository</id>
             <name>Project-Local Repository</name>
             <url>file:${maven.multiModuleProjectDirectory}/repository</url>
         </repository>
@@ -52,7 +52,7 @@
             <url>https://dl.bintray.com/konsoletyper/teavm</url>
         </pluginRepository>
         <pluginRepository>
-            <id>mogwai-plugins</id>
+            <id>local-plugins</id>
             <name>Project-Local Plugin Repository</name>
             <url>file:${project.basedir}/repository</url>
         </pluginRepository>
