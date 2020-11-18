@@ -1,0 +1,136 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.dragome</groupId>
+  <artifactId>dragome-sdk</artifactId>
+  <packaging>pom</packaging>
+  <version>0.95.2-beta1</version>
+  <name>Dragome SDK</name>
+  <description>Dragome SDK is a tool for creating dynamic web application in pure Java</description>
+  <url>http://www.dragome.com</url>
+
+  <licenses>
+    <license>
+      <name>GNU General Public License, Version 3</name>
+      <url>http://www.gnu.org/licenses/gpl-3.0-standalone.html</url>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <name>Fernando Petrola</name>
+      <email>fernando.petrola@dragome.com</email>
+      <organization>Dragome</organization>
+      <organizationUrl>http://www.dragome.com</organizationUrl>
+    </developer>
+  </developers>
+
+  <scm>
+    <connection>scm:git:git@github.com:dragome/dragome-sdk.git</connection>
+    <developerConnection>scm:git:git@github.com:dragome/dragome-sdk.git</developerConnection>
+    <url>git@github.com:dragome/dragome-sdk.git</url>
+  </scm>
+
+  <modules>
+    <module>dragome-js-commons</module>
+    <module>dragome-js-jre</module>
+    <module>dragome-bytecode-js-compiler</module>
+    <module>dragome-core</module>
+    <module>dragome-form-bindings</module>
+    <module>dragome-callback-evictor</module>
+    <module>dragome-method-logger</module>
+    <module>dragome-guia</module>
+  </modules>
+
+  <properties>
+    <skip.gpg>true</skip.gpg>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+  </properties>
+  
+  <repositories>
+    <repository>
+      <id>dragome</id>
+      <name>dragome</name>
+      <url>https://raw.github.com/dragome/dragome/master/maven</url>
+    </repository>
+  </repositories>
+
+  <distributionManagement>
+    <snapshotRepository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <repository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+  </distributionManagement>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-gpg-plugin</artifactId>
+        <version>1.5</version>
+        <configuration>
+          <skip>${skip.gpg}</skip>
+        </configuration>
+        <executions>
+          <execution>
+            <id>sign-artifacts</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>sign</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.dragome</groupId>
+      <artifactId>dragome-bytecode-js-compiler</artifactId>
+      <version>0.95.2-beta1</version>
+    </dependency>
+    <dependency>
+      <groupId>com.dragome</groupId>
+      <artifactId>dragome-js-commons</artifactId>
+      <version>0.95.2-beta1</version>
+    </dependency>
+    <dependency>
+      <groupId>com.dragome</groupId>
+      <artifactId>dragome-js-jre</artifactId>
+      <version>0.95.2-beta1</version>
+    </dependency>
+    <dependency>
+      <groupId>com.dragome</groupId>
+      <artifactId>dragome-callback-evictor</artifactId>
+      <version>0.95.2-beta1</version>
+    </dependency>
+    <dependency>
+      <groupId>com.dragome</groupId>
+      <artifactId>dragome-form-bindings</artifactId>
+      <version>0.95.2-beta1</version>
+    </dependency>
+    <dependency>
+      <groupId>com.dragome</groupId>
+      <artifactId>dragome-core</artifactId>
+      <version>0.95.2-beta1</version>
+    </dependency>
+    <dependency>
+      <groupId>com.dragome</groupId>
+      <artifactId>dragome-method-logger</artifactId>
+      <version>0.95.2-beta1</version>
+    </dependency>
+    <dependency>
+      <groupId>com.dragome</groupId>
+      <artifactId>dragome-guia</artifactId>
+      <version>0.95.2-beta1</version>
+    </dependency>
+  </dependencies>
+
+</project>

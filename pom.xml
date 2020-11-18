@@ -26,7 +26,7 @@
         <module>gameengine-teavmcommon</module>
         <module>gameengine-teavmrenderer</module>
         <module>gameengine-dragomerenderer</module>
-        <module>gameengine-cordovarenderer</module>
+        <!--<module>gameengine-cordovarenderer</module>-->
         <module>gameengine-bytecoderrenderer</module>
         <module>gameengine-tools</module>
         <module>gameengine-editor</module>
@@ -40,17 +40,9 @@
             <url>https://dl.bintray.com/konsoletyper/teavm</url>
         </repository>
         <repository>
-            <id>gamecreator</id>
-            <name>gamecreator</name>
-            <snapshots>
-                <checksumPolicy>ignore</checksumPolicy>
-                <enabled>true</enabled>
-            </snapshots>
-            <releases>
-                <checksumPolicy>ignore</checksumPolicy>
-                <enabled>true</enabled>
-            </releases>
-            <url>https://raw.githubusercontent.com/mirkosertic/GameComposer/gh-pages/maven</url>
+            <id>mogwai-repository</id>
+            <name>Project-Local Repository</name>
+            <url>file:${maven.multiModuleProjectDirectory}/repository</url>
         </repository>
     </repositories>
 
@@ -60,17 +52,9 @@
             <url>https://dl.bintray.com/konsoletyper/teavm</url>
         </pluginRepository>
         <pluginRepository>
-            <id>gamecreator-plugins</id>
-            <name>gamecreator-plugins</name>
-            <snapshots>
-                <checksumPolicy>ignore</checksumPolicy>
-                <enabled>true</enabled>
-            </snapshots>
-            <releases>
-                <checksumPolicy>ignore</checksumPolicy>
-                <enabled>true</enabled>
-            </releases>
-            <url>https://raw.githubusercontent.com/mirkosertic/GameComposer/gh-pages/maven</url>
+            <id>mogwai-plugins</id>
+            <name>Project-Local Plugin Repository</name>
+            <url>file:${project.basedir}/repository</url>
         </pluginRepository>
     </pluginRepositories>
 
