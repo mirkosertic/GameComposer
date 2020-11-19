@@ -135,6 +135,16 @@
                 <artifactId>mockito-all</artifactId>
                 <version>1.10.19</version>
             </dependency>
+            <dependency>
+                <groupId>org.ow2.asm</groupId>
+                <artifactId>asm</artifactId>
+                <version>${asm.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.ow2.asm</groupId>
+                <artifactId>asm-commons</artifactId>
+                <version>${asm.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -142,6 +152,7 @@
         <teavm.version>0.6.1</teavm.version>
         <bytecoder.version>2020-10-05</bytecoder.version>
         <javafx.version>14.0.2.1</javafx.version>
+        <asm.version>9.0</asm.version>
     </properties>
 
     <build>
