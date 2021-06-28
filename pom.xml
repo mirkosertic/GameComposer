@@ -150,7 +150,7 @@
 
     <properties>
         <teavm.version>0.6.1</teavm.version>
-        <bytecoder.version>2020-12-01</bytecoder.version>
+        <bytecoder.version>2021-06-24</bytecoder.version>
         <javafx.version>14.0.2.1</javafx.version>
         <asm.version>9.0</asm.version>
     </properties>
