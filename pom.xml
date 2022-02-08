@@ -128,7 +128,7 @@
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
-                <version>4.13.1</version>
+                <version>4.13.2</version>
             </dependency>
             <dependency>
                 <groupId>org.mockito</groupId>
@@ -151,7 +151,7 @@
     <properties>
         <teavm.version>0.6.1</teavm.version>
         <bytecoder.version>2020-12-01</bytecoder.version>
-        <javafx.version>14.0.2.1</javafx.version>
+        <javafx.version>17.0.2</javafx.version>
         <asm.version>9.0</asm.version>
     </properties>
 
@@ -186,7 +186,7 @@
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>buildnumber-maven-plugin</artifactId>
-                    <version>1.4</version>
+                    <version>3.0.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
