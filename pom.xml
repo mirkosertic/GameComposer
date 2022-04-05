@@ -149,7 +149,7 @@
     </dependencyManagement>
 
     <properties>
-        <teavm.version>0.6.1</teavm.version>
+        <teavm.version>0.7.0</teavm.version>
         <bytecoder.version>2020-12-01</bytecoder.version>
         <javafx.version>18</javafx.version>
         <asm.version>9.2</asm.version>
