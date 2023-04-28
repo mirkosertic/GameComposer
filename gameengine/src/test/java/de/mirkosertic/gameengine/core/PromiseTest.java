@@ -15,14 +15,14 @@
  */
 package de.mirkosertic.gameengine.core;
 
+import org.junit.Test;
+
 import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.isNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
-
-import org.junit.Test;
+import static org.mockito.Mockito.verifyNoInteractions;
 
 public class PromiseTest {
 
@@ -38,7 +38,7 @@ public class PromiseTest {
         }).thenContinue(theResolved).thenContinue(theResolved).catchError(theRejected);
 
         verify(theResolved, times(2)).process(eq("Resolved"));
-        verifyZeroInteractions(theRejected);
+        verifyNoInteractions(theRejected);
     }
 
     @Test
@@ -53,6 +53,6 @@ public class PromiseTest {
         }).thenContinue(theResolved).catchError(theRejected);
 
         verify(theRejected, times(1)).process(eq("Rejected"), (Exception) isNull());
-        verifyZeroInteractions(theResolved);
+        verifyNoInteractions(theResolved);
     }
 }

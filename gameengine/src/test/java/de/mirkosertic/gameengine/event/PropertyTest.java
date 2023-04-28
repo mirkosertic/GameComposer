@@ -7,7 +7,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 
 public class PropertyTest {
 
@@ -28,7 +28,7 @@ public class PropertyTest {
         assertEquals("value", theProperty.get());
         theProperty.set("value");
         assertEquals("value", theProperty.get());
-        verifyZeroInteractions(theListener);
+        verifyNoInteractions(theListener);
     }
 
     @Test
@@ -38,7 +38,7 @@ public class PropertyTest {
         assertEquals("value", theProperty.get());
         theProperty.setQuietly("value1");
         assertEquals("value1", theProperty.get());
-        verifyZeroInteractions(theListener);
+        verifyNoInteractions(theListener);
     }
 
     @Test
