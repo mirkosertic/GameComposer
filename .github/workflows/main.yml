@@ -1,4 +1,4 @@
-name: Build 
+name: Build
 on:
   push:
     branches: [ master ]
@@ -10,14 +10,13 @@ jobs:
         os: [ubuntu-latest]
     steps:
      - uses: actions/checkout@v1
-     - uses: joschi/setup-jdk@v1
-       env:
-         ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+     - uses: actions/setup-java@v2
        with:
-           java-version: '12'
-     - uses: actions/setup-node@v1
+         java-version: 20
+         distribution: "temurin"
+     - uses: actions/setup-node@v3
        with:
-          node-version: '6'
+          node-version: '16'
      - run: npm install
      - run: npm install electron-packager -g
      - run: npm install cordova -g
