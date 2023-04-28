@@ -15,7 +15,7 @@
  */
 package de.mirkosertic.gameengine.web;
 
-import jdk.nashorn.api.scripting.JSObject;
+import org.openjdk.nashorn.api.scripting.JSObject;
 import org.teavm.jso.JSBody;
 import org.teavm.jso.dom.html.HTMLElement;
 

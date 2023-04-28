@@ -35,13 +35,13 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
-import netscape.javascript.JSObject;
-
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import javax.inject.Inject;
+import org.openjdk.nashorn.api.scripting.JSObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import javax.inject.Inject;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 public class EditScriptDialog {
 
