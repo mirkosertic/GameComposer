@@ -162,7 +162,7 @@
     <properties>
         <teavm.version>0.6.1</teavm.version>
         <bytecoder.version>2020-12-01</bytecoder.version>
-        <javafx.version>17.0.7</javafx.version>
+        <javafx.version>25-ea+17</javafx.version>
         <asm.version>9.5</asm.version>
     </properties>
 
